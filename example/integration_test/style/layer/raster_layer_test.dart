@@ -1,0 +1,61 @@
+// This file is generated.
+import 'dart:convert';
+import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:mapbox_maps/mapbox_maps.dart';
+import 'package:mapbox_maps_example/empty_mapview.dart' as app;
+import 'package:turf/helpers.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  Future<void> addDelay(int ms) async {
+    await Future<void>.delayed(Duration(milliseconds: ms));
+  }
+
+  testWidgets('Add RasterLayer', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await addDelay(1000);
+
+    await mapboxMap.style
+        .addSource(RasterSource(id: "source", tileSize: 256, tiles: [
+      "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
+          "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
+          "&transparent=true&width=256&height=256&layers=Natural2015"
+    ]));
+
+    await mapboxMap.style.addLayer(RasterLayer(
+      id: 'layer',
+      sourceId: 'source',
+      visibility: Visibility.NONE,
+      minZoom: 1.0,
+      maxZoom: 20.0,
+      rasterBrightnessMax: 1.0,
+      rasterBrightnessMin: 1.0,
+      rasterContrast: 1.0,
+      rasterFadeDuration: 1.0,
+      rasterHueRotate: 1.0,
+      rasterOpacity: 1.0,
+      rasterResampling: RasterResampling.LINEAR,
+      rasterSaturation: 1.0,
+    ));
+    var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
+    expect('source', layer.sourceId);
+    expect(layer.minZoom, 1);
+    expect(layer.maxZoom, 20);
+    expect(layer.visibility, Visibility.NONE);
+    expect(layer.rasterBrightnessMax, 1.0);
+    expect(layer.rasterBrightnessMin, 1.0);
+    expect(layer.rasterContrast, 1.0);
+    expect(layer.rasterFadeDuration, 1.0);
+    expect(layer.rasterHueRotate, 1.0);
+    expect(layer.rasterOpacity, 1.0);
+    expect(layer.rasterResampling, RasterResampling.LINEAR);
+    expect(layer.rasterSaturation, 1.0);
+  });
+}
+// End of generated file.

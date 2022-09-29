@@ -1,0 +1,94 @@
+<%
+  const type = locals.type
+  const orignalType = locals.orignalType
+  const properties = locals.properties
+  const doc = locals.doc
+  const symbol = "pointAnnotation"
+  const circle = "circleAnnotation"
+  const fill = "polygonAnnotation"
+  const line = "polylineAnnotation"
+-%>
+// This file is generated.
+import 'package:pigeon/pigeon.dart';
+
+<% for (const property of properties) { -%>
+<% if (property.type ==='enum' || property.type === 'array' && property.value === 'enum') { -%>
+<%- blockDoc(property) %>
+enum <%- camelize(property.name) %> {
+<% for(const value of Object.keys(property.values)) { -%>
+  <%- blockDocString(propertyValueDoc(property, value)) %>
+  <%- snakeCaseUpper(value) %>,
+<% } -%>
+}
+
+<% } -%>
+<% } -%>
+@FlutterApi
+abstract class On<%- camelize(type) %>ClickListener {
+  void on<%- camelize(type) %>Click(<%- camelize(type) %> annotation);
+}
+
+@HostApi
+abstract class _<%- camelize(type) %>Messager {
+  @async
+  <%- camelize(type) %> create(String managerId, <%- camelize(type) %>Options annotationOption);
+  @async
+  List<<%- camelize(type) %>> createMulti(String managerId, List<<%- camelize(type) %>Options> annotationOptions);
+  @async
+  void update(String managerId, <%- camelize(type) %> annotation);
+  @async
+  void delete(String managerId, <%- camelize(type) %> annotation);
+  @async
+  void deleteAll(String managerId);
+  <%_ for (const property of properties) { _%>
+  <%_ if (!supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { _%>
+  @async
+  void set<%- camelize(property.name) %>(String managerId, <%- propertyDartType(property) %> <%- camelizeWithLeadingLowercase(property.name) %>);
+  @async
+  <%- propertyDartReturnType(property) %>? get<%- camelize(property.name) %>(String managerId);
+  <%_ } _%>
+  <%_ } _%>
+}
+
+class <%- camelize(type) %> {
+  /// The id for annotation
+  String id;
+  /// The geometry that determines the location/shape of this annotation
+  Map<String?, Object?>? geometry;
+<% if (type === symbol) { -%>
+  /// The bitmap image for this Annotation
+  /// Will not take effect if [iconImage] has been set.
+  Uint8List? image;
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property)) { -%>
+<% if (property.type === 'dimension') { -%>
+  <%- blockDocString(property.doc + ' This property is specified in pixels.') %>
+<% } else { -%>
+  <%- blockDoc(property) %>
+<% } -%>
+  <%- serializationSpecPropertyDartType(property) %>? <%- camelizeWithLeadingLowercase(property.name) %>;
+<% } -%>
+<% } -%>
+}
+
+class <%- camelize(type) %>Options {
+  /// The geometry that determines the location/shape of this annotation
+  Map<String?, Object?>? geometry;
+<% if (type === symbol) { -%>
+  /// The bitmap image for this Annotation
+  /// Will not take effect if [iconImage] has been set.
+  Uint8List? image;
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property)) { -%>
+<% if (property.type === 'dimension') { -%>
+  <%- blockDocString(property.doc + ' This property is specified in pixels.') %>
+<% } else { -%>
+  <%- blockDoc(property) %>
+<% } -%>
+  <%- serializationSpecPropertyDartType(property) %>? <%- camelizeWithLeadingLowercase(property.name) %>;
+<% } -%>
+<% } -%>
+}
+// End of generated file.

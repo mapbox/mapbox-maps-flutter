@@ -1,0 +1,98 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+orbs: 
+  # https://circleci.com/developer/orbs/orb/circleci/flutter?version=1.1.0
+  flutter: circleci/flutter@1.1.0
+  android: circleci/android@2.0.3
+  macos: circleci/macos@2.2.0
+
+commands:
+  inject-netrc-credentials:
+    steps:
+      - run:
+          name: Configure .netrc
+          command: |
+            echo "machine api.mapbox.com login mapbox password ${SDK_REGISTRY_TOKEN}" >> ~/.netrc
+            chmod 0600 ~/.netrc
+
+jobs:
+  build-android:
+    executor:
+      name: android/android-machine
+      resource-class: xlarge
+      tag: 2022.03.1
+    steps:
+      - checkout
+      - android/create-avd:
+          avd-name: flutter
+          install: true
+          system-image: system-images;android-29;default;x86
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.3.2
+      - run:
+          name: ktlint
+          working_directory: example/android
+          command: ./gradlew ktlint
+      - run:
+          name: flutter format
+          command: ./scripts/check-format.sh
+      - run:
+          name: unit test
+          command: flutter test test
+      - android/start-emulator:
+          avd-name: flutter
+          post-emulator-launch-assemble-command: ''
+          restore-gradle-cache-post-emulator-launch: false
+      - run:
+          name: "Build flutter wrapper for android"
+          working_directory: example
+          command: flutter build apk
+      - run:
+          name: "Run integration tests for android"
+          working_directory: example
+          command: flutter test integration_test/all_test.dart -r expanded --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+  build-ios:
+    executor: macos-xcode-latest
+    steps:
+      - checkout
+#      - macos/preboot-simulator:
+#          device: iPhone 13
+#          version: "15.4"
+      - inject-netrc-credentials
+      - flutter/install_sdk_and_pub:
+          flutter_version: 3.3.2
+      - flutter/install_ios_pod:
+          app-dir: example
+      - run:
+          name: swiftlint
+          working_directory: ios
+          command: brew install swiftlint; swiftlint lint --strict
+      - run:
+          name: "Flutter doctor"
+          working_directory: example
+          command: flutter doctor -v
+      - run:
+          name: "Build flutter wrapper for iOS"
+          working_directory: example
+          command: flutter build ios --simulator --no-codesign
+      - run:
+          name: unit test
+          command: flutter test test
+#      - run:
+#          name: "Run integration tests on the iOS simulator"
+#          working_directory: example
+#          command: flutter test integration_test/all_test.dart -r expanded --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+  
+workflows:
+  build:
+    jobs:
+      - build-android
+      - build-ios
+
+executors:
+  macos-xcode-latest:
+    resource_class: large
+    macos:
+      xcode: 13.3.0

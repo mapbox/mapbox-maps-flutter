@@ -1,0 +1,9 @@
+{
+  "id": "points",
+  "type": "symbol",
+  "source": "source",
+  "layout": {
+    "icon-image": "car-15",
+    "icon-size": 1
+  }
+}

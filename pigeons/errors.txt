@@ -1,0 +1,25 @@
+Error: pigeons/mapbox_map.dart:1609: Unsupported datatype:"TileStore" in class "ResourceOptions".
+Error: pigeons/mapbox_map.dart:1835: Unsupported datatype:"FetchTileFunctionCallback" in class "CustomGeometrySourceOptions".
+Error: pigeons/mapbox_map.dart:1837: Unsupported datatype:"CancelTileFunctionCallback" in class "CustomGeometrySourceOptions".
+Error: pigeons/mapbox_map.dart:243: Unknown type: FreeCameraOptions
+Error: pigeons/mapbox_map.dart:865: Unknown type: RenderedQueryGeometry
+Error: pigeons/mapbox_map.dart:969: Unknown type: undefined
+Error: pigeons/mapbox_map.dart:1013: Unknown type: Observer
+Error: pigeons/mapbox_map.dart:1167: Unknown type: TilesetDescriptor
+Error: pigeons/mapbox_map.dart:1197: Unknown type: StylePackLoadProgressCallback
+Error: pigeons/mapbox_map.dart:1197: Unknown type: StylePackCallback
+Error: pigeons/mapbox_map.dart:1177: Unknown type: Cancelable
+Error: pigeons/mapbox_map.dart:1416: Unknown type: OfflineRegionObserver
+Error: pigeons/mapbox_map.dart:1441: Unknown type: OfflineRegion
+Error: pigeons/mapbox_map.dart:1448: Unknown type: OfflineRegion
+Error: pigeons/mapbox_map.dart:1703: Unknown type: MapSnapshot
+Error: pigeons/mapbox_map.dart:1961: Unknown type: CustomLayerHost
+Error: pigeons/mapbox_map.dart:2577: Unknown type: HttpServiceInterface
+Error: pigeons/mapbox_map.dart:2608: Unknown type: OfflineSwitch
+Error: pigeons/mapbox_map.dart:2623: Unknown type: TileStore
+Error: pigeons/mapbox_map.dart:2651: Unknown type: TileStoreObserver
+Error: pigeons/mapbox_map.dart:2686: Unknown type: TileRegionLoadProgressCallback
+Error: pigeons/mapbox_map.dart:2686: Unknown type: TileRegionCallback
+Error: pigeons/mapbox_map.dart:2712: Unknown type: TilesetDescriptor
+Error: pigeons/mapbox_map.dart:1835: Unknown type: FetchTileFunctionCallback
+Error: pigeons/mapbox_map.dart:1837: Unknown type: CancelTileFunctionCallback

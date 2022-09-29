@@ -1,0 +1,1535 @@
+{
+	"$version": 1,
+	"$root": {
+		"version": {
+			"required": true,
+			"type": "enum",
+			"values": [
+				1
+			],
+			"doc": "Configuration specification version number. Must be 1.",
+			"example": 1
+		},
+		"name": {
+			"type": "string",
+			"doc": "A human-readable name for the configuration.",
+			"example": "Custom configuration"
+		},
+		"metadata": {
+			"type": "*",
+			"doc": "Arbitrary properties useful to track with the configuration. Properties should be prefixed to avoid collisions, like 'mapbox:'."
+		},
+		"option": {
+			"type": {
+				"type": "enum",
+				"values": {
+					"gestures": {
+						"doc": "Gesture configuration allows to control the user touch interaction.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"resources": {
+						"doc": "Resources configuration allows to control how resource are handled.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"map": {
+						"doc": "Map configuration allows to control how a map is created.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"location_component": {
+						"doc": "Shows a location puck on the map.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"logo": {
+						"doc": "Shows the Mapbox logo on the map.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"scale_bar": {
+						"doc": "Shows the scale bar on the map.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"attribution": {
+						"doc": "Shows the attribution icon on the map.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"compass": {
+						"doc": "Shows the compass on the map.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					}
+				},
+				"doc": "Type of the options.",
+				"required": true
+			},
+			"metadata": {
+				"type": "*",
+				"doc": "Arbitrary properties useful to track with the options, but do not influence rendering. Properties should be prefixed to avoid collisions, like 'mapbox:'."
+			}
+		}
+	},
+	"configuration": [
+		"configuration_gestures",
+		"configuration_resources",
+		"configuration_map",
+		"configuration_location_component",
+		"configuration_logo",
+		"configuration_attribution",
+		"configuration_compass",
+		"configuration_scale_bar"
+	],
+	"configuration_gestures": {
+		"rotate-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the rotate gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pinch-to-zoom-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the pinch to zoom gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pan-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the single-touch pan gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"scroll-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the single-touch scroll gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pinch-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the pinch gesture is enabled. Allows panning, rotating, and zooming.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"pinch-rotate-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether rotation is enabled for the pinch gesture.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.1.0"
+				}
+			}
+		},
+		"simultaneous-rotate-and-pinch-to-zoom-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether rotation is enabled for the pinch to zoom gesture.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.2.0"
+				}
+			}
+		},
+		"pitch-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the pitch gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"pan-mode": {
+			"type": "enum",
+			"values": {
+				"horizontal": {
+					"doc": "The map may only move horizontally."
+				},
+				"vertical": {
+					"doc": "The map may only move vertically."
+				},
+				"horizontal-and-vertical": {
+					"doc": "The map may move both horizontally and vertically."
+				}
+			},
+			"default": "horizontal-and-vertical",
+			"doc": "Configures the directions in which the map is allowed to move during a pan gesture.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"scroll-mode": {
+			"type": "enum",
+			"values": {
+				"horizontal": {
+					"doc": "The map may only move horizontally."
+				},
+				"vertical": {
+					"doc": "The map may only move vertically."
+				},
+				"horizontal-and-vertical": {
+					"doc": "The map may move both horizontally and vertically."
+				}
+			},
+			"default": "horizontal-and-vertical",
+			"doc": "Configures the directions in which the map is allowed to move during a scroll gesture.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pan-deceleration-factor": {
+			"type": "number",
+			"doc": "A constant factor that determines how quickly pan deceleration animations happen. Multiplied with the velocity vector once per millisecond during deceleration animations.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"double-tap-to-zoom-in-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether double tapping the map with one touch results in a zoom-in animation.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"double-touch-to-zoom-out-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether single tapping the map with two touches results in a zoom-out animation.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"quick-zoom-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the quick zoom gesture is enabled.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"focal-point": {
+			"type": "array",
+			"value": "number",
+			"length": 2,
+			"required": false,
+			"doc": "By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.4.0"
+				}
+			}
+		},
+		"pinch-to-zoom-deceleration-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether a deceleration animation following a pinch-to-zoom gesture is enabled. True by default.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"rotate-deceleration-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether a deceleration animation following a rotate gesture is enabled. True by default.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"scroll-deceleration-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether a deceleration animation following a scroll gesture is enabled. True by default.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"increase-rotate-threshold-when-pinching-to-zoom": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether rotate threshold increases when pinching to zoom. true by default.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"increase-pinch-to-zoom-threshold-when-rotating": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether pinch to zoom threshold increases when rotating. true by default.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"zoom-animation-amount": {
+			"type": "number",
+			"default": 1.0,
+			"doc": "The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pinch-pan-enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether pan is enabled for the pinch gesture.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.6.0"
+				},
+				"platform-name": {
+					"android": "pinch-scroll-enabled"
+				}
+			}
+		}
+	},
+	"configuration_resources": {
+		"access-token": {
+			"type": "string",
+			"default": null,
+			"doc": "A JSON Web token to associate API requests with your Mapbox account.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"base-url": {
+			"type": "string",
+			"default": "https://api.mapbox.com",
+			"doc": "An URL that defines the base for API requests.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"cache-path": {
+			"type": "string",
+			"doc": "The path to the assets.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"asset-path": {
+			"type": "string",
+			"doc": "The path to the assets.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"cache-size": {
+			"default": 50000000,
+			"type": "number",
+			"doc": "The size of the cache.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_map": {
+		"map-mode": {
+			"type": "enum",
+			"values": {
+				"continuous": {
+					"doc": "Continuously updating map."
+				},
+				"static": {
+					"doc": "A once-off still image of an arbitrary viewport."
+				},
+				"tile": {
+					"doc": "A once-off still image of a single tile."
+				}
+			},
+			"default": "continous",
+			"doc": "The map rendering mode. By default, it is set to Continuous so the map will render as data arrives from the network and react immediately to state changes.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"context-mode": {
+			"type": "enum",
+			"values": {
+				"unique": {
+					"doc": "Unique context mode: in OpenGL, the GL context is not shared, thus we can retain knowledge about the GL state from a previous render pass. It also enables clearing the screen using glClear for the bottommost background layer when no pattern is applied to that layer."
+				},
+				"shared": {
+					"doc": "Shared context mode: in OpenGL, the GL context is shared with other renderers, thus we cannot rely on the GL state set from a previous render pass."
+				},
+				"tile": {
+					"doc": "A once-off still image of a single tile."
+				}
+			},
+			"default": "unique",
+			"doc": "The map context mode. This can be used to optimizations if we know that the drawing context is not shared with other code.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"constrain-mode": {
+			"type": "enum",
+			"values": {
+				"none": {
+					"doc": "No constraints."
+				},
+				"height-only": {
+					"doc": "Constrain to height only."
+				},
+				"width-and-height": {
+					"doc": "Constrain both width and height axes."
+				}
+			},
+			"default": "height-only",
+			"doc": "The map constrain mode. This can be used to limit the map to wrap around the globe horizontally. By default, it is set to HeightOnly.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"viewport-mode": {
+			"type": "enum",
+			"values": {
+				"default": {
+					"doc": "Default viewport."
+				},
+				"flipped-y": {
+					"doc": "Viewport flipped on the y-axis."
+				}
+			},
+			"default": "none",
+			"doc": "The viewport mode. This can be used to flip the vertical orientation of the map as some devices may use inverted orientation.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"orientation": {
+			"type": "enum",
+			"values": {
+				"upwards": {
+					"doc": "Default, map oriented upwards."
+				},
+				"rightwards": {
+					"doc": "Map oriented rightwards."
+				},
+				"downwards": {
+					"doc": "Map oriented downwards."
+				},
+				"lefttwards": {
+					"doc": "Map oriented lefttwards."
+				}
+			},
+			"default": "upwards",
+			"doc": "The orientation of the Map. By default, it is set to upwards.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"cross-source-collisions": {
+			"type": "boolean",
+			"default": true,
+			"doc": "To enable cross-source symbol collision detection or not. By default, it is set to true.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"size": {
+			"type": "array",
+			"value": "number",
+			"length": 2,
+			"doc": "The size to resize the map object and renderer backend. The size is given in logical pixels.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"pixel-ratio": {
+			"type": "number",
+			"default": 1,
+			"doc": "The custom pixel ratio. By default, it is set to 1.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"font-family": {
+			"type": "string",
+			"doc": "Font family to use as font fallback for client-side text renderings.",
+			"required": false,
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"glyph-rasterization-mode": {
+			"type": "enum",
+			"values": {
+				"no-glyphs-rasterized-locally": {
+					"doc": "No glyphs are rasterized locally. All glyphs are loaded from the server."
+				},
+				"ideographs-rasterized-locally": {
+					"doc": "Ideographs are rasterized locally, and they are not loaded from the server."
+				},
+				"all-glyphs-rasterized-locally": {
+					"doc": "All glyphs are rasterized locally. No glyphs are loaded from the server."
+				}
+			},
+			"default": "no-glyphs-rasterized-locally",
+			"doc": "Describes glyphs rasterization modes.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"surface": {
+			"type": "enum",
+			"values": {
+				"surface-view": {
+					"doc": "Default, map rendering on a GLSurfaceView."
+				},
+				"texture-view": {
+					"doc": "Map rendering on a TextureView."
+				}
+			},
+			"default": "upwards",
+			"doc": "The view type used to render.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_location_component": {
+		"enabled": {
+			"type": "boolean",
+			"default": false,
+			"doc": "Whether the user location is visible on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pulsing-enabled": {
+			"type": "boolean",
+			"default": false,
+			"doc": "Whether the location puck is pulsing on the map. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pulsing-color": {
+			"type": "color",
+			"default": "#4A90E2",
+			"doc": "The color of the pulsing circle. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"pulsing-max-radius": {
+			"type": "dimension",
+			"default": 10,
+			"unit": "dp",
+			"doc": "The maximum radius of the pulsing circle. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"show-accuracy-ring": {
+			"api-compatibility-version": 2,
+			"type": "boolean",
+			"default": false,
+			"doc": "Whether show accuracy ring with location puck. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.4.0"
+				}
+			}
+		},
+		"accuracy-ring-color": {
+			"api-compatibility-version": 2,
+			"type": "color",
+			"default": "#4d89cff0",
+			"doc": "The color of the accuracy ring. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.3.0",
+					"android": "10.4.0"
+				}
+			}
+		},
+		"accuracy-ring-border-color": {
+			"api-compatibility-version": 2,
+			"type": "color",
+			"default": "#4d89cff0",
+			"doc": "The color of the accuracy ring border. Works for 2D location puck only.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.3.0",
+					"android": "10.4.0"
+				}
+			}
+		},
+		"layer-above": {
+			"type": "string",
+			"required": false,
+			"doc": "Sets the id of the layer that's added above to when placing the component on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"layer-below": {
+			"type": "string",
+			"required": false,
+			"doc": "Sets the id of the layer that's added below to when placing the component on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"puck-bearing-enabled": {
+			"api-compatibility-version": 2,
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the puck rotates to track the bearing source.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.4.0",
+					"android": "10.4.0"
+				}
+			}
+		},
+		"puck-bearing-source": {
+			"api-compatibility-version": 2,
+			"type": "enum",
+			"values": {
+				"heading": {
+					"doc": "Orients the puck to match the direction in which the device is facing."
+				},
+				"course": {
+					"doc": "Orients the puck to match the direction in which the device is moving."
+				}
+			},
+			"default": "heading",
+			"doc": "The enum controls how the puck is oriented",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.3.0",
+					"ios": "10.0.0"
+				}
+			}
+		},
+		"location-puck": {
+			"type": "enum",
+			"values": {
+				"location_puck_2_d": {
+					"top-image": {
+						"type": "image",
+						"required": false,
+						"doc": "Name of image in sprite to use as the top of the location indicator.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"bearing-image": {
+						"type": "image",
+						"required": false,
+						"doc": "Name of image in sprite to use as the middle of the location indicator.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"shadow-image": {
+						"type": "image",
+						"required": false,
+						"doc": "Name of image in sprite to use as the background of the location indicator.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"scale-expression": {
+						"type": "string",
+						"required": false,
+						"doc": "The scale expression of the images. If defined, it will be applied to all the three images.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					}
+				},
+				"location_puck_3_d": {
+					"model-uri": {
+						"type": "string",
+						"default": null,
+						"required": true,
+						"doc": "An URL for the model file in gltf format.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"position": {
+						"type": "array",
+						"value": "number",
+						"length": 2,
+						"default": [
+							0.0,
+							0.0
+						],
+						"doc": "The position of the model.",
+						"transition": true,
+						"property-type": "data-constant",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"model-opacity": {
+						"type": "number",
+						"default": 1,
+						"minimum": 0,
+						"maximum": 1,
+						"doc": "The opacity of the model.",
+						"transition": true,
+						"property-type": "data-constant",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"model-scale": {
+						"type": "array",
+						"value": "number",
+						"length": 3,
+						"default": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"doc": "The scale of the model.",
+						"transition": false,
+						"property-type": "data-constant",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"model-scale-expression": {
+						"type": "string",
+						"required": false,
+						"doc": "The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom.",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					},
+					"model-translation": {
+			            "type": "array",
+			            "value": "number",
+			            "length": 3,
+			            "default": [
+			                0,
+			                0,
+			                0
+			            ],
+			            "property-type": "data-constant",
+			            "expression": {
+			                "interpolated": true,
+			                "parameters": [
+			                    "zoom"
+			                ]
+			            },
+			            "transition": false,
+			            "doc": "The translation of the model [lon, lat, z]"
+			        },
+					"model-rotation": {
+						"type": "array",
+						"value": "number",
+						"length": 3,
+						"default": [
+							0.0,
+							0.0,
+							90.0
+						],
+						"doc": "The rotation of the model.",
+						"transition": true,
+						"property-type": "data-constant",
+						"sdk-support": {
+							"basic functionality": {
+								"android": "10.0.0",
+								"ios": "10.0.0"
+							}
+						}
+					}
+				}
+			},
+			"required": true,
+			"doc": "Defines what the customised look of the location puck.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_scale_bar": {
+		"enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the scale is visible on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"position": {
+			"type": "enum",
+			"values": {
+				"top-left": {
+					"doc": "The top left position of the map."
+				},
+				"top-center": {
+					"doc": "The top center position of the map."
+				},
+				"top-right": {
+					"doc": "The top right position of the map."
+				},
+				"center-right": {
+					"doc": "The center right position of the map."
+				},
+				"bottom-right": {
+					"doc": "The bottom right position of the map."
+				},
+				"bottom-center": {
+					"doc": "The bottom center position of the map."
+				},
+				"bottom-left": {
+					"doc": "The bottom left position of the map."
+				},
+				"center-left": {
+					"doc": "The center left position of the map."
+				}
+			},
+			"default": "top-left",
+			"doc": "Defines where the scale bar is positioned on the map",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-left": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the left that the scale bar honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-top": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the top that the scale bar honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-right": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the right that the scale bar honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-bottom": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the bottom that the scale bar honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"text-color": {
+			"type": "color",
+			"default": "black",
+			"doc": "Defines text color of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"primary-color": {
+			"type": "color",
+			"default": "black",
+			"doc": "Defines primary color of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"secondary-color": {
+			"type": "color",
+			"default": "white",
+			"doc": "Defines secondary color of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"border-width": {
+			"type": "dimension",
+			"default": 2.0,
+			"doc": "Defines width of the border for the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"height": {
+			"type": "dimension",
+			"default": 2.0,
+			"doc": "Defines height of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"text-bar-margin": {
+			"type": "dimension",
+			"default": 8.0,
+			"doc": "Defines margin of the text bar of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"text-border-width": {
+			"type": "dimension",
+			"default": 2.0,
+			"doc": "Defines text border width of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"text-size": {
+			"type": "dimension",
+			"default": 8.0,
+			"doc": "Defines text size of the scale bar.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"is-metric-units": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"refresh-interval": {
+			"type": "number",
+			"default": 15,
+			"doc": "Configures minimum refresh interval, in millisecond, default is 15.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"show-text-border": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Configures whether to show the text border or not, default is true.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"ratio": {
+			"type": "number",
+			"default": 0.5,
+			"doc": "configures ratio of scale bar max width compared with MapView width, default is 0.5.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"useContinuousRendering": {
+			"type": "boolean",
+			"default": false,
+			"doc": "If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_compass": {
+		"enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the compass is visible on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"position": {
+			"type": "enum",
+			"values": {
+				"top-left": {
+					"doc": "The top left position of the map."
+				},
+				"top-center": {
+					"doc": "The top center position of the map."
+				},
+				"top-right": {
+					"doc": "The top right position of the map."
+				},
+				"center-right": {
+					"doc": "The center right position of the map."
+				},
+				"bottom-right": {
+					"doc": "The bottom right position of the map."
+				},
+				"bottom-center": {
+					"doc": "The bottom center position of the map."
+				},
+				"bottom-left": {
+					"doc": "The bottom left position of the map."
+				},
+				"center-left": {
+					"doc": "The center left position of the map."
+				}
+			},
+			"default": "top-right",
+			"doc": "Defines where the compass is positioned on the map",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-left": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the left that the compass icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-top": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the top that the compass icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-right": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the right that the compass icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-bottom": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the bottom that the compass icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"opacity": {
+			"type": "number",
+			"default": 1.0,
+			"doc": "The alpha channel value of the compass image",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"rotation": {
+			"type": "number",
+			"default": 0.0,
+			"doc": "The clockwise rotation value in degrees of the compass.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"visibility": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the compass is displayed.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"fade-when-facing-north": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the compass fades out to invisible when facing north direction.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"clickable": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the compass can be clicked and click events can be registered.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"image": {
+			"type": "image",
+			"required": false,
+			"doc": "The compass image, the visual representation of the compass.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_attribution": {
+		"enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the attribution icon is visible on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"icon-color": {
+			"type": "color",
+			"default": "#FF1E8CAB",
+			"doc": "Defines text color of the attribution icon.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		},
+		"position": {
+			"type": "enum",
+			"values": {
+				"top-left": {
+					"doc": "The top left position of the map."
+				},
+				"top-center": {
+					"doc": "The top center position of the map."
+				},
+				"top-right": {
+					"doc": "The top right position of the map."
+				},
+				"center-right": {
+					"doc": "The center right position of the map."
+				},
+				"bottom-right": {
+					"doc": "The bottom right position of the map."
+				},
+				"bottom-center": {
+					"doc": "The bottom center position of the map."
+				},
+				"bottom-left": {
+					"doc": "The bottom left position of the map."
+				},
+				"center-left": {
+					"doc": "The center left position of the map."
+				}
+			},
+			"default": "bottom-left",
+			"doc": "Defines where the attribution icon is positioned on the map",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-left": {
+			"type": "dimension",
+			"default": 92,
+			"unit": "dp",
+			"doc": "Defines the margin to the left that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-top": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the top that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-right": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the right that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-bottom": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the bottom that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"clickable": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the attribution can be clicked and click events can be registered.",
+			"sdk-support": {
+				"basic functionality": {
+					"android": "10.0.0"
+				}
+			}
+		}
+	},
+	"configuration_logo": {
+		"enabled": {
+			"type": "boolean",
+			"default": true,
+			"doc": "Whether the logo is visible on the map.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"position": {
+			"type": "enum",
+			"values": {
+				"top-left": {
+					"doc": "The top left position of the map."
+				},
+				"top-center": {
+					"doc": "The top center position of the map."
+				},
+				"top-right": {
+					"doc": "The top right position of the map."
+				},
+				"center-right": {
+					"doc": "The center right position of the map."
+				},
+				"bottom-right": {
+					"doc": "The bottom right position of the map."
+				},
+				"bottom-center": {
+					"doc": "The bottom center position of the map."
+				},
+				"bottom-left": {
+					"doc": "The bottom left position of the map."
+				},
+				"center-left": {
+					"doc": "The center left position of the map."
+				}
+			},
+			"default": "bottom-left",
+			"doc": "Defines where the logo is positioned on the map",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-left": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the left that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-top": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the top that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-right": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the right that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		},
+		"margin-bottom": {
+			"type": "dimension",
+			"default": 4,
+			"unit": "dp",
+			"doc": "Defines the margin to the bottom that the attribution icon honors.",
+			"sdk-support": {
+				"basic functionality": {
+					"ios": "10.0.0",
+					"android": "10.0.0"
+				}
+			}
+		}
+	}
+}

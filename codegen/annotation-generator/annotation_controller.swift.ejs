@@ -1,0 +1,318 @@
+<%
+  const type = locals.type
+  const orignalType = locals.orignalType
+  const properties = locals.properties
+  const doc = locals.doc
+  const symbol = "pointAnnotation"
+  const circle = "circleAnnotation"
+  const fill = "polygonAnnotation"
+  const line = "polylineAnnotation"
+
+  const propertySwiftTypeValue = function propertySwiftTypeValue(property) {
+    switch (property.type) {
+      case 'boolean':
+        return '.boolValue';
+      case 'string':
+      case 'formatted':
+      case 'resolvedImage':
+        return ''
+      case 'number':
+        return `.doubleValue`;
+      case 'array':
+        if (property.value === "enum") {
+          return `.map({.init(rawValue:$0)!})`;
+        } else {
+          return `.map({$0${propertySwiftTypeValue({ type: property.value })}})`;
+        }
+      case 'enum':
+        return `newValue?.rawValue`;
+      case 'color':
+        return `newValue?.rgbaString`;
+      default:
+        return ''
+    }
+  }
+
+  const propertyObjectiveCReturnType = function propertyObjectiveCReturnType(property) {
+     switch (property.type) {
+        case 'enum':
+          return `NSNumber?`;
+        default:
+          return `${propertyObjectiveCType(property)}?`;
+     }
+  }
+  const propertyObjectiveCType = function propertyObjectiveCType(property) {
+<!--       console.log("property", property); -->
+      switch (property.type) {
+        case 'string':
+            return `String`;
+        case 'boolean':
+        case 'number':
+          return `NSNumber`;
+        case 'array':
+             return `[${propertyObjectiveCType({ type: property.value, name: property.name })}]`;
+        case 'enum':
+          return `FLT${camelize(property.name)}`;
+        default:
+          return `String`;
+      }
+    }
+-%>
+// This file is generated.
+import Foundation
+import MapboxMaps
+import UIKit
+
+class <%- camelize(type) %>Controller: NSObject, FLT_<%- camelize(type) %>Messager {
+    private static let errorCode = "0"
+    private weak var delegate: ControllerDelegate?
+
+    init(withDelegate delegate: ControllerDelegate) {
+        self.delegate = delegate
+    }
+
+    func createManagerId(_ managerId: String, annotationOption: FLT<%- camelize(type) %>Options, completion: @escaping (FLT<%- camelize(type) %>?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+                let createdAnnotation = annotationOption.to<%- camelize(type) %>()
+                manager.annotations.append(createdAnnotation)
+                completion(createdAnnotation.toFLT<%- camelize(type) %>(), nil)
+            } else {
+                completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func createMultiManagerId(_ managerId: String, annotationOptions: [FLT<%- camelize(type) %>Options], completion: @escaping ([FLT<%- camelize(type) %>]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+                let annotations = annotationOptions.map({ options in
+                    options.to<%- camelize(type) %>()
+                })
+                manager.annotations.append(contentsOf: annotations)
+                let createdAnnotations = annotations.map { annotation in
+                    annotation.toFLT<%- camelize(type) %>()
+                }
+                completion(createdAnnotations, nil)
+            } else {
+                completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func updateManagerId(_ managerId: String, annotation: FLT<%- camelize(type) %>, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+                let index = manager.annotations.firstIndex(where: { <%- camelizeWithLeadingLowercase(type) %> in
+                    <%- camelizeWithLeadingLowercase(type) %>.id == annotation.id
+                })
+
+                if index == nil {
+                    throw AnnotationControllerError.noAnnotationFound
+                }
+
+                let updatedAnnotation = annotation.to<%- camelize(type) %>()
+
+                manager.annotations[index!] = updatedAnnotation
+                completion(nil)
+            } else {
+                completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+        }
+    }
+
+    func deleteManagerId(_ managerId: String, annotation: FLT<%- camelize(type) %>, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+                let index = manager.annotations.firstIndex(where: { <%- camelizeWithLeadingLowercase(type) %> in
+                    <%- camelizeWithLeadingLowercase(type) %>.id == annotation.id
+                })
+
+                if index == nil {
+                    throw AnnotationControllerError.noAnnotationFound
+                }
+                manager.annotations.remove(at: index!)
+                completion(nil)
+            } else {
+                completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+        }
+    }
+
+    func deleteAllManagerId(_ managerId: String, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+                manager.annotations = []
+            } else {
+                completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil))
+        }
+        completion(nil)
+    }
+<%_ for (const property of properties) { _%>
+<%_ if (!supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { _%>
+
+func set<%- camelize(property.name) %>ManagerId(_ managerId: String, <%- camelizeWithLeadingLowercase(property.name) %>: <%- propertyObjectiveCType(property) %>, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+<% if (property.type === 'enum') { -%>
+                manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelize(property.name) %>.allCases[Int(<%- camelizeWithLeadingLowercase(property.name) %>.rawValue)]
+
+<% } else if (property.type === 'array' && property.value === 'enum'){ -%>
+                manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %>.map({<%-propertySwiftElementType(property)%>.allCases[Int($0.rawValue)]})
+<% } else { -%>
+                manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %><%-propertySwiftTypeValue(property) %>
+<% } -%>
+                completion(nil)
+            } else {
+                completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+  }
+
+func get<%- camelize(property.name) %>ManagerId(_ managerId: String, completion: @escaping ( <%- propertyObjectiveCReturnType(property) %>, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? <%- camelize(type) %>Manager {
+               if let <%- camelizeWithLeadingLowercase(property.name) %> = manager.<%- camelizeWithLeadingLowercase(property.name) %> {
+<% if (property.type === 'enum') { -%>
+                let index = <%- camelize(property.name) %>.allCases.firstIndex(of: <%- camelizeWithLeadingLowercase(property.name) %>)!
+                completion(NSNumber(value: index), nil)
+<% } else if (property.type === 'array' && property.value === 'number'){ -%>
+                completion(<%- camelizeWithLeadingLowercase(property.name) %>.map{NSNumber(value: $0)},nil)
+<% } else if (property.type === 'number' || property.type === 'boolean'){ -%>
+                completion(NSNumber(value: <%- camelizeWithLeadingLowercase(property.name) %>),nil)
+<% } else { -%>
+                completion(<%- camelizeWithLeadingLowercase(property.name) %>,nil)
+<% } -%>
+                } else {
+                    completion(nil,nil)
+                }
+            } else {
+                completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+              completion(nil, FlutterError(code: <%- camelize(type) %>Controller.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+  }
+<%_ } _%>
+<%_ } _%>
+}
+
+extension FLT<%- camelize(type) %>Options {
+    func to<%- camelize(type) %>() -> <%- camelize(type) %> {
+<% if (type === circle) { -%>
+    var annotation = <%- camelize(type) %>(centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+<% } else if (type === symbol) { -%>
+    var annotation = <%- camelize(type) %>(coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+    if let image = self.image {
+        annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
+    }
+<% } else if (type === line) { -%>
+    var annotation = <%- camelize(type) %>(lineString: convertDictionaryToPolyline(dict: self.geometry!))
+<% } else { -%>
+    var annotation = <%- camelize(type) %>(polygon: convertDictionaryToPolygon(dict: self.geometry!))
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { -%>
+<% if (property.type === 'enum'){ -%>
+        annotation.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelize(property.name) %>.allCases[Int(self.<%- camelizeWithLeadingLowercase(property.name) %>.rawValue)]
+<% } else { -%>
+        if let <%- camelizeWithLeadingLowercase(property.name) %> = self.<%- camelizeWithLeadingLowercase(property.name) %> {
+<% if (property.type === 'color') { -%>
+           annotation.<%- camelizeWithLeadingLowercase(property.name) %> = StyleColor.init(uiColorFromHex(rgbValue: <%- camelizeWithLeadingLowercase(property.name) %>.intValue))
+<% } else { -%>
+           annotation.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %><%-propertySwiftTypeValue(property) %>
+<% } -%>
+        }
+<% } -%>
+<% } -%>
+<% } -%>
+        return annotation
+    }
+}
+
+extension FLT<%- camelize(type) %> {
+    func to<%- camelize(type) %>() -> <%- camelize(type) %> {
+<% if (type === circle) { -%>
+    var annotation = <%- camelize(type) %>(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+<% } else if (type === symbol) { -%>
+    var annotation = <%- camelize(type) %>(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+    if let image = self.image {
+        annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
+    }
+<% } else if (type === line) { -%>
+    var annotation = <%- camelize(type) %>(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
+<% } else { -%>
+    var annotation = <%- camelize(type) %>(id: self.id, polygon: convertDictionaryToPolygon(dict: self.geometry!))
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { -%>
+<% if (property.type === 'enum'){ -%>
+    annotation.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelize(property.name) %>.allCases[Int(self.<%- camelizeWithLeadingLowercase(property.name) %>.rawValue)]
+<% } else { -%>
+    if let <%- camelizeWithLeadingLowercase(property.name) %> = self.<%- camelizeWithLeadingLowercase(property.name) %> {
+<% if (property.type === 'color') { -%>
+       annotation.<%- camelizeWithLeadingLowercase(property.name) %> = StyleColor.init(uiColorFromHex(rgbValue: <%- camelizeWithLeadingLowercase(property.name) %>.intValue))
+<% } else { -%>
+       annotation.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %><%-propertySwiftTypeValue(property) %>
+<% } -%>
+    }
+<% } -%>
+<% } -%>
+<% } -%>
+        return annotation
+    }
+}
+extension <%- camelize(type) %> {
+    func toFLT<%- camelize(type) %>() -> FLT<%- camelize(type) %> {
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { -%>
+<% if (property.type === 'color') { -%>
+        var <%- camelizeWithLeadingLowercase(property.name) %>: NSNumber?
+        if self.<%- camelizeWithLeadingLowercase(property.name) %> != nil {
+            <%- camelizeWithLeadingLowercase(property.name) %> = NSNumber(value: self.<%- camelizeWithLeadingLowercase(property.name) %>!.rgb())
+<% } else if (property.type === 'enum'){ -%>
+        var <%- camelizeWithLeadingLowercase(property.name) %>: FLT<%- camelize(property.name) %>?
+        if self.<%- camelizeWithLeadingLowercase(property.name) %> != nil {
+            <%- camelizeWithLeadingLowercase(property.name) %> = FLT<%- camelize(property.name) %>.init(rawValue: UInt(<%- camelize(property.name) %>.allCases.firstIndex(of: self.<%- camelizeWithLeadingLowercase(property.name) %>!)!))
+<% } else if (property.type === 'number'){ -%>
+        var <%- camelizeWithLeadingLowercase(property.name) %>: NSNumber?
+        if self.<%- camelizeWithLeadingLowercase(property.name) %> != nil {
+            <%- camelizeWithLeadingLowercase(property.name) %> = NSNumber(value: self.<%- camelizeWithLeadingLowercase(property.name) %>!)
+<% } else if (property.type === 'array'){ -%>
+        var <%- camelizeWithLeadingLowercase(property.name) %>: [NSNumber]?
+        if self.<%- camelizeWithLeadingLowercase(property.name) %> != nil {
+            <%- camelizeWithLeadingLowercase(property.name) %> = self.<%- camelizeWithLeadingLowercase(property.name) %>!.map({NSNumber(value: $0)})
+<% } else { -%>
+        var <%- camelizeWithLeadingLowercase(property.name) %>: String?
+        if self.<%- camelizeWithLeadingLowercase(property.name) %> != nil {
+            <%- camelizeWithLeadingLowercase(property.name) %> =  self.<%- camelizeWithLeadingLowercase(property.name) %>!
+<% } -%>
+        }
+<% } -%>
+<% } -%>
+
+<% if (type === circle) { -%>
+        return FLTCircleAnnotation.make(withId: self.id, geometry: self.point.toMap(), circleSortKey: circleSortKey, circleBlur: circleBlur, circleColor: circleColor, circleOpacity: circleOpacity, circleRadius: circleRadius, circleStrokeColor: circleStrokeColor, circleStrokeOpacity: circleStrokeOpacity, circleStrokeWidth: circleStrokeWidth)
+<% } else if (type === symbol) { -%>
+        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity)
+<% } else if (type === line) { -%>
+        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth)
+<% } else { -%>
+        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern)
+<% } -%>
+    }
+}
+// End of generated file.

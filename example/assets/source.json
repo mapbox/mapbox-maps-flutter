@@ -1,0 +1,21 @@
+{
+  "type": "geojson",
+  "title": "Mapbox Garage",
+  "attribution":"<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>",
+  "marker-symbol": "monument",
+  "data": {
+    "type": "Feature",
+    "id": "point",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -77.032667,
+        38.913175
+      ]
+    },
+    "properties": {
+      "title": "Mapbox Garage",
+      "marker-symbol": "monument"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+[submodule "codegen/vendor/mapbox-maps-stylegen"]
+	path = codegen/vendor/mapbox-maps-stylegen
+	url = git@github.com:mapbox/mapbox-maps-stylegen.git

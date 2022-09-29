@@ -1,0 +1,10 @@
+{
+  "id": "custom",
+  "type": "circle",
+  "source": "source",
+  "paint": {
+    "circle-radius": 20,
+    "circle-color": "#FF3300",
+    "circle-pitch-alignment": "map"
+  }
+}

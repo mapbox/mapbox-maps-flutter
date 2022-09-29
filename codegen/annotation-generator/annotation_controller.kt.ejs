@@ -1,0 +1,333 @@
+<%
+  const type = locals.type
+  const orignalType = locals.orignalType
+  const properties = locals.properties
+  const doc = locals.doc
+  const symbol = "pointAnnotation"
+  const circle = "circleAnnotation"
+  const fill = "polygonAnnotation"
+  const line = "polylineAnnotation"
+
+  const propertyKotlinFLTReturnType = function propertyKotlinFLTReturnType(property) {
+    switch (property.type) {
+      case 'enum':
+        return 'Long';
+      default:
+        return `${propertyKotlinFLTType(property)}`;
+    }
+  }
+  const propertyKotlinFLTType = function propertyKotlinFLTType(property) {
+    switch (property.type) {
+      case 'boolean':
+        return 'Boolean';
+      case 'number':
+        if (property.name) {
+          if (property.name.toLowerCase().includes('zoom') ||
+              property.name === 'clusterRadius' ||
+              property.name === 'buffer' ||
+              property.name === 'tileSize' ||
+              property.name === 'max-overscale-factor-for-parent-tiles') {
+            return 'Long'
+          }
+        }
+        return 'Double';
+      case 'formatted':
+      case 'string':
+      case 'resolvedImage':
+        return 'String';
+      case 'promoteId':
+        return 'PromoteId';
+      case 'enum':
+        return `FLT${camelize(type)}Messager.${property.name ? camelize(property.name) : "String"}`;
+      case 'color':
+        if (property['property-type'] === 'color-ramp') {
+          return 'Expression'
+        }
+        return 'String';
+      case 'array':
+        if (property.value.type === "array") {
+          return `List<${propertyKotlinFLTType({type: property.value, name:property.name})}>`
+        }
+        if (property.name === "position") {
+          return 'LightPosition'
+        }
+        return `List<${propertyKotlinFLTType({ type: property.value , name:property.name})}>`;
+      case '*':
+        if (property.name === "data") {
+          return 'String'
+        } else if (property.name === "clusterProperties") {
+          return 'HashMap<String, Any>'
+        } else if (property.name === 'filter') {
+          return 'Expression'
+        } else {
+          throw new Error(`unknown type for ${property.name}`);
+        }
+      default:
+        throw new Error(`unknown type ${property.type} for ${property.name}`);
+    }
+  }
+-%>
+// This file is generated.
+package com.mapbox.maps.mapbox_maps.annotation
+
+<% if (type === symbol) { -%>
+import android.graphics.BitmapFactory
+import java.util.*
+<% } -%>
+<% if (type === line) { -%>
+import com.mapbox.maps.mapbox_maps.toLineString
+<% } -%>
+import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toMap
+<% if (type === circle || type === symbol) { -%>
+import com.mapbox.maps.mapbox_maps.toPoint
+<% } else if (type === line) { -%>
+import com.mapbox.maps.mapbox_maps.toPoints
+<% } else { -%>
+import com.mapbox.maps.mapbox_maps.toPointsList
+import com.mapbox.maps.mapbox_maps.toPolygon
+<% } -%>
+import com.mapbox.maps.pigeons.FLT<%- camelize(type) %>Messager
+import com.mapbox.maps.plugin.annotation.generated.<%- camelize(type) %>
+import com.mapbox.maps.plugin.annotation.generated.<%- camelize(type) %>Manager
+import com.mapbox.maps.plugin.annotation.generated.<%- camelize(type) %>Options
+
+class <%- camelize(type) %>Controller(private val delegate: ControllerDelegate) :
+  FLT<%- camelize(type) %>Messager._<%- camelize(type) %>Messager {
+  private val annotationMap = mutableMapOf<String, <%- camelize(type) %>>()
+  private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
+
+  override fun create(
+    managerId: String,
+    annotationOption: FLT<%- camelize(type) %>Messager.<%- camelize(type) %>Options,
+    result: FLT<%- camelize(type) %>Messager.Result<FLT<%- camelize(type) %>Messager.<%- camelize(type) %>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+      val annotation = manager.create(annotationOption.to<%- camelize(type) %>Options())
+      annotationMap[annotation.id.toString()] = annotation
+      if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
+        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id.toString())
+      } else {
+        managerCreateAnnotationMap[managerId]!!.add(annotation.id.toString())
+      }
+      result?.success(annotation.toFLT<%- camelize(type) %>())
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+  override fun createMulti(
+    managerId: String,
+    annotationOptions: MutableList<FLT<%- camelize(type) %>Messager.<%- camelize(type) %>Options>,
+    result: FLT<%- camelize(type) %>Messager.Result<MutableList<FLT<%- camelize(type) %>Messager.<%- camelize(type) %>>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+      val annotations = manager.create(annotationOptions.map { it.to<%- camelize(type) %>Options() })
+      annotations.forEach {
+        annotationMap[it.id.toString()] = it
+      }
+      if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
+        managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
+      } else {
+        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id.toString() }
+          .toList())
+      }
+      result?.success(annotations.map { it.toFLT<%- camelize(type) %>() }.toMutableList())
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+  override fun update(
+    managerId: String,
+    annotation: FLT<%- camelize(type) %>Messager.<%- camelize(type) %>,
+    result: FLT<%- camelize(type) %>Messager.Result<Void>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+
+      if (!annotationMap.containsKey(annotation.id)) {
+        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        return
+      }
+      val originalAnnotation = updateAnnotation(annotation)
+
+      manager.update(originalAnnotation)
+      annotationMap[annotation.id] = originalAnnotation
+      result?.success(null)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+  override fun delete(
+    managerId: String,
+    annotation: FLT<%- camelize(type) %>Messager.<%- camelize(type) %>,
+    result: FLT<%- camelize(type) %>Messager.Result<Void>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+
+      if (!annotationMap.containsKey(annotation.id)) {
+        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        return
+      }
+
+      manager.delete(
+        annotationMap[annotation.id]!!
+      )
+      annotationMap.remove(annotation.id)
+      managerCreateAnnotationMap[managerId]?.remove(annotation.id)
+      result?.success(null)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+  override fun deleteAll(managerId: String, result: FLT<%- camelize(type) %>Messager.Result<Void>?) {
+    try {
+      val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+      managerCreateAnnotationMap[managerId]?.apply {
+        forEach { annotationMap.remove(it) }
+        clear()
+      }
+      manager.deleteAll()
+      result?.success(null)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+  private fun updateAnnotation(annotation: FLT<%- camelize(type) %>Messager.<%- camelize(type) %>): <%- camelize(type) %> {
+    val originalAnnotation = annotationMap[annotation.id]!!
+    annotation.geometry?.let {
+<% if (type === circle || type === symbol) { -%>
+      originalAnnotation.geometry = it.toPoint()
+<% } else if (type === line) { -%>
+      originalAnnotation.geometry = it.toLineString()
+<% } else { -%>
+      originalAnnotation.geometry = it.toPolygon()
+<% } -%>
+    }
+<% if (type === symbol) { -%>
+    annotation.image?.let {
+      originalAnnotation.iconImageBitmap = (BitmapFactory.decodeByteArray(it, 0, it.size))
+    }
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property)) { -%>
+    annotation.<%- camelizeWithLeadingLowercase(property.name) %>?.let {
+<% if (property.type === 'color') { -%>
+      originalAnnotation.<%- camelizeWithLeadingLowercase(property.name) %>Int = it.toInt()
+<% } else if (property.type === 'enum'){ -%>
+      originalAnnotation.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelize(property.name) %>.values()[it.ordinal]
+<% } else { -%>
+      originalAnnotation.<%- camelizeWithLeadingLowercase(property.name) %> = it
+<% } -%>
+    }
+<% } -%>
+<% } -%>
+    return originalAnnotation
+  }
+<%_ for (const property of properties) { _%>
+<%_ if (!supportsPropertyFunction(property) && !shouldSkipAnnotationProperty(type, property)) { _%>
+
+  override fun set<%- camelize(property.name) %>(
+    managerId: String,
+    <%- camelizeWithLeadingLowercase(property.name) %>: <%- propertyKotlinFLTType(property) %>,
+    result: FLT<%- camelize(type) %>Messager.Result<Void>?
+  ) {
+    val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+<% if (property.type === 'enum') { -%>
+    manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelize(property.name) %>.values()[<%- camelizeWithLeadingLowercase(property.name) %>.ordinal]
+<% } else if (property.type === 'array' && property.value === 'enum') { -%>
+    manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %>.map { it.name.lowercase(Locale.getDefault()) }
+<% } else { -%>
+    manager.<%- camelizeWithLeadingLowercase(property.name) %> = <%- camelizeWithLeadingLowercase(property.name) %>
+<% } -%>
+    result?.success(null)
+  }
+
+  override fun get<%- camelize(property.name) %>(
+    managerId: String,
+    result: FLT<%- camelize(type) %>Messager.Result<<%- propertyKotlinFLTReturnType(property) %>>?
+  ) {
+    val manager = delegate.getManager(managerId) as <%- camelize(type) %>Manager
+    if (manager.<%- camelizeWithLeadingLowercase(property.name) %> != null) {
+<% if (property.type === 'enum') { -%>
+      result?.success(manager.<%- camelizeWithLeadingLowercase(property.name) %>!!.ordinal.toLong())
+<% } else if (property.type === 'array' && property.value === 'enum') { -%>
+      result?.success(manager.<%- camelizeWithLeadingLowercase(property.name) %>!!.map{it.ordinal.toLong()})
+<% } else { -%>
+      result?.success(manager.<%- camelizeWithLeadingLowercase(property.name) %>!!)
+<% } -%>
+    } else {
+      result?.success(null)
+    }
+  }
+<%_ } _%>
+<%_ } _%>
+}
+
+fun <%- camelize(type) %>.toFLT<%- camelize(type) %>(): FLT<%- camelize(type) %>Messager.<%- camelize(type) %> {
+  val builder = FLT<%- camelize(type) %>Messager.<%- camelize(type) %>.Builder()
+  builder.setId(this.id.toString())
+
+  this.geometry.let {
+    builder.setGeometry(it.toMap())
+  }
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property)) { -%>
+<% if (property.type === 'color') { -%>
+  this.<%- camelizeWithLeadingLowercase(property.name) %>Int?.let {
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    builder.set<%- camelize(property.name) %>(it.toUInt().toLong())
+<% } else { -%>
+  this.<%- camelizeWithLeadingLowercase(property.name) %>?.let {
+<% if (property.type === 'enum') { -%>
+    builder.set<%- camelize(property.name) %>(FLT<%- camelize(type) %>Messager.<%- camelize(property.name) %>.values()[it.ordinal])
+<% } else { -%>
+    builder.set<%- camelize(property.name) %>(it)
+<% } -%>
+<% } -%>
+  }
+<% } -%>
+<% } -%>
+
+  return builder.build()
+}
+
+fun FLT<%- camelize(type) %>Messager.<%- camelize(type) %>Options.to<%- camelize(type) %>Options(): <%- camelize(type) %>Options {
+  val options = <%- camelize(type) %>Options()
+  this.geometry?.let {
+<% if (type === circle || type === symbol) { -%>
+    options.withPoint(it.toPoint())
+<% } else if (type === line) { -%>
+    options.withPoints(it.toPoints())
+<% } else { -%>
+    options.withPoints(it.toPointsList())
+<% } -%>
+  }
+<% if (type === symbol) { -%>
+  this.image?.let {
+    options.withIconImage(BitmapFactory.decodeByteArray(it, 0, it.size))
+  }
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (supportsPropertyFunction(property)) { -%>
+  this.<%- camelizeWithLeadingLowercase(property.name) %>?.let {
+<% if (property.type === 'color') { -%>
+    options.with<%- camelize(property.name) %>(it.toInt())
+<% } else if (property.type === 'enum'){ -%>
+    options.with<%- camelize(property.name) %>(<%- camelize(property.name) %>.values()[it.ordinal])
+<% } else { -%>
+    options.with<%- camelize(property.name) %>(it)
+<% } -%>
+  }
+<% } -%>
+<% } -%>
+  return options
+}
+// End of generated file.

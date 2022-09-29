@@ -1,0 +1,65 @@
+<%
+  const source = locals
+  const name = locals.name
+  const type = locals.type
+  const properties = locals.properties
+-%>
+// This file is generated.
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' hide Visibility;
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:mapbox_maps/mapbox_maps.dart';
+import 'package:mapbox_maps_example/empty_mapview.dart' as app;
+import 'package:turf/helpers.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  Future<void> addDelay(int ms) async {
+    await Future<void>.delayed(Duration(milliseconds: ms));
+  }
+
+  testWidgets('Add <%- camelizeWithUndercoreRemoved(name) %>Source', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await addDelay(1000);
+
+    await mapboxMap.style
+<% if (name === 'geo_json') { -%>
+        .addSource(GeoJsonSource(id: "source",
+<% } else if (name === 'raster_dem') { -%>
+        .addSource(RasterDemSource(id: "source",
+<% } else if (name === 'vector') { -%>
+        .addSource(VectorSource(id: "source",
+<% } else if (name === 'raster') { -%>
+        .addSource(RasterSource(id: "source",
+<% } else  { -%>
+        .addSource(ImageSource(id: "source",
+<% } -%>
+<%_ for (const property of properties) { -%>
+<%_ if (property[`name`] !== '*' && property[`name`] !== 'type' && property[`type`] !== 'promoteId' && property[`name`] !== 'url') { -%>
+        <%- camelizeWithLeadingLowercase(property.name) %>: <%-propertyDartTestValue(property) %>,
+<%_ } -%>
+<%_ } -%>
+    ));
+
+    var source = await mapboxMap.style.getSource('source') as <%- camelizeWithUndercoreRemoved(name) %>Source;
+    expect(source.id, 'source');
+<% for (const property of properties) { -%>
+<%_ if (property[`name`] !== '*' && property[`name`] !== 'type' && property[`type`] !== 'promoteId'&& property[`name`] !== 'url' && property[`name`] !== 'data' && property[`name`] !== 'clusterProperties' && property[`name`] !== 'coordinates') { -%>
+    var <%- camelizeWithLeadingLowercase(property.name) %> = await source.<%- camelizeWithLeadingLowercase(property.name) %>;
+<% if (property[`name`] === 'bounds'){ %>
+   expect(listEquals(bounds, [0.0, 1.0, 2.0, 3.0]), true);
+<% } else  { -%>
+    expect( <%- camelizeWithLeadingLowercase(property.name) %>,  <%-propertyDartTestValue(property) %>);
+<% } -%>
+<% } -%>
+<% } -%>
+  });
+}
+// End of generated file.

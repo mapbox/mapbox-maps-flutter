@@ -1,0 +1,14 @@
+selectAllResources:
+SELECT * FROM resources;
+
+selectAllTiles:
+SELECT * FROM tiles;
+
+selectAllRegions:
+SELECT * FROM regions;
+
+selectAllRegionResources:
+SELECT * FROM region_resources;
+
+selectAllRegionTiles:
+SELECT * FROM region_tiles;

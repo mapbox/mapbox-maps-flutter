@@ -1,0 +1,7 @@
+{
+  "type": "geojson",
+  "data": "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson",
+  "cluster": true,
+  "clusterMaxZoom": 14,
+  "clusterRadius": 50
+}

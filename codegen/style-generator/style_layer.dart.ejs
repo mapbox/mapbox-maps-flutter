@@ -1,0 +1,174 @@
+<%
+  const type = locals.type
+  const properties = locals.properties
+  const layoutProperties = locals.layoutProperties
+  const paintProperties = locals.paintProperties
+  const doc = locals.doc
+-%>
+// This file is generated.
+part of mapbox_maps;
+
+<%- blockDocString(doc) %>
+class <%- camelize(type) %>Layer extends Layer {
+  <%- camelize(type) %>Layer({required super.id,
+    super.visibility,
+    super.minZoom,
+    super.maxZoom,
+<% if (withSource(type)) { -%>
+    required this.sourceId,
+    this.sourceLayer,
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (property.type !== 'formatted') { -%>
+    this.<%- camelizeWithLeadingLowercase(property.name) %>,
+<% } -%>
+<% } -%>
+  });
+
+  @override
+  String getType() => "<%- type %>";
+
+<% if (withSource(type)) { -%>
+  /// The id of the source.
+  String sourceId;
+
+  /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
+  String? sourceLayer;
+<% } -%>
+<% for (const property of properties) { -%>
+<% if (property.type !== 'formatted') { -%>
+  <%- blockDoc(property) %>
+  <%- serializationSpecPropertyDartType(property) %>? <%- camelizeWithLeadingLowercase(property.name) %>;
+
+<% } -%>
+<% } -%>
+
+@override
+  String _encode() {
+    var layout = {};
+    if (visibility != null) {
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
+    }
+<%_ for (const property of layoutProperties) { -%>
+<% if (property.type !== 'formatted') { -%>
+    if (<%- camelizeWithLeadingLowercase(property.name) %> != null) {
+<% if (property.type === 'enum') { -%>
+      layout["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toString().split('.').last.toLowerCase();
+<% } else { -%>
+      layout["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>;
+<% } -%>
+    }
+<% } -%>
+<% } -%>
+    var paint = {};
+<%_ for (const property of paintProperties) { -%>
+    if (<%- camelizeWithLeadingLowercase(property.name) %> != null) {
+<% if (property.type === 'enum') { -%>
+<% if (property.name === 'model-type') { -%>
+      paint["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toString().split('.').last.toLowerCase().replaceAll('_', "-");
+<% } else { -%>
+      paint["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toString().split('.').last.toLowerCase();
+<% } -%>
+<% } else  if (property.type === 'color') { -%>
+      paint["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toRGBA();
+<% } else { -%>
+      paint["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>;
+<% } -%>
+    }
+<% } -%>
+    var properties = {
+      "id": id,
+<% if (withSource(type)) { -%>
+      "source": sourceId,
+<% } -%>
+      "type": getType(),
+      "layout": layout,
+      "paint": paint,
+    };
+<% if (withSource(type)) { -%>
+    if (sourceLayer != null) {
+      properties["source-layer"] = sourceLayer!;
+    }
+<% } -%>
+    if (minZoom != null) {
+      properties["minzoom"] = minZoom!;
+    }
+    if (maxZoom != null) {
+      properties["maxzoom"] = maxZoom!;
+    }
+
+    return json.encode(properties);
+  }
+
+  static <%- camelize(type) %>Layer decode(String properties) {
+    var map = json.decode(properties);
+    if (map["layout"] == null) {
+      map["layout"] = {};
+    }
+    if (map["paint"] == null) {
+      map["paint"] = {};
+    }
+    return <%- camelize(type) %>Layer(id: map["id"],
+<% if (withSource(type)) { -%>
+      sourceId: map["source"],
+      sourceLayer: map["source-layer"],
+<% } -%>
+      minZoom: map["minzoom"]?.toDouble(),
+      maxZoom: map["maxzoom"]?.toDouble(),
+      visibility: map["layout"]["visibility"] == null
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+<%_ for (const property of layoutProperties) { -%>
+<% if (property.type !== 'formatted') { -%>
+<% if (property.type === 'enum') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>:
+      map["layout"]["<%- property.name %>"] == null
+            ? null
+            : <%- camelize(property.name) %>.values.firstWhere((e) =>
+            e.toString().split('.').last.toLowerCase().contains(map["layout"]["<%- property.name %>"])),
+<% } else  if (property.type === 'color') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["layout"]["<%- property.name %>"] as List?)?.toRGBAInt(),
+
+<% } else  if (property.type === 'number') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: map["layout"]["<%- property.name %>"]?.toDouble(),
+<% } else  if (property.type === 'array') { -%>
+<% if (property.value === 'number') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["layout"]["<%- property.name %>"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+<% } else { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["layout"]["<%- property.name %>"] as List?)?.map<String?>((e) => e.toString()).toList(),
+<% } -%>
+<% } else { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: map["layout"]["<%- property.name %>"],
+<% } -%>
+<% } -%>
+<% } -%>
+<%_ for (const property of paintProperties) { -%>
+<% if (property.type === 'enum') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>:
+      map["paint"]["<%- property.name %>"] == null
+            ? null
+            : <%- camelize(property.name) %>.values.firstWhere((e) =>
+<% if (property.name === 'model-type') { -%>
+            e.toString().split('.').last.toLowerCase().replaceAll('_', "-").contains(map["paint"]["<%- property.name %>"])),
+<% } else { -%>
+            e.toString().split('.').last.toLowerCase().contains(map["paint"]["<%- property.name %>"])),
+<% } -%>
+<% } else  if (property.type === 'color') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["paint"]["<%- property.name %>"] as List?)?.toRGBAInt(),
+<% } else  if (property.type === 'number') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: map["paint"]["<%- property.name %>"]?.toDouble(),
+<% } else  if (property.type === 'array') { -%>
+<% if (property.value === 'number') { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["paint"]["<%- property.name %>"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+<% } else { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: (map["paint"]["<%- property.name %>"] as List?)?.map<String?>((e) => e.toString()).toList(),
+<% } -%>
+<% } else { -%>
+      <%- camelizeWithLeadingLowercase(property.name) %>: map["paint"]["<%- property.name %>"],
+<% } -%>
+<% } -%>
+    );
+  }
+}
+
+// End of generated file.

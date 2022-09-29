@@ -1,0 +1,52 @@
+<%
+  const properties = locals.properties
+  const doc = locals.doc
+-%>
+// This file is generated.
+part of mapbox_maps;
+
+/// The global light source.
+/// Check the [online documentation](https://www.mapbox.com/mapbox-gl-style-spec/#light).
+class Light{
+  Light({
+<%_ for (const property of properties) { -%>
+    this.<%- camelizeWithLeadingLowercase(property.name) %>,
+<% if (property.name !== 'anchor') { -%>
+    this.<%- camelizeWithLeadingLowercase(property.name) %>Transition,
+<%_ } -%>
+<%_ } -%>
+  });
+
+<%_ for (const property of properties) { -%>
+  <%- blockDoc(property) %>
+  <%- propertyDartType(property) %>? <%- camelizeWithLeadingLowercase(property.name) %>;
+<% if (property.name !== 'anchor') { -%>
+  <%- blockDoc(property) %>
+  StyleTransition? <%- camelizeWithLeadingLowercase(property.name) %>Transition;
+<%_ } -%>
+<%_ } -%>
+
+  String encode() {
+    var properties = <String, dynamic>{};
+<%_ for (const property of properties) { -%>
+    if (<%- camelizeWithLeadingLowercase(property.name) %> != null) {
+<% if (property.type === 'enum') { -%>
+      properties["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toString().split('.').last.toLowerCase();
+<% } else  if (property.type === 'color') { -%>
+      properties["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>?.toRGBA();
+<% } else { -%>
+      properties["<%- property.name %>"] = <%- camelizeWithLeadingLowercase(property.name) %>;
+<% } -%>
+    }
+<% if (property.name !== 'anchor') { -%>
+    if (<%- camelizeWithLeadingLowercase(property.name) %>Transition != null) {
+       properties["<%- property.name %>Transition"] = <%- camelizeWithLeadingLowercase(property.name) %>Transition?.encode();
+    }
+<% } -%>
+<% } -%>
+
+    return json.encode(properties);
+  }
+}
+
+// End of generated file.
