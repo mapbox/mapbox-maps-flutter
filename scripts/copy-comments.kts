@@ -11,8 +11,8 @@ import kotlin.system.exitProcess
 //
 // Usage :
 //      kotlinc -script copy-comments.kts -- \
-//          -p mapbox-maps-flutter-internal/pigeons \
-//          -g mapbox-maps-flutter-internal/lib/src/pigeons
+//          -p mapbox-maps-flutter/pigeons \
+//          -g mapbox-maps-flutter/lib/src/pigeons
 
 val DOC_PREFIX = "///"
 
