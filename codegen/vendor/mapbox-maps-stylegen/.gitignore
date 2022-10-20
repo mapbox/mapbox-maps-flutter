@@ -1,6 +1,0 @@
-node_modules
-*.list
-.DS_Store
-map-serialization-generator/generated
-templates/.DS_Store
-generators/.DS_Store

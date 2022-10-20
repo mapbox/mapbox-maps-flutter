@@ -1,3 +1,0 @@
-[submodule "vendor/mapbox-maps-internal"]
-	path = vendor/mapbox-maps-internal
-	url = git@github.com:mapbox/mapbox-maps-internal.git

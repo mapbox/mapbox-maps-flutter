@@ -89,10 +89,10 @@ class StyleTransition {
   StyleTransition({this.duration, this.delay});
 
   /// Duration of the transition.
-  Long? duration;
+  int? duration;
 
   /// Delay of the transition.
-  Long? delay;
+  int? delay;
 
   String encode() {
     final properties = <String, dynamic>{"duration": duration, "delay": delay};

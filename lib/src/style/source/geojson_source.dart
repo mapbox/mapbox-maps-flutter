@@ -5,7 +5,7 @@ part of mapbox_maps;
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#geojson)
 class GeoJsonSource extends Source {
   GeoJsonSource({
-    required super.id,
+    required id,
     String? data,
     double? maxzoom,
     String? attribution,
@@ -18,7 +18,7 @@ class GeoJsonSource extends Source {
     bool? lineMetrics,
     bool? generateId,
     double? prefetchZoomDelta,
-  }) {
+  }) : super(id: id) {
     _data = data;
     _maxzoom = maxzoom;
     _attribution = attribution;

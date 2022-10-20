@@ -9,6 +9,14 @@ orbs:
   macos: circleci/macos@2.2.0
 
 commands:
+  checkout-submodules:
+    steps:
+      - run: 
+          name: Checkout submodules
+          command: |
+            git submodule sync --recursive -- turf_equality
+            git submodule update --recursive --init -- turf_equality
+
   inject-netrc-credentials:
     steps:
       - run:
@@ -25,6 +33,7 @@ jobs:
       tag: 2022.03.1
     steps:
       - checkout
+      - checkout-submodules
       - android/create-avd:
           avd-name: flutter
           install: true
@@ -57,6 +66,7 @@ jobs:
     executor: macos-xcode-latest
     steps:
       - checkout
+      - checkout-submodules
 #      - macos/preboot-simulator:
 #          device: iPhone 13
 #          version: "15.4"

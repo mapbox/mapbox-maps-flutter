@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// A filled polygon with an optional stroked border.
 class FillLayer extends Layer {
   FillLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.fillSortKey,
@@ -18,7 +18,8 @@ class FillLayer extends Layer {
     this.fillPattern,
     this.fillTranslate,
     this.fillTranslateAnchor,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "fill";

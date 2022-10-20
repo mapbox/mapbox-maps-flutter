@@ -1,7 +1,0 @@
-../pigeons/settings.dart
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/GesturesMappings.kt
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/LocationComponentMappings.kt
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/ScaleBarMappings.kt
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/CompassMappings.kt
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/AttributionMappings.kt
-../android/src/main/kotlin/com/mapbox/maps/mapbox_maps/mapping/LogoMappings.kt

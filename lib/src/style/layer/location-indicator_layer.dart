@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// Location Indicator layer.
 class LocationIndicatorLayer extends Layer {
   LocationIndicatorLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     this.bearingImage,
     this.shadowImage,
     this.topImage,
@@ -23,7 +23,8 @@ class LocationIndicatorLayer extends Layer {
     this.perspectiveCompensation,
     this.shadowImageSize,
     this.topImageSize,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "location-indicator";

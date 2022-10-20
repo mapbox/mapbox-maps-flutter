@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// Client-side hillshading visualization based on DEM data. Currently, the implementation only supports Mapbox Terrain RGB and Mapzen Terrarium tiles.
 class HillshadeLayer extends Layer {
   HillshadeLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.hillshadeAccentColor,
@@ -16,7 +16,8 @@ class HillshadeLayer extends Layer {
     this.hillshadeIlluminationAnchor,
     this.hillshadeIlluminationDirection,
     this.hillshadeShadowColor,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "hillshade";
