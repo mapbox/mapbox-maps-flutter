@@ -1,3 +1,6 @@
 [submodule "codegen/vendor/mapbox-maps-stylegen"]
 	path = codegen/vendor/mapbox-maps-stylegen
 	url = git@github.com:mapbox/mapbox-maps-stylegen.git
+[submodule "turf_equality"]
+	path = turf_equality
+	url = git@github.com:dartclub/turf_equality.git

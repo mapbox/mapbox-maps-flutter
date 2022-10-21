@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// A heatmap.
 class HeatmapLayer extends Layer {
   HeatmapLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.heatmapColor,
@@ -15,7 +15,8 @@ class HeatmapLayer extends Layer {
     this.heatmapOpacity,
     this.heatmapRadius,
     this.heatmapWeight,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "heatmap";

@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// A spherical dome around the map that is always rendered behind all other layers.
 class SkyLayer extends Layer {
   SkyLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     this.skyAtmosphereColor,
     this.skyAtmosphereHaloColor,
     this.skyAtmosphereSun,
@@ -17,7 +17,8 @@ class SkyLayer extends Layer {
     this.skyGradientRadius,
     this.skyOpacity,
     this.skyType,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "sky";

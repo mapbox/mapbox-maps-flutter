@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// A filled circle.
 class CircleLayer extends Layer {
   CircleLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.circleSortKey,
@@ -22,7 +22,8 @@ class CircleLayer extends Layer {
     this.circleStrokeWidth,
     this.circleTranslate,
     this.circleTranslateAnchor,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "circle";

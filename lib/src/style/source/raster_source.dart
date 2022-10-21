@@ -5,7 +5,7 @@ part of mapbox_maps;
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster)
 class RasterSource extends Source {
   RasterSource({
-    required super.id,
+    required id,
     String? url,
     List<String?>? tiles,
     List<double?>? bounds,
@@ -20,7 +20,7 @@ class RasterSource extends Source {
     double? maxOverscaleFactorForParentTiles,
     double? tileRequestsDelay,
     double? tileNetworkRequestsDelay,
-  }) {
+  }) : super(id: id) {
     _url = url;
     _tiles = tiles;
     _bounds = bounds;

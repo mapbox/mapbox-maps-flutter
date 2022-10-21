@@ -4,14 +4,15 @@ part of mapbox_maps;
 /// The background color or pattern of the map.
 class BackgroundLayer extends Layer {
   BackgroundLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     this.backgroundColor,
     this.backgroundOpacity,
     this.backgroundPattern,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "background";

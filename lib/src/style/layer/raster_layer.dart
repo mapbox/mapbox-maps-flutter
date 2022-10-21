@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// Raster map textures such as satellite imagery.
 class RasterLayer extends Layer {
   RasterLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.rasterBrightnessMax,
@@ -18,7 +18,8 @@ class RasterLayer extends Layer {
     this.rasterOpacity,
     this.rasterResampling,
     this.rasterSaturation,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "raster";

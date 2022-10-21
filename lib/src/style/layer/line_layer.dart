@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// A stroked line.
 class LineLayer extends Layer {
   LineLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.lineCap,
@@ -27,7 +27,8 @@ class LineLayer extends Layer {
     this.lineTranslateAnchor,
     this.lineTrimOffset,
     this.lineWidth,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "line";

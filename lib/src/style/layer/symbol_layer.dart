@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// An icon or a text label.
 class SymbolLayer extends Layer {
   SymbolLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.iconAllowOverlap,
@@ -64,7 +64,8 @@ class SymbolLayer extends Layer {
     this.textOpacity,
     this.textTranslate,
     this.textTranslateAnchor,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "symbol";

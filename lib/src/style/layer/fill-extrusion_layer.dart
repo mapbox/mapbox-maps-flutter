@@ -4,10 +4,10 @@ part of mapbox_maps;
 /// An extruded (3D) polygon.
 class FillExtrusionLayer extends Layer {
   FillExtrusionLayer({
-    required super.id,
-    super.visibility,
-    super.minZoom,
-    super.maxZoom,
+    required id,
+    visibility,
+    minZoom,
+    maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.fillExtrusionBase,
@@ -18,7 +18,8 @@ class FillExtrusionLayer extends Layer {
     this.fillExtrusionTranslate,
     this.fillExtrusionTranslateAnchor,
     this.fillExtrusionVerticalGradient,
-  });
+  }) : super(
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "fill-extrusion";
