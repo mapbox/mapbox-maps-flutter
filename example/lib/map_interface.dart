@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -262,20 +258,6 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
     );
   }
 
-  Widget _getRenderCacheOptions() {
-    return TextButton(
-      child: Text('getRenderCacheOptions'),
-      onPressed: () {
-        mapboxMap?.getRenderCacheOptions().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("getRenderCacheOptions size: ${value.size}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
-      },
-    );
-  }
-
   Widget _reduceMemoryUse() {
     return TextButton(
       child: Text('reduceMemoryUse'),
@@ -332,8 +314,8 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapView mapView = MapView(
-        key: ValueKey("mapView"),
+    final MapWidget mapWidget = MapWidget(
+        key: ValueKey("mapWidget"),
         resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated);
 
@@ -346,7 +328,6 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
         _getSize(),
         _getMapOptions(),
         _getResourceOptions(),
-        _getRenderCacheOptions(),
         _setDebugOptions(),
         _getDebugOptions(),
         _reduceMemoryUse(),
@@ -369,7 +350,7 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 400,
-              child: mapView),
+              child: mapWidget),
         ),
         Expanded(
           child: ListView(

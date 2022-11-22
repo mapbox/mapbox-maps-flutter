@@ -105,11 +105,11 @@ class AnimatedRouteState extends State<AnimatedRoute>
             ],
           ),
         ),
-        body: MapView(
-          key: const ValueKey("mapView"),
+        body: MapWidget(
+          key: const ValueKey("mapWidget"),
           resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(zoom: 3.0),
-          styleUri: Styles.LIGHT,
+          styleUri: MapboxStyles.LIGHT,
           textureView: true,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoadedCallback,

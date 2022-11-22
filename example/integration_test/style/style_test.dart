@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps/mapbox_maps.dart';
-import 'package:mapbox_maps_example/empty_mapview.dart' as app;
+import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 import 'package:turf/helpers.dart';
 
 void main() {
@@ -21,9 +21,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
-    await expectLater(style.getStyleURI(), completion(Styles.MAPBOX_STREETS));
-    style.setStyleURI(Styles.DARK);
-    await expectLater(style.getStyleURI(), completion(Styles.DARK));
+    await expectLater(
+        style.getStyleURI(), completion(MapboxStyles.MAPBOX_STREETS));
+    style.setStyleURI(MapboxStyles.DARK);
+    await expectLater(style.getStyleURI(), completion(MapboxStyles.DARK));
   });
 
   testWidgets('Style json', (WidgetTester tester) async {

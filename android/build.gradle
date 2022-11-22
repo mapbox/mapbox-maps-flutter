@@ -47,6 +47,11 @@ android {
     defaultConfig {
         minSdkVersion 21
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 project.apply {
@@ -56,8 +61,10 @@ project.apply {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation ("com.mapbox.maps:android:10.8.0-beta.1"){
+    implementation ("com.mapbox.maps:android:10.9.0") {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 
+    implementation "androidx.annotation:annotation:1.5.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 }

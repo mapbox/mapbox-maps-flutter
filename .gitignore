@@ -92,6 +92,8 @@ unlinked_spec.ds
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+.fastlane/README.md
+.fastlane/report.xml
 
 # macOS
 **/macos/Flutter/GeneratedPluginRegistrant.swift

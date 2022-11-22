@@ -293,7 +293,6 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPolylineAnnotationMessager.Result<Void>?
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-
     manager.lineTrimOffset = lineTrimOffset
     result?.success(null)
   }

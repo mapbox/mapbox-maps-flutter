@@ -256,31 +256,31 @@ extension FLTCircleAnnotationOptions {
 
 extension FLTCircleAnnotation {
     func toCircleAnnotation() -> CircleAnnotation {
-        var annotation = CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
-        if let circleSortKey = self.circleSortKey {
-           annotation.circleSortKey = circleSortKey.doubleValue
-        }
-        if let circleBlur = self.circleBlur {
-           annotation.circleBlur = circleBlur.doubleValue
-        }
-        if let circleColor = self.circleColor {
-           annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
-        }
-        if let circleOpacity = self.circleOpacity {
-           annotation.circleOpacity = circleOpacity.doubleValue
-        }
-        if let circleRadius = self.circleRadius {
-           annotation.circleRadius = circleRadius.doubleValue
-        }
-        if let circleStrokeColor = self.circleStrokeColor {
-           annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
-        }
-        if let circleStrokeOpacity = self.circleStrokeOpacity {
-           annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
-        }
-        if let circleStrokeWidth = self.circleStrokeWidth {
-           annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
-        }
+    var annotation = CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+    if let circleSortKey = self.circleSortKey {
+       annotation.circleSortKey = circleSortKey.doubleValue
+    }
+    if let circleBlur = self.circleBlur {
+       annotation.circleBlur = circleBlur.doubleValue
+    }
+    if let circleColor = self.circleColor {
+       annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
+    }
+    if let circleOpacity = self.circleOpacity {
+       annotation.circleOpacity = circleOpacity.doubleValue
+    }
+    if let circleRadius = self.circleRadius {
+       annotation.circleRadius = circleRadius.doubleValue
+    }
+    if let circleStrokeColor = self.circleStrokeColor {
+       annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
+    }
+    if let circleStrokeOpacity = self.circleStrokeOpacity {
+       annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
+    }
+    if let circleStrokeWidth = self.circleStrokeWidth {
+       annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
+    }
         return annotation
     }
 }

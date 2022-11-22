@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 part of mapbox_maps;
 
 /// Callback function taking a single argument.
@@ -103,3 +99,12 @@ typedef void OnStyleImageMissingListener(
 /// Definition for listener invoked when an image added to the Style is no longer needed.
 typedef void OnStyleImageUnusedListener(
     StyleImageUnusedEventData styleImageUnusedEventData);
+
+/// Gesture listener called on map tap.
+typedef void OnMapTapListener(ScreenCoordinate coordinate);
+
+/// Gesture listener called on map double tap.
+typedef void OnMapLongTapListener(ScreenCoordinate coordinate);
+
+/// Gesture listener called on map scroll.
+typedef void OnMapScrollListener(ScreenCoordinate coordinate);

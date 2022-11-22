@@ -14,7 +14,6 @@ public protocol ControllerDelegate: class {
 
 extension AnnotationController: AnnotationInteractionDelegate {
     func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
-        print("AnnotationManager did detect tapped annotations: \(annotations)")
         let annotation = annotations.first
         switch annotation {
         case let annotation as PointAnnotation:

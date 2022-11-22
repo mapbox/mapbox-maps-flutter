@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps/mapbox_maps.dart';
-import 'package:mapbox_maps_example/empty_mapview.dart' as app;
+import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +18,9 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await mapboxMap.loadStyleURI(Styles.DARK);
+    await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     var style = await mapboxMap.style.getStyleURI();
-    expect(Styles.DARK, style);
+    expect(MapboxStyles.DARK, style);
     await addDelay(1000);
   });
 
@@ -69,18 +69,6 @@ void main() {
       final mapboxMap = await mapFuture;
 
       await mapboxMap.reduceMemoryUse();
-      await addDelay(1000);
-    });
-
-    testWidgets('RenderCacheOptions', (WidgetTester tester) async {
-      final mapFuture = app.main();
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
-
-      await mapboxMap.setRenderCacheOptions(RenderCacheOptions(size: 10));
-      var size = await mapboxMap.getRenderCacheOptions();
-      expect(size.size, 10);
-
       await addDelay(1000);
     });
   }

@@ -268,14 +268,4 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         let number = self.mapboxMap.elevation(at: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
         return NSNumber(value: number!)
     }
-
-    func setRenderCacheOptionsOptions(_ options: FLTRenderCacheOptions, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
-    }
-
-    func getRenderCacheOptionsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTRenderCacheOptions? {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
-        return nil
-    }
-
 }

@@ -24,6 +24,43 @@ commands:
           command: |
             echo "machine api.mapbox.com login mapbox password ${SDK_REGISTRY_TOKEN}" >> ~/.netrc
             chmod 0600 ~/.netrc
+  
+  install-gcloud:
+    # Link for gcloud versions: https://cloud.google.com/sdk/docs/downloads-versioned-archives#installation_instructions
+    parameters:
+      version:
+        type: string
+        default: "google-cloud-cli-405.0.0-darwin-x86_64.tar.gz"
+      checksum:
+        type: string
+        default: "504852f8ab0c7df62f80d9d687d74c80da68f1e17ad53055fbdb37cf9bbeebc7"
+    description: "Install gcloud"
+    steps:
+      - run:
+          name: Install gcloud
+          command: |
+            mkdir /tmp/gcloud && cd /tmp/gcloud
+
+            curl -OL https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/<< parameters.version >>
+            echo '<< parameters.checksum >> *<< parameters.version >>' >> checksumfile
+            shasum -a 256 -c checksumfile
+
+            tar zxvf << parameters.version >>
+            ./google-cloud-sdk/install.sh -q --install-python false
+
+            echo "source /tmp/gcloud/google-cloud-sdk/path.bash.inc" >> $BASH_ENV
+            echo "source /tmp/gcloud/google-cloud-sdk/completion.bash.inc" >> $BASH_ENV
+
+  login-gcloud:
+    steps:
+      - run:
+          name: Log in to Google Cloud Platform
+          command: |
+            if [[ -n "${GCLOUD_SERVICE_ACCOUNT_JSON}" ]]; then
+              echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
+              gcloud auth activate-service-account --key-file secret.json --project mapbox-maps-flutter
+              rm secret.json
+            fi
 
 jobs:
   build-android:
@@ -34,10 +71,6 @@ jobs:
     steps:
       - checkout
       - checkout-submodules
-      - android/create-avd:
-          avd-name: flutter
-          install: true
-          system-image: system-images;android-29;default;x86
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
       - run:
@@ -50,26 +83,32 @@ jobs:
       - run:
           name: unit test
           command: flutter test test
-      - android/start-emulator:
-          avd-name: flutter
-          post-emulator-launch-assemble-command: ''
-          restore-gradle-cache-post-emulator-launch: false
+      - install-gcloud
+      - login-gcloud
       - run:
-          name: "Build flutter wrapper for android"
-          working_directory: example
-          command: flutter build apk
+          name: "Build Android integration tests"
+          working_directory: example/android
+          command: |
+            flutter build apk
+            ./gradlew app:assembleAndroidTest
+            ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="${MAPBOX_ACCESS_TOKEN_BASE64}"
       - run:
-          name: "Run integration tests for android"
+          name: "Run Android integration tests on Firebase"
           working_directory: example
-          command: flutter test integration_test/all_test.dart -r expanded --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+          command: |
+            gcloud firebase test android run --type instrumentation \
+              --app build/app/outputs/apk/debug/app-debug.apk \
+              --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+              --timeout 5m \
+              --results-dir=result_dir \
+              --use-orchestrator \
+              --num-flaky-test-attempts 3
+            
   build-ios:
     executor: macos-xcode-latest
     steps:
       - checkout
       - checkout-submodules
-#      - macos/preboot-simulator:
-#          device: iPhone 13
-#          version: "15.4"
       - inject-netrc-credentials
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
@@ -80,20 +119,15 @@ jobs:
           working_directory: ios
           command: brew install swiftlint; swiftlint lint --strict
       - run:
-          name: "Flutter doctor"
-          working_directory: example
-          command: flutter doctor -v
-      - run:
           name: "Build flutter wrapper for iOS"
           working_directory: example
           command: flutter build ios --simulator --no-codesign
       - run:
           name: unit test
           command: flutter test test
-#      - run:
-#          name: "Run integration tests on the iOS simulator"
-#          working_directory: example
-#          command: flutter test integration_test/all_test.dart -r expanded --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+      # - install-gcloud
+      # - login-gcloud
+      # - run-firebase-benchmark-ios 
   
 workflows:
   build:

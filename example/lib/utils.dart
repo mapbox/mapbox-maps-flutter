@@ -50,11 +50,11 @@ int createRandomColor() {
 }
 
 final annotationStyles = [
-  Styles.MAPBOX_STREETS,
-  Styles.OUTDOORS,
-  Styles.LIGHT,
-  Styles.DARK,
-  Styles.SATELLITE_STREETS
+  MapboxStyles.MAPBOX_STREETS,
+  MapboxStyles.OUTDOORS,
+  MapboxStyles.LIGHT,
+  MapboxStyles.DARK,
+  MapboxStyles.SATELLITE_STREETS
 ];
 
 const MAPBOX_DIRECTIONS_ENDPOINT =

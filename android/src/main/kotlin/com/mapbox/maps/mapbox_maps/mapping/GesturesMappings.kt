@@ -40,7 +40,7 @@ fun GesturesSettingsInterface.toFLT() = FLTSettings.GesturesSettings.Builder().l
   settings.setDoubleTouchToZoomOutEnabled(doubleTouchToZoomOutEnabled)
   settings.setQuickZoomEnabled(quickZoomEnabled)
   focalPoint?.let {
-    FLTSettings.ScreenCoordinate.Builder().setX(it.x).setY(it.y).build()
+    settings.setFocalPoint(FLTSettings.ScreenCoordinate.Builder().setX(it.x).setY(it.y).build())
   }
   settings.setPinchToZoomDecelerationEnabled(pinchToZoomDecelerationEnabled)
   settings.setRotateDecelerationEnabled(rotateDecelerationEnabled)

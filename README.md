@@ -18,12 +18,22 @@ To run the Maps Flutter Plugin you will need to configure the Mapbox Access Toke
 Read more about access tokens and public/secret scopes at the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) docs.
 
 #### Secret token
-To access platform SDKs you will need to create a secret access token with the `Downloads:Read` scope and set an environment variable `SDK_REGISTRY_TOKEN` using this token.
+To access platform SDKs you will need to create a secret access token with the `Downloads:Read` scope and then:
+ - to download the Android SDK add the token configuration to `~/.gradle/gradle.properties` : 
+```
+  SDK_REGISTRY_TOKEN=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
+```
+ - to download the iOS SDK add the token configuration to `~/.netrc` :
+```
+  machine api.mapbox.com
+  login mapbox
+  password YOUR_SECRET_MAPBOX_ACCESS_TOKEN
+```
 
 #### Public token
-To instantiate the `MapView` widget pass the public access token with `ResourceOptions`:
+To instantiate the `MapWidget` widget pass the public access token with `ResourceOptions`:
 ```
-  MapView(
+  MapWidget(
     resourceOptions:
         ResourceOptions(accessToken: PUBLIC_ACCESS_TOKEN))));
 ```
@@ -67,7 +77,7 @@ dependencies:
   mapbox_maps:
     git:
       url: git@github.com:mapbox/mapbox-maps-flutter.git
-      ref: 0.1.0
+      ref: 0.2.0
 ```
 
 ### Configure permissions
@@ -100,18 +110,18 @@ import 'package:mapbox_maps/mapbox_maps.dart';
 
 void main() {
   runApp(MaterialApp(
-      home: MapView(
+      home: MapWidget(
           resourceOptions: ResourceOptions(accessToken: YOUR_ACCESS_TOKEN))));
 }
 ```
 
-#### MapView widget
-The `MapView` widget provides options to customize the map - you can set `ResourceOptions`, `MapOptions`, `CameraOptions`, `styleURL`.
+#### MapWidget widget
+The `MapWidget` widget provides options to customize the map - you can set `ResourceOptions`, `MapOptions`, `CameraOptions`, `styleURL`.
 
 It also allows or add listeners for various events - related to style loading, map rendering, map loading. 
 
 #### MapboxMap controller
-The `MapboxMap` controller instance is provided with `MapView.onMapCreated` callback.
+The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` callback.
 
 `MapboxMap` exposes an entry point to the most of the APIs Maps Flutter Plugin provides. It allows to control the map, camera, styles, observe map events, 
 query rendered features, etc.
@@ -137,8 +147,8 @@ class FullMapState extends State<FullMap> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapView(
-      key: ValueKey("mapView"),
+        body: MapWidget(
+      key: ValueKey("mapWidget"),
       resourceOptions: ResourceOptions(accessToken: ACCESS_TOKEN),
       onMapCreated: _onMapCreated,
     ));
@@ -199,7 +209,7 @@ Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/styles/), 
 The Mapbox Maps Flutter Plugin allows full customization of the look of the map used in your application. 
 
 ### Set a style
-You can specify the initial style uri at `MapView.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson` : 
+You can specify the initial style uri at `MapWidget.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson` : 
 
 ```
   mapboxMap.loadStyleURI(Styles.LIGHT);
@@ -238,11 +248,11 @@ Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/camera-and
 The camera is the user's viewpoint above the map. The Maps Flutter Plugin provides you with options to set and adjust the camera position, listen for camera changes, get the camera position, and restrict the camera position to set bounds.
 
 ### Camera position
-You can set the starting camera position using `MapView.cameraOptions` :
+You can set the starting camera position using `MapWidget.cameraOptions` :
 
 ```
-MapView(
-  key: ValueKey("mapView"),
+MapWidget(
+  key: ValueKey("mapWidget"),
   resourceOptions: ResourceOptions(accessToken: ACCESS_TOKEN),
   cameraOptions: CameraOptions(
       center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
@@ -280,6 +290,6 @@ Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/user-inter
 
 Users interacting with the map in your application can explore the map by performing standard gestures. 
 
-You can pass custom `MapView.gestureRecognizers` to control which gestures
+You can pass custom `MapWidget.gestureRecognizers` to control which gestures
 are handled by the platform view.
 
