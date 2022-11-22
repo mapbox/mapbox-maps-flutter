@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/animated_route.dart';
 import 'package:mapbox_maps_example/animation.dart';
@@ -22,6 +18,7 @@ import 'page.dart';
 import 'point_annotations.dart';
 import 'projection.dart';
 import 'style.dart';
+import 'gestures.dart';
 
 final List<ExamplePage> _allPages = <ExamplePage>[
   FullMapPage(),
@@ -40,6 +37,7 @@ final List<ExamplePage> _allPages = <ExamplePage>[
   ImageSourcePage(),
   TileJsonPage(),
   LocationPage(),
+  GesturesPage(),
   AnimatedRoutePage(),
 ];
 

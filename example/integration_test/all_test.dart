@@ -1,29 +1,30 @@
 import 'animation_test.dart' as animation_test;
-import 'annotations/circleAnnotation_manager_test.dart'
-    as circleAnnotation_manager_test;
-import 'annotations/circleAnnotation_test.dart' as circleAnnotation_test;
-import 'annotations/pointAnnotation_manager_test.dart'
-    as pointAnnotation_manager_test;
-import 'annotations/pointAnnotation_test.dart' as pointAnnotation_test;
-import 'annotations/polygonAnnotation_manager_test.dart'
-    as polygonAnnotation_manager_test;
-import 'annotations/polygonAnnotation_test.dart' as polygonAnnotation_test;
-import 'annotations/polylineAnnotation_manager_test.dart'
-    as polylineAnnotation_manager_test;
-import 'annotations/polylineAnnotation_test.dart' as polylineAnnotation_test;
+import 'annotations/circle_annotation_manager_test.dart'
+    as circle_annotation_manager_test;
+import 'annotations/circle_annotation_test.dart' as circle_annotation_test;
+import 'annotations/point_annotation_manager_test.dart'
+    as point_annotation_manager_test;
+import 'annotations/point_annotation_test.dart' as point_annotation_test;
+import 'annotations/polygon_annotation_manager_test.dart'
+    as polygon_annotation_manager_test;
+import 'annotations/polygon_annotation_test.dart' as polygon_annotation_test;
+import 'annotations/polyline_annotation_manager_test.dart'
+    as polyline_annotation_manager_test;
+import 'annotations/polyline_annotation_test.dart' as polyline_annotation_test;
 import 'camera_test.dart' as camera_test;
+import 'gestures_test.dart' as gestures_test;
 import 'map_interface_test.dart' as map_interface_test;
 import 'mapboxMap_test.dart' as mapboxMap_test;
 import 'projection_test.dart' as projection_test;
 import 'style/layer/background_layer_test.dart' as background_layer_test;
 import 'style/layer/circle_layer_test.dart' as circle_layer_test;
-import 'style/layer/fill-extrusion_layer_test.dart'
+import 'style/layer/fill_extrusion_layer_test.dart'
     as fill_extrusion_layer_test;
 import 'style/layer/fill_layer_test.dart' as fill_layer_test;
 import 'style/layer/heatmap_layer_test.dart' as heatmap_layer_test;
 import 'style/layer/hillshade_layer_test.dart' as hillshade_layer_test;
 import 'style/layer/line_layer_test.dart' as line_layer_test;
-import 'style/layer/location-indicator_layer_test.dart'
+import 'style/layer/location_indicator_layer_test.dart'
     as location_indicator_layer_test;
 import 'style/layer/raster_layer_test.dart' as raster_layer_test;
 import 'style/layer/sky_layer_test.dart' as sky_layer_test;
@@ -43,16 +44,17 @@ void main() {
   map_interface_test.main();
   mapboxMap_test.main();
   projection_test.main();
+  gestures_test.main();
 
   // annotation tests
-  circleAnnotation_manager_test.main();
-  circleAnnotation_test.main();
-  pointAnnotation_manager_test.main();
-  pointAnnotation_test.main();
-  polygonAnnotation_manager_test.main();
-  polygonAnnotation_test.main();
-  polylineAnnotation_manager_test.main();
-  polylineAnnotation_test.main();
+  circle_annotation_manager_test.main();
+  circle_annotation_test.main();
+  point_annotation_manager_test.main();
+  point_annotation_test.main();
+  polygon_annotation_manager_test.main();
+  polygon_annotation_test.main();
+  polyline_annotation_manager_test.main();
+  polyline_annotation_test.main();
 
   // style tests
   light_test.main();

@@ -4,13 +4,13 @@ import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
-import com.mapbox.maps.pigeons.FLTMapboxMap
+import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
-class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._MapInterface {
+class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._MapInterface {
   override fun loadStyleURI(
     styleURI: String,
-    result: FLTMapboxMap.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>?
   ) {
     mapboxMap.loadStyleUri(
       styleURI,
@@ -25,7 +25,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
 
   override fun loadStyleJson(
     styleJson: String,
-    result: FLTMapboxMap.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>?
   ) {
     mapboxMap.loadStyleJson(
       styleJson,
@@ -38,7 +38,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     )
   }
 
-  override fun clearData(result: FLTMapboxMap.Result<Void>?) {
+  override fun clearData(result: FLTMapInterfaces.Result<Void>?) {
     mapboxMap.clearData {
       if (it.isError) {
         result?.error(Throwable(it.error))
@@ -50,8 +50,8 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
 
   @OptIn(MapboxExperimental::class)
   override fun setMemoryBudget(
-    mapMemoryBudgetInMegabytes: FLTMapboxMap.MapMemoryBudgetInMegabytes?,
-    mapMemoryBudgetInTiles: FLTMapboxMap.MapMemoryBudgetInTiles?
+    mapMemoryBudgetInMegabytes: FLTMapInterfaces.MapMemoryBudgetInMegabytes?,
+    mapMemoryBudgetInTiles: FLTMapInterfaces.MapMemoryBudgetInTiles?
   ) {
     if (mapMemoryBudgetInMegabytes != null) {
       mapboxMap.setMemoryBudget(MapMemoryBudget.valueOf(mapMemoryBudgetInMegabytes.toMapMemoryBudgetInMegabytes()))
@@ -60,7 +60,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     }
   }
 
-  override fun getSize(): FLTMapboxMap.Size {
+  override fun getSize(): FLTMapInterfaces.Size {
     return mapboxMap.getSize().toFLTSize()
   }
 
@@ -80,34 +80,34 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     return mapboxMap.getPrefetchZoomDelta().toLong()
   }
 
-  override fun setNorthOrientation(orientation: FLTMapboxMap.NorthOrientation) {
+  override fun setNorthOrientation(orientation: FLTMapInterfaces.NorthOrientation) {
     mapboxMap.setNorthOrientation(NorthOrientation.values()[orientation.ordinal])
   }
 
-  override fun setConstrainMode(mode: FLTMapboxMap.ConstrainMode) {
+  override fun setConstrainMode(mode: FLTMapInterfaces.ConstrainMode) {
     mapboxMap.setConstrainMode(ConstrainMode.values()[mode.ordinal])
   }
 
-  override fun setViewportMode(mode: FLTMapboxMap.ViewportMode) {
+  override fun setViewportMode(mode: FLTMapInterfaces.ViewportMode) {
     mapboxMap.setViewportMode(ViewportMode.values()[mode.ordinal])
   }
 
-  override fun getMapOptions(): FLTMapboxMap.MapOptions {
+  override fun getMapOptions(): FLTMapInterfaces.MapOptions {
     return mapboxMap.getMapOptions().toFLTMapOptions()
   }
 
-  override fun getDebug(): MutableList<FLTMapboxMap.MapDebugOptions> {
+  override fun getDebug(): MutableList<FLTMapInterfaces.MapDebugOptions> {
     return mapboxMap.getDebug().map { it.toFLTMapDebugOptions() }.toMutableList()
   }
 
-  override fun setDebug(debugOptions: MutableList<FLTMapboxMap.MapDebugOptions>, value: Boolean) {
+  override fun setDebug(debugOptions: MutableList<FLTMapInterfaces.MapDebugOptions>, value: Boolean) {
     mapboxMap.setDebug(debugOptions.map { it.toMapDebugOptions() }, value)
   }
 
   override fun queryRenderedFeatures(
-    geometry: FLTMapboxMap.RenderedQueryGeometry,
-    options: FLTMapboxMap.RenderedQueryOptions,
-    result: FLTMapboxMap.Result<MutableList<FLTMapboxMap.QueriedFeature>>?
+    geometry: FLTMapInterfaces.RenderedQueryGeometry,
+    options: FLTMapInterfaces.RenderedQueryOptions,
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
   ) {
     mapboxMap.queryRenderedFeatures(
       geometry.toRenderedQueryGeometry(),
@@ -126,8 +126,8 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
 
   override fun querySourceFeatures(
     sourceId: String,
-    options: FLTMapboxMap.SourceQueryOptions,
-    result: FLTMapboxMap.Result<MutableList<FLTMapboxMap.QueriedFeature>>?
+    options: FLTMapInterfaces.SourceQueryOptions,
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
   ) {
     mapboxMap.querySourceFeatures(sourceId, options.toSourceQueryOptions()) {
       if (it.isError) {
@@ -146,7 +146,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     cluster: MutableMap<String, Any>,
     limit: Long?,
     offset: Long?,
-    result: FLTMapboxMap.Result<FLTMapboxMap.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
   ) {
     mapboxMap.getGeoJsonClusterLeaves(
       sourceIdentifier, Feature.fromJson(Gson().toJson(cluster)),
@@ -163,7 +163,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
   override fun getGeoJsonClusterChildren(
     sourceIdentifier: String,
     cluster: MutableMap<String, Any>,
-    result: FLTMapboxMap.Result<FLTMapboxMap.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
   ) {
     mapboxMap.getGeoJsonClusterChildren(
       sourceIdentifier,
@@ -180,7 +180,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
   override fun getGeoJsonClusterExpansionZoom(
     sourceIdentifier: String,
     cluster: MutableMap<String, Any>,
-    result: FLTMapboxMap.Result<FLTMapboxMap.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
   ) {
     mapboxMap.getGeoJsonClusterExpansionZoom(
       sourceIdentifier,
@@ -207,7 +207,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    result: FLTMapboxMap.Result<String>?
+    result: FLTMapInterfaces.Result<String>?
   ) {
     return mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
       result?.let {
@@ -233,22 +233,12 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapboxMap._M
     mapboxMap.reduceMemoryUse()
   }
 
-  override fun getResourceOptions(): FLTMapboxMap.ResourceOptions {
+  override fun getResourceOptions(): FLTMapInterfaces.ResourceOptions {
     return mapboxMap.getResourceOptions().toFLTResourceOptions()
   }
 
   override fun getElevation(coordinate: MutableMap<String, Any>): Double? {
     return mapboxMap.getElevation(coordinate.toPoint())
-  }
-
-  @OptIn(MapboxExperimental::class)
-  override fun setRenderCacheOptions(options: FLTMapboxMap.RenderCacheOptions) {
-    mapboxMap.setRenderCacheOptions(options.toRenderCacheOptions())
-  }
-
-  @OptIn(MapboxExperimental::class)
-  override fun getRenderCacheOptions(): FLTMapboxMap.RenderCacheOptions {
-    return mapboxMap.getRenderCacheOptions().toFLTRenderCacheOptions()
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {

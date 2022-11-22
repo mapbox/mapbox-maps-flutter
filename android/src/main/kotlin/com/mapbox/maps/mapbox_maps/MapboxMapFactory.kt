@@ -1,7 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
-import com.mapbox.common.Logger
+import com.mapbox.common.*
 import com.mapbox.maps.*
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
@@ -13,6 +13,7 @@ class MapboxMapFactory(
   private val messenger: BinaryMessenger,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     if (context == null) {
       throw RuntimeException("Context is null, can't create MapView!")
@@ -115,6 +116,7 @@ class MapboxMapFactory(
 
     val textureView = params["textureView"] as? Boolean ?: false
     val styleUri = params["styleUri"] as? String ?: Style.MAPBOX_STREETS
+    val pluginVersion = params["mapboxPluginVersion"] as String
     val mapInitOptions = MapInitOptions(
       context = context,
       resourceOptions = resourceOptionsBuilder.build(),
@@ -131,7 +133,8 @@ class MapboxMapFactory(
       lifecycleProvider,
       eventTypes,
       messenger,
-      viewId
+      viewId,
+      pluginVersion,
     )
   }
 

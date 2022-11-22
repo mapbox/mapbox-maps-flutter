@@ -1,27 +1,26 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 part of mapbox_maps;
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier {
-  MapboxMap(
-      {required _MapboxMapsPlatform mapboxMapsPlatform,
-      this.onStyleLoadedListener,
-      this.onCameraChangeListener,
-      this.onMapIdleListener,
-      this.onMapLoadedListener,
-      this.onMapLoadErrorListener,
-      this.onRenderFrameStartedListener,
-      this.onRenderFrameFinishedListener,
-      this.onSourceAddedListener,
-      this.onSourceDataLoadedListener,
-      this.onSourceRemovedListener,
-      this.onStyleDataLoadedListener,
-      this.onStyleImageMissingListener,
-      this.onStyleImageUnusedListener})
-      : _mapboxMapsPlatform = mapboxMapsPlatform {
+  MapboxMap({
+    required _MapboxMapsPlatform mapboxMapsPlatform,
+    this.onStyleLoadedListener,
+    this.onCameraChangeListener,
+    this.onMapIdleListener,
+    this.onMapLoadedListener,
+    this.onMapLoadErrorListener,
+    this.onRenderFrameStartedListener,
+    this.onRenderFrameFinishedListener,
+    this.onSourceAddedListener,
+    this.onSourceDataLoadedListener,
+    this.onSourceRemovedListener,
+    this.onStyleDataLoadedListener,
+    this.onStyleImageMissingListener,
+    this.onStyleImageUnusedListener,
+    this.onMapTapListener,
+    this.onMapLongTapListener,
+    this.onMapScrollListener,
+  }) : _mapboxMapsPlatform = mapboxMapsPlatform {
     annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
     if (onStyleLoadedListener != null) {
       _mapboxMapsPlatform.onStyleLoadedPlatform.add((argument) {
@@ -87,6 +86,15 @@ class MapboxMap extends ChangeNotifier {
       _mapboxMapsPlatform.onStyleImageUnusedPlatform.add((argument) {
         onStyleImageUnusedListener?.call(argument);
       });
+    }
+    if (onMapTapListener != null ||
+        onMapLongTapListener != null ||
+        onMapScrollListener != null) {
+      GestureListener.setup(_GestureListener(
+        onMapTapListener: onMapTapListener,
+        onMapLongTapListener: onMapLongTapListener,
+        onMapScrollListener: onMapScrollListener,
+      ));
     }
   }
 
@@ -157,6 +165,13 @@ class MapboxMap extends ChangeNotifier {
   /// The map projection of the style.
   final Projection projection = Projection();
 
+  /// The interface to access the gesture settings.
+  final GesturesSettingsInterface gestures = GesturesSettingsInterface();
+
+  final OnMapTapListener? onMapTapListener;
+  final OnMapLongTapListener? onMapLongTapListener;
+  final OnMapScrollListener? onMapScrollListener;
+
   @override
   void dispose() {
     super.dispose();
@@ -225,11 +240,12 @@ class MapboxMap extends ChangeNotifier {
   /// Returns the provided `camera` options object unchanged upon an error.
   /// Note that this method may fail if the principal point of the projection is not inside the `box` or
   /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
-  Future<CameraOptions> cameraForCoordinates2(
+  Future<CameraOptions> cameraForCoordinatesCameraOptions(
           List<Map<String?, Object?>?> coordinates,
           CameraOptions camera,
           ScreenBox box) =>
-      _cameraManager.cameraForCoordinates2(coordinates, camera, box);
+      _cameraManager.cameraForCoordinatesCameraOptions(
+          coordinates, camera, box);
 
   /// Convenience method that returns the `camera options` object for given parameters.
   Future<CameraOptions> cameraForGeometry(Map<String?, Object?> geometry,
@@ -467,19 +483,6 @@ class MapboxMap extends ChangeNotifier {
   Future<double?> getElevation(Map<String?, Object?> coordinate) =>
       _mapInterface.getElevation(coordinate);
 
-  /// Enables or disables the experimental render cache feature.
-  ///
-  /// Render cache is an experimental feature aiming to reduce resource usage of map rendering
-  /// by caching intermediate rendering results of tiles into specific cache textures for reuse between frames.
-  /// Performance benefit of the cache depends on the style as not all layers are cacheable due to e.g.
-  /// viewport aligned features. Render cache always prefers quality over performance.
-  Future<void> setRenderCacheOptions(RenderCacheOptions options) =>
-      _mapInterface.setRenderCacheOptions(options);
-
-  /// Returns the `render cache options` used by the map.
-  Future<RenderCacheOptions> getRenderCacheOptions() =>
-      _mapInterface.getRenderCacheOptions();
-
   /// Will load a new map style asynchronous from the specified URI.
   ///
   /// URI can take the following forms:
@@ -568,4 +571,31 @@ class MapboxMap extends ChangeNotifier {
   /// Cancel the ongoing camera animation if there is one.
   Future<void> cancelCameraAnimation() =>
       _animationManager.cancelCameraAnimation();
+}
+
+class _GestureListener extends GestureListener {
+  _GestureListener({
+    this.onMapTapListener,
+    this.onMapLongTapListener,
+    this.onMapScrollListener,
+  });
+
+  final OnMapTapListener? onMapTapListener;
+  final OnMapLongTapListener? onMapLongTapListener;
+  final OnMapScrollListener? onMapScrollListener;
+
+  @override
+  void onTap(ScreenCoordinate coordinate) {
+    onMapTapListener?.call(coordinate);
+  }
+
+  @override
+  void onLongTap(ScreenCoordinate coordinate) {
+    onMapLongTapListener?.call(coordinate);
+  }
+
+  @override
+  void onScroll(ScreenCoordinate coordinate) {
+    onMapScrollListener?.call(coordinate);
+  }
 }

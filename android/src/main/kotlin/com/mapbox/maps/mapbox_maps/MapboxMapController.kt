@@ -4,9 +4,10 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.mapbox.common.*
 import com.mapbox.maps.*
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
-import com.mapbox.maps.pigeons.FLTMapboxMap
+import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTSettings
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -19,7 +20,8 @@ class MapboxMapController(
   lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   eventTypes: List<String>,
   private val messenger: BinaryMessenger,
-  viewId: Int
+  viewId: Int,
+  pluginVersion: String
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
@@ -34,18 +36,22 @@ class MapboxMapController(
   private val animationController: AnimationController = AnimationController(mapboxMap)
   private val annotationController: AnnotationController = AnnotationController(mapView, mapboxMap)
   private val locationComponentController = LocationComponentController(mapView)
+  private val gestureController = GestureController(mapView)
   private val logoController = LogoController(mapView)
 
   init {
+    changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
-    FLTMapboxMap.StyleManager.setup(messenger, styleController)
-    FLTMapboxMap._CameraManager.setup(messenger, cameraController)
-    FLTMapboxMap.Projection.setup(messenger, projectionController)
-    FLTMapboxMap._MapInterface.setup(messenger, mapInterfaceController)
-    FLTMapboxMap._AnimationManager.setup(messenger, animationController)
+    FLTMapInterfaces.StyleManager.setup(messenger, styleController)
+    FLTMapInterfaces._CameraManager.setup(messenger, cameraController)
+    FLTMapInterfaces.Projection.setup(messenger, projectionController)
+    FLTMapInterfaces._MapInterface.setup(messenger, mapInterfaceController)
+    FLTMapInterfaces._AnimationManager.setup(messenger, animationController)
     annotationController.setup(messenger)
     FLTSettings.LocationComponentSettingsInterface.setup(messenger, locationComponentController)
     FLTSettings.LogoSettingsInterface.setup(messenger, logoController)
+    FLTSettings.GesturesSettingsInterface.setup(messenger, gestureController)
+    gestureController.setup(messenger)
     methodChannel = MethodChannel(messenger, "plugins.flutter.io/mapbox_maps_$viewId")
     methodChannel.setMethodCallHandler(this)
     mapboxMap.subscribe(
@@ -61,16 +67,18 @@ class MapboxMapController(
   }
 
   override fun dispose() {
+    mapView.onStop()
     mapView.onDestroy()
     methodChannel.setMethodCallHandler(null)
-    FLTMapboxMap.StyleManager.setup(messenger, null)
-    FLTMapboxMap._CameraManager.setup(messenger, null)
-    FLTMapboxMap.Projection.setup(messenger, null)
-    FLTMapboxMap._MapInterface.setup(messenger, null)
-    FLTMapboxMap._AnimationManager.setup(messenger, null)
+    FLTMapInterfaces.StyleManager.setup(messenger, null)
+    FLTMapInterfaces._CameraManager.setup(messenger, null)
+    FLTMapInterfaces.Projection.setup(messenger, null)
+    FLTMapInterfaces._MapInterface.setup(messenger, null)
+    FLTMapInterfaces._AnimationManager.setup(messenger, null)
     annotationController.dispose(messenger)
     FLTSettings.LocationComponentSettingsInterface.setup(messenger, null)
     FLTSettings.LogoSettingsInterface.setup(messenger, null)
+    FLTSettings.GesturesSettingsInterface.setup(messenger, null)
   }
 
   override fun onStart(owner: LifecycleOwner) {
@@ -105,6 +113,25 @@ class MapboxMapController(
         result.success(null)
       }
     }
+  }
+
+  private fun changeUserAgent(version: String) {
+    HttpServiceFactory.getInstance().setInterceptor(
+      object : HttpServiceInterceptorInterface {
+        override fun onRequest(request: HttpRequest): HttpRequest {
+          request.headers[HttpHeaders.USER_AGENT] = "${request.headers[HttpHeaders.USER_AGENT]} Flutter Plugin/$version"
+          return request
+        }
+
+        override fun onDownload(download: DownloadOptions): DownloadOptions {
+          return download
+        }
+
+        override fun onResponse(response: HttpResponse): HttpResponse {
+          return response
+        }
+      }
+    )
   }
 
   private fun getEventMethodName(eventType: String) = "event#$eventType"

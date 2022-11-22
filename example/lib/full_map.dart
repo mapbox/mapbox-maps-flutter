@@ -112,17 +112,17 @@ class FullMapState extends State<FullMap> {
                       () => isLight = !isLight,
                     );
                     if (isLight) {
-                      mapboxMap?.loadStyleURI(Styles.LIGHT);
+                      mapboxMap?.loadStyleURI(MapboxStyles.LIGHT);
                     } else {
-                      mapboxMap?.loadStyleURI(Styles.DARK);
+                      mapboxMap?.loadStyleURI(MapboxStyles.DARK);
                     }
                   }),
               SizedBox(height: 10),
             ],
           ),
         ),
-        body: MapView(
-          key: ValueKey("mapView"),
+        body: MapWidget(
+          key: ValueKey("mapWidget"),
           resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(
               center: Point(
@@ -131,7 +131,7 @@ class FullMapState extends State<FullMap> {
                 43.70908256335716,
               )).toJson(),
               zoom: 3.0),
-          styleUri: Styles.LIGHT,
+          styleUri: MapboxStyles.LIGHT,
           textureView: true,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoadedCallback,

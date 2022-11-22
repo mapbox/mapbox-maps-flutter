@@ -12,7 +12,7 @@ class CameraController: NSObject, FLT_CameraManager {
         return cameraOptions.toFLTCameraOptions()
     }
 
-    func camera(forCoordinates2Coordinates coordinates: [[String: Any]], camera: FLTCameraOptions, box: FLTScreenBox, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
+    func camera(forCoordinatesCameraOptionsCoordinates coordinates: [[String: Any]], camera: FLTCameraOptions, box: FLTScreenBox, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
         let cameraOptions = self.mapboxMap.camera(for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}), camera: camera.toCameraOptions(), rect: box.toCGRect())
         return cameraOptions.toFLTCameraOptions()
     }

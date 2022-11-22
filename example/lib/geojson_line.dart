@@ -44,10 +44,10 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapView(
-      key: ValueKey("mapView"),
+        body: MapWidget(
+      key: ValueKey("mapWidget"),
       resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-      styleUri: Styles.MAPBOX_STREETS,
+      styleUri: MapboxStyles.MAPBOX_STREETS,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-122.486052, 37.830348)).toJson(),
           zoom: 14.0),

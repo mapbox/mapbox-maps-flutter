@@ -55,10 +55,10 @@ class ImageSourceWidgetState extends State<ImageSourceWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapView(
-      key: ValueKey("mapView"),
+        body: MapWidget(
+      key: ValueKey("mapWidget"),
       resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-      styleUri: Styles.DARK,
+      styleUri: MapboxStyles.DARK,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
           zoom: 12.0),

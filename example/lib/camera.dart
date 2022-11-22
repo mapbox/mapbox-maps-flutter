@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps/mapbox_maps.dart';
 import 'package:turf/helpers.dart';
@@ -102,11 +98,11 @@ class CameraPageBodyState extends State<CameraPageBody> {
     );
   }
 
-  Widget _cameraForCoordinates2() {
+  Widget _cameraForCoordinatesCameraOptions() {
     return TextButton(
-      child: Text('cameraForCoordinates2'),
+      child: Text('cameraForCoordinatesCameraOptions'),
       onPressed: () {
-        mapboxMap?.cameraForCoordinates2(
+        mapboxMap?.cameraForCoordinatesCameraOptions(
             [
               Point(
                   coordinates: Position(
@@ -323,13 +319,17 @@ class CameraPageBodyState extends State<CameraPageBody> {
     return TextButton(
       child: Text('coordinateForPixel'),
       onPressed: () {
-        mapboxMap?.coordinateForPixel(ScreenCoordinate(x: 100, y: 100)).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Point latitude: ${value["latitude"]}, longitude: ${value["longitude"]}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+        mapboxMap
+            ?.coordinateForPixel(ScreenCoordinate(x: 100, y: 100))
+            .then((value) {
+          final point = Point.fromJson(Map<String, dynamic>.from(value));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Point latitude: ${point.coordinates.lat}, longitude: ${point.coordinates.lng}"),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ));
+        });
       },
     );
   }
@@ -341,12 +341,13 @@ class CameraPageBodyState extends State<CameraPageBody> {
         mapboxMap?.coordinatesForPixels([
           ScreenCoordinate(x: 100, y: 100),
           ScreenCoordinate(x: 200, y: 300)
-        ]).then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //TODO, handle Exception: "Unhandled Exception: type '_InternalLinkedHashMap<Object?, Object?>' is not a subtype of type 'Map<String?, Object?>?' in type cast"
-              content: Text("Points  ${value.first}"),
-              backgroundColor: Theme.of(context).primaryColor,
-              duration: Duration(seconds: 2),
-            )));
+        ]).then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Points ${value.first}"),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ));
+        });
       },
     );
   }
@@ -445,8 +446,8 @@ class CameraPageBodyState extends State<CameraPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapView mapView = MapView(
-        key: ValueKey("mapView"),
+    final MapWidget mapWidget = MapWidget(
+        key: ValueKey("mapWidget"),
         resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated);
 
@@ -456,7 +457,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
       <Widget>[
         _cameraForCoordinateBounds(),
         _cameraForCoordinates(),
-        _cameraForCoordinates2(),
+        _cameraForCoordinatesCameraOptions(),
         _cameraForGeometry(),
         _coordinateBoundsForCamera(),
         _coordinateBoundsForCameraUnwrapped(),
@@ -481,7 +482,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 400,
-              child: mapView),
+              child: mapWidget),
         ),
         Expanded(
           child: ListView(

@@ -1,7 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
-import androidx.annotation.NonNull
 import androidx.lifecycle.Lifecycle
+import com.mapbox.common.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -21,7 +21,7 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   // / when the Flutter Engine is detached from the Activity
   private lateinit var channel: MethodChannel
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "mapbox_maps")
     channel.setMethodCallHandler(this)
     flutterPluginBinding
@@ -39,10 +39,10 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       )
   }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+  override fun onMethodCall(call: MethodCall, result: Result) {
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
 

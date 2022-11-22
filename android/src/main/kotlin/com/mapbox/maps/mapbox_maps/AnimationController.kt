@@ -1,14 +1,14 @@
 package com.mapbox.maps.mapbox_maps
 
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.pigeons.FLTMapboxMap
+import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.*
 
-class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._AnimationManager {
+class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._AnimationManager {
   var cancelable: Cancelable? = null
   override fun easeTo(
-    cameraOptions: FLTMapboxMap.CameraOptions,
-    mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?
+    cameraOptions: FLTMapInterfaces.CameraOptions,
+    mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.easeTo(
       cameraOptions.toCameraOptions(),
@@ -17,8 +17,8 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._Anim
   }
 
   override fun flyTo(
-    cameraOptions: FLTMapboxMap.CameraOptions,
-    mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?
+    cameraOptions: FLTMapInterfaces.CameraOptions,
+    mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.flyTo(
       cameraOptions.toCameraOptions(),
@@ -27,8 +27,8 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._Anim
   }
 
   override fun moveBy(
-    screenCoordinate: FLTMapboxMap.ScreenCoordinate,
-    mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?
+    screenCoordinate: FLTMapInterfaces.ScreenCoordinate,
+    mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.moveBy(
       screenCoordinate.toScreenCoordinate(),
@@ -37,9 +37,9 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._Anim
   }
 
   override fun rotateBy(
-    first: FLTMapboxMap.ScreenCoordinate,
-    second: FLTMapboxMap.ScreenCoordinate,
-    mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?
+    first: FLTMapInterfaces.ScreenCoordinate,
+    second: FLTMapInterfaces.ScreenCoordinate,
+    mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.rotateBy(
       first.toScreenCoordinate(),
@@ -50,8 +50,8 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._Anim
 
   override fun scaleBy(
     amount: Double,
-    screenCoordinate: FLTMapboxMap.ScreenCoordinate?,
-    mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?
+    screenCoordinate: FLTMapInterfaces.ScreenCoordinate?,
+    mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.scaleBy(
       amount,
@@ -60,7 +60,7 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapboxMap._Anim
     )
   }
 
-  override fun pitchBy(pitch: Double, mapAnimationOptions: FLTMapboxMap.MapAnimationOptions?) {
+  override fun pitchBy(pitch: Double, mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?) {
     cancelable = mapboxMap.pitchBy(pitch, mapAnimationOptions?.toMapAnimationOptions())
   }
 

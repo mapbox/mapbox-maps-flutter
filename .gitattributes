@@ -1,0 +1,7 @@
+# Mark files as generated in Github PRs
+## pigeon
+lib/src/pigeons/* linguist-generated=true
+android/src/main/java/com/mapbox/maps/pigeons/* linguist-generated=true
+ios/Classes/*h linguist-generated=true
+ios/Classes/*m linguist-generated=true
+

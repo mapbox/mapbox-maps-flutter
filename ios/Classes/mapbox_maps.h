@@ -10,4 +10,4 @@
 
 
 #endif /* mapbox_maps_h */
-#import "mapbox_map.h"
+#import "MapInterfaces.h"

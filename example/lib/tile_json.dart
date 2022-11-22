@@ -47,8 +47,8 @@ class TileJsonWidgetState extends State<TileJsonWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapView(
-      key: ValueKey("mapView"),
+        body: MapWidget(
+      key: ValueKey("mapWidget"),
       resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),

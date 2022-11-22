@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps/mapbox_maps.dart';
 import 'package:turf/helpers.dart';
@@ -131,8 +127,8 @@ class AnimationPageBodyState extends State<AnimationPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapView mapView = MapView(
-        key: ValueKey("mapView"),
+    final MapWidget mapWidget = MapWidget(
+        key: ValueKey("mapWidget"),
         resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated);
 
@@ -157,7 +153,7 @@ class AnimationPageBodyState extends State<AnimationPageBody> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 400,
-              child: mapView),
+              child: mapWidget),
         ),
         Expanded(
           child: ListView(

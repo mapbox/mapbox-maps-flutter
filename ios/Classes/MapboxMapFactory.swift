@@ -1,5 +1,6 @@
 import Flutter
 import MapboxMaps
+import MapboxCommon
 
 class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     var registrar: FlutterPluginRegistrar
@@ -137,6 +138,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 arguments args: Any?) -> FlutterPlatformView {
         var mapInitOptions = MapInitOptions()
         var eventTypes = [String]()
+        var pluginVersion = ""
 
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
@@ -145,7 +147,8 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 viewIdentifier: viewId,
                 eventTypes: eventTypes,
                 arguments: args,
-                registrar: registrar
+                registrar: registrar,
+                pluginVersion: pluginVersion
             )
         }
         var styleURI: StyleURI? = .streets
@@ -161,13 +164,18 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                                         styleURI: styleURI
         )
 
+        if let version = args["mapboxPluginVersion"] as? String {
+            pluginVersion = version
+        }
+
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
             viewIdentifier: viewId,
             eventTypes: eventTypes,
             arguments: args,
-            registrar: registrar
+            registrar: registrar,
+            pluginVersion: pluginVersion
         )
     }
 }

@@ -44,10 +44,10 @@ class VectorTileSourceWidgetState extends State<VectorTileSourceWidget> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapView(
-      key: ValueKey("mapView"),
+        body: MapWidget(
+      key: ValueKey("mapWidget"),
       resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-      styleUri: Styles.LIGHT,
+      styleUri: MapboxStyles.LIGHT,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-122.447303, 37.753574)).toJson(),
           zoom: 13.0),

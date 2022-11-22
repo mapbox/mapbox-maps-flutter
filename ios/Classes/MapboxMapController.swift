@@ -20,6 +20,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     private var mapboxMap: MapboxMap
     private var channel: FlutterMethodChannel
     private var annotationController: AnnotationController?
+
     func view() -> UIView {
         return mapView
     }
@@ -30,8 +31,11 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         viewIdentifier viewId: Int64,
         eventTypes: [String],
         arguments args: Any?,
-        registrar: FlutterPluginRegistrar
+        registrar: FlutterPluginRegistrar,
+        pluginVersion: String
     ) {
+        HttpServiceFactory.getInstance().setInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
+
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
         self.registrar = registrar
@@ -59,6 +63,10 @@ class MapboxMapController: NSObject, FlutterPlatformView {
 
         let locationController = LocationController(withMapView: mapView)
         FLT_SETTINGSLocationComponentSettingsInterfaceSetup(registrar.messenger(), locationController)
+
+        let gesturesController = GesturesController(withMapView: mapView)
+        FLT_SETTINGSGesturesSettingsInterfaceSetup(registrar.messenger(), gesturesController)
+        gesturesController.setup(messenger: registrar.messenger())
 
         let logoController = LogoController(withMapView: mapView)
         FLT_SETTINGSLogoSettingsInterfaceSetup(registrar.messenger(), logoController)
@@ -119,5 +127,30 @@ class MapboxMapController: NSObject, FlutterPlatformView {
             result = ""
         }
         return result
+    }
+
+    final class HttpUseragentInterceptor: HttpServiceInterceptorInterface {
+
+        private var pluginVersion: String
+
+        init(pluginVersion: String) {
+            self.pluginVersion = pluginVersion
+        }
+
+        func onRequest(for request: HttpRequest) -> HttpRequest {
+            if let oldUseragent = request.headers[HttpHeaders.userAgent] {
+                request.headers[HttpHeaders.userAgent] = "\(oldUseragent) FlutterPlugin/\(self.pluginVersion)"
+            }
+
+            return request
+        }
+
+        func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
+            return download
+        }
+
+        func onResponse(for response: HttpResponse) -> HttpResponse {
+            return response
+        }
     }
 }

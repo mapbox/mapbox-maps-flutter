@@ -1,7 +1,3 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -49,8 +45,8 @@ class StylePageBodyState extends State<StylePageBody> {
 
   // Style string can a reference to a local or remote resources.
   List<String> _styleStrings = [
-    Styles.MAPBOX_STREETS,
-    Styles.SATELLITE,
+    MapboxStyles.MAPBOX_STREETS,
+    MapboxStyles.SATELLITE,
   ];
   int styleIndex = 1;
 
@@ -452,8 +448,8 @@ class StylePageBodyState extends State<StylePageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapView mapView = MapView(
-        key: ValueKey("mapView"),
+    final MapWidget mapWidget = MapWidget(
+        key: ValueKey("mapWidget"),
         resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: _onStyleLoaded);
@@ -498,7 +494,7 @@ class StylePageBodyState extends State<StylePageBody> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 400,
-              child: mapView),
+              child: mapWidget),
         ),
         Expanded(
           child: ListView(
