@@ -1,11 +1,49 @@
-# Mapbox Maps Flutter Plugin for Mapbox Maps SDK v10
+# Mapbox Maps SDK Flutter Plugin
 
-This Mapbox Maps Flutter Plugin allows to show embedded interactive, thoroughly customizable maps inside a Flutter widget, powered by vector tiles and OpenGL(Android)/Metal(iOS).
-For the Android integration, it uses [Mapbox Maps Flutter Plugin for Android v10](https://github.com/mapbox/mapbox-maps-android). For the iOS integration, it uses [Mapbox Maps Flutter Plugin for iOS v10](https://github.com/mapbox/mapbox-maps-ios). Web is not supported yet. This project only supports a subset of the API exposed by these libraries.
+The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v10.9.0). It is currently in beta, but can be used in production. The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS. 
+
+Web and desktop are not supported. 
+
+Contributions welcome!
+
+## Supported API
+
+| Feature | Android | iOS |
+| ------ | ------ | ----- |
+| Style | :white_check_mark:   | :white_check_mark: |
+| Camera position | :white_check_mark:   | :white_check_mark: |
+| Camera animations | :white_check_mark:   | :white_check_mark: |
+| Events | :white_check_mark:   | :white_check_mark: |
+| Gestures | :white_check_mark:   | :white_check_mark: |
+| User Location | :white_check_mark: | :white_check_mark: |
+| Circle Layer | :white_check_mark:   | :white_check_mark: |
+| Fill Layer | :white_check_mark:   | :white_check_mark: |
+| Fill extrusion Layer | :white_check_mark:   | :white_check_mark: |
+| Line Layer | :white_check_mark:   | :white_check_mark: |
+| Circle Layer | :white_check_mark:   | :white_check_mark: |
+| Raster Layer  | :white_check_mark:  | :white_check_mark:  |
+| Symbol Layer | :white_check_mark:   | :white_check_mark: |
+| Hillshade Layer | :white_check_mark:   | :white_check_mark: |
+| Heatmap Layer   | :white_check_mark:  | :white_check_mark:  |
+| Sky Layer | :white_check_mark:   | :white_check_mark: |
+| GeoJson Source  | :white_check_mark:   | :white_check_mark: |
+| Image Source   | :white_check_mark:   | :white_check_mark: |
+| Vector Source   |  :white_check_mark:  | :white_check_mark:  |
+| Raster Source  |  :white_check_mark:  | :white_check_mark:  |
+| Rasterdem Source  |  :white_check_mark:  | :white_check_mark:  |
+| Circle Annotations | :white_check_mark:   | :white_check_mark: |
+| Point Annotations | :white_check_mark:   | :white_check_mark: |
+| Line Annotations | :white_check_mark:   | :white_check_mark: |
+| Fill Annotations | :white_check_mark:   | :white_check_mark: |
+| Offline | :x: | :x: |
+| Viewport | :x: | :x: |
+| Style DSL   | :x:  | :x:  |
+| Expression DSL   | :x:  | :x:  |
+| View Annotations   | :x:  | :x:  |
 
 ## Requirements
 
-The Maps Flutter Plugin is compatible with applications that are:
+The Maps Flutter Plugin is compatible with applications:
 
 - Deployed on iOS 11 or higher
 - Built using the Android SDK 21 or higher
@@ -77,7 +115,7 @@ dependencies:
   mapbox_maps:
     git:
       url: git@github.com:mapbox/mapbox-maps-flutter.git
-      ref: 0.2.0
+      ref: 0.3.0
 ```
 
 ### Configure permissions
@@ -290,6 +328,8 @@ Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/user-inter
 
 Users interacting with the map in your application can explore the map by performing standard gestures. 
 
-You can pass custom `MapWidget.gestureRecognizers` to control which gestures
-are handled by the platform view.
+You can retrieve or update the `GestureSettings` using `MapboxMap.gestures`.
+
+You can observe gesture events using `MapWidget.onTapListener`, `MapWidget.onLongTapListener`, `MapWidget.onScrollListener`.
+
 

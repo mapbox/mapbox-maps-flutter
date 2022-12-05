@@ -1,3 +1,6 @@
+## 0.3.0 
+* Align Kotlin version 1.5.31 with the Maps SDK.
+
 ## 0.2.0
 
 * Rename `MapView` to `MapWidget`.

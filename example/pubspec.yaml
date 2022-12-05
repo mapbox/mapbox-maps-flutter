@@ -7,7 +7,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=2.12.0"
-  flutter: ">=1.20.0 <=2.10.5"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:
@@ -36,10 +36,6 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   turf: ^0.0.7
-
-dependency_overrides:
-  turf_equality: 
-    path: ../turf_equality
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

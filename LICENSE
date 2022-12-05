@@ -1,1 +1,35 @@
-TODO: Add your license here.
+### License
+
+Mapbox Maps Flutter Plugin
+
+Copyright © 2022 Mapbox
+
+All rights reserved.
+
+Mapbox Maps Flutter Plugin must be used according to the Mapbox Terms of Service. This license allows developers with a current active Mapbox account to use and modify the Mapbox Maps Flutter Plugin. Developers may modify the Mapbox Maps Flutter Plugin code so long as the modifications do not change or interfere with marked portions of the code related to billing, accounting, and anonymized data collection. The Mapbox Maps Flutter Plugin sends anonymized location and usage data, which Mapbox uses for fixing bugs and errors, accounting, and generating aggregated anonymized statistics. This license terminates automatically if a user no longer has an active Mapbox account.
+
+For the full license terms, please see the Mapbox Terms of Service at https://www.mapbox.com/legal/tos/
+
+## Additional Mapbox Maps Flutter Plugin licenses
+
+[enum_to_string](https://pub.dev/packages/enum_to_string).
+
+License: [MIT License](https://pub.dev/packages/enum_to_string/license)
+
+===========================================================================
+
+[flutter_plugin_android_lifecycle](https://pub.dev/packages/enum_to_string).
+
+License: [BSD-3-Clause](https://pub.dev/packages/flutter_plugin_android_lifecycle/license)
+
+===========================================================================
+
+[turf](https://pub.dev/packages/turf).
+
+License: [MIT License](https://pub.dev/packages/turf/license)
+
+===========================================================================
+
+[typed_data](https://pub.dev/packages/typed_data).
+
+License: [BSD-3-Clause](https://pub.dev/packages/typed_data/license)
