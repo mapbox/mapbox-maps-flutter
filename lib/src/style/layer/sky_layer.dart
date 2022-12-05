@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// A spherical dome around the map that is always rendered behind all other layers.
 class SkyLayer extends Layer {

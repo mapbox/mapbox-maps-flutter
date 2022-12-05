@@ -1,4 +1,4 @@
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// Controls the frame of reference for `fill-translate`.
 enum FillTranslateAnchor {

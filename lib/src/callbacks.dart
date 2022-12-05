@@ -1,4 +1,4 @@
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// Callback function taking a single argument.
 typedef void ArgumentCallback<T>(T argument);

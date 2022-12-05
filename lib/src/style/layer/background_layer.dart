@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// The background color or pattern of the map.
 class BackgroundLayer extends Layer {
