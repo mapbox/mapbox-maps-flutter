@@ -1,5 +1,6 @@
 ## 0.3.0 
 * Align Kotlin version 1.5.31 with the Maps SDK.
+* Rename library to `mapbox_maps_flutter` due to naming conflict to be able publish to `pub.dev`.
 
 ## 0.2.0
 

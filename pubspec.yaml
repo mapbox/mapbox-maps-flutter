@@ -1,4 +1,4 @@
-name: mapbox_maps
+name: mapbox_maps_flutter
 description: Mapbox Maps Flutter Plugin for Mapbox Maps SDK v10.
 version: 0.3.0
 homepage: https://github.com/mapbox/mapbox-maps-flutter

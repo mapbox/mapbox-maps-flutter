@@ -1,4 +1,4 @@
-import 'package:mapbox_maps/mapbox_maps.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:test/test.dart';
 
 void main() {

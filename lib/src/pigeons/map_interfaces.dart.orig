@@ -1,4 +1,4 @@
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 enum GlyphsRasterizationMode {
   NO_GLYPHS_RASTERIZED_LOCALLY,

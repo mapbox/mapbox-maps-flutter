@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// The global light source.
 /// Check the [online documentation](https://www.mapbox.com/mapbox-gl-style-spec/#light).

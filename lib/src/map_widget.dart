@@ -1,4 +1,4 @@
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// A MapWidget provides an embeddable map interface.
 /// You use this class to display map information and to manipulate the map contents from your application.

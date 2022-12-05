@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// An extruded (3D) polygon.
 class FillExtrusionLayer extends Layer {

@@ -1,4 +1,4 @@
-library mapbox_maps;
+library mapbox_maps_flutter;
 
 import 'dart:async';
 import 'dart:convert';

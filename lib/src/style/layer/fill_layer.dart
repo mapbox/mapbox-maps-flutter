@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// A filled polygon with an optional stroked border.
 class FillLayer extends Layer {

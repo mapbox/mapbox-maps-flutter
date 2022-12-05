@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps;
+part of mapbox_maps_flutter;
 
 /// Raster map textures such as satellite imagery.
 class RasterLayer extends Layer {
