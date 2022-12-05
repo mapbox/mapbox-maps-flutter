@@ -27,11 +27,11 @@ class GestureController(private val mapView: MapView) :
     gestureListener = FLTGestureListeners.GestureListener(messenger)
     mapView.gestures.addOnMapClickListener {
       gestureListener.onTap(it.toFLTScreenCoordinate()) {}
-      true
+      false
     }
     mapView.gestures.addOnMapLongClickListener {
       gestureListener.onLongTap(it.toFLTScreenCoordinate()) {}
-      true
+      false
     }
     mapView.gestures.addOnMoveListener(object :
         OnMoveListener {

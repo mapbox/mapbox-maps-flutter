@@ -1,21 +1,11 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
 orbs: 
-  # https://circleci.com/developer/orbs/orb/circleci/flutter?version=1.1.0
   flutter: circleci/flutter@1.1.0
-  android: circleci/android@2.0.3
-  macos: circleci/macos@2.2.0
+  android: circleci/android@2.1.2
+  macos: circleci/macos@2.3.3
 
 commands:
-  checkout-submodules:
-    steps:
-      - run: 
-          name: Checkout submodules
-          command: |
-            git submodule sync --recursive -- turf_equality
-            git submodule update --recursive --init -- turf_equality
 
   inject-netrc-credentials:
     steps:
@@ -62,29 +52,37 @@ commands:
               rm secret.json
             fi
 
+  add-mapbox-submodules-key:
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:cd:47:bf:57:9c:e5:36:b0:4d:5f:12:5e:d3:b3:3e"
+
 jobs:
+
   build-android:
-    executor:
-      name: android/android-machine
-      resource-class: xlarge
-      tag: 2022.03.1
+    parameters:
+      workspace-path:
+        type: string
+        default: example/build/app/outputs/apk
+    docker:
+      - image: cimg/android:2022.09
+    resource_class: xlarge
     steps:
       - checkout
-      - checkout-submodules
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
+          app-dir: example
       - run:
           name: ktlint
           working_directory: example/android
           command: ./gradlew ktlint
       - run:
-          name: flutter format
+          name: check flutter formatting
           command: ./scripts/check-format.sh
       - run:
           name: unit test
           command: flutter test test
-      - install-gcloud
-      - login-gcloud
       - run:
           name: "Build Android integration tests"
           working_directory: example/android
@@ -92,26 +90,50 @@ jobs:
             flutter build apk
             ./gradlew app:assembleAndroidTest
             ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="${MAPBOX_ACCESS_TOKEN_BASE64}"
+      - persist_to_workspace:
+          root: << parameters.workspace-path >>
+          paths:
+            - debug/app-debug.apk
+            - androidTest/debug/app-debug-androidTest.apk
+
+  run-android-tests-firebase:
+    parameters:
+      workspace-path:
+        type: string
+        default: example/build/app/outputs/apk
+    docker:
+      - image: cimg/android:2022.09
+    resource_class: large
+    steps:
+      - attach_workspace:
+          at: << parameters.workspace-path >>
+      - install-gcloud
+      - login-gcloud
       - run:
           name: "Run Android integration tests on Firebase"
-          working_directory: example
+          no_output_timeout: 20m
           command: |
             gcloud firebase test android run --type instrumentation \
-              --app build/app/outputs/apk/debug/app-debug.apk \
-              --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+              --app << parameters.workspace-path >>/debug/app-debug.apk \
+              --test << parameters.workspace-path >>/androidTest/debug/app-debug-androidTest.apk \
               --timeout 5m \
               --results-dir=result_dir \
               --use-orchestrator \
-              --num-flaky-test-attempts 3
-            
+              --num-flaky-test-attempts 3     
+                         
   build-ios:
+    parameters:
+      workspace-path:
+        type: string
+        default: example/build/output
     executor: macos-xcode-latest
     steps:
       - checkout
-      - checkout-submodules
       - inject-netrc-credentials
+      - add-mapbox-submodules-key
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
+          app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
       - run:
@@ -119,24 +141,65 @@ jobs:
           working_directory: ios
           command: brew install swiftlint; swiftlint lint --strict
       - run:
-          name: "Build flutter wrapper for iOS"
-          working_directory: example
-          command: flutter build ios --simulator --no-codesign
-      - run:
           name: unit test
           command: flutter test test
-      # - install-gcloud
-      # - login-gcloud
-      # - run-firebase-benchmark-ios 
-  
+      - run:
+          name: "Build iOS integration tests"
+          command: |
+            bundle exec fastlane update_code_signing
+
+            pushd example
+
+            # required to init configs that pass environment variables to fastlane later
+            flutter build ios --config-only integration_test/all_test.dart \
+              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+            flutter build ios integration_test/all_test.dart \
+              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+
+            popd # to repo root
+
+            bundle exec fastlane build_examples_tests
+      - persist_to_workspace:
+          root: << parameters.workspace-path >>
+          paths:
+            - build_products.zip
+
+  run-ios-tests-firebase:
+    parameters:
+      workspace-path:
+        type: string
+        default: example/build/output
+    executor: macos-xcode-latest
+    steps:
+      - attach_workspace:
+          at: << parameters.workspace-path >>
+      - install-gcloud
+      - login-gcloud
+      - run:
+          name: "Run iOS integration tests on Firebase"
+          no_output_timeout: 20m
+          command: |
+            gcloud firebase test ios run \
+              --test << parameters.workspace-path >>/build_products.zip \
+              --device model=iphone8,version=15.7
+
+
+
 workflows:
+  version: 2
   build:
     jobs:
       - build-android
+      - run-android-tests-firebase:
+          requires:
+            - build-android
       - build-ios
+      - run-ios-tests-firebase:
+          requires:
+            - build-ios
 
 executors:
   macos-xcode-latest:
     resource_class: large
     macos:
-      xcode: 13.3.0
+      xcode: 14.1.0
