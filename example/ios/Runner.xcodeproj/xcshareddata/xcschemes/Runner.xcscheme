@@ -69,19 +69,6 @@
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "--dart-define ACCESS_TOKEN=sk.eyJ1Ijoia2V2aW45OSIsImEiOiJja2Mxbmc4MzAxdjZrMnhteHF4NWZ2anozIn0.87ZAWClpQwNZ2GhpBtfOlg"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "ACCESS_TOKEN"
-            value = "sk.eyJ1Ijoia2V2aW45OSIsImEiOiJja2Mxbmc4MzAxdjZrMnhteHF4NWZ2anozIn0.87ZAWClpQwNZ2GhpBtfOlg"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Profile"
