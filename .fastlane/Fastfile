@@ -1,0 +1,50 @@
+default_platform(:ios)
+
+ENV["FASTLANE_SKIP_UPDATE_CHECK"] = "1"
+ENV["SPACESHIP_SKIP_2FA_UPGRADE"] = "1"
+
+platform :ios do
+
+  lane :update_code_signing do
+    setup_circle_ci
+    sync_code_signing(type: "development")
+  end
+
+  lane :build_examples_tests do
+    setup_circle_ci
+    sync_code_signing(type: "development")
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "example/ios/Runner.xcodeproj",
+      team_id: "GJZR2MEM28", # Developer Portal Team ID,
+      profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterMapsExample"],
+      targets: ["Runner"],
+      code_sign_identity: "Apple Development: Machiney McMachineface",
+    )
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "example/ios/Runner.xcodeproj",
+      team_id: "GJZR2MEM28", # Developer Portal Team ID,
+      profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterRunnerTests"],
+      targets: ["RunnerTests"],
+      code_sign_identity: "Apple Development: Machiney McMachineface",
+    )
+    # build tests archive in the `output_directory` to launch on firebase
+    run_tests(
+      workspace: 'example/ios/Runner.xcworkspace',
+      scheme: 'Runner',                   # XCTest scheme
+      xcconfig: "example/ios/Flutter/Release.xcconfig",
+      derived_data_path: "example/build/output",
+      configuration: "Release",
+      xcargs: "ENABLE_TESTABILITY=YES SWIFT_TREAT_WARNINGS_AS_ERRORS=NO COMPILER_INDEX_STORE_ENABLE=NO",
+      skip_detect_devices: true,          # Required
+      build_for_testing: true,            # Required
+      sdk: 'iphoneos',                    # Required
+      should_zip_build_products: true,    # Must be true to set the correct format for Firebase Test Lab,
+      result_bundle: true,
+      output_directory: "example/build/output/",
+      code_coverage: true
+    )
+  end
+
+end
