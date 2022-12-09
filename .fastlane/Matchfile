@@ -1,0 +1,4 @@
+git_url("git@github.com:mapbox/apple-certificates.git")
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+app_identifier(["com.mapbox.maps.FlutterMapsExample", "com.mapbox.maps.FlutterRunnerTests"])
+username("applemachine@mapbox.com")

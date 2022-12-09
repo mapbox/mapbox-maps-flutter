@@ -112,10 +112,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter:
-    git:
-      url: git@github.com:mapbox/mapbox-maps-flutter.git
-      ref: 0.3.0
+  mapbox_maps_flutter: ^0.3.0
 ```
 
 ### Configure permissions
