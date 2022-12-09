@@ -73,14 +73,10 @@ jobs:
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
           app-dir: example
-      # FIXME
-      # - run:
-      #     name: ktlint
-      #     working_directory: example/android
-      #     command: ./gradlew ktlint
       - run:
-          name: check flutter formatting
-          command: ./scripts/check-format.sh
+          name: ktlint
+          working_directory: example/android
+          command: ./gradlew ktlint
       - run:
           name: unit test
           command: flutter test test

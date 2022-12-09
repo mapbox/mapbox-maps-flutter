@@ -1,0 +1,58 @@
+PODS:
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - mapbox_maps_flutter (0.3.0):
+    - Flutter
+    - MapboxMaps (~> 10.9.0)
+  - MapboxCommon (23.1.0)
+  - MapboxCoreMaps (10.9.1):
+    - MapboxCommon (~> 23.1)
+  - MapboxMaps (10.9.1):
+    - MapboxCommon (= 23.1.0)
+    - MapboxCoreMaps (= 10.9.1)
+    - MapboxMobileEvents (= 1.0.8)
+    - Turf (~> 2.0)
+  - MapboxMobileEvents (1.0.8)
+  - permission_handler_apple (9.0.4):
+    - Flutter
+  - Turf (2.6.1)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - mapbox_maps_flutter (from `.symlinks/plugins/mapbox_maps_flutter/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+
+SPEC REPOS:
+  trunk:
+    - MapboxCommon
+    - MapboxCoreMaps
+    - MapboxMaps
+    - MapboxMobileEvents
+    - Turf
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  mapbox_maps_flutter:
+    :path: ".symlinks/plugins/mapbox_maps_flutter/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  mapbox_maps_flutter: 953b10ab22156fdd6b00b14a87a9e731716d443a
+  MapboxCommon: bfffb68226f650df065cf24e307576267ebc75e8
+  MapboxCoreMaps: c74e3dd1d7d2b8c0ca5503d8c3e8ef79a8feccd5
+  MapboxMaps: f5e3858e71a923f0e2fc168a93397cfd98341dc5
+  MapboxMobileEvents: febdd92835daa258ca1c1faad0821c0b3394ef40
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
+
+PODFILE CHECKSUM: cd2684f44b1e96d66bfefd9014d340eb8f1ae481
+
+COCOAPODS: 1.11.3
