@@ -54,9 +54,11 @@ android {
     }
 }
 
-project.apply {
-    from("$rootDir/gradle/ktlint.gradle")
-    from("$rootDir/gradle/lint.gradle")
+if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint.gradle").exists) {
+    project.apply {
+        from("$rootDir/gradle/ktlint.gradle")
+        from("$rootDir/gradle/lint.gradle")
+    }
 }
 
 dependencies {

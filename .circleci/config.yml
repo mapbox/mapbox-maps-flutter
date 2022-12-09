@@ -73,10 +73,14 @@ jobs:
       - flutter/install_sdk_and_pub:
           flutter_version: 3.3.2
           app-dir: example
+      # FIXME
+      # - run:
+      #     name: ktlint
+      #     working_directory: example/android
+      #     command: ./gradlew ktlint
       - run:
-          name: ktlint
-          working_directory: example/android
-          command: ./gradlew ktlint
+          name: check flutter formatting
+          command: ./scripts/check-format.sh
       - run:
           name: unit test
           command: flutter test test
@@ -141,9 +145,25 @@ jobs:
           name: unit test
           command: flutter test test
       - run:
-          name: "Build flutter wrapper for iOS"
-          working_directory: example
-          command: flutter build ios --simulator --no-codesign
+          name: "Build iOS integration tests"
+          command: |
+            bundle exec fastlane update_code_signing
+
+            pushd example
+
+            # required to init configs that pass environment variables to fastlane later
+            flutter build ios --config-only integration_test/all_test.dart \
+              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+            flutter build ios integration_test/all_test.dart \
+              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+
+            popd # to repo root
+
+            bundle exec fastlane build_examples_tests
+      - persist_to_workspace:
+          root: << parameters.workspace-path >>
+          paths:
+            - build_products.zip
 
   run-ios-tests-firebase:
     parameters:
@@ -171,7 +191,13 @@ workflows:
   build:
     jobs:
       - build-android
+      - run-android-tests-firebase:
+          requires:
+            - build-android
       - build-ios
+      - run-ios-tests-firebase:
+          requires:
+            - build-ios
 
 executors:
   macos-xcode-latest:
