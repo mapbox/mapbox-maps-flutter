@@ -5,17 +5,17 @@
 Pod::Spec.new do |s|
   s.name             = 'mapbox_maps_flutter'
   s.version          = '0.3.0'
-  s.summary          = 'A new flutter plugin project.'
-  s.description      = <<-DESC
-A new flutter plugin project.
-                       DESC
-  s.homepage         = 'http://example.com'
+
+  s.summary          = 'Mapbox Maps SDK Flutter Plugin.'
+  s.description      = 'An officially developed solution from Mapbox that enables use of our latest Maps SDK product.'
+  s.homepage         = 'https://pub.dev/packages/mapbox_maps_flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Mapbox' => 'mobile@mapbox.com' }
   s.source           = { :path => '.' }
+
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '15.0'
+  s.platform = :ios, '11.0'
   s.dependency 'MapboxMaps', '~> 10.9.0'
 
   # Flutter.framework does not contain a i386 slice.
