@@ -5,12 +5,14 @@ import android.graphics.BitmapFactory
 import com.mapbox.bindgen.Value
 import com.mapbox.common.Logger
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import java.nio.ByteBuffer
+import java.util.Locale
 
 class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
@@ -580,6 +582,17 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
           result.error(Throwable("Invalid projection $projection"))
         }
       }
+      result.success(null)
+    }
+  }
+
+  override fun localizeLabels(
+    locale: String,
+    layerIds: MutableList<String>?,
+    result: FLTMapInterfaces.Result<Void>
+  ) {
+    mapboxMap.getStyle {
+      it.localizeLabels(Locale(locale), layerIds)
       result.success(null)
     }
   }
