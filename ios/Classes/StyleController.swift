@@ -414,5 +414,10 @@ class StyleController: NSObject, FLTStyleManager {
         completion(nil)
     }
 
+    func localizeLabelsLocale(_ locale: String, layerIds: [String]?, completion: @escaping (FlutterError?) -> Void) {
+        try! mapboxMap.style.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
+        completion(nil)
+    }
+
     private static let errorCode = "0"
 }

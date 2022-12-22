@@ -29,6 +29,7 @@ class StylePageBodyState extends State<StylePageBody> {
 
   MapboxMap? mapboxMap;
   var mapProject = 'globe';
+  var locale = 'en';
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -446,6 +447,20 @@ class StylePageBodyState extends State<StylePageBody> {
     );
   }
 
+  Widget _changeLocale() {
+    return TextButton(
+      child: Text('changeLocale'),
+      onPressed: () {
+        if (locale == 'en') {
+          locale = 'de';
+        } else {
+          locale = 'en';
+        }
+        mapboxMap?.style.localizeLabels(locale, null);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -484,6 +499,7 @@ class StylePageBodyState extends State<StylePageBody> {
         _isStyleLoaded(),
         _getProjection(),
         _setProjection(),
+        _changeLocale(),
       ],
     );
 

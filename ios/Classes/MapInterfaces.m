@@ -5596,6 +5596,27 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
       [channel setMessageHandler:nil];
     }
   }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.StyleManager.localizeLabels"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()        ];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(localizeLabelsLocale:layerIds:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(localizeLabelsLocale:layerIds:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_locale = GetNullableObjectAtIndex(args, 0);
+        NSArray<NSString *> *arg_layerIds = GetNullableObjectAtIndex(args, 1);
+        [api localizeLabelsLocale:arg_locale layerIds:arg_layerIds completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
 }
 @interface FLTCancelableCodecReader : FlutterStandardReader
 @end

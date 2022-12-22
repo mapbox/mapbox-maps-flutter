@@ -6665,6 +6665,7 @@ public class FLTMapInterfaces {
     void isStyleLoaded(Result<Boolean> result);
     void getProjection(Result<String> result);
     void setProjection(@NonNull String projection, Result<Void> result);
+    void localizeLabels(@NonNull String locale, @Nullable List<String> layerIds, Result<Void> result);
 
     /** The codec used by StyleManager. */
     static MessageCodec<Object> getCodec() {
@@ -8131,6 +8132,41 @@ public class FLTMapInterfaces {
               };
 
               api.setProjection(projectionArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.StyleManager.localizeLabels", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              String localeArg = (String)args.get(0);
+              if (localeArg == null) {
+                throw new NullPointerException("localeArg unexpectedly null.");
+              }
+              List<String> layerIdsArg = (List<String>)args.get(1);
+              Result<Void> resultCallback = new Result<Void>() {
+                public void success(Void result) {
+                  wrapped.put("result", null);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.localizeLabels(localeArg, layerIdsArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));
