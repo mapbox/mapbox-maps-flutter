@@ -6,6 +6,9 @@ package com.mapbox.maps.pigeons;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.mapbox.maps.MapboxExperimental;
+
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MessageCodec;
@@ -2752,24 +2755,24 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -2777,23 +2780,23 @@ public class FLTMapInterfaces {
       if (value instanceof CameraOptions) {
         stream.write(128);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(129);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(130);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(131);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(132);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -2999,111 +3002,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -3111,139 +3114,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -3758,111 +3761,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -3870,139 +3873,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -4836,18 +4839,18 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -4855,15 +4858,15 @@ public class FLTMapInterfaces {
       if (value instanceof CoordinateBounds) {
         stream.write(128);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(129);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(130);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -5130,111 +5133,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -5242,139 +5245,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -5607,111 +5610,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -5719,139 +5722,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -5966,111 +5969,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -6078,139 +6081,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -6370,111 +6373,111 @@ public class FLTMapInterfaces {
     @Override
     protected Object readValueOfType(byte type, ByteBuffer buffer) {
       switch (type) {
-        case (byte)128:         
+        case (byte)128:
           return CameraBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)129:         
+
+        case (byte)129:
           return CameraBoundsOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)130:         
+
+        case (byte)130:
           return CameraOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)131:         
+
+        case (byte)131:
           return CameraState.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)132:         
+
+        case (byte)132:
           return CanonicalTileID.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)133:         
+
+        case (byte)133:
           return CoordinateBounds.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)134:         
+
+        case (byte)134:
           return CoordinateBoundsZoom.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)135:         
+
+        case (byte)135:
           return FeatureExtensionValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)136:         
+
+        case (byte)136:
           return GlyphsRasterizationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)137:         
+
+        case (byte)137:
           return ImageContent.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)138:         
+
+        case (byte)138:
           return ImageStretches.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)139:         
+
+        case (byte)139:
           return LayerPosition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)140:         
+
+        case (byte)140:
           return MapAnimationOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)141:         
+
+        case (byte)141:
           return MapDebugOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)142:         
+
+        case (byte)142:
           return MapMemoryBudgetInMegabytes.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)143:         
+
+        case (byte)143:
           return MapMemoryBudgetInTiles.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)144:         
+
+        case (byte)144:
           return MapOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)145:         
+
+        case (byte)145:
           return MbxEdgeInsets.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)146:         
+
+        case (byte)146:
           return MbxImage.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)147:         
+
+        case (byte)147:
           return MercatorCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)148:         
+
+        case (byte)148:
           return OfflineRegionGeometryDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)149:         
+
+        case (byte)149:
           return OfflineRegionTilePyramidDefinition.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)150:         
+
+        case (byte)150:
           return ProjectedMeters.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)151:         
+
+        case (byte)151:
           return QueriedFeature.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)152:         
+
+        case (byte)152:
           return RenderedQueryGeometry.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)153:         
+
+        case (byte)153:
           return RenderedQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)154:         
+
+        case (byte)154:
           return ResourceOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)155:         
+
+        case (byte)155:
           return ScreenBox.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)156:         
+
+        case (byte)156:
           return ScreenCoordinate.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)157:         
+
+        case (byte)157:
           return Size.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)158:         
+
+        case (byte)158:
           return SourceQueryOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)159:         
+
+        case (byte)159:
           return StyleObjectInfo.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)160:         
+
+        case (byte)160:
           return StylePropertyValue.fromMap((Map<String, Object>) readValue(buffer));
-        
-        case (byte)161:         
+
+        case (byte)161:
           return TransitionOptions.fromMap((Map<String, Object>) readValue(buffer));
-        
-        default:        
+
+        default:
           return super.readValueOfType(type, buffer);
-        
+
       }
     }
     @Override
@@ -6482,139 +6485,139 @@ public class FLTMapInterfaces {
       if (value instanceof CameraBounds) {
         stream.write(128);
         writeValue(stream, ((CameraBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraBoundsOptions) {
         stream.write(129);
         writeValue(stream, ((CameraBoundsOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraOptions) {
         stream.write(130);
         writeValue(stream, ((CameraOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof CameraState) {
         stream.write(131);
         writeValue(stream, ((CameraState) value).toMap());
-      } else 
+      } else
       if (value instanceof CanonicalTileID) {
         stream.write(132);
         writeValue(stream, ((CanonicalTileID) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBounds) {
         stream.write(133);
         writeValue(stream, ((CoordinateBounds) value).toMap());
-      } else 
+      } else
       if (value instanceof CoordinateBoundsZoom) {
         stream.write(134);
         writeValue(stream, ((CoordinateBoundsZoom) value).toMap());
-      } else 
+      } else
       if (value instanceof FeatureExtensionValue) {
         stream.write(135);
         writeValue(stream, ((FeatureExtensionValue) value).toMap());
-      } else 
+      } else
       if (value instanceof GlyphsRasterizationOptions) {
         stream.write(136);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageContent) {
         stream.write(137);
         writeValue(stream, ((ImageContent) value).toMap());
-      } else 
+      } else
       if (value instanceof ImageStretches) {
         stream.write(138);
         writeValue(stream, ((ImageStretches) value).toMap());
-      } else 
+      } else
       if (value instanceof LayerPosition) {
         stream.write(139);
         writeValue(stream, ((LayerPosition) value).toMap());
-      } else 
+      } else
       if (value instanceof MapAnimationOptions) {
         stream.write(140);
         writeValue(stream, ((MapAnimationOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapDebugOptions) {
         stream.write(141);
         writeValue(stream, ((MapDebugOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInMegabytes) {
         stream.write(142);
         writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toMap());
-      } else 
+      } else
       if (value instanceof MapMemoryBudgetInTiles) {
         stream.write(143);
         writeValue(stream, ((MapMemoryBudgetInTiles) value).toMap());
-      } else 
+      } else
       if (value instanceof MapOptions) {
         stream.write(144);
         writeValue(stream, ((MapOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxEdgeInsets) {
         stream.write(145);
         writeValue(stream, ((MbxEdgeInsets) value).toMap());
-      } else 
+      } else
       if (value instanceof MbxImage) {
         stream.write(146);
         writeValue(stream, ((MbxImage) value).toMap());
-      } else 
+      } else
       if (value instanceof MercatorCoordinate) {
         stream.write(147);
         writeValue(stream, ((MercatorCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionGeometryDefinition) {
         stream.write(148);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof OfflineRegionTilePyramidDefinition) {
         stream.write(149);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toMap());
-      } else 
+      } else
       if (value instanceof ProjectedMeters) {
         stream.write(150);
         writeValue(stream, ((ProjectedMeters) value).toMap());
-      } else 
+      } else
       if (value instanceof QueriedFeature) {
         stream.write(151);
         writeValue(stream, ((QueriedFeature) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
         writeValue(stream, ((RenderedQueryGeometry) value).toMap());
-      } else 
+      } else
       if (value instanceof RenderedQueryOptions) {
         stream.write(153);
         writeValue(stream, ((RenderedQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ResourceOptions) {
         stream.write(154);
         writeValue(stream, ((ResourceOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenBox) {
         stream.write(155);
         writeValue(stream, ((ScreenBox) value).toMap());
-      } else 
+      } else
       if (value instanceof ScreenCoordinate) {
         stream.write(156);
         writeValue(stream, ((ScreenCoordinate) value).toMap());
-      } else 
+      } else
       if (value instanceof Size) {
         stream.write(157);
         writeValue(stream, ((Size) value).toMap());
-      } else 
+      } else
       if (value instanceof SourceQueryOptions) {
         stream.write(158);
         writeValue(stream, ((SourceQueryOptions) value).toMap());
-      } else 
+      } else
       if (value instanceof StyleObjectInfo) {
         stream.write(159);
         writeValue(stream, ((StyleObjectInfo) value).toMap());
-      } else 
+      } else
       if (value instanceof StylePropertyValue) {
         stream.write(160);
         writeValue(stream, ((StylePropertyValue) value).toMap());
-      } else 
+      } else
       if (value instanceof TransitionOptions) {
         stream.write(161);
         writeValue(stream, ((TransitionOptions) value).toMap());
-      } else 
+      } else
 {
         super.writeValue(stream, value);
       }
@@ -6642,6 +6645,7 @@ public class FLTMapInterfaces {
     void getStyleLayerProperties(@NonNull String layerId, Result<String> result);
     void setStyleLayerProperties(@NonNull String layerId, @NonNull String properties, Result<Void> result);
     void addStyleSource(@NonNull String sourceId, @NonNull String properties, Result<Void> result);
+    void addStyleModel(@NonNull String sourceId, @NonNull String modelUri, Result<Void> result);
     void getStyleSourceProperty(@NonNull String sourceId, @NonNull String property, Result<StylePropertyValue> result);
     void setStyleSourceProperty(@NonNull String sourceId, @NonNull String property, @NonNull Object value, Result<Void> result);
     void getStyleSourceProperties(@NonNull String sourceId, Result<String> result);
@@ -7270,6 +7274,45 @@ public class FLTMapInterfaces {
               };
 
               api.setStyleLayerProperties(layerIdArg, propertiesArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+                new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.StyleManager.addModel", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              Map<String,String> args = (Map<String,String>) message;
+              String sourceId = args.get("id");
+              if (sourceId == null) {
+                throw new NullPointerException("sourceId unexpectedly null.");
+              }
+              String modelUri = args.get("uri");
+              if (modelUri == null) {
+                throw new NullPointerException("modelUri unexpectedly null.");
+              }
+
+              Result<Void> resultCallback = new Result<Void>() {
+                public void success(Void result) {
+                  wrapped.put("result", null);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.addStyleModel(sourceId, modelUri, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

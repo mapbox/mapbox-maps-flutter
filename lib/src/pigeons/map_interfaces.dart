@@ -1645,6 +1645,7 @@ class StylePropertyValue {
 
 class __AnimationManagerCodec extends StandardMessageCodec {
   const __AnimationManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraOptions) {
@@ -1889,6 +1890,7 @@ class _AnimationManager {
 
 class __CameraManagerCodec extends StandardMessageCodec {
   const __CameraManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -2687,6 +2689,7 @@ class _CameraManager {
 
 class __MapInterfaceCodec extends StandardMessageCodec {
   const __MapInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -3715,6 +3718,7 @@ class _MapInterface {
 
 class _OfflineRegionCodec extends StandardMessageCodec {
   const _OfflineRegionCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CoordinateBounds) {
@@ -4007,6 +4011,7 @@ class OfflineRegionManager {
 
 class _ProjectionCodec extends StandardMessageCodec {
   const _ProjectionCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -4464,6 +4469,7 @@ class Settings {
 
 class _MapSnapshotCodec extends StandardMessageCodec {
   const _MapSnapshotCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -4817,6 +4823,7 @@ class MapSnapshot {
 
 class _MapSnapshotterCodec extends StandardMessageCodec {
   const _MapSnapshotterCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -5205,6 +5212,7 @@ class MapSnapshotter {
 
 class _StyleManagerCodec extends StandardMessageCodec {
   const _StyleManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -5949,7 +5957,30 @@ class StyleManager {
       return;
     }
   }
-
+  Future<void> addModel(ModelSource source) async{
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.addModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+    await channel.send(source.encode())
+    as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+      (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
   Future<StylePropertyValue> getStyleSourceProperty(
       String arg_sourceId, String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(

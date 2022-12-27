@@ -216,6 +216,9 @@ extension StyleLayer on StyleManager {
       case "symbol":
         layer = SymbolLayer.decode(properties);
         break;
+      case "model":
+        layer = ModelLayer.decode(properties);
+        break;
       default:
         print("Layer type: $type unknown.");
     }
@@ -260,6 +263,9 @@ extension StyleSource on StyleManager {
         break;
       case "raster":
         source = RasterSource(id: sourceId);
+        break;
+      case "model":
+        source = ModelSource(id: sourceId, uri: map["uri"]);
         break;
       default:
         print("Source type: $type unknown.");
