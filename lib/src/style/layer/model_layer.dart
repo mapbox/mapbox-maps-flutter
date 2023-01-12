@@ -4,7 +4,7 @@ class ModelLayer extends Layer {
   ModelLayer({
     required String id,
     required this.sourceId,
-    required this.modelId,
+    this.modelId,
     this.visibility = Visibility.VISIBLE,
     this.modelType = ModelType.COMMON_3D,
     this.sourceLayer,
@@ -22,7 +22,7 @@ class ModelLayer extends Layer {
   final String sourceId;
 
   /// Model to render.
-  final String modelId;
+  final String? modelId;
 
   /// A source layer is an individual layer of data within a vector source.
   /// A vector source can have multiple source layers.
@@ -67,11 +67,7 @@ class ModelLayer extends Layer {
 
     if (visibility != null) {
       layout["visibility"] =
-          visibility
-              ?.toString()
-              .split('.')
-              .last
-              .toLowerCase();
+          visibility?.toString().split('.').last.toLowerCase();
     }
     if (modelId != null) {
       layout["model-id"] = modelId;
@@ -128,5 +124,4 @@ class ModelLayer extends Layer {
     }
     return ModelLayer(id: map['id'], sourceId: map['source'], modelId: '');
   }
-
 }

@@ -5635,6 +5635,7 @@ class StyleManager {
 
   Future<void> addStyleLayer(
       String arg_properties, LayerPosition? arg_layerPosition) async {
+
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.StyleManager.addStyleLayer', codec,
         binaryMessenger: _binaryMessenger);
@@ -5963,8 +5964,7 @@ class StyleManager {
         'dev.flutter.pigeon.StyleManager.addModel', codec,
         binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap = await channel
-            .send(ModelSource(id: arg_sourceId, uri: arg_modelUri).encode())
-        as Map<Object?, Object?>?;
+        .send(<Object?>[arg_sourceId, arg_modelUri]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

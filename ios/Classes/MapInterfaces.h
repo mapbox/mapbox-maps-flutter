@@ -791,6 +791,10 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 - (void)getProjectionWithCompletion:(void(^)(NSString *_Nullable, FlutterError *_Nullable))completion;
 - (void)setProjectionProjection:(NSString *)projection completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)localizeLabelsLocale:(NSString *)locale layerIds:(nullable NSArray<NSString *> *)layerIds completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)addStyleModel:(NSString *) sourceId withModelUri:(NSString *) modelUri completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)removeStyleModel:(NSString *) sourceId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)hasStyleModel:(NSString *)sourceId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+
 @end
 
 extern void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTStyleManager> *_Nullable api);

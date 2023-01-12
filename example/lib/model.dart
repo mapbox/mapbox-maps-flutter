@@ -25,6 +25,10 @@ class Model extends StatefulWidget {
 class _ModelState extends State<Model> {
   late MapboxMap _mapController;
   final name = "modelName";
+  final key = "model-id-key";
+  final modelIdKey = "model-id-key";
+  final sourceId = "source-id";
+  final modelId = "model-id";
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class _ModelState extends State<Model> {
           cameraOptions: CameraOptions(
               center:
                   Point(coordinates: Position(50.0249701, 26.1992264)).toJson(),
-              zoom: 16.0),
+              zoom: 18.0),
           styleUri: MapboxStyles.LIGHT,
           textureView: true,
           onStyleLoadedListener: (_) async {
@@ -49,37 +53,21 @@ class _ModelState extends State<Model> {
         ),
         Row(
           children: [
-            ElevatedButton(
-                onPressed: () async {
-                  final key = "model-id-key";
-
-                  await _mapController.style.addModel(name,
-                      'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf');
-                  await _mapController.style.addSource(GeoJsonSource(
-                      id: name,
-                      data: jsonEncode(FeatureCollection(features: [
-                        Feature(
-                            id: "source12",
-                            geometry: Point(
-                                coordinates: Position(50.0249701, 26.1992264)),
-                            properties: {key: name}),
-                      ]).toJson())));
-                  await _mapController.style.addLayer(ModelLayer(
-                      id: name,
-                      sourceId: name,
-                      modelId: name,
-                      scale: [1.0, 1.0, 1.0]));
-                },
-                child: Text('Add model')),
+            ElevatedButton(onPressed: _addModel, child: Text('Add model')),
             ElevatedButton(
                 onPressed: () async {
                   var styleManager = _mapController.style;
-                  if (await styleManager.hasModel(name)) {
+                  var hasModel = await styleManager.hasModel(modelId);
+                  var hasLayer =
+                      await styleManager.styleLayerExists("model-layer-id");
+                  print(hasModel);
+                  print(hasLayer);
+                  if (hasModel && hasLayer) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Removing model")));
-                    await styleManager.removeStyleLayer(name);
-                    await styleManager.removeModel(name);
-                    await styleManager.removeStyleSource(name);
+                    await styleManager.removeStyleLayer("model-layer-id");
+                    await styleManager.removeModel(modelId);
+                    await styleManager.removeStyleSource(sourceId);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Model not added")));
@@ -90,10 +78,18 @@ class _ModelState extends State<Model> {
                 onPressed: () async {
                   var styleManager = _mapController.style;
 
-                  if (await styleManager.hasModel(name)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Model exists")));
-                  }else{
+                  var hasModel = await styleManager.hasModel(modelId);
+                  var hasGeojson =
+                      await styleManager.styleSourceExists(sourceId);
+                  var hasLayer =
+                      await styleManager.styleLayerExists("model-layer-id");
+                  print(hasModel);
+                  print(hasLayer);
+                  print(hasGeojson);
+                  if (hasModel && hasLayer) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text("Model exists")));
+                  } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("Model not found")));
                   }
@@ -103,5 +99,33 @@ class _ModelState extends State<Model> {
         )
       ],
     ));
+  }
+
+  void _addModel() async {
+    print("addModel");
+    try {
+      await _mapController.style.addModel(modelId,
+          'https://docs.mapbox.com/mapbox-gl-js/assets/34M_17/34M_17.gltf');
+
+      var geoJsonSource = GeoJsonSource(
+          id: sourceId,
+          data: jsonEncode(FeatureCollection(features: [
+            Feature(
+                id: "feature1",
+                geometry: Point(coordinates: Position(50.0249701, 26.1992264)),
+                properties: {modelIdKey: modelId}),
+          ]).toJson()));
+      await _mapController.style.addSource(geoJsonSource);
+
+      var modelLayer = ModelLayer(
+          id: "model-layer-id",
+          sourceId: sourceId,
+          modelType: ModelType.COMMON_3D,
+          modelId: modelId,
+          scale: [1.0, 1.0, 1.0]);
+      await _mapController.style.addLayer(modelLayer);
+    } catch (error) {
+      print(error);
+    }
   }
 }

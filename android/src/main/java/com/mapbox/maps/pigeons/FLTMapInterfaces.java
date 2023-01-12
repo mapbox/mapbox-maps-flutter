@@ -8035,12 +8035,6 @@ public class FLTMapInterfaces {
 
         void addStyleSource(@NonNull String sourceId, @NonNull String properties, Result<Void> result);
 
-        void addStyleModel(@NonNull String sourceId, @NonNull String modelUri, Result<Void> result);
-
-        void removeStyleModel(@NonNull String sourceId, Result<Void> result);
-
-        void hasStyleModel(@NonNull String sourceId, Result<Boolean> result);
-
         void getStyleSourceProperty(@NonNull String sourceId, @NonNull String property, Result<StylePropertyValue> result);
 
         void setStyleSourceProperty(@NonNull String sourceId, @NonNull String property, @NonNull Object value, Result<Void> result);
@@ -8088,6 +8082,12 @@ public class FLTMapInterfaces {
         void setProjection(@NonNull String projection, Result<Void> result);
 
         void localizeLabels(@NonNull String locale, @Nullable List<String> layerIds, Result<Void> result);
+
+        void addStyleModel(@NonNull String sourceId, @NonNull String modelUri, Result<Void> result);
+
+        void removeStyleModel(@NonNull String sourceId, Result<Void> result);
+
+        void hasStyleModel(@NonNull String sourceId, Result<Boolean> result);
 
         /**
          * The codec used by StyleManager.
@@ -8713,15 +8713,16 @@ public class FLTMapInterfaces {
                     channel.setMessageHandler((message, reply) -> {
                         Map<String, Object> wrapped = new HashMap<>();
                         try {
-                            Map<String, String> args = (Map<String, String>) message;
-                            String sourceId = args.get("id");
+                            ArrayList<Object> args = (ArrayList<Object>) message;
+                            String sourceId = (String) args.get(0);
                             if (sourceId == null) {
                                 throw new NullPointerException("sourceId unexpectedly null.");
                             }
-                            String modelUri = args.get("uri");
+                            String modelUri = (String) args.get(1);
                             if (modelUri == null) {
                                 throw new NullPointerException("modelUri unexpectedly null.");
                             }
+
 
                             Result<Void> resultCallback = new Result<Void>() {
                                 public void success(Void result) {
