@@ -1,7 +1,7 @@
 part of mapbox_maps_flutter;
 
 class ModelSource extends Source {
-  final Uri uri;
+  final String uri;
 
   ModelSource({required String id, required this.uri}) : super(id: id);
 
@@ -12,7 +12,7 @@ class ModelSource extends Source {
   String _encode(bool volatile) {
     var properties = <String, dynamic>{};
     properties["id"] = id;
-    properties['uri'] = uri.path;
+    properties['uri'] = uri;
     properties["type"] = getType();
     return json.encode(properties);
   }

@@ -5957,13 +5957,14 @@ class StyleManager {
       return;
     }
   }
-  Future<void> addModel(ModelSource source) async{
+
+  Future<void> addModel(String arg_sourceId, String arg_modelUri) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.StyleManager.addModel', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-    await channel.send(source.encode())
-    as Map<Object?, Object?>?;
+    final Map<Object?, Object?>? replyMap = await channel
+            .send(ModelSource(id: arg_sourceId, uri: arg_modelUri).encode())
+        as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -5971,7 +5972,7 @@ class StyleManager {
       );
     } else if (replyMap['error'] != null) {
       final Map<Object?, Object?> error =
-      (replyMap['error'] as Map<Object?, Object?>?)!;
+          (replyMap['error'] as Map<Object?, Object?>?)!;
       throw PlatformException(
         code: (error['code'] as String?)!,
         message: error['message'] as String?,
@@ -5981,6 +5982,60 @@ class StyleManager {
       return;
     }
   }
+
+  Future<void> removeModel(String arg_sourceId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.removeModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send([arg_sourceId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> hasModel(String arg_sourceId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.hasModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_sourceId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as bool?)!;
+    }
+  }
+
   Future<StylePropertyValue> getStyleSourceProperty(
       String arg_sourceId, String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
