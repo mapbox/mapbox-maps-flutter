@@ -13,16 +13,14 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final logo = mapboxMap.logo;
-    var setttings = LogoSettings(
-        enabled: true,
+    var settings = LogoSettings(
         position: OrnamentPosition.BOTTOM_LEFT,
         marginLeft: 1,
         marginTop: 2,
         marginRight: 3,
         marginBottom: 4);
-    await logo.updateSettings(setttings);
+    await logo.updateSettings(settings);
     var getSettings = await logo.getSettings();
-    expect(getSettings.enabled, true);
     expect(getSettings.position, OrnamentPosition.BOTTOM_LEFT);
     if (Platform.isIOS) {
       expect(getSettings.marginLeft, 1);

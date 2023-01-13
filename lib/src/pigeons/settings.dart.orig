@@ -460,7 +460,6 @@ class CompassSettings {
 
 class AttributionSettings {
   AttributionSettings({
-    this.enabled,
     this.iconColor,
     this.position,
     this.marginLeft,
@@ -470,7 +469,6 @@ class AttributionSettings {
     this.clickable,
   });
 
-  bool? enabled;
   int? iconColor;
   OrnamentPosition? position;
   double? marginLeft;
@@ -481,7 +479,6 @@ class AttributionSettings {
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
     pigeonMap['iconColor'] = iconColor;
     pigeonMap['position'] = position?.index;
     pigeonMap['marginLeft'] = marginLeft;
@@ -495,7 +492,6 @@ class AttributionSettings {
   static AttributionSettings decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return AttributionSettings(
-      enabled: pigeonMap['enabled'] as bool?,
       iconColor: pigeonMap['iconColor'] as int?,
       position: pigeonMap['position'] != null
           ? OrnamentPosition.values[pigeonMap['position']! as int]
@@ -511,7 +507,6 @@ class AttributionSettings {
 
 class LogoSettings {
   LogoSettings({
-    this.enabled,
     this.position,
     this.marginLeft,
     this.marginTop,
@@ -519,7 +514,6 @@ class LogoSettings {
     this.marginBottom,
   });
 
-  bool? enabled;
   OrnamentPosition? position;
   double? marginLeft;
   double? marginTop;
@@ -528,7 +522,6 @@ class LogoSettings {
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
     pigeonMap['position'] = position?.index;
     pigeonMap['marginLeft'] = marginLeft;
     pigeonMap['marginTop'] = marginTop;
@@ -540,7 +533,6 @@ class LogoSettings {
   static LogoSettings decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return LogoSettings(
-      enabled: pigeonMap['enabled'] as bool?,
       position: pigeonMap['position'] != null
           ? OrnamentPosition.values[pigeonMap['position']! as int]
           : null,

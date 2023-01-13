@@ -152,8 +152,6 @@ class MapboxMap extends ChangeNotifier {
   final LocationComponentSettingsInterface location =
       LocationComponentSettingsInterface();
 
-  /// The interface to set the logo.
-  final LogoSettingsInterface logo = LogoSettingsInterface();
   final _CameraManager _cameraManager = _CameraManager();
   final _MapInterface _mapInterface = _MapInterface();
   final _AnimationManager _animationManager = _AnimationManager();
@@ -167,6 +165,19 @@ class MapboxMap extends ChangeNotifier {
 
   /// The interface to access the gesture settings.
   final GesturesSettingsInterface gestures = GesturesSettingsInterface();
+
+  /// The interface to set the logo settings.
+  final LogoSettingsInterface logo = LogoSettingsInterface();
+
+  /// The interface to access the compass settings.
+  final CompassSettingsInterface compass = CompassSettingsInterface();
+
+  /// The interface to access the compass settings.
+  final ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface();
+
+  /// The interface to access the attribution settings.
+  final AttributionSettingsInterface attribution =
+      AttributionSettingsInterface();
 
   final OnMapTapListener? onMapTapListener;
   final OnMapLongTapListener? onMapLongTapListener;
