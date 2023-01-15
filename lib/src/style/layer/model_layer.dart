@@ -122,6 +122,6 @@ class ModelLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return ModelLayer(id: map['id'], sourceId: map['source'], modelId: '');
+    return ModelLayer(id: map['id'], sourceId: map['source'], modelId: map['layout']['model-id']);
   }
 }
