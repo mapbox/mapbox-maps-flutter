@@ -6,7 +6,6 @@ import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.logo.generated.LogoSettingsInterface
 
 fun LogoSettingsInterface.applyFromFLT(settings: FLTSettings.LogoSettings, context: Context) {
-  settings.enabled?.let { enabled = it }
   settings.position?.let { position = it.toPosition() }
   settings.marginLeft?.let { marginLeft = it.toFloat() }
   settings.marginTop?.let { marginTop = it.toFloat() }
@@ -15,7 +14,6 @@ fun LogoSettingsInterface.applyFromFLT(settings: FLTSettings.LogoSettings, conte
 }
 
 fun LogoSettingsInterface.toFLT() = FLTSettings.LogoSettings.Builder().let { settings ->
-  settings.setEnabled(enabled)
   settings.setPosition(position.toOrnamentPosition())
   settings.setMarginLeft(marginLeft.toDouble())
   settings.setMarginTop(marginTop.toDouble())

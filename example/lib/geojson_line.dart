@@ -31,14 +31,12 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
     var data = await rootBundle
         .loadString('assets/from_crema_to_council_crest.geojson');
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
-    await mapboxMap.style.addLayer(LineLayer(
+    await mapboxMap.style.addLayer(SymbolLayer(
         id: "line_layer",
         sourceId: "line",
-        lineJoin: LineJoin.ROUND,
-        lineCap: LineCap.ROUND,
-        lineOpacity: 0.7,
-        lineColor: Colors.red.value,
-        lineWidth: 8.0));
+        symbolPlacement: SymbolPlacement.LINE,
+        iconImage: "car-15",
+        symbolSpacing: 10));
   }
 
   @override

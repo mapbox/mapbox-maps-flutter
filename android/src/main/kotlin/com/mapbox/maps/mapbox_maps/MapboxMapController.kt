@@ -38,6 +38,9 @@ class MapboxMapController(
   private val locationComponentController = LocationComponentController(mapView)
   private val gestureController = GestureController(mapView)
   private val logoController = LogoController(mapView)
+  private val attributionController = AttributionController(mapView)
+  private val scaleBarController = ScaleBarController(mapView)
+  private val compassController = CompassController(mapView)
 
   init {
     changeUserAgent(pluginVersion)
@@ -51,6 +54,9 @@ class MapboxMapController(
     FLTSettings.LocationComponentSettingsInterface.setup(messenger, locationComponentController)
     FLTSettings.LogoSettingsInterface.setup(messenger, logoController)
     FLTSettings.GesturesSettingsInterface.setup(messenger, gestureController)
+    FLTSettings.AttributionSettingsInterface.setup(messenger, attributionController)
+    FLTSettings.ScaleBarSettingsInterface.setup(messenger, scaleBarController)
+    FLTSettings.CompassSettingsInterface.setup(messenger, compassController)
     gestureController.setup(messenger)
     methodChannel = MethodChannel(messenger, "plugins.flutter.io/mapbox_maps_$viewId")
     methodChannel.setMethodCallHandler(this)
@@ -79,6 +85,9 @@ class MapboxMapController(
     FLTSettings.LocationComponentSettingsInterface.setup(messenger, null)
     FLTSettings.LogoSettingsInterface.setup(messenger, null)
     FLTSettings.GesturesSettingsInterface.setup(messenger, null)
+    FLTSettings.CompassSettingsInterface.setup(messenger, null)
+    FLTSettings.ScaleBarSettingsInterface.setup(messenger, null)
+    FLTSettings.AttributionSettingsInterface.setup(messenger, null)
   }
 
   override fun onStart(owner: LifecycleOwner) {
