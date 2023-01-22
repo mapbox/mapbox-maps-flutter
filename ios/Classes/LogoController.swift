@@ -22,7 +22,7 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLogoSettings? {
         let options = mapView.ornaments.options.logo
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-        let settings = FLT_SETTINGSLogoSettings.make(withEnabled: true, position: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale))
+        let settings = FLT_SETTINGSLogoSettings.make(with: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale))
         return settings
     }
 
@@ -38,8 +38,10 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
             return.TOP_RIGHT
         }
     }
+
     private var mapView: MapView
     private var cancelable: Cancelable?
+
     init(withMapView mapView: MapView) {
         self.mapView = mapView
     }

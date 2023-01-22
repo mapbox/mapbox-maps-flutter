@@ -37,17 +37,12 @@ extension LocationOptions {
                 if let position = puck3D.position {
                     model.position = position.map({$0.doubleValue})
                 }
-                // TODO orientation is not generated from flutter
-                //                if let orientation = puck3D.orientation {
-                //                    model.orientation = orientation.map({$0.doubleValue})
-                //                }
-                // TODO translation is not supported on ios
-                //                if let translation = puck3D.translation {
-                //                    model.translation = translation.map({$0.doubleValue})
-                //                }
                 var configuration: Puck3DConfiguration = Puck3DConfiguration(
                     model: model
                 )
+                if let opacity = puck3D.modelOpacity {
+                    configuration.modelOpacity = .constant(opacity.doubleValue)
+                }
                 if let scale = puck3D.modelScale {
                     configuration.modelScale = .constant(scale.map({$0.doubleValue}))
                 }
@@ -89,9 +84,6 @@ extension LocationOptions {
                 if let showAccuracyRing = settings.showAccuracyRing {
                     configuration.showsAccuracyRing = showAccuracyRing.boolValue
                 }
-//              TODO settings are missing on iOS location impl
-//              configuration.layerAbove =
-//              configuration.layerBelow =
 
                 options.puckType = .puck2D(configuration)
             }
@@ -110,11 +102,6 @@ extension LocationOptions {
         var accuracyRingColor: NSNumber?
         var accuracyRingBorderColor: NSNumber?
         var showAccuracyRing: NSNumber?
-        let pulsingMaxRadius: NSNumber? = nil
-        let pulsingColor: NSNumber? = nil
-        let pulsingEnabled: NSNumber? = nil
-        let layerBelow: String? = nil
-        let layerAbove: String? = nil
         let locationPuck2D = FLT_SETTINGSLocationPuck2D.init()
         let locationPuck3D = FLT_SETTINGSLocationPuck3D.init()
         let locationPuck = FLT_SETTINGSLocationPuck.make(with: locationPuck2D, locationPuck3D: locationPuck3D)
@@ -132,16 +119,17 @@ extension LocationOptions {
             if let shadowData = oldConfiguration.shadowImage?.pngData() {
                 locationPuck2D.shadowImage = FlutterStandardTypedData(bytes: shadowData)
             }
-            // TODO
-//            pulsingMaxRadius =
-//            pulsingColor =
-//            pulsingEnabled =
-//            layerAbove =
-//            layerBelow =
+            if case .expression(let scaleData) = oldConfiguration.scale {
+                let encoded = try! JSONEncoder().encode(scaleData)
+                locationPuck2D.scaleExpression = String(data: encoded, encoding: .utf8)
+            }
         }
         if case .puck3D(let oldConfiguration) = self.puckType {
             locationPuck3D.modelUri = oldConfiguration.model.uri?.absoluteString
             locationPuck3D.position = oldConfiguration.model.position?.map({NSNumber(value: $0)})
+            if case .constant(let opacityData) = oldConfiguration.modelOpacity {
+                locationPuck3D.modelOpacity = NSNumber(value: opacityData)
+            }
             if case .constant(let scaleData) = oldConfiguration.modelScale {
                 locationPuck3D.modelScale = scaleData.map({NSNumber(value: $0)})
             }
@@ -152,11 +140,8 @@ extension LocationOptions {
             if case .constant(let rotationData) = oldConfiguration.modelRotation {
                 locationPuck3D.modelRotation = rotationData.map({NSNumber(value: $0)})
             }
-            // TODO
-//            if let orientation = oldConfiguration.model.orientation {
-//            }
         }
 
-        return FLT_SETTINGSLocationComponentSettings.make(withEnabled: enabled, pulsingEnabled: pulsingEnabled, pulsingColor: pulsingColor, pulsingMaxRadius: pulsingMaxRadius, showAccuracyRing: showAccuracyRing, accuracyRingColor: accuracyRingColor, accuracyRingBorderColor: accuracyRingBorderColor, layerAbove: layerBelow, layerBelow: layerAbove, puckBearingEnabled: puckBearingEnabled, puckBearingSource: puckBearingSource, locationPuck: locationPuck)
+        return FLT_SETTINGSLocationComponentSettings.make(withEnabled: enabled, pulsingEnabled: nil, pulsingColor: nil, pulsingMaxRadius: nil, showAccuracyRing: showAccuracyRing, accuracyRingColor: accuracyRingColor, accuracyRingBorderColor: accuracyRingBorderColor, layerAbove: nil, layerBelow: nil, puckBearingEnabled: puckBearingEnabled, puckBearingSource: puckBearingSource, locationPuck: locationPuck)
     }
 }

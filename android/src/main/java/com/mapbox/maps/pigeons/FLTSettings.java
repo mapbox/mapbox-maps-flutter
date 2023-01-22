@@ -1334,12 +1334,6 @@ public class FLTSettings {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class AttributionSettings {
-    private @Nullable Boolean enabled;
-    public @Nullable Boolean getEnabled() { return enabled; }
-    public void setEnabled(@Nullable Boolean setterArg) {
-      this.enabled = setterArg;
-    }
-
     private @Nullable Long iconColor;
     public @Nullable Long getIconColor() { return iconColor; }
     public void setIconColor(@Nullable Long setterArg) {
@@ -1383,11 +1377,6 @@ public class FLTSettings {
     }
 
     public static final class Builder {
-      private @Nullable Boolean enabled;
-      public @NonNull Builder setEnabled(@Nullable Boolean setterArg) {
-        this.enabled = setterArg;
-        return this;
-      }
       private @Nullable Long iconColor;
       public @NonNull Builder setIconColor(@Nullable Long setterArg) {
         this.iconColor = setterArg;
@@ -1425,7 +1414,6 @@ public class FLTSettings {
       }
       public @NonNull AttributionSettings build() {
         AttributionSettings pigeonReturn = new AttributionSettings();
-        pigeonReturn.setEnabled(enabled);
         pigeonReturn.setIconColor(iconColor);
         pigeonReturn.setPosition(position);
         pigeonReturn.setMarginLeft(marginLeft);
@@ -1438,7 +1426,6 @@ public class FLTSettings {
     }
     @NonNull Map<String, Object> toMap() {
       Map<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("enabled", enabled);
       toMapResult.put("iconColor", iconColor);
       toMapResult.put("position", position == null ? null : position.index);
       toMapResult.put("marginLeft", marginLeft);
@@ -1450,8 +1437,6 @@ public class FLTSettings {
     }
     static @NonNull AttributionSettings fromMap(@NonNull Map<String, Object> map) {
       AttributionSettings pigeonResult = new AttributionSettings();
-      Object enabled = map.get("enabled");
-      pigeonResult.setEnabled((Boolean)enabled);
       Object iconColor = map.get("iconColor");
       pigeonResult.setIconColor((iconColor == null) ? null : ((iconColor instanceof Integer) ? (Integer)iconColor : (Long)iconColor));
       Object position = map.get("position");
@@ -1472,12 +1457,6 @@ public class FLTSettings {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class LogoSettings {
-    private @Nullable Boolean enabled;
-    public @Nullable Boolean getEnabled() { return enabled; }
-    public void setEnabled(@Nullable Boolean setterArg) {
-      this.enabled = setterArg;
-    }
-
     private @Nullable OrnamentPosition position;
     public @Nullable OrnamentPosition getPosition() { return position; }
     public void setPosition(@Nullable OrnamentPosition setterArg) {
@@ -1509,11 +1488,6 @@ public class FLTSettings {
     }
 
     public static final class Builder {
-      private @Nullable Boolean enabled;
-      public @NonNull Builder setEnabled(@Nullable Boolean setterArg) {
-        this.enabled = setterArg;
-        return this;
-      }
       private @Nullable OrnamentPosition position;
       public @NonNull Builder setPosition(@Nullable OrnamentPosition setterArg) {
         this.position = setterArg;
@@ -1541,7 +1515,6 @@ public class FLTSettings {
       }
       public @NonNull LogoSettings build() {
         LogoSettings pigeonReturn = new LogoSettings();
-        pigeonReturn.setEnabled(enabled);
         pigeonReturn.setPosition(position);
         pigeonReturn.setMarginLeft(marginLeft);
         pigeonReturn.setMarginTop(marginTop);
@@ -1552,7 +1525,6 @@ public class FLTSettings {
     }
     @NonNull Map<String, Object> toMap() {
       Map<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("enabled", enabled);
       toMapResult.put("position", position == null ? null : position.index);
       toMapResult.put("marginLeft", marginLeft);
       toMapResult.put("marginTop", marginTop);
@@ -1562,8 +1534,6 @@ public class FLTSettings {
     }
     static @NonNull LogoSettings fromMap(@NonNull Map<String, Object> map) {
       LogoSettings pigeonResult = new LogoSettings();
-      Object enabled = map.get("enabled");
-      pigeonResult.setEnabled((Boolean)enabled);
       Object position = map.get("position");
       pigeonResult.setPosition(position == null ? null : OrnamentPosition.values()[(int)position]);
       Object marginLeft = map.get("marginLeft");

@@ -71,6 +71,15 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         let logoController = LogoController(withMapView: mapView)
         FLT_SETTINGSLogoSettingsInterfaceSetup(registrar.messenger(), logoController)
 
+        let attributionController = AttributionController(withMapView: mapView)
+        FLT_SETTINGSAttributionSettingsInterfaceSetup(registrar.messenger(), attributionController)
+
+        let compassController = CompassController(withMapView: mapView)
+        FLT_SETTINGSCompassSettingsInterfaceSetup(registrar.messenger(), compassController)
+
+        let scaleBarController = ScaleBarController(withMapView: mapView)
+        FLT_SETTINGSScaleBarSettingsInterfaceSetup(registrar.messenger(), scaleBarController)
+
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: registrar.messenger())
 
