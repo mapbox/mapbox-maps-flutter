@@ -26,6 +26,7 @@ Contributions welcome!
 | Hillshade Layer | :white_check_mark:   | :white_check_mark: |
 | Heatmap Layer   | :white_check_mark:  | :white_check_mark:  |
 | Sky Layer | :white_check_mark:   | :white_check_mark: |
+| 3D layer | :white_check_mark:   | :white_check_mark: |
 | GeoJson Source  | :white_check_mark:   | :white_check_mark: |
 | Image Source   | :white_check_mark:   | :white_check_mark: |
 | Vector Source   |  :white_check_mark:  | :white_check_mark:  |
