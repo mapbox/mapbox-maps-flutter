@@ -73,7 +73,6 @@ class ModelLayer extends Layer {
       layout["model-id"] = modelId;
     }
 
-
     var paint = {};
 
     if (color != null) {
@@ -122,6 +121,12 @@ class ModelLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return ModelLayer(id: map['id'], sourceId: map['source'], modelId: map['layout']['model-id']);
+    return ModelLayer(
+      id: map['id'],
+      sourceId: map['source'],
+      modelId: map['layout']['model-id'],
+      maxZoom: double.tryParse(map['maxzoom'].toString()),
+      minZoom: double.tryParse(map['minzoom'].toString()),
+    );
   }
 }
