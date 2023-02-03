@@ -1,3 +1,8 @@
+## 0.4.1
+
+### Common
+* Expose `package:turf/helpers.dart`.
+
 ## 0.4.0 
 
 ### Common
