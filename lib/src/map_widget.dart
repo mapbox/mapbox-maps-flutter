@@ -186,10 +186,6 @@ class _MapWidgetState extends State<MapWidget> {
       'mapboxPluginVersion': '0.4.0'
     };
 
-    if (widget.onMapCreated != null && mapboxMap != null) {
-      widget.onMapCreated!(mapboxMap!);
-    }
-
     return _mapboxMapsPlatform.buildView(
         creationParams, onPlatformViewCreated, widget.gestureRecognizers);
   }
