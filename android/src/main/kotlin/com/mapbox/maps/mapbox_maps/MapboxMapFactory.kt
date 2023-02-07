@@ -125,7 +125,6 @@ class MapboxMapFactory(
       textureView = textureView,
       styleUri = styleUri
     )
-    Logger.d(TAG, "MapInitOptions: $mapInitOptions")
     val eventTypes = params["eventTypes"] as? List<String> ?: listOf()
     return MapboxMapController(
       context,
