@@ -11,15 +11,17 @@ class ProxyBinaryMessenger(
   private val nameSuffix: String,
 ) : BinaryMessenger {
 
+  private fun String.appendSuffix() = "$this$nameSuffix"
+
   override fun send(channel: String, message: ByteBuffer?) {
-    messenger.send("$channel$nameSuffix", message)
+    messenger.send(channel.appendSuffix(), message)
   }
 
   override fun send(channel: String, message: ByteBuffer?, callback: BinaryMessenger.BinaryReply?) {
-    messenger.send("$channel$nameSuffix", message, callback)
+    messenger.send(channel.appendSuffix(), message, callback)
   }
 
   override fun setMessageHandler(channel: String, handler: BinaryMessenger.BinaryMessageHandler?) {
-    messenger.setMessageHandler("$channel$nameSuffix", handler)
+    messenger.setMessageHandler(channel.appendSuffix(), handler)
   }
 }
