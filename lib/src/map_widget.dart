@@ -183,7 +183,7 @@ class _MapWidgetState extends State<MapWidget> {
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'eventTypes': widget._eventTypes,
-      'mapboxPluginVersion': '0.4.0'
+      'mapboxPluginVersion': '0.4.1'
     };
 
     return _mapboxMapsPlatform.buildView(
@@ -210,7 +210,8 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   void onPlatformViewCreated(int id) {
-    _mapboxMapsPlatform.initPlatform(id);
+    final suffix = "/map_$id";
+    _mapboxMapsPlatform.initPlatform(suffix);
     final MapboxMap controller = MapboxMap(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onStyleLoadedListener: widget.onStyleLoadedListener,

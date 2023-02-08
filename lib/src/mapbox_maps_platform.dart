@@ -26,6 +26,7 @@ class _MapboxMapsPlatform {
       ArgumentCallbacks<StyleImageUnusedEventData>();
 
   late MethodChannel _channel;
+  late BinaryMessenger binaryMessenger;
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     try {
@@ -101,8 +102,10 @@ class _MapboxMapsPlatform {
     }
   }
 
-  void initPlatform(int id) {
-    _channel = MethodChannel('plugins.flutter.io/mapbox_maps_$id');
+  void initPlatform(String channelSuffix) {
+    this.binaryMessenger = ProxyBinaryMessenger(suffix: channelSuffix);
+    _channel = MethodChannel('plugins.flutter.io', const StandardMethodCodec(),
+        this.binaryMessenger);
     _channel.setMethodCallHandler(_handleMethodCall);
   }
 
