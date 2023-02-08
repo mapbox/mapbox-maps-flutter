@@ -287,16 +287,17 @@ extension StyleColorInt on int {
   }
 }
 
-/// Extension to convert color format
 extension StyleColorList on List {
-  int _checkInt(num value) => value.toInt();
-
-  /// Convert the color from a list into int format.
+  /// Convert the color from a list `[rgba, $R, $G, $B, $A]` to int.
   int toRGBAInt() {
-    final alpha = _checkInt(this.last * 255);
-    final red = _checkInt(this[1]);
-    final green = _checkInt(this[2]);
-    final blue = _checkInt(this[3]);
-    return Color.fromARGB(alpha, red, green, blue).value;
+    final alpha = this.last is num ? ((this.last as num) * 255).toInt() : null;
+    final red = this[1] is num ? (this[1] as num).toInt() : null;
+    final green = this[2] is num ? (this[2] as num).toInt() : null;
+    final blue = this[3] is num ? (this[3] as num).toInt() : null;
+    if (alpha != null && red != null && green != null && blue != null) {
+      return Color.fromARGB(alpha, red, green, blue).value;
+    } else {
+      return 0;
+    }
   }
 }
