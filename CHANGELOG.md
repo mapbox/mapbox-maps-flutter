@@ -1,9 +1,10 @@
-## 0.4.1 
+## 0.4.1
 
 ### Common
 * Expose `package:turf/helpers.dart`.
 * Bump platform Maps SDK dependencies to 10.10.0.
 * Fix issue with multiple maps overriding platform channels of the previous instances.
+* Fix exception accessing `style.getLayer` when layer property is an Expression.
 
 ## 0.4.0 
 

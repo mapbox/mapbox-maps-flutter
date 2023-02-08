@@ -208,18 +208,32 @@ class LineLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["line-join"])),
-      lineMiterLimit: map["layout"]["line-miter-limit"]?.toDouble(),
-      lineRoundLimit: map["layout"]["line-round-limit"]?.toDouble(),
-      lineSortKey: map["layout"]["line-sort-key"]?.toDouble(),
-      lineBlur: map["paint"]["line-blur"]?.toDouble(),
+      lineMiterLimit: map["layout"]["line-miter-limit"] is double?
+          ? map["paint"]["line-miter-limit"] as double?
+          : null,
+      lineRoundLimit: map["layout"]["line-round-limit"] is double?
+          ? map["paint"]["line-round-limit"] as double?
+          : null,
+      lineSortKey: map["layout"]["line-sort-key"] is double?
+          ? map["paint"]["line-sort-key"] as double?
+          : null,
+      lineBlur: map["paint"]["line-blur"] is double?
+          ? map["paint"]["line-blur"] as double?
+          : null,
       lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineGapWidth: map["paint"]["line-gap-width"]?.toDouble(),
+      lineGapWidth: map["paint"]["line-gap-width"] is double?
+          ? map["paint"]["line-gap-width"] as double?
+          : null,
       lineGradient: (map["paint"]["line-gradient"] as List?)?.toRGBAInt(),
-      lineOffset: map["paint"]["line-offset"]?.toDouble(),
-      lineOpacity: map["paint"]["line-opacity"]?.toDouble(),
+      lineOffset: map["paint"]["line-offset"] is double?
+          ? map["paint"]["line-offset"] as double?
+          : null,
+      lineOpacity: map["paint"]["line-opacity"] is double?
+          ? map["paint"]["line-opacity"] as double?
+          : null,
       linePattern: map["paint"]["line-pattern"],
       lineTranslate: (map["paint"]["line-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
@@ -235,7 +249,9 @@ class LineLayer extends Layer {
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineWidth: map["paint"]["line-width"]?.toDouble(),
+      lineWidth: map["paint"]["line-width"] is double?
+          ? map["paint"]["line-width"] as double?
+          : null,
     );
   }
 }

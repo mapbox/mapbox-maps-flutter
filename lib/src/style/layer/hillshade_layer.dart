@@ -118,7 +118,9 @@ class HillshadeLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       hillshadeAccentColor:
           (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
-      hillshadeExaggeration: map["paint"]["hillshade-exaggeration"]?.toDouble(),
+      hillshadeExaggeration: map["paint"]["hillshade-exaggeration"] is double?
+          ? map["paint"]["hillshade-exaggeration"] as double?
+          : null,
       hillshadeHighlightColor:
           (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
       hillshadeIlluminationAnchor:
@@ -131,7 +133,9 @@ class HillshadeLayer extends Layer {
                   .toLowerCase()
                   .contains(map["paint"]["hillshade-illumination-anchor"])),
       hillshadeIlluminationDirection:
-          map["paint"]["hillshade-illumination-direction"]?.toDouble(),
+          map["paint"]["hillshade-illumination-direction"] is double?
+              ? map["paint"]["hillshade-illumination-direction"] as double?
+              : null,
       hillshadeShadowColor:
           (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
     );

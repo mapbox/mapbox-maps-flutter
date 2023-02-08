@@ -167,25 +167,41 @@ class LocationIndicatorLayer extends Layer {
       bearingImage: map["layout"]["bearing-image"],
       shadowImage: map["layout"]["shadow-image"],
       topImage: map["layout"]["top-image"],
-      accuracyRadius: map["paint"]["accuracy-radius"]?.toDouble(),
+      accuracyRadius: map["paint"]["accuracy-radius"] is double?
+          ? map["paint"]["accuracy-radius"] as double?
+          : null,
       accuracyRadiusBorderColor:
           (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
       accuracyRadiusColor:
           (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
-      bearing: map["paint"]["bearing"]?.toDouble(),
-      bearingImageSize: map["paint"]["bearing-image-size"]?.toDouble(),
+      bearing: map["paint"]["bearing"] is double?
+          ? map["paint"]["bearing"] as double?
+          : null,
+      bearingImageSize: map["paint"]["bearing-image-size"] is double?
+          ? map["paint"]["bearing-image-size"] as double?
+          : null,
       emphasisCircleColor:
           (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
-      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"]?.toDouble(),
+      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"] is double?
+          ? map["paint"]["emphasis-circle-radius"] as double?
+          : null,
       imagePitchDisplacement:
-          map["paint"]["image-pitch-displacement"]?.toDouble(),
+          map["paint"]["image-pitch-displacement"] is double?
+              ? map["paint"]["image-pitch-displacement"] as double?
+              : null,
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       perspectiveCompensation:
-          map["paint"]["perspective-compensation"]?.toDouble(),
-      shadowImageSize: map["paint"]["shadow-image-size"]?.toDouble(),
-      topImageSize: map["paint"]["top-image-size"]?.toDouble(),
+          map["paint"]["perspective-compensation"] is double?
+              ? map["paint"]["perspective-compensation"] as double?
+              : null,
+      shadowImageSize: map["paint"]["shadow-image-size"] is double?
+          ? map["paint"]["shadow-image-size"] as double?
+          : null,
+      topImageSize: map["paint"]["top-image-size"] is double?
+          ? map["paint"]["top-image-size"] as double?
+          : null,
     );
   }
 }
