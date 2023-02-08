@@ -129,10 +129,14 @@ class FillLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      fillSortKey: map["layout"]["fill-sort-key"]?.toDouble(),
+      fillSortKey: map["paint"]["fill-sort-key"] is double
+          ? map["paint"]["fill-sort-key"] as double
+          : null,
       fillAntialias: map["paint"]["fill-antialias"],
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
-      fillOpacity: map["paint"]["fill-opacity"]?.toDouble(),
+      fillOpacity: map["paint"]["fill-opacity"] is double
+          ? map["paint"]["fill-opacity"] as double
+          : null,
       fillOutlineColor:
           (map["paint"]["fill-outline-color"] as List?)?.toRGBAInt(),
       fillPattern: map["paint"]["fill-pattern"],

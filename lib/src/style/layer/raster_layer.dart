@@ -129,12 +129,24 @@ class RasterLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      rasterBrightnessMax: map["paint"]["raster-brightness-max"]?.toDouble(),
-      rasterBrightnessMin: map["paint"]["raster-brightness-min"]?.toDouble(),
-      rasterContrast: map["paint"]["raster-contrast"]?.toDouble(),
-      rasterFadeDuration: map["paint"]["raster-fade-duration"]?.toDouble(),
-      rasterHueRotate: map["paint"]["raster-hue-rotate"]?.toDouble(),
-      rasterOpacity: map["paint"]["raster-opacity"]?.toDouble(),
+      rasterBrightnessMax: map["paint"]["raster-brightness-max"] is double
+          ? map["paint"]["raster-brightness-max"] as double
+          : null,
+      rasterBrightnessMin: map["paint"]["raster-brightness-min"] is double
+          ? map["paint"]["raster-brightness-min"] as double
+          : null,
+      rasterContrast: map["paint"]["raster-contrast"] is double
+          ? map["paint"]["raster-contrast"] as double
+          : null,
+      rasterFadeDuration: map["paint"]["raster-fade-duration"] is double
+          ? map["paint"]["raster-fade-duration"] as double
+          : null,
+      rasterHueRotate: map["paint"]["raster-hue-rotate"] is double
+          ? map["paint"]["raster-hue-rotate"] as double
+          : null,
+      rasterOpacity: map["paint"]["raster-opacity"] is double
+          ? map["paint"]["raster-opacity"] as double
+          : null,
       rasterResampling: map["paint"]["raster-resampling"] == null
           ? null
           : RasterResampling.values.firstWhere((e) => e
@@ -143,7 +155,9 @@ class RasterLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["paint"]["raster-resampling"])),
-      rasterSaturation: map["paint"]["raster-saturation"]?.toDouble(),
+      rasterSaturation: map["paint"]["raster-saturation"] is double
+          ? map["paint"]["raster-saturation"] as double
+          : null,
     );
   }
 }

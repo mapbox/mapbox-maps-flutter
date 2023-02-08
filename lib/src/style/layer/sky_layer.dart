@@ -129,13 +129,19 @@ class SkyLayer extends Layer {
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       skyAtmosphereSunIntensity:
-          map["paint"]["sky-atmosphere-sun-intensity"]?.toDouble(),
+          map["paint"]["sky-atmosphere-sun-intensity"] is double
+              ? map["paint"]["sky-atmosphere-sun-intensity"] as double
+              : null,
       skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
       skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      skyGradientRadius: map["paint"]["sky-gradient-radius"]?.toDouble(),
-      skyOpacity: map["paint"]["sky-opacity"]?.toDouble(),
+      skyGradientRadius: map["paint"]["sky-gradient-radius"] is double
+          ? map["paint"]["sky-gradient-radius"] as double
+          : null,
+      skyOpacity: map["paint"]["sky-opacity"] is double
+          ? map["paint"]["sky-opacity"] as double
+          : null,
       skyType: map["paint"]["sky-type"] == null
           ? null
           : SkyType.values.firstWhere((e) => e
