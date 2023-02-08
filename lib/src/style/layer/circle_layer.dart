@@ -159,7 +159,7 @@ class CircleLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      circleSortKey: map["paint"]["circle-sort-key"] is double
+      circleSortKey: map["layout"]["circle-sort-key"] is double
           ? map["paint"]["circle-sort-key"] as double
           : null,
       circleBlur: map["paint"]["circle-blur"] is double

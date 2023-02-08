@@ -208,13 +208,13 @@ class LineLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["line-join"])),
-      lineMiterLimit: map["paint"]["line-miter-limit"] is double
+      lineMiterLimit: map["layout"]["line-miter-limit"] is double
           ? map["paint"]["line-miter-limit"] as double
           : null,
-      lineRoundLimit: map["paint"]["line-round-limit"] is double
+      lineRoundLimit: map["layout"]["line-round-limit"] is double
           ? map["paint"]["line-round-limit"] as double
           : null,
-      lineSortKey: map["paint"]["line-sort-key"] is double
+      lineSortKey: map["layout"]["line-sort-key"] is double
           ? map["paint"]["line-sort-key"] as double
           : null,
       lineBlur: map["paint"]["line-blur"] is double

@@ -479,7 +479,7 @@ class SymbolLayer extends Layer {
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       iconOptional: map["layout"]["icon-optional"],
-      iconPadding: map["paint"]["icon-padding"] is double
+      iconPadding: map["layout"]["icon-padding"] is double
           ? map["paint"]["icon-padding"] as double
           : null,
       iconPitchAlignment: map["layout"]["icon-pitch-alignment"] == null
@@ -490,7 +490,7 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-pitch-alignment"])),
-      iconRotate: map["paint"]["icon-rotate"] is double
+      iconRotate: map["layout"]["icon-rotate"] is double
           ? map["paint"]["icon-rotate"] as double
           : null,
       iconRotationAlignment: map["layout"]["icon-rotation-alignment"] == null
@@ -501,7 +501,7 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-rotation-alignment"])),
-      iconSize: map["paint"]["icon-size"] is double
+      iconSize: map["layout"]["icon-size"] is double
           ? map["paint"]["icon-size"] as double
           : null,
       iconTextFit: map["layout"]["icon-text-fit"] == null
@@ -524,10 +524,10 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["symbol-placement"])),
-      symbolSortKey: map["paint"]["symbol-sort-key"] is double
+      symbolSortKey: map["layout"]["symbol-sort-key"] is double
           ? map["paint"]["symbol-sort-key"] as double
           : null,
-      symbolSpacing: map["paint"]["symbol-spacing"] is double
+      symbolSpacing: map["layout"]["symbol-spacing"] is double
           ? map["paint"]["symbol-spacing"] as double
           : null,
       symbolZOrder: map["layout"]["symbol-z-order"] == null
@@ -560,23 +560,23 @@ class SymbolLayer extends Layer {
               .toLowerCase()
               .contains(map["layout"]["text-justify"])),
       textKeepUpright: map["layout"]["text-keep-upright"],
-      textLetterSpacing: map["paint"]["text-letter-spacing"] is double
+      textLetterSpacing: map["layout"]["text-letter-spacing"] is double
           ? map["paint"]["text-letter-spacing"] as double
           : null,
-      textLineHeight: map["paint"]["text-line-height"] is double
+      textLineHeight: map["layout"]["text-line-height"] is double
           ? map["paint"]["text-line-height"] as double
           : null,
-      textMaxAngle: map["paint"]["text-max-angle"] is double
+      textMaxAngle: map["layout"]["text-max-angle"] is double
           ? map["paint"]["text-max-angle"] as double
           : null,
-      textMaxWidth: map["paint"]["text-max-width"] is double
+      textMaxWidth: map["layout"]["text-max-width"] is double
           ? map["paint"]["text-max-width"] as double
           : null,
       textOffset: (map["layout"]["text-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       textOptional: map["layout"]["text-optional"],
-      textPadding: map["paint"]["text-padding"] is double
+      textPadding: map["layout"]["text-padding"] is double
           ? map["paint"]["text-padding"] as double
           : null,
       textPitchAlignment: map["layout"]["text-pitch-alignment"] == null
@@ -587,10 +587,10 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-pitch-alignment"])),
-      textRadialOffset: map["paint"]["text-radial-offset"] is double
+      textRadialOffset: map["layout"]["text-radial-offset"] is double
           ? map["paint"]["text-radial-offset"] as double
           : null,
-      textRotate: map["paint"]["text-rotate"] is double
+      textRotate: map["layout"]["text-rotate"] is double
           ? map["paint"]["text-rotate"] as double
           : null,
       textRotationAlignment: map["layout"]["text-rotation-alignment"] == null
@@ -601,7 +601,7 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-rotation-alignment"])),
-      textSize: map["paint"]["text-size"] is double
+      textSize: map["layout"]["text-size"] is double
           ? map["paint"]["text-size"] as double
           : null,
       textTransform: map["layout"]["text-transform"] == null

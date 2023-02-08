@@ -129,7 +129,7 @@ class FillLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      fillSortKey: map["paint"]["fill-sort-key"] is double
+      fillSortKey: map["layout"]["fill-sort-key"] is double
           ? map["paint"]["fill-sort-key"] as double
           : null,
       fillAntialias: map["paint"]["fill-antialias"],
