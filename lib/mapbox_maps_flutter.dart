@@ -46,3 +46,5 @@ part 'src/style/source/raster_source.dart';
 part 'src/style/source/rasterdem_source.dart';
 part 'src/style/source/vector_source.dart';
 part 'src/style/style.dart';
+
+export   'package:turf/helpers.dart';
