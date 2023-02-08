@@ -108,17 +108,17 @@ class HeatmapLayer extends Layer {
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
       heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
-      heatmapIntensity: map["paint"]["heatmap-intensity"] is double
-          ? map["paint"]["heatmap-intensity"] as double
+      heatmapIntensity: map["paint"]["heatmap-intensity"] is double?
+          ? map["paint"]["heatmap-intensity"] as double?
           : null,
-      heatmapOpacity: map["paint"]["heatmap-opacity"] is double
-          ? map["paint"]["heatmap-opacity"] as double
+      heatmapOpacity: map["paint"]["heatmap-opacity"] is double?
+          ? map["paint"]["heatmap-opacity"] as double?
           : null,
-      heatmapRadius: map["paint"]["heatmap-radius"] is double
-          ? map["paint"]["heatmap-radius"] as double
+      heatmapRadius: map["paint"]["heatmap-radius"] is double?
+          ? map["paint"]["heatmap-radius"] as double?
           : null,
-      heatmapWeight: map["paint"]["heatmap-weight"] is double
-          ? map["paint"]["heatmap-weight"] as double
+      heatmapWeight: map["paint"]["heatmap-weight"] is double?
+          ? map["paint"]["heatmap-weight"] as double?
           : null,
     );
   }

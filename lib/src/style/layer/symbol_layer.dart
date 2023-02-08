@@ -479,8 +479,8 @@ class SymbolLayer extends Layer {
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       iconOptional: map["layout"]["icon-optional"],
-      iconPadding: map["layout"]["icon-padding"] is double
-          ? map["paint"]["icon-padding"] as double
+      iconPadding: map["layout"]["icon-padding"] is double?
+          ? map["paint"]["icon-padding"] as double?
           : null,
       iconPitchAlignment: map["layout"]["icon-pitch-alignment"] == null
           ? null
@@ -490,8 +490,8 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-pitch-alignment"])),
-      iconRotate: map["layout"]["icon-rotate"] is double
-          ? map["paint"]["icon-rotate"] as double
+      iconRotate: map["layout"]["icon-rotate"] is double?
+          ? map["paint"]["icon-rotate"] as double?
           : null,
       iconRotationAlignment: map["layout"]["icon-rotation-alignment"] == null
           ? null
@@ -501,8 +501,8 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-rotation-alignment"])),
-      iconSize: map["layout"]["icon-size"] is double
-          ? map["paint"]["icon-size"] as double
+      iconSize: map["layout"]["icon-size"] is double?
+          ? map["paint"]["icon-size"] as double?
           : null,
       iconTextFit: map["layout"]["icon-text-fit"] == null
           ? null
@@ -524,11 +524,11 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["symbol-placement"])),
-      symbolSortKey: map["layout"]["symbol-sort-key"] is double
-          ? map["paint"]["symbol-sort-key"] as double
+      symbolSortKey: map["layout"]["symbol-sort-key"] is double?
+          ? map["paint"]["symbol-sort-key"] as double?
           : null,
-      symbolSpacing: map["layout"]["symbol-spacing"] is double
-          ? map["paint"]["symbol-spacing"] as double
+      symbolSpacing: map["layout"]["symbol-spacing"] is double?
+          ? map["paint"]["symbol-spacing"] as double?
           : null,
       symbolZOrder: map["layout"]["symbol-z-order"] == null
           ? null
@@ -560,24 +560,24 @@ class SymbolLayer extends Layer {
               .toLowerCase()
               .contains(map["layout"]["text-justify"])),
       textKeepUpright: map["layout"]["text-keep-upright"],
-      textLetterSpacing: map["layout"]["text-letter-spacing"] is double
-          ? map["paint"]["text-letter-spacing"] as double
+      textLetterSpacing: map["layout"]["text-letter-spacing"] is double?
+          ? map["paint"]["text-letter-spacing"] as double?
           : null,
-      textLineHeight: map["layout"]["text-line-height"] is double
-          ? map["paint"]["text-line-height"] as double
+      textLineHeight: map["layout"]["text-line-height"] is double?
+          ? map["paint"]["text-line-height"] as double?
           : null,
-      textMaxAngle: map["layout"]["text-max-angle"] is double
-          ? map["paint"]["text-max-angle"] as double
+      textMaxAngle: map["layout"]["text-max-angle"] is double?
+          ? map["paint"]["text-max-angle"] as double?
           : null,
-      textMaxWidth: map["layout"]["text-max-width"] is double
-          ? map["paint"]["text-max-width"] as double
+      textMaxWidth: map["layout"]["text-max-width"] is double?
+          ? map["paint"]["text-max-width"] as double?
           : null,
       textOffset: (map["layout"]["text-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       textOptional: map["layout"]["text-optional"],
-      textPadding: map["layout"]["text-padding"] is double
-          ? map["paint"]["text-padding"] as double
+      textPadding: map["layout"]["text-padding"] is double?
+          ? map["paint"]["text-padding"] as double?
           : null,
       textPitchAlignment: map["layout"]["text-pitch-alignment"] == null
           ? null
@@ -587,11 +587,11 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-pitch-alignment"])),
-      textRadialOffset: map["layout"]["text-radial-offset"] is double
-          ? map["paint"]["text-radial-offset"] as double
+      textRadialOffset: map["layout"]["text-radial-offset"] is double?
+          ? map["paint"]["text-radial-offset"] as double?
           : null,
-      textRotate: map["layout"]["text-rotate"] is double
-          ? map["paint"]["text-rotate"] as double
+      textRotate: map["layout"]["text-rotate"] is double?
+          ? map["paint"]["text-rotate"] as double?
           : null,
       textRotationAlignment: map["layout"]["text-rotation-alignment"] == null
           ? null
@@ -601,8 +601,8 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-rotation-alignment"])),
-      textSize: map["layout"]["text-size"] is double
-          ? map["paint"]["text-size"] as double
+      textSize: map["layout"]["text-size"] is double?
+          ? map["paint"]["text-size"] as double?
           : null,
       textTransform: map["layout"]["text-transform"] == null
           ? null
@@ -619,15 +619,15 @@ class SymbolLayer extends Layer {
           ?.map<String?>((e) => e.toString())
           .toList(),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
-      iconHaloBlur: map["paint"]["icon-halo-blur"] is double
-          ? map["paint"]["icon-halo-blur"] as double
+      iconHaloBlur: map["paint"]["icon-halo-blur"] is double?
+          ? map["paint"]["icon-halo-blur"] as double?
           : null,
       iconHaloColor: (map["paint"]["icon-halo-color"] as List?)?.toRGBAInt(),
-      iconHaloWidth: map["paint"]["icon-halo-width"] is double
-          ? map["paint"]["icon-halo-width"] as double
+      iconHaloWidth: map["paint"]["icon-halo-width"] is double?
+          ? map["paint"]["icon-halo-width"] as double?
           : null,
-      iconOpacity: map["paint"]["icon-opacity"] is double
-          ? map["paint"]["icon-opacity"] as double
+      iconOpacity: map["paint"]["icon-opacity"] is double?
+          ? map["paint"]["icon-opacity"] as double?
           : null,
       iconTranslate: (map["paint"]["icon-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
@@ -641,15 +641,15 @@ class SymbolLayer extends Layer {
               .toLowerCase()
               .contains(map["paint"]["icon-translate-anchor"])),
       textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
-      textHaloBlur: map["paint"]["text-halo-blur"] is double
-          ? map["paint"]["text-halo-blur"] as double
+      textHaloBlur: map["paint"]["text-halo-blur"] is double?
+          ? map["paint"]["text-halo-blur"] as double?
           : null,
       textHaloColor: (map["paint"]["text-halo-color"] as List?)?.toRGBAInt(),
-      textHaloWidth: map["paint"]["text-halo-width"] is double
-          ? map["paint"]["text-halo-width"] as double
+      textHaloWidth: map["paint"]["text-halo-width"] is double?
+          ? map["paint"]["text-halo-width"] as double?
           : null,
-      textOpacity: map["paint"]["text-opacity"] is double
-          ? map["paint"]["text-opacity"] as double
+      textOpacity: map["paint"]["text-opacity"] is double?
+          ? map["paint"]["text-opacity"] as double?
           : null,
       textTranslate: (map["paint"]["text-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())

@@ -159,15 +159,15 @@ class CircleLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      circleSortKey: map["layout"]["circle-sort-key"] is double
-          ? map["paint"]["circle-sort-key"] as double
+      circleSortKey: map["layout"]["circle-sort-key"] is double?
+          ? map["paint"]["circle-sort-key"] as double?
           : null,
-      circleBlur: map["paint"]["circle-blur"] is double
-          ? map["paint"]["circle-blur"] as double
+      circleBlur: map["paint"]["circle-blur"] is double?
+          ? map["paint"]["circle-blur"] as double?
           : null,
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
-      circleOpacity: map["paint"]["circle-opacity"] is double
-          ? map["paint"]["circle-opacity"] as double
+      circleOpacity: map["paint"]["circle-opacity"] is double?
+          ? map["paint"]["circle-opacity"] as double?
           : null,
       circlePitchAlignment: map["paint"]["circle-pitch-alignment"] == null
           ? null
@@ -185,16 +185,16 @@ class CircleLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["paint"]["circle-pitch-scale"])),
-      circleRadius: map["paint"]["circle-radius"] is double
-          ? map["paint"]["circle-radius"] as double
+      circleRadius: map["paint"]["circle-radius"] is double?
+          ? map["paint"]["circle-radius"] as double?
           : null,
       circleStrokeColor:
           (map["paint"]["circle-stroke-color"] as List?)?.toRGBAInt(),
-      circleStrokeOpacity: map["paint"]["circle-stroke-opacity"] is double
-          ? map["paint"]["circle-stroke-opacity"] as double
+      circleStrokeOpacity: map["paint"]["circle-stroke-opacity"] is double?
+          ? map["paint"]["circle-stroke-opacity"] as double?
           : null,
-      circleStrokeWidth: map["paint"]["circle-stroke-width"] is double
-          ? map["paint"]["circle-stroke-width"] as double
+      circleStrokeWidth: map["paint"]["circle-stroke-width"] is double?
+          ? map["paint"]["circle-stroke-width"] as double?
           : null,
       circleTranslate: (map["paint"]["circle-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())

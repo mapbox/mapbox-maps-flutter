@@ -80,8 +80,8 @@ class BackgroundLayer extends Layer {
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
-      backgroundOpacity: map["paint"]["background-opacity"] is double
-          ? map["paint"]["background-opacity"] as double
+      backgroundOpacity: map["paint"]["background-opacity"] is double?
+          ? map["paint"]["background-opacity"] as double?
           : null,
       backgroundPattern: map["paint"]["background-pattern"],
     );
