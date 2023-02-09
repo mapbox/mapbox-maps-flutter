@@ -128,19 +128,19 @@ class SkyLayer extends Layer {
       skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      skyAtmosphereSunIntensity:
-          map["paint"]["sky-atmosphere-sun-intensity"] is double?
-              ? map["paint"]["sky-atmosphere-sun-intensity"] as double?
-              : null,
+      skyAtmosphereSunIntensity: map["paint"]["sky-atmosphere-sun-intensity"]
+              is num?
+          ? (map["paint"]["sky-atmosphere-sun-intensity"] as num?)?.toDouble()
+          : null,
       skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
       skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      skyGradientRadius: map["paint"]["sky-gradient-radius"] is double?
-          ? map["paint"]["sky-gradient-radius"] as double?
+      skyGradientRadius: map["paint"]["sky-gradient-radius"] is num?
+          ? (map["paint"]["sky-gradient-radius"] as num?)?.toDouble()
           : null,
-      skyOpacity: map["paint"]["sky-opacity"] is double?
-          ? map["paint"]["sky-opacity"] as double?
+      skyOpacity: map["paint"]["sky-opacity"] is num?
+          ? (map["paint"]["sky-opacity"] as num?)?.toDouble()
           : null,
       skyType: map["paint"]["sky-type"] == null
           ? null
