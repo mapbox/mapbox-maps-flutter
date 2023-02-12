@@ -1033,10 +1033,10 @@ class FeatureExtensionValue {
   });
 
   /// An optional value of a feature extension
-  String? value;
+  Object? value;
 
   /// An optional array of features from a feature extension.
-  List<Map<String?, Object?>?>? featureCollection;
+  List<Map<Object?, Object?>?>? featureCollection;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -1048,9 +1048,9 @@ class FeatureExtensionValue {
   static FeatureExtensionValue decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return FeatureExtensionValue(
-      value: pigeonMap['value'] as String?,
+      value: pigeonMap['value'] as Object?,
       featureCollection: (pigeonMap['featureCollection'] as List<Object?>?)
-          ?.cast<Map<String?, Object?>?>(),
+          ?.cast<Map<Object?, Object?>?>(),
     );
   }
 }
