@@ -129,12 +129,24 @@ class RasterLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      rasterBrightnessMax: map["paint"]["raster-brightness-max"]?.toDouble(),
-      rasterBrightnessMin: map["paint"]["raster-brightness-min"]?.toDouble(),
-      rasterContrast: map["paint"]["raster-contrast"]?.toDouble(),
-      rasterFadeDuration: map["paint"]["raster-fade-duration"]?.toDouble(),
-      rasterHueRotate: map["paint"]["raster-hue-rotate"]?.toDouble(),
-      rasterOpacity: map["paint"]["raster-opacity"]?.toDouble(),
+      rasterBrightnessMax: map["paint"]["raster-brightness-max"] is num?
+          ? (map["paint"]["raster-brightness-max"] as num?)?.toDouble()
+          : null,
+      rasterBrightnessMin: map["paint"]["raster-brightness-min"] is num?
+          ? (map["paint"]["raster-brightness-min"] as num?)?.toDouble()
+          : null,
+      rasterContrast: map["paint"]["raster-contrast"] is num?
+          ? (map["paint"]["raster-contrast"] as num?)?.toDouble()
+          : null,
+      rasterFadeDuration: map["paint"]["raster-fade-duration"] is num?
+          ? (map["paint"]["raster-fade-duration"] as num?)?.toDouble()
+          : null,
+      rasterHueRotate: map["paint"]["raster-hue-rotate"] is num?
+          ? (map["paint"]["raster-hue-rotate"] as num?)?.toDouble()
+          : null,
+      rasterOpacity: map["paint"]["raster-opacity"] is num?
+          ? (map["paint"]["raster-opacity"] as num?)?.toDouble()
+          : null,
       rasterResampling: map["paint"]["raster-resampling"] == null
           ? null
           : RasterResampling.values.firstWhere((e) => e
@@ -143,7 +155,9 @@ class RasterLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["paint"]["raster-resampling"])),
-      rasterSaturation: map["paint"]["raster-saturation"]?.toDouble(),
+      rasterSaturation: map["paint"]["raster-saturation"] is num?
+          ? (map["paint"]["raster-saturation"] as num?)?.toDouble()
+          : null,
     );
   }
 }

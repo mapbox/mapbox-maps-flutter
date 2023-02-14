@@ -208,18 +208,32 @@ class LineLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["line-join"])),
-      lineMiterLimit: map["layout"]["line-miter-limit"]?.toDouble(),
-      lineRoundLimit: map["layout"]["line-round-limit"]?.toDouble(),
-      lineSortKey: map["layout"]["line-sort-key"]?.toDouble(),
-      lineBlur: map["paint"]["line-blur"]?.toDouble(),
+      lineMiterLimit: map["layout"]["line-miter-limit"] is num?
+          ? (map["layout"]["line-miter-limit"] as num?)?.toDouble()
+          : null,
+      lineRoundLimit: map["layout"]["line-round-limit"] is num?
+          ? (map["layout"]["line-round-limit"] as num?)?.toDouble()
+          : null,
+      lineSortKey: map["layout"]["line-sort-key"] is num?
+          ? (map["layout"]["line-sort-key"] as num?)?.toDouble()
+          : null,
+      lineBlur: map["paint"]["line-blur"] is num?
+          ? (map["paint"]["line-blur"] as num?)?.toDouble()
+          : null,
       lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineGapWidth: map["paint"]["line-gap-width"]?.toDouble(),
+      lineGapWidth: map["paint"]["line-gap-width"] is num?
+          ? (map["paint"]["line-gap-width"] as num?)?.toDouble()
+          : null,
       lineGradient: (map["paint"]["line-gradient"] as List?)?.toRGBAInt(),
-      lineOffset: map["paint"]["line-offset"]?.toDouble(),
-      lineOpacity: map["paint"]["line-opacity"]?.toDouble(),
+      lineOffset: map["paint"]["line-offset"] is num?
+          ? (map["paint"]["line-offset"] as num?)?.toDouble()
+          : null,
+      lineOpacity: map["paint"]["line-opacity"] is num?
+          ? (map["paint"]["line-opacity"] as num?)?.toDouble()
+          : null,
       linePattern: map["paint"]["line-pattern"],
       lineTranslate: (map["paint"]["line-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
@@ -235,7 +249,9 @@ class LineLayer extends Layer {
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      lineWidth: map["paint"]["line-width"]?.toDouble(),
+      lineWidth: map["paint"]["line-width"] is num?
+          ? (map["paint"]["line-width"] as num?)?.toDouble()
+          : null,
     );
   }
 }

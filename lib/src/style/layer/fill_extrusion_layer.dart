@@ -132,11 +132,17 @@ class FillExtrusionLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      fillExtrusionBase: map["paint"]["fill-extrusion-base"]?.toDouble(),
+      fillExtrusionBase: map["paint"]["fill-extrusion-base"] is num?
+          ? (map["paint"]["fill-extrusion-base"] as num?)?.toDouble()
+          : null,
       fillExtrusionColor:
           (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
-      fillExtrusionHeight: map["paint"]["fill-extrusion-height"]?.toDouble(),
-      fillExtrusionOpacity: map["paint"]["fill-extrusion-opacity"]?.toDouble(),
+      fillExtrusionHeight: map["paint"]["fill-extrusion-height"] is num?
+          ? (map["paint"]["fill-extrusion-height"] as num?)?.toDouble()
+          : null,
+      fillExtrusionOpacity: map["paint"]["fill-extrusion-opacity"] is num?
+          ? (map["paint"]["fill-extrusion-opacity"] as num?)?.toDouble()
+          : null,
       fillExtrusionPattern: map["paint"]["fill-extrusion-pattern"],
       fillExtrusionTranslate:
           (map["paint"]["fill-extrusion-translate"] as List?)

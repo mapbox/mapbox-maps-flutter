@@ -159,10 +159,16 @@ class CircleLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      circleSortKey: map["layout"]["circle-sort-key"]?.toDouble(),
-      circleBlur: map["paint"]["circle-blur"]?.toDouble(),
+      circleSortKey: map["layout"]["circle-sort-key"] is num?
+          ? (map["layout"]["circle-sort-key"] as num?)?.toDouble()
+          : null,
+      circleBlur: map["paint"]["circle-blur"] is num?
+          ? (map["paint"]["circle-blur"] as num?)?.toDouble()
+          : null,
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
-      circleOpacity: map["paint"]["circle-opacity"]?.toDouble(),
+      circleOpacity: map["paint"]["circle-opacity"] is num?
+          ? (map["paint"]["circle-opacity"] as num?)?.toDouble()
+          : null,
       circlePitchAlignment: map["paint"]["circle-pitch-alignment"] == null
           ? null
           : CirclePitchAlignment.values.firstWhere((e) => e
@@ -179,11 +185,17 @@ class CircleLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["paint"]["circle-pitch-scale"])),
-      circleRadius: map["paint"]["circle-radius"]?.toDouble(),
+      circleRadius: map["paint"]["circle-radius"] is num?
+          ? (map["paint"]["circle-radius"] as num?)?.toDouble()
+          : null,
       circleStrokeColor:
           (map["paint"]["circle-stroke-color"] as List?)?.toRGBAInt(),
-      circleStrokeOpacity: map["paint"]["circle-stroke-opacity"]?.toDouble(),
-      circleStrokeWidth: map["paint"]["circle-stroke-width"]?.toDouble(),
+      circleStrokeOpacity: map["paint"]["circle-stroke-opacity"] is num?
+          ? (map["paint"]["circle-stroke-opacity"] as num?)?.toDouble()
+          : null,
+      circleStrokeWidth: map["paint"]["circle-stroke-width"] is num?
+          ? (map["paint"]["circle-stroke-width"] as num?)?.toDouble()
+          : null,
       circleTranslate: (map["paint"]["circle-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),

@@ -10,6 +10,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'src/proxy_binary_messenger.dart' show ProxyBinaryMessenger;
+
+export 'package:turf/helpers.dart';
+
 part 'src/annotation/circle_annotation_manager.dart';
 part 'src/annotation/point_annotation_manager.dart';
 part 'src/annotation/polygon_annotation_manager.dart';

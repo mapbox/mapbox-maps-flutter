@@ -167,25 +167,39 @@ class LocationIndicatorLayer extends Layer {
       bearingImage: map["layout"]["bearing-image"],
       shadowImage: map["layout"]["shadow-image"],
       topImage: map["layout"]["top-image"],
-      accuracyRadius: map["paint"]["accuracy-radius"]?.toDouble(),
+      accuracyRadius: map["paint"]["accuracy-radius"] is num?
+          ? (map["paint"]["accuracy-radius"] as num?)?.toDouble()
+          : null,
       accuracyRadiusBorderColor:
           (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
       accuracyRadiusColor:
           (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
-      bearing: map["paint"]["bearing"]?.toDouble(),
-      bearingImageSize: map["paint"]["bearing-image-size"]?.toDouble(),
+      bearing: map["paint"]["bearing"] is num?
+          ? (map["paint"]["bearing"] as num?)?.toDouble()
+          : null,
+      bearingImageSize: map["paint"]["bearing-image-size"] is num?
+          ? (map["paint"]["bearing-image-size"] as num?)?.toDouble()
+          : null,
       emphasisCircleColor:
           (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
-      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"]?.toDouble(),
-      imagePitchDisplacement:
-          map["paint"]["image-pitch-displacement"]?.toDouble(),
+      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"] is num?
+          ? (map["paint"]["emphasis-circle-radius"] as num?)?.toDouble()
+          : null,
+      imagePitchDisplacement: map["paint"]["image-pitch-displacement"] is num?
+          ? (map["paint"]["image-pitch-displacement"] as num?)?.toDouble()
+          : null,
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      perspectiveCompensation:
-          map["paint"]["perspective-compensation"]?.toDouble(),
-      shadowImageSize: map["paint"]["shadow-image-size"]?.toDouble(),
-      topImageSize: map["paint"]["top-image-size"]?.toDouble(),
+      perspectiveCompensation: map["paint"]["perspective-compensation"] is num?
+          ? (map["paint"]["perspective-compensation"] as num?)?.toDouble()
+          : null,
+      shadowImageSize: map["paint"]["shadow-image-size"] is num?
+          ? (map["paint"]["shadow-image-size"] as num?)?.toDouble()
+          : null,
+      topImageSize: map["paint"]["top-image-size"] is num?
+          ? (map["paint"]["top-image-size"] as num?)?.toDouble()
+          : null,
     );
   }
 }
