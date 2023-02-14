@@ -1,8 +1,10 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Restricted) import MapboxMaps
+
 import UIKit
 class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func updateSettingsSettings(_ settings: FLT_SETTINGSLogoSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        
         switch settings.position {
         case .BOTTOM_LEFT:
             mapView.ornaments.options.logo.position = .bottomLeading
@@ -17,12 +19,26 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
             mapView.ornaments.options.logo.position = .topTrailing
             mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         }
+        if let visible = settings.enabled {
+            if !visible.boolValue {
+                mapView.ornaments.options.logo.visibility = OrnamentVisibility.hidden
+            } else {
+                mapView.ornaments.options.logo.visibility = OrnamentVisibility.adaptive
+            }
+        }
+
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLogoSettings? {
         let options = mapView.ornaments.options.logo
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-        let settings = FLT_SETTINGSLogoSettings.make(with: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale))
+        let settings = FLT_SETTINGSLogoSettings.make(
+            with: position,
+            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            enable: NSNumber(value: mapView.ornaments.options.logo.visibility != OrnamentVisibility.hidden))
         return settings
     }
 

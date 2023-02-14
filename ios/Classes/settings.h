@@ -220,7 +220,10 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
     marginTop:(nullable NSNumber *)marginTop
     marginRight:(nullable NSNumber *)marginRight
     marginBottom:(nullable NSNumber *)marginBottom
-    clickable:(nullable NSNumber *)clickable;
+    clickable:(nullable NSNumber *)clickable
+    enable:(nullable NSNumber *) enabled;
+
+@property(nonatomic, strong, nullable) NSNumber * enabled;
 @property(nonatomic, strong, nullable) NSNumber * iconColor;
 @property(nonatomic, assign) FLT_SETTINGSOrnamentPosition position;
 @property(nonatomic, strong, nullable) NSNumber * marginLeft;
@@ -235,7 +238,9 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
     marginLeft:(nullable NSNumber *)marginLeft
     marginTop:(nullable NSNumber *)marginTop
     marginRight:(nullable NSNumber *)marginRight
-    marginBottom:(nullable NSNumber *)marginBottom;
+    marginBottom:(nullable NSNumber *)marginBottom
+    enable:(nullable NSNumber *) enabled;
+@property(nonatomic, strong, nullable) NSNumber * enabled;
 @property(nonatomic, assign) FLT_SETTINGSOrnamentPosition position;
 @property(nonatomic, strong, nullable) NSNumber * marginLeft;
 @property(nonatomic, strong, nullable) NSNumber * marginTop;

@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Restricted) import MapboxMaps
 import UIKit
 class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface {
 
@@ -18,6 +18,13 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             mapView.ornaments.options.attributionButton.position = .topTrailing
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         }
+        if let visible = settings.enabled {
+            if !visible.boolValue {
+                mapView.ornaments.options.attributionButton.visibility = OrnamentVisibility.hidden
+            } else {
+                mapView.ornaments.options.attributionButton.visibility = OrnamentVisibility.adaptive
+            }
+        }
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSAttributionSettings? {
@@ -31,7 +38,8 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            clickable: nil)
+            clickable: nil,
+            enable: NSNumber(value: mapView.ornaments.options.attributionButton.visibility != OrnamentVisibility.hidden))
 
         return settings
     }
