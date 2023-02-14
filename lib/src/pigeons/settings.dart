@@ -612,7 +612,6 @@ class CompassSettings {
 /// Shows the attribution icon on the map.
 class AttributionSettings {
   AttributionSettings({
-    this.enabled,
     this.iconColor,
     this.position,
     this.marginLeft,
@@ -621,9 +620,6 @@ class AttributionSettings {
     this.marginBottom,
     this.clickable,
   });
-
-  /// Whether the attribution icon is visible on the map.
-  bool? enabled;
 
   /// Defines text color of the attribution icon.
   int? iconColor;
@@ -648,7 +644,6 @@ class AttributionSettings {
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
     pigeonMap['iconColor'] = iconColor;
     pigeonMap['position'] = position?.index;
     pigeonMap['marginLeft'] = marginLeft;
@@ -662,7 +657,6 @@ class AttributionSettings {
   static AttributionSettings decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return AttributionSettings(
-      enabled: pigeonMap['enabled'] as bool?,
       iconColor: pigeonMap['iconColor'] as int?,
       position: pigeonMap['position'] != null
           ? OrnamentPosition.values[pigeonMap['position']! as int]
@@ -679,16 +673,12 @@ class AttributionSettings {
 /// Shows the Mapbox logo on the map.
 class LogoSettings {
   LogoSettings({
-    this.enabled,
     this.position,
     this.marginLeft,
     this.marginTop,
     this.marginRight,
     this.marginBottom,
   });
-
-  /// Whether the logo is visible on the map.
-  bool? enabled;
 
   /// Defines where the logo is positioned on the map
   OrnamentPosition? position;
@@ -707,7 +697,6 @@ class LogoSettings {
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
     pigeonMap['position'] = position?.index;
     pigeonMap['marginLeft'] = marginLeft;
     pigeonMap['marginTop'] = marginTop;
@@ -719,7 +708,6 @@ class LogoSettings {
   static LogoSettings decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return LogoSettings(
-      enabled: pigeonMap['enabled'] as bool?,
       position: pigeonMap['position'] != null
           ? OrnamentPosition.values[pigeonMap['position']! as int]
           : null,

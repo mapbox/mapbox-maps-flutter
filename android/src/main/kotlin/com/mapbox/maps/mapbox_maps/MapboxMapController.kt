@@ -19,7 +19,7 @@ class MapboxMapController(
   mapInitOptions: MapInitOptions,
   lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   eventTypes: List<String>,
-  private val messenger: BinaryMessenger,
+  messenger: BinaryMessenger,
   viewId: Int,
   pluginVersion: String
 ) : PlatformView,
@@ -38,21 +38,29 @@ class MapboxMapController(
   private val locationComponentController = LocationComponentController(mapView)
   private val gestureController = GestureController(mapView)
   private val logoController = LogoController(mapView)
+  private val attributionController = AttributionController(mapView)
+  private val scaleBarController = ScaleBarController(mapView)
+  private val compassController = CompassController(mapView)
+
+  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$viewId")
 
   init {
     changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
-    FLTMapInterfaces.StyleManager.setup(messenger, styleController)
-    FLTMapInterfaces._CameraManager.setup(messenger, cameraController)
-    FLTMapInterfaces.Projection.setup(messenger, projectionController)
-    FLTMapInterfaces._MapInterface.setup(messenger, mapInterfaceController)
-    FLTMapInterfaces._AnimationManager.setup(messenger, animationController)
-    annotationController.setup(messenger)
-    FLTSettings.LocationComponentSettingsInterface.setup(messenger, locationComponentController)
-    FLTSettings.LogoSettingsInterface.setup(messenger, logoController)
-    FLTSettings.GesturesSettingsInterface.setup(messenger, gestureController)
-    gestureController.setup(messenger)
-    methodChannel = MethodChannel(messenger, "plugins.flutter.io/mapbox_maps_$viewId")
+    FLTMapInterfaces.StyleManager.setup(proxyBinaryMessenger, styleController)
+    FLTMapInterfaces._CameraManager.setup(proxyBinaryMessenger, cameraController)
+    FLTMapInterfaces.Projection.setup(proxyBinaryMessenger, projectionController)
+    FLTMapInterfaces._MapInterface.setup(proxyBinaryMessenger, mapInterfaceController)
+    FLTMapInterfaces._AnimationManager.setup(proxyBinaryMessenger, animationController)
+    annotationController.setup(proxyBinaryMessenger)
+    FLTSettings.LocationComponentSettingsInterface.setup(proxyBinaryMessenger, locationComponentController)
+    FLTSettings.LogoSettingsInterface.setup(proxyBinaryMessenger, logoController)
+    FLTSettings.GesturesSettingsInterface.setup(proxyBinaryMessenger, gestureController)
+    FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, attributionController)
+    FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, scaleBarController)
+    FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
+    gestureController.setup(proxyBinaryMessenger)
+    methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
     mapboxMap.subscribe(
       { event ->
@@ -70,15 +78,18 @@ class MapboxMapController(
     mapView.onStop()
     mapView.onDestroy()
     methodChannel.setMethodCallHandler(null)
-    FLTMapInterfaces.StyleManager.setup(messenger, null)
-    FLTMapInterfaces._CameraManager.setup(messenger, null)
-    FLTMapInterfaces.Projection.setup(messenger, null)
-    FLTMapInterfaces._MapInterface.setup(messenger, null)
-    FLTMapInterfaces._AnimationManager.setup(messenger, null)
-    annotationController.dispose(messenger)
-    FLTSettings.LocationComponentSettingsInterface.setup(messenger, null)
-    FLTSettings.LogoSettingsInterface.setup(messenger, null)
-    FLTSettings.GesturesSettingsInterface.setup(messenger, null)
+    FLTMapInterfaces.StyleManager.setup(proxyBinaryMessenger, null)
+    FLTMapInterfaces._CameraManager.setup(proxyBinaryMessenger, null)
+    FLTMapInterfaces.Projection.setup(proxyBinaryMessenger, null)
+    FLTMapInterfaces._MapInterface.setup(proxyBinaryMessenger, null)
+    FLTMapInterfaces._AnimationManager.setup(proxyBinaryMessenger, null)
+    annotationController.dispose(proxyBinaryMessenger)
+    FLTSettings.LocationComponentSettingsInterface.setup(proxyBinaryMessenger, null)
+    FLTSettings.LogoSettingsInterface.setup(proxyBinaryMessenger, null)
+    FLTSettings.GesturesSettingsInterface.setup(proxyBinaryMessenger, null)
+    FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, null)
+    FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, null)
+    FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, null)
   }
 
   override fun onStart(owner: LifecycleOwner) {

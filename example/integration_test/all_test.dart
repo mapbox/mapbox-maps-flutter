@@ -38,16 +38,25 @@ import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
 import 'style/source/vector_source_test.dart' as vector_source_test;
 import 'style/source/model_source_test.dart' as model_source_test;
 import 'style/style_test.dart' as style_test;
+import 'location_test.dart' as location_test;
+import 'logo_test.dart' as logo_test;
+import 'attribution_test.dart' as attribution_test;
+import 'compass_test.dart' as compass_test;
+import 'scale_bar_test.dart' as scale_bar_test;
 
 
 void main() {
   animation_test.main();
   camera_test.main();
-  // location_test.main();
+  location_test.main();
   map_interface_test.main();
   mapboxMap_test.main();
   projection_test.main();
   gestures_test.main();
+  logo_test.main();
+  attribution_test.main();
+  compass_test.main();
+  scale_bar_test.main();
 
   // annotation tests
   circle_annotation_manager_test.main();

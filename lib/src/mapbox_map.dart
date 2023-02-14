@@ -21,6 +21,8 @@ class MapboxMap extends ChangeNotifier {
     this.onMapLongTapListener,
     this.onMapScrollListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
+    _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
+
     annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
     if (onStyleLoadedListener != null) {
       _mapboxMapsPlatform.onStyleLoadedPlatform.add((argument) {
@@ -90,11 +92,13 @@ class MapboxMap extends ChangeNotifier {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
         onMapScrollListener != null) {
-      GestureListener.setup(_GestureListener(
-        onMapTapListener: onMapTapListener,
-        onMapLongTapListener: onMapLongTapListener,
-        onMapScrollListener: onMapScrollListener,
-      ));
+      GestureListener.setup(
+          _GestureListener(
+            onMapTapListener: onMapTapListener,
+            onMapLongTapListener: onMapLongTapListener,
+            onMapScrollListener: onMapScrollListener,
+          ),
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
     }
   }
 
@@ -146,27 +150,50 @@ class MapboxMap extends ChangeNotifier {
   final OnStyleImageUnusedListener? onStyleImageUnusedListener;
 
   /// The currently loaded Style]object.
-  final StyleManager style = StyleManager();
+  late StyleManager style =
+      StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  final LocationComponentSettingsInterface location =
-      LocationComponentSettingsInterface();
+  late LocationComponentSettingsInterface location =
+      LocationComponentSettingsInterface(
+          binaryMessenger: _proxyBinaryMessenger);
 
-  /// The interface to set the logo.
-  final LogoSettingsInterface logo = LogoSettingsInterface();
-  final _CameraManager _cameraManager = _CameraManager();
-  final _MapInterface _mapInterface = _MapInterface();
-  final _AnimationManager _animationManager = _AnimationManager();
+  late BinaryMessenger _proxyBinaryMessenger;
+
+  late _CameraManager _cameraManager =
+      _CameraManager(binaryMessenger: _proxyBinaryMessenger);
+  late _MapInterface _mapInterface =
+      _MapInterface(binaryMessenger: _proxyBinaryMessenger);
+  late _AnimationManager _animationManager =
+      _AnimationManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to create and set annotations.
   late final _AnnotationManager annotations;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  final Projection projection = Projection();
+  late Projection projection =
+      Projection(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to access the gesture settings.
-  final GesturesSettingsInterface gestures = GesturesSettingsInterface();
+  late GesturesSettingsInterface gestures =
+      GesturesSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+
+  /// The interface to set the logo settings.
+  late LogoSettingsInterface logo =
+      LogoSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+
+  /// The interface to access the compass settings.
+  late CompassSettingsInterface compass =
+      CompassSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+
+  /// The interface to access the compass settings.
+  late ScaleBarSettingsInterface scaleBar =
+      ScaleBarSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+
+  /// The interface to access the attribution settings.
+  late AttributionSettingsInterface attribution =
+      AttributionSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
 
   final OnMapTapListener? onMapTapListener;
   final OnMapLongTapListener? onMapLongTapListener;

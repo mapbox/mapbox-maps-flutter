@@ -54,7 +54,7 @@ class CameraController: NSObject, FLT_CameraManager {
     }
 
     func pixels(forCoordinatesCoordinates coordinates: [[String: Any]], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [FLTScreenCoordinate]? {
-        let points = self.mapboxMap.coordinates(for: coordinates.map({convertDictionaryToCGPoint(dict: $0)!}) )
+        let points = self.mapboxMap.points(for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}))
         return points.map({$0.toFLTScreenCoordinate()})
     }
 
