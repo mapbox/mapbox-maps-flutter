@@ -17,6 +17,8 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         case .TOP_RIGHT:
             mapView.ornaments.options.attributionButton.position = .topTrailing
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        @unknown default:
+            break
         }
         if let visible = settings.enabled {
             if !visible.boolValue {
@@ -32,14 +34,14 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
 
         let settings = FLT_SETTINGSAttributionSettings.make(
-            withIconColor: nil,
+            withEnabled: NSNumber(value: mapView.ornaments.options.attributionButton.visibility != OrnamentVisibility.hidden),
             position: position,
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
             clickable: nil,
-            enable: NSNumber(value: mapView.ornaments.options.attributionButton.visibility != OrnamentVisibility.hidden))
+            iconColor: nil)
 
         return settings
     }

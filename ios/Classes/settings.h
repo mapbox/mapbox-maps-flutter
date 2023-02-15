@@ -214,14 +214,14 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @end
 
 @interface FLT_SETTINGSAttributionSettings : NSObject
-+ (instancetype)makeWithIconColor:(nullable NSNumber *)iconColor
++ (instancetype)makeWithEnabled:(nullable NSNumber *)enabled
     position:(FLT_SETTINGSOrnamentPosition)position
     marginLeft:(nullable NSNumber *)marginLeft
     marginTop:(nullable NSNumber *)marginTop
     marginRight:(nullable NSNumber *)marginRight
     marginBottom:(nullable NSNumber *)marginBottom
     clickable:(nullable NSNumber *)clickable
-    enable:(nullable NSNumber *) enabled;
+    iconColor:(nullable NSNumber *) iconColor;
 
 @property(nonatomic, strong, nullable) NSNumber * enabled;
 @property(nonatomic, strong, nullable) NSNumber * iconColor;
@@ -234,12 +234,12 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @end
 
 @interface FLT_SETTINGSLogoSettings : NSObject
-+ (instancetype)makeWithPosition:(FLT_SETTINGSOrnamentPosition)position
++ (instancetype)makeWithEnabled:(nullable NSNumber *)enabled
     marginLeft:(nullable NSNumber *)marginLeft
     marginTop:(nullable NSNumber *)marginTop
     marginRight:(nullable NSNumber *)marginRight
     marginBottom:(nullable NSNumber *)marginBottom
-    enable:(nullable NSNumber *) enabled;
+    position:(FLT_SETTINGSOrnamentPosition) position;
 @property(nonatomic, strong, nullable) NSNumber * enabled;
 @property(nonatomic, assign) FLT_SETTINGSOrnamentPosition position;
 @property(nonatomic, strong, nullable) NSNumber * marginLeft;
