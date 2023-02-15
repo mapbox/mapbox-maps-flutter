@@ -2,7 +2,7 @@ import Foundation
 @_spi(Restricted) import MapboxMaps
 import UIKit
 class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface {
-
+    
     func updateSettingsSettings(_ settings: FLT_SETTINGSAttributionSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         switch settings.position {
         case .BOTTOM_LEFT:
@@ -17,7 +17,7 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         case .TOP_RIGHT:
             mapView.ornaments.options.attributionButton.position = .topTrailing
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        @unknown default:
+        default:
             break
         }
         if let visible = settings.enabled {
@@ -28,11 +28,10 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             }
         }
     }
-
+    
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSAttributionSettings? {
         let options = mapView.ornaments.options.attributionButton
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-
         let settings = FLT_SETTINGSAttributionSettings.make(
             withEnabled: NSNumber(value: mapView.ornaments.options.attributionButton.visibility != OrnamentVisibility.hidden),
             position: position,
@@ -42,10 +41,11 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
             clickable: nil,
             iconColor: nil)
-
+        
+        
         return settings
     }
-
+    
     func getFLT_SETTINGSOrnamentPosition(position: OrnamentPosition) -> FLT_SETTINGSOrnamentPosition {
         switch position {
         case .bottomLeading:
@@ -58,10 +58,10 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             return.TOP_RIGHT
         }
     }
-
+    
     private var mapView: MapView
     private var cancelable: Cancelable?
-
+    
     init(withMapView mapView: MapView) {
         self.mapView = mapView
     }

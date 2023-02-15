@@ -547,7 +547,12 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @end
 
 @implementation FLT_SETTINGSLogoSettings
-+ (instancetype)makeWithEnabled:(NSNumber *)enabled marginLeft:(NSNumber *)marginLeft marginTop:(NSNumber *)marginTop marginRight:(NSNumber *)marginRight marginBottom:(NSNumber *)marginBottom position:(FLT_SETTINGSOrnamentPosition)position{
++ (instancetype)makeWithEnabled:(NSNumber *)enabled
+  marginLeft:(NSNumber *)marginLeft
+  marginTop:(NSNumber *)marginTop
+  marginRight:(NSNumber *)marginRight
+  marginBottom:(NSNumber *)marginBottom
+  position:(FLT_SETTINGSOrnamentPosition)position{
     FLT_SETTINGSLogoSettings* pigeonResult = [[FLT_SETTINGSLogoSettings alloc] init];
     pigeonResult.position = position;
     pigeonResult.enabled = enabled;

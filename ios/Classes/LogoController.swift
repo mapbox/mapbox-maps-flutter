@@ -18,7 +18,7 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         case .TOP_RIGHT:
             mapView.ornaments.options.logo.position = .topTrailing
             mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        @unknown default:
+        default:
             break
         }
         if let visible = settings.enabled {
@@ -37,10 +37,11 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         let settings = FLT_SETTINGSLogoSettings.make(
             withEnabled: NSNumber(value: mapView.ornaments.options.logo.visibility != OrnamentVisibility.hidden),
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginTop:  NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
             position: position)
+
         return settings
     }
     
