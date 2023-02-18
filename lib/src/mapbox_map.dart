@@ -506,7 +506,7 @@ class MapboxMap extends ChangeNotifier {
       _mapInterface.getResourceOptions();
 
   /// Gets elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen.
+  /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
   Future<double?> getElevation(Map<String?, Object?> coordinate) =>
       _mapInterface.getElevation(coordinate);
 
