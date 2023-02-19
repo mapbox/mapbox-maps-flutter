@@ -44,7 +44,7 @@ void main() {
         visibility: Visibility.NONE,
         sourceId: sourceId,
         modelId: modelId,
-        scale: [1.0, 1.0, 1.0]);
+        modelScale: [1.0, 1.0, 1.0]);
     await mapboxMap.style.addLayer(modelLayer);
     var layer = await mapboxMap.style.getLayer(layerId) as ModelLayer;
     expect(sourceId, layer.sourceId);

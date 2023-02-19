@@ -95,6 +95,31 @@ class _ModelState extends State<Model> {
                   }
                 },
                 child: Text('has model')),
+            ElevatedButton(
+                onPressed: () async {
+                  var styleManager = _mapController.style;
+                  styleManager.getLayer('model-layer-id').then((value) =>
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("""
+                  Model layer :
+                  modelId: ${(value as ModelLayer?)?.modelId}
+                  visibility: ${(value)?.visibility}
+                  modelType: ${(value)?.modelType}
+                  sourceLayer: ${(value)?.sourceLayer}
+                  modelOpacity: ${(value)?.modelOpacity}
+                  modelColor: ${(value)?.modelColor}
+                  modelTranslation: ${(value)?.modelTranslation}
+                  modelColorMixIntensity: ${(value)?.modelColorMixIntensity}
+                  modelScale: ${(value)?.modelScale}
+                  modelRotation: ${(value)?.modelRotation}
+                  minZoom: ${(value)?.minZoom}
+                  maxZoom: ${(value)?.maxZoom}"""
+                            .trim()),
+                        backgroundColor: Theme.of(context).primaryColor,
+                        duration: Duration(seconds: 2),
+                      )));
+                },
+                child: Text('model details')),
           ],
         )
       ],
@@ -122,7 +147,9 @@ class _ModelState extends State<Model> {
           sourceId: sourceId,
           modelType: ModelType.COMMON_3D,
           modelId: modelId,
-          scale: [1.0, 1.0, 1.0]);
+          modelTranslation: [1.2,1.5,1.5],
+          modelRotation: [1.0,1.0,1.0],
+          modelScale: [1.0, 1.0, 1.0]);
       await _mapController.style.addLayer(modelLayer);
     } catch (error) {
       print(error);

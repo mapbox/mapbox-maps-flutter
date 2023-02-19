@@ -4,18 +4,18 @@ class ModelLayer extends Layer {
   ModelLayer({
     required String id,
     required this.sourceId,
-    this.modelId,
-    this.visibility = Visibility.VISIBLE,
-    this.modelType = ModelType.COMMON_3D,
-    this.sourceLayer,
-    this.opacity,
-    this.color,
-    this.translation,
-    this.colorMixIntensity,
-    this.scale,
-    this.rotation,
-    this.minZoom,
-    this.maxZoom,
+             this.modelId,
+             this.visibility = Visibility.VISIBLE,
+             this.modelType = ModelType.COMMON_3D,
+             this.sourceLayer,
+             this.modelOpacity,
+             this.modelColor,
+             this.modelTranslation,
+             this.modelColorMixIntensity,
+             this.modelScale,
+             this.modelRotation,
+             this.minZoom,
+             this.maxZoom,
   }) : super(id: id);
 
   /// The id of the source.
@@ -38,22 +38,22 @@ class ModelLayer extends Layer {
   final double? maxZoom;
 
   /// The tint color of the model layer
-  final int? color;
+  final int? modelColor;
 
   /// ModelColorMixIntensity property
-  final double? colorMixIntensity;
+  final double? modelColorMixIntensity;
 
   /// The opacity of the model layer.
-  final int? opacity;
+  final double? modelOpacity;
 
   /// The rotation of the model in euler angles [lon, lat, z].
-  final List<double>? rotation;
+  final List<double?>? modelRotation;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
-  final List<double>? translation;
+  final List<double?>? modelTranslation;
 
   /// The scale of the model.
-  final List<double>? scale;
+  final List<double?>? modelScale;
 
   ///  Defines rendering behavior of model in respect to other 3D scene objects.
   final ModelType? modelType;
@@ -75,23 +75,23 @@ class ModelLayer extends Layer {
 
     var paint = {};
 
-    if (color != null) {
-      paint["model-color"] = color?.toRGBA();
+    if (modelColor != null) {
+      paint["model-color"] = modelColor?.toRGBA();
     }
-    if (opacity != null) {
-      paint["model-opacity"] = opacity;
+    if (modelOpacity != null) {
+      paint["model-opacity"] = modelOpacity;
     }
-    if (translation != null) {
-      paint["model-translation"] = translation;
+    if (modelTranslation != null) {
+      paint["model-translation"] = modelTranslation;
     }
-    if (rotation != null) {
-      paint['model-rotation'] = rotation;
+    if (modelRotation != null) {
+      paint['model-rotation'] = modelRotation;
     }
-    if (scale != null) {
-      paint['model-scale'] = scale;
+    if (modelScale != null) {
+      paint['model-scale'] = modelScale;
     }
-    if (colorMixIntensity != null) {
-      paint['model-color-mix-intensity'] = colorMixIntensity;
+    if (modelColorMixIntensity != null) {
+      paint['model-color-mix-intensity'] = modelColorMixIntensity;
     }
 
     var properties = {
@@ -115,18 +115,30 @@ class ModelLayer extends Layer {
 
   static Layer? decode(String properties) {
     var map = json.decode(properties);
-    if (map["layout"] == null) {
-      map["layout"] = {};
-    }
-    if (map["paint"] == null) {
-      map["paint"] = {};
-    }
+
     return ModelLayer(
       id: map['id'],
+      modelType: ModelType.COMMON_3D,
       sourceId: map['source'],
       modelId: map['layout']['model-id'],
       maxZoom: double.tryParse(map['maxzoom'].toString()),
       minZoom: double.tryParse(map['minzoom'].toString()),
+      modelRotation: (map["paint"]["model-rotation"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
+      modelTranslation: (map["paint"]["model-translation"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
+      modelScale: (map["paint"]["model-scale"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
+      modelColorMixIntensity: map["paint"]["model-color-mix-intensity"] is num?
+          ? (map["paint"]["model-color-mix-intensity"] as num?)?.toDouble()
+          : null,
+      modelColor: (map["paint"]["model-color"] as List?)?.toRGBAInt(),
+      modelOpacity: map["paint"]["model-opacity"] is num?
+          ? (map["paint"]["model-opacity"] as num?)?.toDouble()
+          : null,
     );
   }
 }
