@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// Part of the icon placed closest to the anchor.
 enum IconAnchor {

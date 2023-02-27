@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// The PolylineAnnotationManager to add/update/delete PolylineAnnotationAnnotations on the map.
 class PolylineAnnotationManager extends BaseAnnotationManager {

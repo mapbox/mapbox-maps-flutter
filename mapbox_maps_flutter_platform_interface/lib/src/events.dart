@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// List of supported event types by the `map` and `map snapshotter` objects,
 /// and event data format specification for each event.

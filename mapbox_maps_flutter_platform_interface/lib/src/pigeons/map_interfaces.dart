@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// Describes glyphs rasterization modes.
 enum GlyphsRasterizationMode {

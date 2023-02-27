@@ -1,9 +1,9 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier {
   MapboxMap({
-    required _MapboxMapsPlatform mapboxMapsPlatform,
+    required MapboxMapsPlatformInterface mapboxMapsPlatform,
     this.onStyleLoadedListener,
     this.onCameraChangeListener,
     this.onMapIdleListener,
@@ -21,88 +21,88 @@ class MapboxMap extends ChangeNotifier {
     this.onMapLongTapListener,
     this.onMapScrollListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
-    _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
+    // _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
 
-    annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
-    if (onStyleLoadedListener != null) {
-      _mapboxMapsPlatform.onStyleLoadedPlatform.add((argument) {
-        onStyleLoadedListener?.call(argument);
-      });
-    }
-    if (onCameraChangeListener != null) {
-      _mapboxMapsPlatform.onCameraChangeListenerPlatform.add((argument) {
-        onCameraChangeListener?.call(argument);
-      });
-    }
-    if (onMapIdleListener != null) {
-      _mapboxMapsPlatform.onMapIdlePlatform.add((argument) {
-        onMapIdleListener?.call(argument);
-      });
-    }
-    if (onMapLoadedListener != null) {
-      _mapboxMapsPlatform.onMapLoadedPlatform.add((argument) {
-        onMapLoadedListener?.call(argument);
-      });
-    }
-    if (onMapLoadErrorListener != null) {
-      _mapboxMapsPlatform.onMapLoadErrorPlatform.add((argument) {
-        onMapLoadErrorListener?.call(argument);
-      });
-    }
-    if (onRenderFrameFinishedListener != null) {
-      _mapboxMapsPlatform.onRenderFrameFinishedPlatform.add((argument) {
-        onRenderFrameFinishedListener?.call(argument);
-      });
-    }
-    if (onRenderFrameStartedListener != null) {
-      _mapboxMapsPlatform.onRenderFrameStartedPlatform.add((argument) {
-        onRenderFrameStartedListener?.call(argument);
-      });
-    }
-    if (onSourceAddedListener != null) {
-      _mapboxMapsPlatform.onSourceAddedPlatform.add((argument) {
-        onSourceAddedListener?.call(argument);
-      });
-    }
-    if (onSourceDataLoadedListener != null) {
-      _mapboxMapsPlatform.onSourceDataLoadedPlatform.add((argument) {
-        onSourceDataLoadedListener?.call(argument);
-      });
-    }
-    if (onSourceRemovedListener != null) {
-      _mapboxMapsPlatform.onSourceRemovedPlatform.add((argument) {
-        onSourceRemovedListener?.call(argument);
-      });
-    }
-    if (onStyleDataLoadedListener != null) {
-      _mapboxMapsPlatform.onStyleDataLoadedPlatform.add((argument) {
-        onStyleDataLoadedListener?.call(argument);
-      });
-    }
-    if (onStyleImageMissingListener != null) {
-      _mapboxMapsPlatform.onStyleImageMissingPlatform.add((argument) {
-        onStyleImageMissingListener?.call(argument);
-      });
-    }
-    if (onStyleImageUnusedListener != null) {
-      _mapboxMapsPlatform.onStyleImageUnusedPlatform.add((argument) {
-        onStyleImageUnusedListener?.call(argument);
-      });
-    }
-    if (onMapTapListener != null ||
-        onMapLongTapListener != null ||
-        onMapScrollListener != null) {
-      GestureListener.setup(
-          _GestureListener(
-            onMapTapListener: onMapTapListener,
-            onMapLongTapListener: onMapLongTapListener,
-            onMapScrollListener: onMapScrollListener,
-          ),
-          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
-    }
+    // annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
+    // if (onStyleLoadedListener != null) {
+    //   _mapboxMapsPlatform.onStyleLoadedPlatform.add((argument) {
+    //     onStyleLoadedListener?.call(argument);
+    //   });
+    // }
+    // if (onCameraChangeListener != null) {
+    //   _mapboxMapsPlatform.onCameraChangeListenerPlatform.add((argument) {
+    //     onCameraChangeListener?.call(argument);
+    //   });
+    // }
+    // if (onMapIdleListener != null) {
+    //   _mapboxMapsPlatform.onMapIdlePlatform.add((argument) {
+    //     onMapIdleListener?.call(argument);
+    //   });
+    // }
+    // if (onMapLoadedListener != null) {
+    //   _mapboxMapsPlatform.onMapLoadedPlatform.add((argument) {
+    //     onMapLoadedListener?.call(argument);
+    //   });
+    // }
+    // if (onMapLoadErrorListener != null) {
+    //   _mapboxMapsPlatform.onMapLoadErrorPlatform.add((argument) {
+    //     onMapLoadErrorListener?.call(argument);
+    //   });
+    // }
+    // if (onRenderFrameFinishedListener != null) {
+    //   _mapboxMapsPlatform.onRenderFrameFinishedPlatform.add((argument) {
+    //     onRenderFrameFinishedListener?.call(argument);
+    //   });
+    // }
+    // if (onRenderFrameStartedListener != null) {
+    //   _mapboxMapsPlatform.onRenderFrameStartedPlatform.add((argument) {
+    //     onRenderFrameStartedListener?.call(argument);
+    //   });
+    // }
+    // if (onSourceAddedListener != null) {
+    //   _mapboxMapsPlatform.onSourceAddedPlatform.add((argument) {
+    //     onSourceAddedListener?.call(argument);
+    //   });
+    // }
+    // if (onSourceDataLoadedListener != null) {
+    //   _mapboxMapsPlatform.onSourceDataLoadedPlatform.add((argument) {
+    //     onSourceDataLoadedListener?.call(argument);
+    //   });
+    // }
+    // if (onSourceRemovedListener != null) {
+    //   _mapboxMapsPlatform.onSourceRemovedPlatform.add((argument) {
+    //     onSourceRemovedListener?.call(argument);
+    //   });
+    // }
+    // if (onStyleDataLoadedListener != null) {
+    //   _mapboxMapsPlatform.onStyleDataLoadedPlatform.add((argument) {
+    //     onStyleDataLoadedListener?.call(argument);
+    //   });
+    // }
+    // if (onStyleImageMissingListener != null) {
+    //   _mapboxMapsPlatform.onStyleImageMissingPlatform.add((argument) {
+    //     onStyleImageMissingListener?.call(argument);
+    //   });
+    // }
+    // if (onStyleImageUnusedListener != null) {
+    //   _mapboxMapsPlatform.onStyleImageUnusedPlatform.add((argument) {
+    //     onStyleImageUnusedListener?.call(argument);
+    //   });
+    // }
+    // if (onMapTapListener != null ||
+    //     onMapLongTapListener != null ||
+    //     onMapScrollListener != null) {
+    //   GestureListener.setup(
+    //       _GestureListener(
+    //         onMapTapListener: onMapTapListener,
+    //         onMapLongTapListener: onMapLongTapListener,
+    //         onMapScrollListener: onMapScrollListener,
+    //       ),
+    //       binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+    // }
   }
 
-  final _MapboxMapsPlatform _mapboxMapsPlatform;
+  final MapboxMapsPlatformInterface _mapboxMapsPlatform;
 
   /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
   final OnStyleLoadedListener? onStyleLoadedListener;
@@ -202,7 +202,7 @@ class MapboxMap extends ChangeNotifier {
   @override
   void dispose() {
     super.dispose();
-    _mapboxMapsPlatform.dispose();
+    MapboxMapsPlatformInterface.instance.dispose();
     _observersMap.clear();
   }
 
@@ -213,22 +213,22 @@ class MapboxMap extends ChangeNotifier {
   /// in order to stop receiving notifications, caller must call `unsubscribe` with an
   /// `observer` instance used for an initial subscription.
   void subscribe(Observer observer, List<String> events) {
-    events.forEach((element) {
-      _mapboxMapsPlatform.addEventListener(element);
-      if (_observersMap[element] == null) {
-        // Haven't subscribed this event
-        _observersMap[element] = [observer];
-      } else {
-        // Have subscribed this event, just add observer to ths list
-        _observersMap[element]!.add(observer);
-      }
-    });
-    _mapboxMapsPlatform.observers.add((argument) {
-      // Notify all the observers registered with this event.
-      _observersMap[argument.type]?.forEach((element) {
-        element(argument);
-      });
-    });
+    // events.forEach((element) {
+    // _mapboxMapsPlatform.addEventListener(element);
+    //   if (_observersMap[element] == null) {
+    //     // Haven't subscribed this event
+    //     _observersMap[element] = [observer];
+    //   } else {
+    //     // Have subscribed this event, just add observer to ths list
+    //     _observersMap[element]!.add(observer);
+    //   }
+    // });
+    // _mapboxMapsPlatform.observers.add((argument) {
+    //   // Notify all the observers registered with this event.
+    //   _observersMap[argument.type]?.forEach((element) {
+    //     element(argument);
+    //   });
+    // });
   }
 
   /// Unsubscribes an `observer` from a provided array of event types.

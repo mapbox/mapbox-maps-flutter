@@ -170,7 +170,8 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   final Completer<MapboxMap> _controller = Completer<MapboxMap>();
 
-  final _MapboxMapsPlatform _mapboxMapsPlatform = _MapboxMapsPlatform();
+  final MapboxMapsPlatformInterface _mapboxMapsPlatform =
+      MapboxMapsPlatformInterface.instance;
 
   MapboxMap? mapboxMap;
 
@@ -212,6 +213,7 @@ class _MapWidgetState extends State<MapWidget> {
   void onPlatformViewCreated(int id) {
     final suffix = "/map_$id";
     _mapboxMapsPlatform.initPlatform(suffix);
+    print("onPlatformViewCreated $suffix");
     final MapboxMap controller = MapboxMap(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onStyleLoadedListener: widget.onStyleLoadedListener,

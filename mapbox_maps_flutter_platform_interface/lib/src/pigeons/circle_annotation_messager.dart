@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
 /// Orientation of circle when map is pitched.
 enum CirclePitchAlignment {

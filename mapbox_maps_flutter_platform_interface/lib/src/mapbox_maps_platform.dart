@@ -1,8 +1,6 @@
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_platform_interface;
 
-typedef OnPlatformViewCreatedCallback = void Function(int);
-
-class _MapboxMapsPlatform {
+class MapboxMapsPlatform extends MapboxMapsPlatformInterface {
   final observers = ArgumentCallbacks<Event>();
   final onStyleLoadedPlatform = ArgumentCallbacks<StyleLoadedEventData>();
   final onCameraChangeListenerPlatform =
@@ -102,6 +100,7 @@ class _MapboxMapsPlatform {
     }
   }
 
+  @override
   void initPlatform(String channelSuffix) {
     this.binaryMessenger = ProxyBinaryMessenger(suffix: channelSuffix);
     _channel = MethodChannel('plugins.flutter.io', const StandardMethodCodec(),
@@ -109,31 +108,35 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(_handleMethodCall);
   }
 
+  @override
   Widget buildView(
       Map<String, dynamic> creationParams,
       OnPlatformViewCreatedCallback onPlatformViewCreated,
       Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers) {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'plugins.flutter.io/mapbox_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return UiKitView(
-        viewType: 'plugins.flutter.io/mapbox_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return AndroidView(
+          viewType: 'plugins.flutter.io/mapbox_maps',
+          onPlatformViewCreated: onPlatformViewCreated,
+          gestureRecognizers: gestureRecognizers,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+        );
+      case TargetPlatform.iOS:
+        return UiKitView(
+          viewType: 'plugins.flutter.io/mapbox_maps',
+          onPlatformViewCreated: onPlatformViewCreated,
+          gestureRecognizers: gestureRecognizers,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+        );
+      default:
+        return Text(
+            '$defaultTargetPlatform is not yet supported by the maps plugin');
     }
-    return Text(
-        '$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
+  @override
   void dispose() {
     _channel.setMethodCallHandler(null);
   }

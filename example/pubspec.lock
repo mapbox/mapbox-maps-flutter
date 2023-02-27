@@ -100,6 +100,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -131,6 +136,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.4"
   json_annotation:
     dependency: transitive
     description:
@@ -142,6 +154,20 @@ packages:
     dependency: "direct main"
     description:
       path: ".."
+      relative: true
+    source: path
+    version: "0.4.1"
+  mapbox_maps_flutter_platform_interface:
+    dependency: transitive
+    description:
+      path: "../mapbox_maps_flutter_platform_interface"
+      relative: true
+    source: path
+    version: "0.4.1"
+  mapbox_maps_flutter_web:
+    dependency: transitive
+    description:
+      path: "../mapbox_maps_flutter_web"
       relative: true
     source: path
     version: "0.4.1"
