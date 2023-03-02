@@ -201,9 +201,16 @@ class MapboxMap extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
+    if (onMapTapListener != null ||
+        onMapLongTapListener != null ||
+        onMapScrollListener != null) {
+      GestureListener.setup(
+          null,
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+    }
     _mapboxMapsPlatform.dispose();
     _observersMap.clear();
+    super.dispose();
   }
 
   var _observersMap = Map<String, List<Observer>>();
