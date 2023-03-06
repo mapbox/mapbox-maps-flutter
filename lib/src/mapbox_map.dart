@@ -201,9 +201,16 @@ class MapboxMap extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
+    if (onMapTapListener != null ||
+        onMapLongTapListener != null ||
+        onMapScrollListener != null) {
+      GestureListener.setup(
+          null,
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+    }
     _mapboxMapsPlatform.dispose();
     _observersMap.clear();
+    super.dispose();
   }
 
   var _observersMap = Map<String, List<Observer>>();
@@ -506,7 +513,7 @@ class MapboxMap extends ChangeNotifier {
       _mapInterface.getResourceOptions();
 
   /// Gets elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen.
+  /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
   Future<double?> getElevation(Map<String?, Object?> coordinate) =>
       _mapInterface.getElevation(coordinate);
 
