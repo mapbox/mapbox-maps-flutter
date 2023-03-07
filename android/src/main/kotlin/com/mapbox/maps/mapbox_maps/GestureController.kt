@@ -34,20 +34,32 @@ class GestureController(private val mapView: MapView) :
       false
     }
     mapView.gestures.addOnMoveListener(object :
-        OnMoveListener {
-        override fun onMove(detector: MoveGestureDetector): Boolean {
-          gestureListener.onScroll(
-            mapView.getMapboxMap().coordinateForPixel(
-              ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
-            ).toFLTScreenCoordinate()
-          ) {}
-          return false
-        }
+      OnMoveListener {
+      override fun onMove(detector: MoveGestureDetector): Boolean {
+        gestureListener.onScroll(
+          mapView.getMapboxMap().coordinateForPixel(
+            ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
+          ).toFLTScreenCoordinate()
+        ) {}
+        return false
+      }
 
-        override fun onMoveBegin(detector: MoveGestureDetector) {}
+      override fun onMoveBegin(detector: MoveGestureDetector) {
+        gestureListener.onScrollStart(
+          mapView.getMapboxMap().coordinateForPixel(
+            ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
+          ).toFLTScreenCoordinate()
+        ) {}
+      }
 
-        override fun onMoveEnd(detector: MoveGestureDetector) {}
-      })
+      override fun onMoveEnd(detector: MoveGestureDetector) {
+        gestureListener.onScrollEnd(
+          mapView.getMapboxMap().coordinateForPixel(
+            ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
+          ).toFLTScreenCoordinate()
+        ) {}
+      }
+    })
   }
 }
 
