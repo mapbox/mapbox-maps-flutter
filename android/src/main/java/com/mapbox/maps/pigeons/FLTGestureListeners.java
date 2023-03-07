@@ -137,6 +137,20 @@ public class FLTGestureListeners {
         callback.reply(null);
       });
     }
+    public void onScrollStart(@NonNull ScreenCoordinate coordinateArg, Reply<Void> callback) {
+      BasicMessageChannel<Object> channel =
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.GestureListener.onScrollStart", getCodec());
+      channel.send(new ArrayList<Object>(Arrays.asList(coordinateArg)), channelReply -> {
+        callback.reply(null);
+      });
+    }
+    public void onScrollEnd(@NonNull ScreenCoordinate coordinateArg, Reply<Void> callback) {
+      BasicMessageChannel<Object> channel =
+          new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.GestureListener.onScrollEnd", getCodec());
+      channel.send(new ArrayList<Object>(Arrays.asList(coordinateArg)), channelReply -> {
+        callback.reply(null);
+      });
+    }
   }
   private static Map<String, Object> wrapError(Throwable exception) {
     Map<String, Object> errorMap = new HashMap<>();

@@ -158,4 +158,24 @@ NSObject<FlutterMessageCodec> *FLT_GESTURESGestureListenerGetCodec() {
     completion(nil);
   }];
 }
+- (void)onScrollStartCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate completion:(void(^)(NSError *_Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.GestureListener.onScrollStart"
+      binaryMessenger:self.binaryMessenger
+      codec:FLT_GESTURESGestureListenerGetCodec()];
+  [channel sendMessage:@[arg_coordinate ?: [NSNull null]] reply:^(id reply) {
+    completion(nil);
+  }];
+}
+- (void)onScrollEndCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate completion:(void(^)(NSError *_Nullable))completion {
+  FlutterBasicMessageChannel *channel =
+    [FlutterBasicMessageChannel
+      messageChannelWithName:@"dev.flutter.pigeon.GestureListener.onScrollEnd"
+      binaryMessenger:self.binaryMessenger
+      codec:FLT_GESTURESGestureListenerGetCodec()];
+  [channel sendMessage:@[arg_coordinate ?: [NSNull null]] reply:^(id reply) {
+    completion(nil);
+  }];
+}
 @end

@@ -6,13 +6,21 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
 
     private var onGestureListener: FLT_GESTURESGestureListener?
 
-    func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didBegin gestureType: MapboxMaps.GestureType) {}
+    func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didBegin gestureType: MapboxMaps.GestureType) {
+        switch gestureType {
+        case .pan:
+            let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.panGestureRecognizer.location(in: mapView)))
+            self.onGestureListener?.onScrollStart(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+        default: break
+        }
+    }
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEnd gestureType: MapboxMaps.GestureType, willAnimate: Bool) {
         switch gestureType {
         case .pan:
             let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.panGestureRecognizer.location(in: mapView)))
             self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+            self.onGestureListener?.onScrollEnd(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
         case .singleTap:
             let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
             self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })

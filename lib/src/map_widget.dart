@@ -36,6 +36,8 @@ class MapWidget extends StatefulWidget {
     this.onTapListener,
     this.onLongTapListener,
     this.onScrollListener,
+    this.onScrollStartListener,
+    this.onScrollEndListener,
   }) : super(key: key) {
     if (onStyleLoadedListener != null) {
       _eventTypes.add(MapEvents.STYLE_LOADED);
@@ -158,6 +160,8 @@ class MapWidget extends StatefulWidget {
   final OnMapTapListener? onTapListener;
   final OnMapLongTapListener? onLongTapListener;
   final OnMapScrollListener? onScrollListener;
+  final OnMapScrollListener? onScrollStartListener;
+  final OnMapScrollListener? onScrollEndListener;
 
   @override
   State createState() {
@@ -230,6 +234,8 @@ class _MapWidgetState extends State<MapWidget> {
       onMapTapListener: widget.onTapListener,
       onMapLongTapListener: widget.onLongTapListener,
       onMapScrollListener: widget.onScrollListener,
+      onMapScrollStartListener: widget.onScrollStartListener,
+      onMapScrollEndListener: widget.onScrollEndListener,
     );
     _controller.complete(controller);
     if (widget.onMapCreated != null) {

@@ -27,5 +27,7 @@ NSObject<FlutterMessageCodec> *FLT_GESTURESGestureListenerGetCodec(void);
 - (void)onTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void(^)(NSError *_Nullable))completion;
 - (void)onLongTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void(^)(NSError *_Nullable))completion;
 - (void)onScrollCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void(^)(NSError *_Nullable))completion;
+- (void)onScrollStartCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void(^)(NSError *_Nullable))completion;
+- (void)onScrollEndCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void(^)(NSError *_Nullable))completion;
 @end
 NS_ASSUME_NONNULL_END
