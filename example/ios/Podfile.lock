@@ -52,7 +52,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
-  mapbox_maps_flutter: 0a986349834687afe1896920d51581f967aea629
+  mapbox_maps_flutter: d480bf1f1468685824b74d8487cb4fbf0ace15eb
   MapboxCommon: 762407ce0c8353d9b9a0d0b72f9dc1c30d1dc904
   MapboxCoreMaps: 03e7214fabb54d496ff56314ff8159dd264b6093
   MapboxMaps: 08677400a5b8673856109563ea604d73a991bc77

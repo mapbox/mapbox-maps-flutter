@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Restricted) import MapboxMaps
 import UIKit
 class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func updateSettingsSettings(_ settings: FLT_SETTINGSLogoSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
