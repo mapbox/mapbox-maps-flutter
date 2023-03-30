@@ -17,6 +17,8 @@ class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
         case .TOP_RIGHT:
             mapView.ornaments.options.scaleBar.position = .topTrailing
             mapView.ornaments.options.scaleBar.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+         default:
+            return
         }
         if let isMetric = settings.isMetricUnits?.boolValue {
             mapView.ornaments.options.scaleBar.useMetricUnits = isMetric

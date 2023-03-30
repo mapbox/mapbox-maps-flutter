@@ -668,7 +668,7 @@ NSObject<FlutterMessageCodec> *FLTOfflineRegionGetCodec(void);
 - (nullable FlutterStandardTypedData *)getMetadataWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setMetadataMetadata:(FlutterStandardTypedData *)metadata completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)setOfflineRegionDownloadStateState:(FLTOfflineRegionDownloadState)state error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)invalidateWithCompletion:(void(^)(FlutterError *_Nullable))completion;
+- (void)invalidateWithCallback:(void(^)(FlutterError *_Nullable))completion;
 - (void)purgeWithCompletion:(void(^)(FlutterError *_Nullable))completion;
 @end
 
@@ -705,9 +705,9 @@ extern void FLTProjectionSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObj
 NSObject<FlutterMessageCodec> *FLTSettingsGetCodec(void);
 
 @protocol FLTSettings
-- (void)setKey:(NSString *)key value:(NSString *)value error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setSettingKey:(NSString *)key value:(NSString *)value flutterError:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
-- (nullable NSString *)getKey:(NSString *)key error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable NSString *)getSettingkey:(NSString *)key flutterError:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLTSettingsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTSettings> *_Nullable api);
@@ -738,7 +738,7 @@ NSObject<FlutterMessageCodec> *FLTMapSnapshotterGetCodec(void);
 /// @return `nil` only when `error != nil`.
 - (nullable NSNumber *)isInTileModeWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setTileModeSet:(NSNumber *)set error:(FlutterError *_Nullable *_Nonnull)error;
-- (void)cancelWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)cancelWithFlutterError:(FlutterError *_Nullable *_Nonnull)error;
 - (nullable NSNumber *)getElevationCoordinate:(NSDictionary<NSString *, id> *)coordinate error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
@@ -799,7 +799,7 @@ extern void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSO
 NSObject<FlutterMessageCodec> *FLTCancelableGetCodec(void);
 
 @protocol FLTCancelable
-- (void)cancelWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)cancelWith:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLTCancelableSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTCancelable> *_Nullable api);
@@ -811,7 +811,7 @@ NSObject<FlutterMessageCodec> *FLTOfflineSwitchGetCodec(void);
 - (void)setMapboxStackConnectedConnected:(NSNumber *)connected error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
 - (nullable NSNumber *)isMapboxStackConnectedWithError:(FlutterError *_Nullable *_Nonnull)error;
-- (void)resetWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)resetWithFlutterError:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLTOfflineSwitchSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTOfflineSwitch> *_Nullable api);

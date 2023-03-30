@@ -16,6 +16,8 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         case .TOP_RIGHT:
             mapView.ornaments.options.logo.position = .topTrailing
             mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        default:
+            break;
         }
     }
 

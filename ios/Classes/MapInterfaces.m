@@ -3154,9 +3154,9 @@ void FLTOfflineRegionSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         binaryMessenger:binaryMessenger
         codec:FLTOfflineRegionGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(invalidateWithCompletion:)], @"FLTOfflineRegion api (%@) doesn't respond to @selector(invalidateWithCompletion:)", api);
+      NSCAssert([api respondsToSelector:@selector(invalidateWithCallback:)], @"FLTOfflineRegion api (%@) doesn't respond to @selector(invalidateWithCallback:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        [api invalidateWithCompletion:^(FlutterError *_Nullable error) {
+        [api invalidateWithCallback:^(FlutterError *_Nullable error) {
           callback(wrapResult(nil, error));
         }];
       }];
@@ -3667,13 +3667,13 @@ void FLTSettingsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTSe
         binaryMessenger:binaryMessenger
         codec:FLTSettingsGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(setKey:value:error:)], @"FLTSettings api (%@) doesn't respond to @selector(setKey:value:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(setSettingKey:value:flutterError:)], @"FLTSettings api (%@) doesn't respond to @selector(setSettingKey:value:flutterError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_key = GetNullableObjectAtIndex(args, 0);
         NSString *arg_value = GetNullableObjectAtIndex(args, 1);
         FlutterError *error;
-        [api setKey:arg_key value:arg_value error:&error];
+        [api setSettingKey:arg_key value:arg_value flutterError:&error];
         callback(wrapResult(nil, error));
       }];
     }
@@ -3688,12 +3688,12 @@ void FLTSettingsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTSe
         binaryMessenger:binaryMessenger
         codec:FLTSettingsGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(getKey:error:)], @"FLTSettings api (%@) doesn't respond to @selector(getKey:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(getSettingkey:flutterError:)], @"FLTSettings api (%@) doesn't respond to @selector(getSettingkey:flutterError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_key = GetNullableObjectAtIndex(args, 0);
         FlutterError *error;
-        NSString *output = [api getKey:arg_key error:&error];
+        NSString *output = [api getSettingkey:arg_key flutterError:&error];
         callback(wrapResult(output, error));
       }];
     }
@@ -4432,10 +4432,10 @@ void FLTMapSnapshotterSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
         binaryMessenger:binaryMessenger
         codec:FLTMapSnapshotterGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(cancelWithError:)], @"FLTMapSnapshotter api (%@) doesn't respond to @selector(cancelWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(cancelWithFlutterError:)], @"FLTMapSnapshotter api (%@) doesn't respond to @selector(cancelWithFlutterError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        [api cancelWithError:&error];
+        [api cancelWithFlutterError:&error];
         callback(wrapResult(nil, error));
       }];
     }
@@ -5658,10 +5658,10 @@ void FLTCancelableSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT
         binaryMessenger:binaryMessenger
         codec:FLTCancelableGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(cancelWithError:)], @"FLTCancelable api (%@) doesn't respond to @selector(cancelWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(cancelWithFlutterError:)], @"FLTCancelable api (%@) doesn't respond to @selector(cancelWith:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        [api cancelWithError:&error];
+        [api cancelWith:&error];
         callback(wrapResult(nil, error));
       }];
     }
@@ -5748,10 +5748,10 @@ void FLTOfflineSwitchSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         binaryMessenger:binaryMessenger
         codec:FLTOfflineSwitchGetCodec()        ];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(resetWithError:)], @"FLTOfflineSwitch api (%@) doesn't respond to @selector(resetWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(resetWithFlutterError:)], @"FLTOfflineSwitch api (%@) doesn't respond to @selector(resetWithFlutterError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
-        [api resetWithError:&error];
+        [api resetWithFlutterError:&error];
         callback(wrapResult(nil, error));
       }];
     }

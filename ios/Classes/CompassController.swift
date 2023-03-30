@@ -17,6 +17,8 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         case .TOP_RIGHT:
             mapView.ornaments.options.compass.position = .topTrailing
             mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        default:
+            break
         }
 
         if let data = settings.image?.data {

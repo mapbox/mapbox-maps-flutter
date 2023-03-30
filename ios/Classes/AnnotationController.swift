@@ -8,7 +8,7 @@ public enum AnnotationControllerError: Error {
     case wrongManagerType
 }
 
-public protocol ControllerDelegate: class {
+public protocol ControllerDelegate: AnyObject {
     func getManager(managerId: String) throws -> AnnotationManager
 }
 

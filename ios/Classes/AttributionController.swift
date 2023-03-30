@@ -17,6 +17,8 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         case .TOP_RIGHT:
             mapView.ornaments.options.attributionButton.position = .topTrailing
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        default:
+            break
         }
     }
 
