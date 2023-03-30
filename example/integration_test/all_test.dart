@@ -29,18 +29,21 @@ import 'style/layer/location_indicator_layer_test.dart'
 import 'style/layer/raster_layer_test.dart' as raster_layer_test;
 import 'style/layer/sky_layer_test.dart' as sky_layer_test;
 import 'style/layer/symbol_layer_test.dart' as symbol_layer_test;
+import 'style/layer/model_layer_test.dart' as model_layer_test;
 import 'style/light_test.dart' as light_test;
 import 'style/source/geojson_source_test.dart' as geojson_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
 import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
 import 'style/source/vector_source_test.dart' as vector_source_test;
+import 'style/source/model_source_test.dart' as model_source_test;
 import 'style/style_test.dart' as style_test;
 import 'location_test.dart' as location_test;
 import 'logo_test.dart' as logo_test;
 import 'attribution_test.dart' as attribution_test;
 import 'compass_test.dart' as compass_test;
 import 'scale_bar_test.dart' as scale_bar_test;
+
 
 void main() {
   animation_test.main();
@@ -81,6 +84,7 @@ void main() {
   hillshade_layer_test.main();
   heatmap_layer_test.main();
   fill_layer_test.main();
+  model_layer_test.main();
 
   // source tests
   vector_source_test.main();
@@ -88,4 +92,5 @@ void main() {
   raster_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
+  model_source_test.main();
 }

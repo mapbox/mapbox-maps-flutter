@@ -19,12 +19,27 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         default:
             break;
         }
+        if let visible = settings.enabled {
+            if !visible.boolValue {
+                mapView.ornaments.options.logo.visibility = OrnamentVisibility.hidden
+            } else {
+                mapView.ornaments.options.logo.visibility = OrnamentVisibility.adaptive
+            }
+        }
+
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLogoSettings? {
         let options = mapView.ornaments.options.logo
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-        let settings = FLT_SETTINGSLogoSettings.make(with: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale))
+        let settings = FLT_SETTINGSLogoSettings.make(
+            withEnabled: NSNumber(value: mapView.ornaments.options.logo.visibility != OrnamentVisibility.hidden),
+            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginTop:  NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            position: position)
+
         return settings
     }
 

@@ -67,6 +67,6 @@ dependencies {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 
-    implementation "androidx.annotation:annotation:1.1.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    implementation "androidx.annotation:annotation:1.5.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
 }

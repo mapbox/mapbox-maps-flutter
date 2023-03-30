@@ -1645,6 +1645,7 @@ class StylePropertyValue {
 
 class __AnimationManagerCodec extends StandardMessageCodec {
   const __AnimationManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraOptions) {
@@ -1889,6 +1890,7 @@ class _AnimationManager {
 
 class __CameraManagerCodec extends StandardMessageCodec {
   const __CameraManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -2687,6 +2689,7 @@ class _CameraManager {
 
 class __MapInterfaceCodec extends StandardMessageCodec {
   const __MapInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -3715,6 +3718,7 @@ class _MapInterface {
 
 class _OfflineRegionCodec extends StandardMessageCodec {
   const _OfflineRegionCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CoordinateBounds) {
@@ -4007,6 +4011,7 @@ class OfflineRegionManager {
 
 class _ProjectionCodec extends StandardMessageCodec {
   const _ProjectionCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -4464,6 +4469,7 @@ class Settings {
 
 class _MapSnapshotCodec extends StandardMessageCodec {
   const _MapSnapshotCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -4817,6 +4823,7 @@ class MapSnapshot {
 
 class _MapSnapshotterCodec extends StandardMessageCodec {
   const _MapSnapshotterCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -5205,6 +5212,7 @@ class MapSnapshotter {
 
 class _StyleManagerCodec extends StandardMessageCodec {
   const _StyleManagerCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CameraBounds) {
@@ -5627,6 +5635,7 @@ class StyleManager {
 
   Future<void> addStyleLayer(
       String arg_properties, LayerPosition? arg_layerPosition) async {
+
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.StyleManager.addStyleLayer', codec,
         binaryMessenger: _binaryMessenger);
@@ -5947,6 +5956,83 @@ class StyleManager {
       );
     } else {
       return;
+    }
+  }
+
+  Future<void> addModel(String arg_sourceId, String arg_modelUri) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.addModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel
+        .send(<Object?>[arg_sourceId, arg_modelUri]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> removeModel(String arg_sourceId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.removeModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send([arg_sourceId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> hasModel(String arg_sourceId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.StyleManager.hasModel', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_sourceId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as bool?)!;
     }
   }
 

@@ -505,25 +505,22 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
 @end
 
 @implementation FLT_SETTINGSAttributionSettings
-+ (instancetype)makeWithIconColor:(nullable NSNumber *)iconColor
-    position:(FLT_SETTINGSOrnamentPosition)position
-    marginLeft:(nullable NSNumber *)marginLeft
-    marginTop:(nullable NSNumber *)marginTop
-    marginRight:(nullable NSNumber *)marginRight
-    marginBottom:(nullable NSNumber *)marginBottom
-    clickable:(nullable NSNumber *)clickable {
-  FLT_SETTINGSAttributionSettings* pigeonResult = [[FLT_SETTINGSAttributionSettings alloc] init];
-  pigeonResult.iconColor = iconColor;
-  pigeonResult.position = position;
-  pigeonResult.marginLeft = marginLeft;
-  pigeonResult.marginTop = marginTop;
-  pigeonResult.marginRight = marginRight;
-  pigeonResult.marginBottom = marginBottom;
-  pigeonResult.clickable = clickable;
-  return pigeonResult;
++ (instancetype)makeWithEnabled:(NSNumber *)enabled position:(FLT_SETTINGSOrnamentPosition)position marginLeft:(NSNumber *)marginLeft marginTop:(NSNumber *)marginTop marginRight:(NSNumber *)marginRight marginBottom:(NSNumber *)marginBottom clickable:(NSNumber *)clickable iconColor:(NSNumber *)iconColor{
+    FLT_SETTINGSAttributionSettings* pigeonResult = [[FLT_SETTINGSAttributionSettings alloc] init];
+    pigeonResult.enabled = enabled;
+    pigeonResult.iconColor = iconColor;
+    pigeonResult.position = position;
+    pigeonResult.marginLeft = marginLeft;
+    pigeonResult.marginTop = marginTop;
+    pigeonResult.marginRight = marginRight;
+    pigeonResult.marginBottom = marginBottom;
+    pigeonResult.clickable = clickable;
+    return pigeonResult;
 }
+
 + (FLT_SETTINGSAttributionSettings *)fromMap:(NSDictionary *)dict {
   FLT_SETTINGSAttributionSettings *pigeonResult = [[FLT_SETTINGSAttributionSettings alloc] init];
+  pigeonResult.enabled = GetNullableObject(dict, @"enabled");
   pigeonResult.iconColor = GetNullableObject(dict, @"iconColor");
   pigeonResult.position = [GetNullableObject(dict, @"position") integerValue];
   pigeonResult.marginLeft = GetNullableObject(dict, @"marginLeft");
@@ -543,26 +540,32 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"marginRight" : (self.marginRight ?: [NSNull null]),
     @"marginBottom" : (self.marginBottom ?: [NSNull null]),
     @"clickable" : (self.clickable ?: [NSNull null]),
+    @"enabled" : (self.enabled ?: [NSNull null]),
+
   };
 }
 @end
 
 @implementation FLT_SETTINGSLogoSettings
-+ (instancetype)makeWithPosition:(FLT_SETTINGSOrnamentPosition)position
-    marginLeft:(nullable NSNumber *)marginLeft
-    marginTop:(nullable NSNumber *)marginTop
-    marginRight:(nullable NSNumber *)marginRight
-    marginBottom:(nullable NSNumber *)marginBottom {
-  FLT_SETTINGSLogoSettings* pigeonResult = [[FLT_SETTINGSLogoSettings alloc] init];
-  pigeonResult.position = position;
-  pigeonResult.marginLeft = marginLeft;
-  pigeonResult.marginTop = marginTop;
-  pigeonResult.marginRight = marginRight;
-  pigeonResult.marginBottom = marginBottom;
-  return pigeonResult;
++ (instancetype)makeWithEnabled:(NSNumber *)enabled
+  marginLeft:(NSNumber *)marginLeft
+  marginTop:(NSNumber *)marginTop
+  marginRight:(NSNumber *)marginRight
+  marginBottom:(NSNumber *)marginBottom
+  position:(FLT_SETTINGSOrnamentPosition)position{
+    FLT_SETTINGSLogoSettings* pigeonResult = [[FLT_SETTINGSLogoSettings alloc] init];
+    pigeonResult.position = position;
+    pigeonResult.enabled = enabled;
+    pigeonResult.marginLeft = marginLeft;
+    pigeonResult.marginTop = marginTop;
+    pigeonResult.marginRight = marginRight;
+    pigeonResult.marginBottom = marginBottom;
+    return pigeonResult;
 }
+
 + (FLT_SETTINGSLogoSettings *)fromMap:(NSDictionary *)dict {
   FLT_SETTINGSLogoSettings *pigeonResult = [[FLT_SETTINGSLogoSettings alloc] init];
+  pigeonResult.enabled = GetNullableObject(dict, @"enabled");
   pigeonResult.position = [GetNullableObject(dict, @"position") integerValue];
   pigeonResult.marginLeft = GetNullableObject(dict, @"marginLeft");
   pigeonResult.marginTop = GetNullableObject(dict, @"marginTop");
@@ -578,6 +581,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"marginTop" : (self.marginTop ?: [NSNull null]),
     @"marginRight" : (self.marginRight ?: [NSNull null]),
     @"marginBottom" : (self.marginBottom ?: [NSNull null]),
+    @"enabled" : (self.enabled ?: [NSNull null]),
   };
 }
 @end

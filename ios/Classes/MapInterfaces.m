@@ -5109,6 +5109,69 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.StyleManager.addModel"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()        ];
+    if (api) {
+        NSCAssert([api respondsToSelector:@selector(addStyleModel:withModelUri:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(addStyleModel:withModelUri:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_modelUri = GetNullableObjectAtIndex(args, 1);
+          [api addStyleModel:arg_sourceId withModelUri:arg_modelUri completion:^(FlutterError * _Nullable error) {
+              callback(wrapResult(nil, error));
+          }];
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+    {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.StyleManager.removeModel"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()        ];
+    if (api) {
+        NSCAssert([api respondsToSelector:@selector(removeStyleModel:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(removeStyleModel:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
+      
+          [api removeStyleModel:arg_sourceId completion:^(FlutterError * _Nullable error) {
+              callback(wrapResult(nil, error));
+          }];
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+    {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.StyleManager.hasModel"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()        ];
+    if (api) {
+        NSCAssert([api respondsToSelector:@selector(hasStyleModel:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(hasStyleModel:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
+      
+          [api hasStyleModel:arg_sourceId completion:^(NSNumber * _Nullable output, FlutterError * _Nullable error) {
+              callback(wrapResult(output, error));
+          }];
+      }];
+    }
+    else {
+      [channel setMessageHandler:nil];
+    }
+  }
+    {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.StyleManager.addStyleSource"
         binaryMessenger:binaryMessenger
         codec:FLTStyleManagerGetCodec()        ];

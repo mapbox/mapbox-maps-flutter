@@ -12,7 +12,7 @@ import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import java.nio.ByteBuffer
-import java.util.Locale
+import java.util.*
 
 class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
@@ -260,6 +260,41 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
     }
   }
 
+  override fun hasStyleModel(sourceId: String, result: FLTMapInterfaces.Result<Boolean>?) {
+    mapboxMap.getStyle {
+      val hasStyleModel = it.hasStyleModel(sourceId)
+      result?.success(hasStyleModel)
+    }
+  }
+
+  override fun removeStyleModel(sourceId: String, result: FLTMapInterfaces.Result<Void>?) {
+    mapboxMap.getStyle {
+      val expected = it.removeStyleModel(sourceId)
+      if (expected.isError) {
+        result?.error(Throwable(expected.error))
+      } else {
+        result?.success(null)
+      }
+
+    }
+  }
+
+  override fun addStyleModel(
+    sourceId: String,
+    modelUri: String,
+    result: FLTMapInterfaces.Result<Void>?
+  ) {
+    mapboxMap.getStyle {
+      val expected = it.addStyleModel(sourceId, modelUri)
+      if (expected.isError) {
+        result?.error(Throwable(expected.error))
+      } else {
+        result?.success(null)
+      }
+    }
+
+  }
+
   override fun getStyleSourceProperty(
     sourceId: String,
     property: String,
@@ -269,11 +304,12 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
       val styleLayerProperty = it.getStyleSourceProperty(sourceId, property)
       val stylePropertyValueKind =
         FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
-      val value = if (property == "tiles" || property == "bounds" || property == "clusterProperties") {
-        styleLayerProperty.value.toJson()
-      } else {
-        styleLayerProperty.value.toString()
-      }
+      val value =
+        if (property == "tiles" || property == "bounds" || property == "clusterProperties") {
+          styleLayerProperty.value.toJson()
+        } else {
+          styleLayerProperty.value.toString()
+        }
       val stylePropertyValue =
         FLTMapInterfaces.StylePropertyValue.Builder()
           .setValue(value)
@@ -415,7 +451,11 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
     }
   }
 
-  override fun setStyleLightProperty(id: String, value: Any, result: FLTMapInterfaces.Result<Void>) {
+  override fun setStyleLightProperty(
+    id: String,
+    value: Any,
+    result: FLTMapInterfaces.Result<Void>
+  ) {
     mapboxMap.getStyle {
       val expected = it.setStyleLightProperty(id, value.toValue())
       if (expected.isError) {

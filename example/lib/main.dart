@@ -15,6 +15,7 @@ import 'package:mapbox_maps_example/vector_tile_source.dart';
 
 import 'full_map.dart';
 import 'location.dart';
+import 'model.dart';
 import 'page.dart';
 import 'point_annotations.dart';
 import 'projection.dart';
@@ -41,6 +42,7 @@ final List<ExamplePage> _allPages = <ExamplePage>[
   GesturesPage(),
   OrnamentsPage(),
   AnimatedRoutePage(),
+  ModelPage()
 ];
 
 class MapsDemo extends StatelessWidget {

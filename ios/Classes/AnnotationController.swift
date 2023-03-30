@@ -25,7 +25,7 @@ extension AnnotationController: AnnotationInteractionDelegate {
         case let annotation as PolylineAnnotation:
             self.onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation(), completion: {_ in })
         default:
-            print("Can't detemine the type of annotation: \(annotation)")
+            print("Can't detemine the type of annotation: \(String(describing: annotation))")
         }
     }
 }

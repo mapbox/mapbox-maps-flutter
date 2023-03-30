@@ -19,21 +19,31 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         default:
             break
+        default:
+            break
+        }
+        if let visible = settings.enabled {
+            if !visible.boolValue {
+                mapView.ornaments.options.attributionButton.visibility = OrnamentVisibility.hidden
+            } else {
+                mapView.ornaments.options.attributionButton.visibility = OrnamentVisibility.adaptive
+            }
         }
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSAttributionSettings? {
         let options = mapView.ornaments.options.attributionButton
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-
         let settings = FLT_SETTINGSAttributionSettings.make(
-            withIconColor: nil,
+            withEnabled: NSNumber(value: mapView.ornaments.options.attributionButton.visibility != OrnamentVisibility.hidden),
             position: position,
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            clickable: nil)
+            clickable: nil,
+            iconColor: nil)
+
 
         return settings
     }

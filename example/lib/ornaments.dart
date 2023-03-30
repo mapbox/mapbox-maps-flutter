@@ -28,9 +28,11 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
   final colors = [Colors.amber, Colors.black, Colors.blue];
 
   MapboxMap? mapboxMap;
-  bool showOrnaments = true;
   OrnamentPosition compassPosition = OrnamentPosition.TOP_RIGHT;
+  bool showCompass = true;
   bool showScaleBar = true;
+  bool showLogo = false;
+  bool showAttribution = false;
   OrnamentPosition scaleBarPosition = OrnamentPosition.TOP_LEFT;
   OrnamentPosition logoPosition = OrnamentPosition.BOTTOM_LEFT;
   OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_LEFT;
@@ -53,7 +55,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
 
     mapboxMap.compass.updateSettings(CompassSettings(
       position: compassPosition,
-      enabled: showOrnaments,
+      enabled: showCompass,
       marginBottom: 10,
       marginLeft: 10,
       marginTop: 10,
@@ -73,12 +75,13 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       position: logoPosition,
       marginBottom: 30,
       marginLeft: 30,
+      enabled: showLogo,
       marginTop: 30,
       marginRight: 30,
     ));
 
-    mapboxMap.attribution
-        .updateSettings(AttributionSettings(position: attributionPosition));
+    mapboxMap.attribution.updateSettings(AttributionSettings(
+        position: attributionPosition, enabled: showAttribution));
   }
 
   @override
@@ -122,10 +125,10 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       child: Text('toggle compass'),
       onPressed: () {
         setState(() {
-          if (showOrnaments) {
-            showOrnaments = false;
+          if (showCompass) {
+            showCompass = false;
           } else {
-            showOrnaments = true;
+            showCompass = true;
           }
         });
       },
@@ -167,6 +170,54 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
             showScaleBar = true;
           }
         });
+      },
+    );
+  }
+
+  Widget _getLogoSettings() {
+    return TextButton(
+      child: Text('get logo settings'),
+      onPressed: () {
+        mapboxMap?.logo.getSettings().then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("""
+                  Ornaments settings : 
+                    enabled : ${value.enabled}
+                    marginBottom : ${value.marginBottom}
+                    marginLeft : ${value.marginLeft}
+                    marginRight : ${value.marginRight}
+                    marginTop : ${value.marginTop}
+                    position :  ${value.position}
+                    """
+                      .trim()),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 2),
+                )));
+      },
+    );
+  }
+
+  _toggleLogo() {
+    return TextButton(
+      child: Text('toggle Logo'),
+      onPressed: () {
+        setState(() {
+          showLogo = !showLogo;
+        });
+        mapboxMap?.logo.updateSettings(LogoSettings(enabled: showLogo));
+      },
+    );
+  }
+
+  _toggleAttribution() {
+    return TextButton(
+      child: Text('toggle Attribution'),
+      onPressed: () {
+        setState(() {
+          showAttribution = !showAttribution;
+        });
+        mapboxMap?.attribution
+            .updateSettings(AttributionSettings(enabled: showAttribution));
       },
     );
   }
@@ -261,7 +312,10 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
         _toggleScaleBar(),
         _moveScaleBar(),
         _moveAttribution(),
+        _toggleAttribution(),
+        _getLogoSettings(),
         _moveLogo(),
+        _toggleLogo()
       ],
     );
 

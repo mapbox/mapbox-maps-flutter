@@ -611,15 +611,18 @@ class CompassSettings {
 
 /// Shows the attribution icon on the map.
 class AttributionSettings {
-  AttributionSettings({
-    this.iconColor,
-    this.position,
-    this.marginLeft,
-    this.marginTop,
-    this.marginRight,
-    this.marginBottom,
-    this.clickable,
-  });
+  AttributionSettings(
+      {this.iconColor,
+      this.position,
+      this.marginLeft,
+      this.marginTop,
+      this.marginRight,
+      this.marginBottom,
+      this.clickable,
+      this.enabled});
+
+  /// Whether the logo is visible on the map.
+  bool? enabled;
 
   /// Defines text color of the attribution icon.
   int? iconColor;
@@ -651,6 +654,7 @@ class AttributionSettings {
     pigeonMap['marginRight'] = marginRight;
     pigeonMap['marginBottom'] = marginBottom;
     pigeonMap['clickable'] = clickable;
+    pigeonMap['enabled'] = enabled;
     return pigeonMap;
   }
 
@@ -666,19 +670,23 @@ class AttributionSettings {
       marginRight: pigeonMap['marginRight'] as double?,
       marginBottom: pigeonMap['marginBottom'] as double?,
       clickable: pigeonMap['clickable'] as bool?,
+      enabled: pigeonMap['enabled'] as bool?,
     );
   }
 }
 
 /// Shows the Mapbox logo on the map.
 class LogoSettings {
-  LogoSettings({
-    this.position,
-    this.marginLeft,
-    this.marginTop,
-    this.marginRight,
-    this.marginBottom,
-  });
+  LogoSettings(
+      {this.position,
+      this.marginLeft,
+      this.marginTop,
+      this.marginRight,
+      this.marginBottom,
+      this.enabled});
+
+  /// Whether the logo is visible on the map.
+  bool? enabled;
 
   /// Defines where the logo is positioned on the map
   OrnamentPosition? position;
@@ -702,25 +710,27 @@ class LogoSettings {
     pigeonMap['marginTop'] = marginTop;
     pigeonMap['marginRight'] = marginRight;
     pigeonMap['marginBottom'] = marginBottom;
+    pigeonMap['enabled'] = enabled;
     return pigeonMap;
   }
 
   static LogoSettings decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return LogoSettings(
-      position: pigeonMap['position'] != null
-          ? OrnamentPosition.values[pigeonMap['position']! as int]
-          : null,
-      marginLeft: pigeonMap['marginLeft'] as double?,
-      marginTop: pigeonMap['marginTop'] as double?,
-      marginRight: pigeonMap['marginRight'] as double?,
-      marginBottom: pigeonMap['marginBottom'] as double?,
-    );
+        position: pigeonMap['position'] != null
+            ? OrnamentPosition.values[pigeonMap['position']! as int]
+            : null,
+        marginLeft: pigeonMap['marginLeft'] as double?,
+        marginTop: pigeonMap['marginTop'] as double?,
+        marginRight: pigeonMap['marginRight'] as double?,
+        marginBottom: pigeonMap['marginBottom'] as double?,
+        enabled: pigeonMap['enabled'] as bool?);
   }
 }
 
 class _GesturesSettingsInterfaceCodec extends StandardMessageCodec {
   const _GesturesSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is GesturesSettings) {
@@ -816,6 +826,7 @@ class GesturesSettingsInterface {
 
 class _LocationComponentSettingsInterfaceCodec extends StandardMessageCodec {
   const _LocationComponentSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is LocationComponentSettings) {
@@ -926,6 +937,7 @@ class LocationComponentSettingsInterface {
 
 class _ScaleBarSettingsInterfaceCodec extends StandardMessageCodec {
   const _ScaleBarSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is ScaleBarSettings) {
@@ -1015,6 +1027,7 @@ class ScaleBarSettingsInterface {
 
 class _CompassSettingsInterfaceCodec extends StandardMessageCodec {
   const _CompassSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CompassSettings) {
@@ -1104,6 +1117,7 @@ class CompassSettingsInterface {
 
 class _AttributionSettingsInterfaceCodec extends StandardMessageCodec {
   const _AttributionSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is AttributionSettings) {
@@ -1194,6 +1208,7 @@ class AttributionSettingsInterface {
 
 class _LogoSettingsInterfaceCodec extends StandardMessageCodec {
   const _LogoSettingsInterfaceCodec();
+
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is LogoSettings) {

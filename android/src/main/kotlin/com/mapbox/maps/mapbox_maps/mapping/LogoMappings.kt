@@ -11,6 +11,7 @@ fun LogoSettingsInterface.applyFromFLT(settings: FLTSettings.LogoSettings, conte
   settings.marginTop?.let { marginTop = it.toFloat() }
   settings.marginRight?.let { marginRight = it.toFloat() }
   settings.marginBottom?.let { marginBottom = it.toFloat() }
+  settings.enabled?.let { enabled = it }
 }
 
 fun LogoSettingsInterface.toFLT() = FLTSettings.LogoSettings.Builder().let { settings ->
@@ -19,6 +20,7 @@ fun LogoSettingsInterface.toFLT() = FLTSettings.LogoSettings.Builder().let { set
   settings.setMarginTop(marginTop.toDouble())
   settings.setMarginRight(marginRight.toDouble())
   settings.setMarginBottom(marginBottom.toDouble())
+  settings.setEnabled(enabled)
   settings.build()
 }
 

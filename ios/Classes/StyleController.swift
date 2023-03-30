@@ -4,6 +4,9 @@ import UIKit
 
 class StyleController: NSObject, FLTStyleManager {
 
+
+    
+
     private var mapboxMap: MapboxMap
     init(withMapboxMap mapboxMap: MapboxMap) {
         self.mapboxMap = mapboxMap
@@ -418,6 +421,29 @@ class StyleController: NSObject, FLTStyleManager {
         try! mapboxMap.style.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
         completion(nil)
     }
+    
+    func addStyleModel(_ sourceId: String, withModelUri modelUri: String, completion: @escaping (FlutterError?) -> Void) {
+        do{
+            try mapboxMap.style.addModel(withId: sourceId, modelURI: modelUri)
+            completion(nil)
+        }catch{
+            completion( FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+        }
+    }
+    
+    func removeStyleModel(_ sourceId: String, completion: @escaping (FlutterError?) -> Void) {
+        do{
+            try mapboxMap.style.removeModel(withId: sourceId)
+            completion(nil)
+        }catch{
+            completion( FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+        }
+    }
 
+    func hasStyleModel(_ sourceId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+        let existes = mapboxMap.style.modelExists(withId: sourceId)
+        completion(NSNumber(value: existes), nil)
+    }
+    
     private static let errorCode = "0"
 }
