@@ -215,7 +215,7 @@ class StyleController: NSObject, FLTStyleManager {
 
     func updateStyleImageSourceImageSourceId(_ sourceId: String, image: FLTMbxImage,
                                              completion: @escaping (FlutterError?) -> Void) {
-        guard let image = UIImage(data: image.data.data) else { return }
+        guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else { return }
         do {
             try mapboxMap.style.updateImageSource(withId: sourceId, image: image)
             completion(nil)

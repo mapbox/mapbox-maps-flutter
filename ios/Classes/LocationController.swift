@@ -63,13 +63,13 @@ extension LocationOptions {
                     }
                 }()
                 if let bearingImage = settings.locationPuck?.locationPuck2D?.bearingImage {
-                    configuration.bearingImage = UIImage(data: bearingImage.data)
+                    configuration.bearingImage = UIImage(data: bearingImage.data, scale: UIScreen.main.scale)
                 }
                 if let shadowImage = settings.locationPuck?.locationPuck2D?.shadowImage {
-                    configuration.shadowImage = UIImage(data: shadowImage.data)
+                    configuration.shadowImage = UIImage(data: shadowImage.data, scale: UIScreen.main.scale)
                 }
                 if let topImage = settings.locationPuck?.locationPuck2D?.topImage {
-                    configuration.topImage = UIImage(data: topImage.data)
+                    configuration.topImage = UIImage(data: topImage.data, scale: UIScreen.main.scale)
                 }
                 if let scaleExpressionData = settings.locationPuck?.locationPuck2D?.scaleExpression?.data(using: .utf8) {
                     let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
