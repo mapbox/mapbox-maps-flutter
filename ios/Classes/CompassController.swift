@@ -20,7 +20,7 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         }
 
         if let data = settings.image?.data {
-            mapView.ornaments.options.compass.image = UIImage(data: data)
+            mapView.ornaments.options.compass.image = UIImage(data: data, scale: UIScreen.main.scale)
         }
 
         if let visible = settings.enabled {
