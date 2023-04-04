@@ -114,10 +114,10 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
 
             if let paddingMap = cameraOptionsMap["padding"] as? [String: CGFloat] {
                 padding = UIEdgeInsets(
-                    top: paddingMap["top"]!,
-                    left: paddingMap["left"]!,
-                    bottom: paddingMap["bottom"]!,
-                    right: paddingMap["right"]!
+                    top: paddingMap["top"]! / UIScreen.main.scale,
+                    left: paddingMap["left"]! / UIScreen.main.scale,
+                    bottom: paddingMap["bottom"]! / UIScreen.main.scale,
+                    right: paddingMap["right"]! / UIScreen.main.scale
                 )
             }
 
