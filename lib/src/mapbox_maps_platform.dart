@@ -164,4 +164,20 @@ class _MapboxMapsPlatform {
       return new Future.error(e);
     }
   }
+
+  Future<dynamic> addGestureListeners() async {
+    try {
+      return _channel.invokeMethod('gesture#add_listeners');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeGestureListeners() async {
+    try {
+      return _channel.invokeMethod('gesture#remove_listeners');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
 }

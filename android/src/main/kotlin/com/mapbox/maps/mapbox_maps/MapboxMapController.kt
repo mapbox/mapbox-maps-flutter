@@ -59,7 +59,6 @@ class MapboxMapController(
     FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, attributionController)
     FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, scaleBarController)
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
-    gestureController.setup(proxyBinaryMessenger)
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
     mapboxMap.subscribe(
@@ -118,6 +117,12 @@ class MapboxMapController(
       }
       "annotation#remove_manager" -> {
         annotationController.handleRemoveManager(call, result)
+      }
+      "gesture#add_listeners" -> {
+        gestureController.addListeners(proxyBinaryMessenger)
+      }
+      "gesture#remove_listeners" -> {
+        gestureController.removeListeners()
       }
       else -> {
         println("OnMethodCall : ${call.method}")
