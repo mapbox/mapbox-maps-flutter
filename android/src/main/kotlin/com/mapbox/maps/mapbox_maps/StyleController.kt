@@ -628,7 +628,7 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
         stretchX.map {
           ImageStretches(
             it.first.toFloat(),
-            it.first.toFloat()
+            it.second.toFloat()
           )
         },
         stretchY.map { ImageStretches(it.first.toFloat(), it.second.toFloat()) },
