@@ -36,7 +36,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
       MbxEdgeInsets(top: 100, left: 100, bottom: 100, right: 100);
 
   late MapboxMap mapboxMap;
-  late PointAnnotationManager pointAnnotationManager;
+  PointAnnotationManager? pointAnnotationManager;
   Timer? timer;
   var trackLocation = true;
   var showAnnotations = false;
@@ -45,6 +45,8 @@ class AnimatedRouteState extends State<AnimatedRoute>
     this.mapboxMap = mapboxMap;
     this.pointAnnotationManager =
         await mapboxMap.annotations.createPointAnnotationManager();
+    await this.pointAnnotationManager?.setIconTextFit(IconTextFit.BOTH);
+    // await this.pointAnnotationManager?.setIconPadding(5.0);
 
     mapboxMap.subscribe(_eventObserver, [
       MapEvents.STYLE_LOADED,
@@ -67,6 +69,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
+    addStretchableIcon();
   }
 
   @override
@@ -151,11 +154,11 @@ class AnimatedRouteState extends State<AnimatedRoute>
       final Uint8List imageData = bytes.buffer.asUint8List();
 
       for (Point coordinate in coordinates) {
-        pointAnnotationManager.addAnnotation(imageData, coordinate);
+        pointAnnotationManager?.addAnnotation(imageData, coordinate);
       }
 
       pointAnnotationManager
-          .addOnPointAnnotationClickListener(AnnotationClickListener(this));
+          ?.addOnPointAnnotationClickListener(AnnotationClickListener(this));
 
       // animate camera to view annotations + puck position
       final camera = await mapboxMap.cameraForCoordinates([
@@ -164,7 +167,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
       ], defaultEdgeInsets, null, null);
       mapboxMap.flyTo(camera, null);
     } else {
-      pointAnnotationManager.deleteAll();
+      pointAnnotationManager?.deleteAll();
     }
   }
 
@@ -176,6 +179,23 @@ class AnimatedRouteState extends State<AnimatedRoute>
           zoom: 10,
         ),
         null);
+  }
+
+  void addStretchableIcon() async {
+    final ByteData bytes = await rootBundle.load('assets/blue_round.png');
+    final imageData = bytes.buffer.asUint8List();
+    final image = await decodeImageFromList(imageData);
+    print(
+        "ImageData ${imageData.length} - lengthInBytes ${imageData.lengthInBytes}");
+
+    mapboxMap.style.addStyleImage(
+        "stretchable-icon",
+        1.0,
+        MbxImage(width: image.width, height: image.height, data: imageData),
+        false,
+        [ImageStretches(first: 64.0, second: 67.0)],
+        [ImageStretches(first: 60.0, second: 66.0)],
+        ImageContent(left: 46.0, top: 42.0, right: 83.0, bottom: 87.0));
   }
 }
 
@@ -202,6 +222,7 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
         start, end.coordinates, MapsDemo.ACCESS_TOKEN);
 
     drawRouteLowLevel(coordinates);
+    placeStretchableAnnotation(coordinates);
   }
 
   drawRouteLowLevel(List<Position> polyline) async {
@@ -248,5 +269,51 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
         });
       controller?.forward();
     });
+  }
+
+  void placeStretchableAnnotation(List<Position> coordinates) {
+    if (coordinates.length < 2) {
+      print("Empty coordinates list");
+      return;
+    }
+    final center = Point(
+        coordinates: Position(
+      (coordinates.first.lng + coordinates.last.lng) / 2,
+      (coordinates.first.lat + coordinates.last.lat) / 2,
+    ));
+
+    final start = Point(coordinates: coordinates.first);
+    final end = Point(coordinates: coordinates.last);
+
+    final centerAnnotationOptions = PointAnnotationOptions(
+      geometry: center.toJson(),
+      textAnchor: TextAnchor.CENTER,
+      iconAnchor: IconAnchor.CENTER,
+      textColor: Colors.black.value,
+      iconImage: "stretchable-icon",
+      textField: "Not really long text",
+    );
+
+    final startAnnotationOptions = PointAnnotationOptions(
+      geometry: start.toJson(),
+      textAnchor: TextAnchor.CENTER,
+      iconAnchor: IconAnchor.CENTER,
+      textColor: Colors.black.value,
+      iconImage: "stretchable-icon",
+      textField: "Short text",
+    );
+
+    final endAnnotationOptions = PointAnnotationOptions(
+      geometry: end.toJson(),
+      textAnchor: TextAnchor.CENTER,
+      iconAnchor: IconAnchor.CENTER,
+      textColor: Colors.black.value,
+      iconImage: "stretchable-icon",
+      textField: "Very very very very very very very very long text",
+    );
+
+    mapState.pointAnnotationManager?.create(centerAnnotationOptions);
+    mapState.pointAnnotationManager?.create(startAnnotationOptions);
+    mapState.pointAnnotationManager?.create(endAnnotationOptions);
   }
 }
