@@ -906,7 +906,7 @@ extension FLTPointAnnotationOptions {
     func toPointAnnotation() -> PointAnnotation {
     var annotation = PointAnnotation(coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
     if let image = self.image {
-        annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
+        annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
     }
         annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor.rawValue)]
         if let iconImage = self.iconImage {
@@ -986,7 +986,7 @@ extension FLTPointAnnotation {
     func toPointAnnotation() -> PointAnnotation {
     var annotation = PointAnnotation(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
     if let image = self.image {
-        annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
+        annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
     }
     annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor.rawValue)]
     if let iconImage = self.iconImage {

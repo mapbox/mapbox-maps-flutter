@@ -89,17 +89,7 @@ class MapboxMap extends ChangeNotifier {
         onStyleImageUnusedListener?.call(argument);
       });
     }
-    if (onMapTapListener != null ||
-        onMapLongTapListener != null ||
-        onMapScrollListener != null) {
-      GestureListener.setup(
-          _GestureListener(
-            onMapTapListener: onMapTapListener,
-            onMapLongTapListener: onMapLongTapListener,
-            onMapScrollListener: onMapScrollListener,
-          ),
-          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
-    }
+    _setupGestures();
   }
 
   final _MapboxMapsPlatform _mapboxMapsPlatform;
@@ -195,17 +185,16 @@ class MapboxMap extends ChangeNotifier {
   late AttributionSettingsInterface attribution =
       AttributionSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
 
-  final OnMapTapListener? onMapTapListener;
-  final OnMapLongTapListener? onMapLongTapListener;
-  final OnMapScrollListener? onMapScrollListener;
+  OnMapTapListener? onMapTapListener;
+  OnMapLongTapListener? onMapLongTapListener;
+  OnMapScrollListener? onMapScrollListener;
 
   @override
   void dispose() {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
         onMapScrollListener != null) {
-      GestureListener.setup(
-          null,
+      GestureListener.setup(null,
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
     }
     _mapboxMapsPlatform.dispose();
@@ -379,6 +368,7 @@ class MapboxMap extends ChangeNotifier {
   Future<void> dragEnd() => _cameraManager.dragEnd();
 
   /// Gets the size of the map.
+  /// Note : not supported for iOS.
   Future<Size> getSize() => _mapInterface.getSize();
 
   /// Triggers a repaint of the map.
@@ -605,6 +595,36 @@ class MapboxMap extends ChangeNotifier {
   /// Cancel the ongoing camera animation if there is one.
   Future<void> cancelCameraAnimation() =>
       _animationManager.cancelCameraAnimation();
+
+  void _setupGestures() {
+    if (onMapTapListener != null ||
+        onMapLongTapListener != null ||
+        onMapScrollListener != null) {
+      GestureListener.setup(
+          _GestureListener(
+            onMapTapListener: onMapTapListener,
+            onMapLongTapListener: onMapLongTapListener,
+            onMapScrollListener: onMapScrollListener,
+          ),
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+      _mapboxMapsPlatform.addGestureListeners();
+    }
+  }
+
+  void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
+    this.onMapTapListener = onMapTapListener;
+    _setupGestures();
+  }
+
+  void setOnMapLongTapListener(OnMapLongTapListener? onMapLongTapListener) {
+    this.onMapLongTapListener = onMapLongTapListener;
+    _setupGestures();
+  }
+
+  void setOnMapMoveListener(OnMapScrollListener? onMapScrollListener) {
+    this.onMapScrollListener = onMapScrollListener;
+    _setupGestures();
+  }
 }
 
 class _GestureListener extends GestureListener {
