@@ -114,9 +114,9 @@ extension FLTTransitionOptions {
 extension FLTMbxEdgeInsets {
     func toUIEdgeInsets() -> UIEdgeInsets {
         return UIEdgeInsets(
-            top: self.top.doubleValue / UIScreen.main.scale, 
+            top: self.top.doubleValue / UIScreen.main.scale,
             left: self.left.doubleValue / UIScreen.main.scale,
-            bottom: self.bottom.doubleValue / UIScreen.main.scale, 
+            bottom: self.bottom.doubleValue / UIScreen.main.scale,
             right: self.right.doubleValue / UIScreen.main.scale)
     }
 }
@@ -202,9 +202,9 @@ extension CameraOptions {
     func toFLTCameraOptions() -> FLTCameraOptions {
         let center = self.center != nil ? self.center?.toDict(): nil
         let padding = self.padding != nil ? FLTMbxEdgeInsets.make(
-            withTop: NSNumber(value: self.padding!.top * UIScreen.main.scale), 
-            left: NSNumber(value: self.padding!.left * UIScreen.main.scale), 
-            bottom: NSNumber(value: self.padding!.bottom * UIScreen.main.scale), 
+            withTop: NSNumber(value: self.padding!.top * UIScreen.main.scale),
+            left: NSNumber(value: self.padding!.left * UIScreen.main.scale),
+            bottom: NSNumber(value: self.padding!.bottom * UIScreen.main.scale),
             right: NSNumber(value: self.padding!.right * UIScreen.main.scale)) : nil
 
         let anchor = self.anchor != nil ? FLTScreenCoordinate.makeWith(x: self.anchor!.x as NSNumber, y: self.anchor!.y as NSNumber) : nil

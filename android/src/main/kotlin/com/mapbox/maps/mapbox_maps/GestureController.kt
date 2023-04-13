@@ -27,7 +27,7 @@ class GestureController(private val mapView: MapView) :
   private var onClickListener: OnMapClickListener? = null
   private var onLongClickListener: OnMapLongClickListener? = null
   private var onMoveListener: OnMoveListener? = null
-  
+
   fun addListeners(messenger: BinaryMessenger) {
     fltGestureListener = FLTGestureListeners.GestureListener(messenger)
 

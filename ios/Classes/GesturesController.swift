@@ -111,7 +111,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         mapView.gestures.delegate = self
         onGestureListener = FLT_GESTURESGestureListener(binaryMessenger: messenger)
     }
-    
+
     func removeListeners() {
         if let gestureRecognizer = self.gestureRecognizer {
             mapView.removeGestureRecognizer(gestureRecognizer)
