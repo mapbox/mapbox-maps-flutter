@@ -57,13 +57,13 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     init(
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
-        viewIdentifier viewId: Int64,
+        channelSuffix: Int,
         eventTypes: [String],
         arguments args: Any?,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String
     ) {
-        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(viewId)")
+        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(channelSuffix)")
 
         HttpServiceFactory.getInstance().setInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
 

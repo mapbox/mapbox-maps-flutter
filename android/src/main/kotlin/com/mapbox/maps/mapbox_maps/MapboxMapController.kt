@@ -20,7 +20,7 @@ class MapboxMapController(
   lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   eventTypes: List<String>,
   messenger: BinaryMessenger,
-  viewId: Int,
+  channelSuffix: Int,
   pluginVersion: String
 ) : PlatformView,
   DefaultLifecycleObserver,
@@ -42,7 +42,7 @@ class MapboxMapController(
   private val scaleBarController = ScaleBarController(mapView)
   private val compassController = CompassController(mapView)
 
-  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$viewId")
+  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
 
   init {
     changeUserAgent(pluginVersion)

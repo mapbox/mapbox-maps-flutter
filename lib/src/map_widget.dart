@@ -210,8 +210,7 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   void onPlatformViewCreated(int id) {
-    final suffix = "/map_$id";
-    _mapboxMapsPlatform.initPlatform(suffix);
+    _mapboxMapsPlatform.initPlatform();
     final MapboxMap controller = MapboxMap(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onStyleLoadedListener: widget.onStyleLoadedListener,
