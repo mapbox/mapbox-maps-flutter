@@ -141,14 +141,17 @@ class MapboxMapController: NSObject, FlutterPlatformView {
                 self.channel.invokeMethod(self.getEventMethodName(eventType: eventType),
                                           arguments: self.convertDictionaryToString(dict: data))
             }
+            result(nil)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
             annotationController!.handleRemoveManager(methodCall: methodCall, result: result)
         case "gesture#add_listeners":
             gesturesController!.addListeners(messenger: proxyBinaryMessenger)
+            result(nil)
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }

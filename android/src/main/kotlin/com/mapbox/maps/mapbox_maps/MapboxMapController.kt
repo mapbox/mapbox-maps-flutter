@@ -125,10 +125,10 @@ class MapboxMapController(
         gestureController.removeListeners()
       }
       else -> {
-        println("OnMethodCall : ${call.method}")
-        result.success(null)
+        result.notImplemented()
       }
     }
+    result.success(null)
   }
 
   private fun changeUserAgent(version: String) {
