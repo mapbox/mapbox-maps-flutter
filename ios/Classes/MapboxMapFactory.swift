@@ -139,12 +139,13 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         var mapInitOptions = MapInitOptions()
         var eventTypes = [String]()
         var pluginVersion = ""
+        var channelSuffix = 0
 
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
                 withFrame: frame,
                 mapInitOptions: mapInitOptions,
-                channelSuffix: 0,
+                channelSuffix: channelSuffix,
                 eventTypes: eventTypes,
                 arguments: args,
                 registrar: registrar,
@@ -167,8 +168,10 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         if let version = args["mapboxPluginVersion"] as? String {
             pluginVersion = version
         }
-        
-        let channelSuffix = args["channelSuffix"] as! Int
+
+        if let suffix = args["channelSuffix"] as? Int {
+            channelSuffix = suffix
+        }
 
         return MapboxMapController(
             withFrame: frame,
