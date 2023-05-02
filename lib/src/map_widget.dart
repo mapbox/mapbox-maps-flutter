@@ -16,7 +16,7 @@ class MapWidget extends StatefulWidget {
     required this.resourceOptions,
     this.mapOptions,
     this.cameraOptions,
-    this.textureView,
+    this.textureView = true,
     this.styleUri,
     this.gestureRecognizers,
     this.onMapCreated,
@@ -87,7 +87,10 @@ class MapWidget extends StatefulWidget {
   /// The Initial Camera options when creating a MapWidget.
   final CameraOptions? cameraOptions;
 
-  /// Flag indicating to use a TextureView as render surface for the MapWidget. Default is false. Only works for Android.
+  /// Flag indicating to use a TextureView as render surface for the MapWidget.
+  /// Only works for Android.
+  /// FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
+  /// As a workaround default is true.
   final bool? textureView;
 
   /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [Style.MAPBOX_STREETS].
