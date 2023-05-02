@@ -17,7 +17,7 @@ import io.flutter.plugin.platform.PlatformView
 class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
-  lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
+  private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   eventTypes: List<String>,
   messenger: BinaryMessenger,
   channelSuffix: Int,
@@ -74,6 +74,7 @@ class MapboxMapController(
   }
 
   override fun dispose() {
+    lifecycleProvider.getLifecycle()?.removeObserver(this)
     mapView.onStop()
     mapView.onDestroy()
     methodChannel.setMethodCallHandler(null)
@@ -111,6 +112,7 @@ class MapboxMapController(
           },
           listOf(eventType)
         )
+        result.success(null)
       }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
@@ -120,15 +122,16 @@ class MapboxMapController(
       }
       "gesture#add_listeners" -> {
         gestureController.addListeners(proxyBinaryMessenger)
+        result.success(null)
       }
       "gesture#remove_listeners" -> {
         gestureController.removeListeners()
+        result.success(null)
       }
       else -> {
         result.notImplemented()
       }
     }
-    result.success(null)
   }
 
   private fun changeUserAgent(version: String) {

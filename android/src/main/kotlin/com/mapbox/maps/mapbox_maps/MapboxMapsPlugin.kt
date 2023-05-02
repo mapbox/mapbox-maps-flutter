@@ -1,7 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
 import androidx.lifecycle.Lifecycle
-import com.mapbox.common.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
