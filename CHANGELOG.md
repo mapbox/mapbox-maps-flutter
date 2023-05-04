@@ -1,3 +1,7 @@
+## 0.4.3
+### Common
+* Fix multiple memory leaks. 
+
 ## 0.4.2
 ### Common
 * Add methods to set gesture listeners dynamically.
