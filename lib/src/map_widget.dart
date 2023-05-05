@@ -16,6 +16,8 @@ class MapWidget extends StatefulWidget {
     required this.resourceOptions,
     this.mapOptions,
     this.cameraOptions,
+    // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
+    // As a workaround default is true.
     this.textureView = true,
     this.styleUri,
     this.gestureRecognizers,
