@@ -57,13 +57,13 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     init(
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
-        viewIdentifier viewId: Int64,
+        channelSuffix: Int,
         eventTypes: [String],
         arguments args: Any?,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String
     ) {
-        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(viewId)")
+        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(channelSuffix)")
 
         HttpServiceFactory.getInstance().setInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
 
@@ -141,14 +141,17 @@ class MapboxMapController: NSObject, FlutterPlatformView {
                 self.channel.invokeMethod(self.getEventMethodName(eventType: eventType),
                                           arguments: self.convertDictionaryToString(dict: data))
             }
+            result(nil)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
             annotationController!.handleRemoveManager(methodCall: methodCall, result: result)
         case "gesture#add_listeners":
             gesturesController!.addListeners(messenger: proxyBinaryMessenger)
+            result(nil)
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
