@@ -202,21 +202,18 @@ class _SuffixesRegistry {
 
     if (suffixesAvailable.isEmpty) {
       _suffix++;
-      suffixesInUse.add(_suffix);
       suffix = _suffix;
     } else {
       suffix = suffixesAvailable.first;
       suffixesAvailable.remove(suffix);
-      suffixesInUse.add(suffix);
     }
+    suffixesInUse.add(suffix);
 
     return suffix;
   }
 
   void releaseSuffix(int suffix) {
-    if (!suffixesInUse.remove(suffix)) {
-      throw Exception("Suffix $suffix not in use");
-    }
+    suffixesInUse.remove(suffix);
     suffixesAvailable.add(suffix);
   }
 }
