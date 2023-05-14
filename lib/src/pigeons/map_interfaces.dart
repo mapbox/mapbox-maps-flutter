@@ -320,7 +320,7 @@ enum TileRegionErrorType {
 
 /// The distance on each side between rectangles, when one is contained into other.
 ///
-/// All fields' values are in `platform pixel` units.
+/// All fields' values are in pixels units.
 class MbxEdgeInsets {
   MbxEdgeInsets({
     required this.top,

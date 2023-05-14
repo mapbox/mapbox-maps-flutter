@@ -114,10 +114,10 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
 
             if let paddingMap = cameraOptionsMap["padding"] as? [String: CGFloat] {
                 padding = UIEdgeInsets(
-                    top: paddingMap["top"]!,
-                    left: paddingMap["left"]!,
-                    bottom: paddingMap["bottom"]!,
-                    right: paddingMap["right"]!
+                    top: paddingMap["top"]! / UIScreen.main.scale,
+                    left: paddingMap["left"]! / UIScreen.main.scale,
+                    bottom: paddingMap["bottom"]! / UIScreen.main.scale,
+                    right: paddingMap["right"]! / UIScreen.main.scale
                 )
             }
 
@@ -139,12 +139,13 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         var mapInitOptions = MapInitOptions()
         var eventTypes = [String]()
         var pluginVersion = ""
+        var channelSuffix = 0
 
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
                 withFrame: frame,
                 mapInitOptions: mapInitOptions,
-                viewIdentifier: viewId,
+                channelSuffix: channelSuffix,
                 eventTypes: eventTypes,
                 arguments: args,
                 registrar: registrar,
@@ -168,10 +169,14 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             pluginVersion = version
         }
 
+        if let suffix = args["channelSuffix"] as? Int {
+            channelSuffix = suffix
+        }
+
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
-            viewIdentifier: viewId,
+            channelSuffix: channelSuffix,
             eventTypes: eventTypes,
             arguments: args,
             registrar: registrar,
