@@ -36,7 +36,7 @@ class GesturesSettings {
     this.scrollEnabled,
     this.simultaneousRotateAndPinchToZoomEnabled,
     this.pitchEnabled,
-    this.scrollMode,
+    this.scrollMode = ScrollMode.HORIZONTAL_AND_VERTICAL,
     this.doubleTapToZoomInEnabled,
     this.doubleTouchToZoomOutEnabled,
     this.quickZoomEnabled,
@@ -138,7 +138,7 @@ class GesturesSettings {
       pitchEnabled: pigeonMap['pitchEnabled'] as bool?,
       scrollMode: pigeonMap['scrollMode'] != null
           ? ScrollMode.values[pigeonMap['scrollMode']! as int]
-          : null,
+          : ScrollMode.HORIZONTAL_AND_VERTICAL,
       doubleTapToZoomInEnabled: pigeonMap['doubleTapToZoomInEnabled'] as bool?,
       doubleTouchToZoomOutEnabled:
           pigeonMap['doubleTouchToZoomOutEnabled'] as bool?,
