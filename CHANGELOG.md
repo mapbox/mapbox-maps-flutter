@@ -1,3 +1,19 @@
+## 0.4.3
+### Common
+* Fix multiple memory leaks. 
+
+## 0.4.2
+### Common
+* Add methods to set gesture listeners dynamically.
+
+### iOS
+* Apply scale factor to UIImage.
+* Apply scale factor to UIEdgeInsets.
+* Fix vertical scrollMode lock on gesture settings update.
+
+### Android
+* Fix ImageStretches mapping. 
+
 ## 0.4.1
 
 ### Common
