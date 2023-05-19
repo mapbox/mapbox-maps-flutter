@@ -66,6 +66,7 @@ NSObject<FlutterMessageCodec> *FLT_PolygonAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTPolygonAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPolygonAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTPolygonAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setFillAntialiasManagerId:(NSString *)managerId fillAntialias:(NSNumber *)fillAntialias completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getFillAntialiasManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setFillTranslateManagerId:(NSString *)managerId fillTranslate:(NSArray<NSNumber *> *)fillTranslate completion:(void(^)(FlutterError *_Nullable))completion;

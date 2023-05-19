@@ -256,6 +256,7 @@ NSObject<FlutterMessageCodec> *FLT_PointAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTPointAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPointAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTPointAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconAllowOverlapManagerId:(NSString *)managerId iconAllowOverlap:(NSNumber *)iconAllowOverlap completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getIconAllowOverlapManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconIgnorePlacementManagerId:(NSString *)managerId iconIgnorePlacement:(NSNumber *)iconIgnorePlacement completion:(void(^)(FlutterError *_Nullable))completion;

@@ -120,6 +120,19 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun getAnnotations(
+    managerId: String,
+    result: FLTPolylineAnnotationMessager.Result<MutableList<FLTPolylineAnnotationMessager.PolylineAnnotation>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTPolylineAnnotation() }.toMutableList()
+      result?.success(annotations)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
   private fun updateAnnotation(annotation: FLTPolylineAnnotationMessager.PolylineAnnotation): PolylineAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {

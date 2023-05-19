@@ -94,6 +94,7 @@ NSObject<FlutterMessageCodec> *FLT_PolylineAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTPolylineAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineCapManagerId:(NSString *)managerId lineCap:(FLTLineCap)lineCap completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getLineCapManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineMiterLimitManagerId:(NSString *)managerId lineMiterLimit:(NSNumber *)lineMiterLimit completion:(void(^)(FlutterError *_Nullable))completion;

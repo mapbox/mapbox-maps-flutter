@@ -391,6 +391,26 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
       [channel setMessageHandler:nil];
     }
   }
+    {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon._CircleAnnotationMessager.getAnnotations"
+          binaryMessenger:binaryMessenger
+          codec:FLT_CircleAnnotationMessagerGetCodec()        ];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getAnnotationsManagerId:completion:)], @"FLT_CircleAnnotationMessager api (%@) doesn't respond to @selector(getAnnotationsManagerId:completion:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          NSArray *args = message;
+          NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+          [api getAnnotationsManagerId:arg_managerId completion:^(NSArray<FLTCircleAnnotation *> *_Nullable output, FlutterError *_Nullable error) {
+            callback(wrapResult(output, error));
+          }];
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]

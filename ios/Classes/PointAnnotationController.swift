@@ -99,6 +99,21 @@ class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTPointAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTPointAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setIconAllowOverlapManagerId(_ managerId: String, iconAllowOverlap: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {

@@ -119,6 +119,20 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun getAnnotations(
+    managerId: String,
+    result: FLTCircleAnnotationMessager.Result<MutableList<FLTCircleAnnotationMessager.CircleAnnotation>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as CircleAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTCircleAnnotation() }.toMutableList()
+      result?.success(annotations)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
+
   private fun updateAnnotation(annotation: FLTCircleAnnotationMessager.CircleAnnotation): CircleAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {

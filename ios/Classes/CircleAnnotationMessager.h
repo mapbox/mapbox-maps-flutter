@@ -88,6 +88,7 @@ NSObject<FlutterMessageCodec> *FLT_CircleAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTCircleAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchAlignmentManagerId:(NSString *)managerId circlePitchAlignment:(FLTCirclePitchAlignment)circlePitchAlignment completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getCirclePitchAlignmentManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchScaleManagerId:(NSString *)managerId circlePitchScale:(FLTCirclePitchScale)circlePitchScale completion:(void(^)(FlutterError *_Nullable))completion;

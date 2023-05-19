@@ -99,6 +99,21 @@ class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTCircleAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTCircleAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setCirclePitchAlignmentManagerId(_ managerId: String, circlePitchAlignment: FLTCirclePitchAlignment, completion: @escaping (FlutterError?) -> Void) {
         do {

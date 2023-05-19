@@ -120,6 +120,19 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun getAnnotations(
+    managerId: String,
+    result: FLTPolygonAnnotationMessager.Result<MutableList<FLTPolygonAnnotationMessager.PolygonAnnotation>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTPolygonAnnotation() }.toMutableList()
+      result?.success(annotations)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
   private fun updateAnnotation(annotation: FLTPolygonAnnotationMessager.PolygonAnnotation): PolygonAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {

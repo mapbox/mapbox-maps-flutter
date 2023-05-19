@@ -121,6 +121,19 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun getAnnotations(
+    managerId: String,
+    result: FLTPointAnnotationMessager.Result<MutableList<FLTPointAnnotationMessager.PointAnnotation>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PointAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTPointAnnotation() }.toMutableList()
+      result?.success(annotations)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
   private fun updateAnnotation(annotation: FLTPointAnnotationMessager.PointAnnotation): PointAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {

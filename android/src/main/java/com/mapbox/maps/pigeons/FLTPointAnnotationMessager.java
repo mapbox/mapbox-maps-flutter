@@ -1191,6 +1191,7 @@ public class FLTPointAnnotationMessager {
     void update(@NonNull String managerId, @NonNull PointAnnotation annotation, Result<Void> result);
     void delete(@NonNull String managerId, @NonNull PointAnnotation annotation, Result<Void> result);
     void deleteAll(@NonNull String managerId, Result<Void> result);
+    void getAnnotations(@NonNull String managerId, Result<List<PointAnnotation>> result);
     void setIconAllowOverlap(@NonNull String managerId, @NonNull Boolean iconAllowOverlap, Result<Void> result);
     void getIconAllowOverlap(@NonNull String managerId, Result<Boolean> result);
     void setIconIgnorePlacement(@NonNull String managerId, @NonNull Boolean iconIgnorePlacement, Result<Void> result);
@@ -1429,6 +1430,40 @@ public class FLTPointAnnotationMessager {
               };
 
               api.deleteAll(managerIdArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+                new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon._PointAnnotationMessager.getAnnotations", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              String managerIdArg = (String)args.get(0);
+              if (managerIdArg == null) {
+                throw new NullPointerException("managerIdArg unexpectedly null.");
+              }
+              Result<List<PointAnnotation>> resultCallback = new Result<List<PointAnnotation>>() {
+                public void success(List<PointAnnotation> result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.getAnnotations(managerIdArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

@@ -399,6 +399,26 @@ void FLT_PolylineAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessen
       [channel setMessageHandler:nil];
     }
   }
+    {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon._PolylineAnnotationMessager.getAnnotations"
+          binaryMessenger:binaryMessenger
+          codec:FLT_PolylineAnnotationMessagerGetCodec()        ];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getAnnotationsManagerId:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(getAnnotationsManagerId:completion:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          NSArray *args = message;
+          NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+          [api getAnnotationsManagerId:arg_managerId completion:^(NSArray<FLTPolylineAnnotation *> *_Nullable output, FlutterError *_Nullable error) {
+            callback(wrapResult(output, error));
+          }];
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]

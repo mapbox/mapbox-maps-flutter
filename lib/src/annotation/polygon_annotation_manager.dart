@@ -37,6 +37,10 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messager.deleteAll(id);
 
+  /// Current annotations of manager.
+  Future<List<PolygonAnnotation>> getAnnotations() =>
+      messager.getAnnotations(id);
+
   /// Whether or not the fill should be antialiased.
   Future<void> setFillAntialias(bool fillAntialias) =>
       messager.setFillAntialias(id, fillAntialias);

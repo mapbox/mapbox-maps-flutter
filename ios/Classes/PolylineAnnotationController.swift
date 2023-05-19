@@ -99,6 +99,21 @@ class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTPolylineAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTPolylineAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setLineCapManagerId(_ managerId: String, lineCap: FLTLineCap, completion: @escaping (FlutterError?) -> Void) {
         do {
