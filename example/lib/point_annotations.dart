@@ -77,7 +77,8 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
             iconSize: 1.3,
             iconOffset: [0.0, -5.0],
             symbolSortKey: 10,
-            image: list))
+            image: list,
+            userInfo: {"test key": "data value"}))
         .then((value) => pointAnnotation = value);
   }
 

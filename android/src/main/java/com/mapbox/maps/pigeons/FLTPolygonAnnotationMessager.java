@@ -79,6 +79,12 @@ public class FLTPolygonAnnotationMessager {
       this.fillPattern = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private PolygonAnnotation() {}
     public static final class Builder {
@@ -117,6 +123,12 @@ public class FLTPolygonAnnotationMessager {
         this.fillPattern = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PolygonAnnotation build() {
         PolygonAnnotation pigeonReturn = new PolygonAnnotation();
         pigeonReturn.setId(id);
@@ -126,6 +138,7 @@ public class FLTPolygonAnnotationMessager {
         pigeonReturn.setFillOpacity(fillOpacity);
         pigeonReturn.setFillOutlineColor(fillOutlineColor);
         pigeonReturn.setFillPattern(fillPattern);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -138,6 +151,7 @@ public class FLTPolygonAnnotationMessager {
       toMapResult.put("fillOpacity", fillOpacity);
       toMapResult.put("fillOutlineColor", fillOutlineColor);
       toMapResult.put("fillPattern", fillPattern);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PolygonAnnotation fromMap(@NonNull Map<String, Object> map) {
@@ -156,6 +170,8 @@ public class FLTPolygonAnnotationMessager {
       pigeonResult.setFillOutlineColor((fillOutlineColor == null) ? null : ((fillOutlineColor instanceof Integer) ? (Integer)fillOutlineColor : (Long)fillOutlineColor));
       Object fillPattern = map.get("fillPattern");
       pigeonResult.setFillPattern((String)fillPattern);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }
@@ -198,6 +214,12 @@ public class FLTPolygonAnnotationMessager {
       this.fillPattern = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable Map<String, Object> geometry;
       public @NonNull Builder setGeometry(@Nullable Map<String, Object> setterArg) {
@@ -229,6 +251,12 @@ public class FLTPolygonAnnotationMessager {
         this.fillPattern = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PolygonAnnotationOptions build() {
         PolygonAnnotationOptions pigeonReturn = new PolygonAnnotationOptions();
         pigeonReturn.setGeometry(geometry);
@@ -237,6 +265,7 @@ public class FLTPolygonAnnotationMessager {
         pigeonReturn.setFillOpacity(fillOpacity);
         pigeonReturn.setFillOutlineColor(fillOutlineColor);
         pigeonReturn.setFillPattern(fillPattern);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -248,6 +277,7 @@ public class FLTPolygonAnnotationMessager {
       toMapResult.put("fillOpacity", fillOpacity);
       toMapResult.put("fillOutlineColor", fillOutlineColor);
       toMapResult.put("fillPattern", fillPattern);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PolygonAnnotationOptions fromMap(@NonNull Map<String, Object> map) {
@@ -264,6 +294,8 @@ public class FLTPolygonAnnotationMessager {
       pigeonResult.setFillOutlineColor((fillOutlineColor == null) ? null : ((fillOutlineColor instanceof Integer) ? (Integer)fillOutlineColor : (Long)fillOutlineColor));
       Object fillPattern = map.get("fillPattern");
       pigeonResult.setFillPattern((String)fillPattern);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }

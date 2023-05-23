@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import android.graphics.BitmapFactory
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toJsonElement
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoint
 import com.mapbox.maps.pigeons.FLTPointAnnotationMessager
@@ -219,6 +220,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     }
     annotation.textOpacity?.let {
       originalAnnotation.textOpacity = it
+    }
+    annotation.userInfo?.let {
+      originalAnnotation.setData(it.toJsonElement())
     }
     return originalAnnotation
   }
@@ -907,6 +911,9 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
   this.textOpacity?.let {
     builder.setTextOpacity(it)
   }
+  this.getData()?.let {
+    builder.setUserInfo(it.toMap())
+  }
 
   return builder.build()
 }
@@ -996,6 +1003,9 @@ fun FLTPointAnnotationMessager.PointAnnotationOptions.toPointAnnotationOptions()
   }
   this.textOpacity?.let {
     options.withTextOpacity(it)
+  }
+  this.userInfo?.let {
+    options.withData(it.toJsonElement())
   }
   return options
 }

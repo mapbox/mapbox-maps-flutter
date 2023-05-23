@@ -138,6 +138,7 @@ class PointAnnotation {
     this.textHaloColor,
     this.textHaloWidth,
     this.textOpacity,
+    this.userInfo,
   });
 
   String id;
@@ -169,6 +170,7 @@ class PointAnnotation {
   int? textHaloColor;
   double? textHaloWidth;
   double? textOpacity;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -201,6 +203,7 @@ class PointAnnotation {
     pigeonMap['textHaloColor'] = textHaloColor;
     pigeonMap['textHaloWidth'] = textHaloWidth;
     pigeonMap['textOpacity'] = textOpacity;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -245,6 +248,8 @@ class PointAnnotation {
       textHaloColor: pigeonMap['textHaloColor'] as int?,
       textHaloWidth: pigeonMap['textHaloWidth'] as double?,
       textOpacity: pigeonMap['textOpacity'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -279,6 +284,7 @@ class PointAnnotationOptions {
     this.textHaloColor,
     this.textHaloWidth,
     this.textOpacity,
+    this.userInfo,
   });
 
   Map<String?, Object?>? geometry;
@@ -309,6 +315,7 @@ class PointAnnotationOptions {
   int? textHaloColor;
   double? textHaloWidth;
   double? textOpacity;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -340,6 +347,7 @@ class PointAnnotationOptions {
     pigeonMap['textHaloColor'] = textHaloColor;
     pigeonMap['textHaloWidth'] = textHaloWidth;
     pigeonMap['textOpacity'] = textOpacity;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -383,6 +391,8 @@ class PointAnnotationOptions {
       textHaloColor: pigeonMap['textHaloColor'] as int?,
       textHaloWidth: pigeonMap['textHaloWidth'] as double?,
       textOpacity: pigeonMap['textOpacity'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }

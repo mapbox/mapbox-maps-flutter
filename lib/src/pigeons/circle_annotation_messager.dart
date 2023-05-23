@@ -39,6 +39,7 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.userInfo,
   });
 
   /// The id for annotation
@@ -71,6 +72,9 @@ class CircleAnnotation {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   double? circleStrokeWidth;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['id'] = id;
@@ -83,6 +87,7 @@ class CircleAnnotation {
     pigeonMap['circleStrokeColor'] = circleStrokeColor;
     pigeonMap['circleStrokeOpacity'] = circleStrokeOpacity;
     pigeonMap['circleStrokeWidth'] = circleStrokeWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -100,6 +105,8 @@ class CircleAnnotation {
       circleStrokeColor: pigeonMap['circleStrokeColor'] as int?,
       circleStrokeOpacity: pigeonMap['circleStrokeOpacity'] as double?,
       circleStrokeWidth: pigeonMap['circleStrokeWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -115,6 +122,7 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.userInfo,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -144,6 +152,9 @@ class CircleAnnotationOptions {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   double? circleStrokeWidth;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['geometry'] = geometry;
@@ -155,6 +166,7 @@ class CircleAnnotationOptions {
     pigeonMap['circleStrokeColor'] = circleStrokeColor;
     pigeonMap['circleStrokeOpacity'] = circleStrokeOpacity;
     pigeonMap['circleStrokeWidth'] = circleStrokeWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -171,6 +183,8 @@ class CircleAnnotationOptions {
       circleStrokeColor: pigeonMap['circleStrokeColor'] as int?,
       circleStrokeOpacity: pigeonMap['circleStrokeOpacity'] as double?,
       circleStrokeWidth: pigeonMap['circleStrokeWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }

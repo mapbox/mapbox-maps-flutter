@@ -262,6 +262,7 @@ class PointAnnotation {
     this.textHaloColor,
     this.textHaloWidth,
     this.textOpacity,
+    this.userInfo,
   });
 
   /// The id for annotation
@@ -352,6 +353,9 @@ class PointAnnotation {
   /// The opacity at which the text will be drawn.
   double? textOpacity;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['id'] = id;
@@ -383,6 +387,7 @@ class PointAnnotation {
     pigeonMap['textHaloColor'] = textHaloColor;
     pigeonMap['textHaloWidth'] = textHaloWidth;
     pigeonMap['textOpacity'] = textOpacity;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -427,6 +432,8 @@ class PointAnnotation {
       textHaloColor: pigeonMap['textHaloColor'] as int?,
       textHaloWidth: pigeonMap['textHaloWidth'] as double?,
       textOpacity: pigeonMap['textOpacity'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -461,6 +468,7 @@ class PointAnnotationOptions {
     this.textHaloColor,
     this.textHaloWidth,
     this.textOpacity,
+    this.userInfo,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -548,6 +556,9 @@ class PointAnnotationOptions {
   /// The opacity at which the text will be drawn.
   double? textOpacity;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['geometry'] = geometry;
@@ -578,6 +589,7 @@ class PointAnnotationOptions {
     pigeonMap['textHaloColor'] = textHaloColor;
     pigeonMap['textHaloWidth'] = textHaloWidth;
     pigeonMap['textOpacity'] = textOpacity;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -621,6 +633,8 @@ class PointAnnotationOptions {
       textHaloColor: pigeonMap['textHaloColor'] as int?,
       textHaloWidth: pigeonMap['textHaloWidth'] as double?,
       textOpacity: pigeonMap['textOpacity'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }

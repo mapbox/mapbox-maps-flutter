@@ -27,6 +27,7 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.userInfo,
   });
 
   String id;
@@ -39,6 +40,7 @@ class CircleAnnotation {
   int? circleStrokeColor;
   double? circleStrokeOpacity;
   double? circleStrokeWidth;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -52,6 +54,7 @@ class CircleAnnotation {
     pigeonMap['circleStrokeColor'] = circleStrokeColor;
     pigeonMap['circleStrokeOpacity'] = circleStrokeOpacity;
     pigeonMap['circleStrokeWidth'] = circleStrokeWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -69,6 +72,8 @@ class CircleAnnotation {
       circleStrokeColor: pigeonMap['circleStrokeColor'] as int?,
       circleStrokeOpacity: pigeonMap['circleStrokeOpacity'] as double?,
       circleStrokeWidth: pigeonMap['circleStrokeWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -84,6 +89,7 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.userInfo,
   });
 
   Map<String?, Object?>? geometry;
@@ -95,6 +101,7 @@ class CircleAnnotationOptions {
   int? circleStrokeColor;
   double? circleStrokeOpacity;
   double? circleStrokeWidth;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -107,6 +114,7 @@ class CircleAnnotationOptions {
     pigeonMap['circleStrokeColor'] = circleStrokeColor;
     pigeonMap['circleStrokeOpacity'] = circleStrokeOpacity;
     pigeonMap['circleStrokeWidth'] = circleStrokeWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -123,6 +131,8 @@ class CircleAnnotationOptions {
       circleStrokeColor: pigeonMap['circleStrokeColor'] as int?,
       circleStrokeOpacity: pigeonMap['circleStrokeOpacity'] as double?,
       circleStrokeWidth: pigeonMap['circleStrokeWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }

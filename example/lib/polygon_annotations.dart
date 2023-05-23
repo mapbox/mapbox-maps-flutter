@@ -47,7 +47,8 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
         options.add(PolygonAnnotationOptions(
             geometry:
                 Polygon(coordinates: createRandomPositionsList()).toJson(),
-            fillColor: createRandomColor()));
+            fillColor: createRandomColor(),
+            userInfo: {"test key": "data value"}));
       }
       polygonAnnotationManager?.createMulti(options);
       polygonAnnotationManager

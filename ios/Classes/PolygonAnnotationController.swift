@@ -223,6 +223,9 @@ extension FLTPolygonAnnotationOptions {
         if let fillPattern = self.fillPattern {
            annotation.fillPattern = fillPattern
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -244,6 +247,9 @@ extension FLTPolygonAnnotation {
     }
     if let fillPattern = self.fillPattern {
        annotation.fillPattern = fillPattern
+    }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
     }
         return annotation
     }
@@ -271,7 +277,7 @@ extension PolygonAnnotation {
             fillPattern =  self.fillPattern!
         }
 
-        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern)
+        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern, userInfo: self.userInfo)
     }
 }
 // End of generated file.

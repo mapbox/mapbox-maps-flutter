@@ -2,6 +2,7 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toJsonElement
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoint
 import com.mapbox.maps.pigeons.FLTCircleAnnotationMessager
@@ -162,6 +163,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
     annotation.circleStrokeWidth?.let {
       originalAnnotation.circleStrokeWidth = it
     }
+    annotation.userInfo?.let {
+      originalAnnotation.setData(it.toJsonElement())
+    }
     return originalAnnotation
   }
 
@@ -287,7 +291,9 @@ fun CircleAnnotation.toFLTCircleAnnotation(): FLTCircleAnnotationMessager.Circle
   this.circleStrokeWidth?.let {
     builder.setCircleStrokeWidth(it)
   }
-
+  this.getData()?.let {
+    builder.setUserInfo(it.toMap())
+  }
   return builder.build()
 }
 
@@ -319,6 +325,9 @@ fun FLTCircleAnnotationMessager.CircleAnnotationOptions.toCircleAnnotationOption
   }
   this.circleStrokeWidth?.let {
     options.withCircleStrokeWidth(it)
+  }
+  this.userInfo?.let {
+    options.withData(it.toJsonElement())
   }
   return options
 }

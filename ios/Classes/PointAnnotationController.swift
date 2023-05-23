@@ -993,6 +993,9 @@ extension FLTPointAnnotationOptions {
         if let textOpacity = self.textOpacity {
            annotation.textOpacity = textOpacity.doubleValue
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -1073,6 +1076,9 @@ extension FLTPointAnnotation {
     if let textOpacity = self.textOpacity {
        annotation.textOpacity = textOpacity.doubleValue
     }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
+   }
         return annotation
     }
 }
@@ -1183,7 +1189,7 @@ extension PointAnnotation {
             textOpacity = NSNumber(value: self.textOpacity!)
         }
 
-        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity)
+        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity, userInfo: self.userInfo)
     }
 }
 // End of generated file.

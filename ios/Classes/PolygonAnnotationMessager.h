@@ -25,7 +25,8 @@ typedef NS_ENUM(NSUInteger, FLTFillTranslateAnchor) {
     fillColor:(nullable NSNumber *)fillColor
     fillOpacity:(nullable NSNumber *)fillOpacity
     fillOutlineColor:(nullable NSNumber *)fillOutlineColor
-    fillPattern:(nullable NSString *)fillPattern;
+    fillPattern:(nullable NSString *)fillPattern
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, copy) NSString * id;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) NSNumber * fillSortKey;
@@ -33,6 +34,7 @@ typedef NS_ENUM(NSUInteger, FLTFillTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * fillOpacity;
 @property(nonatomic, strong, nullable) NSNumber * fillOutlineColor;
 @property(nonatomic, copy, nullable) NSString * fillPattern;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 @interface FLTPolygonAnnotationOptions : NSObject
@@ -41,13 +43,15 @@ typedef NS_ENUM(NSUInteger, FLTFillTranslateAnchor) {
     fillColor:(nullable NSNumber *)fillColor
     fillOpacity:(nullable NSNumber *)fillOpacity
     fillOutlineColor:(nullable NSNumber *)fillOutlineColor
-    fillPattern:(nullable NSString *)fillPattern;
+    fillPattern:(nullable NSString *)fillPattern
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) NSNumber * fillSortKey;
 @property(nonatomic, strong, nullable) NSNumber * fillColor;
 @property(nonatomic, strong, nullable) NSNumber * fillOpacity;
 @property(nonatomic, strong, nullable) NSNumber * fillOutlineColor;
 @property(nonatomic, copy, nullable) NSString * fillPattern;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 /// The codec used by FLTOnPolygonAnnotationClickListener.

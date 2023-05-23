@@ -30,6 +30,7 @@ class PolylineAnnotation {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.userInfo,
   });
 
   String id;
@@ -43,6 +44,7 @@ class PolylineAnnotation {
   double? lineOpacity;
   String? linePattern;
   double? lineWidth;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -57,6 +59,7 @@ class PolylineAnnotation {
     pigeonMap['lineOpacity'] = lineOpacity;
     pigeonMap['linePattern'] = linePattern;
     pigeonMap['lineWidth'] = lineWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -77,6 +80,8 @@ class PolylineAnnotation {
       lineOpacity: pigeonMap['lineOpacity'] as double?,
       linePattern: pigeonMap['linePattern'] as String?,
       lineWidth: pigeonMap['lineWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -93,6 +98,7 @@ class PolylineAnnotationOptions {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.userInfo,
   });
 
   Map<String?, Object?>? geometry;
@@ -105,6 +111,7 @@ class PolylineAnnotationOptions {
   double? lineOpacity;
   String? linePattern;
   double? lineWidth;
+  Map<String?, Object?>? userInfo;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -118,6 +125,7 @@ class PolylineAnnotationOptions {
     pigeonMap['lineOpacity'] = lineOpacity;
     pigeonMap['linePattern'] = linePattern;
     pigeonMap['lineWidth'] = lineWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -137,6 +145,8 @@ class PolylineAnnotationOptions {
       lineOpacity: pigeonMap['lineOpacity'] as double?,
       linePattern: pigeonMap['linePattern'] as String?,
       lineWidth: pigeonMap['lineWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }

@@ -351,6 +351,9 @@ extension FLTPolylineAnnotationOptions {
         if let lineWidth = self.lineWidth {
            annotation.lineWidth = lineWidth.doubleValue
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -382,6 +385,9 @@ extension FLTPolylineAnnotation {
     }
     if let lineWidth = self.lineWidth {
        annotation.lineWidth = lineWidth.doubleValue
+    }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
     }
         return annotation
     }
@@ -425,7 +431,7 @@ extension PolylineAnnotation {
             lineWidth = NSNumber(value: self.lineWidth!)
         }
 
-        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth)
+        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth, userInfo: self.userInfo)
     }
 }
 // End of generated file.

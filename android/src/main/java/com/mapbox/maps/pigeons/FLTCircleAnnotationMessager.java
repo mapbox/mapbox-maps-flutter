@@ -117,6 +117,12 @@ public class FLTCircleAnnotationMessager {
       this.circleStrokeWidth = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private CircleAnnotation() {}
     public static final class Builder {
@@ -170,6 +176,12 @@ public class FLTCircleAnnotationMessager {
         this.circleStrokeWidth = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull CircleAnnotation build() {
         CircleAnnotation pigeonReturn = new CircleAnnotation();
         pigeonReturn.setId(id);
@@ -182,6 +194,7 @@ public class FLTCircleAnnotationMessager {
         pigeonReturn.setCircleStrokeColor(circleStrokeColor);
         pigeonReturn.setCircleStrokeOpacity(circleStrokeOpacity);
         pigeonReturn.setCircleStrokeWidth(circleStrokeWidth);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -197,6 +210,7 @@ public class FLTCircleAnnotationMessager {
       toMapResult.put("circleStrokeColor", circleStrokeColor);
       toMapResult.put("circleStrokeOpacity", circleStrokeOpacity);
       toMapResult.put("circleStrokeWidth", circleStrokeWidth);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull CircleAnnotation fromMap(@NonNull Map<String, Object> map) {
@@ -221,6 +235,8 @@ public class FLTCircleAnnotationMessager {
       pigeonResult.setCircleStrokeOpacity((Double)circleStrokeOpacity);
       Object circleStrokeWidth = map.get("circleStrokeWidth");
       pigeonResult.setCircleStrokeWidth((Double)circleStrokeWidth);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }
@@ -281,6 +297,12 @@ public class FLTCircleAnnotationMessager {
       this.circleStrokeWidth = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable Map<String, Object> geometry;
       public @NonNull Builder setGeometry(@Nullable Map<String, Object> setterArg) {
@@ -327,6 +349,13 @@ public class FLTCircleAnnotationMessager {
         this.circleStrokeWidth = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
+
       public @NonNull CircleAnnotationOptions build() {
         CircleAnnotationOptions pigeonReturn = new CircleAnnotationOptions();
         pigeonReturn.setGeometry(geometry);
@@ -338,6 +367,7 @@ public class FLTCircleAnnotationMessager {
         pigeonReturn.setCircleStrokeColor(circleStrokeColor);
         pigeonReturn.setCircleStrokeOpacity(circleStrokeOpacity);
         pigeonReturn.setCircleStrokeWidth(circleStrokeWidth);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -352,6 +382,7 @@ public class FLTCircleAnnotationMessager {
       toMapResult.put("circleStrokeColor", circleStrokeColor);
       toMapResult.put("circleStrokeOpacity", circleStrokeOpacity);
       toMapResult.put("circleStrokeWidth", circleStrokeWidth);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull CircleAnnotationOptions fromMap(@NonNull Map<String, Object> map) {
@@ -374,6 +405,8 @@ public class FLTCircleAnnotationMessager {
       pigeonResult.setCircleStrokeOpacity((Double)circleStrokeOpacity);
       Object circleStrokeWidth = map.get("circleStrokeWidth");
       pigeonResult.setCircleStrokeWidth((Double)circleStrokeWidth);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }

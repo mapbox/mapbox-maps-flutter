@@ -49,7 +49,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     fillColor:(nullable NSNumber *)fillColor
     fillOpacity:(nullable NSNumber *)fillOpacity
     fillOutlineColor:(nullable NSNumber *)fillOutlineColor
-    fillPattern:(nullable NSString *)fillPattern {
+    fillPattern:(nullable NSString *)fillPattern
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPolygonAnnotation* pigeonResult = [[FLTPolygonAnnotation alloc] init];
   pigeonResult.id = id;
   pigeonResult.geometry = geometry;
@@ -58,6 +59,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.fillOpacity = fillOpacity;
   pigeonResult.fillOutlineColor = fillOutlineColor;
   pigeonResult.fillPattern = fillPattern;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPolygonAnnotation *)fromMap:(NSDictionary *)dict {
@@ -70,6 +72,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.fillOpacity = GetNullableObject(dict, @"fillOpacity");
   pigeonResult.fillOutlineColor = GetNullableObject(dict, @"fillOutlineColor");
   pigeonResult.fillPattern = GetNullableObject(dict, @"fillPattern");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPolygonAnnotation *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPolygonAnnotation fromMap:dict] : nil; }
@@ -82,6 +85,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"fillOpacity" : (self.fillOpacity ?: [NSNull null]),
     @"fillOutlineColor" : (self.fillOutlineColor ?: [NSNull null]),
     @"fillPattern" : (self.fillPattern ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -92,7 +96,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     fillColor:(nullable NSNumber *)fillColor
     fillOpacity:(nullable NSNumber *)fillOpacity
     fillOutlineColor:(nullable NSNumber *)fillOutlineColor
-    fillPattern:(nullable NSString *)fillPattern {
+    fillPattern:(nullable NSString *)fillPattern
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPolygonAnnotationOptions* pigeonResult = [[FLTPolygonAnnotationOptions alloc] init];
   pigeonResult.geometry = geometry;
   pigeonResult.fillSortKey = fillSortKey;
@@ -100,6 +105,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.fillOpacity = fillOpacity;
   pigeonResult.fillOutlineColor = fillOutlineColor;
   pigeonResult.fillPattern = fillPattern;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPolygonAnnotationOptions *)fromMap:(NSDictionary *)dict {
@@ -110,6 +116,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.fillOpacity = GetNullableObject(dict, @"fillOpacity");
   pigeonResult.fillOutlineColor = GetNullableObject(dict, @"fillOutlineColor");
   pigeonResult.fillPattern = GetNullableObject(dict, @"fillPattern");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPolygonAnnotationOptions *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPolygonAnnotationOptions fromMap:dict] : nil; }
@@ -121,6 +128,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"fillOpacity" : (self.fillOpacity ?: [NSNull null]),
     @"fillOutlineColor" : (self.fillOutlineColor ?: [NSNull null]),
     @"fillPattern" : (self.fillPattern ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end

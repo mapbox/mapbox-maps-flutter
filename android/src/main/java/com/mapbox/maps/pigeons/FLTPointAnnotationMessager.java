@@ -383,6 +383,12 @@ public class FLTPointAnnotationMessager {
       this.textOpacity = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private PointAnnotation() {}
     public static final class Builder {
@@ -531,6 +537,12 @@ public class FLTPointAnnotationMessager {
         this.textOpacity = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PointAnnotation build() {
         PointAnnotation pigeonReturn = new PointAnnotation();
         pigeonReturn.setId(id);
@@ -562,6 +574,7 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setTextHaloColor(textHaloColor);
         pigeonReturn.setTextHaloWidth(textHaloWidth);
         pigeonReturn.setTextOpacity(textOpacity);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -596,6 +609,7 @@ public class FLTPointAnnotationMessager {
       toMapResult.put("textHaloColor", textHaloColor);
       toMapResult.put("textHaloWidth", textHaloWidth);
       toMapResult.put("textOpacity", textOpacity);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PointAnnotation fromMap(@NonNull Map<String, Object> map) {
@@ -658,6 +672,8 @@ public class FLTPointAnnotationMessager {
       pigeonResult.setTextHaloWidth((Double)textHaloWidth);
       Object textOpacity = map.get("textOpacity");
       pigeonResult.setTextOpacity((Double)textOpacity);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }
@@ -832,6 +848,12 @@ public class FLTPointAnnotationMessager {
       this.textOpacity = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable Map<String, Object> geometry;
       public @NonNull Builder setGeometry(@Nullable Map<String, Object> setterArg) {
@@ -973,6 +995,12 @@ public class FLTPointAnnotationMessager {
         this.textOpacity = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PointAnnotationOptions build() {
         PointAnnotationOptions pigeonReturn = new PointAnnotationOptions();
         pigeonReturn.setGeometry(geometry);
@@ -1003,6 +1031,7 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setTextHaloColor(textHaloColor);
         pigeonReturn.setTextHaloWidth(textHaloWidth);
         pigeonReturn.setTextOpacity(textOpacity);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -1036,6 +1065,7 @@ public class FLTPointAnnotationMessager {
       toMapResult.put("textHaloColor", textHaloColor);
       toMapResult.put("textHaloWidth", textHaloWidth);
       toMapResult.put("textOpacity", textOpacity);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PointAnnotationOptions fromMap(@NonNull Map<String, Object> map) {
@@ -1096,6 +1126,8 @@ public class FLTPointAnnotationMessager {
       pigeonResult.setTextHaloWidth((Double)textHaloWidth);
       Object textOpacity = map.get("textOpacity");
       pigeonResult.setTextOpacity((Double)textOpacity);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }

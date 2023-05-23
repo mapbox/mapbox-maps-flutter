@@ -52,7 +52,8 @@ class PolylineAnnotationPageBodyState
       polylineAnnotationManager?.createMulti(positions
           .map((e) => PolylineAnnotationOptions(
               geometry: LineString(coordinates: e).toJson(),
-              lineColor: createRandomColor()))
+              lineColor: createRandomColor(),
+              userInfo: {"test key": "data value"}))
           .toList());
       polylineAnnotationManager
           ?.addOnPolylineAnnotationClickListener(AnnotationClickListener());

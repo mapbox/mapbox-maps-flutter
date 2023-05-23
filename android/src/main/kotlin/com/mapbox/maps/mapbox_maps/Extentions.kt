@@ -1,12 +1,13 @@
 package com.mapbox.maps.mapbox_maps
 
-import com.google.gson.Gson
+import com.google.gson.*
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.reflect.Type
 
 // FLT to Android
 fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOptions {
@@ -386,7 +387,7 @@ fun CameraOptions.toFLTCameraOptions(): FLTMapInterfaces.CameraOptions {
 
 fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
   when (val value = this[it]) {
-    is JSONArray -> {
+   is JSONArray -> {
       val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
       JSONObject(map).toMap().values.toList()
     }
@@ -394,4 +395,28 @@ fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
     JSONObject.NULL -> null
     else -> value
   }
+}
+
+fun JsonElement.toMap(): Map<String, *> {
+  if(this is JsonNull ||
+    (this is JSONArray && (this as JsonArray).size() == 0) ||
+    (this is JSONObject && (this as JSONObject).length() == 0)
+    ) {
+    return mapOf<String, Object>()
+  }
+  val gson = Gson()
+  val type: Type = object : com.google.gson.reflect.TypeToken<Map<String, Any>>() {}.type
+  return gson.fromJson(this, type)
+}
+
+fun Map<String, Any>.toJsonElement(): JsonElement {
+  val gson = Gson()
+  val jsonObject = JsonObject()
+
+  for ((key, value) in this) {
+    val jsonElement = gson.toJsonTree(value)
+    jsonObject.add(key, jsonElement)
+  }
+
+  return jsonObject
 }

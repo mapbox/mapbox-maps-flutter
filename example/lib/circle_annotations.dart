@@ -48,7 +48,8 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
         options.add(CircleAnnotationOptions(
             geometry: createRandomPoint().toJson(),
             circleColor: createRandomColor(),
-            circleRadius: 8.0));
+            circleRadius: 8.0,
+            userInfo: {"test key": "data value"}));
       }
       circleAnnotationManager?.createMulti(options);
       circleAnnotationManager

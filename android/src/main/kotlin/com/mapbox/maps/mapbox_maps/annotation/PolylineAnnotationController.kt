@@ -2,6 +2,7 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toJsonElement
 import com.mapbox.maps.mapbox_maps.toLineString
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoints
@@ -164,6 +165,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     }
     annotation.lineWidth?.let {
       originalAnnotation.lineWidth = it
+    }
+    annotation.userInfo?.let {
+      originalAnnotation.setData(it.toJsonElement())
     }
     return originalAnnotation
   }
@@ -358,6 +362,9 @@ fun PolylineAnnotation.toFLTPolylineAnnotation(): FLTPolylineAnnotationMessager.
   this.lineWidth?.let {
     builder.setLineWidth(it)
   }
+  this.getData()?.let {
+    builder.setUserInfo(it.toMap())
+  }
 
   return builder.build()
 }
@@ -393,6 +400,9 @@ fun FLTPolylineAnnotationMessager.PolylineAnnotationOptions.toPolylineAnnotation
   }
   this.lineWidth?.let {
     options.withLineWidth(it)
+  }
+  this.userInfo?.let {
+    options.withData(it.toJsonElement())
   }
   return options
 }

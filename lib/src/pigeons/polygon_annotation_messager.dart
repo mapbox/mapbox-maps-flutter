@@ -18,6 +18,7 @@ class PolygonAnnotation {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.userInfo,
   });
 
   /// The id for annotation
@@ -41,6 +42,9 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['id'] = id;
@@ -50,6 +54,7 @@ class PolygonAnnotation {
     pigeonMap['fillOpacity'] = fillOpacity;
     pigeonMap['fillOutlineColor'] = fillOutlineColor;
     pigeonMap['fillPattern'] = fillPattern;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -64,6 +69,8 @@ class PolygonAnnotation {
       fillOpacity: pigeonMap['fillOpacity'] as double?,
       fillOutlineColor: pigeonMap['fillOutlineColor'] as int?,
       fillPattern: pigeonMap['fillPattern'] as String?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -76,6 +83,7 @@ class PolygonAnnotationOptions {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.userInfo,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -96,6 +104,9 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['geometry'] = geometry;
@@ -104,6 +115,7 @@ class PolygonAnnotationOptions {
     pigeonMap['fillOpacity'] = fillOpacity;
     pigeonMap['fillOutlineColor'] = fillOutlineColor;
     pigeonMap['fillPattern'] = fillPattern;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -117,6 +129,8 @@ class PolygonAnnotationOptions {
       fillOpacity: pigeonMap['fillOpacity'] as double?,
       fillOutlineColor: pigeonMap['fillOutlineColor'] as int?,
       fillPattern: pigeonMap['fillPattern'] as String?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
