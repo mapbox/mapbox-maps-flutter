@@ -59,7 +59,7 @@ extension LocationOptions {
                     if case .puck2D(let configuration) = self.puckType {
                         return configuration
                     } else {
-                        return Puck2DConfiguration()
+                        return Puck2DConfiguration.makeDefault(showBearing: settings.puckBearingEnabled?.boolValue ?? false)
                     }
                 }()
                 if let bearingImage = settings.locationPuck?.locationPuck2D?.bearingImage {
