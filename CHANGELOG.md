@@ -1,3 +1,10 @@
+## 0.4.4
+### Android
+* Bump platform Maps SDK to 10.13.0.
+
+### iOS
+* Bump platform Maps SDK to 10.13.1.
+
 ## 0.4.3
 ### Common
 * Fix multiple memory leaks. 
