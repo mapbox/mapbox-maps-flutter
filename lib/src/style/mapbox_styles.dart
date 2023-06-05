@@ -6,19 +6,19 @@ class MapboxStyles {
   /// Mapbox Streets: A complete base map, perfect for incorporating your own data. Using this
   /// constant means your map style will always use the latest version and may change as we
   /// improve the style.
-  static const String MAPBOX_STREETS = "mapbox://styles/mapbox/streets-v11";
+  static const String MAPBOX_STREETS = "mapbox://styles/mapbox/streets-v12";
 
   /// Outdoors: A general-purpose style tailored to outdoor activities. Using this constant means
   /// your map style will always use the latest version and may change as we improve the style.
-  static const String OUTDOORS = "mapbox://styles/mapbox/outdoors-v11";
+  static const String OUTDOORS = "mapbox://styles/mapbox/outdoors-v12";
 
   /// Light: Subtle light backdrop for data visualizations. Using this constant means your map
   /// style will always use the latest version and may change as we improve the style.
-  static const String LIGHT = "mapbox://styles/mapbox/light-v10";
+  static const String LIGHT = "mapbox://styles/mapbox/light-v11";
 
   /// Dark: Subtle dark backdrop for data visualizations. Using this constant means your map style
   /// will always use the latest version and may change as we improve the style.
-  static const String DARK = "mapbox://styles/mapbox/dark-v10";
+  static const String DARK = "mapbox://styles/mapbox/dark-v11";
 
   /// Satellite: A beautiful global satellite and aerial imagery layer. Using this constant means
   /// your map style will always use the latest version and may change as we improve the style.
@@ -28,7 +28,7 @@ class MapboxStyles {
   /// constant means your map style will always use the latest version and may change as we
   /// improve the style.
   static const String SATELLITE_STREETS =
-      "mapbox://styles/mapbox/satellite-streets-v11";
+      "mapbox://styles/mapbox/satellite-streets-v12";
 
   /// Traffic Day: Color-coded roads based on live traffic congestion data. Traffic data is currently
   /// available in
