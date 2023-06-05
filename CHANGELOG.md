@@ -5,6 +5,7 @@
 ### iOS
 * Bump platform Maps SDK to 10.13.1.
 * Fix 2d puck bearing not displayed.
+* Fix pinchZoomEnabled gesture setting not applied.
 
 ## 0.4.3
 ### Common

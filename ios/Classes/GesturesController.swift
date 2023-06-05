@@ -53,6 +53,9 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         if let quickZoomEnabled = settings.quickZoomEnabled {
             mapView.gestures.options.quickZoomEnabled = quickZoomEnabled.boolValue
         }
+        if let pinchZoomEnabled = settings.pinchToZoomEnabled {
+            mapView.gestures.options.pinchZoomEnabled = pinchZoomEnabled.boolValue
+        }
         switch settings.scrollMode {
         case .HORIZONTAL:
             mapView.gestures.options.panMode = PanMode.horizontal
