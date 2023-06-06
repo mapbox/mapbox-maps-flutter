@@ -53,7 +53,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     lineOffset:(nullable NSNumber *)lineOffset
     lineOpacity:(nullable NSNumber *)lineOpacity
     linePattern:(nullable NSString *)linePattern
-    lineWidth:(nullable NSNumber *)lineWidth {
+    lineWidth:(nullable NSNumber *)lineWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPolylineAnnotation* pigeonResult = [[FLTPolylineAnnotation alloc] init];
   pigeonResult.id = id;
   pigeonResult.geometry = geometry;
@@ -66,6 +67,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.lineOpacity = lineOpacity;
   pigeonResult.linePattern = linePattern;
   pigeonResult.lineWidth = lineWidth;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPolylineAnnotation *)fromMap:(NSDictionary *)dict {
@@ -82,6 +84,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.lineOpacity = GetNullableObject(dict, @"lineOpacity");
   pigeonResult.linePattern = GetNullableObject(dict, @"linePattern");
   pigeonResult.lineWidth = GetNullableObject(dict, @"lineWidth");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPolylineAnnotation *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPolylineAnnotation fromMap:dict] : nil; }
@@ -98,6 +101,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"lineOpacity" : (self.lineOpacity ?: [NSNull null]),
     @"linePattern" : (self.linePattern ?: [NSNull null]),
     @"lineWidth" : (self.lineWidth ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -112,7 +116,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     lineOffset:(nullable NSNumber *)lineOffset
     lineOpacity:(nullable NSNumber *)lineOpacity
     linePattern:(nullable NSString *)linePattern
-    lineWidth:(nullable NSNumber *)lineWidth {
+    lineWidth:(nullable NSNumber *)lineWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPolylineAnnotationOptions* pigeonResult = [[FLTPolylineAnnotationOptions alloc] init];
   pigeonResult.geometry = geometry;
   pigeonResult.lineJoin = lineJoin;
@@ -124,6 +129,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.lineOpacity = lineOpacity;
   pigeonResult.linePattern = linePattern;
   pigeonResult.lineWidth = lineWidth;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPolylineAnnotationOptions *)fromMap:(NSDictionary *)dict {
@@ -138,6 +144,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.lineOpacity = GetNullableObject(dict, @"lineOpacity");
   pigeonResult.linePattern = GetNullableObject(dict, @"linePattern");
   pigeonResult.lineWidth = GetNullableObject(dict, @"lineWidth");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPolylineAnnotationOptions *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPolylineAnnotationOptions fromMap:dict] : nil; }
@@ -153,6 +160,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"lineOpacity" : (self.lineOpacity ?: [NSNull null]),
     @"linePattern" : (self.linePattern ?: [NSNull null]),
     @"lineWidth" : (self.lineWidth ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -399,6 +407,26 @@ void FLT_PolylineAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessen
       [channel setMessageHandler:nil];
     }
   }
+    {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon._PolylineAnnotationMessager.getAnnotations"
+          binaryMessenger:binaryMessenger
+          codec:FLT_PolylineAnnotationMessagerGetCodec()        ];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getAnnotationsManagerId:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(getAnnotationsManagerId:completion:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          NSArray *args = message;
+          NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+          [api getAnnotationsManagerId:arg_managerId completion:^(NSArray<FLTPolylineAnnotation *> *_Nullable output, FlutterError *_Nullable error) {
+            callback(wrapResult(output, error));
+          }];
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]

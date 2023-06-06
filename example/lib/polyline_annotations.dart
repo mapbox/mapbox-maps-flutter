@@ -52,7 +52,8 @@ class PolylineAnnotationPageBodyState
       polylineAnnotationManager?.createMulti(positions
           .map((e) => PolylineAnnotationOptions(
               geometry: LineString(coordinates: e).toJson(),
-              lineColor: createRandomColor()))
+              lineColor: createRandomColor(),
+              userInfo: {"test key": "data value"}))
           .toList());
       polylineAnnotationManager
           ?.addOnPolylineAnnotationClickListener(AnnotationClickListener());
@@ -134,6 +135,24 @@ class PolylineAnnotationPageBodyState
     );
   }
 
+  Widget _getAnnotations() {
+    return TextButton(
+      child: Text('get all annotations'),
+      onPressed: () {
+        polylineAnnotationManager?.getAnnotations().then((value) {
+          final ids = value.map((e) => e.id).join(", ");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Current annotations ids:\n[$ids]",
+            ),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ));
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -144,7 +163,13 @@ class PolylineAnnotationPageBodyState
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[
+        _create(),
+        _update(),
+        _delete(),
+        _deleteAll(),
+        _getAnnotations(),
+      ],
     );
 
     final colmn = Column(

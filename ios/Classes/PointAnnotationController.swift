@@ -99,6 +99,21 @@ class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTPointAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTPointAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setIconAllowOverlapManagerId(_ managerId: String, iconAllowOverlap: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
@@ -978,6 +993,9 @@ extension FLTPointAnnotationOptions {
         if let textOpacity = self.textOpacity {
            annotation.textOpacity = textOpacity.doubleValue
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -1058,6 +1076,9 @@ extension FLTPointAnnotation {
     if let textOpacity = self.textOpacity {
        annotation.textOpacity = textOpacity.doubleValue
     }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
+   }
         return annotation
     }
 }
@@ -1168,7 +1189,7 @@ extension PointAnnotation {
             textOpacity = NSNumber(value: self.textOpacity!)
         }
 
-        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity)
+        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity, userInfo: self.userInfo)
     }
 }
 // End of generated file.

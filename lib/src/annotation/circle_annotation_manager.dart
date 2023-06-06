@@ -37,6 +37,10 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messager.deleteAll(id);
 
+  /// Current annotations of manager.
+  Future<List<CircleAnnotation>> getAnnotations() =>
+      messager.getAnnotations(id);
+
   /// Orientation of circle when map is pitched.
   Future<void> setCirclePitchAlignment(
           CirclePitchAlignment circlePitchAlignment) =>

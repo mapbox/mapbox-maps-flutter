@@ -2,6 +2,7 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toJsonElement
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPointsList
 import com.mapbox.maps.mapbox_maps.toPolygon
@@ -120,6 +121,19 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun getAnnotations(
+    managerId: String,
+    result: FLTPolygonAnnotationMessager.Result<MutableList<FLTPolygonAnnotationMessager.PolygonAnnotation>>?
+  ) {
+    try {
+      val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+      val annotations = annotationMap.values.map { it.toFLTPolygonAnnotation() }.toMutableList()
+      result?.success(annotations)
+    } catch (e: Exception) {
+      result?.error(e)
+    }
+  }
+
   private fun updateAnnotation(annotation: FLTPolygonAnnotationMessager.PolygonAnnotation): PolygonAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {
@@ -139,6 +153,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
     }
     annotation.fillPattern?.let {
       originalAnnotation.fillPattern = it
+    }
+    annotation.userInfo?.let {
+      originalAnnotation.setData(it.toJsonElement())
     }
     return originalAnnotation
   }
@@ -234,6 +251,9 @@ fun PolygonAnnotation.toFLTPolygonAnnotation(): FLTPolygonAnnotationMessager.Pol
   this.fillPattern?.let {
     builder.setFillPattern(it)
   }
+  this.getData()?.let {
+    builder.setUserInfo(it.toMap())
+  }
 
   return builder.build()
 }
@@ -257,6 +277,9 @@ fun FLTPolygonAnnotationMessager.PolygonAnnotationOptions.toPolygonAnnotationOpt
   }
   this.fillPattern?.let {
     options.withFillPattern(it)
+  }
+  this.userInfo?.let {
+    options.withData(it.toJsonElement())
   }
   return options
 }

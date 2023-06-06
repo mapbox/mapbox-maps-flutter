@@ -99,6 +99,21 @@ class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTPolygonAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTPolygonAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setFillAntialiasManagerId(_ managerId: String, fillAntialias: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
@@ -208,6 +223,9 @@ extension FLTPolygonAnnotationOptions {
         if let fillPattern = self.fillPattern {
            annotation.fillPattern = fillPattern
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -229,6 +247,9 @@ extension FLTPolygonAnnotation {
     }
     if let fillPattern = self.fillPattern {
        annotation.fillPattern = fillPattern
+    }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
     }
         return annotation
     }
@@ -256,7 +277,7 @@ extension PolygonAnnotation {
             fillPattern =  self.fillPattern!
         }
 
-        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern)
+        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern, userInfo: self.userInfo)
     }
 }
 // End of generated file.

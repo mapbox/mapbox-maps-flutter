@@ -149,7 +149,8 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
-    textOpacity:(nullable NSNumber *)textOpacity;
+    textOpacity:(nullable NSNumber *)textOpacity
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, copy) NSString * id;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) FlutterStandardTypedData * image;
@@ -179,6 +180,7 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * textHaloColor;
 @property(nonatomic, strong, nullable) NSNumber * textHaloWidth;
 @property(nonatomic, strong, nullable) NSNumber * textOpacity;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 @interface FLTPointAnnotationOptions : NSObject
@@ -209,7 +211,8 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
-    textOpacity:(nullable NSNumber *)textOpacity;
+    textOpacity:(nullable NSNumber *)textOpacity
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) FlutterStandardTypedData * image;
 @property(nonatomic, assign) FLTIconAnchor iconAnchor;
@@ -238,6 +241,7 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * textHaloColor;
 @property(nonatomic, strong, nullable) NSNumber * textHaloWidth;
 @property(nonatomic, strong, nullable) NSNumber * textOpacity;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 /// The codec used by FLTOnPointAnnotationClickListener.
@@ -256,6 +260,7 @@ NSObject<FlutterMessageCodec> *FLT_PointAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTPointAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPointAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTPointAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconAllowOverlapManagerId:(NSString *)managerId iconAllowOverlap:(NSNumber *)iconAllowOverlap completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getIconAllowOverlapManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconIgnorePlacementManagerId:(NSString *)managerId iconIgnorePlacement:(NSNumber *)iconIgnorePlacement completion:(void(^)(FlutterError *_Nullable))completion;

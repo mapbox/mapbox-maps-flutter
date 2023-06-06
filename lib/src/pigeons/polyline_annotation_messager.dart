@@ -46,6 +46,7 @@ class PolylineAnnotation {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.userInfo,
   });
 
   /// The id for annotation
@@ -81,6 +82,9 @@ class PolylineAnnotation {
   /// Stroke thickness.
   double? lineWidth;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['id'] = id;
@@ -94,6 +98,7 @@ class PolylineAnnotation {
     pigeonMap['lineOpacity'] = lineOpacity;
     pigeonMap['linePattern'] = linePattern;
     pigeonMap['lineWidth'] = lineWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -114,6 +119,8 @@ class PolylineAnnotation {
       lineOpacity: pigeonMap['lineOpacity'] as double?,
       linePattern: pigeonMap['linePattern'] as String?,
       lineWidth: pigeonMap['lineWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -130,6 +137,7 @@ class PolylineAnnotationOptions {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.userInfo,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -162,6 +170,9 @@ class PolylineAnnotationOptions {
   /// Stroke thickness.
   double? lineWidth;
 
+  /// Properties associated with the annotation.
+  Map<String?, Object?>? userInfo;
+
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['geometry'] = geometry;
@@ -174,6 +185,7 @@ class PolylineAnnotationOptions {
     pigeonMap['lineOpacity'] = lineOpacity;
     pigeonMap['linePattern'] = linePattern;
     pigeonMap['lineWidth'] = lineWidth;
+    pigeonMap['userInfo'] = userInfo;
     return pigeonMap;
   }
 
@@ -193,6 +205,8 @@ class PolylineAnnotationOptions {
       lineOpacity: pigeonMap['lineOpacity'] as double?,
       linePattern: pigeonMap['linePattern'] as String?,
       lineWidth: pigeonMap['lineWidth'] as double?,
+      userInfo: (pigeonMap['userInfo'] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>(),
     );
   }
 }
@@ -430,6 +444,30 @@ class _PolylineAnnotationMessager {
       );
     } else {
       return;
+    }
+  }
+
+  Future<List<PolylineAnnotation>> getAnnotations(String arg_managerId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon._PolylineAnnotationMessager.getAnnotations', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error =
+          (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return (replyMap['result'] as List<Object?>?)!.cast<PolylineAnnotation>();
     }
   }
 

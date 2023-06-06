@@ -99,6 +99,21 @@ class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTPolylineAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTPolylineAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setLineCapManagerId(_ managerId: String, lineCap: FLTLineCap, completion: @escaping (FlutterError?) -> Void) {
         do {
@@ -336,6 +351,9 @@ extension FLTPolylineAnnotationOptions {
         if let lineWidth = self.lineWidth {
            annotation.lineWidth = lineWidth.doubleValue
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -367,6 +385,9 @@ extension FLTPolylineAnnotation {
     }
     if let lineWidth = self.lineWidth {
        annotation.lineWidth = lineWidth.doubleValue
+    }
+    if let userInfo = self.userInfo {
+       annotation.userInfo = userInfo
     }
         return annotation
     }
@@ -410,7 +431,7 @@ extension PolylineAnnotation {
             lineWidth = NSNumber(value: self.lineWidth!)
         }
 
-        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth)
+        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth, userInfo: self.userInfo)
     }
 }
 // End of generated file.

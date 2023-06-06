@@ -41,7 +41,8 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
     lineOffset:(nullable NSNumber *)lineOffset
     lineOpacity:(nullable NSNumber *)lineOpacity
     linePattern:(nullable NSString *)linePattern
-    lineWidth:(nullable NSNumber *)lineWidth;
+    lineWidth:(nullable NSNumber *)lineWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, copy) NSString * id;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, assign) FLTLineJoin lineJoin;
@@ -53,6 +54,7 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * lineOpacity;
 @property(nonatomic, copy, nullable) NSString * linePattern;
 @property(nonatomic, strong, nullable) NSNumber * lineWidth;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 @interface FLTPolylineAnnotationOptions : NSObject
@@ -65,7 +67,8 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
     lineOffset:(nullable NSNumber *)lineOffset
     lineOpacity:(nullable NSNumber *)lineOpacity
     linePattern:(nullable NSString *)linePattern
-    lineWidth:(nullable NSNumber *)lineWidth;
+    lineWidth:(nullable NSNumber *)lineWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, assign) FLTLineJoin lineJoin;
 @property(nonatomic, strong, nullable) NSNumber * lineSortKey;
@@ -76,6 +79,7 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * lineOpacity;
 @property(nonatomic, copy, nullable) NSString * linePattern;
 @property(nonatomic, strong, nullable) NSNumber * lineWidth;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 /// The codec used by FLTOnPolylineAnnotationClickListener.
@@ -94,6 +98,7 @@ NSObject<FlutterMessageCodec> *FLT_PolylineAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTPolylineAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineCapManagerId:(NSString *)managerId lineCap:(FLTLineCap)lineCap completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getLineCapManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineMiterLimitManagerId:(NSString *)managerId lineMiterLimit:(NSNumber *)lineMiterLimit completion:(void(^)(FlutterError *_Nullable))completion;

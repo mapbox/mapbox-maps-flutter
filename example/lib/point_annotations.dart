@@ -77,7 +77,8 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
             iconSize: 1.3,
             iconOffset: [0.0, -5.0],
             symbolSortKey: 10,
-            image: list))
+            image: list,
+            userInfo: {"test key": "data value"}))
         .then((value) => pointAnnotation = value);
   }
 
@@ -138,6 +139,24 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
     );
   }
 
+  Widget _getAnnotations() {
+    return TextButton(
+      child: Text('get all annotations'),
+      onPressed: () {
+        pointAnnotationManager?.getAnnotations().then((value) {
+          final ids = value.map((e) => e.id).join(", ");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Current annotations ids:\n[$ids]",
+            ),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ));
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -148,7 +167,13 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[
+        _create(),
+        _update(),
+        _delete(),
+        _deleteAll(),
+        _getAnnotations(),
+      ],
     );
 
     final colmn = Column(

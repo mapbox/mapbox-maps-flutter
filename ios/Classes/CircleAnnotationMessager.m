@@ -52,7 +52,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     circleRadius:(nullable NSNumber *)circleRadius
     circleStrokeColor:(nullable NSNumber *)circleStrokeColor
     circleStrokeOpacity:(nullable NSNumber *)circleStrokeOpacity
-    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth {
+    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTCircleAnnotation* pigeonResult = [[FLTCircleAnnotation alloc] init];
   pigeonResult.id = id;
   pigeonResult.geometry = geometry;
@@ -64,6 +65,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.circleStrokeColor = circleStrokeColor;
   pigeonResult.circleStrokeOpacity = circleStrokeOpacity;
   pigeonResult.circleStrokeWidth = circleStrokeWidth;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTCircleAnnotation *)fromMap:(NSDictionary *)dict {
@@ -79,6 +81,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.circleStrokeColor = GetNullableObject(dict, @"circleStrokeColor");
   pigeonResult.circleStrokeOpacity = GetNullableObject(dict, @"circleStrokeOpacity");
   pigeonResult.circleStrokeWidth = GetNullableObject(dict, @"circleStrokeWidth");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTCircleAnnotation *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTCircleAnnotation fromMap:dict] : nil; }
@@ -94,6 +97,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"circleStrokeColor" : (self.circleStrokeColor ?: [NSNull null]),
     @"circleStrokeOpacity" : (self.circleStrokeOpacity ?: [NSNull null]),
     @"circleStrokeWidth" : (self.circleStrokeWidth ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -107,7 +111,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     circleRadius:(nullable NSNumber *)circleRadius
     circleStrokeColor:(nullable NSNumber *)circleStrokeColor
     circleStrokeOpacity:(nullable NSNumber *)circleStrokeOpacity
-    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth {
+    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTCircleAnnotationOptions* pigeonResult = [[FLTCircleAnnotationOptions alloc] init];
   pigeonResult.geometry = geometry;
   pigeonResult.circleSortKey = circleSortKey;
@@ -118,6 +123,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.circleStrokeColor = circleStrokeColor;
   pigeonResult.circleStrokeOpacity = circleStrokeOpacity;
   pigeonResult.circleStrokeWidth = circleStrokeWidth;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTCircleAnnotationOptions *)fromMap:(NSDictionary *)dict {
@@ -131,6 +137,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.circleStrokeColor = GetNullableObject(dict, @"circleStrokeColor");
   pigeonResult.circleStrokeOpacity = GetNullableObject(dict, @"circleStrokeOpacity");
   pigeonResult.circleStrokeWidth = GetNullableObject(dict, @"circleStrokeWidth");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTCircleAnnotationOptions *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTCircleAnnotationOptions fromMap:dict] : nil; }
@@ -145,6 +152,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"circleStrokeColor" : (self.circleStrokeColor ?: [NSNull null]),
     @"circleStrokeOpacity" : (self.circleStrokeOpacity ?: [NSNull null]),
     @"circleStrokeWidth" : (self.circleStrokeWidth ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -391,6 +399,26 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
       [channel setMessageHandler:nil];
     }
   }
+    {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon._CircleAnnotationMessager.getAnnotations"
+          binaryMessenger:binaryMessenger
+          codec:FLT_CircleAnnotationMessagerGetCodec()        ];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getAnnotationsManagerId:completion:)], @"FLT_CircleAnnotationMessager api (%@) doesn't respond to @selector(getAnnotationsManagerId:completion:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          NSArray *args = message;
+          NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+          [api getAnnotationsManagerId:arg_managerId completion:^(NSArray<FLTCircleAnnotation *> *_Nullable output, FlutterError *_Nullable error) {
+            callback(wrapResult(output, error));
+          }];
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]

@@ -125,6 +125,12 @@ public class FLTPolylineAnnotationMessager {
       this.lineWidth = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     /** Constructor is private to enforce null safety; use Builder. */
     private PolylineAnnotation() {}
     public static final class Builder {
@@ -183,6 +189,12 @@ public class FLTPolylineAnnotationMessager {
         this.lineWidth = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PolylineAnnotation build() {
         PolylineAnnotation pigeonReturn = new PolylineAnnotation();
         pigeonReturn.setId(id);
@@ -196,6 +208,7 @@ public class FLTPolylineAnnotationMessager {
         pigeonReturn.setLineOpacity(lineOpacity);
         pigeonReturn.setLinePattern(linePattern);
         pigeonReturn.setLineWidth(lineWidth);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -212,6 +225,7 @@ public class FLTPolylineAnnotationMessager {
       toMapResult.put("lineOpacity", lineOpacity);
       toMapResult.put("linePattern", linePattern);
       toMapResult.put("lineWidth", lineWidth);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PolylineAnnotation fromMap(@NonNull Map<String, Object> map) {
@@ -238,6 +252,8 @@ public class FLTPolylineAnnotationMessager {
       pigeonResult.setLinePattern((String)linePattern);
       Object lineWidth = map.get("lineWidth");
       pigeonResult.setLineWidth((Double)lineWidth);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }
@@ -304,6 +320,12 @@ public class FLTPolylineAnnotationMessager {
       this.lineWidth = setterArg;
     }
 
+    private @Nullable Map<String, Object> userInfo;
+    public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+    public void setUserInfo(@Nullable Map<String, Object> setterArg) {
+      this.userInfo = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable Map<String, Object> geometry;
       public @NonNull Builder setGeometry(@Nullable Map<String, Object> setterArg) {
@@ -355,6 +377,12 @@ public class FLTPolylineAnnotationMessager {
         this.lineWidth = setterArg;
         return this;
       }
+      private @Nullable Map<String, Object> userInfo;
+      public @Nullable Map<String, Object> getUserInfo() { return userInfo; }
+      public Builder setUserInfo(@Nullable Map<String, Object> setterArg) {
+        this.userInfo = setterArg;
+        return this;
+      }
       public @NonNull PolylineAnnotationOptions build() {
         PolylineAnnotationOptions pigeonReturn = new PolylineAnnotationOptions();
         pigeonReturn.setGeometry(geometry);
@@ -367,6 +395,7 @@ public class FLTPolylineAnnotationMessager {
         pigeonReturn.setLineOpacity(lineOpacity);
         pigeonReturn.setLinePattern(linePattern);
         pigeonReturn.setLineWidth(lineWidth);
+        pigeonReturn.setUserInfo(userInfo);
         return pigeonReturn;
       }
     }
@@ -382,6 +411,7 @@ public class FLTPolylineAnnotationMessager {
       toMapResult.put("lineOpacity", lineOpacity);
       toMapResult.put("linePattern", linePattern);
       toMapResult.put("lineWidth", lineWidth);
+      toMapResult.put("userInfo", userInfo);
       return toMapResult;
     }
     static @NonNull PolylineAnnotationOptions fromMap(@NonNull Map<String, Object> map) {
@@ -406,6 +436,8 @@ public class FLTPolylineAnnotationMessager {
       pigeonResult.setLinePattern((String)linePattern);
       Object lineWidth = map.get("lineWidth");
       pigeonResult.setLineWidth((Double)lineWidth);
+      Object userInfo = map.get("userInfo");
+      pigeonResult.setUserInfo((Map<String, Object>)userInfo);
       return pigeonResult;
     }
   }
@@ -501,6 +533,7 @@ public class FLTPolylineAnnotationMessager {
     void update(@NonNull String managerId, @NonNull PolylineAnnotation annotation, Result<Void> result);
     void delete(@NonNull String managerId, @NonNull PolylineAnnotation annotation, Result<Void> result);
     void deleteAll(@NonNull String managerId, Result<Void> result);
+    void getAnnotations(@NonNull String managerId, Result<List<PolylineAnnotation>> result);
     void setLineCap(@NonNull String managerId, @NonNull LineCap lineCap, Result<Void> result);
     void getLineCap(@NonNull String managerId, Result<Long> result);
     void setLineMiterLimit(@NonNull String managerId, @NonNull Double lineMiterLimit, Result<Void> result);
@@ -699,6 +732,40 @@ public class FLTPolylineAnnotationMessager {
               };
 
               api.deleteAll(managerIdArg, resultCallback);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+              reply.reply(wrapped);
+            }
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+                new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon._PolylineAnnotationMessager.getAnnotations", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              String managerIdArg = (String)args.get(0);
+              if (managerIdArg == null) {
+                throw new NullPointerException("managerIdArg unexpectedly null.");
+              }
+              Result<List<PolylineAnnotation>> resultCallback = new Result<List<PolylineAnnotation>>() {
+                public void success(List<PolylineAnnotation> result) {
+                  wrapped.put("result", result);
+                  reply.reply(wrapped);
+                }
+                public void error(Throwable error) {
+                  wrapped.put("error", wrapError(error));
+                  reply.reply(wrapped);
+                }
+              };
+
+              api.getAnnotations(managerIdArg, resultCallback);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

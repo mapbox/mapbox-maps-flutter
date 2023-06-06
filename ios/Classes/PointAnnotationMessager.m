@@ -71,7 +71,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
-    textOpacity:(nullable NSNumber *)textOpacity {
+    textOpacity:(nullable NSNumber *)textOpacity
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPointAnnotation* pigeonResult = [[FLTPointAnnotation alloc] init];
   pigeonResult.id = id;
   pigeonResult.geometry = geometry;
@@ -102,6 +103,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.textHaloColor = textHaloColor;
   pigeonResult.textHaloWidth = textHaloWidth;
   pigeonResult.textOpacity = textOpacity;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPointAnnotation *)fromMap:(NSDictionary *)dict {
@@ -136,6 +138,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.textHaloColor = GetNullableObject(dict, @"textHaloColor");
   pigeonResult.textHaloWidth = GetNullableObject(dict, @"textHaloWidth");
   pigeonResult.textOpacity = GetNullableObject(dict, @"textOpacity");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPointAnnotation *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPointAnnotation fromMap:dict] : nil; }
@@ -170,6 +173,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"textHaloColor" : (self.textHaloColor ?: [NSNull null]),
     @"textHaloWidth" : (self.textHaloWidth ?: [NSNull null]),
     @"textOpacity" : (self.textOpacity ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -202,7 +206,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
-    textOpacity:(nullable NSNumber *)textOpacity {
+    textOpacity:(nullable NSNumber *)textOpacity
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo {
   FLTPointAnnotationOptions* pigeonResult = [[FLTPointAnnotationOptions alloc] init];
   pigeonResult.geometry = geometry;
   pigeonResult.image = image;
@@ -232,6 +237,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.textHaloColor = textHaloColor;
   pigeonResult.textHaloWidth = textHaloWidth;
   pigeonResult.textOpacity = textOpacity;
+  pigeonResult.userInfo = userInfo;
   return pigeonResult;
 }
 + (FLTPointAnnotationOptions *)fromMap:(NSDictionary *)dict {
@@ -264,6 +270,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.textHaloColor = GetNullableObject(dict, @"textHaloColor");
   pigeonResult.textHaloWidth = GetNullableObject(dict, @"textHaloWidth");
   pigeonResult.textOpacity = GetNullableObject(dict, @"textOpacity");
+  pigeonResult.userInfo = GetNullableObject(dict, @"userInfo");
   return pigeonResult;
 }
 + (nullable FLTPointAnnotationOptions *)nullableFromMap:(NSDictionary *)dict { return (dict) ? [FLTPointAnnotationOptions fromMap:dict] : nil; }
@@ -297,6 +304,7 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"textHaloColor" : (self.textHaloColor ?: [NSNull null]),
     @"textHaloWidth" : (self.textHaloWidth ?: [NSNull null]),
     @"textOpacity" : (self.textOpacity ?: [NSNull null]),
+    @"userInfo" : (self.userInfo ?: [NSNull null]),
   };
 }
 @end
@@ -543,6 +551,26 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:nil];
     }
   }
+    {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon._PointAnnotationMessager.getAnnotations"
+          binaryMessenger:binaryMessenger
+          codec:FLT_PointAnnotationMessagerGetCodec()        ];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getAnnotationsManagerId:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(getAnnotationsManagerId:completion:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          NSArray *args = message;
+          NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+          [api getAnnotationsManagerId:arg_managerId completion:^(NSArray<FLTPointAnnotation *> *_Nullable output, FlutterError *_Nullable error) {
+            callback(wrapResult(output, error));
+          }];
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]

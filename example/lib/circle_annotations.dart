@@ -48,7 +48,8 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
         options.add(CircleAnnotationOptions(
             geometry: createRandomPoint().toJson(),
             circleColor: createRandomColor(),
-            circleRadius: 8.0));
+            circleRadius: 8.0,
+            userInfo: {"test key": "data value"}));
       }
       circleAnnotationManager?.createMulti(options);
       circleAnnotationManager
@@ -122,6 +123,24 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
     );
   }
 
+  Widget _getAnnotations() {
+    return TextButton(
+      child: Text('get all annotations'),
+      onPressed: () {
+        circleAnnotationManager?.getAnnotations().then((value) {
+          final ids = value.map((e) => e.id).join(", ");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Current annotations ids:\n[$ids]",
+            ),
+            backgroundColor: Theme.of(context).primaryColor,
+            duration: Duration(seconds: 2),
+          ));
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
@@ -132,7 +151,13 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
     final List<Widget> listViewChildren = <Widget>[];
 
     listViewChildren.addAll(
-      <Widget>[_create(), _update(), _delete(), _deleteAll()],
+      <Widget>[
+        _create(),
+        _update(),
+        _delete(),
+        _deleteAll(),
+        _getAnnotations(),
+      ],
     );
 
     final colmn = Column(

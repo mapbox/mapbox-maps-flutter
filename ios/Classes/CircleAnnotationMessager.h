@@ -38,7 +38,8 @@ typedef NS_ENUM(NSUInteger, FLTCircleTranslateAnchor) {
     circleRadius:(nullable NSNumber *)circleRadius
     circleStrokeColor:(nullable NSNumber *)circleStrokeColor
     circleStrokeOpacity:(nullable NSNumber *)circleStrokeOpacity
-    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth;
+    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, copy) NSString * id;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) NSNumber * circleSortKey;
@@ -49,6 +50,7 @@ typedef NS_ENUM(NSUInteger, FLTCircleTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeColor;
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeOpacity;
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeWidth;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 @interface FLTCircleAnnotationOptions : NSObject
@@ -60,7 +62,8 @@ typedef NS_ENUM(NSUInteger, FLTCircleTranslateAnchor) {
     circleRadius:(nullable NSNumber *)circleRadius
     circleStrokeColor:(nullable NSNumber *)circleStrokeColor
     circleStrokeOpacity:(nullable NSNumber *)circleStrokeOpacity
-    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth;
+    circleStrokeWidth:(nullable NSNumber *)circleStrokeWidth
+    userInfo:(nullable NSDictionary<NSString *, id> *)userInfo;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * geometry;
 @property(nonatomic, strong, nullable) NSNumber * circleSortKey;
 @property(nonatomic, strong, nullable) NSNumber * circleBlur;
@@ -70,6 +73,7 @@ typedef NS_ENUM(NSUInteger, FLTCircleTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeColor;
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeOpacity;
 @property(nonatomic, strong, nullable) NSNumber * circleStrokeWidth;
+@property(nonatomic, strong, nullable) NSDictionary<NSString *, id> * userInfo;
 @end
 
 /// The codec used by FLTOnCircleAnnotationClickListener.
@@ -88,6 +92,7 @@ NSObject<FlutterMessageCodec> *FLT_CircleAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void(^)(FlutterError *_Nullable))completion;
+- (void)getAnnotationsManagerId:(NSString *)managerId completion:(void(^)(NSArray<FLTCircleAnnotation *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchAlignmentManagerId:(NSString *)managerId circlePitchAlignment:(FLTCirclePitchAlignment)circlePitchAlignment completion:(void(^)(FlutterError *_Nullable))completion;
 - (void)getCirclePitchAlignmentManagerId:(NSString *)managerId completion:(void(^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchScaleManagerId:(NSString *)managerId circlePitchScale:(FLTCirclePitchScale)circlePitchScale completion:(void(^)(FlutterError *_Nullable))completion;

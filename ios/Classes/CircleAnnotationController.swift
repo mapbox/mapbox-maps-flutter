@@ -99,6 +99,21 @@ class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         }
         completion(nil)
     }
+    
+    func getAnnotationsManagerId(_ managerId: String, completion: @escaping ([FLTCircleAnnotation]?, FlutterError?) -> Void) {
+        do {
+            if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
+                let annotations = manager.annotations.map { annotation in
+                    annotation.toFLTCircleAnnotation()
+                }
+                completion(annotations, nil)
+            } else {
+                completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            }
+        } catch {
+            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 
 func setCirclePitchAlignmentManagerId(_ managerId: String, circlePitchAlignment: FLTCirclePitchAlignment, completion: @escaping (FlutterError?) -> Void) {
         do {
@@ -250,37 +265,43 @@ extension FLTCircleAnnotationOptions {
         if let circleStrokeWidth = self.circleStrokeWidth {
            annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
         }
+        if let userInfo = self.userInfo {
+           annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
 
 extension FLTCircleAnnotation {
     func toCircleAnnotation() -> CircleAnnotation {
-    var annotation = CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
-    if let circleSortKey = self.circleSortKey {
-       annotation.circleSortKey = circleSortKey.doubleValue
-    }
-    if let circleBlur = self.circleBlur {
-       annotation.circleBlur = circleBlur.doubleValue
-    }
-    if let circleColor = self.circleColor {
-       annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
-    }
-    if let circleOpacity = self.circleOpacity {
-       annotation.circleOpacity = circleOpacity.doubleValue
-    }
-    if let circleRadius = self.circleRadius {
-       annotation.circleRadius = circleRadius.doubleValue
-    }
-    if let circleStrokeColor = self.circleStrokeColor {
-       annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
-    }
-    if let circleStrokeOpacity = self.circleStrokeOpacity {
-       annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
-    }
-    if let circleStrokeWidth = self.circleStrokeWidth {
-       annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
-    }
+        var annotation = CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+        if let circleSortKey = self.circleSortKey {
+           annotation.circleSortKey = circleSortKey.doubleValue
+        }
+        if let circleBlur = self.circleBlur {
+           annotation.circleBlur = circleBlur.doubleValue
+        }
+        if let circleColor = self.circleColor {
+           annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
+        }
+        if let circleOpacity = self.circleOpacity {
+           annotation.circleOpacity = circleOpacity.doubleValue
+        }
+        if let circleRadius = self.circleRadius {
+           annotation.circleRadius = circleRadius.doubleValue
+        }
+        if let circleStrokeColor = self.circleStrokeColor {
+           annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
+        }
+        if let circleStrokeOpacity = self.circleStrokeOpacity {
+           annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
+        }
+        if let circleStrokeWidth = self.circleStrokeWidth {
+           annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
+        }
+        if let userInfo = self.userInfo {
+            annotation.userInfo = userInfo
+        }
         return annotation
     }
 }
@@ -318,8 +339,8 @@ extension CircleAnnotation {
         if self.circleStrokeWidth != nil {
             circleStrokeWidth = NSNumber(value: self.circleStrokeWidth!)
         }
-
-        return FLTCircleAnnotation.make(withId: self.id, geometry: self.point.toMap(), circleSortKey: circleSortKey, circleBlur: circleBlur, circleColor: circleColor, circleOpacity: circleOpacity, circleRadius: circleRadius, circleStrokeColor: circleStrokeColor, circleStrokeOpacity: circleStrokeOpacity, circleStrokeWidth: circleStrokeWidth)
+       
+        return FLTCircleAnnotation.make(withId: self.id, geometry: self.point.toMap(), circleSortKey: circleSortKey, circleBlur: circleBlur, circleColor: circleColor, circleOpacity: circleOpacity, circleRadius: circleRadius, circleStrokeColor: circleStrokeColor, circleStrokeOpacity: circleStrokeOpacity, circleStrokeWidth: circleStrokeWidth, userInfo: self.userInfo)
     }
 }
 // End of generated file.
