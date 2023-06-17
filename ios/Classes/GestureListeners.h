@@ -30,9 +30,9 @@ NSObject<FlutterMessageCodec> *FLT_GESTURESGestureListenerGetCodec(void);
 
 @interface FLT_GESTURESGestureListener : NSObject
 - (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
-- (void)onTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)onLongTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)onScrollCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onLongTapCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)onScrollCoordinate:(FLT_GESTURESScreenCoordinate *)coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion;
 @end
 
 NS_ASSUME_NONNULL_END

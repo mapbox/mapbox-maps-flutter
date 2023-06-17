@@ -11,11 +11,13 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEnd gestureType: MapboxMaps.GestureType, willAnimate: Bool) {
         switch gestureType {
         case .pan:
-            let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.panGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+            let cgpoint = gestureManager.panGestureRecognizer.location(in: mapView)
+            let point = Point(mapView.mapboxMap.coordinate(for: cgpoint))
+            self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), point: [ "x": cgpoint.x, "y": cgpoint.y ], completion: {_ in })
         case .singleTap:
-            let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+            let cgpoint = gestureManager.singleTapGestureRecognizer.location(in: mapView)
+            let point = Point(mapView.mapboxMap.coordinate(for: cgpoint))
+            self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), point: [ "x": cgpoint.x, "y": cgpoint.y ], completion: {_ in })
         default: break
         }
     }
@@ -24,8 +26,9 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
 
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
-        let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onLongTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+        let cgpoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: cgpoint))
+        self.onGestureListener?.onLongTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), point: [ "x": cgpoint.x, "y": cgpoint.y ], completion: {_ in })
     }
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSGesturesSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
