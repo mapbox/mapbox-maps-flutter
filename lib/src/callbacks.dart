@@ -104,10 +104,13 @@ typedef void OnStyleImageUnusedListener(
 typedef void OnResourceRequestListener(ResourceEventData resourceEventData);
 
 /// Gesture listener called on map tap.
-typedef void OnMapTapListener(ScreenCoordinate coordinate);
+typedef void OnMapTapListener(
+    ScreenCoordinate coordinate, Map<String?, Object?> point);
 
 /// Gesture listener called on map double tap.
-typedef void OnMapLongTapListener(ScreenCoordinate coordinate);
+typedef void OnMapLongTapListener(
+    ScreenCoordinate coordinate, Map<String?, Object?> point);
 
 /// Gesture listener called on map scroll.
-typedef void OnMapScrollListener(ScreenCoordinate coordinate);
+typedef void OnMapScrollListener(
+    ScreenCoordinate coordinate, Map<String?, Object?> point);

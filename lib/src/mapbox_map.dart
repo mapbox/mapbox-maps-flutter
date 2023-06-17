@@ -603,17 +603,17 @@ class _GestureListener extends GestureListener {
   final OnMapScrollListener? onMapScrollListener;
 
   @override
-  void onTap(ScreenCoordinate coordinate) {
-    onMapTapListener?.call(coordinate);
+  void onTap(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    onMapTapListener?.call(coordinate, point);
   }
 
   @override
-  void onLongTap(ScreenCoordinate coordinate) {
-    onMapLongTapListener?.call(coordinate);
+  void onLongTap(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    onMapLongTapListener?.call(coordinate, point);
   }
 
   @override
-  void onScroll(ScreenCoordinate coordinate) {
-    onMapScrollListener?.call(coordinate);
+  void onScroll(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    onMapScrollListener?.call(coordinate, point);
   }
 }
