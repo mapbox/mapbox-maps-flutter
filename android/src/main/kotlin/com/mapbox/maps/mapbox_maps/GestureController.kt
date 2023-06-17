@@ -34,19 +34,28 @@ class GestureController(private val mapView: MapView) :
     removeListeners()
 
     onClickListener = OnMapClickListener { 
-      fltGestureListener.onTap(it.toFLTScreenCoordinate()) {}
+      fltGestureListener.onTap(
+        it.toFLTScreenCoordinate(),
+        it.toMap()
+      ) {}
       false
     }.also { mapView.gestures.addOnMapClickListener(it) }
 
     onLongClickListener = OnMapLongClickListener {
-      fltGestureListener.onLongTap(it.toFLTScreenCoordinate()) {}
+      fltGestureListener.onLongTap(
+        it.toFLTScreenCoordinate(),
+        it.toMap()
+      ) {}
       false
     }.also { mapView.gestures.addOnMapLongClickListener(it) }
 
     onMoveListener = object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
+        var screenCoordinate = 
+          ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble());
         fltGestureListener.onScroll(
-          ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble()).toFLTScreenCoordinate()
+          screenCoordinate.toFLTScreenCoordinate(),
+          screenCoordinate.toPointMap()
         ) {}
         return false
       }
@@ -72,5 +81,9 @@ class GestureController(private val mapView: MapView) :
       .setX(this.x)
       .setY(this.y)
       .build()
+  }
+
+  private fun ScreenCoordinate.toPointMap(): Map<String, Any> {
+    return  mapView.getMapboxMap().coordinateForPixel(this).toMap();
   }
 }
