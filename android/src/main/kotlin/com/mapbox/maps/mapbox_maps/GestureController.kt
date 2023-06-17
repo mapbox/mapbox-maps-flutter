@@ -37,8 +37,8 @@ class GestureController(private val mapView: MapView) :
       override fun success() { }
       override fun error(error: Throwable) { }
     }
-    onClickListener = OnMapClickListener { point ->
-      fltGestureListener.onTap(point.toFLTScreenCoordinate(), result)
+    onClickListener = OnMapClickListener {
+      fltGestureListener.onTap(it.toFLTScreenCoordinate(), result)
       false
     }.also { mapView.gestures.addOnMapClickListener(it) }
 
@@ -50,9 +50,7 @@ class GestureController(private val mapView: MapView) :
     onMoveListener = object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
         fltGestureListener.onScroll(
-          mapView.mapboxMap.coordinateForPixel(
-            ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
-          ).toFLTScreenCoordinate(),
+          ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble()).toFLTScreenCoordinate(),
           result
         )
         return false
@@ -69,11 +67,15 @@ class GestureController(private val mapView: MapView) :
     onLongClickListener?.let { mapView.gestures.removeOnMapLongClickListener(it) }
     onMoveListener?.let { mapView.gestures.removeOnMoveListener(it) }
   }
-}
 
-private fun Point.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
-  return FLTGestureListeners.ScreenCoordinate.Builder()
-    .setX(this.latitude())
-    .setY(this.longitude())
-    .build()
+  private fun Point.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
+    return mapView.getMapboxMap().pixelForCoordinate(this).toFLTScreenCoordinate();
+  }
+
+  private fun ScreenCoordinate.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
+    return FLTGestureListeners.ScreenCoordinate.Builder()
+      .setX(this.x)
+      .setY(this.y)
+      .build()
+  }
 }
