@@ -1047,10 +1047,17 @@ class FeatureExtensionValue {
 
   static FeatureExtensionValue decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    final List<Object?> featureCollection = pigeonMap['featureCollection'] as List<Object?>;
+    final List<Map<String?, Object?>> mappedFeatureCollection = featureCollection.map((item) {
+      if (item is Map) {
+        return item.cast<String?, Object?>();
+      } else {
+        return {};
+      }
+    }).toList().cast<Map<String?, Object?>>();
     return FeatureExtensionValue(
       value: pigeonMap['value'] as String?,
-      featureCollection: (pigeonMap['featureCollection'] as List<Object?>?)
-          ?.cast<Map<String?, Object?>?>(),
+      featureCollection: mappedFeatureCollection
     );
   }
 }
