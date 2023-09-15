@@ -121,7 +121,7 @@ func getCirclePitchAlignmentManagerId(_ managerId: String, completion: @escaping
                 let index = CirclePitchAlignment.allCases.firstIndex(of: circlePitchAlignment)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -152,7 +152,7 @@ func getCirclePitchScaleManagerId(_ managerId: String, completion: @escaping ( N
                 let index = CirclePitchScale.allCases.firstIndex(of: circlePitchScale)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -179,9 +179,9 @@ func getCircleTranslateManagerId(_ managerId: String, completion: @escaping ( [N
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                if let circleTranslate = manager.circleTranslate {
-                completion(circleTranslate.map{NSNumber(value: $0)},nil)
+                completion(circleTranslate.map {NSNumber(value: $0)}, nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -212,7 +212,7 @@ func getCircleTranslateAnchorManagerId(_ managerId: String, completion: @escapin
                 let index = CircleTranslateAnchor.allCases.firstIndex(of: circleTranslateAnchor)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))

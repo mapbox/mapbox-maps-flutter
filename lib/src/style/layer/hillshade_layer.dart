@@ -3,7 +3,8 @@ part of mapbox_maps_flutter;
 
 /// Client-side hillshading visualization based on DEM data. Currently, the implementation only supports Mapbox Terrain RGB and Mapzen Terrarium tiles.
 class HillshadeLayer extends Layer {
-  HillshadeLayer({required id,
+  HillshadeLayer({
+    required id,
     visibility,
     minZoom,
     maxZoom,
@@ -16,11 +17,7 @@ class HillshadeLayer extends Layer {
     this.hillshadeIlluminationDirection,
     this.hillshadeShadowColor,
   }) : super(
-      id: id, 
-      visibility: visibility, 
-      maxZoom: maxZoom, 
-      minZoom: minZoom
-  );
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "hillshade";
@@ -30,6 +27,7 @@ class HillshadeLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
+
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
   int? hillshadeAccentColor;
 
@@ -48,12 +46,12 @@ class HillshadeLayer extends Layer {
   /// The shading color of areas that face away from the light source.
   int? hillshadeShadowColor;
 
-
-@override
+  @override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] =
+          visibility?.toString().split('.').last.toLowerCase();
     }
     var paint = {};
     if (hillshadeAccentColor != null) {
@@ -66,10 +64,12 @@ class HillshadeLayer extends Layer {
       paint["hillshade-highlight-color"] = hillshadeHighlightColor?.toRGBA();
     }
     if (hillshadeIlluminationAnchor != null) {
-      paint["hillshade-illumination-anchor"] = hillshadeIlluminationAnchor?.toString().split('.').last.toLowerCase();
+      paint["hillshade-illumination-anchor"] =
+          hillshadeIlluminationAnchor?.toString().split('.').last.toLowerCase();
     }
     if (hillshadeIlluminationDirection != null) {
-      paint["hillshade-illumination-direction"] = hillshadeIlluminationDirection;
+      paint["hillshade-illumination-direction"] =
+          hillshadeIlluminationDirection;
     }
     if (hillshadeShadowColor != null) {
       paint["hillshade-shadow-color"] = hillshadeShadowColor?.toRGBA();
@@ -102,24 +102,43 @@ class HillshadeLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return HillshadeLayer(id: map["id"],
+    return HillshadeLayer(
+      id: map["id"],
       sourceId: map["source"],
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-            ? Visibility.VISIBLE
-            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
-      hillshadeAccentColor: (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
-      hillshadeExaggeration: map["paint"]["hillshade-exaggeration"] is num? ? (map["paint"]["hillshade-exaggeration"] as num?)?.toDouble() : null,
-      hillshadeHighlightColor: (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
+          ? Visibility.VISIBLE
+          : Visibility.values.firstWhere((e) => e
+              .toString()
+              .split('.')
+              .last
+              .toLowerCase()
+              .contains(map["layout"]["visibility"])),
+      hillshadeAccentColor:
+          (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
+      hillshadeExaggeration: map["paint"]["hillshade-exaggeration"] is num?
+          ? (map["paint"]["hillshade-exaggeration"] as num?)?.toDouble()
+          : null,
+      hillshadeHighlightColor:
+          (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
       hillshadeIlluminationAnchor:
-      map["paint"]["hillshade-illumination-anchor"] == null
-            ? null
-            : HillshadeIlluminationAnchor.values.firstWhere((e) =>
-            e.toString().split('.').last.toLowerCase().contains(map["paint"]["hillshade-illumination-anchor"])),
-      hillshadeIlluminationDirection: map["paint"]["hillshade-illumination-direction"] is num? ? (map["paint"]["hillshade-illumination-direction"] as num?)?.toDouble() : null,
-      hillshadeShadowColor: (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
+          map["paint"]["hillshade-illumination-anchor"] == null
+              ? null
+              : HillshadeIlluminationAnchor.values.firstWhere((e) => e
+                  .toString()
+                  .split('.')
+                  .last
+                  .toLowerCase()
+                  .contains(map["paint"]["hillshade-illumination-anchor"])),
+      hillshadeIlluminationDirection:
+          map["paint"]["hillshade-illumination-direction"] is num?
+              ? (map["paint"]["hillshade-illumination-direction"] as num?)
+                  ?.toDouble()
+              : null,
+      hillshadeShadowColor:
+          (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
     );
   }
 }

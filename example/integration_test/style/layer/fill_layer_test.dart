@@ -33,33 +33,33 @@ void main() {
         .addSource(GeoJsonSource(id: "source", data: json.encode(polygon)));
 
     await mapboxMap.style.addLayer(FillLayer(
-        id: 'layer',
-        sourceId: 'source',
-        visibility: Visibility.NONE,
-        minZoom: 1.0,
-        maxZoom: 20.0,
-        fillSortKey: 1.0,
-        fillAntialias: true,
-        fillColor: Colors.red.value,
-        fillOpacity: 1.0,
-        fillOutlineColor: Colors.red.value,
-        fillPattern: "abc",
-        fillTranslate: [0.0, 1.0],
-        fillTranslateAnchor: FillTranslateAnchor.MAP,
-        ));
+      id: 'layer',
+      sourceId: 'source',
+      visibility: Visibility.NONE,
+      minZoom: 1.0,
+      maxZoom: 20.0,
+      fillSortKey: 1.0,
+      fillAntialias: true,
+      fillColor: Colors.red.value,
+      fillOpacity: 1.0,
+      fillOutlineColor: Colors.red.value,
+      fillPattern: "abc",
+      fillTranslate: [0.0, 1.0],
+      fillTranslateAnchor: FillTranslateAnchor.MAP,
+    ));
     var layer = await mapboxMap.style.getLayer('layer') as FillLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.fillSortKey,  1.0);
-    expect(layer.fillAntialias,  true);
-    expect(layer.fillColor,  Colors.red.value);
-    expect(layer.fillOpacity,  1.0);
-    expect(layer.fillOutlineColor,  Colors.red.value);
-    expect(layer.fillPattern,  "abc");
-    expect(layer.fillTranslate,  [0.0, 1.0]);
-    expect(layer.fillTranslateAnchor,  FillTranslateAnchor.MAP);
+    expect(layer.fillSortKey, 1.0);
+    expect(layer.fillAntialias, true);
+    expect(layer.fillColor, Colors.red.value);
+    expect(layer.fillOpacity, 1.0);
+    expect(layer.fillOutlineColor, Colors.red.value);
+    expect(layer.fillPattern, "abc");
+    expect(layer.fillTranslate, [0.0, 1.0]);
+    expect(layer.fillTranslateAnchor, FillTranslateAnchor.MAP);
   });
 }
 // End of generated file.

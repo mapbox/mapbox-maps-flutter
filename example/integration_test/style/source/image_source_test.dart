@@ -23,16 +23,21 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
-    await mapboxMap.style
-        .addSource(ImageSource(id: "source",
-        coordinates: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [0.0, 1.0]],
-        prefetchZoomDelta: 1.0,
+    await mapboxMap.style.addSource(ImageSource(
+      id: "source",
+      coordinates: [
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 1.0]
+      ],
+      prefetchZoomDelta: 1.0,
     ));
 
     var source = await mapboxMap.style.getSource('source') as ImageSource;
     expect(source.id, 'source');
     var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect( prefetchZoomDelta,  1.0);
+    expect(prefetchZoomDelta, 1.0);
   });
 }
 // End of generated file.

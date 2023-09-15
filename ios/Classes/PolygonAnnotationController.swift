@@ -117,9 +117,9 @@ func getFillAntialiasManagerId(_ managerId: String, completion: @escaping ( NSNu
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
                if let fillAntialias = manager.fillAntialias {
-                completion(NSNumber(value: fillAntialias),nil)
+                completion(NSNumber(value: fillAntialias), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -146,9 +146,9 @@ func getFillTranslateManagerId(_ managerId: String, completion: @escaping ( [NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
                if let fillTranslate = manager.fillTranslate {
-                completion(fillTranslate.map{NSNumber(value: $0)},nil)
+                completion(fillTranslate.map {NSNumber(value: $0)}, nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -179,7 +179,7 @@ func getFillTranslateAnchorManagerId(_ managerId: String, completion: @escaping 
                 let index = FillTranslateAnchor.allCases.firstIndex(of: fillTranslateAnchor)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))

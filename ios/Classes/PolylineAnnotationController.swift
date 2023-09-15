@@ -121,7 +121,7 @@ func getLineCapManagerId(_ managerId: String, completion: @escaping ( NSNumber?,
                 let index = LineCap.allCases.firstIndex(of: lineCap)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -148,9 +148,9 @@ func getLineMiterLimitManagerId(_ managerId: String, completion: @escaping ( NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
                if let lineMiterLimit = manager.lineMiterLimit {
-                completion(NSNumber(value: lineMiterLimit),nil)
+                completion(NSNumber(value: lineMiterLimit), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -177,9 +177,9 @@ func getLineRoundLimitManagerId(_ managerId: String, completion: @escaping ( NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
                if let lineRoundLimit = manager.lineRoundLimit {
-                completion(NSNumber(value: lineRoundLimit),nil)
+                completion(NSNumber(value: lineRoundLimit), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -206,9 +206,9 @@ func getLineDasharrayManagerId(_ managerId: String, completion: @escaping ( [NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
                if let lineDasharray = manager.lineDasharray {
-                completion(lineDasharray.map{NSNumber(value: $0)},nil)
+                completion(lineDasharray.map {NSNumber(value: $0)}, nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -235,9 +235,9 @@ func getLineTranslateManagerId(_ managerId: String, completion: @escaping ( [NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
                if let lineTranslate = manager.lineTranslate {
-                completion(lineTranslate.map{NSNumber(value: $0)},nil)
+                completion(lineTranslate.map {NSNumber(value: $0)}, nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -268,7 +268,7 @@ func getLineTranslateAnchorManagerId(_ managerId: String, completion: @escaping 
                 let index = LineTranslateAnchor.allCases.firstIndex(of: lineTranslateAnchor)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -295,9 +295,9 @@ func getLineTrimOffsetManagerId(_ managerId: String, completion: @escaping ( [NS
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
                if let lineTrimOffset = manager.lineTrimOffset {
-                completion(lineTrimOffset.map{NSNumber(value: $0)},nil)
+                completion(lineTrimOffset.map {NSNumber(value: $0)}, nil)
                 } else {
-                    completion(nil,nil)
+                    completion(nil, nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))

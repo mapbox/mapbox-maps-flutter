@@ -3,7 +3,8 @@ part of mapbox_maps_flutter;
 
 /// A heatmap.
 class HeatmapLayer extends Layer {
-  HeatmapLayer({required id,
+  HeatmapLayer({
+    required id,
     visibility,
     minZoom,
     maxZoom,
@@ -15,11 +16,7 @@ class HeatmapLayer extends Layer {
     this.heatmapRadius,
     this.heatmapWeight,
   }) : super(
-      id: id, 
-      visibility: visibility, 
-      maxZoom: maxZoom, 
-      minZoom: minZoom
-  );
+            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
 
   @override
   String getType() => "heatmap";
@@ -29,6 +26,7 @@ class HeatmapLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
+
   /// Defines the color of each pixel based on its density value in a heatmap.  Should be an expression that uses `["heatmap-density"]` as input.
   int? heatmapColor;
 
@@ -44,12 +42,12 @@ class HeatmapLayer extends Layer {
   /// A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
   double? heatmapWeight;
 
-
-@override
+  @override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] =
+          visibility?.toString().split('.').last.toLowerCase();
     }
     var paint = {};
     if (heatmapColor != null) {
@@ -95,19 +93,33 @@ class HeatmapLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return HeatmapLayer(id: map["id"],
+    return HeatmapLayer(
+      id: map["id"],
       sourceId: map["source"],
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-            ? Visibility.VISIBLE
-            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+          ? Visibility.VISIBLE
+          : Visibility.values.firstWhere((e) => e
+              .toString()
+              .split('.')
+              .last
+              .toLowerCase()
+              .contains(map["layout"]["visibility"])),
       heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
-      heatmapIntensity: map["paint"]["heatmap-intensity"] is num? ? (map["paint"]["heatmap-intensity"] as num?)?.toDouble() : null,
-      heatmapOpacity: map["paint"]["heatmap-opacity"] is num? ? (map["paint"]["heatmap-opacity"] as num?)?.toDouble() : null,
-      heatmapRadius: map["paint"]["heatmap-radius"] is num? ? (map["paint"]["heatmap-radius"] as num?)?.toDouble() : null,
-      heatmapWeight: map["paint"]["heatmap-weight"] is num? ? (map["paint"]["heatmap-weight"] as num?)?.toDouble() : null,
+      heatmapIntensity: map["paint"]["heatmap-intensity"] is num?
+          ? (map["paint"]["heatmap-intensity"] as num?)?.toDouble()
+          : null,
+      heatmapOpacity: map["paint"]["heatmap-opacity"] is num?
+          ? (map["paint"]["heatmap-opacity"] as num?)?.toDouble()
+          : null,
+      heatmapRadius: map["paint"]["heatmap-radius"] is num?
+          ? (map["paint"]["heatmap-radius"] as num?)?.toDouble()
+          : null,
+      heatmapWeight: map["paint"]["heatmap-weight"] is num?
+          ? (map["paint"]["heatmap-weight"] as num?)?.toDouble()
+          : null,
     );
   }
 }

@@ -21,35 +21,34 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
-
     await mapboxMap.style.addLayer(SkyLayer(
-        id: 'layer',
-        visibility: Visibility.NONE,
-        minZoom: 1.0,
-        maxZoom: 20.0,
-        skyAtmosphereColor: Colors.red.value,
-        skyAtmosphereHaloColor: Colors.red.value,
-        skyAtmosphereSun: [0.0, 1.0],
-        skyAtmosphereSunIntensity: 1.0,
-        skyGradient: Colors.red.value,
-        skyGradientCenter: [0.0, 1.0],
-        skyGradientRadius: 1.0,
-        skyOpacity: 1.0,
-        skyType: SkyType.GRADIENT,
-        ));
+      id: 'layer',
+      visibility: Visibility.NONE,
+      minZoom: 1.0,
+      maxZoom: 20.0,
+      skyAtmosphereColor: Colors.red.value,
+      skyAtmosphereHaloColor: Colors.red.value,
+      skyAtmosphereSun: [0.0, 1.0],
+      skyAtmosphereSunIntensity: 1.0,
+      skyGradient: Colors.red.value,
+      skyGradientCenter: [0.0, 1.0],
+      skyGradientRadius: 1.0,
+      skyOpacity: 1.0,
+      skyType: SkyType.GRADIENT,
+    ));
     var layer = await mapboxMap.style.getLayer('layer') as SkyLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.skyAtmosphereColor,  Colors.red.value);
-    expect(layer.skyAtmosphereHaloColor,  Colors.red.value);
-    expect(layer.skyAtmosphereSun,  [0.0, 1.0]);
-    expect(layer.skyAtmosphereSunIntensity,  1.0);
-    expect(layer.skyGradient,  Colors.red.value);
-    expect(layer.skyGradientCenter,  [0.0, 1.0]);
-    expect(layer.skyGradientRadius,  1.0);
-    expect(layer.skyOpacity,  1.0);
-    expect(layer.skyType,  SkyType.GRADIENT);
+    expect(layer.skyAtmosphereColor, Colors.red.value);
+    expect(layer.skyAtmosphereHaloColor, Colors.red.value);
+    expect(layer.skyAtmosphereSun, [0.0, 1.0]);
+    expect(layer.skyAtmosphereSunIntensity, 1.0);
+    expect(layer.skyGradient, Colors.red.value);
+    expect(layer.skyGradientCenter, [0.0, 1.0]);
+    expect(layer.skyGradientRadius, 1.0);
+    expect(layer.skyOpacity, 1.0);
+    expect(layer.skyType, SkyType.GRADIENT);
   });
 }
 // End of generated file.

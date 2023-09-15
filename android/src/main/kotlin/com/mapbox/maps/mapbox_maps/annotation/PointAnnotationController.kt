@@ -2,7 +2,6 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import android.graphics.BitmapFactory
-import java.util.*
 import com.mapbox.maps.extension.style.layers.properties.generated.*
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoint
@@ -10,6 +9,7 @@ import com.mapbox.maps.pigeons.FLTPointAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import java.util.*
 
 class PointAnnotationController(private val delegate: ControllerDelegate) :
   FLTPointAnnotationMessager._PointAnnotationMessager {
@@ -50,8 +50,10 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id.toString() }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id.toString() }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPointAnnotation() }.toMutableList())
     } catch (e: Exception) {

@@ -1,8 +1,8 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
-import com.mapbox.maps.mapbox_maps.toLineString
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toLineString
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoints
 import com.mapbox.maps.pigeons.FLTPolylineAnnotationMessager
@@ -49,8 +49,10 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id.toString() }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id.toString() }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPolylineAnnotation() }.toMutableList())
     } catch (e: Exception) {

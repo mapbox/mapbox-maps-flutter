@@ -49,8 +49,10 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id.toString() }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id.toString() }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPolygonAnnotation() }.toMutableList())
     } catch (e: Exception) {
