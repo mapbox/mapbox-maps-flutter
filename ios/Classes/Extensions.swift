@@ -152,7 +152,13 @@ extension MercatorCoordinate {
 extension ResourceOptions {
     func toFLTResourceOptions() -> FLTResourceOptions {
         let data = FLTTileStoreUsageMode(rawValue: UInt(self.tileStoreUsageMode.rawValue))
-        return FLTResourceOptions.make(withAccessToken: self.accessToken, baseURL: self.baseURL?.absoluteString, dataPath: self.dataPathURL?.absoluteString, assetPath: self.assetPathURL?.absoluteString, tileStoreUsageMode: data!)
+        return FLTResourceOptions.make(
+            withAccessToken: self.accessToken,
+            baseURL: self.baseURL?.absoluteString,
+            dataPath: self.dataPathURL?.absoluteString,
+            assetPath: self.assetPathURL?.absoluteString,
+            tileStoreUsageMode: .init(value: data!)
+        )
     }
 }
 extension MapDebugOptions {
@@ -175,7 +181,17 @@ extension GlyphsRasterizationOptions {
 }
 extension MapOptions {
     func toFLTMapOptions() -> FLTMapOptions {
-        return FLTMapOptions.make(with: .SHARED, constrainMode: .NONE, viewportMode: .DEFAULT, orientation: .UPWARDS, crossSourceCollisions: NSNumber(value: self.crossSourceCollisions), optimizeForTerrain: NSNumber(value: self.optimizeForTerrain), size: self.size?.toFLTSize(), pixelRatio: NSNumber(value: self.pixelRatio), glyphsRasterizationOptions: self.glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions())
+        return FLTMapOptions.make(
+            withContextMode: .init(value: .SHARED),
+            constrainMode: .init(value: .NONE),
+            viewportMode: .init(value: .DEFAULT),
+            orientation: .init(value: .UPWARDS),
+            crossSourceCollisions: NSNumber(value: self.crossSourceCollisions),
+            optimizeForTerrain: NSNumber(value: self.optimizeForTerrain),
+            size: self.size?.toFLTSize(),
+            pixelRatio: NSNumber(value: self.pixelRatio),
+            glyphsRasterizationOptions: self.glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions()
+        )
     }
 }
 extension CameraBounds {

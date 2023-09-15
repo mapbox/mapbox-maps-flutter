@@ -21,22 +21,23 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
+
     await mapboxMap.style.addLayer(BackgroundLayer(
-      id: 'layer',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      backgroundColor: Colors.red.value,
-      backgroundOpacity: 1.0,
-      backgroundPattern: "abc",
-    ));
+        id: 'layer',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        backgroundColor: Colors.red.value,
+        backgroundOpacity: 1.0,
+        backgroundPattern: "abc",
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.backgroundColor, Colors.red.value);
-    expect(layer.backgroundOpacity, 1.0);
-    expect(layer.backgroundPattern, "abc");
+    expect(layer.backgroundColor,  Colors.red.value);
+    expect(layer.backgroundOpacity,  1.0);
+    expect(layer.backgroundPattern,  "abc");
   });
 }
 // End of generated file.

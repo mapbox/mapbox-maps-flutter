@@ -23,7 +23,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.19.0
-  pigeon: 3.2.3
+  pigeon: ^11.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

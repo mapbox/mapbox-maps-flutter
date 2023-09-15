@@ -3,8 +3,7 @@ part of mapbox_maps_flutter;
 
 /// A filled polygon with an optional stroked border.
 class FillLayer extends Layer {
-  FillLayer({
-    required id,
+  FillLayer({required id,
     visibility,
     minZoom,
     maxZoom,
@@ -19,7 +18,11 @@ class FillLayer extends Layer {
     this.fillTranslate,
     this.fillTranslateAnchor,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+      id: id, 
+      visibility: visibility, 
+      maxZoom: maxZoom, 
+      minZoom: minZoom
+  );
 
   @override
   String getType() => "fill";
@@ -29,7 +32,6 @@ class FillLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
-
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
 
@@ -54,12 +56,12 @@ class FillLayer extends Layer {
   /// Controls the frame of reference for `fill-translate`.
   FillTranslateAnchor? fillTranslateAnchor;
 
-  @override
+
+@override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
     }
     if (fillSortKey != null) {
       layout["fill-sort-key"] = fillSortKey;
@@ -84,8 +86,7 @@ class FillLayer extends Layer {
       paint["fill-translate"] = fillTranslate;
     }
     if (fillTranslateAnchor != null) {
-      paint["fill-translate-anchor"] =
-          fillTranslateAnchor?.toString().split('.').last.toLowerCase();
+      paint["fill-translate-anchor"] = fillTranslateAnchor?.toString().split('.').last.toLowerCase();
     }
     var properties = {
       "id": id,
@@ -115,42 +116,26 @@ class FillLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return FillLayer(
-      id: map["id"],
+    return FillLayer(id: map["id"],
       sourceId: map["source"],
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
-      fillSortKey: map["layout"]["fill-sort-key"] is num?
-          ? (map["layout"]["fill-sort-key"] as num?)?.toDouble()
-          : null,
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+      fillSortKey: map["layout"]["fill-sort-key"] is num? ? (map["layout"]["fill-sort-key"] as num?)?.toDouble() : null,
       fillAntialias: map["paint"]["fill-antialias"],
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
-      fillOpacity: map["paint"]["fill-opacity"] is num?
-          ? (map["paint"]["fill-opacity"] as num?)?.toDouble()
-          : null,
-      fillOutlineColor:
-          (map["paint"]["fill-outline-color"] as List?)?.toRGBAInt(),
+      fillOpacity: map["paint"]["fill-opacity"] is num? ? (map["paint"]["fill-opacity"] as num?)?.toDouble() : null,
+      fillOutlineColor: (map["paint"]["fill-outline-color"] as List?)?.toRGBAInt(),
       fillPattern: map["paint"]["fill-pattern"],
-      fillTranslate: (map["paint"]["fill-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      fillTranslateAnchor: map["paint"]["fill-translate-anchor"] == null
-          ? null
-          : FillTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["paint"]["fill-translate-anchor"])),
+      fillTranslate: (map["paint"]["fill-translate"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      fillTranslateAnchor:
+      map["paint"]["fill-translate-anchor"] == null
+            ? null
+            : FillTranslateAnchor.values.firstWhere((e) =>
+            e.toString().split('.').last.toLowerCase().contains(map["paint"]["fill-translate-anchor"])),
     );
   }
 }

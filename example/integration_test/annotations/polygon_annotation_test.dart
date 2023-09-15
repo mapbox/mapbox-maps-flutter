@@ -16,16 +16,8 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-    var geometry = Polygon(coordinates: [
-      [
-        Position(-3.363937, -10.733102),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
+    final manager = await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [ [ Position(-3.363937, -10.733102), Position(1.754703, -19.716317), Position(-15.747196, -21.085074), Position(-3.363937, -10.733102) ] ]);
 
     var polygonAnnotationOptions = PolygonAnnotationOptions(
       geometry: geometry.toJson(),
@@ -51,32 +43,19 @@ void main() {
     expect("abc", annotation.fillPattern);
   });
 
-  testWidgets('update and delete PolygonAnnotation',
-      (WidgetTester tester) async {
+  testWidgets('update and delete PolygonAnnotation', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
-    var geometry = Polygon(coordinates: [
-      [
-        Position(-3.363937, -10.733102),
-        Position(1.754703, -19.716317),
-        Position(-15.747196, -21.085074),
-        Position(-3.363937, -10.733102)
-      ]
-    ]);
+    final manager = await mapboxMap.annotations.createPolygonAnnotationManager();
+    var geometry = Polygon(coordinates: [ [ Position(-3.363937, -10.733102), Position(1.754703, -19.716317), Position(-15.747196, -21.085074), Position(-3.363937, -10.733102) ] ]);
 
     var polygonAnnotationOptions = PolygonAnnotationOptions(
       geometry: geometry.toJson(),
     );
     final annotation = await manager.create(polygonAnnotationOptions);
     var polygon = Polygon.fromJson((annotation.geometry)!.cast());
-    var newPolygon = Polygon(
-        coordinates: polygon.coordinates
-            .map((e) =>
-                e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
-            .toList());
+    var newPolygon = Polygon( coordinates: polygon.coordinates .map((e) => e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList()) .toList());
     annotation.geometry = newPolygon.toJson();
     await manager.update(annotation);
     await manager.delete(annotation);

@@ -10,14 +10,14 @@ import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._MapInterface {
   override fun loadStyleURI(
     styleURI: String,
-    result: FLTMapInterfaces.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>
   ) {
     mapboxMap.loadStyleUri(
       styleURI,
-      { result?.success(null) },
+      { result.success(null) },
       object : OnMapLoadErrorListener {
         override fun onMapLoadError(eventData: MapLoadingErrorEventData) {
-          result?.error(Throwable(eventData.message))
+          result.error(Throwable(eventData.message))
         }
       }
     )
@@ -25,25 +25,25 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
 
   override fun loadStyleJson(
     styleJson: String,
-    result: FLTMapInterfaces.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>
   ) {
     mapboxMap.loadStyleJson(
       styleJson,
-      { result?.success(null) },
+      { result.success(null) },
       object : OnMapLoadErrorListener {
         override fun onMapLoadError(eventData: MapLoadingErrorEventData) {
-          result?.error(Throwable(eventData.message))
+          result.error(Throwable(eventData.message))
         }
       }
     )
   }
 
-  override fun clearData(result: FLTMapInterfaces.Result<Void>?) {
+  override fun clearData(result: FLTMapInterfaces.Result<Void>) {
     mapboxMap.clearData {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(null)
+        result.success(null)
       }
     }
   }
@@ -107,16 +107,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   override fun queryRenderedFeatures(
     geometry: FLTMapInterfaces.RenderedQueryGeometry,
     options: FLTMapInterfaces.RenderedQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>
   ) {
     mapboxMap.queryRenderedFeatures(
       geometry.toRenderedQueryGeometry(),
       options.toRenderedQueryOptions()
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(
+        result.success(
           it.value?.map { feature -> feature.toFLTQueriedFeature() }
             ?.toMutableList()
         )
@@ -127,13 +127,13 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   override fun querySourceFeatures(
     sourceId: String,
     options: FLTMapInterfaces.SourceQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>
   ) {
     mapboxMap.querySourceFeatures(sourceId, options.toSourceQueryOptions()) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(
+        result.success(
           it.value?.map { feature -> feature.toFLTQueriedFeature() }
             ?.toMutableList()
         )
@@ -146,16 +146,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     cluster: MutableMap<String, Any>,
     limit: Long?,
     offset: Long?,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>
   ) {
     mapboxMap.getGeoJsonClusterLeaves(
       sourceIdentifier, Feature.fromJson(Gson().toJson(cluster)),
       limit ?: 10, offset ?: 0
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        result.success(it.value?.toFLTFeatureExtensionValue())
       }
     }
   }
@@ -163,16 +163,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   override fun getGeoJsonClusterChildren(
     sourceIdentifier: String,
     cluster: MutableMap<String, Any>,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>
   ) {
     mapboxMap.getGeoJsonClusterChildren(
       sourceIdentifier,
       Feature.fromJson(Gson().toJson(cluster))
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        result.success(it.value?.toFLTFeatureExtensionValue())
       }
     }
   }
@@ -180,16 +180,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   override fun getGeoJsonClusterExpansionZoom(
     sourceIdentifier: String,
     cluster: MutableMap<String, Any>,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>
   ) {
     mapboxMap.getGeoJsonClusterExpansionZoom(
       sourceIdentifier,
       Feature.fromJson(Gson().toJson(cluster))
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        result.error(Throwable(it.error))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        result.success(it.value?.toFLTFeatureExtensionValue())
       }
     }
   }
@@ -207,10 +207,10 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    result: FLTMapInterfaces.Result<String>?
+    result: FLTMapInterfaces.Result<String>
   ) {
     return mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
-      result?.let {
+      result.let {
         if (expected.isError) {
           it.error(Throwable(expected.error))
         } else {

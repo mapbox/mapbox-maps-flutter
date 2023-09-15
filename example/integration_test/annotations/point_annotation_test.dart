@@ -92,9 +92,7 @@ void main() {
     );
     final annotation = await manager.create(pointAnnotationOptions);
     var point = Point.fromJson((annotation.geometry)!.cast());
-    var newPoint = Point(
-        coordinates:
-            Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+    var newPoint = Point( coordinates: Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
     annotation.geometry = newPoint.toJson();
     await manager.update(annotation);
     await manager.delete(annotation);

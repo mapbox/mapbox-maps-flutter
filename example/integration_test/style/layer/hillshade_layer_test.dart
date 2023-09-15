@@ -21,33 +21,33 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
-    await mapboxMap.style.addSource(RasterDemSource(
-        id: "source", url: "mapbox://mapbox.mapbox-terrain-dem-v1"));
+    await mapboxMap.style
+        .addSource(RasterDemSource(id: "source", url: "mapbox://mapbox.mapbox-terrain-dem-v1"));
 
     await mapboxMap.style.addLayer(HillshadeLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      hillshadeAccentColor: Colors.red.value,
-      hillshadeExaggeration: 1.0,
-      hillshadeHighlightColor: Colors.red.value,
-      hillshadeIlluminationAnchor: HillshadeIlluminationAnchor.MAP,
-      hillshadeIlluminationDirection: 1.0,
-      hillshadeShadowColor: Colors.red.value,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        hillshadeAccentColor: Colors.red.value,
+        hillshadeExaggeration: 1.0,
+        hillshadeHighlightColor: Colors.red.value,
+        hillshadeIlluminationAnchor: HillshadeIlluminationAnchor.MAP,
+        hillshadeIlluminationDirection: 1.0,
+        hillshadeShadowColor: Colors.red.value,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as HillshadeLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.hillshadeAccentColor, Colors.red.value);
-    expect(layer.hillshadeExaggeration, 1.0);
-    expect(layer.hillshadeHighlightColor, Colors.red.value);
-    expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);
-    expect(layer.hillshadeIlluminationDirection, 1.0);
-    expect(layer.hillshadeShadowColor, Colors.red.value);
+    expect(layer.hillshadeAccentColor,  Colors.red.value);
+    expect(layer.hillshadeExaggeration,  1.0);
+    expect(layer.hillshadeHighlightColor,  Colors.red.value);
+    expect(layer.hillshadeIlluminationAnchor,  HillshadeIlluminationAnchor.MAP);
+    expect(layer.hillshadeIlluminationDirection,  1.0);
+    expect(layer.hillshadeShadowColor,  Colors.red.value);
   });
 }
 // End of generated file.

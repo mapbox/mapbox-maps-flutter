@@ -82,38 +82,35 @@ class PolylineAnnotation {
   double? lineWidth;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['id'] = id;
-    pigeonMap['geometry'] = geometry;
-    pigeonMap['lineJoin'] = lineJoin?.index;
-    pigeonMap['lineSortKey'] = lineSortKey;
-    pigeonMap['lineBlur'] = lineBlur;
-    pigeonMap['lineColor'] = lineColor;
-    pigeonMap['lineGapWidth'] = lineGapWidth;
-    pigeonMap['lineOffset'] = lineOffset;
-    pigeonMap['lineOpacity'] = lineOpacity;
-    pigeonMap['linePattern'] = linePattern;
-    pigeonMap['lineWidth'] = lineWidth;
-    return pigeonMap;
+    return <Object?>[
+      id,
+      geometry,
+      lineJoin?.index,
+      lineSortKey,
+      lineBlur,
+      lineColor,
+      lineGapWidth,
+      lineOffset,
+      lineOpacity,
+      linePattern,
+      lineWidth,
+    ];
   }
 
-  static PolylineAnnotation decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static PolylineAnnotation decode(Object result) {
+    result as List<Object?>;
     return PolylineAnnotation(
-      id: pigeonMap['id']! as String,
-      geometry: (pigeonMap['geometry'] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>(),
-      lineJoin: pigeonMap['lineJoin'] != null
-          ? LineJoin.values[pigeonMap['lineJoin']! as int]
-          : null,
-      lineSortKey: pigeonMap['lineSortKey'] as double?,
-      lineBlur: pigeonMap['lineBlur'] as double?,
-      lineColor: pigeonMap['lineColor'] as int?,
-      lineGapWidth: pigeonMap['lineGapWidth'] as double?,
-      lineOffset: pigeonMap['lineOffset'] as double?,
-      lineOpacity: pigeonMap['lineOpacity'] as double?,
-      linePattern: pigeonMap['linePattern'] as String?,
-      lineWidth: pigeonMap['lineWidth'] as double?,
+      id: result[0]! as String,
+      geometry: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      lineJoin: result[2] != null ? LineJoin.values[result[2]! as int] : null,
+      lineSortKey: result[3] as double?,
+      lineBlur: result[4] as double?,
+      lineColor: result[5] as int?,
+      lineGapWidth: result[6] as double?,
+      lineOffset: result[7] as double?,
+      lineOpacity: result[8] as double?,
+      linePattern: result[9] as String?,
+      lineWidth: result[10] as double?,
     );
   }
 }
@@ -163,36 +160,33 @@ class PolylineAnnotationOptions {
   double? lineWidth;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['geometry'] = geometry;
-    pigeonMap['lineJoin'] = lineJoin?.index;
-    pigeonMap['lineSortKey'] = lineSortKey;
-    pigeonMap['lineBlur'] = lineBlur;
-    pigeonMap['lineColor'] = lineColor;
-    pigeonMap['lineGapWidth'] = lineGapWidth;
-    pigeonMap['lineOffset'] = lineOffset;
-    pigeonMap['lineOpacity'] = lineOpacity;
-    pigeonMap['linePattern'] = linePattern;
-    pigeonMap['lineWidth'] = lineWidth;
-    return pigeonMap;
+    return <Object?>[
+      geometry,
+      lineJoin?.index,
+      lineSortKey,
+      lineBlur,
+      lineColor,
+      lineGapWidth,
+      lineOffset,
+      lineOpacity,
+      linePattern,
+      lineWidth,
+    ];
   }
 
-  static PolylineAnnotationOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static PolylineAnnotationOptions decode(Object result) {
+    result as List<Object?>;
     return PolylineAnnotationOptions(
-      geometry: (pigeonMap['geometry'] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>(),
-      lineJoin: pigeonMap['lineJoin'] != null
-          ? LineJoin.values[pigeonMap['lineJoin']! as int]
-          : null,
-      lineSortKey: pigeonMap['lineSortKey'] as double?,
-      lineBlur: pigeonMap['lineBlur'] as double?,
-      lineColor: pigeonMap['lineColor'] as int?,
-      lineGapWidth: pigeonMap['lineGapWidth'] as double?,
-      lineOffset: pigeonMap['lineOffset'] as double?,
-      lineOpacity: pigeonMap['lineOpacity'] as double?,
-      linePattern: pigeonMap['linePattern'] as String?,
-      lineWidth: pigeonMap['lineWidth'] as double?,
+      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      lineJoin: result[1] != null ? LineJoin.values[result[1]! as int] : null,
+      lineSortKey: result[2] as double?,
+      lineBlur: result[3] as double?,
+      lineColor: result[4] as int?,
+      lineGapWidth: result[5] as double?,
+      lineOffset: result[6] as double?,
+      lineOpacity: result[7] as double?,
+      linePattern: result[8] as String?,
+      lineWidth: result[9] as double?,
     );
   }
 }
@@ -214,7 +208,6 @@ class _OnPolylineAnnotationClickListenerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return PolylineAnnotation.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -226,11 +219,12 @@ abstract class OnPolylineAnnotationClickListener {
       _OnPolylineAnnotationClickListenerCodec();
 
   void onPolylineAnnotationClick(PolylineAnnotation annotation);
+
   static void setup(OnPolylineAnnotationClickListener? api,
       {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.OnPolylineAnnotationClickListener.onPolylineAnnotationClick',
+          'dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick',
           codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -238,12 +232,12 @@ abstract class OnPolylineAnnotationClickListener {
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final PolylineAnnotation? arg_annotation =
               (args[0] as PolylineAnnotation?);
           assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null, expected non-null PolylineAnnotation.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick was null, expected non-null PolylineAnnotation.');
           api.onPolylineAnnotationClick(arg_annotation!);
           return;
         });
@@ -272,10 +266,8 @@ class __PolylineAnnotationMessagerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return PolylineAnnotation.decode(readValue(buffer)!);
-
       case 129:
         return PolylineAnnotationOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -288,7 +280,6 @@ class _PolylineAnnotationMessager {
   /// BinaryMessenger will be used which routes to the host platform.
   _PolylineAnnotationMessager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec =
@@ -297,86 +288,80 @@ class _PolylineAnnotationMessager {
   Future<PolylineAnnotation> create(String arg_managerId,
       PolylineAnnotationOptions arg_annotationOption) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.create', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.create',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotationOption])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotationOption]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as PolylineAnnotation?)!;
+      return (replyList[0] as PolylineAnnotation?)!;
     }
   }
 
   Future<List<PolylineAnnotation?>> createMulti(String arg_managerId,
       List<PolylineAnnotationOptions?> arg_annotationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.createMulti', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.createMulti',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_annotationOptions])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!
-          .cast<PolylineAnnotation?>();
+      return (replyList[0] as List<Object?>?)!.cast<PolylineAnnotation?>();
     }
   }
 
   Future<void> update(
       String arg_managerId, PolylineAnnotation arg_annotation) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.update', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.update',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotation])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -386,23 +371,21 @@ class _PolylineAnnotationMessager {
   Future<void> delete(
       String arg_managerId, PolylineAnnotation arg_annotation) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.delete', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.delete',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotation])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -411,22 +394,21 @@ class _PolylineAnnotationMessager {
 
   Future<void> deleteAll(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.deleteAll', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.deleteAll',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -435,23 +417,21 @@ class _PolylineAnnotationMessager {
 
   Future<void> setLineCap(String arg_managerId, LineCap arg_lineCap) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineCap', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineCap',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineCap.index])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineCap.index]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -460,49 +440,45 @@ class _PolylineAnnotationMessager {
 
   Future<int?> getLineCap(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineCap', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineCap',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setLineMiterLimit(
       String arg_managerId, double arg_lineMiterLimit) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineMiterLimit',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineMiterLimit',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineMiterLimit])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineMiterLimit]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -511,50 +487,45 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineMiterLimit(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineMiterLimit',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineMiterLimit',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setLineRoundLimit(
       String arg_managerId, double arg_lineRoundLimit) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineRoundLimit',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineRoundLimit',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineRoundLimit])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineRoundLimit]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -563,50 +534,45 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineRoundLimit(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineRoundLimit',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineRoundLimit',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setLineDasharray(
       String arg_managerId, List<double?> arg_lineDasharray) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineDasharray',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDasharray',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineDasharray])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineDasharray]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -615,50 +581,45 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineDasharray(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineDasharray',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDasharray',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
   Future<void> setLineTranslate(
       String arg_managerId, List<double?> arg_lineTranslate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineTranslate',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslate',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineTranslate])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineTranslate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -667,50 +628,46 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineTranslate(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineTranslate',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslate',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
   Future<void> setLineTranslateAnchor(
       String arg_managerId, LineTranslateAnchor arg_lineTranslateAnchor) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_lineTranslateAnchor.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -719,50 +676,45 @@ class _PolylineAnnotationMessager {
 
   Future<int?> getLineTranslateAnchor(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setLineTrimOffset(
       String arg_managerId, List<double?> arg_lineTrimOffset) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.setLineTrimOffset',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTrimOffset',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_lineTrimOffset])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_lineTrimOffset]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -771,26 +723,24 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineTrimOffset(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PolylineAnnotationMessager.getLineTrimOffset',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTrimOffset',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 }

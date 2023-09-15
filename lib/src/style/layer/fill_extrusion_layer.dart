@@ -3,8 +3,7 @@ part of mapbox_maps_flutter;
 
 /// An extruded (3D) polygon.
 class FillExtrusionLayer extends Layer {
-  FillExtrusionLayer({
-    required id,
+  FillExtrusionLayer({required id,
     visibility,
     minZoom,
     maxZoom,
@@ -19,7 +18,11 @@ class FillExtrusionLayer extends Layer {
     this.fillExtrusionTranslateAnchor,
     this.fillExtrusionVerticalGradient,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+      id: id, 
+      visibility: visibility, 
+      maxZoom: maxZoom, 
+      minZoom: minZoom
+  );
 
   @override
   String getType() => "fill-extrusion";
@@ -29,7 +32,6 @@ class FillExtrusionLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
-
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
   double? fillExtrusionBase;
 
@@ -54,12 +56,12 @@ class FillExtrusionLayer extends Layer {
   /// Whether to apply a vertical gradient to the sides of a fill-extrusion layer. If true, sides will be shaded slightly darker farther down.
   bool? fillExtrusionVerticalGradient;
 
-  @override
+
+@override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
     }
     var paint = {};
     if (fillExtrusionBase != null) {
@@ -81,11 +83,7 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-translate"] = fillExtrusionTranslate;
     }
     if (fillExtrusionTranslateAnchor != null) {
-      paint["fill-extrusion-translate-anchor"] = fillExtrusionTranslateAnchor
-          ?.toString()
-          .split('.')
-          .last
-          .toLowerCase();
+      paint["fill-extrusion-translate-anchor"] = fillExtrusionTranslateAnchor?.toString().split('.').last.toLowerCase();
     }
     if (fillExtrusionVerticalGradient != null) {
       paint["fill-extrusion-vertical-gradient"] = fillExtrusionVerticalGradient;
@@ -118,47 +116,26 @@ class FillExtrusionLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return FillExtrusionLayer(
-      id: map["id"],
+    return FillExtrusionLayer(id: map["id"],
       sourceId: map["source"],
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
-      fillExtrusionBase: map["paint"]["fill-extrusion-base"] is num?
-          ? (map["paint"]["fill-extrusion-base"] as num?)?.toDouble()
-          : null,
-      fillExtrusionColor:
-          (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
-      fillExtrusionHeight: map["paint"]["fill-extrusion-height"] is num?
-          ? (map["paint"]["fill-extrusion-height"] as num?)?.toDouble()
-          : null,
-      fillExtrusionOpacity: map["paint"]["fill-extrusion-opacity"] is num?
-          ? (map["paint"]["fill-extrusion-opacity"] as num?)?.toDouble()
-          : null,
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+      fillExtrusionBase: map["paint"]["fill-extrusion-base"] is num? ? (map["paint"]["fill-extrusion-base"] as num?)?.toDouble() : null,
+      fillExtrusionColor: (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
+      fillExtrusionHeight: map["paint"]["fill-extrusion-height"] is num? ? (map["paint"]["fill-extrusion-height"] as num?)?.toDouble() : null,
+      fillExtrusionOpacity: map["paint"]["fill-extrusion-opacity"] is num? ? (map["paint"]["fill-extrusion-opacity"] as num?)?.toDouble() : null,
       fillExtrusionPattern: map["paint"]["fill-extrusion-pattern"],
-      fillExtrusionTranslate:
-          (map["paint"]["fill-extrusion-translate"] as List?)
-              ?.map<double?>((e) => e.toDouble())
-              .toList(),
+      fillExtrusionTranslate: (map["paint"]["fill-extrusion-translate"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
       fillExtrusionTranslateAnchor:
-          map["paint"]["fill-extrusion-translate-anchor"] == null
-              ? null
-              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e
-                  .toString()
-                  .split('.')
-                  .last
-                  .toLowerCase()
-                  .contains(map["paint"]["fill-extrusion-translate-anchor"])),
-      fillExtrusionVerticalGradient: map["paint"]
-          ["fill-extrusion-vertical-gradient"],
+      map["paint"]["fill-extrusion-translate-anchor"] == null
+            ? null
+            : FillExtrusionTranslateAnchor.values.firstWhere((e) =>
+            e.toString().split('.').last.toLowerCase().contains(map["paint"]["fill-extrusion-translate-anchor"])),
+      fillExtrusionVerticalGradient: map["paint"]["fill-extrusion-vertical-gradient"],
     );
   }
 }

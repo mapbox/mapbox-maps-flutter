@@ -21,36 +21,36 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
+
     await mapboxMap.style.addLayer(FillExtrusionLayer(
-      id: 'layer',
-      sourceId: "composite",
-      sourceLayer: "building",
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      fillExtrusionBase: 1.0,
-      fillExtrusionColor: Colors.red.value,
-      fillExtrusionHeight: 1.0,
-      fillExtrusionOpacity: 1.0,
-      fillExtrusionPattern: "abc",
-      fillExtrusionTranslate: [0.0, 1.0],
-      fillExtrusionTranslateAnchor: FillExtrusionTranslateAnchor.MAP,
-      fillExtrusionVerticalGradient: true,
-    ));
+        id: 'layer',
+        sourceId: "composite",
+        sourceLayer: "building",
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        fillExtrusionBase: 1.0,
+        fillExtrusionColor: Colors.red.value,
+        fillExtrusionHeight: 1.0,
+        fillExtrusionOpacity: 1.0,
+        fillExtrusionPattern: "abc",
+        fillExtrusionTranslate: [0.0, 1.0],
+        fillExtrusionTranslateAnchor: FillExtrusionTranslateAnchor.MAP,
+        fillExtrusionVerticalGradient: true,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as FillExtrusionLayer;
     expect('composite', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
-    expect(layer.fillExtrusionBase, 1.0);
-    expect(layer.fillExtrusionColor, Colors.red.value);
-    expect(layer.fillExtrusionHeight, 1.0);
-    expect(layer.fillExtrusionOpacity, 1.0);
-    expect(layer.fillExtrusionPattern, "abc");
-    expect(layer.fillExtrusionTranslate, [0.0, 1.0]);
-    expect(
-        layer.fillExtrusionTranslateAnchor, FillExtrusionTranslateAnchor.MAP);
-    expect(layer.fillExtrusionVerticalGradient, true);
+    expect(layer.fillExtrusionBase,  1.0);
+    expect(layer.fillExtrusionColor,  Colors.red.value);
+    expect(layer.fillExtrusionHeight,  1.0);
+    expect(layer.fillExtrusionOpacity,  1.0);
+    expect(layer.fillExtrusionPattern,  "abc");
+    expect(layer.fillExtrusionTranslate,  [0.0, 1.0]);
+    expect(layer.fillExtrusionTranslateAnchor,  FillExtrusionTranslateAnchor.MAP);
+    expect(layer.fillExtrusionVerticalGradient,  true);
   });
 }
 // End of generated file.

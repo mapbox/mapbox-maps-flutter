@@ -36,7 +36,7 @@ class GesturesSettings {
     this.scrollEnabled,
     this.simultaneousRotateAndPinchToZoomEnabled,
     this.pitchEnabled,
-    this.scrollMode = ScrollMode.HORIZONTAL_AND_VERTICAL,
+    this.scrollMode,
     this.doubleTapToZoomInEnabled,
     this.doubleTouchToZoomOutEnabled,
     this.quickZoomEnabled,
@@ -102,62 +102,50 @@ class GesturesSettings {
   bool? pinchPanEnabled;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['rotateEnabled'] = rotateEnabled;
-    pigeonMap['pinchToZoomEnabled'] = pinchToZoomEnabled;
-    pigeonMap['scrollEnabled'] = scrollEnabled;
-    pigeonMap['simultaneousRotateAndPinchToZoomEnabled'] =
-        simultaneousRotateAndPinchToZoomEnabled;
-    pigeonMap['pitchEnabled'] = pitchEnabled;
-    pigeonMap['scrollMode'] = scrollMode?.index;
-    pigeonMap['doubleTapToZoomInEnabled'] = doubleTapToZoomInEnabled;
-    pigeonMap['doubleTouchToZoomOutEnabled'] = doubleTouchToZoomOutEnabled;
-    pigeonMap['quickZoomEnabled'] = quickZoomEnabled;
-    pigeonMap['focalPoint'] = focalPoint?.encode();
-    pigeonMap['pinchToZoomDecelerationEnabled'] =
-        pinchToZoomDecelerationEnabled;
-    pigeonMap['rotateDecelerationEnabled'] = rotateDecelerationEnabled;
-    pigeonMap['scrollDecelerationEnabled'] = scrollDecelerationEnabled;
-    pigeonMap['increaseRotateThresholdWhenPinchingToZoom'] =
-        increaseRotateThresholdWhenPinchingToZoom;
-    pigeonMap['increasePinchToZoomThresholdWhenRotating'] =
-        increasePinchToZoomThresholdWhenRotating;
-    pigeonMap['zoomAnimationAmount'] = zoomAnimationAmount;
-    pigeonMap['pinchPanEnabled'] = pinchPanEnabled;
-    return pigeonMap;
+    return <Object?>[
+      rotateEnabled,
+      pinchToZoomEnabled,
+      scrollEnabled,
+      simultaneousRotateAndPinchToZoomEnabled,
+      pitchEnabled,
+      scrollMode?.index,
+      doubleTapToZoomInEnabled,
+      doubleTouchToZoomOutEnabled,
+      quickZoomEnabled,
+      focalPoint?.encode(),
+      pinchToZoomDecelerationEnabled,
+      rotateDecelerationEnabled,
+      scrollDecelerationEnabled,
+      increaseRotateThresholdWhenPinchingToZoom,
+      increasePinchToZoomThresholdWhenRotating,
+      zoomAnimationAmount,
+      pinchPanEnabled,
+    ];
   }
 
-  static GesturesSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static GesturesSettings decode(Object result) {
+    result as List<Object?>;
     return GesturesSettings(
-      rotateEnabled: pigeonMap['rotateEnabled'] as bool?,
-      pinchToZoomEnabled: pigeonMap['pinchToZoomEnabled'] as bool?,
-      scrollEnabled: pigeonMap['scrollEnabled'] as bool?,
-      simultaneousRotateAndPinchToZoomEnabled:
-          pigeonMap['simultaneousRotateAndPinchToZoomEnabled'] as bool?,
-      pitchEnabled: pigeonMap['pitchEnabled'] as bool?,
-      scrollMode: pigeonMap['scrollMode'] != null
-          ? ScrollMode.values[pigeonMap['scrollMode']! as int]
-          : ScrollMode.HORIZONTAL_AND_VERTICAL,
-      doubleTapToZoomInEnabled: pigeonMap['doubleTapToZoomInEnabled'] as bool?,
-      doubleTouchToZoomOutEnabled:
-          pigeonMap['doubleTouchToZoomOutEnabled'] as bool?,
-      quickZoomEnabled: pigeonMap['quickZoomEnabled'] as bool?,
-      focalPoint: pigeonMap['focalPoint'] != null
-          ? ScreenCoordinate.decode(pigeonMap['focalPoint']!)
+      rotateEnabled: result[0] as bool?,
+      pinchToZoomEnabled: result[1] as bool?,
+      scrollEnabled: result[2] as bool?,
+      simultaneousRotateAndPinchToZoomEnabled: result[3] as bool?,
+      pitchEnabled: result[4] as bool?,
+      scrollMode:
+          result[5] != null ? ScrollMode.values[result[5]! as int] : null,
+      doubleTapToZoomInEnabled: result[6] as bool?,
+      doubleTouchToZoomOutEnabled: result[7] as bool?,
+      quickZoomEnabled: result[8] as bool?,
+      focalPoint: result[9] != null
+          ? ScreenCoordinate.decode(result[9]! as List<Object?>)
           : null,
-      pinchToZoomDecelerationEnabled:
-          pigeonMap['pinchToZoomDecelerationEnabled'] as bool?,
-      rotateDecelerationEnabled:
-          pigeonMap['rotateDecelerationEnabled'] as bool?,
-      scrollDecelerationEnabled:
-          pigeonMap['scrollDecelerationEnabled'] as bool?,
-      increaseRotateThresholdWhenPinchingToZoom:
-          pigeonMap['increaseRotateThresholdWhenPinchingToZoom'] as bool?,
-      increasePinchToZoomThresholdWhenRotating:
-          pigeonMap['increasePinchToZoomThresholdWhenRotating'] as bool?,
-      zoomAnimationAmount: pigeonMap['zoomAnimationAmount'] as double?,
-      pinchPanEnabled: pigeonMap['pinchPanEnabled'] as bool?,
+      pinchToZoomDecelerationEnabled: result[10] as bool?,
+      rotateDecelerationEnabled: result[11] as bool?,
+      scrollDecelerationEnabled: result[12] as bool?,
+      increaseRotateThresholdWhenPinchingToZoom: result[13] as bool?,
+      increasePinchToZoomThresholdWhenRotating: result[14] as bool?,
+      zoomAnimationAmount: result[15] as double?,
+      pinchPanEnabled: result[16] as bool?,
     );
   }
 }
@@ -183,21 +171,21 @@ class LocationPuck2D {
   String? scaleExpression;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['topImage'] = topImage;
-    pigeonMap['bearingImage'] = bearingImage;
-    pigeonMap['shadowImage'] = shadowImage;
-    pigeonMap['scaleExpression'] = scaleExpression;
-    return pigeonMap;
+    return <Object?>[
+      topImage,
+      bearingImage,
+      shadowImage,
+      scaleExpression,
+    ];
   }
 
-  static LocationPuck2D decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LocationPuck2D decode(Object result) {
+    result as List<Object?>;
     return LocationPuck2D(
-      topImage: pigeonMap['topImage'] as Uint8List?,
-      bearingImage: pigeonMap['bearingImage'] as Uint8List?,
-      shadowImage: pigeonMap['shadowImage'] as Uint8List?,
-      scaleExpression: pigeonMap['scaleExpression'] as String?,
+      topImage: result[0] as Uint8List?,
+      bearingImage: result[1] as Uint8List?,
+      shadowImage: result[2] as Uint8List?,
+      scaleExpression: result[3] as String?,
     );
   }
 }
@@ -235,29 +223,27 @@ class LocationPuck3D {
   List<double?>? modelRotation;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['modelUri'] = modelUri;
-    pigeonMap['position'] = position;
-    pigeonMap['modelOpacity'] = modelOpacity;
-    pigeonMap['modelScale'] = modelScale;
-    pigeonMap['modelScaleExpression'] = modelScaleExpression;
-    pigeonMap['modelTranslation'] = modelTranslation;
-    pigeonMap['modelRotation'] = modelRotation;
-    return pigeonMap;
+    return <Object?>[
+      modelUri,
+      position,
+      modelOpacity,
+      modelScale,
+      modelScaleExpression,
+      modelTranslation,
+      modelRotation,
+    ];
   }
 
-  static LocationPuck3D decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LocationPuck3D decode(Object result) {
+    result as List<Object?>;
     return LocationPuck3D(
-      modelUri: pigeonMap['modelUri'] as String?,
-      position: (pigeonMap['position'] as List<Object?>?)?.cast<double?>(),
-      modelOpacity: pigeonMap['modelOpacity'] as double?,
-      modelScale: (pigeonMap['modelScale'] as List<Object?>?)?.cast<double?>(),
-      modelScaleExpression: pigeonMap['modelScaleExpression'] as String?,
-      modelTranslation:
-          (pigeonMap['modelTranslation'] as List<Object?>?)?.cast<double?>(),
-      modelRotation:
-          (pigeonMap['modelRotation'] as List<Object?>?)?.cast<double?>(),
+      modelUri: result[0] as String?,
+      position: (result[1] as List<Object?>?)?.cast<double?>(),
+      modelOpacity: result[2] as double?,
+      modelScale: (result[3] as List<Object?>?)?.cast<double?>(),
+      modelScaleExpression: result[4] as String?,
+      modelTranslation: (result[5] as List<Object?>?)?.cast<double?>(),
+      modelRotation: (result[6] as List<Object?>?)?.cast<double?>(),
     );
   }
 }
@@ -270,23 +256,24 @@ class LocationPuck {
   });
 
   LocationPuck2D? locationPuck2D;
+
   LocationPuck3D? locationPuck3D;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['locationPuck2D'] = locationPuck2D?.encode();
-    pigeonMap['locationPuck3D'] = locationPuck3D?.encode();
-    return pigeonMap;
+    return <Object?>[
+      locationPuck2D?.encode(),
+      locationPuck3D?.encode(),
+    ];
   }
 
-  static LocationPuck decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LocationPuck decode(Object result) {
+    result as List<Object?>;
     return LocationPuck(
-      locationPuck2D: pigeonMap['locationPuck2D'] != null
-          ? LocationPuck2D.decode(pigeonMap['locationPuck2D']!)
+      locationPuck2D: result[0] != null
+          ? LocationPuck2D.decode(result[0]! as List<Object?>)
           : null,
-      locationPuck3D: pigeonMap['locationPuck3D'] != null
-          ? LocationPuck3D.decode(pigeonMap['locationPuck3D']!)
+      locationPuck3D: result[1] != null
+          ? LocationPuck3D.decode(result[1]! as List<Object?>)
           : null,
     );
   }
@@ -346,40 +333,40 @@ class LocationComponentSettings {
   LocationPuck? locationPuck;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
-    pigeonMap['pulsingEnabled'] = pulsingEnabled;
-    pigeonMap['pulsingColor'] = pulsingColor;
-    pigeonMap['pulsingMaxRadius'] = pulsingMaxRadius;
-    pigeonMap['showAccuracyRing'] = showAccuracyRing;
-    pigeonMap['accuracyRingColor'] = accuracyRingColor;
-    pigeonMap['accuracyRingBorderColor'] = accuracyRingBorderColor;
-    pigeonMap['layerAbove'] = layerAbove;
-    pigeonMap['layerBelow'] = layerBelow;
-    pigeonMap['puckBearingEnabled'] = puckBearingEnabled;
-    pigeonMap['puckBearingSource'] = puckBearingSource?.index;
-    pigeonMap['locationPuck'] = locationPuck?.encode();
-    return pigeonMap;
+    return <Object?>[
+      enabled,
+      pulsingEnabled,
+      pulsingColor,
+      pulsingMaxRadius,
+      showAccuracyRing,
+      accuracyRingColor,
+      accuracyRingBorderColor,
+      layerAbove,
+      layerBelow,
+      puckBearingEnabled,
+      puckBearingSource?.index,
+      locationPuck?.encode(),
+    ];
   }
 
-  static LocationComponentSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LocationComponentSettings decode(Object result) {
+    result as List<Object?>;
     return LocationComponentSettings(
-      enabled: pigeonMap['enabled'] as bool?,
-      pulsingEnabled: pigeonMap['pulsingEnabled'] as bool?,
-      pulsingColor: pigeonMap['pulsingColor'] as int?,
-      pulsingMaxRadius: pigeonMap['pulsingMaxRadius'] as double?,
-      showAccuracyRing: pigeonMap['showAccuracyRing'] as bool?,
-      accuracyRingColor: pigeonMap['accuracyRingColor'] as int?,
-      accuracyRingBorderColor: pigeonMap['accuracyRingBorderColor'] as int?,
-      layerAbove: pigeonMap['layerAbove'] as String?,
-      layerBelow: pigeonMap['layerBelow'] as String?,
-      puckBearingEnabled: pigeonMap['puckBearingEnabled'] as bool?,
-      puckBearingSource: pigeonMap['puckBearingSource'] != null
-          ? PuckBearingSource.values[pigeonMap['puckBearingSource']! as int]
+      enabled: result[0] as bool?,
+      pulsingEnabled: result[1] as bool?,
+      pulsingColor: result[2] as int?,
+      pulsingMaxRadius: result[3] as double?,
+      showAccuracyRing: result[4] as bool?,
+      accuracyRingColor: result[5] as int?,
+      accuracyRingBorderColor: result[6] as int?,
+      layerAbove: result[7] as String?,
+      layerBelow: result[8] as String?,
+      puckBearingEnabled: result[9] as bool?,
+      puckBearingSource: result[10] != null
+          ? PuckBearingSource.values[result[10]! as int]
           : null,
-      locationPuck: pigeonMap['locationPuck'] != null
-          ? LocationPuck.decode(pigeonMap['locationPuck']!)
+      locationPuck: result[11] != null
+          ? LocationPuck.decode(result[11]! as List<Object?>)
           : null,
     );
   }
@@ -467,53 +454,52 @@ class ScaleBarSettings {
   bool? useContinuousRendering;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
-    pigeonMap['position'] = position?.index;
-    pigeonMap['marginLeft'] = marginLeft;
-    pigeonMap['marginTop'] = marginTop;
-    pigeonMap['marginRight'] = marginRight;
-    pigeonMap['marginBottom'] = marginBottom;
-    pigeonMap['textColor'] = textColor;
-    pigeonMap['primaryColor'] = primaryColor;
-    pigeonMap['secondaryColor'] = secondaryColor;
-    pigeonMap['borderWidth'] = borderWidth;
-    pigeonMap['height'] = height;
-    pigeonMap['textBarMargin'] = textBarMargin;
-    pigeonMap['textBorderWidth'] = textBorderWidth;
-    pigeonMap['textSize'] = textSize;
-    pigeonMap['isMetricUnits'] = isMetricUnits;
-    pigeonMap['refreshInterval'] = refreshInterval;
-    pigeonMap['showTextBorder'] = showTextBorder;
-    pigeonMap['ratio'] = ratio;
-    pigeonMap['useContinuousRendering'] = useContinuousRendering;
-    return pigeonMap;
+    return <Object?>[
+      enabled,
+      position?.index,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      textColor,
+      primaryColor,
+      secondaryColor,
+      borderWidth,
+      height,
+      textBarMargin,
+      textBorderWidth,
+      textSize,
+      isMetricUnits,
+      refreshInterval,
+      showTextBorder,
+      ratio,
+      useContinuousRendering,
+    ];
   }
 
-  static ScaleBarSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ScaleBarSettings decode(Object result) {
+    result as List<Object?>;
     return ScaleBarSettings(
-      enabled: pigeonMap['enabled'] as bool?,
-      position: pigeonMap['position'] != null
-          ? OrnamentPosition.values[pigeonMap['position']! as int]
-          : null,
-      marginLeft: pigeonMap['marginLeft'] as double?,
-      marginTop: pigeonMap['marginTop'] as double?,
-      marginRight: pigeonMap['marginRight'] as double?,
-      marginBottom: pigeonMap['marginBottom'] as double?,
-      textColor: pigeonMap['textColor'] as int?,
-      primaryColor: pigeonMap['primaryColor'] as int?,
-      secondaryColor: pigeonMap['secondaryColor'] as int?,
-      borderWidth: pigeonMap['borderWidth'] as double?,
-      height: pigeonMap['height'] as double?,
-      textBarMargin: pigeonMap['textBarMargin'] as double?,
-      textBorderWidth: pigeonMap['textBorderWidth'] as double?,
-      textSize: pigeonMap['textSize'] as double?,
-      isMetricUnits: pigeonMap['isMetricUnits'] as bool?,
-      refreshInterval: pigeonMap['refreshInterval'] as int?,
-      showTextBorder: pigeonMap['showTextBorder'] as bool?,
-      ratio: pigeonMap['ratio'] as double?,
-      useContinuousRendering: pigeonMap['useContinuousRendering'] as bool?,
+      enabled: result[0] as bool?,
+      position:
+          result[1] != null ? OrnamentPosition.values[result[1]! as int] : null,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+      textColor: result[6] as int?,
+      primaryColor: result[7] as int?,
+      secondaryColor: result[8] as int?,
+      borderWidth: result[9] as double?,
+      height: result[10] as double?,
+      textBarMargin: result[11] as double?,
+      textBorderWidth: result[12] as double?,
+      textSize: result[13] as double?,
+      isMetricUnits: result[14] as bool?,
+      refreshInterval: result[15] as int?,
+      showTextBorder: result[16] as bool?,
+      ratio: result[17] as double?,
+      useContinuousRendering: result[18] as bool?,
     );
   }
 }
@@ -572,39 +558,38 @@ class CompassSettings {
   Uint8List? image;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['enabled'] = enabled;
-    pigeonMap['position'] = position?.index;
-    pigeonMap['marginLeft'] = marginLeft;
-    pigeonMap['marginTop'] = marginTop;
-    pigeonMap['marginRight'] = marginRight;
-    pigeonMap['marginBottom'] = marginBottom;
-    pigeonMap['opacity'] = opacity;
-    pigeonMap['rotation'] = rotation;
-    pigeonMap['visibility'] = visibility;
-    pigeonMap['fadeWhenFacingNorth'] = fadeWhenFacingNorth;
-    pigeonMap['clickable'] = clickable;
-    pigeonMap['image'] = image;
-    return pigeonMap;
+    return <Object?>[
+      enabled,
+      position?.index,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      opacity,
+      rotation,
+      visibility,
+      fadeWhenFacingNorth,
+      clickable,
+      image,
+    ];
   }
 
-  static CompassSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CompassSettings decode(Object result) {
+    result as List<Object?>;
     return CompassSettings(
-      enabled: pigeonMap['enabled'] as bool?,
-      position: pigeonMap['position'] != null
-          ? OrnamentPosition.values[pigeonMap['position']! as int]
-          : null,
-      marginLeft: pigeonMap['marginLeft'] as double?,
-      marginTop: pigeonMap['marginTop'] as double?,
-      marginRight: pigeonMap['marginRight'] as double?,
-      marginBottom: pigeonMap['marginBottom'] as double?,
-      opacity: pigeonMap['opacity'] as double?,
-      rotation: pigeonMap['rotation'] as double?,
-      visibility: pigeonMap['visibility'] as bool?,
-      fadeWhenFacingNorth: pigeonMap['fadeWhenFacingNorth'] as bool?,
-      clickable: pigeonMap['clickable'] as bool?,
-      image: pigeonMap['image'] as Uint8List?,
+      enabled: result[0] as bool?,
+      position:
+          result[1] != null ? OrnamentPosition.values[result[1]! as int] : null,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+      opacity: result[6] as double?,
+      rotation: result[7] as double?,
+      visibility: result[8] as bool?,
+      fadeWhenFacingNorth: result[9] as bool?,
+      clickable: result[10] as bool?,
+      image: result[11] as Uint8List?,
     );
   }
 }
@@ -643,29 +628,28 @@ class AttributionSettings {
   bool? clickable;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['iconColor'] = iconColor;
-    pigeonMap['position'] = position?.index;
-    pigeonMap['marginLeft'] = marginLeft;
-    pigeonMap['marginTop'] = marginTop;
-    pigeonMap['marginRight'] = marginRight;
-    pigeonMap['marginBottom'] = marginBottom;
-    pigeonMap['clickable'] = clickable;
-    return pigeonMap;
+    return <Object?>[
+      iconColor,
+      position?.index,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      clickable,
+    ];
   }
 
-  static AttributionSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static AttributionSettings decode(Object result) {
+    result as List<Object?>;
     return AttributionSettings(
-      iconColor: pigeonMap['iconColor'] as int?,
-      position: pigeonMap['position'] != null
-          ? OrnamentPosition.values[pigeonMap['position']! as int]
-          : null,
-      marginLeft: pigeonMap['marginLeft'] as double?,
-      marginTop: pigeonMap['marginTop'] as double?,
-      marginRight: pigeonMap['marginRight'] as double?,
-      marginBottom: pigeonMap['marginBottom'] as double?,
-      clickable: pigeonMap['clickable'] as bool?,
+      iconColor: result[0] as int?,
+      position:
+          result[1] != null ? OrnamentPosition.values[result[1]! as int] : null,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
+      clickable: result[6] as bool?,
     );
   }
 }
@@ -696,25 +680,24 @@ class LogoSettings {
   double? marginBottom;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['position'] = position?.index;
-    pigeonMap['marginLeft'] = marginLeft;
-    pigeonMap['marginTop'] = marginTop;
-    pigeonMap['marginRight'] = marginRight;
-    pigeonMap['marginBottom'] = marginBottom;
-    return pigeonMap;
+    return <Object?>[
+      position?.index,
+      marginLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+    ];
   }
 
-  static LogoSettings decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LogoSettings decode(Object result) {
+    result as List<Object?>;
     return LogoSettings(
-      position: pigeonMap['position'] != null
-          ? OrnamentPosition.values[pigeonMap['position']! as int]
-          : null,
-      marginLeft: pigeonMap['marginLeft'] as double?,
-      marginTop: pigeonMap['marginTop'] as double?,
-      marginRight: pigeonMap['marginRight'] as double?,
-      marginBottom: pigeonMap['marginBottom'] as double?,
+      position:
+          result[0] != null ? OrnamentPosition.values[result[0]! as int] : null,
+      marginLeft: result[1] as double?,
+      marginTop: result[2] as double?,
+      marginRight: result[3] as double?,
+      marginBottom: result[4] as double?,
     );
   }
 }
@@ -739,74 +722,69 @@ class _GesturesSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return GesturesSettings.decode(readValue(buffer)!);
-
       case 129:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Gesture configuration allows to control the user touch interaction.
 class GesturesSettingsInterface {
   /// Constructor for [GesturesSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   GesturesSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _GesturesSettingsInterfaceCodec();
 
   Future<GesturesSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.GesturesSettingsInterface.getSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as GesturesSettings?)!;
+      return (replyList[0] as GesturesSettings?)!;
     }
   }
 
   Future<void> updateSettings(GesturesSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.GesturesSettingsInterface.updateSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -840,29 +818,25 @@ class _LocationComponentSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return LocationComponentSettings.decode(readValue(buffer)!);
-
       case 129:
         return LocationPuck.decode(readValue(buffer)!);
-
       case 130:
         return LocationPuck2D.decode(readValue(buffer)!);
-
       case 131:
         return LocationPuck3D.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Shows a location puck on the map.
 class LocationComponentSettingsInterface {
   /// Constructor for [LocationComponentSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   LocationComponentSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec =
@@ -870,53 +844,48 @@ class LocationComponentSettingsInterface {
 
   Future<LocationComponentSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.LocationComponentSettingsInterface.getSettings',
+        'dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.getSettings',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as LocationComponentSettings?)!;
+      return (replyList[0] as LocationComponentSettings?)!;
     }
   }
 
   Future<void> updateSettings(LocationComponentSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.LocationComponentSettingsInterface.updateSettings',
+        'dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.updateSettings',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -941,71 +910,67 @@ class _ScaleBarSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return ScaleBarSettings.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Shows the scale bar on the map.
 class ScaleBarSettingsInterface {
   /// Constructor for [ScaleBarSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   ScaleBarSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _ScaleBarSettingsInterfaceCodec();
 
   Future<ScaleBarSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ScaleBarSettingsInterface.getSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as ScaleBarSettings?)!;
+      return (replyList[0] as ScaleBarSettings?)!;
     }
   }
 
   Future<void> updateSettings(ScaleBarSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ScaleBarSettingsInterface.updateSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1030,71 +995,67 @@ class _CompassSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CompassSettings.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Shows the compass on the map.
 class CompassSettingsInterface {
   /// Constructor for [CompassSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   CompassSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _CompassSettingsInterfaceCodec();
 
   Future<CompassSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CompassSettingsInterface.getSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CompassSettings?)!;
+      return (replyList[0] as CompassSettings?)!;
     }
   }
 
   Future<void> updateSettings(CompassSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.CompassSettingsInterface.updateSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1119,20 +1080,19 @@ class _AttributionSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return AttributionSettings.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Shows the attribution icon on the map.
 class AttributionSettingsInterface {
   /// Constructor for [AttributionSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   AttributionSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec =
@@ -1140,51 +1100,48 @@ class AttributionSettingsInterface {
 
   Future<AttributionSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.AttributionSettingsInterface.getSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as AttributionSettings?)!;
+      return (replyList[0] as AttributionSettings?)!;
     }
   }
 
   Future<void> updateSettings(AttributionSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.AttributionSettingsInterface.updateSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1209,71 +1166,67 @@ class _LogoSettingsInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return LogoSettings.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Shows the Mapbox logo on the map.
 class LogoSettingsInterface {
   /// Constructor for [LogoSettingsInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   LogoSettingsInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _LogoSettingsInterfaceCodec();
 
   Future<LogoSettings> getSettings() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.LogoSettingsInterface.getSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as LogoSettings?)!;
+      return (replyList[0] as LogoSettings?)!;
     }
   }
 
   Future<void> updateSettings(LogoSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.LogoSettingsInterface.updateSettings', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_settings]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_settings]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;

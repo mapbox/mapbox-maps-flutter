@@ -4,11 +4,11 @@ import UIKit
 class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface {
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSAttributionSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        switch settings.position {
+        switch settings.position?.value {
         case .BOTTOM_LEFT:
             mapView.ornaments.options.attributionButton.position = .bottomLeading
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .BOTTOM_RIGHT:
+        case .BOTTOM_RIGHT, .none:
             mapView.ornaments.options.attributionButton.position = .bottomTrailing
             mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_LEFT:
@@ -26,7 +26,7 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
 
         let settings = FLT_SETTINGSAttributionSettings.make(
             withIconColor: nil,
-            position: position,
+            position: .init(value: position),
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),

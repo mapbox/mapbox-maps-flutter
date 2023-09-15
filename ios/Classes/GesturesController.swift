@@ -56,14 +56,15 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         if let pinchZoomEnabled = settings.pinchToZoomEnabled {
             mapView.gestures.options.pinchZoomEnabled = pinchZoomEnabled.boolValue
         }
-        switch settings.scrollMode {
+        switch settings.scrollMode?.value {
         case .HORIZONTAL:
             mapView.gestures.options.panMode = PanMode.horizontal
         case .VERTICAL:
             mapView.gestures.options.panMode = PanMode.vertical
-        case .HORIZONTAL_AND_VERTICAL:
+        case .HORIZONTAL_AND_VERTICAL, .none:
             mapView.gestures.options.panMode = PanMode.horizontalAndVertical
-        @unknown default: break
+        @unknown default:
+            break
         }
         if let focalPoint = settings.focalPoint {
             mapView.gestures.options.focalPoint = CGPoint(x: focalPoint.x.doubleValue, y: focalPoint.y.doubleValue)
@@ -92,7 +93,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
             scrollEnabled: NSNumber(value: options.panEnabled),
             simultaneousRotateAndPinchToZoomEnabled: NSNumber(value: options.rotateEnabled),
             pitchEnabled: NSNumber(value: options.pitchEnabled),
-            scrollMode: scrollMode,
+            scrollMode: .init(value: scrollMode),
             doubleTapToZoomInEnabled: NSNumber(value: options.doubleTapToZoomInEnabled),
             doubleTouchToZoomOutEnabled: NSNumber(value: options.doubleTouchToZoomOutEnabled),
             quickZoomEnabled: NSNumber(value: options.quickZoomEnabled),

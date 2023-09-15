@@ -3,8 +3,8 @@ import Foundation
 import UIKit
 class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func updateSettingsSettings(_ settings: FLT_SETTINGSLogoSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        switch settings.position {
-        case .BOTTOM_LEFT:
+        switch settings.position?.value {
+        case .BOTTOM_LEFT, .none:
             mapView.ornaments.options.logo.position = .bottomLeading
             mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .BOTTOM_RIGHT:
@@ -22,7 +22,13 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLogoSettings? {
         let options = mapView.ornaments.options.logo
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
-        let settings = FLT_SETTINGSLogoSettings.make(with: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale))
+        let settings = FLT_SETTINGSLogoSettings.make(
+            withPosition: .init(value: position),
+            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale)
+        )
         return settings
     }
 
