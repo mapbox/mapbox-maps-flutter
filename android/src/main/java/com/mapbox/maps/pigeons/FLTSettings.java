@@ -1417,7 +1417,7 @@ public class FLTSettings {
       this.showTextBorder = setterArg;
     }
 
-    /** configures ratio of scale bar max width compared with MapWidget width, default is 0.5. */
+    /** configures ratio of scale bar max width compared with MapView width, default is 0.5. */
     private @Nullable Double ratio;
 
     public @Nullable Double getRatio() {

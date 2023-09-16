@@ -311,7 +311,7 @@ func getLineTrimOffsetManagerId(_ managerId: String, completion: @escaping ( [NS
 extension FLTPolylineAnnotationOptions {
     func toPolylineAnnotation() -> PolylineAnnotation {
     var annotation = PolylineAnnotation(lineString: convertDictionaryToPolyline(dict: self.geometry!))
-        annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin.rawValue)]
+        annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin?.value.rawValue ?? 0)]
         if let lineSortKey = self.lineSortKey {
            annotation.lineSortKey = lineSortKey.doubleValue
         }
@@ -343,7 +343,7 @@ extension FLTPolylineAnnotationOptions {
 extension FLTPolylineAnnotation {
     func toPolylineAnnotation() -> PolylineAnnotation {
     var annotation = PolylineAnnotation(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
-    annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin.rawValue)]
+    annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin?.value.rawValue ?? 0)]
     if let lineSortKey = self.lineSortKey {
        annotation.lineSortKey = lineSortKey.doubleValue
     }
@@ -410,7 +410,19 @@ extension PolylineAnnotation {
             lineWidth = NSNumber(value: self.lineWidth!)
         }
 
-        return FLTPolylineAnnotation.make(withId: self.id, geometry: self.lineString.toMap(), lineJoin: lineJoin!, lineSortKey: lineSortKey, lineBlur: lineBlur, lineColor: lineColor, lineGapWidth: lineGapWidth, lineOffset: lineOffset, lineOpacity: lineOpacity, linePattern: linePattern, lineWidth: lineWidth)
+    return FLTPolylineAnnotation.make(
+        withId: self.id,
+        geometry: self.lineString.toMap(),
+        lineJoin: .init(value: lineJoin!),
+        lineSortKey: lineSortKey,
+        lineBlur: lineBlur,
+        lineColor: lineColor,
+        lineGapWidth: lineGapWidth,
+        lineOffset: lineOffset,
+        lineOpacity: lineOpacity,
+        linePattern: linePattern,
+        lineWidth: lineWidth
+    )
     }
 }
 // End of generated file.

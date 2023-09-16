@@ -274,7 +274,7 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @property(nonatomic, strong, nullable) NSNumber * refreshInterval;
 /// Configures whether to show the text border or not, default is true.
 @property(nonatomic, strong, nullable) NSNumber * showTextBorder;
-/// configures ratio of scale bar max width compared with MapWidget width, default is 0.5.
+/// configures ratio of scale bar max width compared with MapView width, default is 0.5.
 @property(nonatomic, strong, nullable) NSNumber * ratio;
 /// If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.
 @property(nonatomic, strong, nullable) NSNumber * useContinuousRendering;

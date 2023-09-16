@@ -908,7 +908,7 @@ extension FLTPointAnnotationOptions {
     if let image = self.image {
         annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
     }
-        annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor.rawValue)]
+        annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor?.value.rawValue ?? 0)]
         if let iconImage = self.iconImage {
            annotation.iconImage = iconImage
         }
@@ -924,11 +924,11 @@ extension FLTPointAnnotationOptions {
         if let symbolSortKey = self.symbolSortKey {
            annotation.symbolSortKey = symbolSortKey.doubleValue
         }
-        annotation.textAnchor = TextAnchor.allCases[Int(self.textAnchor.rawValue)]
+        annotation.textAnchor = TextAnchor.allCases[Int(self.textAnchor?.value.rawValue ?? 0)]
         if let textField = self.textField {
            annotation.textField = textField
         }
-        annotation.textJustify = TextJustify.allCases[Int(self.textJustify.rawValue)]
+        annotation.textJustify = TextJustify.allCases[Int(self.textJustify?.value.rawValue ?? 0)]
         if let textLetterSpacing = self.textLetterSpacing {
            annotation.textLetterSpacing = textLetterSpacing.doubleValue
         }
@@ -947,7 +947,7 @@ extension FLTPointAnnotationOptions {
         if let textSize = self.textSize {
            annotation.textSize = textSize.doubleValue
         }
-        annotation.textTransform = TextTransform.allCases[Int(self.textTransform.rawValue)]
+        annotation.textTransform = TextTransform.allCases[Int(self.textTransform?.value.rawValue ?? 0)]
         if let iconColor = self.iconColor {
            annotation.iconColor = StyleColor.init(uiColorFromHex(rgbValue: iconColor.intValue))
         }
@@ -988,7 +988,7 @@ extension FLTPointAnnotation {
     if let image = self.image {
         annotation.image = .init(image: UIImage(data: image.data)!, name: UUID().uuidString)
     }
-    annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor.rawValue)]
+    annotation.iconAnchor = IconAnchor.allCases[Int(self.iconAnchor?.value.rawValue ?? 0)]
     if let iconImage = self.iconImage {
        annotation.iconImage = iconImage
     }
@@ -1004,11 +1004,11 @@ extension FLTPointAnnotation {
     if let symbolSortKey = self.symbolSortKey {
        annotation.symbolSortKey = symbolSortKey.doubleValue
     }
-    annotation.textAnchor = TextAnchor.allCases[Int(self.textAnchor.rawValue)]
+    annotation.textAnchor = TextAnchor.allCases[Int(self.textAnchor?.value.rawValue ?? 0)]
     if let textField = self.textField {
        annotation.textField = textField
     }
-    annotation.textJustify = TextJustify.allCases[Int(self.textJustify.rawValue)]
+    annotation.textJustify = TextJustify.allCases[Int(self.textJustify?.value.rawValue ?? 0)]
     if let textLetterSpacing = self.textLetterSpacing {
        annotation.textLetterSpacing = textLetterSpacing.doubleValue
     }
@@ -1027,7 +1027,7 @@ extension FLTPointAnnotation {
     if let textSize = self.textSize {
        annotation.textSize = textSize.doubleValue
     }
-    annotation.textTransform = TextTransform.allCases[Int(self.textTransform.rawValue)]
+    annotation.textTransform = TextTransform.allCases[Int(self.textTransform?.value.rawValue ?? 0)]
     if let iconColor = self.iconColor {
        annotation.iconColor = StyleColor.init(uiColorFromHex(rgbValue: iconColor.intValue))
     }
@@ -1168,7 +1168,37 @@ extension PointAnnotation {
             textOpacity = NSNumber(value: self.textOpacity!)
         }
 
-        return FLTPointAnnotation.make(withId: self.id, geometry: self.point.toMap(), image: nil, iconAnchor: iconAnchor!, iconImage: iconImage, iconOffset: iconOffset, iconRotate: iconRotate, iconSize: iconSize, symbolSortKey: symbolSortKey, textAnchor: textAnchor!, textField: textField, textJustify: textJustify!, textLetterSpacing: textLetterSpacing, textMaxWidth: textMaxWidth, textOffset: textOffset, textRadialOffset: textRadialOffset, textRotate: textRotate, textSize: textSize, textTransform: textTransform!, iconColor: iconColor, iconHaloBlur: iconHaloBlur, iconHaloColor: iconHaloColor, iconHaloWidth: iconHaloWidth, iconOpacity: iconOpacity, textColor: textColor, textHaloBlur: textHaloBlur, textHaloColor: textHaloColor, textHaloWidth: textHaloWidth, textOpacity: textOpacity)
+    return FLTPointAnnotation.make(
+        withId: self.id,
+        geometry: self.point.toMap(),
+        image: nil,
+        iconAnchor: .init(value: iconAnchor!),
+        iconImage: iconImage,
+        iconOffset: iconOffset,
+        iconRotate: iconRotate,
+        iconSize: iconSize,
+        symbolSortKey: symbolSortKey,
+        textAnchor: .init(value: textAnchor!),
+        textField: textField,
+        textJustify: .init(value: textJustify!),
+        textLetterSpacing: textLetterSpacing,
+        textMaxWidth: textMaxWidth,
+        textOffset: textOffset,
+        textRadialOffset: textRadialOffset,
+        textRotate: textRotate,
+        textSize: textSize,
+        textTransform: .init(value: textTransform!),
+        iconColor: iconColor,
+        iconHaloBlur: iconHaloBlur,
+        iconHaloColor: iconHaloColor,
+        iconHaloWidth: iconHaloWidth,
+        iconOpacity: iconOpacity,
+        textColor: textColor,
+        textHaloBlur: textHaloBlur,
+        textHaloColor: textHaloColor,
+        textHaloWidth: textHaloWidth,
+        textOpacity: textOpacity
+    )
     }
 }
 // End of generated file.
