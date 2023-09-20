@@ -34,23 +34,35 @@ fun FLTMapInterfaces.SourceQueryOptions.toSourceQueryOptions(): SourceQueryOptio
 
 fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(): RenderedQueryGeometry {
   return when (type) {
-    FLTMapInterfaces.Type.SCREEN_BOX -> RenderedQueryGeometry.valueOf(
-      Gson().fromJson(
+    FLTMapInterfaces.Type.SCREEN_BOX -> {
+      val screenBoxArray = Gson().fromJson(
         value,
-        ScreenBox::class.java
+        Array<Array<Double>>::class.java
       )
-    )
-    FLTMapInterfaces.Type.LIST -> {
-      val array: Array<ScreenCoordinate> =
-        Gson().fromJson(value, Array<ScreenCoordinate>::class.java)
-      RenderedQueryGeometry.valueOf(array.toList())
+      val minCoord = screenBoxArray[0]
+      val maxCoord = screenBoxArray[1]
+      RenderedQueryGeometry.valueOf(
+        ScreenBox(
+          ScreenCoordinate(minCoord[0], minCoord[1]),
+          ScreenCoordinate(maxCoord[0], maxCoord[1])
+        )
+      )
     }
-    FLTMapInterfaces.Type.SCREEN_COORDINATE -> RenderedQueryGeometry.valueOf(
-      Gson().fromJson(
+    FLTMapInterfaces.Type.LIST -> {
+      val array: Array<Array<Double>> =
+        Gson().fromJson(value, Array<Array<Double>>::class.java)
+      RenderedQueryGeometry.valueOf(array.map { ScreenCoordinate(it[0], it[1]) }.toList())
+    }
+    FLTMapInterfaces.Type.SCREEN_COORDINATE -> {
+      val pointArray = Gson().fromJson(
         value,
-        ScreenCoordinate::class.java
+        Array<Double>::class.java
       )
-    )
+
+      RenderedQueryGeometry.valueOf(
+        ScreenCoordinate(pointArray[0], pointArray[1])
+      )
+    }
   }
 }
 

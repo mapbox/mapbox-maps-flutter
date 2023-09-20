@@ -22,63 +22,63 @@ class MapboxMapFactory(
     val resourceOptionsBuilder = ResourceOptions.Builder().applyDefaultParams(context)
     val mapOptionsBuilder = MapOptions.Builder().applyDefaultParams(context)
     val cameraOptionsBuilder = CameraOptions.Builder()
-    (params["resourceOptions"] as Map<String, Any>?)?.let { resourceOptions ->
-      resourceOptions["accessToken"]?.let {
+    (params["resourceOptions"] as ArrayList<Any?>?)?.let { resourceOptions ->
+      resourceOptions[0]?.let {
         resourceOptionsBuilder.accessToken(it as String)
       }
-      resourceOptions["baseURL"]?.let {
+      resourceOptions[1]?.let {
         resourceOptionsBuilder.baseURL(it as String)
       }
-      resourceOptions["dataPath"]?.let {
+      resourceOptions[2]?.let {
         resourceOptionsBuilder.dataPath(it as String)
       }
-      resourceOptions["assetPath"]?.let {
+      resourceOptions[3]?.let {
         resourceOptionsBuilder.assetPath(it as String)
       }
-      resourceOptions["tileStoreUsageMode"]?.let {
+      resourceOptions[4]?.let {
         resourceOptionsBuilder.tileStoreUsageMode(TileStoreUsageMode.values()[it as Int])
       }
     }
 
-    (params["mapOptions"] as Map<String, Any>?)?.let { mapOptions ->
-      mapOptions["contextMode"]?.let {
+    (params["mapOptions"] as ArrayList<Any?>?)?.let { mapOptions ->
+      mapOptions[0]?.let {
         mapOptionsBuilder.contextMode(ContextMode.values()[it as Int])
       }
-      mapOptions["constrainMode"]?.let {
+      mapOptions[1]?.let {
         mapOptionsBuilder.constrainMode(ConstrainMode.values()[it as Int])
       }
-      mapOptions["viewportMode"]?.let {
+      mapOptions[2]?.let {
         mapOptionsBuilder.viewportMode(ViewportMode.values()[it as Int])
       }
-      mapOptions["orientation"]?.let {
+      mapOptions[3]?.let {
         mapOptionsBuilder.orientation(NorthOrientation.values()[it as Int])
       }
-      mapOptions["crossSourceCollisions"]?.let {
+      mapOptions[4]?.let {
         mapOptionsBuilder.crossSourceCollisions(it as Boolean)
       }
-      mapOptions["optimizeForTerrain"]?.let {
+      mapOptions[5]?.let {
         mapOptionsBuilder.optimizeForTerrain(it as Boolean)
       }
-      mapOptions["size"]?.let {
-        (it as Map<String, Double>).let { size ->
+      mapOptions[6]?.let {
+        (it as ArrayList<Double>).let { size ->
           mapOptionsBuilder.size(
             Size(
-              size["width"]!!.toFloat(),
-              size["height"]!!.toFloat()
+              size[0].toFloat(),
+              size[1].toFloat()
             )
           )
         }
       }
-      mapOptions["pixelRatio"]?.let {
+      mapOptions[7]?.let {
         mapOptionsBuilder.pixelRatio((it as Double).toFloat())
       }
-      mapOptions["glyphsRasterizationOptions"]?.let {
-        (it as Map<String, Any?>).let { glyphs ->
+      mapOptions[8]?.let {
+        (it as ArrayList<Any?>).let { glyphs ->
           val builder = GlyphsRasterizationOptions.Builder()
-          glyphs["fontFamily"]?.let { fontFamily ->
+          glyphs[1]?.let { fontFamily ->
             builder.fontFamily(fontFamily as String)
           }
-          glyphs["rasterizationMode"]?.let { rasterizationMode ->
+          glyphs[0]?.let { rasterizationMode ->
             builder.rasterizationMode(
               GlyphsRasterizationMode.values()[rasterizationMode as Int]
             )
@@ -88,29 +88,29 @@ class MapboxMapFactory(
       }
     }
 
-    (params["cameraOptions"] as Map<String, Any>?)?.let { cameraOptions ->
-      cameraOptions["bearing"]?.let {
+    (params["cameraOptions"] as ArrayList<Any?>?)?.let { cameraOptions ->
+      cameraOptions[4]?.let {
         cameraOptionsBuilder.bearing(it as Double)
       }
-      (cameraOptions["center"] as Map<String, Any>?)?.let {
+      (cameraOptions[0] as? Map<String, Any>?)?.let {
         cameraOptionsBuilder.center(it.toPoint())
       }
-      cameraOptions["pitch"]?.let {
+      cameraOptions[5]?.let {
         cameraOptionsBuilder.pitch(it as Double)
       }
-      cameraOptions["zoom"]?.let {
+      cameraOptions[3]?.let {
         cameraOptionsBuilder.zoom(it as Double)
       }
-      (cameraOptions["padding"] as Map<String, Double>?)?.let {
+      (cameraOptions[1] as? ArrayList<Double>?)?.let {
         cameraOptionsBuilder.padding(
           EdgeInsets(
-            it["top"]!!, it["left"]!!,
-            it["bottom"]!!, it["right"]!!
+            it[0], it[1],
+            it[2], it[3]
           )
         )
       }
-      (cameraOptions["anchor"] as Map<String, Double>?)?.let {
-        cameraOptionsBuilder.anchor(ScreenCoordinate(it["x"]!!, it["y"]!!))
+      (cameraOptions[2] as? ArrayList<Double>?)?.let {
+        cameraOptionsBuilder.anchor(ScreenCoordinate(it[0], it[1]))
       }
     }
 
