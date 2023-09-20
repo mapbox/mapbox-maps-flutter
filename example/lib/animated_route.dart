@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as MapboxMaps;
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/helpers.dart';
 
 import 'page.dart';
 
@@ -194,57 +193,43 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
       await mapState.mapboxMap.style.removeStyleSource("source");
     }
 
-    // build route from puck position to the clicked annotation
-    final start = await mapState.mapboxMap.style.getPuckPosition();
     final end = Point.fromJson((annotation.geometry)!.cast());
 
-    final coordinates = await fetchRouteCoordinates(
-        start, end.coordinates, MapsDemo.ACCESS_TOKEN);
-
-    drawRouteLowLevel(coordinates);
+    showAnimatedCircle(end);
   }
 
-  drawRouteLowLevel(List<Position> polyline) async {
-    final line = LineString(coordinates: polyline);
+  Layer buildCircleLayer(double radius) {
+    return CircleLayer(
+      id: 'layer',
+      sourceId: 'source',
+      circleBlur: 0.1,
+      circleColor: Colors.blueAccent.value,
+      circleOpacity: 0.3,
+      circleRadius: radius,
+    );
+  }
+
+  void showAnimatedCircle(Point end) async {
     mapState.mapboxMap.style.styleSourceExists("source").then((exists) async {
       if (exists) {
-        // if source exists - just update it
-        final source = await mapState.mapboxMap.style.getSource("source");
-        (source as GeoJsonSource).updateGeoJSON(json.encode(line));
+        final source =
+            await mapState.mapboxMap.style.getSource("source") as GeoJsonSource;
+        source.updateGeoJSON(json.encode(end));
+        mapState.mapboxMap.style.updateLayer(buildCircleLayer(0.0));
       } else {
-        await mapState.mapboxMap.style.addSource(GeoJsonSource(
-            id: "source", data: json.encode(line), lineMetrics: true));
+        await mapState.mapboxMap.style
+            .addSource(GeoJsonSource(id: "source", data: json.encode(end)));
 
-        await mapState.mapboxMap.style.addLayer(LineLayer(
-          id: 'layer',
-          sourceId: 'source',
-          lineCap: LineCap.ROUND,
-          lineJoin: LineJoin.ROUND,
-          lineBlur: 1.0,
-          lineColor: Colors.deepOrangeAccent.value,
-          lineDasharray: [1.0, 2.0],
-          lineTrimOffset: [0.0, 0.0],
-          lineWidth: 5.0,
-        ));
+        await mapState.mapboxMap.style.addLayer(buildCircleLayer(0.0));
       }
 
-      // query line layer
-      final lineLayer =
-          await mapState.mapboxMap.style.getLayer('layer') as LineLayer;
-
-      // draw layer with gradient
-      mapState.mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
-          '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
-
-      // animate layer to reveal it from start to end
       controller?.stop();
       controller = AnimationController(
           duration: const Duration(seconds: 2), vsync: mapState);
       animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
         ..addListener(() async {
-          // set the animated value of lineTrim and update the layer
-          lineLayer.lineTrimOffset = [animation?.value, 1.0];
-          mapState.mapboxMap.style.updateLayer(lineLayer);
+          final radius = animation!.value * 100;
+          mapState.mapboxMap.style.updateLayer(buildCircleLayer(radius));
         });
       controller?.forward();
     });
