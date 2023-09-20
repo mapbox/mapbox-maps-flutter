@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -422,15 +424,21 @@ void main() {
     mapboxMap.dragEnd();
   });
   testWidgets('getDragCameraOptions', (WidgetTester tester) async {
-    final mapFuture = app.main();
+    final mapFuture = app.runFixedSizeMap();
     await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;    
     await addDelay(1000);
 
-    final mapboxMap = await mapFuture;
     var options = await mapboxMap.getDragCameraOptions(
         ScreenCoordinate(x: 1, y: 1), ScreenCoordinate(x: 100, y: 100));
     var coordinates = options.center!["coordinates"] as List;
-    expect((coordinates.first as double).round(), -84);
-    expect((coordinates.last as double).round(), 64);
+    if (Platform.isAndroid) {
+      expect((coordinates.first as double).round(), -28);
+      expect((coordinates.last as double).round(), 27);
+    } else {
+      expect((coordinates.first as double).round(), -96);
+      expect((coordinates.last as double).round(), 69);
+    }
+    await addDelay(1000);
   });
 }
