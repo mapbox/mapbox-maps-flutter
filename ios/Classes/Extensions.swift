@@ -312,6 +312,14 @@ func convertStringToDictionary(properties: String) -> [String: Any] {
     return result
 }
 
+func convertStringToArray(properties: String) -> [Any] {
+    let data = properties.data(using: String.Encoding.utf8)!
+    let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
+
+    guard let result = jsonObject as? [Any] else {return []}
+    return result
+}
+
 func convertDictionaryToString(dict: [String: Any]?) -> String {
     var result: String = ""
     if dict == nil { return result }

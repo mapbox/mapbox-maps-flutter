@@ -200,11 +200,7 @@ void main() {
 
     var options = await mapboxMap.getResourceOptions();
     expect(options.accessToken, isNotNull);
-    if (Platform.isAndroid) {
-      expect(options.baseURL, 'https://api.mapbox.com');
-    } else {
-      expect(options.baseURL, 'file:///https:/api.mapbox.com');
-    }
+    expect(options.baseURL, 'https://api.mapbox.com');
     await addDelay(1000);
   });
 
@@ -215,6 +211,11 @@ void main() {
     var style = mapboxMap.style;
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
+    final ByteData bytes =
+    await rootBundle.load('assets/symbols/custom-icon.png');
+    final Uint8List list = bytes.buffer.asUint8List();
+    await style.addStyleImage('icon', 1.0,
+    MbxImage(width: 40, height: 40, data: list), true, [], [], null);
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
     await addDelay(1000);

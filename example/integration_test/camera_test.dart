@@ -424,13 +424,13 @@ void main() {
   testWidgets('getDragCameraOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
+    await addDelay(1000);
+
     final mapboxMap = await mapFuture;
     var options = await mapboxMap.getDragCameraOptions(
         ScreenCoordinate(x: 1, y: 1), ScreenCoordinate(x: 100, y: 100));
     var coordinates = options.center!["coordinates"] as List;
-    expect((coordinates.first as double).round(), 0);
-    expect((coordinates.last as double).round(), 0);
-
-    await addDelay(1000);
+    expect((coordinates.first as double).round(), -84);
+    expect((coordinates.last as double).round(), 64);
   });
 }

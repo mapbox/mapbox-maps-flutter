@@ -242,11 +242,11 @@ void main() {
     var camera = await style.getStyleDefaultCamera();
     expect(camera.bearing, 0);
     expect(camera.pitch, 0);
-    expect(camera.zoom, 3.0);
+    expect(camera.zoom, 2.0);
     expect(camera.anchor, null);
     var coordinates = camera.center!['coordinates'] as List;
-    expect(coordinates.first, 0);
-    expect(coordinates.last, 0);
+    expect(coordinates.first, -92.25);
+    expect(coordinates.last, 37.75);
   });
 
   testWidgets('StyleLightProperty', (WidgetTester tester) async {
@@ -364,10 +364,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var projection = await mapboxMap.style.getProjection();
-    expect(projection, "mercator");
-    await mapboxMap.style.setProjection("globe");
-    projection = await mapboxMap.style.getProjection();
     expect(projection, "globe");
+    await mapboxMap.style.setProjection("mercator");
+    projection = await mapboxMap.style.getProjection();
+    expect(projection, "mercator");
     await addDelay(1000);
   });
 }
