@@ -135,7 +135,7 @@ jobs:
       - run:
           name: swiftlint
           working_directory: ios
-          command: brew install swiftlint; swiftlint lint --strict
+          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint; swiftlint lint --strict
       - run:
           name: unit test
           command: flutter test test
