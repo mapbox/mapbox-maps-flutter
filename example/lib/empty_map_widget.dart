@@ -25,19 +25,18 @@ Future<MapboxMap> runFixedSizeMap() {
 
   runApp(MaterialApp(
       home: Align(
-        alignment: Alignment.topLeft,
-        child: Container(
-          width: 300,
-          height: 300,
-          child: MapWidget(
-              key: ValueKey("mapWidget"),
-              onMapCreated: (MapboxMap mapboxMap) {
-                completer.complete(mapboxMap);
-              },
-              resourceOptions:
-                  ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN)),
-        ),
-      )));
+    alignment: Alignment.topLeft,
+    child: Container(
+      width: 300,
+      height: 300,
+      child: MapWidget(
+          key: ValueKey("mapWidget"),
+          onMapCreated: (MapboxMap mapboxMap) {
+            completer.complete(mapboxMap);
+          },
+          resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN)),
+    ),
+  )));
 
   return completer.future;
 }

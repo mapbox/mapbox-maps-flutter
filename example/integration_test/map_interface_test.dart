@@ -212,10 +212,10 @@ void main() {
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     final ByteData bytes =
-    await rootBundle.load('assets/symbols/custom-icon.png');
+        await rootBundle.load('assets/symbols/custom-icon.png');
     final Uint8List list = bytes.buffer.asUint8List();
     await style.addStyleImage('icon', 1.0,
-    MbxImage(width: 40, height: 40, data: list), true, [], [], null);
+        MbxImage(width: 40, height: 40, data: list), true, [], [], null);
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
     await addDelay(1000);

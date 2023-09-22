@@ -427,10 +427,10 @@ void main() {
   testWidgets('getDragCameraOptions', (WidgetTester tester) async {
     final mapFuture = app.runFixedSizeMap();
     await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;    
+    final mapboxMap = await mapFuture;
 
     var destination = ScreenCoordinate(x: 100, y: 100);
-    
+
     // the input has to be scaled on Android,
     // as GL Native treats iOS and Android coordinates differently:
     // * on iOS screen coordinates are expected to be provided(as well as returned by GL Native) as logical pixels
@@ -442,11 +442,12 @@ void main() {
       destination.x = destination.x * pixelRatio;
       destination.y = destination.y * pixelRatio;
     }
-    final options = await mapboxMap.getDragCameraOptions(ScreenCoordinate(x: 0, y: 0), destination);
+    final options = await mapboxMap.getDragCameraOptions(
+        ScreenCoordinate(x: 0, y: 0), destination);
     final coordinates = options.center!["coordinates"] as List;
     expect((coordinates.first as double).round(), -97);
     expect((coordinates.last as double).round(), 69);
-    
+
     await addDelay(1000);
   });
 }
