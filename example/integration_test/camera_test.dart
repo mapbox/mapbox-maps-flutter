@@ -435,6 +435,7 @@ void main() {
     // as GL Native treats iOS and Android coordinates differently:
     // * on iOS screen coordinates are expected to be provided(as well as returned by GL Native) as logical pixels
     // * on Android screen coordinates are expected to be physical pixels(both ways)
+    // TODO: this should be removed once https://mapbox.atlassian.net/browse/MAPSFLT-120 is addressed
     if (Platform.isAndroid) {
       final BuildContext context = tester.element(find.byType(MapWidget));
       final pixelRatio = MediaQuery.of(context).devicePixelRatio;
