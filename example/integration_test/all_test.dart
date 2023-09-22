@@ -88,7 +88,8 @@ void main() {
   image_source_test.main();
   geojson_source_test.main();
 
-  // location test has to be at the bottom as on iOS it triggers location permission dialot
+  // location test has to be at the bottom as on iOS it triggers location permission dialog
   // to be shown which makes tests that rely on QRF/QSF fail
+  // TODO: address this properly by granting the location permission somehow
   location_test.main();
 }
