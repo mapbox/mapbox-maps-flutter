@@ -4,10 +4,10 @@ part of mapbox_maps_flutter;
 /// A heatmap.
 class HeatmapLayer extends Layer {
   HeatmapLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.heatmapColor,

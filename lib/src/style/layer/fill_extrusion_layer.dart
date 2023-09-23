@@ -4,10 +4,10 @@ part of mapbox_maps_flutter;
 /// An extruded (3D) polygon.
 class FillExtrusionLayer extends Layer {
   FillExtrusionLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.fillExtrusionBase,

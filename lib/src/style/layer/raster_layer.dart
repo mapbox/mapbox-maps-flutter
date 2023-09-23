@@ -4,10 +4,10 @@ part of mapbox_maps_flutter;
 /// Raster map textures such as satellite imagery.
 class RasterLayer extends Layer {
   RasterLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.rasterBrightnessMax,

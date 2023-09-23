@@ -4,10 +4,10 @@ part of mapbox_maps_flutter;
 /// A stroked line.
 class LineLayer extends Layer {
   LineLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
     required this.sourceId,
     this.sourceLayer,
     this.lineCap,
