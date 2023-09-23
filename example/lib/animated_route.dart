@@ -39,32 +39,26 @@ class AnimatedRouteState extends State<AnimatedRoute>
   var trackLocation = true;
   var showAnnotations = false;
 
+  void dispose() {
+    super.dispose();
+
+    timer?.cancel();
+  }
+
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     this.pointAnnotationManager =
         await mapboxMap.annotations.createPointAnnotationManager();
 
-    mapboxMap.subscribe(_eventObserver, [
-      MapEvents.STYLE_LOADED,
-      MapEvents.MAP_LOADED,
-      MapEvents.MAP_IDLE,
-    ]);
-
     await _getPermission();
+
+    setLocationComponent();
+    refreshTrackLocation();
+    refreshCarAnnotations();
   }
 
   _getPermission() async {
     await Permission.locationWhenInUse.request();
-  }
-
-  _eventObserver(Event event) {
-    // print("Receive event, type: ${event.type}, data: ${event.data}");
-  }
-
-  _onStyleLoadedCallback(StyleLoadedEventData data) {
-    setLocationComponent();
-    refreshTrackLocation();
-    refreshCarAnnotations();
   }
 
   @override
@@ -110,7 +104,6 @@ class AnimatedRouteState extends State<AnimatedRoute>
           styleUri: MapboxStyles.LIGHT,
           textureView: true,
           onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoadedCallback,
         ));
   }
 
