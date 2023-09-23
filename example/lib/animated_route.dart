@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/helpers.dart';
 
 import 'page.dart';
 
@@ -106,7 +104,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
           ),
         ),
         body: MapWidget(
-          key: const ValueKey("mapWidget"),
+          key: const ValueKey('mapWidget'),
           resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(zoom: 3.0),
           styleUri: MapboxStyles.LIGHT,
@@ -189,9 +187,9 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
   @override
   void onPointAnnotationClick(PointAnnotation annotation) async {
-    if (await mapState.mapboxMap.style.styleSourceExists("source")) {
-      await mapState.mapboxMap.style.removeStyleLayer("layer");
-      await mapState.mapboxMap.style.removeStyleSource("source");
+    if (await mapState.mapboxMap.style.styleSourceExists('source')) {
+      await mapState.mapboxMap.style.removeStyleLayer('layer');
+      await mapState.mapboxMap.style.removeStyleSource('source');
     }
 
     // build route from puck position to the clicked annotation
@@ -206,14 +204,14 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
   drawRouteLowLevel(List<Position> polyline) async {
     final line = LineString(coordinates: polyline);
-    mapState.mapboxMap.style.styleSourceExists("source").then((exists) async {
+    mapState.mapboxMap.style.styleSourceExists('source').then((exists) async {
       if (exists) {
         // if source exists - just update it
-        final source = await mapState.mapboxMap.style.getSource("source");
+        final source = await mapState.mapboxMap.style.getSource('source');
         (source as GeoJsonSource).updateGeoJSON(json.encode(line));
       } else {
         await mapState.mapboxMap.style.addSource(GeoJsonSource(
-            id: "source", data: json.encode(line), lineMetrics: true));
+            id: 'source', data: json.encode(line), lineMetrics: true));
 
         await mapState.mapboxMap.style.addLayer(LineLayer(
           id: 'layer',
@@ -233,7 +231,7 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
           await mapState.mapboxMap.style.getLayer('layer') as LineLayer;
 
       // draw layer with gradient
-      mapState.mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+      mapState.mapboxMap.style.setStyleLayerProperty('layer', 'line-gradient',
           '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
 
       // animate layer to reveal it from start to end
