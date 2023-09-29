@@ -23,7 +23,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.19.0
-  pigeon: ^11.0.1
+  pigeon:
+    git:
+      url: https://github.com/evil159/packages.git
+      ref: 53718b121f385905a7baa1531f771d24bbb25a1d
+      path: packages/pigeon
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
