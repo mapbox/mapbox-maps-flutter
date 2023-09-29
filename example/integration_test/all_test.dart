@@ -45,7 +45,6 @@ import 'scale_bar_test.dart' as scale_bar_test;
 void main() {
   animation_test.main();
   camera_test.main();
-  location_test.main();
   map_interface_test.main();
   mapboxMap_test.main();
   projection_test.main();
@@ -88,4 +87,9 @@ void main() {
   raster_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
+
+  // location test has to be at the bottom as on iOS it triggers location permission dialog
+  // to be shown which makes tests that rely on QRF/QSF fail
+  // TODO: address this properly by granting the location permission somehow
+  location_test.main();
 }

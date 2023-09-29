@@ -4,14 +4,14 @@ import UIKit
 class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSScaleBarSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        switch settings.position {
+        switch settings.position?.value {
         case .BOTTOM_LEFT:
             mapView.ornaments.options.scaleBar.position = .bottomLeading
             mapView.ornaments.options.scaleBar.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .BOTTOM_RIGHT:
             mapView.ornaments.options.scaleBar.position = .bottomTrailing
             mapView.ornaments.options.scaleBar.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .TOP_LEFT:
+        case .TOP_LEFT, .none:
             mapView.ornaments.options.scaleBar.position = .topLeading
             mapView.ornaments.options.scaleBar.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_RIGHT:
@@ -36,7 +36,7 @@ class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
 
         let settings = FLT_SETTINGSScaleBarSettings.make(
             withEnabled: NSNumber(value: mapView.ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden),
-            position: position,
+            position: .init(value: position),
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
             marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),

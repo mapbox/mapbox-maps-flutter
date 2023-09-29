@@ -41,10 +41,10 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
     }
   }
 
-  override fun getStyleDefaultCamera(result: FLTMapInterfaces.Result<FLTMapInterfaces.CameraOptions>?) {
+  override fun getStyleDefaultCamera(result: FLTMapInterfaces.Result<FLTMapInterfaces.CameraOptions>) {
     mapboxMap.getStyle {
       val camera = it.styleDefaultCamera
-      result?.success(camera.toFLTCameraOptions())
+      result.success(camera.toFLTCameraOptions())
     }
   }
 
@@ -203,15 +203,15 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
     layerId: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>
   ) {
     mapboxMap.getStyle {
       val expected =
         it.setStyleLayerProperty(layerId, property, value.toValue())
       if (expected.isError) {
-        result?.error(Throwable(expected.error))
+        result.error(Throwable(expected.error))
       } else {
-        result?.success(null)
+        result.success(null)
       }
     }
   }
@@ -550,14 +550,14 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
   override fun invalidateStyleCustomGeometrySourceRegion(
     sourceId: String,
     bounds: FLTMapInterfaces.CoordinateBounds,
-    result: FLTMapInterfaces.Result<Void>?
+    result: FLTMapInterfaces.Result<Void>
   ) {
     mapboxMap.getStyle { style ->
       style.invalidateStyleCustomGeometrySourceRegion(
         sourceId,
         coordinateBounds = bounds.toCoordinateBounds()
       )
-      result?.success(null)
+      result.success(null)
     }
   }
 

@@ -23,7 +23,7 @@ extension LocationOptions {
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled.boolValue
         }
-        switch settings.puckBearingSource {
+        switch settings.puckBearingSource?.value {
         case .COURSE:
             options.puckBearingSource = .course
         default:
@@ -142,6 +142,19 @@ extension LocationOptions {
             }
         }
 
-        return FLT_SETTINGSLocationComponentSettings.make(withEnabled: enabled, pulsingEnabled: nil, pulsingColor: nil, pulsingMaxRadius: nil, showAccuracyRing: showAccuracyRing, accuracyRingColor: accuracyRingColor, accuracyRingBorderColor: accuracyRingBorderColor, layerAbove: nil, layerBelow: nil, puckBearingEnabled: puckBearingEnabled, puckBearingSource: puckBearingSource, locationPuck: locationPuck)
+        return FLT_SETTINGSLocationComponentSettings.make(
+            withEnabled: enabled,
+            pulsingEnabled: nil,
+            pulsingColor: nil,
+            pulsingMaxRadius: nil,
+            showAccuracyRing: showAccuracyRing,
+            accuracyRingColor: accuracyRingColor,
+            accuracyRingBorderColor: accuracyRingBorderColor,
+            layerAbove: nil,
+            layerBelow: nil,
+            puckBearingEnabled: puckBearingEnabled,
+            puckBearingSource: .init(value: puckBearingSource),
+            locationPuck: locationPuck
+        )
     }
 }

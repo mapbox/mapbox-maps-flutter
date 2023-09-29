@@ -131,12 +131,12 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     func queryRenderedFeaturesGeometry(_ geometry: FLTRenderedQueryGeometry, options: FLTRenderedQueryOptions, completion: @escaping ([FLTQueriedFeature]?, FlutterError?) -> Void) {
         do {
             if geometry.type == FLTType.SCREEN_BOX {
-                let screenDirct = convertStringToDictionary(properties: geometry.value)
-                guard let minDict = screenDirct["min"] as? [String: Double] else {return}
-                guard let maxDict = screenDirct["max"] as? [String: Double] else {return}
+                let screenBoxArray = convertStringToArray(properties: geometry.value)
+                guard let minCoord = screenBoxArray[0] as? [Double] else {return}
+                guard let maxCoord = screenBoxArray[1] as? [Double] else {return}
 
-                let screenBox = ScreenBox(min: ScreenCoordinate(x: minDict["x"] ?? 0, y: minDict["y"] ?? 0),
-                                          max: ScreenCoordinate(x: maxDict["x"] ?? 0, y: maxDict["y"] ?? 0))
+                let screenBox = ScreenBox(min: ScreenCoordinate(x: minCoord[0], y: minCoord[1]),
+                                          max: ScreenCoordinate(x: maxCoord[0], y: maxCoord[1]))
                 let cgRect = screenBox.toCGRect()
                 let queryOptions = try options.toRenderedQueryOptions()
                 self.mapboxMap.queryRenderedFeatures(in: cgRect, options: queryOptions) { result in
@@ -148,8 +148,8 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
                     }
                 }
             } else if geometry.type == FLTType.SCREEN_COORDINATE {
-                guard let pointDirct = convertStringToDictionary(properties: geometry.value) as? [String: Double] else {return}
-                let cgPoint = CGPoint(x: pointDirct["x"] ?? 0, y: pointDirct["y"] ?? 0)
+                guard let pointArray = convertStringToArray(properties: geometry.value) as? [Double] else {return}
+                let cgPoint = CGPoint(x: pointArray[0], y: pointArray[1])
 
                 try self.mapboxMap.queryRenderedFeatures(at: cgPoint, options: options.toRenderedQueryOptions()) { result in
                     switch result {
@@ -160,9 +160,9 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
                     }
                 }
             } else {
-                let cgPoints = try JSONDecoder().decode([[String: Double]].self, from: geometry.value.data(using: String.Encoding.utf8)!)
+                let cgPoints = try JSONDecoder().decode([[Double]].self, from: geometry.value.data(using: String.Encoding.utf8)!)
 
-                try self.mapboxMap.queryRenderedFeatures(for: cgPoints.map({CGPoint(x: $0["x"]!, y: $0["y"]!)}), options: options.toRenderedQueryOptions()) { result in
+                try self.mapboxMap.queryRenderedFeatures(for: cgPoints.map({CGPoint(x: $0[0], y: $0[1])}), options: options.toRenderedQueryOptions()) { result in
                     switch result {
                     case .success(let features):
                         completion(features.map({$0.toFLTQueriedFeature()}), nil)

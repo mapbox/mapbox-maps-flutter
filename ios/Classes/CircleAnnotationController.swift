@@ -319,7 +319,18 @@ extension CircleAnnotation {
             circleStrokeWidth = NSNumber(value: self.circleStrokeWidth!)
         }
 
-        return FLTCircleAnnotation.make(withId: self.id, geometry: self.point.toMap(), circleSortKey: circleSortKey, circleBlur: circleBlur, circleColor: circleColor, circleOpacity: circleOpacity, circleRadius: circleRadius, circleStrokeColor: circleStrokeColor, circleStrokeOpacity: circleStrokeOpacity, circleStrokeWidth: circleStrokeWidth)
+    return FLTCircleAnnotation.make(
+        withId: self.id,
+        geometry: self.point.toMap(),
+        circleSortKey: circleSortKey,
+        circleBlur: circleBlur,
+        circleColor: circleColor,
+        circleOpacity: circleOpacity,
+        circleRadius: circleRadius,
+        circleStrokeColor: circleStrokeColor,
+        circleStrokeOpacity: circleStrokeOpacity,
+        circleStrokeWidth: circleStrokeWidth
+    )
     }
 }
 // End of generated file.

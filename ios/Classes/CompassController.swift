@@ -4,7 +4,7 @@ import UIKit
 class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSCompassSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        switch settings.position {
+        switch settings.position?.value {
         case .BOTTOM_LEFT:
             mapView.ornaments.options.compass.position = .bottomLeading
             mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
@@ -14,7 +14,7 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         case .TOP_LEFT:
             mapView.ornaments.options.compass.position = .topLeading
             mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .TOP_RIGHT:
+        case .TOP_RIGHT, .none:
             mapView.ornaments.options.compass.position = .topTrailing
             mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         }
@@ -58,7 +58,20 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
             visibility = true
         }
 
-        let settings = FLT_SETTINGSCompassSettings.make(withEnabled: true, position: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale), opacity: NSNumber(value: 0.0), rotation: NSNumber(value: 0.0), visibility: visibility, fadeWhenFacingNorth: fadeNorth, clickable: true, image: topImage)
+        let settings = FLT_SETTINGSCompassSettings.make(
+            withEnabled: true,
+            position: .init(value: position),
+            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
+            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            opacity: NSNumber(value: 0.0),
+            rotation: NSNumber(value: 0.0),
+            visibility: visibility,
+            fadeWhenFacingNorth: fadeNorth,
+            clickable: true,
+            image: topImage
+        )
 
         return settings
     }

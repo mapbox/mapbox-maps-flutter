@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -422,14 +425,28 @@ void main() {
     mapboxMap.dragEnd();
   });
   testWidgets('getDragCameraOptions', (WidgetTester tester) async {
-    final mapFuture = app.main();
+    final mapFuture = app.runFixedSizeMap();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var options = await mapboxMap.getDragCameraOptions(
-        ScreenCoordinate(x: 1, y: 1), ScreenCoordinate(x: 100, y: 100));
-    var coordinates = options.center!["coordinates"] as List;
-    expect((coordinates.first as double).round(), 0);
-    expect((coordinates.last as double).round(), 0);
+
+    var destination = ScreenCoordinate(x: 100, y: 100);
+
+    // the input has to be scaled on Android,
+    // as GL Native treats iOS and Android coordinates differently:
+    // * on iOS screen coordinates are expected to be provided(as well as returned by GL Native) as logical pixels
+    // * on Android screen coordinates are expected to be physical pixels(both ways)
+    // TODO: this should be removed once https://mapbox.atlassian.net/browse/MAPSFLT-120 is addressed
+    if (Platform.isAndroid) {
+      final BuildContext context = tester.element(find.byType(MapWidget));
+      final pixelRatio = MediaQuery.of(context).devicePixelRatio;
+      destination.x = destination.x * pixelRatio;
+      destination.y = destination.y * pixelRatio;
+    }
+    final options = await mapboxMap.getDragCameraOptions(
+        ScreenCoordinate(x: 0, y: 0), destination);
+    final coordinates = options.center!["coordinates"] as List;
+    expect((coordinates.first as double).round(), -97);
+    expect((coordinates.last as double).round(), 69);
 
     await addDelay(1000);
   });

@@ -92,8 +92,10 @@ enum MapDebugOptionsData {
   /// with red.
   RENDER_CACHE,
 
-  /// Show 3D model bounding boxes. */
+  /// Show 3D model bounding boxes.
   MODEL_BOUNDS,
+
+  /// Show a wireframe for terrain.
   TERRAIN_WIREFRAME,
 }
 
@@ -102,29 +104,32 @@ enum ViewAnnotationAnchor {
   /// The top of the view annotation is placed closest to the geometry.
   TOP,
 
-  /// The left side of the view annotation is placed closest to the geometry. */
+  /// The left side of the view annotation is placed closest to the geometry.
   LEFT,
 
-  /// The bottom of the view annotation is placed closest to the geometry. */
+  /// The bottom of the view annotation is placed closest to the geometry.
   BOTTOM,
 
-  /// The right side of the view annotation is placed closest to the geometry. */
+  /// The right side of the view annotation is placed closest to the geometry.
   RIGHT,
 
-  /// The top-left corner of the view annotation is placed closest to the geometry. */
+  /// The top-left corner of the view annotation is placed closest to the geometry.
   TOP_LEFT,
 
-  /// The bottom-right corner of the view annotation is placed closest to the geometry. */
+  /// The bottom-right corner of the view annotation is placed closest to the geometry.
   BOTTOM_RIGHT,
 
-  /// The top-right corner of the view annotation is placed closest to the geometry. */
+  /// The top-right corner of the view annotation is placed closest to the geometry.
   TOP_RIGHT,
 
-  /// The bottom-left corner of the view annotation is placed closest to the geometry. */
+  /// The bottom-left corner of the view annotation is placed closest to the geometry.
   BOTTOM_LEFT,
+
+  /// The center of the view annotation is placed closest to the geometry.
   CENTER,
 }
 
+/// Type information of the variant's content
 enum Type {
   SCREEN_BOX,
   SCREEN_COORDINATE,
@@ -151,14 +156,16 @@ enum ResponseErrorReason {
   /// The resource is not found.
   NOT_FOUND,
 
-  /// The server error. */
+  /// The server error.
   SERVER,
 
-  /// The connection error. */
+  /// The connection error.
   CONNECTION,
 
-  /// The error happened because of a rate limit. */
+  /// The error happened because of a rate limit.
   RATE_LIMIT,
+
+  /// Other reason.
   OTHER,
 }
 
@@ -166,6 +173,8 @@ enum ResponseErrorReason {
 enum OfflineRegionDownloadState {
   /// Indicates downloading is inactive.
   INACTIVE,
+
+  /// Indicates downloading is active.
   ACTIVE,
 }
 
@@ -205,11 +214,13 @@ enum StylePropertyValueKind {
   /// The property value is not defined.
   UNDEFINED,
 
-  /// The property value is a constant. */
+  /// The property value is a constant.
   CONSTANT,
 
-  /// The property value is a style [expression](https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions). */
+  /// The property value is a style [expression](https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions).
   EXPRESSION,
+
+  /// Property value is a style [transition](https://docs.mapbox.com/mapbox-gl-js/style-spec/#transition).
   TRANSITION,
 }
 
@@ -320,7 +331,7 @@ enum TileRegionErrorType {
 
 /// The distance on each side between rectangles, when one is contained into other.
 ///
-/// All fields' values are in pixels units.
+/// All fields' values are in `platform pixel` units.
 class MbxEdgeInsets {
   MbxEdgeInsets({
     required this.top,
@@ -342,21 +353,21 @@ class MbxEdgeInsets {
   double right;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['top'] = top;
-    pigeonMap['left'] = left;
-    pigeonMap['bottom'] = bottom;
-    pigeonMap['right'] = right;
-    return pigeonMap;
+    return <Object?>[
+      top,
+      left,
+      bottom,
+      right,
+    ];
   }
 
-  static MbxEdgeInsets decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MbxEdgeInsets decode(Object result) {
+    result as List<Object?>;
     return MbxEdgeInsets(
-      top: pigeonMap['top']! as double,
-      left: pigeonMap['left']! as double,
-      bottom: pigeonMap['bottom']! as double,
-      right: pigeonMap['right']! as double,
+      top: result[0]! as double,
+      left: result[1]! as double,
+      bottom: result[2]! as double,
+      right: result[3]! as double,
     );
   }
 }
@@ -398,30 +409,29 @@ class CameraOptions {
   double? pitch;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['center'] = center;
-    pigeonMap['padding'] = padding?.encode();
-    pigeonMap['anchor'] = anchor?.encode();
-    pigeonMap['zoom'] = zoom;
-    pigeonMap['bearing'] = bearing;
-    pigeonMap['pitch'] = pitch;
-    return pigeonMap;
+    return <Object?>[
+      center,
+      padding?.encode(),
+      anchor?.encode(),
+      zoom,
+      bearing,
+      pitch,
+    ];
   }
 
-  static CameraOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CameraOptions decode(Object result) {
+    result as List<Object?>;
     return CameraOptions(
-      center: (pigeonMap['center'] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>(),
-      padding: pigeonMap['padding'] != null
-          ? MbxEdgeInsets.decode(pigeonMap['padding']!)
+      center: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      padding: result[1] != null
+          ? MbxEdgeInsets.decode(result[1]! as List<Object?>)
           : null,
-      anchor: pigeonMap['anchor'] != null
-          ? ScreenCoordinate.decode(pigeonMap['anchor']!)
+      anchor: result[2] != null
+          ? ScreenCoordinate.decode(result[2]! as List<Object?>)
           : null,
-      zoom: pigeonMap['zoom'] as double?,
-      bearing: pigeonMap['bearing'] as double?,
-      pitch: pigeonMap['pitch'] as double?,
+      zoom: result[3] as double?,
+      bearing: result[4] as double?,
+      pitch: result[5] as double?,
     );
   }
 }
@@ -454,24 +464,23 @@ class CameraState {
   double pitch;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['center'] = center;
-    pigeonMap['padding'] = padding.encode();
-    pigeonMap['zoom'] = zoom;
-    pigeonMap['bearing'] = bearing;
-    pigeonMap['pitch'] = pitch;
-    return pigeonMap;
+    return <Object?>[
+      center,
+      padding.encode(),
+      zoom,
+      bearing,
+      pitch,
+    ];
   }
 
-  static CameraState decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CameraState decode(Object result) {
+    result as List<Object?>;
     return CameraState(
-      center: (pigeonMap['center'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>(),
-      padding: MbxEdgeInsets.decode(pigeonMap['padding']!),
-      zoom: pigeonMap['zoom']! as double,
-      bearing: pigeonMap['bearing']! as double,
-      pitch: pigeonMap['pitch']! as double,
+      center: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      padding: MbxEdgeInsets.decode(result[1]! as List<Object?>),
+      zoom: result[2]! as double,
+      bearing: result[3]! as double,
+      pitch: result[4]! as double,
     );
   }
 }
@@ -502,25 +511,25 @@ class CameraBoundsOptions {
   double? minPitch;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['bounds'] = bounds?.encode();
-    pigeonMap['maxZoom'] = maxZoom;
-    pigeonMap['minZoom'] = minZoom;
-    pigeonMap['maxPitch'] = maxPitch;
-    pigeonMap['minPitch'] = minPitch;
-    return pigeonMap;
+    return <Object?>[
+      bounds?.encode(),
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    ];
   }
 
-  static CameraBoundsOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CameraBoundsOptions decode(Object result) {
+    result as List<Object?>;
     return CameraBoundsOptions(
-      bounds: pigeonMap['bounds'] != null
-          ? CoordinateBounds.decode(pigeonMap['bounds']!)
+      bounds: result[0] != null
+          ? CoordinateBounds.decode(result[0]! as List<Object?>)
           : null,
-      maxZoom: pigeonMap['maxZoom'] as double?,
-      minZoom: pigeonMap['minZoom'] as double?,
-      maxPitch: pigeonMap['maxPitch'] as double?,
-      minPitch: pigeonMap['minPitch'] as double?,
+      maxZoom: result[1] as double?,
+      minZoom: result[2] as double?,
+      maxPitch: result[3] as double?,
+      minPitch: result[4] as double?,
     );
   }
 }
@@ -551,23 +560,23 @@ class CameraBounds {
   double minPitch;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['bounds'] = bounds.encode();
-    pigeonMap['maxZoom'] = maxZoom;
-    pigeonMap['minZoom'] = minZoom;
-    pigeonMap['maxPitch'] = maxPitch;
-    pigeonMap['minPitch'] = minPitch;
-    return pigeonMap;
+    return <Object?>[
+      bounds.encode(),
+      maxZoom,
+      minZoom,
+      maxPitch,
+      minPitch,
+    ];
   }
 
-  static CameraBounds decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CameraBounds decode(Object result) {
+    result as List<Object?>;
     return CameraBounds(
-      bounds: CoordinateBounds.decode(pigeonMap['bounds']!),
-      maxZoom: pigeonMap['maxZoom']! as double,
-      minZoom: pigeonMap['minZoom']! as double,
-      maxPitch: pigeonMap['maxPitch']! as double,
-      minPitch: pigeonMap['minPitch']! as double,
+      bounds: CoordinateBounds.decode(result[0]! as List<Object?>),
+      maxZoom: result[1]! as double,
+      minZoom: result[2]! as double,
+      maxPitch: result[3]! as double,
+      minPitch: result[4]! as double,
     );
   }
 }
@@ -587,17 +596,17 @@ class MapAnimationOptions {
   int? startDelay;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['duration'] = duration;
-    pigeonMap['startDelay'] = startDelay;
-    return pigeonMap;
+    return <Object?>[
+      duration,
+      startDelay,
+    ];
   }
 
-  static MapAnimationOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MapAnimationOptions decode(Object result) {
+    result as List<Object?>;
     return MapAnimationOptions(
-      duration: pigeonMap['duration'] as int?,
-      startDelay: pigeonMap['startDelay'] as int?,
+      duration: result[0] as int?,
+      startDelay: result[1] as int?,
     );
   }
 }
@@ -623,21 +632,21 @@ class CoordinateBounds {
   bool infiniteBounds;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['southwest'] = southwest;
-    pigeonMap['northeast'] = northeast;
-    pigeonMap['infiniteBounds'] = infiniteBounds;
-    return pigeonMap;
+    return <Object?>[
+      southwest,
+      northeast,
+      infiniteBounds,
+    ];
   }
 
-  static CoordinateBounds decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CoordinateBounds decode(Object result) {
+    result as List<Object?>;
     return CoordinateBounds(
-      southwest: (pigeonMap['southwest'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>(),
-      northeast: (pigeonMap['northeast'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>(),
-      infiniteBounds: pigeonMap['infiniteBounds']! as bool,
+      southwest:
+          (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      northeast:
+          (result[1] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      infiniteBounds: result[2]! as bool,
     );
   }
 }
@@ -651,15 +660,15 @@ class MapDebugOptions {
   MapDebugOptionsData data;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['data'] = data.index;
-    return pigeonMap;
+    return <Object?>[
+      data.index,
+    ];
   }
 
-  static MapDebugOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MapDebugOptions decode(Object result) {
+    result as List<Object?>;
     return MapDebugOptions(
-      data: MapDebugOptionsData.values[pigeonMap['data']! as int],
+      data: MapDebugOptionsData.values[result[0]! as int],
     );
   }
 }
@@ -689,18 +698,17 @@ class GlyphsRasterizationOptions {
   String? fontFamily;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['rasterizationMode'] = rasterizationMode.index;
-    pigeonMap['fontFamily'] = fontFamily;
-    return pigeonMap;
+    return <Object?>[
+      rasterizationMode.index,
+      fontFamily,
+    ];
   }
 
-  static GlyphsRasterizationOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static GlyphsRasterizationOptions decode(Object result) {
+    result as List<Object?>;
     return GlyphsRasterizationOptions(
-      rasterizationMode: GlyphsRasterizationMode
-          .values[pigeonMap['rasterizationMode']! as int],
-      fontFamily: pigeonMap['fontFamily'] as String?,
+      rasterizationMode: GlyphsRasterizationMode.values[result[0]! as int],
+      fontFamily: result[1] as String?,
     );
   }
 }
@@ -714,15 +722,15 @@ class MapMemoryBudgetInMegabytes {
   int size;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['size'] = size;
-    return pigeonMap;
+    return <Object?>[
+      size,
+    ];
   }
 
-  static MapMemoryBudgetInMegabytes decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MapMemoryBudgetInMegabytes decode(Object result) {
+    result as List<Object?>;
     return MapMemoryBudgetInMegabytes(
-      size: pigeonMap['size']! as int,
+      size: result[0]! as int,
     );
   }
 }
@@ -736,15 +744,15 @@ class MapMemoryBudgetInTiles {
   int size;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['size'] = size;
-    return pigeonMap;
+    return <Object?>[
+      size,
+    ];
   }
 
-  static MapMemoryBudgetInTiles decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MapMemoryBudgetInTiles decode(Object result) {
+    result as List<Object?>;
     return MapMemoryBudgetInTiles(
-      size: pigeonMap['size']! as int,
+      size: result[0]! as int,
     );
   }
 }
@@ -806,44 +814,37 @@ class MapOptions {
   GlyphsRasterizationOptions? glyphsRasterizationOptions;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['contextMode'] = contextMode?.index;
-    pigeonMap['constrainMode'] = constrainMode?.index;
-    pigeonMap['viewportMode'] = viewportMode?.index;
-    pigeonMap['orientation'] = orientation?.index;
-    pigeonMap['crossSourceCollisions'] = crossSourceCollisions;
-    pigeonMap['optimizeForTerrain'] = optimizeForTerrain;
-    pigeonMap['size'] = size?.encode();
-    pigeonMap['pixelRatio'] = pixelRatio;
-    pigeonMap['glyphsRasterizationOptions'] =
-        glyphsRasterizationOptions?.encode();
-    return pigeonMap;
+    return <Object?>[
+      contextMode?.index,
+      constrainMode?.index,
+      viewportMode?.index,
+      orientation?.index,
+      crossSourceCollisions,
+      optimizeForTerrain,
+      size?.encode(),
+      pixelRatio,
+      glyphsRasterizationOptions?.encode(),
+    ];
   }
 
-  static MapOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MapOptions decode(Object result) {
+    result as List<Object?>;
     return MapOptions(
-      contextMode: pigeonMap['contextMode'] != null
-          ? ContextMode.values[pigeonMap['contextMode']! as int]
+      contextMode:
+          result[0] != null ? ContextMode.values[result[0]! as int] : null,
+      constrainMode:
+          result[1] != null ? ConstrainMode.values[result[1]! as int] : null,
+      viewportMode:
+          result[2] != null ? ViewportMode.values[result[2]! as int] : null,
+      orientation:
+          result[3] != null ? NorthOrientation.values[result[3]! as int] : null,
+      crossSourceCollisions: result[4] as bool?,
+      optimizeForTerrain: result[5] as bool?,
+      size: result[6] != null ? Size.decode(result[6]! as List<Object?>) : null,
+      pixelRatio: result[7]! as double,
+      glyphsRasterizationOptions: result[8] != null
+          ? GlyphsRasterizationOptions.decode(result[8]! as List<Object?>)
           : null,
-      constrainMode: pigeonMap['constrainMode'] != null
-          ? ConstrainMode.values[pigeonMap['constrainMode']! as int]
-          : null,
-      viewportMode: pigeonMap['viewportMode'] != null
-          ? ViewportMode.values[pigeonMap['viewportMode']! as int]
-          : null,
-      orientation: pigeonMap['orientation'] != null
-          ? NorthOrientation.values[pigeonMap['orientation']! as int]
-          : null,
-      crossSourceCollisions: pigeonMap['crossSourceCollisions'] as bool?,
-      optimizeForTerrain: pigeonMap['optimizeForTerrain'] as bool?,
-      size: pigeonMap['size'] != null ? Size.decode(pigeonMap['size']!) : null,
-      pixelRatio: pigeonMap['pixelRatio']! as double,
-      glyphsRasterizationOptions:
-          pigeonMap['glyphsRasterizationOptions'] != null
-              ? GlyphsRasterizationOptions.decode(
-                  pigeonMap['glyphsRasterizationOptions']!)
-              : null,
     );
   }
 }
@@ -863,17 +864,17 @@ class ScreenCoordinate {
   double y;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['x'] = x;
-    pigeonMap['y'] = y;
-    return pigeonMap;
+    return <Object?>[
+      x,
+      y,
+    ];
   }
 
-  static ScreenCoordinate decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ScreenCoordinate decode(Object result) {
+    result as List<Object?>;
     return ScreenCoordinate(
-      x: pigeonMap['x']! as double,
-      y: pigeonMap['y']! as double,
+      x: result[0]! as double,
+      y: result[1]! as double,
     );
   }
 }
@@ -893,17 +894,17 @@ class ScreenBox {
   ScreenCoordinate max;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['min'] = min.encode();
-    pigeonMap['max'] = max.encode();
-    return pigeonMap;
+    return <Object?>[
+      min.encode(),
+      max.encode(),
+    ];
   }
 
-  static ScreenBox decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ScreenBox decode(Object result) {
+    result as List<Object?>;
     return ScreenBox(
-      min: ScreenCoordinate.decode(pigeonMap['min']!),
-      max: ScreenCoordinate.decode(pigeonMap['max']!),
+      min: ScreenCoordinate.decode(result[0]! as List<Object?>),
+      max: ScreenCoordinate.decode(result[1]! as List<Object?>),
     );
   }
 }
@@ -922,17 +923,17 @@ class CoordinateBoundsZoom {
   double zoom;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['bounds'] = bounds.encode();
-    pigeonMap['zoom'] = zoom;
-    return pigeonMap;
+    return <Object?>[
+      bounds.encode(),
+      zoom,
+    ];
   }
 
-  static CoordinateBoundsZoom decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CoordinateBoundsZoom decode(Object result) {
+    result as List<Object?>;
     return CoordinateBoundsZoom(
-      bounds: CoordinateBounds.decode(pigeonMap['bounds']!),
-      zoom: pigeonMap['zoom']! as double,
+      bounds: CoordinateBounds.decode(result[0]! as List<Object?>),
+      zoom: result[1]! as double,
     );
   }
 }
@@ -951,17 +952,17 @@ class Size {
   double height;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['width'] = width;
-    pigeonMap['height'] = height;
-    return pigeonMap;
+    return <Object?>[
+      width,
+      height,
+    ];
   }
 
-  static Size decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static Size decode(Object result) {
+    result as List<Object?>;
     return Size(
-      width: pigeonMap['width']! as double,
-      height: pigeonMap['height']! as double,
+      width: result[0]! as double,
+      height: result[1]! as double,
     );
   }
 }
@@ -980,17 +981,17 @@ class RenderedQueryOptions {
   String? filter;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['layerIds'] = layerIds;
-    pigeonMap['filter'] = filter;
-    return pigeonMap;
+    return <Object?>[
+      layerIds,
+      filter,
+    ];
   }
 
-  static RenderedQueryOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static RenderedQueryOptions decode(Object result) {
+    result as List<Object?>;
     return RenderedQueryOptions(
-      layerIds: (pigeonMap['layerIds'] as List<Object?>?)?.cast<String?>(),
-      filter: pigeonMap['filter'] as String?,
+      layerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      filter: result[1] as String?,
     );
   }
 }
@@ -1009,18 +1010,17 @@ class SourceQueryOptions {
   String filter;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['sourceLayerIds'] = sourceLayerIds;
-    pigeonMap['filter'] = filter;
-    return pigeonMap;
+    return <Object?>[
+      sourceLayerIds,
+      filter,
+    ];
   }
 
-  static SourceQueryOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static SourceQueryOptions decode(Object result) {
+    result as List<Object?>;
     return SourceQueryOptions(
-      sourceLayerIds:
-          (pigeonMap['sourceLayerIds'] as List<Object?>?)?.cast<String?>(),
-      filter: pigeonMap['filter']! as String,
+      sourceLayerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      filter: result[1]! as String,
     );
   }
 }
@@ -1039,18 +1039,18 @@ class FeatureExtensionValue {
   List<Map<String?, Object?>?>? featureCollection;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['value'] = value;
-    pigeonMap['featureCollection'] = featureCollection;
-    return pigeonMap;
+    return <Object?>[
+      value,
+      featureCollection,
+    ];
   }
 
-  static FeatureExtensionValue decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static FeatureExtensionValue decode(Object result) {
+    result as List<Object?>;
     return FeatureExtensionValue(
-      value: pigeonMap['value'] as String?,
-      featureCollection: (pigeonMap['featureCollection'] as List<Object?>?)
-          ?.cast<Map<String?, Object?>?>(),
+      value: result[0] as String?,
+      featureCollection:
+          (result[1] as List<Object?>?)?.cast<Map<String?, Object?>?>(),
     );
   }
 }
@@ -1073,19 +1073,19 @@ class LayerPosition {
   int? at;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['above'] = above;
-    pigeonMap['below'] = below;
-    pigeonMap['at'] = at;
-    return pigeonMap;
+    return <Object?>[
+      above,
+      below,
+      at,
+    ];
   }
 
-  static LayerPosition decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static LayerPosition decode(Object result) {
+    result as List<Object?>;
     return LayerPosition(
-      above: pigeonMap['above'] as String?,
-      below: pigeonMap['below'] as String?,
-      at: pigeonMap['at'] as int?,
+      above: result[0] as String?,
+      below: result[1] as String?,
+      at: result[2] as int?,
     );
   }
 }
@@ -1115,27 +1115,26 @@ class QueriedFeature {
   String state;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['feature'] = feature;
-    pigeonMap['source'] = source;
-    pigeonMap['sourceLayer'] = sourceLayer;
-    pigeonMap['state'] = state;
-    return pigeonMap;
+    return <Object?>[
+      feature,
+      source,
+      sourceLayer,
+      state,
+    ];
   }
 
-  static QueriedFeature decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static QueriedFeature decode(Object result) {
+    result as List<Object?>;
     return QueriedFeature(
-      feature: (pigeonMap['feature'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>(),
-      source: pigeonMap['source']! as String,
-      sourceLayer: pigeonMap['sourceLayer'] as String?,
-      state: pigeonMap['state']! as String,
+      feature: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      source: result[1]! as String,
+      sourceLayer: result[2] as String?,
+      state: result[3]! as String,
     );
   }
 }
 
-/// Geometry for querying rendered features. */
+/// Geometry for querying rendered features.
 class RenderedQueryGeometry {
   RenderedQueryGeometry({
     required this.value,
@@ -1144,20 +1143,21 @@ class RenderedQueryGeometry {
 
   /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
   String value;
+
   Type type;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['value'] = value;
-    pigeonMap['type'] = type.index;
-    return pigeonMap;
+    return <Object?>[
+      value,
+      type.index,
+    ];
   }
 
-  static RenderedQueryGeometry decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static RenderedQueryGeometry decode(Object result) {
+    result as List<Object?>;
     return RenderedQueryGeometry(
-      value: pigeonMap['value']! as String,
-      type: Type.values[pigeonMap['type']! as int],
+      value: result[0]! as String,
+      type: Type.values[result[1]! as int],
     );
   }
 }
@@ -1196,27 +1196,26 @@ class OfflineRegionGeometryDefinition {
   GlyphsRasterizationMode glyphsRasterizationMode;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['styleURL'] = styleURL;
-    pigeonMap['geometry'] = geometry;
-    pigeonMap['minZoom'] = minZoom;
-    pigeonMap['maxZoom'] = maxZoom;
-    pigeonMap['pixelRatio'] = pixelRatio;
-    pigeonMap['glyphsRasterizationMode'] = glyphsRasterizationMode.index;
-    return pigeonMap;
+    return <Object?>[
+      styleURL,
+      geometry,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      glyphsRasterizationMode.index,
+    ];
   }
 
-  static OfflineRegionGeometryDefinition decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static OfflineRegionGeometryDefinition decode(Object result) {
+    result as List<Object?>;
     return OfflineRegionGeometryDefinition(
-      styleURL: pigeonMap['styleURL']! as String,
-      geometry: (pigeonMap['geometry'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>(),
-      minZoom: pigeonMap['minZoom']! as double,
-      maxZoom: pigeonMap['maxZoom']! as double,
-      pixelRatio: pigeonMap['pixelRatio']! as double,
-      glyphsRasterizationMode: GlyphsRasterizationMode
-          .values[pigeonMap['glyphsRasterizationMode']! as int],
+      styleURL: result[0]! as String,
+      geometry: (result[1] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      minZoom: result[2]! as double,
+      maxZoom: result[3]! as double,
+      pixelRatio: result[4]! as double,
+      glyphsRasterizationMode:
+          GlyphsRasterizationMode.values[result[5]! as int],
     );
   }
 }
@@ -1255,26 +1254,26 @@ class OfflineRegionTilePyramidDefinition {
   GlyphsRasterizationMode glyphsRasterizationMode;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['styleURL'] = styleURL;
-    pigeonMap['bounds'] = bounds.encode();
-    pigeonMap['minZoom'] = minZoom;
-    pigeonMap['maxZoom'] = maxZoom;
-    pigeonMap['pixelRatio'] = pixelRatio;
-    pigeonMap['glyphsRasterizationMode'] = glyphsRasterizationMode.index;
-    return pigeonMap;
+    return <Object?>[
+      styleURL,
+      bounds.encode(),
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      glyphsRasterizationMode.index,
+    ];
   }
 
-  static OfflineRegionTilePyramidDefinition decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static OfflineRegionTilePyramidDefinition decode(Object result) {
+    result as List<Object?>;
     return OfflineRegionTilePyramidDefinition(
-      styleURL: pigeonMap['styleURL']! as String,
-      bounds: CoordinateBounds.decode(pigeonMap['bounds']!),
-      minZoom: pigeonMap['minZoom']! as double,
-      maxZoom: pigeonMap['maxZoom']! as double,
-      pixelRatio: pigeonMap['pixelRatio']! as double,
-      glyphsRasterizationMode: GlyphsRasterizationMode
-          .values[pigeonMap['glyphsRasterizationMode']! as int],
+      styleURL: result[0]! as String,
+      bounds: CoordinateBounds.decode(result[1]! as List<Object?>),
+      minZoom: result[2]! as double,
+      maxZoom: result[3]! as double,
+      pixelRatio: result[4]! as double,
+      glyphsRasterizationMode:
+          GlyphsRasterizationMode.values[result[5]! as int],
     );
   }
 }
@@ -1298,17 +1297,17 @@ class ProjectedMeters {
   double easting;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['northing'] = northing;
-    pigeonMap['easting'] = easting;
-    return pigeonMap;
+    return <Object?>[
+      northing,
+      easting,
+    ];
   }
 
-  static ProjectedMeters decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ProjectedMeters decode(Object result) {
+    result as List<Object?>;
     return ProjectedMeters(
-      northing: pigeonMap['northing']! as double,
-      easting: pigeonMap['easting']! as double,
+      northing: result[0]! as double,
+      easting: result[1]! as double,
     );
   }
 }
@@ -1327,17 +1326,17 @@ class MercatorCoordinate {
   double y;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['x'] = x;
-    pigeonMap['y'] = y;
-    return pigeonMap;
+    return <Object?>[
+      x,
+      y,
+    ];
   }
 
-  static MercatorCoordinate decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MercatorCoordinate decode(Object result) {
+    result as List<Object?>;
     return MercatorCoordinate(
-      x: pigeonMap['x']! as double,
-      y: pigeonMap['y']! as double,
+      x: result[0]! as double,
+      y: result[1]! as double,
     );
   }
 }
@@ -1376,24 +1375,24 @@ class ResourceOptions {
   TileStoreUsageMode? tileStoreUsageMode;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['accessToken'] = accessToken;
-    pigeonMap['baseURL'] = baseURL;
-    pigeonMap['dataPath'] = dataPath;
-    pigeonMap['assetPath'] = assetPath;
-    pigeonMap['tileStoreUsageMode'] = tileStoreUsageMode?.index;
-    return pigeonMap;
+    return <Object?>[
+      accessToken,
+      baseURL,
+      dataPath,
+      assetPath,
+      tileStoreUsageMode?.index,
+    ];
   }
 
-  static ResourceOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ResourceOptions decode(Object result) {
+    result as List<Object?>;
     return ResourceOptions(
-      accessToken: pigeonMap['accessToken']! as String,
-      baseURL: pigeonMap['baseURL'] as String?,
-      dataPath: pigeonMap['dataPath'] as String?,
-      assetPath: pigeonMap['assetPath'] as String?,
-      tileStoreUsageMode: pigeonMap['tileStoreUsageMode'] != null
-          ? TileStoreUsageMode.values[pigeonMap['tileStoreUsageMode']! as int]
+      accessToken: result[0]! as String,
+      baseURL: result[1] as String?,
+      dataPath: result[2] as String?,
+      assetPath: result[3] as String?,
+      tileStoreUsageMode: result[4] != null
+          ? TileStoreUsageMode.values[result[4]! as int]
           : null,
     );
   }
@@ -1413,17 +1412,17 @@ class StyleObjectInfo {
   String type;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['id'] = id;
-    pigeonMap['type'] = type;
-    return pigeonMap;
+    return <Object?>[
+      id,
+      type,
+    ];
   }
 
-  static StyleObjectInfo decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static StyleObjectInfo decode(Object result) {
+    result as List<Object?>;
     return StyleObjectInfo(
-      id: pigeonMap['id']! as String,
-      type: pigeonMap['type']! as String,
+      id: result[0]! as String,
+      type: result[1]! as String,
     );
   }
 }
@@ -1450,19 +1449,19 @@ class MbxImage {
   Uint8List data;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['width'] = width;
-    pigeonMap['height'] = height;
-    pigeonMap['data'] = data;
-    return pigeonMap;
+    return <Object?>[
+      width,
+      height,
+      data,
+    ];
   }
 
-  static MbxImage decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static MbxImage decode(Object result) {
+    result as List<Object?>;
     return MbxImage(
-      width: pigeonMap['width']! as int,
-      height: pigeonMap['height']! as int,
-      data: pigeonMap['data']! as Uint8List,
+      width: result[0]! as int,
+      height: result[1]! as int,
+      data: result[2]! as Uint8List,
     );
   }
 }
@@ -1481,17 +1480,17 @@ class ImageStretches {
   double second;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['first'] = first;
-    pigeonMap['second'] = second;
-    return pigeonMap;
+    return <Object?>[
+      first,
+      second,
+    ];
   }
 
-  static ImageStretches decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ImageStretches decode(Object result) {
+    result as List<Object?>;
     return ImageStretches(
-      first: pigeonMap['first']! as double,
-      second: pigeonMap['second']! as double,
+      first: result[0]! as double,
+      second: result[1]! as double,
     );
   }
 }
@@ -1520,21 +1519,21 @@ class ImageContent {
   double bottom;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['left'] = left;
-    pigeonMap['top'] = top;
-    pigeonMap['right'] = right;
-    pigeonMap['bottom'] = bottom;
-    return pigeonMap;
+    return <Object?>[
+      left,
+      top,
+      right,
+      bottom,
+    ];
   }
 
-  static ImageContent decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static ImageContent decode(Object result) {
+    result as List<Object?>;
     return ImageContent(
-      left: pigeonMap['left']! as double,
-      top: pigeonMap['top']! as double,
-      right: pigeonMap['right']! as double,
-      bottom: pigeonMap['bottom']! as double,
+      left: result[0]! as double,
+      top: result[1]! as double,
+      right: result[2]! as double,
+      bottom: result[3]! as double,
     );
   }
 }
@@ -1561,20 +1560,19 @@ class TransitionOptions {
   bool? enablePlacementTransitions;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['duration'] = duration;
-    pigeonMap['delay'] = delay;
-    pigeonMap['enablePlacementTransitions'] = enablePlacementTransitions;
-    return pigeonMap;
+    return <Object?>[
+      duration,
+      delay,
+      enablePlacementTransitions,
+    ];
   }
 
-  static TransitionOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static TransitionOptions decode(Object result) {
+    result as List<Object?>;
     return TransitionOptions(
-      duration: pigeonMap['duration'] as int?,
-      delay: pigeonMap['delay'] as int?,
-      enablePlacementTransitions:
-          pigeonMap['enablePlacementTransitions'] as bool?,
+      duration: result[0] as int?,
+      delay: result[1] as int?,
+      enablePlacementTransitions: result[2] as bool?,
     );
   }
 }
@@ -1597,19 +1595,19 @@ class CanonicalTileID {
   int y;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['z'] = z;
-    pigeonMap['x'] = x;
-    pigeonMap['y'] = y;
-    return pigeonMap;
+    return <Object?>[
+      z,
+      x,
+      y,
+    ];
   }
 
-  static CanonicalTileID decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static CanonicalTileID decode(Object result) {
+    result as List<Object?>;
     return CanonicalTileID(
-      z: pigeonMap['z']! as int,
-      x: pigeonMap['x']! as int,
-      y: pigeonMap['y']! as int,
+      z: result[0]! as int,
+      x: result[1]! as int,
+      y: result[2]! as int,
     );
   }
 }
@@ -1628,17 +1626,17 @@ class StylePropertyValue {
   StylePropertyValueKind kind;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['value'] = value;
-    pigeonMap['kind'] = kind.index;
-    return pigeonMap;
+    return <Object?>[
+      value,
+      kind.index,
+    ];
   }
 
-  static StylePropertyValue decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static StylePropertyValue decode(Object result) {
+    result as List<Object?>;
     return StylePropertyValue(
-      value: pigeonMap['value']! as String,
-      kind: StylePropertyValueKind.values[pigeonMap['kind']! as int],
+      value: result[0]! as String,
+      kind: StylePropertyValueKind.values[result[1]! as int],
     );
   }
 }
@@ -1672,32 +1670,27 @@ class __AnimationManagerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 129:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 130:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 131:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 132:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Interface for managing animation.
 class _AnimationManager {
   /// Constructor for [_AnimationManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   _AnimationManager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = __AnimationManagerCodec();
@@ -1705,23 +1698,22 @@ class _AnimationManager {
   Future<void> easeTo(CameraOptions arg_cameraOptions,
       MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.easeTo', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.easeTo',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_cameraOptions, arg_mapAnimationOptions])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1731,23 +1723,21 @@ class _AnimationManager {
   Future<void> flyTo(CameraOptions arg_cameraOptions,
       MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.flyTo', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.flyTo', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_cameraOptions, arg_mapAnimationOptions])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1757,23 +1747,21 @@ class _AnimationManager {
   Future<void> pitchBy(
       double arg_pitch, MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.pitchBy', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.pitchBy',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_pitch, arg_mapAnimationOptions])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_pitch, arg_mapAnimationOptions]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1785,25 +1773,24 @@ class _AnimationManager {
       ScreenCoordinate? arg_screenCoordinate,
       MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.scaleBy', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.scaleBy',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[
+    final List<Object?>? replyList = await channel.send(<Object?>[
       arg_amount,
       arg_screenCoordinate,
       arg_mapAnimationOptions
-    ]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    ]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1813,23 +1800,22 @@ class _AnimationManager {
   Future<void> moveBy(ScreenCoordinate arg_screenCoordinate,
       MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.moveBy', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.moveBy',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_screenCoordinate, arg_mapAnimationOptions])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1839,23 +1825,22 @@ class _AnimationManager {
   Future<void> rotateBy(ScreenCoordinate arg_first, ScreenCoordinate arg_second,
       MapAnimationOptions? arg_mapAnimationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.rotateBy', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.rotateBy',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_first, arg_second, arg_mapAnimationOptions])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1864,22 +1849,20 @@ class _AnimationManager {
 
   Future<void> cancelCameraAnimation() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._AnimationManager.cancelCameraAnimation', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.cancelCameraAnimation',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2003,681 +1986,749 @@ class __CameraManagerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Interface for managing camera.
 class _CameraManager {
   /// Constructor for [_CameraManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   _CameraManager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = __CameraManagerCodec();
 
+  /// Convenience method that returns the `camera options` object for given parameters.
+  ///
+  /// @param bounds The `coordinate bounds` of the camera.
+  /// @param padding The `edge insets` of the camera.
+  /// @param bearing The bearing of the camera.
+  /// @param pitch The pitch of the camera.
+  ///
+  /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinateBounds(CoordinateBounds arg_bounds,
       MbxEdgeInsets arg_padding, double? arg_bearing, double? arg_pitch) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.cameraForCoordinateBounds', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinateBounds',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_bounds, arg_padding, arg_bearing, arg_pitch])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Convenience method that returns the `camera options` object for given parameters.
+  ///
+  /// @param coordinates The `coordinates` representing the bounds of the camera.
+  /// @param padding The `edge insets` of the camera.
+  /// @param bearing The bearing of the camera.
+  /// @param pitch The pitch of the camera.
+  ///
+  /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinates(
       List<Map<String?, Object?>?> arg_coordinates,
       MbxEdgeInsets arg_padding,
       double? arg_bearing,
       double? arg_pitch) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.cameraForCoordinates', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinates',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(
+    final List<Object?>? replyList = await channel.send(
             <Object?>[arg_coordinates, arg_padding, arg_bearing, arg_pitch])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Convenience method that adjusts the provided `camera options` object for given parameters.
+  ///
+  /// Returns the provided `camera` options with zoom adjusted to fit `coordinates` into the `box`, so that `coordinates` on the left,
+  /// top and right of the effective `camera` center at the principal point of the projection (defined by `padding`) fit into the `box`.
+  /// Returns the provided `camera` options object unchanged upon an error.
+  /// Note that this method may fail if the principal point of the projection is not inside the `box` or
+  /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
+  ///
+  /// @param coordinates The `coordinates` representing the bounds of the camera.
+  /// @param camera The `camera options` for which zoom should be adjusted. Note that the `camera.center` is required.
+  /// @param box The `screen box` into which `coordinates` should fit.
+  ///
+  /// @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
       List<Map<String?, Object?>?> arg_coordinates,
       CameraOptions arg_camera,
       ScreenBox arg_box) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.cameraForCoordinatesCameraOptions',
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesCameraOptions',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_coordinates, arg_camera, arg_box])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Convenience method that returns the `camera options` object for given parameters.
+  ///
+  /// @param geometry The `geometry` representing the bounds of the camera.
+  /// @param padding The `edge insets` of the camera.
+  /// @param bearing The bearing of the camera.
+  /// @param pitch The pitch of the camera.
+  ///
+  /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForGeometry(Map<String?, Object?> arg_geometry,
       MbxEdgeInsets arg_padding, double? arg_bearing, double? arg_pitch) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.cameraForGeometry', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForGeometry',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_geometry, arg_padding, arg_bearing, arg_pitch])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Returns the `coordinate bounds` for a given camera.
+  ///
+  /// Note that if the given `camera` shows the antimeridian, the returned wrapped `coordinate bounds`
+  /// might not represent the minimum bounding box.
+  ///
+  /// @param camera The `camera options` to use for calculating `coordinate bounds`.
+  ///
+  /// @return The `coordinate bounds` object representing a given `camera`.
+  ///
   Future<CoordinateBounds> coordinateBoundsForCamera(
       CameraOptions arg_camera) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinateBoundsForCamera', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCamera',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_camera]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_camera]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CoordinateBounds?)!;
+      return (replyList[0] as CoordinateBounds?)!;
     }
   }
 
+  /// Returns the `coordinate bounds` for a given camera.
+  ///
+  /// This method is useful if the `camera` shows the antimeridian.
+  ///
+  /// @param camera The `camera options` to use for calculating `coordinate bounds`.
+  ///
+  /// @return The `coordinate bounds` object representing a given `camera`.
+  ///
   Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
       CameraOptions arg_camera) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinateBoundsForCameraUnwrapped',
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCameraUnwrapped',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_camera]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_camera]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CoordinateBounds?)!;
+      return (replyList[0] as CoordinateBounds?)!;
     }
   }
 
+  /// Returns the `coordinate bounds` and the `zoom` for a given `camera`.
+  ///
+  /// Note that if the given `camera` shows the antimeridian, the returned wrapped `coordinate bounds`
+  /// might not represent the minimum bounding box.
+  ///
+  /// @param camera The `camera options` to use for calculating `coordinate bounds` and `zoom`.
+  ///
+  /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
+  ///
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
       CameraOptions arg_camera) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinateBoundsZoomForCamera',
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCamera',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_camera]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_camera]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CoordinateBoundsZoom?)!;
+      return (replyList[0] as CoordinateBoundsZoom?)!;
     }
   }
 
+  /// Returns the unwrapped `coordinate bounds` and `zoom` for a given `camera`.
+  ///
+  /// This method is useful if the `camera` shows the antimeridian.
+  ///
+  /// @param camera The `camera options` to use for calculating `coordinate bounds` and `zoom`.
+  ///
+  /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
+  ///
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
       CameraOptions arg_camera) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinateBoundsZoomForCameraUnwrapped',
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCameraUnwrapped',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_camera]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_camera]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CoordinateBoundsZoom?)!;
+      return (replyList[0] as CoordinateBoundsZoom?)!;
     }
   }
 
+  /// Calculates a `screen coordinate` that corresponds to a geographical coordinate
+  /// (i.e., longitude-latitude pair).
+  ///
+  /// The `screen coordinate` is in `platform pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  ///
+  /// @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
+  ///
+  /// @return A `screen coordinate` on the screen in `platform pixels`.
   Future<ScreenCoordinate> pixelForCoordinate(
       Map<String?, Object?> arg_coordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.pixelForCoordinate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelForCoordinate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as ScreenCoordinate?)!;
+      return (replyList[0] as ScreenCoordinate?)!;
     }
   }
 
+  /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
+  /// to a `screen coordinate`.
+  ///
+  /// The screen coordinate is in `platform pixels`relative to the top left corner
+  /// of the map (not of the whole screen).
+  ///
+  /// @param pixel A `screen coordinate` on the screen in `platform pixels`.
+  ///
+  /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
   Future<Map<String?, Object?>> coordinateForPixel(
       ScreenCoordinate arg_pixel) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinateForPixel', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateForPixel',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_pixel]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_pixel]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (replyList[0] as Map<Object?, Object?>?)!.cast<String?, Object?>();
     }
   }
 
+  /// Calculates `screen coordinates` that correspond to geographical `coordinates`
+  /// (i.e., longitude-latitude pairs).
+  ///
+  /// The `screen coordinates` are in `platform pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  ///
+  /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
+  ///
+  /// @return A `screen coordinates` in `platform pixels` for a given geographical `coordinates`.
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
       List<Map<String?, Object?>?> arg_coordinates) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.pixelsForCoordinates', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_coordinates]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinates]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<ScreenCoordinate?>();
+      return (replyList[0] as List<Object?>?)!.cast<ScreenCoordinate?>();
     }
   }
 
+  /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
+  /// to `screen coordinates`.
+  ///
+  /// The screen coordinates are in `platform pixels` relative to the top left corner
+  /// of the map (not of the whole screen).
+  ///
+  /// @param pixels A `screen coordinates` in `platform pixels`.
+  ///
+  /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
   Future<List<Map<String?, Object?>?>> coordinatesForPixels(
       List<ScreenCoordinate?> arg_pixels) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.coordinatesForPixels', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_pixels]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_pixels]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      // FIXME manually patched - for some reason Pigeon generates incorrect mapping that leads to
-      // Exception: "Unhandled Exception: type '_InternalLinkedHashMap<Object?, Object?>' is not a subtype of type 'Map<String?, Object?>?' in type cast"
-      return (replyMap['result'] as List<Object?>?)!
-          .map((e) => Map<String?, Object?>.from(e as Map<dynamic, dynamic>))
-          .toList();
-      // return (replyMap['result'] as List<Object?>?)!
-      //    .cast<Map<String?, Object?>?>();
+      return (replyList[0] as List<Object?>?)!.cast<Map<String?, Object?>?>();
     }
   }
 
+  /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
+  /// The map will retain its current values for any details not passed via the camera options argument.
+  /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
+  /// different `camera state`.
+  ///
+  /// @param cameraOptions The new `camera options` to be set.
   Future<void> setCamera(CameraOptions arg_cameraOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.setCamera', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setCamera',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_cameraOptions]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_cameraOptions]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns the current `camera state`.
+  ///
+  /// @return The current `camera state`.
   Future<CameraState> getCameraState() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.getCameraState', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getCameraState',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraState?)!;
+      return (replyList[0] as CameraState?)!;
     }
   }
 
+  /// Sets the `camera bounds options` of the map. The map will retain its current values for any
+  /// details not passed via the camera bounds options arguments.
+  /// When camera bounds options are set, the camera center is constrained by these bounds, as well as the minimum
+  /// zoom level of the camera, to prevent out of bounds areas to be visible.
+  /// Note that tilting or rotating the map, or setting stricter minimum and maximum zoom within `options` may still cause some out of bounds areas to become visible.
+  ///
+  /// @param options The `camera bounds options` to set.
+  /// @return A string describing an error if the operation was not successful, expected with `void` value otherwise.
   Future<void> setBounds(CameraBoundsOptions arg_options) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.setBounds', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setBounds',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_options]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_options]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns the `camera bounds` of the map.
+  /// @return A `camera bounds` of the map.
   Future<CameraBounds> getBounds() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.getBounds', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getBounds',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraBounds?)!;
+      return (replyList[0] as CameraBounds?)!;
     }
   }
 
+  /// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
+  ///
+  /// @param point The pivot `screen coordinate`, measured in `platform pixels` from top to bottom and from left to right.
   Future<void> dragStart(ScreenCoordinate arg_point) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.dragStart', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragStart',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_point]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_point]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
+  ///
+  /// @param fromPoint The `screen coordinate` to drag the map from, measured in `platform pixels` from top to bottom and from left to right.
+  /// @param toPoint The `screen coordinate` to drag the map to, measured in `platform pixels` from top to bottom and from left to right.
+  ///
+  /// @return The `camera options` object showing the end point.
   Future<CameraOptions> getDragCameraOptions(
       ScreenCoordinate arg_fromPoint, ScreenCoordinate arg_toPoint) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.getDragCameraOptions', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getDragCameraOptions',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_fromPoint, arg_toPoint]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_fromPoint, arg_toPoint]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
   Future<void> dragEnd() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._CameraManager.dragEnd', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragEnd', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2801,141 +2852,107 @@ class __MapInterfaceCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Map class provides map rendering functionality.
+///
 class _MapInterface {
   /// Constructor for [_MapInterface].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   _MapInterface({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = __MapInterfaceCodec();
 
   Future<void> loadStyleURI(String arg_styleURI) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.loadStyleURI', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_styleURI]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_styleURI]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2944,22 +2961,21 @@ class _MapInterface {
 
   Future<void> loadStyleJson(String arg_styleJson) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.loadStyleJson', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleJson',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_styleJson]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_styleJson]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2968,22 +2984,19 @@ class _MapInterface {
 
   Future<void> clearData() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.clearData', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.clearData', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2994,721 +3007,809 @@ class _MapInterface {
       MapMemoryBudgetInMegabytes? arg_mapMemoryBudgetInMegabytes,
       MapMemoryBudgetInTiles? arg_mapMemoryBudgetInTiles) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setMemoryBudget', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setMemoryBudget',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[
+    final List<Object?>? replyList = await channel.send(<Object?>[
       arg_mapMemoryBudgetInMegabytes,
       arg_mapMemoryBudgetInTiles
-    ]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    ]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the size of the map.
+  ///
+  /// @return The `size` of the map in `platform pixels`.
   Future<Size> getSize() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getSize', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getSize', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Size?)!;
+      return (replyList[0] as Size?)!;
     }
   }
 
+  /// Triggers a repaint of the map.
   Future<void> triggerRepaint() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.triggerRepaint', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.triggerRepaint',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Tells the map rendering engine that there is currently a gesture in progress. This
+  /// affects how the map renders labels, as it will use different texture filters if a gesture
+  /// is ongoing.
+  ///
+  /// @param inProgress The `boolean` value representing if a gesture is in progress.
   Future<void> setGestureInProgress(bool arg_inProgress) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setGestureInProgress', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setGestureInProgress',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_inProgress]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_inProgress]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns `true` if a gesture is currently in progress.
+  ///
+  /// @return `true` if a gesture is currently in progress, `false` otherwise.
   Future<bool> isGestureInProgress() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.isGestureInProgress', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isGestureInProgress',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Tells the map rendering engine that the animation is currently performed by the
+  /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
+  /// In particular, it brings more stability to symbol placement and rendering.
+  ///
+  /// @param inProgress The `boolean` value representing if user animation is in progress
   Future<void> setUserAnimationInProgress(bool arg_inProgress) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setUserAnimationInProgress', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setUserAnimationInProgress',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_inProgress]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_inProgress]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns `true` if user animation is currently in progress.
+  ///
+  /// @return `true` if a user animation is currently in progress, `false` otherwise.
   Future<bool> isUserAnimationInProgress() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.isUserAnimationInProgress', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isUserAnimationInProgress',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// When loading a map, if prefetch zoom `delta` is set to any number greater than 0,
+  /// the map will first request a tile at zoom level lower than `zoom - delta`, with requested
+  /// zoom level a multiple of `delta`, in an attempt to display a full map at lower resolution as quick as possible.
+  ///
+  /// @param delta The new prefetch zoom delta.
   Future<void> setPrefetchZoomDelta(int arg_delta) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setPrefetchZoomDelta', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setPrefetchZoomDelta',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_delta]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_delta]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns the map's prefetch zoom delta.
+  ///
+  /// @return The map's prefetch zoom `delta`.
   Future<int> getPrefetchZoomDelta() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getPrefetchZoomDelta', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getPrefetchZoomDelta',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as int?)!;
+      return (replyList[0] as int?)!;
     }
   }
 
+  /// Sets the north `orientation mode`.
   Future<void> setNorthOrientation(NorthOrientation arg_orientation) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setNorthOrientation', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setNorthOrientation',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_orientation.index]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_orientation.index]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Sets the map `constrain mode`.
   Future<void> setConstrainMode(ConstrainMode arg_mode) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setConstrainMode', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setConstrainMode',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_mode.index]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_mode.index]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Sets the `viewport mode`.
   Future<void> setViewportMode(ViewportMode arg_mode) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setViewportMode', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setViewportMode',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_mode.index]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_mode.index]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns the `map options`.
+  ///
+  /// @return The map's `map options`.
   Future<MapOptions> getMapOptions() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getMapOptions', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getMapOptions',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as MapOptions?)!;
+      return (replyList[0] as MapOptions?)!;
     }
   }
 
+  /// Returns the `map debug options`.
+  ///
+  /// @return An array of `map debug options` flags currently set to the map.
   Future<List<MapDebugOptions?>> getDebug() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getDebug', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<MapDebugOptions?>();
+      return (replyList[0] as List<Object?>?)!.cast<MapDebugOptions?>();
     }
   }
 
+  /// Sets the `map debug options` and enables debug mode based on the passed value.
+  ///
+  /// @param debugOptions An array of `map debug options` to be set.
+  /// @param value A `boolean` value representing the state for a given `map debug options`.
+  ///
   Future<void> setDebug(
       List<MapDebugOptions?> arg_debugOptions, bool arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setDebug', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_debugOptions, arg_value]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_debugOptions, arg_value]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Queries the map for rendered features.
+  ///
+  /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
+  /// @param options The `render query options` for querying rendered features.
+  /// @param completion The `query features completion` called when the query completes.
+  /// @return A `cancelable` object that could be used to cancel the pending query.
   Future<List<QueriedFeature?>> queryRenderedFeatures(
       RenderedQueryGeometry arg_geometry,
       RenderedQueryOptions arg_options) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.queryRenderedFeatures', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_geometry, arg_options]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_geometry, arg_options]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<QueriedFeature?>();
+      return (replyList[0] as List<Object?>?)!.cast<QueriedFeature?>();
     }
   }
 
+  /// Queries the map for source features.
+  ///
+  /// @param sourceId The style source identifier used to query for source features.
+  /// @param options The `source query options` for querying source features.
+  /// @param completion The `query features completion` called when the query completes.
   Future<List<QueriedFeature?>> querySourceFeatures(
       String arg_sourceId, SourceQueryOptions arg_options) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.querySourceFeatures', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_sourceId, arg_options]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_options]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<QueriedFeature?>();
+      return (replyList[0] as List<Object?>?)!.cast<QueriedFeature?>();
     }
   }
 
+  /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
+  /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  ///
+  /// @param sourceIdentifier GeoJsonSource identifier.
+  /// @param cluster Cluster from which to retrieve leaves from
+  /// @param limit The number of points to return from the query (must use type [Long], set to maximum for all points). Defaults to 10.
+  /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
+  /// @param completion The result will be returned through the completion block.
+  ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(
       String arg_sourceIdentifier,
       Map<String?, Object?> arg_cluster,
       int? arg_limit,
       int? arg_offset) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getGeoJsonClusterLeaves', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(
+    final List<Object?>? replyList = await channel.send(
             <Object?>[arg_sourceIdentifier, arg_cluster, arg_limit, arg_offset])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as FeatureExtensionValue?)!;
+      return (replyList[0] as FeatureExtensionValue?)!;
     }
   }
 
+  /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
+  /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  ///
+  /// @param sourceIdentifier GeoJsonSource identifier.
+  /// @param cluster cluster from which to retrieve children from
+  /// @param completion The result will be returned through the completion block.
+  ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
       String arg_sourceIdentifier, Map<String?, Object?> arg_cluster) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getGeoJsonClusterChildren', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceIdentifier, arg_cluster])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceIdentifier, arg_cluster]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as FeatureExtensionValue?)!;
+      return (replyList[0] as FeatureExtensionValue?)!;
     }
   }
 
+  /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
+  /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
+  ///
+  /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
+  ///
+  /// @param sourceIdentifier GeoJsonSource identifier.
+  /// @param cluster cluster from which to retrieve the expansion zoom from
+  /// @param completion The result will be returned through the completion block.
+  ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
       String arg_sourceIdentifier, Map<String?, Object?> arg_cluster) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getGeoJsonClusterExpansionZoom',
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceIdentifier, arg_cluster])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceIdentifier, arg_cluster]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as FeatureExtensionValue?)!;
+      return (replyList[0] as FeatureExtensionValue?)!;
     }
   }
 
+  /// Updates the state object of a feature within a style source.
+  ///
+  /// Update entries in the `state` object of a given feature within a style source. Only properties of the
+  /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
+  /// retain its previous value.
+  ///
+  /// Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+  /// immediately visible using `getStateFeature`.
+  ///
+  /// @param sourceId The style source identifier.
+  /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
+  /// @param featureId The feature identifier of the feature whose state should be updated.
+  /// @param state The `state` object with properties to update with their respective new values.
   Future<void> setFeatureState(String arg_sourceId, String? arg_sourceLayerId,
       String arg_featureId, String arg_state) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.setFeatureState', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureState',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[
+    final List<Object?>? replyList = await channel.send(<Object?>[
       arg_sourceId,
       arg_sourceLayerId,
       arg_featureId,
       arg_state
-    ]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    ]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the state map of a feature within a style source.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
+  /// immediately visible.
+  ///
+  /// @param sourceId The style source identifier.
+  /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
+  /// @param featureId The feature identifier of the feature whose state should be queried.
+  /// @param completion The `query feature state completion` called when the query completes.
   Future<String> getFeatureState(String arg_sourceId, String? arg_sourceLayerId,
       String arg_featureId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getFeatureState', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_sourceId, arg_sourceLayerId, arg_featureId])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Removes entries from a feature state object.
+  ///
+  /// Remove a specified property or all property from a feature's state object, depending on the value of
+  /// `stateKey`.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method migth not be
+  /// immediately visible using `getStateFeature`.
+  ///
+  /// @param sourceId The style source identifier.
+  /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
+  /// @param featureId The feature identifier of the feature whose state should be removed.
+  /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
   Future<void> removeFeatureState(
       String arg_sourceId,
       String? arg_sourceLayerId,
       String arg_featureId,
       String? arg_stateKey) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.removeFeatureState', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureState',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[
+    final List<Object?>? replyList = await channel.send(<Object?>[
       arg_sourceId,
       arg_sourceLayerId,
       arg_featureId,
       arg_stateKey
-    ]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    ]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.reduceMemoryUse', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the resource options for the map.
+  ///
+  /// All optional fields of the retuned object are initialized with the actual values.
+  ///
+  /// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
+  ///
+  /// @return The `resource options` for the map.
   Future<ResourceOptions> getResourceOptions() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getResourceOptions', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getResourceOptions',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as ResourceOptions?)!;
+      return (replyList[0] as ResourceOptions?)!;
     }
   }
 
+  /// Gets elevation for the given coordinate.
+  /// Note: Elevation is only available for the visible region on the screen.
+  ///
+  /// @param coordinate The `coordinate` defined as longitude-latitude pair.
+  /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
   Future<double?> getElevation(Map<String?, Object?> arg_coordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._MapInterface.getElevation', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getElevation',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 }
@@ -3736,227 +3837,246 @@ class _OfflineRegionCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 129:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 130:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// An offline region represents an identifiable geographic region with optional metadata.
 class OfflineRegion {
   /// Constructor for [OfflineRegion].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   OfflineRegion({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _OfflineRegionCodec();
 
+  /// The regions identifier
   Future<int> getIdentifier() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.getIdentifier', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getIdentifier',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as int?)!;
+      return (replyList[0] as int?)!;
     }
   }
 
+  /// The tile pyramid defining the region. Tile pyramid and geometry definitions are
+  /// mutually exclusive.
+  ///
+  /// @return A definition describing the tile pyramid including attributes, otherwise empty.
   Future<OfflineRegionTilePyramidDefinition?> getTilePyramidDefinition() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.getTilePyramidDefinition', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getTilePyramidDefinition',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as OfflineRegionTilePyramidDefinition?);
+      return (replyList[0] as OfflineRegionTilePyramidDefinition?);
     }
   }
 
+  /// The geometry defining the region. Geometry and tile pyramid definitions are
+  /// mutually exclusive.
+  ///
+  /// @return A definition describing the geometry including attributes, otherwise empty.
   Future<OfflineRegionGeometryDefinition?> getGeometryDefinition() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.getGeometryDefinition', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getGeometryDefinition',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as OfflineRegionGeometryDefinition?);
+      return (replyList[0] as OfflineRegionGeometryDefinition?);
     }
   }
 
+  /// Arbitrary binary region metadata.
+  ///
+  /// @return The metadata associated with the region.
   Future<Uint8List> getMetadata() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.getMetadata', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getMetadata',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Uint8List?)!;
+      return (replyList[0] as Uint8List?)!;
     }
   }
 
+  /// Sets arbitrary binary region metadata for the region.
+  ///
+  /// Note that this setter is asynchronous and the given metadata is applied only
+  /// after the resulting callback is invoked with no error.
+  ///
+  /// @param metadata The metadata associated with the region.
+  /// @param callback Called once the request is complete or an error occurred.
   Future<void> setMetadata(Uint8List arg_metadata) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.setMetadata', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setMetadata',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_metadata]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_metadata]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Sets the download state of an offline region
+  /// A region is either inactive (not downloading, but previously-downloaded
+  /// resources are available for use), or active (resources are being downloaded
+  /// or will be downloaded, if necessary, when network access is available).
+  ///
+  /// If the region is already in the given state, this call is ignored.
+  ///
+  /// @param state The new state to set.
   Future<void> setOfflineRegionDownloadState(
       OfflineRegionDownloadState arg_state) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.setOfflineRegionDownloadState', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setOfflineRegionDownloadState',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_state.index]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_state.index]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Invalidate all the tiles for the region forcing to revalidate
+  /// the tiles with the server before using. This is more efficient than deleting the
+  /// offline region and downloading it again because if the data on the cache matches
+  /// the server, no new data gets transmitted.
+  ///
+  /// @param callback Called once the request is complete or an error occurred.
   Future<void> invalidate() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.invalidate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.invalidate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Remove an offline region from the database and perform any resources
+  /// evictions necessary as a result.
+  ///
+  /// @param callback Called once the request is complete or an error occurred.
   Future<void> purge() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegion.purge', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.purge', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -3964,40 +4084,44 @@ class OfflineRegion {
   }
 }
 
-class _OfflineRegionManagerCodec extends StandardMessageCodec {
-  const _OfflineRegionManagerCodec();
-}
-
+/// The `offline region manager` that manages offline packs. All of the class’s instance methods are asynchronous
+/// reflecting the fact that offline resources are stored in a database. The offline manager maintains a canonical
+/// collection of offline packs.
 class OfflineRegionManager {
   /// Constructor for [OfflineRegionManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   OfflineRegionManager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _OfflineRegionManagerCodec();
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
 
+  /// Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
+  ///
+  /// By default, the limit is set to 6,000.
+  /// Once this limit is reached, `OfflineRegionObserver.mapboxTileCountLimitExceeded()`
+  /// fires every additional attempt to download additional tiles until already downloaded tiles are removed
+  /// by calling `OfflineRegion.purge()` API.
+  ///
+  /// @param limit the maximum number of tiles allowed to be downloaded
   Future<void> setOfflineMapboxTileCountLimit(int arg_limit) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineRegionManager.setOfflineMapboxTileCountLimit',
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegionManager.setOfflineMapboxTileCountLimit',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_limit]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_limit]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -4121,343 +4245,336 @@ class _ProjectionCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Collection of [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection methods.
 class Projection {
   /// Constructor for [Projection].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   Projection({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _ProjectionCodec();
 
+  /// Calculate distance spanned by one pixel at the specified latitude
+  /// and zoom level.
+  ///
+  /// @param latitude The latitude for which to return the value.
+  /// @param zoom The zoom level.
+  ///
+  /// @return Returns the distance measured in meters.
   Future<double> getMetersPerPixelAtLatitude(
       double arg_latitude, double arg_zoom) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Projection.getMetersPerPixelAtLatitude', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.getMetersPerPixelAtLatitude',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_latitude, arg_zoom]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_latitude, arg_zoom]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as double?)!;
+      return (replyList[0] as double?)!;
     }
   }
 
+  /// Calculate Spherical Mercator ProjectedMeters coordinates.
+  ///
+  /// @param coordinate A longitude-latitude pair for which to calculate
+  /// `projected meters` coordinates.
+  ///
+  /// @return Returns Spherical Mercator ProjectedMeters coordinates.
   Future<ProjectedMeters> projectedMetersForCoordinate(
       Map<String?, Object?> arg_coordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Projection.projectedMetersForCoordinate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as ProjectedMeters?)!;
+      return (replyList[0] as ProjectedMeters?)!;
     }
   }
 
+  /// Calculate a longitude-latitude pair for a Spherical Mercator projected
+  /// meters.
+  ///
+  /// @param projectedMeters Spherical Mercator ProjectedMeters coordinates for
+  /// which to calculate a longitude-latitude pair.
+  ///
+  /// @return Returns a longitude-latitude pair.
   Future<Map<String?, Object?>> coordinateForProjectedMeters(
       ProjectedMeters arg_projectedMeters) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Projection.coordinateForProjectedMeters', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_projectedMeters]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_projectedMeters]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (replyList[0] as Map<Object?, Object?>?)!.cast<String?, Object?>();
     }
   }
 
+  /// Calculate a point on the map in Mercator Projection for a given
+  /// coordinate at the specified zoom scale.
+  ///
+  /// @param coordinate The longitude-latitude pair for which to return the value.
+  /// @param zoomScale The current zoom factor (2 ^ Zoom level) applied on the map, is used to
+  /// calculate the world size as tileSize * zoomScale (i.e., 512 * 2 ^ Zoom level)
+  /// where tileSize is the width of a tile in pixels.
+  ///
+  /// @return Returns a point on the map in Mercator projection.
   Future<MercatorCoordinate> project(
       Map<String?, Object?> arg_coordinate, double arg_zoomScale) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Projection.project', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.project', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate, arg_zoomScale])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_coordinate, arg_zoomScale]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as MercatorCoordinate?)!;
+      return (replyList[0] as MercatorCoordinate?)!;
     }
   }
 
+  /// Calculate a coordinate for a given point on the map in Mercator Projection.
+  ///
+  /// @param coordinate Point on the map in Mercator projection.
+  /// @param zoomScale The current zoom factor applied on the map, is used to
+  /// calculate the world size as tileSize * zoomScale (i.e., 512 * 2 ^ Zoom level)
+  /// where tileSize is the width of a tile in pixels.
+  ///
+  /// @return Returns a coordinate.
   Future<Map<String?, Object?>> unproject(
       MercatorCoordinate arg_coordinate, double arg_zoomScale) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Projection.unproject', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.unproject', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate, arg_zoomScale])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_coordinate, arg_zoomScale]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (replyList[0] as Map<Object?, Object?>?)!.cast<String?, Object?>();
     }
   }
 }
 
-class _SettingsCodec extends StandardMessageCodec {
-  const _SettingsCodec();
-}
-
+/// Settings class provides non-persistent, in-process key-value storage.
 class Settings {
   /// Constructor for [Settings].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   Settings({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _SettingsCodec();
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
 
+  /// Sets setting value for a specified key.
+  ///
+  /// @param key A name of the key.
+  /// @param value The `value` for the key.
   Future<void> set(String arg_key, String arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Settings.set', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Settings.set', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_key, arg_value]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_key, arg_value]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Return value for a key.
+  ///
+  /// @param key A name of the key.
+  ///
+  /// @return `value` if a key exists in settings otherwise a `null value` will be returned.
   Future<String> get(String arg_key) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Settings.get', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Settings.get', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_key]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_key]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 }
@@ -4578,239 +4695,210 @@ class _MapSnapshotCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// An image snapshot of a map rendered by `map snapshotter`.
 class MapSnapshot {
   /// Constructor for [MapSnapshot].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   MapSnapshot({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _MapSnapshotCodec();
 
+  /// Calculate screen coordinate on the snapshot from geographical `coordinate`.
+  ///
+  /// @param coordinate A geographical `coordinate`.
+  /// @return A `screen coordinate` measured in `platform pixels` on the snapshot for geographical `coordinate`.
   Future<ScreenCoordinate> screenCoordinate(
       Map<String?, Object?> arg_coordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshot.screenCoordinate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.screenCoordinate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as ScreenCoordinate?)!;
+      return (replyList[0] as ScreenCoordinate?)!;
     }
   }
 
+  /// Calculate geographical coordinates from a point on the snapshot.
+  ///
+  /// @param screenCoordinate A `screen coordinate` on the snapshot in `platform pixels`.
+  /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
   Future<Map<String?, Object?>> coordinate(
       ScreenCoordinate arg_screenCoordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshot.coordinate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.coordinate', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_screenCoordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_screenCoordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (replyList[0] as Map<Object?, Object?>?)!.cast<String?, Object?>();
     }
   }
 
+  /// Get list of attributions for the sources in this snapshot.
+  ///
+  /// @return A list of attributions for the sources in this snapshot.
   Future<List<String?>> attributions() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshot.attributions', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.attributions',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<String?>();
+      return (replyList[0] as List<Object?>?)!.cast<String?>();
     }
   }
 
+  /// Get the rendered snapshot `image`.
+  ///
+  /// @return A rendered snapshot `image`.
   Future<MbxImage> image() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshot.image', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.image', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as MbxImage?)!;
+      return (replyList[0] as MbxImage?)!;
     }
   }
 }
@@ -4931,274 +5019,252 @@ class _MapSnapshotterCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// MapSnapshotter exposes functionality to capture static map images.
 class MapSnapshotter {
   /// Constructor for [MapSnapshotter].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   MapSnapshotter({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _MapSnapshotterCodec();
 
+  /// Sets the `size` of the snapshot
+  ///
+  /// @param size The new `size` of the snapshot in `platform pixels`.
   Future<void> setSize(Size arg_size) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.setSize', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setSize', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_size]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_size]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the size of the snapshot
+  ///
+  /// @return Snapshot `size` in `platform pixels`.
   Future<Size> getSize() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.getSize', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getSize', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as Size?)!;
+      return (replyList[0] as Size?)!;
     }
   }
 
+  /// Returns `true` if the snapshotter is in the tile mode.
+  ///
+  /// @return `true` if the snapshotter is in the tile mode, `false` otherwise.
   Future<bool> isInTileMode() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.isInTileMode', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.isInTileMode',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Sets the snapshotter to the tile mode.
+  ///
+  /// In the tile mode, the snapshotter fetches the still image of a single tile.
+  ///
+  /// @param set A `boolean` value representing if the snapshotter is in the tile mode.
   Future<void> setTileMode(bool arg_set) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.setTileMode', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setTileMode',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_set]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_set]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Cancel the current snapshot operation.
+  ///
+  /// Cancel the current snapshot operation, if any. The callback passed to the start method
+  /// is called with error parameter set.
   Future<void> cancel() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.cancel', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.cancel', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Get elevation for the given coordinate.
+  /// Note: Elevation is only available for the visible region on the screen.
+  ///
+  /// @param coordinate defined as longitude-latitude pair.
+  ///
+  /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
   Future<double?> getElevation(Map<String?, Object?> arg_coordinate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MapSnapshotter.getElevation', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getElevation',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_coordinate]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_coordinate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 }
@@ -5319,1036 +5385,1175 @@ class _StyleManagerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return CameraBounds.decode(readValue(buffer)!);
-
       case 129:
         return CameraBoundsOptions.decode(readValue(buffer)!);
-
       case 130:
         return CameraOptions.decode(readValue(buffer)!);
-
       case 131:
         return CameraState.decode(readValue(buffer)!);
-
       case 132:
         return CanonicalTileID.decode(readValue(buffer)!);
-
       case 133:
         return CoordinateBounds.decode(readValue(buffer)!);
-
       case 134:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-
       case 135:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-
       case 136:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-
       case 137:
         return ImageContent.decode(readValue(buffer)!);
-
       case 138:
         return ImageStretches.decode(readValue(buffer)!);
-
       case 139:
         return LayerPosition.decode(readValue(buffer)!);
-
       case 140:
         return MapAnimationOptions.decode(readValue(buffer)!);
-
       case 141:
         return MapDebugOptions.decode(readValue(buffer)!);
-
       case 142:
         return MapMemoryBudgetInMegabytes.decode(readValue(buffer)!);
-
       case 143:
         return MapMemoryBudgetInTiles.decode(readValue(buffer)!);
-
       case 144:
         return MapOptions.decode(readValue(buffer)!);
-
       case 145:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-
       case 146:
         return MbxImage.decode(readValue(buffer)!);
-
       case 147:
         return MercatorCoordinate.decode(readValue(buffer)!);
-
       case 148:
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-
       case 149:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-
       case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-
       case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-
       case 152:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-
       case 153:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-
       case 154:
         return ResourceOptions.decode(readValue(buffer)!);
-
       case 155:
         return ScreenBox.decode(readValue(buffer)!);
-
       case 156:
         return ScreenCoordinate.decode(readValue(buffer)!);
-
       case 157:
         return Size.decode(readValue(buffer)!);
-
       case 158:
         return SourceQueryOptions.decode(readValue(buffer)!);
-
       case 159:
         return StyleObjectInfo.decode(readValue(buffer)!);
-
       case 160:
         return StylePropertyValue.decode(readValue(buffer)!);
-
       case 161:
         return TransitionOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
+/// Interface for managing style of the `map`.
 class StyleManager {
   /// Constructor for [StyleManager].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   StyleManager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _StyleManagerCodec();
 
+  /// Get the URI of the current style in use.
+  ///
+  /// @return A string containing a style URI.
   Future<String> getStyleURI() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleURI', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleURI',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Load style from provided URI.
+  ///
+  /// This is an asynchronous call. To check the result of this operation the user must register an observer observing
+  /// `MapLoaded` or `MapLoadingError` events. In case of successful style load, `StyleLoaded` event will be also emitted.
+  ///
+  /// @param uri URI where the style should be loaded from.
   Future<void> setStyleURI(String arg_uri) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleURI', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleURI',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_uri]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_uri]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Get the JSON serialization string of the current style in use.
+  ///
+  /// @return A JSON string containing a serialized style.
   Future<String> getStyleJSON() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleJSON', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleJSON',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Load the style from a provided JSON string.
+  ///
+  /// @param json A JSON string containing a serialized style.
   Future<void> setStyleJSON(String arg_json) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleJSON', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleJSON',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_json]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_json]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Returns the map style's default camera, if any, or a default camera otherwise.
+  /// The map style's default camera is defined as follows:
+  /// - [center](https://docs.mapbox.com/mapbox-gl-js/style-spec/#root-center)
+  /// - [zoom](https://docs.mapbox.com/mapbox-gl-js/style-spec/#root-zoom)
+  /// - [bearing](https://docs.mapbox.com/mapbox-gl-js/style-spec/#root-bearing)
+  /// - [pitch](https://docs.mapbox.com/mapbox-gl-js/style-spec/#root-pitch)
+  ///
+  /// The style default camera is re-evaluated when a new style is loaded.
+  ///
+  /// @return The default `camera options` of the current style in use.
   Future<CameraOptions> getStyleDefaultCamera() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleDefaultCamera', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleDefaultCamera',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as CameraOptions?)!;
+      return (replyList[0] as CameraOptions?)!;
     }
   }
 
+  /// Returns the map style's transition options. By default, the style parser will attempt
+  /// to read the style default transition options, if any, fallbacking to an immediate transition
+  /// otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+  /// reset once a new style has been loaded.
+  ///
+  /// The style transition is re-evaluated when a new style is loaded.
+  ///
+  /// @return The `transition options` of the current style in use.
   Future<TransitionOptions> getStyleTransition() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleTransition', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as TransitionOptions?)!;
+      return (replyList[0] as TransitionOptions?)!;
     }
   }
 
+  /// Overrides the map style's transition options with user-provided options.
+  ///
+  /// The style transition is re-evaluated when a new style is loaded.
+  ///
+  /// @param transitionOptions The `transition options`.
   Future<void> setStyleTransition(
       TransitionOptions arg_transitionOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleTransition', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_transitionOptions]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_transitionOptions]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Adds a new [style layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers).
+  ///
+  /// Runtime style layers are valid until they are either removed or a new style is loaded.
+  ///
+  /// @param properties A map of style layer properties.
+  /// @param layerPosition If not empty, the new layer will be positioned according to `layer position` parameters.
+  ///
+  /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> addStyleLayer(
       String arg_properties, LayerPosition? arg_layerPosition) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.addStyleLayer', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleLayer',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_properties, arg_layerPosition])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_properties, arg_layerPosition]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Adds a new [style layer](https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers).
+  ///
+  /// Whenever a new style is being parsed and currently used style has persistent layers,
+  /// an engine will try to do following:
+  ///   - keep the persistent layer at its relative position
+  ///   - keep the source used by a persistent layer
+  ///   - keep images added through `addStyleImage` method
+  ///
+  /// In cases when a new style has the same layer, source or image resource, style's resources would be
+  /// used instead and `MapLoadingError` event will be emitted.
+  ///
+  /// @param properties A map of style layer properties.
+  /// @param layerPosition If not empty, the new layer will be positioned according to `layer position` parameters.
+  ///
+  /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> addPersistentStyleLayer(
       String arg_properties, LayerPosition? arg_layerPosition) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.addPersistentStyleLayer', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addPersistentStyleLayer',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_properties, arg_layerPosition])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_properties, arg_layerPosition]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Checks if a style layer is persistent.
+  ///
+  /// @param layerId A style layer identifier.
+  /// @return A string describing an error if the operation was not successful, boolean representing state otherwise.
   Future<bool> isStyleLayerPersistent(String arg_layerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.isStyleLayerPersistent', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLayerPersistent',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_layerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_layerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Removes an existing style layer.
+  ///
+  /// @param layerId An identifier of the style layer to remove.
+  ///
+  /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> removeStyleLayer(String arg_layerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.removeStyleLayer', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleLayer',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_layerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_layerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Moves an existing style layer
+  ///
+  /// @param layerId Identifier of the style layer to move.
+  /// @param layerPosition The layer will be positioned according to the LayerPosition parameters. If an empty LayerPosition
+  ///                      is provided then the layer is moved to the top of the layerstack.
+  ///
+  /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> moveStyleLayer(
       String arg_layerId, LayerPosition? arg_layerPosition) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.moveStyleLayer', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleLayer',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_layerId, arg_layerPosition])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_layerId, arg_layerPosition]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Checks whether a given style layer exists.
+  ///
+  /// @param layerId Style layer identifier.
+  ///
+  /// @return A `true` value if the given style layer exists, `false` otherwise.
   Future<bool> styleLayerExists(String arg_layerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.styleLayerExists', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleLayerExists',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_layerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_layerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Returns the existing style layers.
+  ///
+  /// @return The list containing the information about existing style layer objects.
   Future<List<StyleObjectInfo?>> getStyleLayers() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleLayers', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<StyleObjectInfo?>();
+      return (replyList[0] as List<Object?>?)!.cast<StyleObjectInfo?>();
     }
   }
 
+  /// Gets the value of style layer property.
+  ///
+  /// @param layerId A style layer identifier.
+  /// @param property The style layer property name.
+  /// @return The `style property value`.
   Future<StylePropertyValue> getStyleLayerProperty(
       String arg_layerId, String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleLayerProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_layerId, arg_property]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_layerId, arg_property]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as StylePropertyValue?)!;
+      return (replyList[0] as StylePropertyValue?)!;
     }
   }
 
+  /// Sets a value to a style layer property.
+  ///
+  /// @param layerId A style layer identifier.
+  /// @param property The style layer property name.
+  /// @param value The style layer property value.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLayerProperty(
       String arg_layerId, String arg_property, Object arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleLayerProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_layerId, arg_property, arg_value])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets style layer properties.
+  ///
+  /// @return The style layer properties or a string describing an error if the operation was not successful.
   Future<String> getStyleLayerProperties(String arg_layerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleLayerProperties', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperties',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_layerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_layerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Sets style layer properties.
+  /// This method can be used to perform batch update for a style layer properties. The structure of a
+  /// provided `properties` value must conform to a format for a corresponding [layer type](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/).
+  /// Modification of a layer [id](https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#id) and/or a [layer type] (https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#type) is not allowed.
+  ///
+  /// @param layerId A style layer identifier.
+  /// @param properties A map of style layer properties.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLayerProperties(
       String arg_layerId, String arg_properties) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleLayerProperties', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperties',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_layerId, arg_properties]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_layerId, arg_properties]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Adds a new [style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources).
+  ///
+  /// @param sourceId An identifier for the style source.
+  /// @param properties A map of style source properties.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addStyleSource(
       String arg_sourceId, String arg_properties) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.addStyleSource', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleSource',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceId, arg_properties])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_properties]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the value of style source property.
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param property The style source property name.
+  /// @return The value of a `property` in the source with a `sourceId`.
   Future<StylePropertyValue> getStyleSourceProperty(
       String arg_sourceId, String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleSourceProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_sourceId, arg_property]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_property]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as StylePropertyValue?)!;
+      return (replyList[0] as StylePropertyValue?)!;
     }
   }
 
+  /// Sets a value to a style source property.
+  /// Note: When setting the `data` property of a `geojson` source, this method never returns an error.
+  /// In case of success, a `map-loaded` event will be propagated. In case of errors, a `map-loading-error` event will be propagated instead.
+  ///
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param property The style source property name.
+  /// @param value The style source property value.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleSourceProperty(
       String arg_sourceId, String arg_property, Object arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleSourceProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_sourceId, arg_property, arg_value])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets style source properties.
+  ///
+  /// @param sourceId A style source identifier.
+  ///
+  /// @return The style source properties or a string describing an error if the operation was not successful.
   Future<String> getStyleSourceProperties(String arg_sourceId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleSourceProperties', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperties',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_sourceId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Sets style source properties.
+  ///
+  /// This method can be used to perform batch update for a style source properties. The structure of a
+  /// provided `properties` value must conform to a format for a corresponding [source type](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/).
+  /// Modification of a source [type](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#type) is not allowed.
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param properties A map of Style source properties.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleSourceProperties(
       String arg_sourceId, String arg_properties) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleSourceProperties', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperties',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceId, arg_properties])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_properties]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param image An `image`.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> updateStyleImageSourceImage(
       String arg_sourceId, MbxImage arg_image) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.updateStyleImageSourceImage', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImageSourceImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_sourceId, arg_image]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_image]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Removes an existing style source.
+  ///
+  /// @param sourceId An identifier of the style source to remove.
   Future<void> removeStyleSource(String arg_sourceId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.removeStyleSource', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleSource',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_sourceId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Checks whether a given style source exists.
+  ///
+  /// @param sourceId A style source identifier.
+  ///
+  /// @return `true` if the given source exists, `false` otherwise.
   Future<bool> styleSourceExists(String arg_sourceId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.styleSourceExists', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleSourceExists',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_sourceId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_sourceId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Returns the existing style sources.
+  ///
+  /// @return The list containing the information about existing style source objects.
   Future<List<StyleObjectInfo?>> getStyleSources() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleSources', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<StyleObjectInfo?>();
+      return (replyList[0] as List<Object?>?)!.cast<StyleObjectInfo?>();
     }
   }
 
+  /// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
+  ///
+  /// @param properties A map of style light properties values, with their names as a key.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLight(String arg_properties) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleLight', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLight',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_properties]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_properties]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the value of a style light property.
+  ///
+  /// @param property The style light property name.
+  /// @return The style light property value.
   Future<StylePropertyValue> getStyleLightProperty(String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleLightProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLightProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_property]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_property]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as StylePropertyValue?)!;
+      return (replyList[0] as StylePropertyValue?)!;
     }
   }
 
+  /// Sets a value to the the style light property.
+  ///
+  /// @param property The style light property name.
+  /// @param value The style light property value.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleLightProperty(
       String arg_property, Object arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleLightProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLightProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_property, arg_value]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_property, arg_value]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Sets the style global [terrain](https://docs.mapbox.com/mapbox-gl-js/style-spec/#terrain) properties.
+  ///
+  /// @param properties A map of style terrain properties values, with their names as a key.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleTerrain(String arg_properties) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleTerrain', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrain',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_properties]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_properties]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Gets the value of a style terrain property.
+  ///
+  /// @param property The style terrain property name.
+  /// @return The style terrain property value.
   Future<StylePropertyValue> getStyleTerrainProperty(
       String arg_property) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleTerrainProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTerrainProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_property]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_property]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as StylePropertyValue?)!;
+      return (replyList[0] as StylePropertyValue?)!;
     }
   }
 
+  /// Sets a value to the the style terrain property.
+  ///
+  /// @param property The style terrain property name.
+  /// @param value The style terrain property value.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleTerrainProperty(
       String arg_property, Object arg_value) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setStyleTerrainProperty', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrainProperty',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_property, arg_value]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_property, arg_value]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Get an `image` from the style.
+  ///
+  /// @param imageId The identifier of the `image`.
+  ///
+  /// @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
   Future<MbxImage?> getStyleImage(String arg_imageId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getStyleImage', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_imageId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_imageId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as MbxImage?);
+      return (replyList[0] as MbxImage?);
     }
   }
 
+  /// Adds an image to be used in the style. This API can also be used for updating
+  /// an image. If the image for a given `imageId` was already added, it gets replaced by the new image.
+  ///
+  /// The image can be used in [`icon-image`](https://www.mapbox.com/mapbox-gl-js/style-spec/#layout-symbol-icon-image),
+  /// [`fill-pattern`](https://www.mapbox.com/mapbox-gl-js/style-spec/#paint-fill-fill-pattern),
+  /// [`line-pattern`](https://www.mapbox.com/mapbox-gl-js/style-spec/#paint-line-line-pattern) and
+  /// [`text-field`](https://www.mapbox.com/mapbox-gl-js/style-spec/#layout-symbol-text-field) properties.
+  ///
+  /// @param imageId An identifier of the image.
+  /// @param scale A scale factor for the image.
+  /// @param image A pixel data of the image.
+  /// @param sdf An option to treat whether image is SDF(signed distance field) or not.
+  /// @param stretchX An array of two-element arrays, consisting of two numbers that represent
+  /// the from position and the to position of areas that can be stretched horizontally.
+  /// @param stretchY An array of two-element arrays, consisting of two numbers that represent
+  /// the from position and the to position of areas that can be stretched vertically.
+  /// @param content An array of four numbers, with the first two specifying the left, top
+  /// corner, and the last two specifying the right, bottom corner. If present, and if the
+  /// icon uses icon-text-fit, the symbol's text will be fit inside the content box.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addStyleImage(
       String arg_imageId,
       double arg_scale,
@@ -6358,9 +6563,10 @@ class StyleManager {
       List<ImageStretches?> arg_stretchY,
       ImageContent? arg_content) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.addStyleImage', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[
+    final List<Object?>? replyList = await channel.send(<Object?>[
       arg_imageId,
       arg_scale,
       arg_image,
@@ -6368,231 +6574,261 @@ class StyleManager {
       arg_stretchX,
       arg_stretchY,
       arg_content
-    ]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    ]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Removes an image from the style.
+  ///
+  /// @param imageId The identifier of the image to remove.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> removeStyleImage(String arg_imageId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.removeStyleImage', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_imageId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_imageId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Checks whether an image exists.
+  ///
+  /// @param imageId The identifier of the image.
+  ///
+  /// @return True if image exists, false otherwise.
   Future<bool> hasStyleImage(String arg_imageId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.hasStyleImage', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.hasStyleImage',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_imageId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_imageId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Set tile data of a custom geometry.
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param tileId A `canonical tile id` of the tile.
+  /// @param featureCollection An array with the features to add.
+  /// Invalidate tile for provided custom geometry source.
+  ///
+  /// @param sourceId A style source identifier,.
+  /// @param tileId A `canonical tile id` of the tile.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> invalidateStyleCustomGeometrySourceTile(
       String arg_sourceId, CanonicalTileID arg_tileId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.invalidateStyleCustomGeometrySourceTile',
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceTile',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_sourceId, arg_tileId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_tileId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Invalidate region for provided custom geometry source.
+  ///
+  /// @param sourceId A style source identifier
+  /// @param bounds A `coordinate bounds` object.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> invalidateStyleCustomGeometrySourceRegion(
       String arg_sourceId, CoordinateBounds arg_bounds) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.invalidateStyleCustomGeometrySourceRegion',
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceRegion',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_sourceId, arg_bounds]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_sourceId, arg_bounds]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Check if the style is completely loaded.
+  ///
+  /// Note: The style specified sprite would be marked as loaded even with sprite loading error (An error will be emitted via `MapLoadingError`).
+  /// Sprite loading error is not fatal and we don't want it to block the map rendering, thus the function will still return `true` if style and sources are fully loaded.
+  ///
+  /// @return `true` iff the style JSON contents, the style specified sprite and sources are all loaded, otherwise returns `false`.
+  ///
   Future<bool> isStyleLoaded() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.isStyleLoaded', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLoaded',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Function to get the projection provided by the Style Extension.
+  ///
+  /// @return Projection that is currently applied to the map
   Future<String> getProjection() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.getProjection', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as String?)!;
+      return (replyList[0] as String?)!;
     }
   }
 
+  /// Function to set the projection provided by the Style Extension.
+  ///
+  /// @param projection The projection to be set.
   Future<void> setProjection(String arg_projection) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.setProjection', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_projection]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_projection]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Function to localize style labels.
+  ///
+  /// @param locale The locale to apply for localization
+  /// @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
   Future<void> localizeLabels(
       String arg_locale, List<String?>? arg_layerIds) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.StyleManager.localizeLabels', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.localizeLabels',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_locale, arg_layerIds]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_locale, arg_layerIds]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -6600,39 +6836,38 @@ class StyleManager {
   }
 }
 
-class _CancelableCodec extends StandardMessageCodec {
-  const _CancelableCodec();
-}
-
+/// Allows to cancel the associated asynchronous operation
+///
+/// The the associated asynchronous operation is not automatically canceled if this
+/// object goes out of scope.
 class Cancelable {
   /// Constructor for [Cancelable].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   Cancelable({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _CancelableCodec();
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
 
+  /// Cancels the associated asynchronous operation
+  ///
+  /// If the associated asynchronous operation has already finished, this call is ignored.
   Future<void> cancel() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.Cancelable.cancel', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -6640,92 +6875,93 @@ class Cancelable {
   }
 }
 
-class _OfflineSwitchCodec extends StandardMessageCodec {
-  const _OfflineSwitchCodec();
-}
-
+/// Instance that allows connecting or disconnecting the Mapbox stack to the network.
 class OfflineSwitch {
   /// Constructor for [OfflineSwitch].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   OfflineSwitch({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _OfflineSwitchCodec();
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
 
+  /// Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
+  /// with HttpRequestErrorType#ConnectionError.
+  ///
+  /// @param connected Set false to disconnect the Mapbox stack
   Future<void> setMapboxStackConnected(bool arg_connected) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineSwitch.setMapboxStackConnected', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.setMapboxStackConnected',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_connected]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_connected]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
     }
   }
 
+  /// Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
+  ///
+  /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
   Future<bool> isMapboxStackConnected() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineSwitch.isMapboxStackConnected', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.isMapboxStackConnected',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as bool?)!;
+      return (replyList[0] as bool?)!;
     }
   }
 
+  /// Releases the OfflineSwitch singleton instance.
+  ///
+  /// Users can call this method if they want to do manual cleanup of the resources allocated by Mapbox services.
+  /// If the user calls getInstance() after reset, a new instance of the OfflineSwitch singleton will be allocated.
   Future<void> reset() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.OfflineSwitch.reset', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.reset', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -6733,18 +6969,16 @@ class OfflineSwitch {
   }
 }
 
-class _TilesetDescriptorCodec extends StandardMessageCodec {
-  const _TilesetDescriptorCodec();
-}
-
+/// A bundle that encapsulates tilesets creation for the tile store implementation.
+///
+/// Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
 class TilesetDescriptor {
   /// Constructor for [TilesetDescriptor].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   TilesetDescriptor({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _TilesetDescriptorCodec();
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
 }

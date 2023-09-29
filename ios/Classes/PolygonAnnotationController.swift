@@ -256,7 +256,15 @@ extension PolygonAnnotation {
             fillPattern =  self.fillPattern!
         }
 
-        return FLTPolygonAnnotation.make(withId: self.id, geometry: self.polygon.toMap(), fillSortKey: fillSortKey, fillColor: fillColor, fillOpacity: fillOpacity, fillOutlineColor: fillOutlineColor, fillPattern: fillPattern)
+    return FLTPolygonAnnotation.make(
+        withId: self.id,
+        geometry: self.polygon.toMap(),
+        fillSortKey: fillSortKey,
+        fillColor: fillColor,
+        fillOpacity: fillOpacity,
+        fillOutlineColor: fillOutlineColor,
+        fillPattern: fillPattern
+    )
     }
 }
 // End of generated file.

@@ -353,80 +353,75 @@ class PointAnnotation {
   double? textOpacity;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['id'] = id;
-    pigeonMap['geometry'] = geometry;
-    pigeonMap['image'] = image;
-    pigeonMap['iconAnchor'] = iconAnchor?.index;
-    pigeonMap['iconImage'] = iconImage;
-    pigeonMap['iconOffset'] = iconOffset;
-    pigeonMap['iconRotate'] = iconRotate;
-    pigeonMap['iconSize'] = iconSize;
-    pigeonMap['symbolSortKey'] = symbolSortKey;
-    pigeonMap['textAnchor'] = textAnchor?.index;
-    pigeonMap['textField'] = textField;
-    pigeonMap['textJustify'] = textJustify?.index;
-    pigeonMap['textLetterSpacing'] = textLetterSpacing;
-    pigeonMap['textMaxWidth'] = textMaxWidth;
-    pigeonMap['textOffset'] = textOffset;
-    pigeonMap['textRadialOffset'] = textRadialOffset;
-    pigeonMap['textRotate'] = textRotate;
-    pigeonMap['textSize'] = textSize;
-    pigeonMap['textTransform'] = textTransform?.index;
-    pigeonMap['iconColor'] = iconColor;
-    pigeonMap['iconHaloBlur'] = iconHaloBlur;
-    pigeonMap['iconHaloColor'] = iconHaloColor;
-    pigeonMap['iconHaloWidth'] = iconHaloWidth;
-    pigeonMap['iconOpacity'] = iconOpacity;
-    pigeonMap['textColor'] = textColor;
-    pigeonMap['textHaloBlur'] = textHaloBlur;
-    pigeonMap['textHaloColor'] = textHaloColor;
-    pigeonMap['textHaloWidth'] = textHaloWidth;
-    pigeonMap['textOpacity'] = textOpacity;
-    return pigeonMap;
+    return <Object?>[
+      id,
+      geometry,
+      image,
+      iconAnchor?.index,
+      iconImage,
+      iconOffset,
+      iconRotate,
+      iconSize,
+      symbolSortKey,
+      textAnchor?.index,
+      textField,
+      textJustify?.index,
+      textLetterSpacing,
+      textMaxWidth,
+      textOffset,
+      textRadialOffset,
+      textRotate,
+      textSize,
+      textTransform?.index,
+      iconColor,
+      iconHaloBlur,
+      iconHaloColor,
+      iconHaloWidth,
+      iconOpacity,
+      textColor,
+      textHaloBlur,
+      textHaloColor,
+      textHaloWidth,
+      textOpacity,
+    ];
   }
 
-  static PointAnnotation decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static PointAnnotation decode(Object result) {
+    result as List<Object?>;
     return PointAnnotation(
-      id: pigeonMap['id']! as String,
-      geometry: (pigeonMap['geometry'] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>(),
-      image: pigeonMap['image'] as Uint8List?,
-      iconAnchor: pigeonMap['iconAnchor'] != null
-          ? IconAnchor.values[pigeonMap['iconAnchor']! as int]
-          : null,
-      iconImage: pigeonMap['iconImage'] as String?,
-      iconOffset: (pigeonMap['iconOffset'] as List<Object?>?)?.cast<double?>(),
-      iconRotate: pigeonMap['iconRotate'] as double?,
-      iconSize: pigeonMap['iconSize'] as double?,
-      symbolSortKey: pigeonMap['symbolSortKey'] as double?,
-      textAnchor: pigeonMap['textAnchor'] != null
-          ? TextAnchor.values[pigeonMap['textAnchor']! as int]
-          : null,
-      textField: pigeonMap['textField'] as String?,
-      textJustify: pigeonMap['textJustify'] != null
-          ? TextJustify.values[pigeonMap['textJustify']! as int]
-          : null,
-      textLetterSpacing: pigeonMap['textLetterSpacing'] as double?,
-      textMaxWidth: pigeonMap['textMaxWidth'] as double?,
-      textOffset: (pigeonMap['textOffset'] as List<Object?>?)?.cast<double?>(),
-      textRadialOffset: pigeonMap['textRadialOffset'] as double?,
-      textRotate: pigeonMap['textRotate'] as double?,
-      textSize: pigeonMap['textSize'] as double?,
-      textTransform: pigeonMap['textTransform'] != null
-          ? TextTransform.values[pigeonMap['textTransform']! as int]
-          : null,
-      iconColor: pigeonMap['iconColor'] as int?,
-      iconHaloBlur: pigeonMap['iconHaloBlur'] as double?,
-      iconHaloColor: pigeonMap['iconHaloColor'] as int?,
-      iconHaloWidth: pigeonMap['iconHaloWidth'] as double?,
-      iconOpacity: pigeonMap['iconOpacity'] as double?,
-      textColor: pigeonMap['textColor'] as int?,
-      textHaloBlur: pigeonMap['textHaloBlur'] as double?,
-      textHaloColor: pigeonMap['textHaloColor'] as int?,
-      textHaloWidth: pigeonMap['textHaloWidth'] as double?,
-      textOpacity: pigeonMap['textOpacity'] as double?,
+      id: result[0]! as String,
+      geometry: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      image: result[2] as Uint8List?,
+      iconAnchor:
+          result[3] != null ? IconAnchor.values[result[3]! as int] : null,
+      iconImage: result[4] as String?,
+      iconOffset: (result[5] as List<Object?>?)?.cast<double?>(),
+      iconRotate: result[6] as double?,
+      iconSize: result[7] as double?,
+      symbolSortKey: result[8] as double?,
+      textAnchor:
+          result[9] != null ? TextAnchor.values[result[9]! as int] : null,
+      textField: result[10] as String?,
+      textJustify:
+          result[11] != null ? TextJustify.values[result[11]! as int] : null,
+      textLetterSpacing: result[12] as double?,
+      textMaxWidth: result[13] as double?,
+      textOffset: (result[14] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[15] as double?,
+      textRotate: result[16] as double?,
+      textSize: result[17] as double?,
+      textTransform:
+          result[18] != null ? TextTransform.values[result[18]! as int] : null,
+      iconColor: result[19] as int?,
+      iconHaloBlur: result[20] as double?,
+      iconHaloColor: result[21] as int?,
+      iconHaloWidth: result[22] as double?,
+      iconOpacity: result[23] as double?,
+      textColor: result[24] as int?,
+      textHaloBlur: result[25] as double?,
+      textHaloColor: result[26] as int?,
+      textHaloWidth: result[27] as double?,
+      textOpacity: result[28] as double?,
     );
   }
 }
@@ -549,78 +544,73 @@ class PointAnnotationOptions {
   double? textOpacity;
 
   Object encode() {
-    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['geometry'] = geometry;
-    pigeonMap['image'] = image;
-    pigeonMap['iconAnchor'] = iconAnchor?.index;
-    pigeonMap['iconImage'] = iconImage;
-    pigeonMap['iconOffset'] = iconOffset;
-    pigeonMap['iconRotate'] = iconRotate;
-    pigeonMap['iconSize'] = iconSize;
-    pigeonMap['symbolSortKey'] = symbolSortKey;
-    pigeonMap['textAnchor'] = textAnchor?.index;
-    pigeonMap['textField'] = textField;
-    pigeonMap['textJustify'] = textJustify?.index;
-    pigeonMap['textLetterSpacing'] = textLetterSpacing;
-    pigeonMap['textMaxWidth'] = textMaxWidth;
-    pigeonMap['textOffset'] = textOffset;
-    pigeonMap['textRadialOffset'] = textRadialOffset;
-    pigeonMap['textRotate'] = textRotate;
-    pigeonMap['textSize'] = textSize;
-    pigeonMap['textTransform'] = textTransform?.index;
-    pigeonMap['iconColor'] = iconColor;
-    pigeonMap['iconHaloBlur'] = iconHaloBlur;
-    pigeonMap['iconHaloColor'] = iconHaloColor;
-    pigeonMap['iconHaloWidth'] = iconHaloWidth;
-    pigeonMap['iconOpacity'] = iconOpacity;
-    pigeonMap['textColor'] = textColor;
-    pigeonMap['textHaloBlur'] = textHaloBlur;
-    pigeonMap['textHaloColor'] = textHaloColor;
-    pigeonMap['textHaloWidth'] = textHaloWidth;
-    pigeonMap['textOpacity'] = textOpacity;
-    return pigeonMap;
+    return <Object?>[
+      geometry,
+      image,
+      iconAnchor?.index,
+      iconImage,
+      iconOffset,
+      iconRotate,
+      iconSize,
+      symbolSortKey,
+      textAnchor?.index,
+      textField,
+      textJustify?.index,
+      textLetterSpacing,
+      textMaxWidth,
+      textOffset,
+      textRadialOffset,
+      textRotate,
+      textSize,
+      textTransform?.index,
+      iconColor,
+      iconHaloBlur,
+      iconHaloColor,
+      iconHaloWidth,
+      iconOpacity,
+      textColor,
+      textHaloBlur,
+      textHaloColor,
+      textHaloWidth,
+      textOpacity,
+    ];
   }
 
-  static PointAnnotationOptions decode(Object message) {
-    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+  static PointAnnotationOptions decode(Object result) {
+    result as List<Object?>;
     return PointAnnotationOptions(
-      geometry: (pigeonMap['geometry'] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>(),
-      image: pigeonMap['image'] as Uint8List?,
-      iconAnchor: pigeonMap['iconAnchor'] != null
-          ? IconAnchor.values[pigeonMap['iconAnchor']! as int]
-          : null,
-      iconImage: pigeonMap['iconImage'] as String?,
-      iconOffset: (pigeonMap['iconOffset'] as List<Object?>?)?.cast<double?>(),
-      iconRotate: pigeonMap['iconRotate'] as double?,
-      iconSize: pigeonMap['iconSize'] as double?,
-      symbolSortKey: pigeonMap['symbolSortKey'] as double?,
-      textAnchor: pigeonMap['textAnchor'] != null
-          ? TextAnchor.values[pigeonMap['textAnchor']! as int]
-          : null,
-      textField: pigeonMap['textField'] as String?,
-      textJustify: pigeonMap['textJustify'] != null
-          ? TextJustify.values[pigeonMap['textJustify']! as int]
-          : null,
-      textLetterSpacing: pigeonMap['textLetterSpacing'] as double?,
-      textMaxWidth: pigeonMap['textMaxWidth'] as double?,
-      textOffset: (pigeonMap['textOffset'] as List<Object?>?)?.cast<double?>(),
-      textRadialOffset: pigeonMap['textRadialOffset'] as double?,
-      textRotate: pigeonMap['textRotate'] as double?,
-      textSize: pigeonMap['textSize'] as double?,
-      textTransform: pigeonMap['textTransform'] != null
-          ? TextTransform.values[pigeonMap['textTransform']! as int]
-          : null,
-      iconColor: pigeonMap['iconColor'] as int?,
-      iconHaloBlur: pigeonMap['iconHaloBlur'] as double?,
-      iconHaloColor: pigeonMap['iconHaloColor'] as int?,
-      iconHaloWidth: pigeonMap['iconHaloWidth'] as double?,
-      iconOpacity: pigeonMap['iconOpacity'] as double?,
-      textColor: pigeonMap['textColor'] as int?,
-      textHaloBlur: pigeonMap['textHaloBlur'] as double?,
-      textHaloColor: pigeonMap['textHaloColor'] as int?,
-      textHaloWidth: pigeonMap['textHaloWidth'] as double?,
-      textOpacity: pigeonMap['textOpacity'] as double?,
+      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      image: result[1] as Uint8List?,
+      iconAnchor:
+          result[2] != null ? IconAnchor.values[result[2]! as int] : null,
+      iconImage: result[3] as String?,
+      iconOffset: (result[4] as List<Object?>?)?.cast<double?>(),
+      iconRotate: result[5] as double?,
+      iconSize: result[6] as double?,
+      symbolSortKey: result[7] as double?,
+      textAnchor:
+          result[8] != null ? TextAnchor.values[result[8]! as int] : null,
+      textField: result[9] as String?,
+      textJustify:
+          result[10] != null ? TextJustify.values[result[10]! as int] : null,
+      textLetterSpacing: result[11] as double?,
+      textMaxWidth: result[12] as double?,
+      textOffset: (result[13] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[14] as double?,
+      textRotate: result[15] as double?,
+      textSize: result[16] as double?,
+      textTransform:
+          result[17] != null ? TextTransform.values[result[17]! as int] : null,
+      iconColor: result[18] as int?,
+      iconHaloBlur: result[19] as double?,
+      iconHaloColor: result[20] as int?,
+      iconHaloWidth: result[21] as double?,
+      iconOpacity: result[22] as double?,
+      textColor: result[23] as int?,
+      textHaloBlur: result[24] as double?,
+      textHaloColor: result[25] as int?,
+      textHaloWidth: result[26] as double?,
+      textOpacity: result[27] as double?,
     );
   }
 }
@@ -642,7 +632,6 @@ class _OnPointAnnotationClickListenerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return PointAnnotation.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -654,11 +643,12 @@ abstract class OnPointAnnotationClickListener {
       _OnPointAnnotationClickListenerCodec();
 
   void onPointAnnotationClick(PointAnnotation annotation);
+
   static void setup(OnPointAnnotationClickListener? api,
       {BinaryMessenger? binaryMessenger}) {
     {
       final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.OnPointAnnotationClickListener.onPointAnnotationClick',
+          'dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick',
           codec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -666,11 +656,11 @@ abstract class OnPointAnnotationClickListener {
       } else {
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.OnPointAnnotationClickListener.onPointAnnotationClick was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final PointAnnotation? arg_annotation = (args[0] as PointAnnotation?);
           assert(arg_annotation != null,
-              'Argument for dev.flutter.pigeon.OnPointAnnotationClickListener.onPointAnnotationClick was null, expected non-null PointAnnotation.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick was null, expected non-null PointAnnotation.');
           api.onPointAnnotationClick(arg_annotation!);
           return;
         });
@@ -699,10 +689,8 @@ class __PointAnnotationMessagerCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return PointAnnotation.decode(readValue(buffer)!);
-
       case 129:
         return PointAnnotationOptions.decode(readValue(buffer)!);
-
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -715,7 +703,6 @@ class _PointAnnotationMessager {
   /// BinaryMessenger will be used which routes to the host platform.
   _PointAnnotationMessager({BinaryMessenger? binaryMessenger})
       : _binaryMessenger = binaryMessenger;
-
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = __PointAnnotationMessagerCodec();
@@ -723,85 +710,80 @@ class _PointAnnotationMessager {
   Future<PointAnnotation> create(
       String arg_managerId, PointAnnotationOptions arg_annotationOption) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.create', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.create',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotationOption])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotationOption]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as PointAnnotation?)!;
+      return (replyList[0] as PointAnnotation?)!;
     }
   }
 
   Future<List<PointAnnotation?>> createMulti(String arg_managerId,
       List<PointAnnotationOptions?> arg_annotationOptions) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.createMulti', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.createMulti',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_annotationOptions])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
-    } else if (replyMap['result'] == null) {
+    } else if (replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)!.cast<PointAnnotation?>();
+      return (replyList[0] as List<Object?>?)!.cast<PointAnnotation?>();
     }
   }
 
   Future<void> update(
       String arg_managerId, PointAnnotation arg_annotation) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.update', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.update',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotation])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -811,23 +793,21 @@ class _PointAnnotationMessager {
   Future<void> delete(
       String arg_managerId, PointAnnotation arg_annotation) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.delete', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.delete',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_annotation])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -836,22 +816,21 @@ class _PointAnnotationMessager {
 
   Future<void> deleteAll(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.deleteAll', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.deleteAll',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -861,24 +840,21 @@ class _PointAnnotationMessager {
   Future<void> setIconAllowOverlap(
       String arg_managerId, bool arg_iconAllowOverlap) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconAllowOverlap',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconAllowOverlap',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_iconAllowOverlap])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_iconAllowOverlap]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -887,50 +863,46 @@ class _PointAnnotationMessager {
 
   Future<bool?> getIconAllowOverlap(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconAllowOverlap',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconAllowOverlap',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setIconIgnorePlacement(
       String arg_managerId, bool arg_iconIgnorePlacement) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconIgnorePlacement',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconIgnorePlacement',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_iconIgnorePlacement])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -939,49 +911,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getIconIgnorePlacement(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconIgnorePlacement',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconIgnorePlacement',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setIconKeepUpright(
       String arg_managerId, bool arg_iconKeepUpright) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconKeepUpright', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconKeepUpright',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_iconKeepUpright])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_iconKeepUpright]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -990,48 +958,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getIconKeepUpright(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconKeepUpright', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconKeepUpright',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setIconOptional(
       String arg_managerId, bool arg_iconOptional) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconOptional', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconOptional',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_iconOptional])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_iconOptional]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1040,48 +1005,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getIconOptional(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconOptional', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconOptional',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setIconPadding(
       String arg_managerId, double arg_iconPadding) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconPadding', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconPadding',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_iconPadding])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_iconPadding]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1090,49 +1052,46 @@ class _PointAnnotationMessager {
 
   Future<double?> getIconPadding(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconPadding', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPadding',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setIconPitchAlignment(
       String arg_managerId, IconPitchAlignment arg_iconPitchAlignment) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconPitchAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconPitchAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_iconPitchAlignment.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1141,50 +1100,46 @@ class _PointAnnotationMessager {
 
   Future<int?> getIconPitchAlignment(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconPitchAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPitchAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setIconRotationAlignment(String arg_managerId,
       IconRotationAlignment arg_iconRotationAlignment) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconRotationAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconRotationAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_iconRotationAlignment.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1193,49 +1148,46 @@ class _PointAnnotationMessager {
 
   Future<int?> getIconRotationAlignment(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconRotationAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconRotationAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setIconTextFit(
       String arg_managerId, IconTextFit arg_iconTextFit) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconTextFit', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFit',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_iconTextFit.index])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1244,49 +1196,46 @@ class _PointAnnotationMessager {
 
   Future<int?> getIconTextFit(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconTextFit', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFit',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setIconTextFitPadding(
       String arg_managerId, List<double?> arg_iconTextFitPadding) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconTextFitPadding',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFitPadding',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_iconTextFitPadding])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1295,50 +1244,45 @@ class _PointAnnotationMessager {
 
   Future<List<double?>?> getIconTextFitPadding(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconTextFitPadding',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFitPadding',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
   Future<void> setSymbolAvoidEdges(
       String arg_managerId, bool arg_symbolAvoidEdges) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setSymbolAvoidEdges',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolAvoidEdges',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_symbolAvoidEdges])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_symbolAvoidEdges]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1347,49 +1291,46 @@ class _PointAnnotationMessager {
 
   Future<bool?> getSymbolAvoidEdges(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getSymbolAvoidEdges',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolAvoidEdges',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setSymbolPlacement(
       String arg_managerId, SymbolPlacement arg_symbolPlacement) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setSymbolPlacement', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolPlacement',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_symbolPlacement.index])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1398,48 +1339,45 @@ class _PointAnnotationMessager {
 
   Future<int?> getSymbolPlacement(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getSymbolPlacement', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolPlacement',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setSymbolSpacing(
       String arg_managerId, double arg_symbolSpacing) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setSymbolSpacing', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolSpacing',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_symbolSpacing])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_symbolSpacing]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1448,48 +1386,46 @@ class _PointAnnotationMessager {
 
   Future<double?> getSymbolSpacing(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getSymbolSpacing', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolSpacing',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setSymbolZOrder(
       String arg_managerId, SymbolZOrder arg_symbolZOrder) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setSymbolZOrder', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZOrder',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_symbolZOrder.index])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1498,49 +1434,45 @@ class _PointAnnotationMessager {
 
   Future<int?> getSymbolZOrder(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getSymbolZOrder', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZOrder',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setTextAllowOverlap(
       String arg_managerId, bool arg_textAllowOverlap) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextAllowOverlap',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextAllowOverlap',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textAllowOverlap])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textAllowOverlap]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1549,48 +1481,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getTextAllowOverlap(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextAllowOverlap',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextAllowOverlap',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setTextFont(
       String arg_managerId, List<String?> arg_textFont) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextFont', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextFont',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
-        .send(<Object?>[arg_managerId, arg_textFont]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textFont]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1599,49 +1528,46 @@ class _PointAnnotationMessager {
 
   Future<List<String?>?> getTextFont(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextFont', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextFont',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<String?>();
+      return (replyList[0] as List<Object?>?)?.cast<String?>();
     }
   }
 
   Future<void> setTextIgnorePlacement(
       String arg_managerId, bool arg_textIgnorePlacement) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextIgnorePlacement',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextIgnorePlacement',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
+    final List<Object?>? replyList =
         await channel.send(<Object?>[arg_managerId, arg_textIgnorePlacement])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+            as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1650,49 +1576,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getTextIgnorePlacement(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextIgnorePlacement',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextIgnorePlacement',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setTextKeepUpright(
       String arg_managerId, bool arg_textKeepUpright) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextKeepUpright', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextKeepUpright',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textKeepUpright])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textKeepUpright]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1701,48 +1623,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getTextKeepUpright(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextKeepUpright', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextKeepUpright',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setTextLineHeight(
       String arg_managerId, double arg_textLineHeight) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextLineHeight', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextLineHeight',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textLineHeight])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textLineHeight]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1751,48 +1670,45 @@ class _PointAnnotationMessager {
 
   Future<double?> getTextLineHeight(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextLineHeight', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextLineHeight',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setTextMaxAngle(
       String arg_managerId, double arg_textMaxAngle) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextMaxAngle', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextMaxAngle',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textMaxAngle])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textMaxAngle]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1801,48 +1717,45 @@ class _PointAnnotationMessager {
 
   Future<double?> getTextMaxAngle(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextMaxAngle', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextMaxAngle',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setTextOptional(
       String arg_managerId, bool arg_textOptional) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextOptional', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextOptional',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textOptional])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textOptional]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1851,48 +1764,45 @@ class _PointAnnotationMessager {
 
   Future<bool?> getTextOptional(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextOptional', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextOptional',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as bool?);
+      return (replyList[0] as bool?);
     }
   }
 
   Future<void> setTextPadding(
       String arg_managerId, double arg_textPadding) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextPadding', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextPadding',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textPadding])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textPadding]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1901,49 +1811,46 @@ class _PointAnnotationMessager {
 
   Future<double?> getTextPadding(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextPadding', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPadding',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as double?);
+      return (replyList[0] as double?);
     }
   }
 
   Future<void> setTextPitchAlignment(
       String arg_managerId, TextPitchAlignment arg_textPitchAlignment) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextPitchAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextPitchAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_textPitchAlignment.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -1952,50 +1859,46 @@ class _PointAnnotationMessager {
 
   Future<int?> getTextPitchAlignment(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextPitchAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPitchAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setTextRotationAlignment(String arg_managerId,
       TextRotationAlignment arg_textRotationAlignment) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextRotationAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextRotationAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_textRotationAlignment.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2004,49 +1907,45 @@ class _PointAnnotationMessager {
 
   Future<int?> getTextRotationAlignment(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextRotationAlignment',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextRotationAlignment',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setIconTranslate(
       String arg_managerId, List<double?> arg_iconTranslate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconTranslate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTranslate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_iconTranslate])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_iconTranslate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2055,49 +1954,46 @@ class _PointAnnotationMessager {
 
   Future<List<double?>?> getIconTranslate(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconTranslate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
   Future<void> setIconTranslateAnchor(
       String arg_managerId, IconTranslateAnchor arg_iconTranslateAnchor) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setIconTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_iconTranslateAnchor.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2106,49 +2002,45 @@ class _PointAnnotationMessager {
 
   Future<int?> getIconTranslateAnchor(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getIconTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 
   Future<void> setTextTranslate(
       String arg_managerId, List<double?> arg_textTranslate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextTranslate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextTranslate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId, arg_textTranslate])
-            as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_textTranslate]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2157,49 +2049,46 @@ class _PointAnnotationMessager {
 
   Future<List<double?>?> getTextTranslate(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextTranslate', codec,
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslate',
+        codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
   Future<void> setTextTranslateAnchor(
       String arg_managerId, TextTranslateAnchor arg_textTranslateAnchor) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.setTextTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel
+    final List<Object?>? replyList = await channel
             .send(<Object?>[arg_managerId, arg_textTranslateAnchor.index])
-        as Map<Object?, Object?>?;
-    if (replyMap == null) {
+        as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
       return;
@@ -2208,26 +2097,24 @@ class _PointAnnotationMessager {
 
   Future<int?> getTextTranslateAnchor(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon._PointAnnotationMessager.getTextTranslateAnchor',
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslateAnchor',
         codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_managerId]) as Map<Object?, Object?>?;
-    if (replyMap == null) {
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
         message: 'Unable to establish connection on channel.',
       );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error =
-          (replyMap['error'] as Map<Object?, Object?>?)!;
+    } else if (replyList.length > 1) {
       throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
       );
     } else {
-      return (replyMap['result'] as int?);
+      return (replyList[0] as int?);
     }
   }
 }

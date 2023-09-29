@@ -19,7 +19,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
   override fun create(
     managerId: String,
     annotationOption: FLTPointAnnotationMessager.PointAnnotationOptions,
-    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.PointAnnotation>?
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.PointAnnotation>
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
@@ -30,16 +30,16 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       } else {
         managerCreateAnnotationMap[managerId]!!.add(annotation.id.toString())
       }
-      result?.success(annotation.toFLTPointAnnotation())
+      result.success(annotation.toFLTPointAnnotation())
     } catch (e: Exception) {
-      result?.error(e)
+      result.error(e)
     }
   }
 
   override fun createMulti(
     managerId: String,
     annotationOptions: MutableList<FLTPointAnnotationMessager.PointAnnotationOptions>,
-    result: FLTPointAnnotationMessager.Result<MutableList<FLTPointAnnotationMessager.PointAnnotation>>?
+    result: FLTPointAnnotationMessager.Result<MutableList<FLTPointAnnotationMessager.PointAnnotation>>
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
@@ -55,16 +55,16 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
             .toList()
         )
       }
-      result?.success(annotations.map { it.toFLTPointAnnotation() }.toMutableList())
+      result.success(annotations.map { it.toFLTPointAnnotation() }.toMutableList())
     } catch (e: Exception) {
-      result?.error(e)
+      result.error(e)
     }
   }
 
   override fun update(
     managerId: String,
     annotation: FLTPointAnnotationMessager.PointAnnotation,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
@@ -77,22 +77,22 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
 
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
-      result?.success(null)
+      result.success(null)
     } catch (e: Exception) {
-      result?.error(e)
+      result.error(e)
     }
   }
 
   override fun delete(
     managerId: String,
     annotation: FLTPointAnnotationMessager.PointAnnotation,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
 
       if (!annotationMap.containsKey(annotation.id)) {
-        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        result.error(Throwable("Annotation has not been added on the map: $annotation."))
         return
       }
 
@@ -101,13 +101,13 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       )
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
-      result?.success(null)
+      result.success(null)
     } catch (e: Exception) {
-      result?.error(e)
+      result.error(e)
     }
   }
 
-  override fun deleteAll(managerId: String, result: FLTPointAnnotationMessager.Result<Void>?) {
+  override fun deleteAll(managerId: String, result: FLTPointAnnotationMessager.Result<Void>) {
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
       managerCreateAnnotationMap[managerId]?.apply {
@@ -115,9 +115,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
         clear()
       }
       manager.deleteAll()
-      result?.success(null)
+      result.success(null)
     } catch (e: Exception) {
-      result?.error(e)
+      result.error(e)
     }
   }
 
@@ -213,594 +213,594 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
   override fun setIconAllowOverlap(
     managerId: String,
     iconAllowOverlap: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconAllowOverlap = iconAllowOverlap
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconAllowOverlap(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconAllowOverlap != null) {
-      result?.success(manager.iconAllowOverlap!!)
+      result.success(manager.iconAllowOverlap!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconIgnorePlacement(
     managerId: String,
     iconIgnorePlacement: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconIgnorePlacement = iconIgnorePlacement
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconIgnorePlacement(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconIgnorePlacement != null) {
-      result?.success(manager.iconIgnorePlacement!!)
+      result.success(manager.iconIgnorePlacement!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconKeepUpright(
     managerId: String,
     iconKeepUpright: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconKeepUpright = iconKeepUpright
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconKeepUpright(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconKeepUpright != null) {
-      result?.success(manager.iconKeepUpright!!)
+      result.success(manager.iconKeepUpright!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconOptional(
     managerId: String,
     iconOptional: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconOptional = iconOptional
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconOptional(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconOptional != null) {
-      result?.success(manager.iconOptional!!)
+      result.success(manager.iconOptional!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconPadding(
     managerId: String,
     iconPadding: Double,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconPadding = iconPadding
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconPadding(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>?
+    result: FLTPointAnnotationMessager.Result<Double>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconPadding != null) {
-      result?.success(manager.iconPadding!!)
+      result.success(manager.iconPadding!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconPitchAlignment(
     managerId: String,
     iconPitchAlignment: FLTPointAnnotationMessager.IconPitchAlignment,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconPitchAlignment = IconPitchAlignment.values()[iconPitchAlignment.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconPitchAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconPitchAlignment != null) {
-      result?.success(manager.iconPitchAlignment!!.ordinal.toLong())
+      result.success(manager.iconPitchAlignment!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconRotationAlignment(
     managerId: String,
     iconRotationAlignment: FLTPointAnnotationMessager.IconRotationAlignment,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconRotationAlignment = IconRotationAlignment.values()[iconRotationAlignment.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconRotationAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconRotationAlignment != null) {
-      result?.success(manager.iconRotationAlignment!!.ordinal.toLong())
+      result.success(manager.iconRotationAlignment!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconTextFit(
     managerId: String,
     iconTextFit: FLTPointAnnotationMessager.IconTextFit,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconTextFit = IconTextFit.values()[iconTextFit.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconTextFit(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTextFit != null) {
-      result?.success(manager.iconTextFit!!.ordinal.toLong())
+      result.success(manager.iconTextFit!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconTextFitPadding(
     managerId: String,
     iconTextFitPadding: List<Double>,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconTextFitPadding = iconTextFitPadding
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconTextFitPadding(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<List<Double>>?
+    result: FLTPointAnnotationMessager.Result<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTextFitPadding != null) {
-      result?.success(manager.iconTextFitPadding!!)
+      result.success(manager.iconTextFitPadding!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setSymbolAvoidEdges(
     managerId: String,
     symbolAvoidEdges: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.symbolAvoidEdges = symbolAvoidEdges
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getSymbolAvoidEdges(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolAvoidEdges != null) {
-      result?.success(manager.symbolAvoidEdges!!)
+      result.success(manager.symbolAvoidEdges!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setSymbolPlacement(
     managerId: String,
     symbolPlacement: FLTPointAnnotationMessager.SymbolPlacement,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.symbolPlacement = SymbolPlacement.values()[symbolPlacement.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getSymbolPlacement(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolPlacement != null) {
-      result?.success(manager.symbolPlacement!!.ordinal.toLong())
+      result.success(manager.symbolPlacement!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setSymbolSpacing(
     managerId: String,
     symbolSpacing: Double,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.symbolSpacing = symbolSpacing
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getSymbolSpacing(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>?
+    result: FLTPointAnnotationMessager.Result<Double>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolSpacing != null) {
-      result?.success(manager.symbolSpacing!!)
+      result.success(manager.symbolSpacing!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setSymbolZOrder(
     managerId: String,
     symbolZOrder: FLTPointAnnotationMessager.SymbolZOrder,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.symbolZOrder = SymbolZOrder.values()[symbolZOrder.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getSymbolZOrder(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolZOrder != null) {
-      result?.success(manager.symbolZOrder!!.ordinal.toLong())
+      result.success(manager.symbolZOrder!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextAllowOverlap(
     managerId: String,
     textAllowOverlap: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textAllowOverlap = textAllowOverlap
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextAllowOverlap(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textAllowOverlap != null) {
-      result?.success(manager.textAllowOverlap!!)
+      result.success(manager.textAllowOverlap!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextFont(
     managerId: String,
     textFont: List<String>,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textFont = textFont
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextFont(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<List<String>>?
+    result: FLTPointAnnotationMessager.Result<List<String>>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textFont != null) {
-      result?.success(manager.textFont!!)
+      result.success(manager.textFont!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextIgnorePlacement(
     managerId: String,
     textIgnorePlacement: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textIgnorePlacement = textIgnorePlacement
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextIgnorePlacement(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textIgnorePlacement != null) {
-      result?.success(manager.textIgnorePlacement!!)
+      result.success(manager.textIgnorePlacement!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextKeepUpright(
     managerId: String,
     textKeepUpright: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textKeepUpright = textKeepUpright
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextKeepUpright(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textKeepUpright != null) {
-      result?.success(manager.textKeepUpright!!)
+      result.success(manager.textKeepUpright!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextLineHeight(
     managerId: String,
     textLineHeight: Double,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textLineHeight = textLineHeight
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextLineHeight(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>?
+    result: FLTPointAnnotationMessager.Result<Double>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textLineHeight != null) {
-      result?.success(manager.textLineHeight!!)
+      result.success(manager.textLineHeight!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextMaxAngle(
     managerId: String,
     textMaxAngle: Double,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textMaxAngle = textMaxAngle
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextMaxAngle(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>?
+    result: FLTPointAnnotationMessager.Result<Double>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textMaxAngle != null) {
-      result?.success(manager.textMaxAngle!!)
+      result.success(manager.textMaxAngle!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextOptional(
     managerId: String,
     textOptional: Boolean,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textOptional = textOptional
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextOptional(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Boolean>?
+    result: FLTPointAnnotationMessager.Result<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textOptional != null) {
-      result?.success(manager.textOptional!!)
+      result.success(manager.textOptional!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextPadding(
     managerId: String,
     textPadding: Double,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textPadding = textPadding
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextPadding(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>?
+    result: FLTPointAnnotationMessager.Result<Double>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textPadding != null) {
-      result?.success(manager.textPadding!!)
+      result.success(manager.textPadding!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextPitchAlignment(
     managerId: String,
     textPitchAlignment: FLTPointAnnotationMessager.TextPitchAlignment,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textPitchAlignment = TextPitchAlignment.values()[textPitchAlignment.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextPitchAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textPitchAlignment != null) {
-      result?.success(manager.textPitchAlignment!!.ordinal.toLong())
+      result.success(manager.textPitchAlignment!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextRotationAlignment(
     managerId: String,
     textRotationAlignment: FLTPointAnnotationMessager.TextRotationAlignment,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textRotationAlignment = TextRotationAlignment.values()[textRotationAlignment.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextRotationAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textRotationAlignment != null) {
-      result?.success(manager.textRotationAlignment!!.ordinal.toLong())
+      result.success(manager.textRotationAlignment!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconTranslate(
     managerId: String,
     iconTranslate: List<Double>,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconTranslate = iconTranslate
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconTranslate(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<List<Double>>?
+    result: FLTPointAnnotationMessager.Result<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTranslate != null) {
-      result?.success(manager.iconTranslate!!)
+      result.success(manager.iconTranslate!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setIconTranslateAnchor(
     managerId: String,
     iconTranslateAnchor: FLTPointAnnotationMessager.IconTranslateAnchor,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.iconTranslateAnchor = IconTranslateAnchor.values()[iconTranslateAnchor.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getIconTranslateAnchor(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTranslateAnchor != null) {
-      result?.success(manager.iconTranslateAnchor!!.ordinal.toLong())
+      result.success(manager.iconTranslateAnchor!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextTranslate(
     managerId: String,
     textTranslate: List<Double>,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textTranslate = textTranslate
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextTranslate(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<List<Double>>?
+    result: FLTPointAnnotationMessager.Result<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textTranslate != null) {
-      result?.success(manager.textTranslate!!)
+      result.success(manager.textTranslate!!)
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 
   override fun setTextTranslateAnchor(
     managerId: String,
     textTranslateAnchor: FLTPointAnnotationMessager.TextTranslateAnchor,
-    result: FLTPointAnnotationMessager.Result<Void>?
+    result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     manager.textTranslateAnchor = TextTranslateAnchor.values()[textTranslateAnchor.ordinal]
-    result?.success(null)
+    result.success(null)
   }
 
   override fun getTextTranslateAnchor(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>?
+    result: FLTPointAnnotationMessager.Result<Long>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textTranslateAnchor != null) {
-      result?.success(manager.textTranslateAnchor!!.ordinal.toLong())
+      result.success(manager.textTranslateAnchor!!.ordinal.toLong())
     } else {
-      result?.success(null)
+      result.success(null)
     }
   }
 }
