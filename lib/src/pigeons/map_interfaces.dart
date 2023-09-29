@@ -1049,8 +1049,10 @@ class FeatureExtensionValue {
     result as List<Object?>;
     return FeatureExtensionValue(
       value: result[0] as String?,
-      featureCollection:
-          (result[1] as List<Object?>?)?.cast<Map<String?, Object?>?>(),
+      featureCollection: (result[1] as List<Object?>?)?.map((e) {
+        return Map<Object?, Object?>.from(e as Map<dynamic, dynamic>)
+            .cast<String?, Object?>();
+      }).toList(),
     );
   }
 }
@@ -2529,7 +2531,10 @@ class _CameraManager {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyList[0] as List<Object?>?)!.cast<Map<String?, Object?>?>();
+      return (replyList[0] as List<Object?>?)!.map((e) {
+        return Map<Object?, Object?>.from(e as Map<dynamic, dynamic>)
+            .cast<String?, Object?>();
+      }).toList();
     }
   }
 
