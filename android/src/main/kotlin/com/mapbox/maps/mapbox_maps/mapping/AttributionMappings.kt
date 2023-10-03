@@ -16,7 +16,7 @@ fun AttributionSettingsInterface.applyFromFLT(settings: FLTSettings.AttributionS
 }
 
 fun AttributionSettingsInterface.toFLT() = FLTSettings.AttributionSettings.Builder().let { settings ->
-  settings.setIconColor(iconColor.toLong())
+  settings.setIconColor(iconColor.toUInt().toLong())
   settings.setPosition(position.toOrnamentPosition())
   settings.setMarginLeft(marginLeft.toDouble())
   settings.setMarginTop(marginTop.toDouble())
