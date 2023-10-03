@@ -54,11 +54,10 @@ void main() {
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
+    expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
+    expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
+    expect(updatedSettings.pulsingColor, settings.pulsingColor);
     if (Platform.isAndroid) {
-      expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
-      expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
-      // FIXME colors are parsed incorrectly
-      // expect(updatedSettings.pulsingColor, settings.pulsingColor);
       expect(updatedSettings.layerAbove, settings.layerAbove);
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
