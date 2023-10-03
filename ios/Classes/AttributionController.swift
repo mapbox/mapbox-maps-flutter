@@ -4,19 +4,26 @@ import UIKit
 class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface {
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSAttributionSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        var attributionButton = mapView.ornaments.options.attributionButton
         switch settings.position?.value {
         case .BOTTOM_LEFT:
-            mapView.ornaments.options.attributionButton.position = .bottomLeading
-            mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.position = .bottomLeading
+            attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .BOTTOM_RIGHT, .none:
-            mapView.ornaments.options.attributionButton.position = .bottomTrailing
-            mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.position = .bottomTrailing
+            attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_LEFT:
-            mapView.ornaments.options.attributionButton.position = .topLeading
-            mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.position = .topLeading
+            attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_RIGHT:
-            mapView.ornaments.options.attributionButton.position = .topTrailing
-            mapView.ornaments.options.attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.position = .topTrailing
+            attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        }
+
+        mapView.ornaments.options.attributionButton = attributionButton
+
+        if let iconColor = settings.iconColor?.intValue {
+            mapView.ornaments.attributionButton.tintColor = uiColorFromHex(rgbValue: iconColor)
         }
     }
 
