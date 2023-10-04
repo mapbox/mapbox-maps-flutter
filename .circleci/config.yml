@@ -2,6 +2,8 @@ version: 2.1
 
 orbs: 
   flutter: circleci/flutter@2.0.2
+  macos: circleci/macos@2.4.0
+  gcp-cli: circleci/gcp-cli@3.1.1
 
 commands:
 
@@ -13,42 +15,11 @@ commands:
             echo "machine api.mapbox.com login mapbox password ${SDK_REGISTRY_TOKEN}" >> ~/.netrc
             chmod 0600 ~/.netrc
   
-  install-gcloud:
-    # Link for gcloud versions: https://cloud.google.com/sdk/docs/downloads-versioned-archives#installation_instructions
-    parameters:
-      version:
-        type: string
-        default: "google-cloud-cli-405.0.0-darwin-x86_64.tar.gz"
-      checksum:
-        type: string
-        default: "504852f8ab0c7df62f80d9d687d74c80da68f1e17ad53055fbdb37cf9bbeebc7"
-    description: "Install gcloud"
+  setup-gcloud:
     steps:
-      - run:
-          name: Install gcloud
-          command: |
-            mkdir /tmp/gcloud && cd /tmp/gcloud
-
-            curl -OL https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/<< parameters.version >>
-            echo '<< parameters.checksum >> *<< parameters.version >>' >> checksumfile
-            shasum -a 256 -c checksumfile
-
-            tar zxvf << parameters.version >>
-            ./google-cloud-sdk/install.sh -q --install-python false
-
-            echo "source /tmp/gcloud/google-cloud-sdk/path.bash.inc" >> $BASH_ENV
-            echo "source /tmp/gcloud/google-cloud-sdk/completion.bash.inc" >> $BASH_ENV
-
-  login-gcloud:
-    steps:
-      - run:
-          name: Log in to Google Cloud Platform
-          command: |
-            if [[ -n "${GCLOUD_SERVICE_ACCOUNT_JSON}" ]]; then
-              echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
-              gcloud auth activate-service-account --key-file secret.json --project mapbox-maps-flutter
-              rm secret.json
-            fi
+      - gcp-cli/setup:
+          version: 449.0.0
+          gcloud_service_key: GCLOUD_SERVICE_ACCOUNT_JSON
 
   add-mapbox-submodules-key:
     steps:
@@ -69,7 +40,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.13.4
+          version: 3.13.6
           app-dir: example
       - run:
           name: ktlint
@@ -96,14 +67,11 @@ jobs:
       workspace-path:
         type: string
         default: example/build/app/outputs/apk
-    docker:
-      - image: cimg/android:2022.09
-    resource_class: large
+    executor: firebase-test-runner
     steps:
       - attach_workspace:
           at: << parameters.workspace-path >>
-      - install-gcloud
-      - login-gcloud
+      - setup-gcloud
       - run:
           name: "Run Android integration tests on Firebase"
           no_output_timeout: 20m
@@ -127,8 +95,9 @@ jobs:
       - checkout
       - inject-netrc-credentials
       - add-mapbox-submodules-key
+      - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.13.4
+          version: 3.13.6
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
@@ -142,14 +111,10 @@ jobs:
       - run:
           name: "Build iOS integration tests"
           command: |
-            bundle exec fastlane update_code_signing
-
             pushd example
 
             # required to init configs that pass environment variables to fastlane later
             flutter build ios --config-only integration_test/all_test.dart \
-              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
-            flutter build ios integration_test/all_test.dart \
               --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
             popd # to repo root
@@ -165,12 +130,11 @@ jobs:
       workspace-path:
         type: string
         default: example/build/output
-    executor: macos-xcode-latest
+    executor: firebase-test-runner
     steps:
       - attach_workspace:
           at: << parameters.workspace-path >>
-      - install-gcloud
-      - login-gcloud
+      - setup-gcloud
       - run:
           name: "Run iOS integration tests on Firebase"
           no_output_timeout: 20m
@@ -182,7 +146,6 @@ jobs:
 
 
 workflows:
-  version: 2
   build:
     jobs:
       - build-android
@@ -196,6 +159,10 @@ workflows:
 
 executors:
   macos-xcode-latest:
-    resource_class: large
+    resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 14.1.0
+      xcode: 15.0.0
+  firebase-test-runner:
+    resource_class: small
+    docker:
+      - image: cimg/python:3.7

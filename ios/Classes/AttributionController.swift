@@ -30,9 +30,10 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSAttributionSettings? {
         let options = mapView.ornaments.options.attributionButton
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
+        let iconColor = mapView.ornaments.attributionButton.tintColor.rgb()
 
         let settings = FLT_SETTINGSAttributionSettings.make(
-            withIconColor: nil,
+            withIconColor: NSNumber(value: iconColor),
             position: .init(value: position),
             marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
             marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
