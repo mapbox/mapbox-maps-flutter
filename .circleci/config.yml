@@ -67,8 +67,7 @@ jobs:
       workspace-path:
         type: string
         default: example/build/app/outputs/apk
-    docker:
-      - image: cimg/python:3.7    
+    executor: firebase-test-runner
     steps:
       - attach_workspace:
           at: << parameters.workspace-path >>
@@ -135,8 +134,7 @@ jobs:
       workspace-path:
         type: string
         default: example/build/output
-    docker: 
-      - image: cimg/python:3.7
+    executor: firebase-test-runner
     steps:
       - attach_workspace:
           at: << parameters.workspace-path >>
@@ -168,3 +166,7 @@ executors:
     resource_class: macos.m1.medium.gen1
     macos:
       xcode: 15.0.0
+  firebase-test-runner:
+    resource_class: small
+    docker:
+      - image: cimg/python:3.7
