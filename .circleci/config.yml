@@ -118,8 +118,6 @@ jobs:
             # required to init configs that pass environment variables to fastlane later
             flutter build ios --config-only integration_test/all_test.dart \
               --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
-            flutter build ios integration_test/all_test.dart \
-              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
             popd # to repo root
 
