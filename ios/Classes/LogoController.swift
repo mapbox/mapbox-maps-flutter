@@ -3,20 +3,23 @@ import Foundation
 import UIKit
 class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
     func updateSettingsSettings(_ settings: FLT_SETTINGSLogoSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        var logo = mapView.ornaments.options.logo
         switch settings.position?.value {
         case .BOTTOM_LEFT, .none:
-            mapView.ornaments.options.logo.position = .bottomLeading
-            mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.position = .bottomLeading
+            logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .BOTTOM_RIGHT:
-            mapView.ornaments.options.logo.position = .bottomTrailing
-            mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.position = .bottomTrailing
+            logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_LEFT:
-            mapView.ornaments.options.logo.position = .topLeading
-            mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.position = .topLeading
+            logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         case .TOP_RIGHT:
-            mapView.ornaments.options.logo.position = .topTrailing
-            mapView.ornaments.options.logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.position = .topTrailing
+            logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
         }
+
+        mapView.ornaments.options.logo = logo
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLogoSettings? {
