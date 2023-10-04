@@ -24,10 +24,16 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
             compass.image = UIImage(data: data, scale: UIScreen.main.scale)
         }
 
-        if let visible = settings.enabled {
-            if !visible.boolValue {
-                compass.visibility = visible.boolValue ? .adaptive : .hidden
+        if let visible = settings.enabled?.boolValue {
+            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth?.boolValue ?? true
+
+            let visibility: OrnamentVisibility = switch (visible, fadeWhenFacingNorth) {
+            case (true, true): .adaptive
+            case (true, false): .visible
+            case (false, _): .hidden
             }
+
+            compass.visibility = visibility
         }
 
         mapView.ornaments.options.compass = compass
