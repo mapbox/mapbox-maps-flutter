@@ -54,11 +54,10 @@ void main() {
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
+    expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
+    expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
+    expect(updatedSettings.pulsingColor, settings.pulsingColor);
     if (Platform.isAndroid) {
-      expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
-      expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
-      // FIXME colors are parsed incorrectly
-      // expect(updatedSettings.pulsingColor, settings.pulsingColor);
       expect(updatedSettings.layerAbove, settings.layerAbove);
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
@@ -66,9 +65,8 @@ void main() {
     expect(updatedSettings.puckBearingSource, settings.puckBearingSource);
     expect(updatedSettings.showAccuracyRing, settings.showAccuracyRing);
     // FIXME bitmaps are decoded incorrectly for some reason
-    // expect(updatedSettings.accuracyRingBorderColor,
-    //     settings.accuracyRingBorderColor);
-    // expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
+    expect(updatedSettings.accuracyRingBorderColor, settings.accuracyRingBorderColor);
+    expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.bearingImage,
     //     settings.locationPuck?.locationPuck2D?.bearingImage);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.topImage,

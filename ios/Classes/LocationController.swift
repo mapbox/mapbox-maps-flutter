@@ -84,6 +84,18 @@ extension LocationOptions {
                 if let showAccuracyRing = settings.showAccuracyRing {
                     configuration.showsAccuracyRing = showAccuracyRing.boolValue
                 }
+                if settings.pulsingEnabled?.boolValue ?? false {
+                    var pulsing = Puck2DConfiguration.Pulsing()
+
+                    if let radius = settings.pulsingMaxRadius?.intValue {
+                        // -1 indicates "accuracy" mode(from Android)
+                        pulsing.radius = radius == -1 ? .accuracy : .constant(Double(radius))
+                    }
+                    if let color = settings.pulsingColor?.intValue {
+                        pulsing.color = uiColorFromHex(rgbValue: color)
+                    }
+                    configuration.pulsing = pulsing
+                }
 
                 options.puckType = .puck2D(configuration)
             }
@@ -102,6 +114,9 @@ extension LocationOptions {
         var accuracyRingColor: NSNumber?
         var accuracyRingBorderColor: NSNumber?
         var showAccuracyRing: NSNumber?
+        var pulsingEnabled: NSNumber?
+        var pulsingRadius: NSNumber?
+        var pulsingColor: NSNumber?
         let locationPuck2D = FLT_SETTINGSLocationPuck2D.init()
         let locationPuck3D = FLT_SETTINGSLocationPuck3D.init()
         let locationPuck = FLT_SETTINGSLocationPuck.make(with: locationPuck2D, locationPuck3D: locationPuck3D)
@@ -122,6 +137,16 @@ extension LocationOptions {
             if case .expression(let scaleData) = oldConfiguration.scale {
                 let encoded = try! JSONEncoder().encode(scaleData)
                 locationPuck2D.scaleExpression = String(data: encoded, encoding: .utf8)
+            }
+            if let pulsing = oldConfiguration.pulsing {
+                pulsingEnabled = NSNumber(value: true)
+                switch pulsing.radius {
+                case .accuracy:
+                    pulsingRadius = NSNumber(value: -1)
+                case .constant(let radius):
+                    pulsingRadius = NSNumber(value: radius)
+                }
+                pulsingColor = NSNumber(value: pulsing.color.rgb())
             }
         }
         if case .puck3D(let oldConfiguration) = self.puckType {
@@ -144,9 +169,9 @@ extension LocationOptions {
 
         return FLT_SETTINGSLocationComponentSettings.make(
             withEnabled: enabled,
-            pulsingEnabled: nil,
-            pulsingColor: nil,
-            pulsingMaxRadius: nil,
+            pulsingEnabled: pulsingEnabled,
+            pulsingColor: pulsingColor,
+            pulsingMaxRadius: pulsingRadius,
             showAccuracyRing: showAccuracyRing,
             accuracyRingColor: accuracyRingColor,
             accuracyRingBorderColor: accuracyRingBorderColor,
