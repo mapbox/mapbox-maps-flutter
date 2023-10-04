@@ -47,10 +47,10 @@ void main() {
       expect(updatedSettings.marginTop, 2);
       expect(updatedSettings.marginRight, 3);
       expect(updatedSettings.marginBottom, 4);
-      // FIXME colors are decoded incorrectly for some reason
-      // expect(updatedSettings.textColor, Colors.black.value);
-      // expect(updatedSettings.primaryColor, Colors.red.value);
-      // expect(updatedSettings.secondaryColor, Colors.blue.value);
+      // iOS doesn't support these settings
+      expect(updatedSettings.textColor, Colors.black.value);
+      expect(updatedSettings.primaryColor, Colors.red.value);
+      expect(updatedSettings.secondaryColor, Colors.blue.value);
       expect(updatedSettings.borderWidth, 2);
       expect(updatedSettings.height, 10);
       expect(updatedSettings.textBarMargin, 1);
