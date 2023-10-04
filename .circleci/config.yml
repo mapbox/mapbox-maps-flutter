@@ -111,8 +111,6 @@ jobs:
       - run:
           name: "Build iOS integration tests"
           command: |
-            bundle exec fastlane update_code_signing
-
             pushd example
 
             # required to init configs that pass environment variables to fastlane later
