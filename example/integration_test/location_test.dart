@@ -65,9 +65,8 @@ void main() {
     expect(updatedSettings.puckBearingSource, settings.puckBearingSource);
     expect(updatedSettings.showAccuracyRing, settings.showAccuracyRing);
     // FIXME bitmaps are decoded incorrectly for some reason
-    // expect(updatedSettings.accuracyRingBorderColor,
-    //     settings.accuracyRingBorderColor);
-    // expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
+    expect(updatedSettings.accuracyRingBorderColor, settings.accuracyRingBorderColor);
+    expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.bearingImage,
     //     settings.locationPuck?.locationPuck2D?.bearingImage);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.topImage,
