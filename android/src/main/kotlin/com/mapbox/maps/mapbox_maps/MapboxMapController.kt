@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.mapbox.common.*
 import com.mapbox.maps.*
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
@@ -61,6 +62,22 @@ class MapboxMapController(
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
+
+    /*
+    * Setting lifecycle owner to the map view
+    * To fix the issue
+    * ---> IllegalStateException: Please ensure that the hosting activity/fragment
+    *      is a valid LifecycleOwner #259 - Reported By:- @amias-samir
+    */
+    mapView.let {
+      val lifecycle = lifecycleProvider.getLifecycle()
+      lifecycle?.let { l ->
+        ViewTreeLifecycleOwner.set(it) {
+          l
+        }
+      }
+    }
+
     mapboxMap.subscribe(
       { event ->
         methodChannel.invokeMethod(getEventMethodName(event.type), event.data.toJson())
