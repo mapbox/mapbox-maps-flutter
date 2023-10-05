@@ -1,4 +1,4 @@
-## main
+## 0.4.5
 ### Common
 
 * Update pigeon to v11 ([#248](https://github.com/mapbox/mapbox-maps-flutter/pull/234)).
