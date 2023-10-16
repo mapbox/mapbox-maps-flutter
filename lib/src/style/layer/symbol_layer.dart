@@ -463,7 +463,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      iconAllowOverlap: map["layout"]["icon-allow-overlap"],
+      iconAllowOverlap: map["layout"]["icon-allow-overlap"] is bool?
+          ? map["layout"]["icon-allow-overlap"] as bool?
+          : null,
       iconAnchor: map["layout"]["icon-anchor"] == null
           ? null
           : IconAnchor.values.firstWhere((e) => e
@@ -472,13 +474,21 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-anchor"])),
-      iconIgnorePlacement: map["layout"]["icon-ignore-placement"],
-      iconImage: map["layout"]["icon-image"],
-      iconKeepUpright: map["layout"]["icon-keep-upright"],
+      iconIgnorePlacement: map["layout"]["icon-ignore-placement"] is bool?
+          ? map["layout"]["icon-ignore-placement"] as bool?
+          : null,
+      iconImage: map["layout"]["icon-image"] is String?
+          ? map["layout"]["icon-image"] as String?
+          : null,
+      iconKeepUpright: map["layout"]["icon-keep-upright"] is bool?
+          ? map["layout"]["icon-keep-upright"] as bool?
+          : null,
       iconOffset: (map["layout"]["icon-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      iconOptional: map["layout"]["icon-optional"],
+      iconOptional: map["layout"]["icon-optional"] is bool?
+          ? map["layout"]["icon-optional"] as bool?
+          : null,
       iconPadding: map["layout"]["icon-padding"] is num?
           ? (map["layout"]["icon-padding"] as num?)?.toDouble()
           : null,
@@ -515,7 +525,9 @@ class SymbolLayer extends Layer {
       iconTextFitPadding: (map["layout"]["icon-text-fit-padding"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      symbolAvoidEdges: map["layout"]["symbol-avoid-edges"],
+      symbolAvoidEdges: map["layout"]["symbol-avoid-edges"] is bool?
+          ? map["layout"]["symbol-avoid-edges"] as bool?
+          : null,
       symbolPlacement: map["layout"]["symbol-placement"] == null
           ? null
           : SymbolPlacement.values.firstWhere((e) => e
@@ -538,7 +550,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["symbol-z-order"])),
-      textAllowOverlap: map["layout"]["text-allow-overlap"],
+      textAllowOverlap: map["layout"]["text-allow-overlap"] is bool?
+          ? map["layout"]["text-allow-overlap"] as bool?
+          : null,
       textAnchor: map["layout"]["text-anchor"] == null
           ? null
           : TextAnchor.values.firstWhere((e) => e
@@ -550,7 +564,9 @@ class SymbolLayer extends Layer {
       textFont: (map["layout"]["text-font"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
-      textIgnorePlacement: map["layout"]["text-ignore-placement"],
+      textIgnorePlacement: map["layout"]["text-ignore-placement"] is bool?
+          ? map["layout"]["text-ignore-placement"] as bool?
+          : null,
       textJustify: map["layout"]["text-justify"] == null
           ? null
           : TextJustify.values.firstWhere((e) => e
@@ -559,7 +575,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-justify"])),
-      textKeepUpright: map["layout"]["text-keep-upright"],
+      textKeepUpright: map["layout"]["text-keep-upright"] is bool?
+          ? map["layout"]["text-keep-upright"] as bool?
+          : null,
       textLetterSpacing: map["layout"]["text-letter-spacing"] is num?
           ? (map["layout"]["text-letter-spacing"] as num?)?.toDouble()
           : null,
@@ -575,7 +593,9 @@ class SymbolLayer extends Layer {
       textOffset: (map["layout"]["text-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      textOptional: map["layout"]["text-optional"],
+      textOptional: map["layout"]["text-optional"] is bool?
+          ? map["layout"]["text-optional"] as bool?
+          : null,
       textPadding: map["layout"]["text-padding"] is num?
           ? (map["layout"]["text-padding"] as num?)?.toDouble()
           : null,
