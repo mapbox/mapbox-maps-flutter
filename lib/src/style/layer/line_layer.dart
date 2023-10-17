@@ -234,7 +234,7 @@ class LineLayer extends Layer {
       lineOpacity: map["paint"]["line-opacity"] is num?
           ? (map["paint"]["line-opacity"] as num?)?.toDouble()
           : null,
-      linePattern: map["layout"]["line-pattern"] is String?
+      linePattern: map["paint"]["line-pattern"] is String?
           ? map["layout"]["line-pattern"] as String?
           : null,
       lineTranslate: (map["paint"]["line-translate"] as List?)
