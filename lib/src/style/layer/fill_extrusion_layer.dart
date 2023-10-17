@@ -143,7 +143,9 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionOpacity: map["paint"]["fill-extrusion-opacity"] is num?
           ? (map["paint"]["fill-extrusion-opacity"] as num?)?.toDouble()
           : null,
-      fillExtrusionPattern: map["paint"]["fill-extrusion-pattern"],
+      fillExtrusionPattern: map["paint"]["fill-extrusion-pattern"] is String?
+          ? map["paint"]["fill-extrusion-pattern"] as String?
+          : null,
       fillExtrusionTranslate:
           (map["paint"]["fill-extrusion-translate"] as List?)
               ?.map<double?>((e) => e.toDouble())
@@ -157,8 +159,10 @@ class FillExtrusionLayer extends Layer {
                   .last
                   .toLowerCase()
                   .contains(map["paint"]["fill-extrusion-translate-anchor"])),
-      fillExtrusionVerticalGradient: map["paint"]
-          ["fill-extrusion-vertical-gradient"],
+      fillExtrusionVerticalGradient:
+          map["paint"]["fill-extrusion-vertical-gradient"] is bool?
+              ? map["paint"]["fill-extrusion-vertical-gradient"] as bool?
+              : null,
     );
   }
 }

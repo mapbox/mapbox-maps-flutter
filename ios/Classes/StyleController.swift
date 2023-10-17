@@ -129,7 +129,7 @@ class StyleController: NSObject, FLTStyleManager {
         do {
             var mappedValue = value
             if let stringValue = value as? String {
-                if (stringValue.hasPrefix("[") || stringValue.hasPrefix("{")) {
+                if stringValue.hasPrefix("[") || stringValue.hasPrefix("{") {
                     if let expressionData = stringValue.data(using: .utf8) {
                         let expJSONObject = try JSONSerialization.jsonObject(with: expressionData, options: [])
                         mappedValue = expJSONObject
