@@ -97,8 +97,14 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - run:
-          name: bundle install
-          command: bundle install # pin cocoapods to a working version(for more check a comment in Gemfile)
+          name: Use activesupport 7.0.8 so that Cocoapods works
+          command: |
+            # activesupport was pinned because of Cocoapods being incompatible with active support 7.0.10,
+            # more details here - https://github.com/CocoaPods/CocoaPods/issues/12081
+            # allegedly, this issue is resolved in https://github.com/CocoaPods/CocoaPods/pull/12082,
+            # pinning can be removed after the above fix is released
+            gem uninstall activesupport --version '>= 7.0.8'
+            gem install activesupport '7.0.8'
       - flutter/install_sdk_and_pub:
           version: 3.13.6
           app-dir: example
