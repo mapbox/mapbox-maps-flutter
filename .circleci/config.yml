@@ -103,7 +103,7 @@ jobs:
             # more details here - https://github.com/CocoaPods/CocoaPods/issues/12081
             # allegedly, this issue is resolved in https://github.com/CocoaPods/CocoaPods/pull/12082,
             # pinning can be removed after the above fix is released
-            gem uninstall activesupport --version '>= 7.0.8'
+            gem uninstall activesupport --version '>= 7.0.8' --ignore-dependencies
             gem install activesupport '7.0.8'
       - flutter/install_sdk_and_pub:
           version: 3.13.6
