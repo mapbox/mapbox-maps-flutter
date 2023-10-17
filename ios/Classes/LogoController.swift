@@ -7,16 +7,16 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         switch settings.position?.value {
         case .BOTTOM_LEFT, .none:
             logo.position = .bottomLeading
-            logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .BOTTOM_RIGHT:
             logo.position = .bottomTrailing
-            logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .TOP_LEFT:
             logo.position = .topLeading
-            logo.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         case .TOP_RIGHT:
             logo.position = .topTrailing
-            logo.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            logo.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         }
 
         mapView.ornaments.options.logo = logo
@@ -27,10 +27,10 @@ class LogoController: NSObject, FLT_SETTINGSLogoSettingsInterface {
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
         let settings = FLT_SETTINGSLogoSettings.make(
             withPosition: .init(value: position),
-            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale)
+            marginLeft: NSNumber(value: options.margins.x),
+            marginTop: NSNumber(value: options.margins.y),
+            marginRight: NSNumber(value: options.margins.x),
+            marginBottom: NSNumber(value: options.margins.y)
         )
         return settings
     }
