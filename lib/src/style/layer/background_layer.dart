@@ -84,7 +84,7 @@ class BackgroundLayer extends Layer {
           ? (map["paint"]["background-opacity"] as num?)?.toDouble()
           : null,
       backgroundPattern: map["paint"]["background-pattern"] is String?
-          ? map["layout"]["background-pattern"] as String?
+          ? map["paint"]["background-pattern"] as String?
           : null,
     );
   }
