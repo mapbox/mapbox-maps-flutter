@@ -4,8 +4,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'main.dart';
 import 'page.dart';
 
-import 'package:turf/helpers.dart';
-
 class OrnamentsPage extends ExamplePage {
   OrnamentsPage() : super(const Icon(Icons.map), 'Ornaments');
 
@@ -51,7 +49,11 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       pitch: null,
     ));
 
-    mapboxMap.compass.updateSettings(CompassSettings(
+    _updateMapSettigns();
+  }
+
+  void _updateMapSettigns() {
+    mapboxMap?.compass.updateSettings(CompassSettings(
       position: compassPosition,
       enabled: showOrnaments,
       marginBottom: 10,
@@ -60,7 +62,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       marginRight: 10,
     ));
 
-    mapboxMap.scaleBar.updateSettings(ScaleBarSettings(
+    mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(
       position: scaleBarPosition,
       enabled: showScaleBar,
       marginBottom: 20,
@@ -69,7 +71,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       marginRight: 20,
     ));
 
-    mapboxMap.logo.updateSettings(LogoSettings(
+    mapboxMap?.logo.updateSettings(LogoSettings(
       position: logoPosition,
       marginBottom: 30,
       marginLeft: 30,
@@ -77,7 +79,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       marginRight: 30,
     ));
 
-    mapboxMap.attribution
+    mapboxMap?.attribution
         .updateSettings(AttributionSettings(position: attributionPosition));
   }
 
@@ -122,11 +124,8 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       child: Text('toggle compass'),
       onPressed: () {
         setState(() {
-          if (showOrnaments) {
-            showOrnaments = false;
-          } else {
-            showOrnaments = true;
-          }
+          showOrnaments = !showOrnaments;
+          _updateMapSettigns();
         });
       },
     );
@@ -151,6 +150,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               compassPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateMapSettigns();
         });
       },
     );
@@ -161,11 +161,8 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       child: Text('toggle scale bar'),
       onPressed: () {
         setState(() {
-          if (showScaleBar) {
-            showScaleBar = false;
-          } else {
-            showScaleBar = true;
-          }
+          showScaleBar = !showScaleBar;
+          _updateMapSettigns();
         });
       },
     );
@@ -190,6 +187,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateMapSettigns();
         });
       },
     );
@@ -214,6 +212,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               attributionPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateMapSettigns();
         });
       },
     );
@@ -238,6 +237,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               logoPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateMapSettigns();
         });
       },
     );
