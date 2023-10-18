@@ -9,7 +9,7 @@ import com.mapbox.maps.plugin.locationcomponent.location2
 
 class LocationComponentController(private val mapView: MapView) :
   FLTSettings.LocationComponentSettingsInterface {
-  override fun getSettings(): FLTSettings.LocationComponentSettings = mapView.location2.toFLT()
+  override fun getSettings(): FLTSettings.LocationComponentSettings = mapView.location2.toFLT(mapView.context)
 
   override fun updateSettings(settings: FLTSettings.LocationComponentSettings) {
     mapView.location2.apply {

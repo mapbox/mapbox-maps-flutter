@@ -8,7 +8,7 @@ import com.mapbox.maps.plugin.compass.compass
 
 class CompassController(private val mapView: MapView) :
   FLTSettings.CompassSettingsInterface {
-  override fun getSettings(): FLTSettings.CompassSettings = mapView.compass.toFLT()
+  override fun getSettings(): FLTSettings.CompassSettings = mapView.compass.toFLT(mapView.context)
   override fun updateSettings(settings: FLTSettings.CompassSettings) {
     mapView.compass.applyFromFLT(settings, mapView.context)
   }

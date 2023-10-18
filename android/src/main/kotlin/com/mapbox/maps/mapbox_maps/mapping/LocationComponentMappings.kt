@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import com.mapbox.maps.mapbox_maps.toDevicePixels
+import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.LocationPuck3D
@@ -16,7 +18,7 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
   settings.enabled?.let { enabled = it }
   settings.pulsingEnabled?.let { pulsingEnabled = it }
   settings.pulsingColor?.let { pulsingColor = it.toInt() }
-  settings.pulsingMaxRadius?.let { pulsingMaxRadius = it.toFloat() }
+  settings.pulsingMaxRadius?.let { pulsingMaxRadius = it.toDevicePixels(context) }
   settings.showAccuracyRing?.let { showAccuracyRing = it }
   settings.accuracyRingColor?.let { accuracyRingColor = it.toInt() }
   settings.accuracyRingBorderColor?.let { accuracyRingBorderColor = it.toInt() }
@@ -52,11 +54,11 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
   }
 }
 
-fun LocationComponentSettingsInterface2.toFLT() = FLTSettings.LocationComponentSettings.Builder().let { settings ->
+fun LocationComponentSettingsInterface2.toFLT(context: Context) = FLTSettings.LocationComponentSettings.Builder().let { settings ->
   settings.setEnabled(enabled)
   settings.setPulsingEnabled(pulsingEnabled)
   settings.setPulsingColor(pulsingColor.toUInt().toLong())
-  settings.setPulsingMaxRadius(pulsingMaxRadius.toDouble())
+  settings.setPulsingMaxRadius(pulsingMaxRadius.toLogicalPixels(context))
   settings.setShowAccuracyRing(showAccuracyRing)
   settings.setAccuracyRingColor(accuracyRingColor.toUInt().toLong())
   settings.setAccuracyRingBorderColor(accuracyRingBorderColor.toUInt().toLong())
