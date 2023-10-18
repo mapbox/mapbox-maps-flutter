@@ -27,10 +27,11 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         if let visible = settings.enabled?.boolValue {
             let fadeWhenFacingNorth = settings.fadeWhenFacingNorth?.boolValue ?? true
 
-            let visibility: OrnamentVisibility = switch (visible, fadeWhenFacingNorth) {
-            case (true, true): .adaptive
-            case (true, false): .visible
-            case (false, _): .hidden
+            let visibility: OrnamentVisibility
+            switch (visible, fadeWhenFacingNorth) {
+            case (true, true): visibility = .adaptive
+            case (true, false): visibility = .visible
+            case (false, _): visibility = .hidden
             }
 
             compass.visibility = visibility
