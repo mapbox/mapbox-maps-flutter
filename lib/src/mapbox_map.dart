@@ -297,7 +297,7 @@ class MapboxMap extends ChangeNotifier {
   /// Calculates a `screen coordinate` that corresponds to a geographical coordinate
   /// (i.e., longitude-latitude pair).
   ///
-  /// The `screen coordinate` is in `platform pixels` relative to the top left corner
+  /// The `screen coordinate` is in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   Future<ScreenCoordinate> pixelForCoordinate(
           Map<String?, Object?> coordinate) =>
@@ -306,7 +306,7 @@ class MapboxMap extends ChangeNotifier {
   /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
   /// to a `screen coordinate`.
   ///
-  /// The screen coordinate is in `platform pixels`relative to the top left corner
+  /// The screen coordinate is in `logical pixels`relative to the top left corner
   /// of the map (not of the whole screen).
   Future<Map<String?, Object?>> coordinateForPixel(ScreenCoordinate pixel) =>
       _cameraManager.coordinateForPixel(pixel);
@@ -314,7 +314,7 @@ class MapboxMap extends ChangeNotifier {
   /// Calculates `screen coordinates` that correspond to geographical `coordinates`
   /// (i.e., longitude-latitude pairs).
   ///
-  /// The `screen coordinates` are in `platform pixels` relative to the top left corner
+  /// The `screen coordinates` are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
           List<Map<String?, Object?>?> coordinates) =>
@@ -323,7 +323,7 @@ class MapboxMap extends ChangeNotifier {
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
   /// to `screen coordinates`.
   ///
-  /// The screen coordinates are in `platform pixels` relative to the top left corner
+  /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   Future<List<Map<String?, Object?>?>> coordinatesForPixels(
           List<ScreenCoordinate?> pixels) =>

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class FLT_GESTURESScreenCoordinate;
 
 /// Describes the coordinate on the screen, measured from top to bottom and from left to right.
-/// Note: the `map` uses screen coordinate units measured in `platform pixels`.
+/// Note: the `map` uses screen coordinate units measured in `logical pixels`.
 @interface FLT_GESTURESScreenCoordinate : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
