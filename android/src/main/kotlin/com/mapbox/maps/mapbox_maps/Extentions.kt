@@ -58,9 +58,11 @@ fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(context: Cont
     FLTMapInterfaces.Type.LIST -> {
       val array: Array<Array<Double>> =
         Gson().fromJson(value, Array<Array<Double>>::class.java)
-      RenderedQueryGeometry.valueOf(array.map {
-        ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
-      }.toList())
+      RenderedQueryGeometry.valueOf(
+        array.map {
+          ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
+        }.toList()
+      )
     }
     FLTMapInterfaces.Type.SCREEN_COORDINATE -> {
       val pointArray = Gson().fromJson(

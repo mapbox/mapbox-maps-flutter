@@ -83,7 +83,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       marginLeft: 40,
       marginTop: 40,
       marginRight: 0,
-      ));
+    ));
   }
 
   @override

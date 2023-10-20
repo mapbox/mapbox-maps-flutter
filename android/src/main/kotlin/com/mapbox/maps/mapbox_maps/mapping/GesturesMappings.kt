@@ -4,7 +4,6 @@ package com.mapbox.maps.mapbox_maps.mapping
 import android.content.Context
 import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.mapbox_maps.toDevicePixels
-import com.mapbox.maps.mapbox_maps.toFLTScreenCoordinate
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.ScrollMode
