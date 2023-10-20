@@ -18,7 +18,7 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
   settings.enabled?.let { enabled = it }
   settings.pulsingEnabled?.let { pulsingEnabled = it }
   settings.pulsingColor?.let { pulsingColor = it.toInt() }
-  settings.pulsingMaxRadius?.let { pulsingMaxRadius = it.toDevicePixels(context) }
+  settings.pulsingMaxRadius?.let { pulsingMaxRadius = it.toFloat() }
   settings.showAccuracyRing?.let { showAccuracyRing = it }
   settings.accuracyRingColor?.let { accuracyRingColor = it.toInt() }
   settings.accuracyRingBorderColor?.let { accuracyRingBorderColor = it.toInt() }
@@ -54,11 +54,11 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
   }
 }
 
-fun LocationComponentSettingsInterface2.toFLT(context: Context) = FLTSettings.LocationComponentSettings.Builder().let { settings ->
+fun LocationComponentSettingsInterface2.toFLT() = FLTSettings.LocationComponentSettings.Builder().let { settings ->
   settings.setEnabled(enabled)
   settings.setPulsingEnabled(pulsingEnabled)
   settings.setPulsingColor(pulsingColor.toUInt().toLong())
-  settings.setPulsingMaxRadius(pulsingMaxRadius.toLogicalPixels(context))
+  settings.setPulsingMaxRadius(pulsingMaxRadius.toDouble())
   settings.setShowAccuracyRing(showAccuracyRing)
   settings.setAccuracyRingColor(accuracyRingColor.toUInt().toLong())
   settings.setAccuracyRingBorderColor(accuracyRingBorderColor.toUInt().toLong())
