@@ -8,7 +8,7 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 
 class ScaleBarController(private val mapView: MapView) :
   FLTSettings.ScaleBarSettingsInterface {
-  override fun getSettings(): FLTSettings.ScaleBarSettings = mapView.scalebar.toFLT()
+  override fun getSettings(): FLTSettings.ScaleBarSettings = mapView.scalebar.toFLT(mapView.context)
   override fun updateSettings(settings: FLTSettings.ScaleBarSettings) {
     mapView.scalebar.applyFromFLT(settings, mapView.context)
   }

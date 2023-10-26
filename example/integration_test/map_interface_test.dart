@@ -58,8 +58,8 @@ void main() {
       await tester.pumpAndSettle();
       final mapboxMap = await mapFuture;
       var size = await mapboxMap.getSize();
-      expect(size.width, tester.binding.window.physicalSize.width);
-      expect(size.height, tester.binding.window.physicalSize.height);
+      expect(size.width, tester.binding.renderView.size.width);
+      expect(size.height, tester.binding.renderView.size.height);
       await addDelay(1000);
     });
 

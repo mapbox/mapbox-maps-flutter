@@ -436,7 +436,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 
 /// The distance on each side between rectangles, when one is contained into other.
 ///
-/// All fields' values are in `platform pixel` units.
+/// All fields' values are in `logical pixel` units.
 @interface FLTMbxEdgeInsets : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
@@ -660,7 +660,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 /// By default, it is set to `true`.
 @property(nonatomic, strong, nullable) NSNumber * optimizeForTerrain;
 /// The size to resize the map object and renderer backend.
-/// The size is given in `platform pixel` units. macOS and iOS platforms use
+/// The size is given in `logical pixel` units. macOS and iOS platforms use
 /// device-independent pixel units, while other platforms, such as Android,
 /// use screen pixel units.
 @property(nonatomic, strong, nullable) FLTSize * size;
@@ -671,7 +671,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @end
 
 /// Describes the coordinate on the screen, measured from top to bottom and from left to right.
-/// Note: the `map` uses screen coordinate units measured in `platform pixels`.
+/// Note: the `map` uses screen coordinate units measured in `logical pixels`.
 @interface FLTScreenCoordinate : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
@@ -683,7 +683,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, strong) NSNumber * y;
 @end
 
-/// Describes the coordinate box on the screen, measured in `platform pixels`
+/// Describes the coordinate box on the screen, measured in `logical pixels`
 /// from top to bottom and from left to right.
 @interface FLTScreenBox : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
@@ -1137,22 +1137,22 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// Calculates a `screen coordinate` that corresponds to a geographical coordinate
 /// (i.e., longitude-latitude pair).
 ///
-/// The `screen coordinate` is in `platform pixels` relative to the top left corner
+/// The `screen coordinate` is in `logical pixels` relative to the top left corner
 /// of the map (not of the whole screen).
 ///
 /// @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
 ///
-/// @return A `screen coordinate` on the screen in `platform pixels`.
+/// @return A `screen coordinate` on the screen in `logical pixels`.
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTScreenCoordinate *)pixelForCoordinateCoordinate:(NSDictionary<NSString *, id> *)coordinate error:(FlutterError *_Nullable *_Nonnull)error;
 /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
 /// to a `screen coordinate`.
 ///
-/// The screen coordinate is in `platform pixels`relative to the top left corner
+/// The screen coordinate is in `logical pixels`relative to the top left corner
 /// of the map (not of the whole screen).
 ///
-/// @param pixel A `screen coordinate` on the screen in `platform pixels`.
+/// @param pixel A `screen coordinate` on the screen in `logical pixels`.
 ///
 /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
 ///
@@ -1161,22 +1161,22 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// Calculates `screen coordinates` that correspond to geographical `coordinates`
 /// (i.e., longitude-latitude pairs).
 ///
-/// The `screen coordinates` are in `platform pixels` relative to the top left corner
+/// The `screen coordinates` are in `logical pixels` relative to the top left corner
 /// of the map (not of the whole screen).
 ///
 /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
 ///
-/// @return A `screen coordinates` in `platform pixels` for a given geographical `coordinates`.
+/// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable NSArray<FLTScreenCoordinate *> *)pixelsForCoordinatesCoordinates:(NSArray<NSDictionary<NSString *, id> *> *)coordinates error:(FlutterError *_Nullable *_Nonnull)error;
 /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
 /// to `screen coordinates`.
 ///
-/// The screen coordinates are in `platform pixels` relative to the top left corner
+/// The screen coordinates are in `logical pixels` relative to the top left corner
 /// of the map (not of the whole screen).
 ///
-/// @param pixels A `screen coordinates` in `platform pixels`.
+/// @param pixels A `screen coordinates` in `logical pixels`.
 ///
 /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
 ///
@@ -1211,12 +1211,12 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 - (nullable FLTCameraBounds *)getBoundsWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
 ///
-/// @param point The pivot `screen coordinate`, measured in `platform pixels` from top to bottom and from left to right.
+/// @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
 - (void)dragStartPoint:(FLTScreenCoordinate *)point error:(FlutterError *_Nullable *_Nonnull)error;
 /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
 ///
-/// @param fromPoint The `screen coordinate` to drag the map from, measured in `platform pixels` from top to bottom and from left to right.
-/// @param toPoint The `screen coordinate` to drag the map to, measured in `platform pixels` from top to bottom and from left to right.
+/// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
+/// @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
 ///
 /// @return The `camera options` object showing the end point.
 ///
@@ -1240,7 +1240,7 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 - (void)setMemoryBudgetMapMemoryBudgetInMegabytes:(nullable FLTMapMemoryBudgetInMegabytes *)mapMemoryBudgetInMegabytes mapMemoryBudgetInTiles:(nullable FLTMapMemoryBudgetInTiles *)mapMemoryBudgetInTiles error:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets the size of the map.
 ///
-/// @return The `size` of the map in `platform pixels`.
+/// @return The `size` of the map in `logical pixels`.
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTSize *)getSizeWithError:(FlutterError *_Nullable *_Nonnull)error;
@@ -1579,13 +1579,13 @@ NSObject<FlutterMessageCodec> *FLTMapSnapshotGetCodec(void);
 /// Calculate screen coordinate on the snapshot from geographical `coordinate`.
 ///
 /// @param coordinate A geographical `coordinate`.
-/// @return A `screen coordinate` measured in `platform pixels` on the snapshot for geographical `coordinate`.
+/// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTScreenCoordinate *)screenCoordinateCoordinate:(NSDictionary<NSString *, id> *)coordinate error:(FlutterError *_Nullable *_Nonnull)error;
 /// Calculate geographical coordinates from a point on the snapshot.
 ///
-/// @param screenCoordinate A `screen coordinate` on the snapshot in `platform pixels`.
+/// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
 /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
 ///
 /// @return `nil` only when `error != nil`.
@@ -1613,11 +1613,11 @@ NSObject<FlutterMessageCodec> *FLTMapSnapshotterGetCodec(void);
 @protocol FLTMapSnapshotter
 /// Sets the `size` of the snapshot
 ///
-/// @param size The new `size` of the snapshot in `platform pixels`.
+/// @param size The new `size` of the snapshot in `logical pixels`.
 - (void)setSizeSize:(FLTSize *)size error:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets the size of the snapshot
 ///
-/// @return Snapshot `size` in `platform pixels`.
+/// @return Snapshot `size` in `logical pixels`.
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTSize *)getSizeWithError:(FlutterError *_Nullable *_Nonnull)error;

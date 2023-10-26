@@ -1,17 +1,18 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.*
 
-class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._AnimationManager {
+class AnimationController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces._AnimationManager {
   var cancelable: Cancelable? = null
   override fun easeTo(
     cameraOptions: FLTMapInterfaces.CameraOptions,
     mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.easeTo(
-      cameraOptions.toCameraOptions(),
+      cameraOptions.toCameraOptions(context),
       mapAnimationOptions?.toMapAnimationOptions()
     )
   }
@@ -21,7 +22,7 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._
     mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.flyTo(
-      cameraOptions.toCameraOptions(),
+      cameraOptions.toCameraOptions(context),
       mapAnimationOptions?.toMapAnimationOptions()
     )
   }
@@ -31,7 +32,7 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._
     mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.moveBy(
-      screenCoordinate.toScreenCoordinate(),
+      screenCoordinate.toScreenCoordinate(context),
       mapAnimationOptions?.toMapAnimationOptions()
     )
   }
@@ -42,8 +43,8 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._
     mapAnimationOptions: FLTMapInterfaces.MapAnimationOptions?
   ) {
     cancelable = mapboxMap.rotateBy(
-      first.toScreenCoordinate(),
-      second.toScreenCoordinate(),
+      first.toScreenCoordinate(context),
+      second.toScreenCoordinate(context),
       mapAnimationOptions?.toMapAnimationOptions()
     )
   }
@@ -55,7 +56,7 @@ class AnimationController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._
   ) {
     cancelable = mapboxMap.scaleBy(
       amount,
-      screenCoordinate?.toScreenCoordinate(),
+      screenCoordinate?.toScreenCoordinate(context),
       mapAnimationOptions?.toMapAnimationOptions()
     )
   }

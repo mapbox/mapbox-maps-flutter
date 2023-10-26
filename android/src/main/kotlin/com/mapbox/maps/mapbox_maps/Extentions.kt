@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
@@ -32,7 +33,7 @@ fun FLTMapInterfaces.SourceQueryOptions.toSourceQueryOptions(): SourceQueryOptio
   return SourceQueryOptions(sourceLayerIds, filter.toValue())
 }
 
-fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(): RenderedQueryGeometry {
+fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): RenderedQueryGeometry {
   return when (type) {
     FLTMapInterfaces.Type.SCREEN_BOX -> {
       val screenBoxArray = Gson().fromJson(
@@ -43,15 +44,25 @@ fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(): RenderedQu
       val maxCoord = screenBoxArray[1]
       RenderedQueryGeometry.valueOf(
         ScreenBox(
-          ScreenCoordinate(minCoord[0], minCoord[1]),
-          ScreenCoordinate(maxCoord[0], maxCoord[1])
+          ScreenCoordinate(
+            minCoord[0].toDevicePixels(context).toDouble(),
+            minCoord[1].toDevicePixels(context).toDouble()
+          ),
+          ScreenCoordinate(
+            maxCoord[0].toDevicePixels(context).toDouble(),
+            maxCoord[1].toDevicePixels(context).toDouble()
+          )
         )
       )
     }
     FLTMapInterfaces.Type.LIST -> {
       val array: Array<Array<Double>> =
         Gson().fromJson(value, Array<Array<Double>>::class.java)
-      RenderedQueryGeometry.valueOf(array.map { ScreenCoordinate(it[0], it[1]) }.toList())
+      RenderedQueryGeometry.valueOf(
+        array.map {
+          ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
+        }.toList()
+      )
     }
     FLTMapInterfaces.Type.SCREEN_COORDINATE -> {
       val pointArray = Gson().fromJson(
@@ -60,7 +71,10 @@ fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(): RenderedQu
       )
 
       RenderedQueryGeometry.valueOf(
-        ScreenCoordinate(pointArray[0], pointArray[1])
+        ScreenCoordinate(
+          pointArray[0].toDevicePixels(context).toDouble(),
+          pointArray[1].toDevicePixels(context).toDouble()
+        )
       )
     }
   }
@@ -137,21 +151,30 @@ fun Map<String, Any>.toPolygon(): Polygon {
 fun FLTMapInterfaces.CoordinateBounds.toCoordinateBounds() =
   CoordinateBounds(southwest.toPoint(), northeast.toPoint(), infiniteBounds)
 
-fun FLTMapInterfaces.MbxEdgeInsets.toEdgeInsets() = EdgeInsets(top, left, bottom, right)
+fun FLTMapInterfaces.MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
+  return EdgeInsets(
+    top.toDevicePixels(context).toDouble(),
+    left.toDevicePixels(context).toDouble(),
+    bottom.toDevicePixels(context).toDouble(),
+    right.toDevicePixels(context).toDouble()
+  )
+}
 
-fun FLTMapInterfaces.ScreenCoordinate.toScreenCoordinate() = ScreenCoordinate(x, y)
+fun FLTMapInterfaces.ScreenCoordinate.toScreenCoordinate(context: Context): ScreenCoordinate {
+  return ScreenCoordinate(x.toDevicePixels(context).toDouble(), y.toDevicePixels(context).toDouble())
+}
 
-fun FLTMapInterfaces.CameraOptions.toCameraOptions(): CameraOptions = CameraOptions.Builder()
-  .anchor(anchor?.toScreenCoordinate())
+fun FLTMapInterfaces.CameraOptions.toCameraOptions(context: Context): CameraOptions = CameraOptions.Builder()
+  .anchor(anchor?.toScreenCoordinate(context))
   .bearing(bearing)
   .center(center?.toPoint())
-  .padding(padding?.toEdgeInsets())
+  .padding(padding?.toEdgeInsets(context))
   .zoom(zoom)
   .pitch(pitch)
   .build()
 
-fun FLTMapInterfaces.ScreenBox.toScreenBox(): ScreenBox =
-  ScreenBox(min.toScreenCoordinate(), max.toScreenCoordinate())
+fun FLTMapInterfaces.ScreenBox.toScreenBox(context: Context): ScreenBox =
+  ScreenBox(min.toScreenCoordinate(context), max.toScreenCoordinate(context))
 
 fun FLTMapInterfaces.CameraBoundsOptions.toCameraBoundsOptions(): CameraBoundsOptions =
   CameraBoundsOptions.Builder()
@@ -187,6 +210,10 @@ fun Map<String, Any>.toGeometry(): Geometry {
     }
     else -> throw(RuntimeException("Unsupported Geometry: ${Gson().toJson(this)}"))
   }
+}
+
+fun Number.toDevicePixels(context: Context): Float {
+  return this.toFloat() * context.resources.displayMetrics.density
 }
 
 // Android to FLT
@@ -255,7 +282,7 @@ fun GlyphsRasterizationOptions.toFLTGlyphsRasterizationOptions(): FLTMapInterfac
     .build()
 }
 
-fun MapOptions.toFLTMapOptions(): FLTMapInterfaces.MapOptions {
+fun MapOptions.toFLTMapOptions(context: Context): FLTMapInterfaces.MapOptions {
   val builder = FLTMapInterfaces.MapOptions.Builder()
   constrainMode?.let {
     val values = FLTMapInterfaces.ConstrainMode.values()
@@ -285,7 +312,7 @@ fun MapOptions.toFLTMapOptions(): FLTMapInterfaces.MapOptions {
     builder.setOptimizeForTerrain(it)
   }
   size?.let {
-    builder.setSize(it.toFLTSize())
+    builder.setSize(it.toFLTSize(context))
   }
   glyphsRasterizationOptions?.let {
     builder.setGlyphsRasterizationOptions(it.toFLTGlyphsRasterizationOptions())
@@ -295,9 +322,10 @@ fun MapOptions.toFLTMapOptions(): FLTMapInterfaces.MapOptions {
     .build()
 }
 
-fun Size.toFLTSize(): FLTMapInterfaces.Size {
-  return FLTMapInterfaces.Size.Builder().setHeight(height.toDouble())
-    .setWidth(width.toDouble())
+fun Size.toFLTSize(context: Context): FLTMapInterfaces.Size {
+  return FLTMapInterfaces.Size.Builder()
+    .setHeight(height.toLogicalPixels(context))
+    .setWidth(width.toLogicalPixels(context))
     .build()
 }
 
@@ -328,23 +356,23 @@ fun LineString.toMap(): Map<String, Any> {
   return map
 }
 
-fun ScreenCoordinate.toFLTScreenCoordinate(): FLTMapInterfaces.ScreenCoordinate {
+fun ScreenCoordinate.toFLTScreenCoordinate(context: Context): FLTMapInterfaces.ScreenCoordinate {
   return FLTMapInterfaces.ScreenCoordinate.Builder()
-    .setX(x)
-    .setY(y)
+    .setX(x.toLogicalPixels(context))
+    .setY(y.toLogicalPixels(context))
     .build()
 }
 
-fun EdgeInsets.toFLTEdgeInsets(): FLTMapInterfaces.MbxEdgeInsets = FLTMapInterfaces.MbxEdgeInsets.Builder()
-  .setLeft(left)
-  .setTop(top)
-  .setBottom(bottom)
-  .setRight(right)
+fun EdgeInsets.toFLTEdgeInsets(context: Context): FLTMapInterfaces.MbxEdgeInsets = FLTMapInterfaces.MbxEdgeInsets.Builder()
+  .setLeft(left.toLogicalPixels(context))
+  .setTop(top.toLogicalPixels(context))
+  .setBottom(bottom.toLogicalPixels(context))
+  .setRight(right.toLogicalPixels(context))
   .build()
 
-fun CameraState.toCameraState(): FLTMapInterfaces.CameraState = FLTMapInterfaces.CameraState.Builder()
+fun CameraState.toCameraState(context: Context): FLTMapInterfaces.CameraState = FLTMapInterfaces.CameraState.Builder()
   .setBearing(bearing)
-  .setPadding(padding.toFLTEdgeInsets())
+  .setPadding(padding.toFLTEdgeInsets(context))
   .setPitch(pitch)
   .setZoom(zoom)
   .setCenter(center.toMap())
@@ -370,10 +398,10 @@ fun CameraBounds.toFLTCameraBounds() = FLTMapInterfaces.CameraBounds.Builder().s
   .setBounds(bounds.toFLTCoordinateBounds())
   .build()
 
-fun CameraOptions.toFLTCameraOptions(): FLTMapInterfaces.CameraOptions {
+fun CameraOptions.toFLTCameraOptions(context: Context): FLTMapInterfaces.CameraOptions {
   val builder = FLTMapInterfaces.CameraOptions.Builder()
   anchor?.let { anchor ->
-    builder.setAnchor(anchor.toFLTScreenCoordinate())
+    builder.setAnchor(anchor.toFLTScreenCoordinate(context))
   }
   center?.let { center ->
     val centerMap = mutableMapOf<String, Any>()
@@ -382,10 +410,10 @@ fun CameraOptions.toFLTCameraOptions(): FLTMapInterfaces.CameraOptions {
   }
   padding?.let { padding ->
     val fLTPadding = FLTMapInterfaces.MbxEdgeInsets.Builder()
-      .setBottom(padding.bottom)
-      .setLeft(padding.left)
-      .setRight(padding.right)
-      .setTop(padding.top)
+      .setBottom(padding.bottom.toLogicalPixels(context))
+      .setLeft(padding.left.toLogicalPixels(context))
+      .setRight(padding.right.toLogicalPixels(context))
+      .setTop(padding.top.toLogicalPixels(context))
       .build()
     builder.setPadding(fLTPadding)
   }
@@ -406,4 +434,8 @@ fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
     JSONObject.NULL -> null
     else -> value
   }
+}
+
+fun Number.toLogicalPixels(context: Context): Double {
+  return this.toDouble() / context.resources.displayMetrics.density
 }

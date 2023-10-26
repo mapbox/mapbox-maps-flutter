@@ -1,10 +1,11 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.*
 
-class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._CameraManager {
+class CameraController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces._CameraManager {
   override fun cameraForCoordinateBounds(
     bounds: FLTMapInterfaces.CoordinateBounds,
     padding: FLTMapInterfaces.MbxEdgeInsets,
@@ -13,11 +14,11 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinateBounds(
       bounds.toCoordinateBounds(),
-      padding.toEdgeInsets(),
+      padding.toEdgeInsets(context),
       bearing,
       pitch
     )
-    return cameraOptions.toFLTCameraOptions()
+    return cameraOptions.toFLTCameraOptions(context)
   }
 
   override fun cameraForCoordinates(
@@ -28,11 +29,11 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
       coordinates.map { it.toPoint() },
-      padding.toEdgeInsets(),
+      padding.toEdgeInsets(context),
       bearing,
       pitch
     )
-    return cameraOptions.toFLTCameraOptions()
+    return cameraOptions.toFLTCameraOptions(context)
   }
 
   override fun cameraForCoordinatesCameraOptions(
@@ -42,10 +43,10 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
       coordinates.map { it.toPoint() },
-      camera.toCameraOptions(),
-      box.toScreenBox()
+      camera.toCameraOptions(context),
+      box.toScreenBox(context)
     )
-    return cameraOptions.toFLTCameraOptions()
+    return cameraOptions.toFLTCameraOptions(context)
   }
 
   override fun cameraForGeometry(
@@ -56,61 +57,61 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForGeometry(
       geometry.toGeometry(),
-      padding.toEdgeInsets(),
+      padding.toEdgeInsets(context),
       bearing,
       pitch
     )
-    return cameraOptions.toFLTCameraOptions()
+    return cameraOptions.toFLTCameraOptions(context)
   }
 
   override fun coordinateBoundsForCamera(camera: FLTMapInterfaces.CameraOptions): FLTMapInterfaces.CoordinateBounds {
-    val coordinateBounds = mapboxMap.coordinateBoundsForCamera(camera.toCameraOptions())
+    val coordinateBounds = mapboxMap.coordinateBoundsForCamera(camera.toCameraOptions(context))
     return coordinateBounds.toFLTCoordinateBounds()
   }
 
   override fun coordinateBoundsForCameraUnwrapped(camera: FLTMapInterfaces.CameraOptions): FLTMapInterfaces.CoordinateBounds {
     val coordinateBounds =
-      mapboxMap.coordinateBoundsForCameraUnwrapped(camera.toCameraOptions())
+      mapboxMap.coordinateBoundsForCameraUnwrapped(camera.toCameraOptions(context))
     return coordinateBounds.toFLTCoordinateBounds()
   }
 
   override fun coordinateBoundsZoomForCamera(camera: FLTMapInterfaces.CameraOptions): FLTMapInterfaces.CoordinateBoundsZoom {
-    val coordinateBoundsZoom = mapboxMap.coordinateBoundsZoomForCamera(camera.toCameraOptions())
+    val coordinateBoundsZoom = mapboxMap.coordinateBoundsZoomForCamera(camera.toCameraOptions(context))
     return coordinateBoundsZoom.toFLTCoordinateBoundsZoom()
   }
 
   override fun coordinateBoundsZoomForCameraUnwrapped(camera: FLTMapInterfaces.CameraOptions): FLTMapInterfaces.CoordinateBoundsZoom {
     val coordinateBoundsZoom =
-      mapboxMap.coordinateBoundsZoomForCameraUnwrapped(camera.toCameraOptions())
+      mapboxMap.coordinateBoundsZoomForCameraUnwrapped(camera.toCameraOptions(context))
     return coordinateBoundsZoom.toFLTCoordinateBoundsZoom()
   }
 
   override fun pixelForCoordinate(coordinate: MutableMap<String, Any>): FLTMapInterfaces.ScreenCoordinate {
     val screenCoordinate = mapboxMap.pixelForCoordinate(coordinate.toPoint())
-    return screenCoordinate.toFLTScreenCoordinate()
+    return screenCoordinate.toFLTScreenCoordinate(context)
   }
 
   override fun coordinateForPixel(pixel: FLTMapInterfaces.ScreenCoordinate): MutableMap<String, Any> {
-    val screenCoordinate = mapboxMap.coordinateForPixel(pixel.toScreenCoordinate())
+    val screenCoordinate = mapboxMap.coordinateForPixel(pixel.toScreenCoordinate(context))
     return screenCoordinate.toMap() as MutableMap<String, Any>
   }
 
   override fun pixelsForCoordinates(coordinates: MutableList<MutableMap<String, Any>>): MutableList<FLTMapInterfaces.ScreenCoordinate> {
     val screenCoordinates = mapboxMap.pixelsForCoordinates(coordinates.map { it.toPoint() })
-    return screenCoordinates.map { it.toFLTScreenCoordinate() }.toMutableList()
+    return screenCoordinates.map { it.toFLTScreenCoordinate(context) }.toMutableList()
   }
 
   override fun coordinatesForPixels(pixels: MutableList<FLTMapInterfaces.ScreenCoordinate>): MutableList<MutableMap<String, Any>> {
-    val points = mapboxMap.coordinatesForPixels(pixels.map { it.toScreenCoordinate() })
+    val points = mapboxMap.coordinatesForPixels(pixels.map { it.toScreenCoordinate(context) })
     return points.map { it.toMap().toMutableMap() }.toMutableList()
   }
 
   override fun setCamera(cameraOptions: FLTMapInterfaces.CameraOptions) {
-    mapboxMap.setCamera(cameraOptions.toCameraOptions())
+    mapboxMap.setCamera(cameraOptions.toCameraOptions(context))
   }
 
   override fun getCameraState(): FLTMapInterfaces.CameraState {
-    return mapboxMap.cameraState.toCameraState()
+    return mapboxMap.cameraState.toCameraState(context)
   }
 
   override fun setBounds(options: FLTMapInterfaces.CameraBoundsOptions) {
@@ -122,7 +123,7 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
   }
 
   override fun dragStart(point: FLTMapInterfaces.ScreenCoordinate) {
-    mapboxMap.dragStart(point.toScreenCoordinate())
+    mapboxMap.dragStart(point.toScreenCoordinate(context))
   }
 
   override fun getDragCameraOptions(
@@ -130,9 +131,9 @@ class CameraController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._Cam
     toPoint: FLTMapInterfaces.ScreenCoordinate
   ): FLTMapInterfaces.CameraOptions {
     return mapboxMap.getDragCameraOptions(
-      fromPoint.toScreenCoordinate(),
-      toPoint.toScreenCoordinate()
-    ).toFLTCameraOptions()
+      fromPoint.toScreenCoordinate(context),
+      toPoint.toScreenCoordinate(context)
+    ).toFLTCameraOptions(context)
   }
 
   override fun dragEnd() {

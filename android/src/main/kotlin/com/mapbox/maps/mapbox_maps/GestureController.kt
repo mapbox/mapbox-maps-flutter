@@ -17,7 +17,7 @@ import io.flutter.plugin.common.BinaryMessenger
 class GestureController(private val mapView: MapView) :
   FLTSettings.GesturesSettingsInterface {
 
-  override fun getSettings(): FLTSettings.GesturesSettings = mapView.gestures.toFLT()
+  override fun getSettings(): FLTSettings.GesturesSettings = mapView.gestures.toFLT(mapView.context)
 
   override fun updateSettings(settings: FLTSettings.GesturesSettings) {
     mapView.gestures.applyFromFLT(settings, mapView.context)

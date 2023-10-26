@@ -1,3 +1,10 @@
+## main
+
+### Common
+
+* Screen-related units(screen coordinates, dimentions, etc.) are expected to be provided in logical pixels.
+We have matched screen-related units expected by the maps plugin to the units that Flutter operates with(logical pixels).
+
 ## 0.4.5
 ### Common
 

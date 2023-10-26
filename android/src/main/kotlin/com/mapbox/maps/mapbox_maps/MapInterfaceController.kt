@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.maps.*
@@ -7,7 +8,7 @@ import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
-class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._MapInterface {
+class MapInterfaceController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces._MapInterface {
   override fun loadStyleURI(
     styleURI: String,
     result: FLTMapInterfaces.Result<Void>
@@ -61,7 +62,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   }
 
   override fun getSize(): FLTMapInterfaces.Size {
-    return mapboxMap.getSize().toFLTSize()
+    return mapboxMap.getSize().toFLTSize(context)
   }
 
   override fun triggerRepaint() {
@@ -93,7 +94,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
   }
 
   override fun getMapOptions(): FLTMapInterfaces.MapOptions {
-    return mapboxMap.getMapOptions().toFLTMapOptions()
+    return mapboxMap.getMapOptions().toFLTMapOptions(context)
   }
 
   override fun getDebug(): MutableList<FLTMapInterfaces.MapDebugOptions> {
@@ -110,7 +111,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>
   ) {
     mapboxMap.queryRenderedFeatures(
-      geometry.toRenderedQueryGeometry(),
+      geometry.toRenderedQueryGeometry(context),
       options.toRenderedQueryOptions()
     ) {
       if (it.isError) {

@@ -469,7 +469,7 @@ public class FLTMapInterfaces {
   /**
    * The distance on each side between rectangles, when one is contained into other.
    *
-   * All fields' values are in `platform pixel` units.
+   * All fields' values are in `logical pixel` units.
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
@@ -1749,7 +1749,7 @@ public class FLTMapInterfaces {
 
     /**
      * The size to resize the map object and renderer backend.
-     * The size is given in `platform pixel` units. macOS and iOS platforms use
+     * The size is given in `logical pixel` units. macOS and iOS platforms use
      * device-independent pixel units, while other platforms, such as Android,
      * use screen pixel units.
      */
@@ -1912,7 +1912,7 @@ public class FLTMapInterfaces {
 
   /**
    * Describes the coordinate on the screen, measured from top to bottom and from left to right.
-   * Note: the `map` uses screen coordinate units measured in `platform pixels`.
+   * Note: the `map` uses screen coordinate units measured in `logical pixels`.
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
@@ -1991,7 +1991,7 @@ public class FLTMapInterfaces {
   }
 
   /**
-   * Describes the coordinate box on the screen, measured in `platform pixels`
+   * Describes the coordinate box on the screen, measured in `logical pixels`
    * from top to bottom and from left to right.
    *
    * Generated class from Pigeon that represents data sent in messages.
@@ -4669,12 +4669,12 @@ public class FLTMapInterfaces {
      * Calculates a `screen coordinate` that corresponds to a geographical coordinate
      * (i.e., longitude-latitude pair).
      *
-     * The `screen coordinate` is in `platform pixels` relative to the top left corner
+     * The `screen coordinate` is in `logical pixels` relative to the top left corner
      * of the map (not of the whole screen).
      *
      * @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
      *
-     * @return A `screen coordinate` on the screen in `platform pixels`.
+     * @return A `screen coordinate` on the screen in `logical pixels`.
      */
     @NonNull 
     ScreenCoordinate pixelForCoordinate(@NonNull Map<String, Object> coordinate);
@@ -4682,10 +4682,10 @@ public class FLTMapInterfaces {
      * Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
      * to a `screen coordinate`.
      *
-     * The screen coordinate is in `platform pixels`relative to the top left corner
+     * The screen coordinate is in `logical pixels`relative to the top left corner
      * of the map (not of the whole screen).
      *
-     * @param pixel A `screen coordinate` on the screen in `platform pixels`.
+     * @param pixel A `screen coordinate` on the screen in `logical pixels`.
      *
      * @return A geographical `coordinate` corresponding to a given `screen coordinate`.
      */
@@ -4695,12 +4695,12 @@ public class FLTMapInterfaces {
      * Calculates `screen coordinates` that correspond to geographical `coordinates`
      * (i.e., longitude-latitude pairs).
      *
-     * The `screen coordinates` are in `platform pixels` relative to the top left corner
+     * The `screen coordinates` are in `logical pixels` relative to the top left corner
      * of the map (not of the whole screen).
      *
      * @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
      *
-     * @return A `screen coordinates` in `platform pixels` for a given geographical `coordinates`.
+     * @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
      */
     @NonNull 
     List<ScreenCoordinate> pixelsForCoordinates(@NonNull List<Map<String, Object>> coordinates);
@@ -4708,10 +4708,10 @@ public class FLTMapInterfaces {
      * Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
      * to `screen coordinates`.
      *
-     * The screen coordinates are in `platform pixels` relative to the top left corner
+     * The screen coordinates are in `logical pixels` relative to the top left corner
      * of the map (not of the whole screen).
      *
-     * @param pixels A `screen coordinates` in `platform pixels`.
+     * @param pixels A `screen coordinates` in `logical pixels`.
      *
      * @return A `geographical coordinates` that correspond to a given `screen coordinates`.
      */
@@ -4753,14 +4753,14 @@ public class FLTMapInterfaces {
     /**
      * Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
      *
-     * @param point The pivot `screen coordinate`, measured in `platform pixels` from top to bottom and from left to right.
+     * @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
      */
     void dragStart(@NonNull ScreenCoordinate point);
     /**
      * Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
      *
-     * @param fromPoint The `screen coordinate` to drag the map from, measured in `platform pixels` from top to bottom and from left to right.
-     * @param toPoint The `screen coordinate` to drag the map to, measured in `platform pixels` from top to bottom and from left to right.
+     * @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
+     * @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
      *
      * @return The `camera options` object showing the end point.
      */
@@ -5449,7 +5449,7 @@ public class FLTMapInterfaces {
     /**
      * Gets the size of the map.
      *
-     * @return The `size` of the map in `platform pixels`.
+     * @return The `size` of the map in `logical pixels`.
      */
     @NonNull 
     Size getSize();
@@ -7420,14 +7420,14 @@ public class FLTMapInterfaces {
      * Calculate screen coordinate on the snapshot from geographical `coordinate`.
      *
      * @param coordinate A geographical `coordinate`.
-     * @return A `screen coordinate` measured in `platform pixels` on the snapshot for geographical `coordinate`.
+     * @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
      */
     @NonNull 
     ScreenCoordinate screenCoordinate(@NonNull Map<String, Object> coordinate);
     /**
      * Calculate geographical coordinates from a point on the snapshot.
      *
-     * @param screenCoordinate A `screen coordinate` on the snapshot in `platform pixels`.
+     * @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
      * @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
      */
     @NonNull 
@@ -7748,13 +7748,13 @@ public class FLTMapInterfaces {
     /**
      * Sets the `size` of the snapshot
      *
-     * @param size The new `size` of the snapshot in `platform pixels`.
+     * @param size The new `size` of the snapshot in `logical pixels`.
      */
     void setSize(@NonNull Size size);
     /**
      * Gets the size of the snapshot
      *
-     * @return Snapshot `size` in `platform pixels`.
+     * @return Snapshot `size` in `logical pixels`.
      */
     @NonNull 
     Size getSize();
