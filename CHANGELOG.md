@@ -1,5 +1,4 @@
-## main
-
+## 0.5.0
 ### Common
 
 * Screen-related units(screen coordinates, dimentions, etc.) are expected to be provided in logical pixels.
