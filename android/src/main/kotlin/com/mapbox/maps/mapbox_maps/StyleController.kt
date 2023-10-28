@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.mapbox.bindgen.Value
@@ -14,7 +15,7 @@ import com.mapbox.maps.pigeons.FLTMapInterfaces
 import java.nio.ByteBuffer
 import java.util.Locale
 
-class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.StyleManager {
+class StyleController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
     mapboxMap.getStyle {
       result.success(it.styleURI)
@@ -44,7 +45,7 @@ class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Style
   override fun getStyleDefaultCamera(result: FLTMapInterfaces.Result<FLTMapInterfaces.CameraOptions>) {
     mapboxMap.getStyle {
       val camera = it.styleDefaultCamera
-      result.success(camera.toFLTCameraOptions())
+      result.success(camera.toFLTCameraOptions(context))
     }
   }
 

@@ -33,7 +33,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
   bool showScaleBar = true;
   OrnamentPosition scaleBarPosition = OrnamentPosition.TOP_LEFT;
   OrnamentPosition logoPosition = OrnamentPosition.BOTTOM_LEFT;
-  OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_LEFT;
+  OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -64,21 +64,26 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       position: scaleBarPosition,
       enabled: showScaleBar,
       marginBottom: 20,
-      marginLeft: 20,
-      marginTop: 20,
+      marginLeft: 10,
+      marginTop: 10,
       marginRight: 20,
     ));
 
     mapboxMap.logo.updateSettings(LogoSettings(
       position: logoPosition,
-      marginBottom: 30,
-      marginLeft: 30,
+      marginBottom: 10,
+      marginLeft: 10,
       marginTop: 30,
       marginRight: 30,
     ));
 
-    mapboxMap.attribution
-        .updateSettings(AttributionSettings(position: attributionPosition));
+    mapboxMap.attribution.updateSettings(AttributionSettings(
+      position: attributionPosition,
+      marginBottom: 10,
+      marginLeft: 40,
+      marginTop: 40,
+      marginRight: 0,
+    ));
   }
 
   @override

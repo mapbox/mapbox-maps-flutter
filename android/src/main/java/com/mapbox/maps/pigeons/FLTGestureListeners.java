@@ -59,7 +59,7 @@ public class FLTGestureListeners {
 
   /**
    * Describes the coordinate on the screen, measured from top to bottom and from left to right.
-   * Note: the `map` uses screen coordinate units measured in `platform pixels`.
+   * Note: the `map` uses screen coordinate units measured in `logical pixels`.
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
