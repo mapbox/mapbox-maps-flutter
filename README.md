@@ -73,7 +73,7 @@ To instantiate the `MapWidget` widget pass the public access token with `Resourc
 ```
   MapWidget(
     resourceOptions:
-        ResourceOptions(accessToken: PUBLIC_ACCESS_TOKEN))));
+        ResourceOptions(accessToken: ACCESS_TOKEN))));
 ```
 
 It's a good practice to retrieve access tokens from some external source.
@@ -81,13 +81,13 @@ It's a good practice to retrieve access tokens from some external source.
 You can pass access token via the command line arguments when either building : 
 
 ```
-flutter build <platform> --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter build <platform> --dart-define ACCESS_TOKEN=...
 ```
 
 or running the application : 
 
 ```
-flutter run --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter run --dart-define ACCESS_TOKEN=...
 ```
 
 You can also persist token in launch.json : 
@@ -96,7 +96,7 @@ You can also persist token in launch.json :
     {
         ...
         "args": [
-            "--dart-define", "PUBLIC_ACCESS_TOKEN=..."
+            "--dart-define", "ACCESS_TOKEN=..."
         ],
     }
 ]
@@ -104,7 +104,7 @@ You can also persist token in launch.json :
 
 Then to retrieve the token from the environment in the application :
 ```
-String ACCESS_TOKEN = String.fromEnvironment("PUBLIC_ACCESS_TOKEN");
+String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 ```
 
 ### Add the dependency
