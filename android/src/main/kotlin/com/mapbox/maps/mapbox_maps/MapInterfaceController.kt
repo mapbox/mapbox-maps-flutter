@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
+import com.mapbox.common.MapboxOptions
 import com.mapbox.geojson.Feature
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
@@ -40,7 +41,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
   }
 
   override fun clearData(result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.clearData {
+    MapboxMap.clearData {
       if (it.isError) {
         result.error(Throwable(it.error))
       } else {
@@ -50,14 +51,14 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
   }
 
   @OptIn(MapboxExperimental::class)
-  override fun setMemoryBudget(
-    mapMemoryBudgetInMegabytes: FLTMapInterfaces.MapMemoryBudgetInMegabytes?,
-    mapMemoryBudgetInTiles: FLTMapInterfaces.MapMemoryBudgetInTiles?
+  override fun setTileCacheBudget(
+    tileCacheBudgetInMegabytes: FLTMapInterfaces.TileCacheBudgetInMegabytes?,
+    tileCacheBudgetInTiles: FLTMapInterfaces.TileCacheBudgetInTiles?
   ) {
-    if (mapMemoryBudgetInMegabytes != null) {
-      mapboxMap.setMemoryBudget(MapMemoryBudget.valueOf(mapMemoryBudgetInMegabytes.toMapMemoryBudgetInMegabytes()))
-    } else if (mapMemoryBudgetInTiles != null) {
-      mapboxMap.setMemoryBudget(MapMemoryBudget.valueOf(mapMemoryBudgetInTiles.toMapMemoryBudgetInTiles()))
+    if (tileCacheBudgetInMegabytes != null) {
+      mapboxMap.setTileCacheBudget(TileCacheBudget.valueOf(tileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes()))
+    } else if (tileCacheBudgetInTiles != null) {
+      mapboxMap.setTileCacheBudget(TileCacheBudget.valueOf(tileCacheBudgetInTiles.toMapMemoryBudgetInTiles()))
     }
   }
 
@@ -108,7 +109,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
   override fun queryRenderedFeatures(
     geometry: FLTMapInterfaces.RenderedQueryGeometry,
     options: FLTMapInterfaces.RenderedQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedRenderedFeature>>
   ) {
     mapboxMap.queryRenderedFeatures(
       geometry.toRenderedQueryGeometry(context),
@@ -118,7 +119,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
         result.error(Throwable(it.error))
       } else {
         result.success(
-          it.value?.map { feature -> feature.toFLTQueriedFeature() }
+          it.value?.map { feature -> feature.toFLTQueriedRenderedFeature() }
             ?.toMutableList()
         )
       }
@@ -128,14 +129,14 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
   override fun querySourceFeatures(
     sourceId: String,
     options: FLTMapInterfaces.SourceQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>
+    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedSourceFeature>>
   ) {
     mapboxMap.querySourceFeatures(sourceId, options.toSourceQueryOptions()) {
       if (it.isError) {
         result.error(Throwable(it.error))
       } else {
         result.success(
-          it.value?.map { feature -> feature.toFLTQueriedFeature() }
+          it.value?.map { feature -> feature.toFLTQueriedSourceFeature() }
             ?.toMutableList()
         )
       }
@@ -199,9 +200,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    state: String
+    state: String,
+    result: FLTMapInterfaces.Result<Void>
   ) {
-    mapboxMap.setFeatureState(sourceId, sourceLayerId, featureId, state.toValue())
+    mapboxMap.setFeatureState(sourceId, sourceLayerId, featureId, state.toValue()) {
+      if (it.isError) {
+        result.error(Throwable(it.error))
+      } else {
+        result.success(null)
+      }
+    }
   }
 
   override fun getFeatureState(
@@ -210,7 +218,7 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
     featureId: String,
     result: FLTMapInterfaces.Result<String>
   ) {
-    return mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
+    mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
       result.let {
         if (expected.isError) {
           it.error(Throwable(expected.error))
@@ -225,17 +233,20 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    stateKey: String?
+    stateKey: String?,
+    result: FLTMapInterfaces.Result<Void>
   ) {
-    mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey)
+    mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey) {
+      if (it.isError) {
+        result.error(Throwable(it.error))
+      } else {
+        result.success(null)
+      }
+    }
   }
 
   override fun reduceMemoryUse() {
     mapboxMap.reduceMemoryUse()
-  }
-
-  override fun getResourceOptions(): FLTMapInterfaces.ResourceOptions {
-    return mapboxMap.getResourceOptions().toFLTResourceOptions()
   }
 
   override fun getElevation(coordinate: MutableMap<String, Any>): Double? {

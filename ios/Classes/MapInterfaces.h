@@ -408,8 +408,8 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @class FLTCoordinateBounds;
 @class FLTMapDebugOptions;
 @class FLTGlyphsRasterizationOptions;
-@class FLTMapMemoryBudgetInMegabytes;
-@class FLTMapMemoryBudgetInTiles;
+@class FLTTileCacheBudgetInMegabytes;
+@class FLTTileCacheBudgetInTiles;
 @class FLTMapOptions;
 @class FLTScreenCoordinate;
 @class FLTScreenBox;
@@ -419,13 +419,14 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @class FLTSourceQueryOptions;
 @class FLTFeatureExtensionValue;
 @class FLTLayerPosition;
+@class FLTQueriedRenderedFeature;
+@class FLTQueriedSourceFeature;
 @class FLTQueriedFeature;
 @class FLTRenderedQueryGeometry;
 @class FLTOfflineRegionGeometryDefinition;
 @class FLTOfflineRegionTilePyramidDefinition;
 @class FLTProjectedMeters;
 @class FLTMercatorCoordinate;
-@class FLTResourceOptions;
 @class FLTStyleObjectInfo;
 @class FLTMbxImage;
 @class FLTImageStretches;
@@ -607,7 +608,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @end
 
 /// Map memory budget in megabytes.
-@interface FLTMapMemoryBudgetInMegabytes : NSObject
+@interface FLTTileCacheBudgetInMegabytes : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithSize:(NSNumber *)size;
@@ -615,7 +616,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @end
 
 /// Map memory budget in tiles.
-@interface FLTMapMemoryBudgetInTiles : NSObject
+@interface FLTTileCacheBudgetInTiles : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithSize:(NSNumber *)size;
@@ -631,7 +632,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
     viewportMode:(nullable FLTViewportModeBox *)viewportMode
     orientation:(nullable FLTNorthOrientationBox *)orientation
     crossSourceCollisions:(nullable NSNumber *)crossSourceCollisions
-    optimizeForTerrain:(nullable NSNumber *)optimizeForTerrain
     size:(nullable FLTSize *)size
     pixelRatio:(NSNumber *)pixelRatio
     glyphsRasterizationOptions:(nullable FLTGlyphsRasterizationOptions *)glyphsRasterizationOptions;
@@ -651,14 +651,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 /// Specify whether to enable cross-source symbol collision detection
 /// or not. By default, it is set to `true`.
 @property(nonatomic, strong, nullable) NSNumber * crossSourceCollisions;
-/// With terrain on, if `true`, the map will render for performance
-/// priority, which may lead to layer reordering allowing to maximize
-/// performance (layers that are draped over terrain will be drawn first,
-/// including fill, line, background, hillshade and raster). Any layers that
-/// are positioned after symbols are draped last, over symbols. Otherwise, if
-/// set to `false`, the map will always be drawn for layer order priority.
-/// By default, it is set to `true`.
-@property(nonatomic, strong, nullable) NSNumber * optimizeForTerrain;
 /// The size to resize the map object and renderer backend.
 /// The size is given in `logical pixel` units. macOS and iOS platforms use
 /// device-independent pixel units, while other platforms, such as Android,
@@ -763,6 +755,31 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, copy, nullable) NSString * below;
 /// Layer should be positioned at specified index in a layers stack.
 @property(nonatomic, strong, nullable) NSNumber * at;
+@end
+
+/// Represents query result that is returned in QueryRenderedFeaturesCallback.
+/// @see `queryRenderedFeatures`
+@interface FLTQueriedRenderedFeature : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature
+    layers:(NSArray<NSString *> *)layers;
+/// Feature returned by the query.
+@property(nonatomic, strong) FLTQueriedFeature * queriedFeature;
+/// An array of layer Ids for the queried feature.
+/// If the feature has been rendered in multiple layers, multiple Ids will be provided.
+/// If the feature is only rendered in one layer, a single Id will be provided.
+@property(nonatomic, strong) NSArray<NSString *> * layers;
+@end
+
+/// Represents query result that is returned in QuerySourceFeaturesCallback.
+/// @see `querySourceFeatures`
+@interface FLTQueriedSourceFeature : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature;
+/// Feature returned by the query.
+@property(nonatomic, strong) FLTQueriedFeature * queriedFeature;
 @end
 
 /// Represents query result that is returned in QueryFeaturesCallback.
@@ -880,35 +897,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, strong) NSNumber * x;
 /// A value representing the y position of this coordinate.
 @property(nonatomic, strong) NSNumber * y;
-@end
-
-/// Options to configure a resource
-@interface FLTResourceOptions : NSObject
-/// `init` unavailable to enforce nonnull fields, see the `make` class method.
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithAccessToken:(NSString *)accessToken
-    baseURL:(nullable NSString *)baseURL
-    dataPath:(nullable NSString *)dataPath
-    assetPath:(nullable NSString *)assetPath
-    tileStoreUsageMode:(nullable FLTTileStoreUsageModeBox *)tileStoreUsageMode;
-/// The access token that is used to access resources provided by Mapbox services.
-@property(nonatomic, copy) NSString * accessToken;
-/// The base URL that would be used to make HTTP requests. By default it is `https://api.mapbox.com`.
-@property(nonatomic, copy, nullable) NSString * baseURL;
-/// The path to the map data folder.
-///
-/// The implementation will use this folder for storing offline style packages and temporary data.
-///
-/// The application must have sufficient permissions to create files within the provided directory.
-/// If a dataPath is not provided, the default location will be used (the application data path defined
-/// in the `Mapbox Common SystemInformation API`).
-@property(nonatomic, copy, nullable) NSString * dataPath;
-/// The path to the folder where application assets are located. Resources whose protocol is `asset://`
-/// will be fetched from an asset folder or asset management system provided by respective platform.
-/// This option is ignored for Android platform. An iOS application may provide path to an application bundle's path.
-@property(nonatomic, copy, nullable) NSString * assetPath;
-/// The tile store usage mode.
-@property(nonatomic, strong, nullable) FLTTileStoreUsageModeBox * tileStoreUsageMode;
 @end
 
 /// The information about style object (source or layer).
@@ -1209,10 +1197,6 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTCameraBounds *)getBoundsWithError:(FlutterError *_Nullable *_Nonnull)error;
-/// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-///
-/// @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
-- (void)dragStartPoint:(FLTScreenCoordinate *)point error:(FlutterError *_Nullable *_Nonnull)error;
 /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
 ///
 /// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
@@ -1221,9 +1205,7 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// @return The `camera options` object showing the end point.
 ///
 /// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)getDragCameraOptionsFromPoint:(FLTScreenCoordinate *)fromPoint toPoint:(FLTScreenCoordinate *)toPoint error:(FlutterError *_Nullable *_Nonnull)error;
-/// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
-- (void)dragEndWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable FLTCameraOptions *)cameraForDragFromPoint:(FLTScreenCoordinate *)fromPoint toPoint:(FLTScreenCoordinate *)toPoint error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_CameraManager> *_Nullable api);
@@ -1237,7 +1219,7 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 - (void)loadStyleURIStyleURI:(NSString *)styleURI completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)loadStyleJsonStyleJson:(NSString *)styleJson completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)clearDataWithCompletion:(void (^)(FlutterError *_Nullable))completion;
-- (void)setMemoryBudgetMapMemoryBudgetInMegabytes:(nullable FLTMapMemoryBudgetInMegabytes *)mapMemoryBudgetInMegabytes mapMemoryBudgetInTiles:(nullable FLTMapMemoryBudgetInTiles *)mapMemoryBudgetInTiles error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setTileCacheBudgetTileCacheBudgetInMegabytes:(nullable FLTTileCacheBudgetInMegabytes *)tileCacheBudgetInMegabytes tileCacheBudgetInTiles:(nullable FLTTileCacheBudgetInTiles *)tileCacheBudgetInTiles error:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets the size of the map.
 ///
 /// @return The `size` of the map in `logical pixels`.
@@ -1312,13 +1294,13 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param options The `render query options` for querying rendered features.
 /// @param completion The `query features completion` called when the query completes.
 /// @return A `cancelable` object that could be used to cancel the pending query.
-- (void)queryRenderedFeaturesGeometry:(FLTRenderedQueryGeometry *)geometry options:(FLTRenderedQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedFeature *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)queryRenderedFeaturesGeometry:(FLTRenderedQueryGeometry *)geometry options:(FLTRenderedQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedRenderedFeature *> *_Nullable, FlutterError *_Nullable))completion;
 /// Queries the map for source features.
 ///
 /// @param sourceId The style source identifier used to query for source features.
 /// @param options The `source query options` for querying source features.
 /// @param completion The `query features completion` called when the query completes.
-- (void)querySourceFeaturesSourceId:(NSString *)sourceId options:(FLTSourceQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedFeature *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)querySourceFeaturesSourceId:(NSString *)sourceId options:(FLTSourceQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedSourceFeature *> *_Nullable, FlutterError *_Nullable))completion;
 /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
 /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
 ///
@@ -1364,7 +1346,7 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
 /// @param featureId The feature identifier of the feature whose state should be updated.
 /// @param state The `state` object with properties to update with their respective new values.
-- (void)setFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId state:(NSString *)state error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId state:(NSString *)state completion:(void (^)(FlutterError *_Nullable))completion;
 /// Gets the state map of a feature within a style source.
 ///
 /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -1387,19 +1369,9 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
 /// @param featureId The feature identifier of the feature whose state should be removed.
 /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
-- (void)removeFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId stateKey:(nullable NSString *)stateKey error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)removeFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId stateKey:(nullable NSString *)stateKey completion:(void (^)(FlutterError *_Nullable))completion;
 /// Reduces memory use. Useful to call when the application gets paused or sent to background.
 - (void)reduceMemoryUseWithError:(FlutterError *_Nullable *_Nonnull)error;
-/// Gets the resource options for the map.
-///
-/// All optional fields of the retuned object are initialized with the actual values.
-///
-/// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-///
-/// @return The `resource options` for the map.
-///
-/// @return `nil` only when `error != nil`.
-- (nullable FLTResourceOptions *)getResourceOptionsWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets elevation for the given coordinate.
 /// Note: Elevation is only available for the visible region on the screen.
 ///

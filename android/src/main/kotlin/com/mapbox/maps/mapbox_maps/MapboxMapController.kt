@@ -61,6 +61,7 @@ class MapboxMapController(
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
+
     mapboxMap.subscribe(
       { event ->
         methodChannel.invokeMethod(getEventMethodName(event.type), event.data.toJson())

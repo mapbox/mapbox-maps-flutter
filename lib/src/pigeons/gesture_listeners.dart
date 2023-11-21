@@ -1,5 +1,6 @@
 part of mapbox_maps_flutter;
 
+
 class _GestureListenerCodec extends StandardMessageCodec {
   const _GestureListenerCodec();
   @override

@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
+import com.mapbox.bindgen.Expected
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
 import com.mapbox.maps.pigeons.FLTMapInterfaces
@@ -21,12 +22,12 @@ fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOp
   return builder.build()
 }
 
-fun FLTMapInterfaces.MapMemoryBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): MapMemoryBudgetInMegabytes {
-  return MapMemoryBudgetInMegabytes(size)
+fun FLTMapInterfaces.TileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): TileCacheBudgetInMegabytes {
+  return TileCacheBudgetInMegabytes(size)
 }
 
-fun FLTMapInterfaces.MapMemoryBudgetInTiles.toMapMemoryBudgetInTiles(): MapMemoryBudgetInTiles {
-  return MapMemoryBudgetInTiles(size)
+fun FLTMapInterfaces.TileCacheBudgetInTiles.toMapMemoryBudgetInTiles(): TileCacheBudgetInTiles {
+  return TileCacheBudgetInTiles(size)
 }
 
 fun FLTMapInterfaces.SourceQueryOptions.toSourceQueryOptions(): SourceQueryOptions {
@@ -248,24 +249,20 @@ fun QueriedFeature.toFLTQueriedFeature(): FLTMapInterfaces.QueriedFeature {
     .build()
 }
 
-fun TileStoreUsageMode.toFLTTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
-  return FLTMapInterfaces.TileStoreUsageMode.values()[ordinal]
+fun QueriedRenderedFeature.toFLTQueriedRenderedFeature(): FLTMapInterfaces.QueriedRenderedFeature {
+  return FLTMapInterfaces.QueriedRenderedFeature.Builder()
+    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
+    .setLayers(this.layers)
+    .build()
+}
+fun QueriedSourceFeature.toFLTQueriedSourceFeature(): FLTMapInterfaces.QueriedSourceFeature {
+  return FLTMapInterfaces.QueriedSourceFeature.Builder()
+    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
+    .build()
 }
 
-fun ResourceOptions.toFLTResourceOptions(): FLTMapInterfaces.ResourceOptions {
-  val builder = FLTMapInterfaces.ResourceOptions.Builder()
-    .setAccessToken(accessToken)
-    .setTileStoreUsageMode(tileStoreUsageMode.toFLTTileStoreUsageMode())
-  baseURL?.let {
-    builder.setBaseURL(it)
-  }
-  dataPath?.let {
-    builder.setDataPath(it)
-  }
-  assetPath?.let {
-    builder.setAssetPath(it)
-  }
-  return builder.build()
+fun TileStoreUsageMode.toFLTTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
+  return FLTMapInterfaces.TileStoreUsageMode.values()[ordinal]
 }
 
 fun MapDebugOptions.toFLTMapDebugOptions(): FLTMapInterfaces.MapDebugOptions {
@@ -307,9 +304,6 @@ fun MapOptions.toFLTMapOptions(context: Context): FLTMapInterfaces.MapOptions {
   }
   crossSourceCollisions?.let {
     builder.setCrossSourceCollisions(it)
-  }
-  optimizeForTerrain?.let {
-    builder.setOptimizeForTerrain(it)
   }
   size?.let {
     builder.setSize(it.toFLTSize(context))
