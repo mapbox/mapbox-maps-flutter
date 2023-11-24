@@ -19,7 +19,7 @@ class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
-  eventTypes: List<FLTMapInterfaces._MapEvent>,
+  eventTypes: List<Int>,
   messenger: BinaryMessenger,
   channelSuffix: Int,
   pluginVersion: String
@@ -28,7 +28,7 @@ class MapboxMapController(
   MethodChannel.MethodCallHandler {
 
   private val mapView: MapView = MapView(context, mapInitOptions)
-  private val mapboxMap: MapboxMap = mapView.getMapboxMap()
+  private val mapboxMap: MapboxMap = mapView.mapboxMap
   private val methodChannel: MethodChannel
   private val styleController: StyleController = StyleController(mapboxMap, context)
   private val cameraController: CameraController = CameraController(mapboxMap, context)
@@ -60,21 +60,22 @@ class MapboxMapController(
     FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, attributionController)
     FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, scaleBarController)
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
-    FLTMapInterfaces._MapboxMapsOptions.setup(proxyBinaryMessenger, optionsController)
-    FLTMapInterfaces._MapboxOptions.setup(proxyBinaryMessenger, optionsController)
+
+    FLTMapInterfaces._MapboxMapsOptions.setup(messenger, optionsController)
+    FLTMapInterfaces._MapboxOptions.setup(messenger, optionsController)
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
 
     // TODO: check if state-triggered subscription change does not lead to multiple subscriptions/not unsubscribing when listener becomes null
     for (event in eventTypes) {
-      subscribeToEvent(event)
+      subscribeToEvent(FLTMapInterfaces._MapEvent.values()[event])
     }
   }
 
   private fun subscribeToEvent(event: FLTMapInterfaces._MapEvent) {
     // check deserialization of these events, as they are separate structs declared in GL Native and Flutter plugin
-    when(event) {
+    when (event) {
       FLTMapInterfaces._MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
         methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
       }
@@ -198,4 +199,4 @@ class MapboxMapController(
 }
 
 private val FLTMapInterfaces._MapEvent.methodName: String
-  get() = "event#${ordinal}"
+  get() = "event#$ordinal"

@@ -1,21 +1,21 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
-import com.mapbox.maps.mapbox_maps.toLineString
 import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.toLineString
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoints
 import com.mapbox.maps.pigeons.FLTPolylineAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import toLineCap
 import toFLTLineCap
-import toLineJoin
 import toFLTLineJoin
-import toLineTranslateAnchor
 import toFLTLineTranslateAnchor
-  
+import toLineCap
+import toLineJoin
+import toLineTranslateAnchor
+
 class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   FLTPolylineAnnotationMessager._PolylineAnnotationMessager {
   private val annotationMap = mutableMapOf<String, PolylineAnnotation>()
@@ -55,8 +55,10 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPolylineAnnotation() }.toMutableList())
     } catch (e: Exception) {

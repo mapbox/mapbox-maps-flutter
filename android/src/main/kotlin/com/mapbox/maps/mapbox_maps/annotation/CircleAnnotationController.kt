@@ -9,12 +9,12 @@ import com.mapbox.maps.plugin.annotation.generated.CircleAnnotation
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
 import toCirclePitchAlignment
-import toFLTCirclePitchAlignment
 import toCirclePitchScale
-import toFLTCirclePitchScale
 import toCircleTranslateAnchor
+import toFLTCirclePitchAlignment
+import toFLTCirclePitchScale
 import toFLTCircleTranslateAnchor
-  
+
 class CircleAnnotationController(private val delegate: ControllerDelegate) :
   FLTCircleAnnotationMessager._CircleAnnotationMessager {
   private val annotationMap = mutableMapOf<String, CircleAnnotation>()
@@ -54,8 +54,10 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTCircleAnnotation() }.toMutableList())
     } catch (e: Exception) {

@@ -18,7 +18,7 @@ class MapWidget extends StatefulWidget {
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
     this.textureView = true,
-    this.styleUri = MapboxStyles.MAPBOX_STREETS,
+    this.styleUri = MapboxStyles.STANDARD,
     this.gestureRecognizers,
     this.onMapCreated,
     this.onStyleLoadedListener,

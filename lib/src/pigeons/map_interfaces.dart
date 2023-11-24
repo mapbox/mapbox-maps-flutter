@@ -7652,7 +7652,9 @@ class TilesetDescriptor {
   /// Constructor for [TilesetDescriptor].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  TilesetDescriptor({BinaryMessenger? binaryMessenger});
+  TilesetDescriptor({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
+  final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = StandardMessageCodec();
 }

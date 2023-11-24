@@ -2,7 +2,6 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import android.graphics.BitmapFactory
-import java.util.*
 import com.mapbox.maps.extension.style.layers.properties.generated.*
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoint
@@ -10,33 +9,34 @@ import com.mapbox.maps.pigeons.FLTPointAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import toIconAnchor
 import toFLTIconAnchor
-import toIconPitchAlignment
 import toFLTIconPitchAlignment
-import toIconRotationAlignment
 import toFLTIconRotationAlignment
-import toIconTextFit
 import toFLTIconTextFit
-import toSymbolPlacement
-import toFLTSymbolPlacement
-import toSymbolZOrder
-import toFLTSymbolZOrder
-import toTextAnchor
-import toFLTTextAnchor
-import toTextJustify
-import toFLTTextJustify
-import toTextPitchAlignment
-import toFLTTextPitchAlignment
-import toTextRotationAlignment
-import toFLTTextRotationAlignment
-import toTextTransform
-import toFLTTextTransform
-import toIconTranslateAnchor
 import toFLTIconTranslateAnchor
-import toTextTranslateAnchor
+import toFLTSymbolPlacement
+import toFLTSymbolZOrder
+import toFLTTextAnchor
+import toFLTTextJustify
+import toFLTTextPitchAlignment
+import toFLTTextRotationAlignment
+import toFLTTextTransform
 import toFLTTextTranslateAnchor
-  
+import toIconAnchor
+import toIconPitchAlignment
+import toIconRotationAlignment
+import toIconTextFit
+import toIconTranslateAnchor
+import toSymbolPlacement
+import toSymbolZOrder
+import toTextAnchor
+import toTextJustify
+import toTextPitchAlignment
+import toTextRotationAlignment
+import toTextTransform
+import toTextTranslateAnchor
+import java.util.*
+
 class PointAnnotationController(private val delegate: ControllerDelegate) :
   FLTPointAnnotationMessager._PointAnnotationMessager {
   private val annotationMap = mutableMapOf<String, PointAnnotation>()
@@ -76,8 +76,10 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPointAnnotation() }.toMutableList())
     } catch (e: Exception) {

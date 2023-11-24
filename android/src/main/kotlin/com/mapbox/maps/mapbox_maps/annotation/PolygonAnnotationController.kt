@@ -9,9 +9,9 @@ import com.mapbox.maps.pigeons.FLTPolygonAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import toFillTranslateAnchor
 import toFLTFillTranslateAnchor
-  
+import toFillTranslateAnchor
+
 class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   FLTPolygonAnnotationMessager._PolygonAnnotationMessager {
   private val annotationMap = mutableMapOf<String, PolygonAnnotation>()
@@ -51,8 +51,10 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id }
-          .toList())
+        managerCreateAnnotationMap[managerId]!!.addAll(
+          annotations.map { it.id }
+            .toList()
+        )
       }
       result.success(annotations.map { it.toFLTPolygonAnnotation() }.toMutableList())
     } catch (e: Exception) {

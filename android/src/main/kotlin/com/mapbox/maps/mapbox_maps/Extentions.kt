@@ -346,7 +346,7 @@ fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
   return when (this) {
     ProjectionName.GLOBE -> StyleProjectionName.GLOBE
     ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
-    else -> { throw  java.lang.RuntimeException("Projection $this is not supported.")}
+    else -> { throw java.lang.RuntimeException("Projection $this is not supported.") }
   }
 }
 fun Projection.toFLTProjection(): StyleProjection {

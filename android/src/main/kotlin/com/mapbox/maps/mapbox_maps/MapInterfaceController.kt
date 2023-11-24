@@ -2,7 +2,6 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
-import com.mapbox.common.MapboxOptions
 import com.mapbox.geojson.Feature
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData

@@ -18,19 +18,19 @@ class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInter
   }
 
   override fun setBaseUrl(url: String) {
-    MapboxMapsOptions.baseUrl = url;
+    MapboxMapsOptions.baseUrl = url
   }
 
   override fun getDataPath(): String {
-    return MapboxMapsOptions.dataPath;
+    return MapboxMapsOptions.dataPath
   }
 
   override fun setDataPath(path: String) {
-    MapboxMapsOptions.dataPath = path;
+    MapboxMapsOptions.dataPath = path
   }
 
   override fun getAssetPath(): String {
-    return "";
+    return ""
   }
 
   override fun setAssetPath(path: String) {

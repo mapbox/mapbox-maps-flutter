@@ -3,7 +3,6 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import com.mapbox.common.*
 import com.mapbox.maps.*
-import com.mapbox.maps.pigeons.FLTMapInterfaces
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
@@ -21,7 +20,6 @@ class MapboxMapFactory(
     }
     val params = args as Map<String, Any>
     val mapOptionsBuilder = MapOptions.Builder().applyDefaultParams(context)
-    val cameraOptionsBuilder = CameraOptions.Builder()
 
     (params["mapOptions"] as ArrayList<Any?>?)?.let { mapOptions ->
       mapOptions[0]?.let {
@@ -68,7 +66,8 @@ class MapboxMapFactory(
       }
     }
 
-    (params["cameraOptions"] as ArrayList<Any?>?)?.let { cameraOptions ->
+    val cameraOptions = (params["cameraOptions"] as ArrayList<Any?>?)?.let { cameraOptions ->
+      val cameraOptionsBuilder = CameraOptions.Builder()
       cameraOptions[4]?.let {
         cameraOptionsBuilder.bearing(it as Double)
       }
@@ -96,6 +95,7 @@ class MapboxMapFactory(
             it[1].toDevicePixels(context).toDouble()
           )
         )
+        cameraOptionsBuilder.build()
       }
     }
 
@@ -107,12 +107,12 @@ class MapboxMapFactory(
     val mapInitOptions = MapInitOptions(
       context = context,
       mapOptions = mapOptionsBuilder.build(),
-      cameraOptions = cameraOptionsBuilder.build(),
+      cameraOptions = cameraOptions,
       textureView = textureView,
       styleUri = styleUri
     )
     // TODO: Check if the cast succeeds
-    val eventTypes = params["eventTypes"] as? List<FLTMapInterfaces._MapEvent> ?: listOf()
+    val eventTypes = params["eventTypes"] as? List<Int> ?: listOf()
     return MapboxMapController(
       context,
       mapInitOptions,

@@ -443,9 +443,8 @@ class CameraPageBodyState extends State<CameraPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

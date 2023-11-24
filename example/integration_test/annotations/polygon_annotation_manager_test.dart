@@ -16,7 +16,8 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager = await mapboxMap.annotations.createPolygonAnnotationManager();
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
     await addDelay(1000);
 
     await manager.setFillAntialias(true);

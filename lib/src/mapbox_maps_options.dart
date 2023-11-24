@@ -29,12 +29,13 @@ class MapboxOptions {
 /// resource options, such a setup might cause performance implications.
 class MapboxMapsOptions {
   static _MapboxMapsOptions _options = _MapboxMapsOptions();
+
   /// The base URL that would be used by the Maps engine to make HTTP requests.
   /// By default the engine uses the base URL `https://api.mapbox.com`
   static Future<String> getBaseUrl() {
     return _options.getBaseUrl();
   }
-  
+
   /// The base URL that would be used by the Maps engine to make HTTP requests.
   void setBaseUrl(String url) {
     _options.setBaseUrl(url);
@@ -56,7 +57,6 @@ class MapboxMapsOptions {
     _options.setDataPath(path);
   }
 
-
   /// The path to the Maps asset folder. Default is application's main bundle path.
   ///
   /// This option is ignored for Android platform.
@@ -77,13 +77,12 @@ class MapboxMapsOptions {
     _options.setAssetPath(path);
   }
 
-
   /// The tile store usage mode for the Maps API objects. Default is `readOnly`.
   Future<TileStoreUsageMode> getTileStoreUsageMode() {
     return _options.getTileStoreUsageMode();
   }
 
-    /// The tile store usage mode for the Maps API objects.
+  /// The tile store usage mode for the Maps API objects.
   void setTileStoreUsageMode(TileStoreUsageMode mode) {
     _options.setTileStoreUsageMode(mode);
   }
