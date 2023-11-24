@@ -17,6 +17,6 @@ class LocationComponentController(private val mapView: MapView) :
         withBearing = settings.puckBearingEnabled == true
       )
     }
-    mapView.location.applyFromFLT(settings, mapView.context)
+    mapView.location.applyFromFLT(settings)
   }
 }

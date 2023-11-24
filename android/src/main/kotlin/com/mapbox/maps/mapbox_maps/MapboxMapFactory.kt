@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import com.mapbox.common.*
 import com.mapbox.maps.*
+import com.mapbox.maps.pigeons.FLTMapInterfaces
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
@@ -19,26 +20,8 @@ class MapboxMapFactory(
       throw RuntimeException("Context is null, can't create MapView!")
     }
     val params = args as Map<String, Any>
-    val resourceOptionsBuilder = ResourceOptions.Builder().applyDefaultParams(context)
     val mapOptionsBuilder = MapOptions.Builder().applyDefaultParams(context)
     val cameraOptionsBuilder = CameraOptions.Builder()
-    (params["resourceOptions"] as ArrayList<Any?>?)?.let { resourceOptions ->
-      resourceOptions[0]?.let {
-        resourceOptionsBuilder.accessToken(it as String)
-      }
-      resourceOptions[1]?.let {
-        resourceOptionsBuilder.baseURL(it as String)
-      }
-      resourceOptions[2]?.let {
-        resourceOptionsBuilder.dataPath(it as String)
-      }
-      resourceOptions[3]?.let {
-        resourceOptionsBuilder.assetPath(it as String)
-      }
-      resourceOptions[4]?.let {
-        resourceOptionsBuilder.tileStoreUsageMode(TileStoreUsageMode.values()[it as Int])
-      }
-    }
 
     (params["mapOptions"] as ArrayList<Any?>?)?.let { mapOptions ->
       mapOptions[0]?.let {
@@ -55,9 +38,6 @@ class MapboxMapFactory(
       }
       mapOptions[4]?.let {
         mapOptionsBuilder.crossSourceCollisions(it as Boolean)
-      }
-      mapOptions[5]?.let {
-        mapOptionsBuilder.optimizeForTerrain(it as Boolean)
       }
       mapOptions[6]?.let {
         (it as ArrayList<Double>).let { size ->
@@ -126,13 +106,13 @@ class MapboxMapFactory(
     val pluginVersion = params["mapboxPluginVersion"] as String
     val mapInitOptions = MapInitOptions(
       context = context,
-      resourceOptions = resourceOptionsBuilder.build(),
       mapOptions = mapOptionsBuilder.build(),
       cameraOptions = cameraOptionsBuilder.build(),
       textureView = textureView,
       styleUri = styleUri
     )
-    val eventTypes = params["eventTypes"] as? List<String> ?: listOf()
+    // TODO: Check if the cast succeeds
+    val eventTypes = params["eventTypes"] as? List<FLTMapInterfaces._MapEvent> ?: listOf()
     return MapboxMapController(
       context,
       mapInitOptions,

@@ -273,6 +273,31 @@ typedef NS_ENUM(NSUInteger, FLTStylePropertyValueKind) {
 - (instancetype)initWithValue:(FLTStylePropertyValueKind)value;
 @end
 
+typedef NS_ENUM(NSUInteger, FLTStyleProjectionName) {
+  FLTStyleProjectionNameMercator = 0,
+  FLTStyleProjectionNameGlobe = 1,
+};
+
+/// Wrapper for FLTStyleProjectionName to allow for nullability.
+@interface FLTStyleProjectionNameBox : NSObject
+@property(nonatomic, assign) FLTStyleProjectionName value;
+- (instancetype)initWithValue:(FLTStyleProjectionName)value;
+@end
+
+/// Whether extruded geometries are lit relative to the map or viewport.
+typedef NS_ENUM(NSUInteger, FLTAnchor) {
+  /// The position of the light source is aligned to the rotation of the map.
+  FLTAnchorMAP = 0,
+  /// The position of the light source is aligned to the rotation of the viewport.
+  FLTAnchorVIEWPORT = 1,
+};
+
+/// Wrapper for FLTAnchor to allow for nullability.
+@interface FLTAnchorBox : NSObject
+@property(nonatomic, assign) FLTAnchor value;
+- (instancetype)initWithValue:(FLTAnchor)value;
+@end
+
 /// HTTP defines a set of request methods to indicate the desired action to be performed for a given resource.
 typedef NS_ENUM(NSUInteger, FLTHttpMethod) {
   /// The GET method requests a representation of the specified resource. Requests using GET should only retrieve data.
@@ -399,6 +424,29 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 - (instancetype)initWithValue:(FLTTileRegionErrorType)value;
 @end
 
+typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
+  FLT_MapEventMapLoaded = 0,
+  FLT_MapEventMapLoadingError = 1,
+  FLT_MapEventStyleLoaded = 2,
+  FLT_MapEventStyleDataLoaded = 3,
+  FLT_MapEventCameraChanged = 4,
+  FLT_MapEventMapIdle = 5,
+  FLT_MapEventSourceAdded = 6,
+  FLT_MapEventSourceRemoved = 7,
+  FLT_MapEventSourceDataLoaded = 8,
+  FLT_MapEventStyleImageMissing = 9,
+  FLT_MapEventStyleImageRemoveUnused = 10,
+  FLT_MapEventRenderFrameStarted = 11,
+  FLT_MapEventRenderFrameFinished = 12,
+  FLT_MapEventResourceRequest = 13,
+};
+
+/// Wrapper for FLT_MapEvent to allow for nullability.
+@interface FLT_MapEventBox : NSObject
+@property(nonatomic, assign) FLT_MapEvent value;
+- (instancetype)initWithValue:(FLT_MapEvent)value;
+@end
+
 @class FLTMbxEdgeInsets;
 @class FLTCameraOptions;
 @class FLTCameraState;
@@ -428,6 +476,10 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @class FLTProjectedMeters;
 @class FLTMercatorCoordinate;
 @class FLTStyleObjectInfo;
+@class FLTStyleProjection;
+@class FLTFlatLight;
+@class FLTDirectionalLight;
+@class FLTAmbientLight;
 @class FLTMbxImage;
 @class FLTImageStretches;
 @class FLTImageContent;
@@ -909,6 +961,106 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, copy) NSString * id;
 /// The object's type.
 @property(nonatomic, copy) NSString * type;
+@end
+
+@interface FLTStyleProjection : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithName:(FLTStyleProjectionName)name;
+@property(nonatomic, assign) FLTStyleProjectionName name;
+@end
+
+/// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTFlatLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    anchor:(nullable FLTAnchorBox *)anchor
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    position:(nullable NSArray<NSNumber *> *)position
+    positionTransition:(nullable FLTTransitionOptions *)positionTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Whether extruded geometries are lit relative to the map or viewport.
+@property(nonatomic, strong, nullable) FLTAnchorBox * anchor;
+/// Color tint for lighting extruded geometries.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
+/// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * position;
+/// Transition property for `position`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * positionTransition;
+@end
+
+/// A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTDirectionalLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    castShadows:(nullable NSNumber *)castShadows
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    direction:(nullable NSArray<NSNumber *> *)direction
+    directionTransition:(nullable FLTTransitionOptions *)directionTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    shadowIntensity:(nullable NSNumber *)shadowIntensity
+    shadowIntensityTransition:(nullable FLTTransitionOptions *)shadowIntensityTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Enable/Disable shadow casting for this light
+@property(nonatomic, strong, nullable) NSNumber * castShadows;
+/// Color of the directional light.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * direction;
+/// Transition property for `direction`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * directionTransition;
+/// A multiplier for the color of the directional light.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
+/// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
+@property(nonatomic, strong, nullable) NSNumber * shadowIntensity;
+/// Transition property for `shadowIntensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * shadowIntensityTransition;
+@end
+
+/// An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTAmbientLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Color of the ambient light.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// A multiplier for the color of the ambient light.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
 @end
 
 /// Image type.
@@ -1521,6 +1673,37 @@ NSObject<FlutterMessageCodec> *FLTProjectionGetCodec(void);
 
 extern void FLTProjectionSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTProjection> *_Nullable api);
 
+/// The codec used by FLT_MapboxOptions.
+NSObject<FlutterMessageCodec> *FLT_MapboxOptionsGetCodec(void);
+
+@protocol FLT_MapboxOptions
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getAccessTokenWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setAccessTokenToken:(NSString *)token error:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void FLT_MapboxOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxOptions> *_Nullable api);
+
+/// The codec used by FLT_MapboxMapsOptions.
+NSObject<FlutterMessageCodec> *FLT_MapboxMapsOptionsGetCodec(void);
+
+@protocol FLT_MapboxMapsOptions
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getBaseUrlWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setBaseUrlUrl:(NSString *)url error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getDataPathWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setDataPathPath:(NSString *)path error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getAssetPathWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setAssetPathPath:(NSString *)path error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (FLTFLTTileStoreUsageMode)getTileStoreUsageModeWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setTileStoreUsageModeMode:(FLTTileStoreUsageMode)mode error:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void FLT_MapboxMapsOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxMapsOptions> *_Nullable api);
+
 /// The codec used by FLTSettings.
 NSObject<FlutterMessageCodec> *FLTSettingsGetCodec(void);
 
@@ -1815,6 +1998,19 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 ///
 /// @return The list containing the information about existing style source objects.
 - (void)getStyleSourcesWithCompletion:(void (^)(NSArray<FLTStyleObjectInfo *> *_Nullable, FlutterError *_Nullable))completion;
+/// Returns an ordered list of the current style lights.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSArray<FLTStyleObjectInfo *> *)getStyleLightsWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// Set global directional lightning.
+///
+/// @param flatLight The flat light source.
+- (void)setLightFlatLight:(FLTFlatLight *)flatLight error:(FlutterError *_Nullable *_Nonnull)error;
+/// Set dynamic lightning.
+/// 
+/// @param ambientLight The ambient light source.
+/// @param directionalLight The directional light source.
+- (void)setLightsAmbientLight:(FLTAmbientLight *)ambientLight directionalLight:(FLTDirectionalLight *)directionalLight error:(FlutterError *_Nullable *_Nonnull)error;
 /// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
 ///
 /// @param properties A map of style light properties values, with their names as a key.
@@ -1824,15 +2020,17 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 /// Gets the value of a style light property.
 ///
 /// @param property The style light property name.
+/// @param id The unique identifier of the style light in lights list.
 /// @return The style light property value.
-- (void)getStyleLightPropertyProperty:(NSString *)property completion:(void (^)(FLTStylePropertyValue *_Nullable, FlutterError *_Nullable))completion;
+- (void)getStyleLightPropertyId:(NSString *)id property:(NSString *)property completion:(void (^)(FLTStylePropertyValue *_Nullable, FlutterError *_Nullable))completion;
 /// Sets a value to the the style light property.
 ///
 /// @param property The style light property name.
+/// @param id The unique identifier of the style light in lights list.
 /// @param value The style light property value.
 ///
 /// @return A string describing an error if the operation was not successful, empty otherwise.
-- (void)setStyleLightPropertyProperty:(NSString *)property value:(id)value completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)setStyleLightPropertyId:(NSString *)id property:(NSString *)property value:(id)value completion:(void (^)(FlutterError *_Nullable))completion;
 /// Sets the style global [terrain](https://docs.mapbox.com/mapbox-gl-js/style-spec/#terrain) properties.
 ///
 /// @param properties A map of style terrain properties values, with their names as a key.
@@ -1921,11 +2119,11 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 /// Function to get the projection provided by the Style Extension.
 ///
 /// @return Projection that is currently applied to the map
-- (void)getProjectionWithCompletion:(void (^)(NSString *_Nullable, FlutterError *_Nullable))completion;
+- (nullable FLTStyleProjection *)getProjectionWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// Function to set the projection provided by the Style Extension.
 ///
 /// @param projection The projection to be set.
-- (void)setProjectionProjection:(NSString *)projection completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)setProjectionProjection:(FLTStyleProjection *)projection error:(FlutterError *_Nullable *_Nonnull)error;
 /// Function to localize style labels.
 ///
 /// @param locale The locale to apply for localization

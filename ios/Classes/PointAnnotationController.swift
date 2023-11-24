@@ -117,9 +117,9 @@ func getIconAllowOverlapManagerId(_ managerId: String, completion: @escaping ( N
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconAllowOverlap = manager.iconAllowOverlap {
-                completion(NSNumber(value: iconAllowOverlap), nil)
+                completion(NSNumber(value: iconAllowOverlap),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -146,9 +146,9 @@ func getIconIgnorePlacementManagerId(_ managerId: String, completion: @escaping 
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconIgnorePlacement = manager.iconIgnorePlacement {
-                completion(NSNumber(value: iconIgnorePlacement), nil)
+                completion(NSNumber(value: iconIgnorePlacement),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -175,9 +175,9 @@ func getIconKeepUprightManagerId(_ managerId: String, completion: @escaping ( NS
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconKeepUpright = manager.iconKeepUpright {
-                completion(NSNumber(value: iconKeepUpright), nil)
+                completion(NSNumber(value: iconKeepUpright),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -204,9 +204,9 @@ func getIconOptionalManagerId(_ managerId: String, completion: @escaping ( NSNum
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconOptional = manager.iconOptional {
-                completion(NSNumber(value: iconOptional), nil)
+                completion(NSNumber(value: iconOptional),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -233,9 +233,9 @@ func getIconPaddingManagerId(_ managerId: String, completion: @escaping ( NSNumb
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconPadding = manager.iconPadding {
-                completion(NSNumber(value: iconPadding), nil)
+                completion(NSNumber(value: iconPadding),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -266,7 +266,7 @@ func getIconPitchAlignmentManagerId(_ managerId: String, completion: @escaping (
                 let index = IconPitchAlignment.allCases.firstIndex(of: iconPitchAlignment)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -297,7 +297,7 @@ func getIconRotationAlignmentManagerId(_ managerId: String, completion: @escapin
                 let index = IconRotationAlignment.allCases.firstIndex(of: iconRotationAlignment)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -328,7 +328,7 @@ func getIconTextFitManagerId(_ managerId: String, completion: @escaping ( NSNumb
                 let index = IconTextFit.allCases.firstIndex(of: iconTextFit)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -355,9 +355,9 @@ func getIconTextFitPaddingManagerId(_ managerId: String, completion: @escaping (
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconTextFitPadding = manager.iconTextFitPadding {
-                completion(iconTextFitPadding.map {NSNumber(value: $0)}, nil)
+                completion(iconTextFitPadding.map{NSNumber(value: $0)},nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -384,9 +384,9 @@ func getSymbolAvoidEdgesManagerId(_ managerId: String, completion: @escaping ( N
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let symbolAvoidEdges = manager.symbolAvoidEdges {
-                completion(NSNumber(value: symbolAvoidEdges), nil)
+                completion(NSNumber(value: symbolAvoidEdges),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -417,7 +417,7 @@ func getSymbolPlacementManagerId(_ managerId: String, completion: @escaping ( NS
                 let index = SymbolPlacement.allCases.firstIndex(of: symbolPlacement)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -444,9 +444,9 @@ func getSymbolSpacingManagerId(_ managerId: String, completion: @escaping ( NSNu
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let symbolSpacing = manager.symbolSpacing {
-                completion(NSNumber(value: symbolSpacing), nil)
+                completion(NSNumber(value: symbolSpacing),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -477,7 +477,7 @@ func getSymbolZOrderManagerId(_ managerId: String, completion: @escaping ( NSNum
                 let index = SymbolZOrder.allCases.firstIndex(of: symbolZOrder)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -504,9 +504,9 @@ func getTextAllowOverlapManagerId(_ managerId: String, completion: @escaping ( N
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textAllowOverlap = manager.textAllowOverlap {
-                completion(NSNumber(value: textAllowOverlap), nil)
+                completion(NSNumber(value: textAllowOverlap),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -533,9 +533,9 @@ func getTextFontManagerId(_ managerId: String, completion: @escaping ( [String]?
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textFont = manager.textFont {
-                completion(textFont, nil)
+                completion(textFont,nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -562,9 +562,9 @@ func getTextIgnorePlacementManagerId(_ managerId: String, completion: @escaping 
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textIgnorePlacement = manager.textIgnorePlacement {
-                completion(NSNumber(value: textIgnorePlacement), nil)
+                completion(NSNumber(value: textIgnorePlacement),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -591,9 +591,9 @@ func getTextKeepUprightManagerId(_ managerId: String, completion: @escaping ( NS
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textKeepUpright = manager.textKeepUpright {
-                completion(NSNumber(value: textKeepUpright), nil)
+                completion(NSNumber(value: textKeepUpright),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -620,9 +620,9 @@ func getTextLineHeightManagerId(_ managerId: String, completion: @escaping ( NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textLineHeight = manager.textLineHeight {
-                completion(NSNumber(value: textLineHeight), nil)
+                completion(NSNumber(value: textLineHeight),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -649,9 +649,9 @@ func getTextMaxAngleManagerId(_ managerId: String, completion: @escaping ( NSNum
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textMaxAngle = manager.textMaxAngle {
-                completion(NSNumber(value: textMaxAngle), nil)
+                completion(NSNumber(value: textMaxAngle),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -678,9 +678,9 @@ func getTextOptionalManagerId(_ managerId: String, completion: @escaping ( NSNum
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textOptional = manager.textOptional {
-                completion(NSNumber(value: textOptional), nil)
+                completion(NSNumber(value: textOptional),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -707,9 +707,9 @@ func getTextPaddingManagerId(_ managerId: String, completion: @escaping ( NSNumb
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textPadding = manager.textPadding {
-                completion(NSNumber(value: textPadding), nil)
+                completion(NSNumber(value: textPadding),nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -740,7 +740,7 @@ func getTextPitchAlignmentManagerId(_ managerId: String, completion: @escaping (
                 let index = TextPitchAlignment.allCases.firstIndex(of: textPitchAlignment)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -771,7 +771,7 @@ func getTextRotationAlignmentManagerId(_ managerId: String, completion: @escapin
                 let index = TextRotationAlignment.allCases.firstIndex(of: textRotationAlignment)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -798,9 +798,9 @@ func getIconTranslateManagerId(_ managerId: String, completion: @escaping ( [NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let iconTranslate = manager.iconTranslate {
-                completion(iconTranslate.map {NSNumber(value: $0)}, nil)
+                completion(iconTranslate.map{NSNumber(value: $0)},nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -831,7 +831,7 @@ func getIconTranslateAnchorManagerId(_ managerId: String, completion: @escaping 
                 let index = IconTranslateAnchor.allCases.firstIndex(of: iconTranslateAnchor)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -858,9 +858,9 @@ func getTextTranslateManagerId(_ managerId: String, completion: @escaping ( [NSN
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                if let textTranslate = manager.textTranslate {
-                completion(textTranslate.map {NSNumber(value: $0)}, nil)
+                completion(textTranslate.map{NSNumber(value: $0)},nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
@@ -891,7 +891,7 @@ func getTextTranslateAnchorManagerId(_ managerId: String, completion: @escaping 
                 let index = TextTranslateAnchor.allCases.firstIndex(of: textTranslateAnchor)!
                 completion(NSNumber(value: index), nil)
                 } else {
-                    completion(nil, nil)
+                    completion(nil,nil)
                 }
             } else {
                 completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))

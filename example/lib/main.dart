@@ -12,6 +12,7 @@ import 'package:mapbox_maps_example/polygon_annotations.dart';
 import 'package:mapbox_maps_example/polyline_annotations.dart';
 import 'package:mapbox_maps_example/tile_json.dart';
 import 'package:mapbox_maps_example/vector_tile_source.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'full_map.dart';
 import 'location.dart';
@@ -54,6 +55,7 @@ class MapsDemo extends StatelessWidget {
   static const String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 
   void _pushPage(BuildContext context, ExamplePage page) async {
+    MapboxOptions.setAccessToken(MapsDemo.ACCESS_TOKEN);
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (_) => Scaffold(
               appBar: AppBar(title: Text(page.title)),
@@ -108,5 +110,6 @@ class MapsDemo extends StatelessWidget {
 }
 
 void main() {
+
   runApp(MaterialApp(home: MapsDemo()));
 }

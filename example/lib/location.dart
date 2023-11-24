@@ -1,11 +1,9 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class LocationPage extends ExamplePage {
@@ -253,7 +251,6 @@ class LocationPageBodyState extends State<LocationPageBody> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
         key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];

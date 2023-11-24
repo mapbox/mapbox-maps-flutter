@@ -1098,7 +1098,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconPitchAlignment(String arg_managerId) async {
+  Future<IconPitchAlignment?> getIconPitchAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPitchAlignment',
         codec,
@@ -1117,7 +1118,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconPitchAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1146,7 +1149,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconRotationAlignment(String arg_managerId) async {
+  Future<IconRotationAlignment?> getIconRotationAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconRotationAlignment',
         codec,
@@ -1165,7 +1169,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconRotationAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1194,7 +1200,7 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconTextFit(String arg_managerId) async {
+  Future<IconTextFit?> getIconTextFit(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFit',
         codec,
@@ -1213,7 +1219,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconTextFit.values[replyList[0]! as int];
     }
   }
 
@@ -1337,7 +1345,7 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getSymbolPlacement(String arg_managerId) async {
+  Future<SymbolPlacement?> getSymbolPlacement(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolPlacement',
         codec,
@@ -1356,7 +1364,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : SymbolPlacement.values[replyList[0]! as int];
     }
   }
 
@@ -1432,7 +1442,7 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getSymbolZOrder(String arg_managerId) async {
+  Future<SymbolZOrder?> getSymbolZOrder(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZOrder',
         codec,
@@ -1451,7 +1461,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : SymbolZOrder.values[replyList[0]! as int];
     }
   }
 
@@ -1857,7 +1869,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextPitchAlignment(String arg_managerId) async {
+  Future<TextPitchAlignment?> getTextPitchAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPitchAlignment',
         codec,
@@ -1876,7 +1889,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextPitchAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1905,7 +1920,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextRotationAlignment(String arg_managerId) async {
+  Future<TextRotationAlignment?> getTextRotationAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextRotationAlignment',
         codec,
@@ -1924,7 +1940,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextRotationAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -2000,7 +2018,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconTranslateAnchor(String arg_managerId) async {
+  Future<IconTranslateAnchor?> getIconTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslateAnchor',
         codec,
@@ -2019,7 +2038,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconTranslateAnchor.values[replyList[0]! as int];
     }
   }
 
@@ -2095,7 +2116,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextTranslateAnchor(String arg_managerId) async {
+  Future<TextTranslateAnchor?> getTextTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslateAnchor',
         codec,
@@ -2114,7 +2136,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextTranslateAnchor.values[replyList[0]! as int];
     }
   }
 }

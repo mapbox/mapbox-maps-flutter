@@ -193,49 +193,7 @@ class MapboxMap extends ChangeNotifier {
   void dispose() {
     super.dispose();
     _mapboxMapsPlatform.dispose();
-    _observersMap.clear();
     GestureListener.setup(null, binaryMessenger: _proxyBinaryMessenger);
-  }
-
-  var _observersMap = Map<String, List<Observer>>();
-
-  /// Subscribes an `observer` to a provided array of event types.
-  /// The `observable` will hold a strong reference to an `observer` instance, therefore,
-  /// in order to stop receiving notifications, caller must call `unsubscribe` with an
-  /// `observer` instance used for an initial subscription.
-  void subscribe(Observer observer, List<String> events) {
-    events.forEach((element) {
-      _mapboxMapsPlatform.addEventListener(element);
-      if (_observersMap[element] == null) {
-        // Haven't subscribed this event
-        _observersMap[element] = [observer];
-      } else {
-        // Have subscribed this event, just add observer to ths list
-        _observersMap[element]!.add(observer);
-      }
-    });
-    _mapboxMapsPlatform.observers.add((argument) {
-      // Notify all the observers registered with this event.
-      _observersMap[argument.type]?.forEach((element) {
-        element(argument);
-      });
-    });
-  }
-
-  /// Unsubscribes an `observer` from a provided array of event types.
-  void unsubscribe(Observer observer, List<String> events) {
-    events.forEach((element) {
-      _observersMap[element]!.remove(observer);
-    });
-  }
-
-  /// Unsubscribes an `observer` from all events.
-  void unsubscribeAll(Observer observer) {
-    _observersMap.forEach((key, value) {
-      if (value.contains(observer)) {
-        value.remove(observer);
-      }
-    });
   }
 
   /// Convenience method that returns the `camera options` object for given parameters.
@@ -350,17 +308,10 @@ class MapboxMap extends ChangeNotifier {
   /// Returns the `camera bounds` of the map.
   Future<CameraBounds> getBounds() => _cameraManager.getBounds();
 
-  /// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-  Future<void> dragStart(ScreenCoordinate point) =>
-      _cameraManager.dragStart(point);
-
   /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-  Future<CameraOptions> getDragCameraOptions(
+  Future<CameraOptions> cameraForDrag(
           ScreenCoordinate fromPoint, ScreenCoordinate toPoint) =>
-      _cameraManager.getDragCameraOptions(fromPoint, toPoint);
-
-  /// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
-  Future<void> dragEnd() => _cameraManager.dragEnd();
+      _cameraManager.cameraForDrag(fromPoint, toPoint);
 
   /// Gets the size of the map.
   /// Note : not supported for iOS.
@@ -420,12 +371,12 @@ class MapboxMap extends ChangeNotifier {
       _mapInterface.setDebug(debugOptions, value);
 
   /// Queries the map for rendered features.
-  Future<List<QueriedFeature?>> queryRenderedFeatures(
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
           RenderedQueryGeometry geometry, RenderedQueryOptions options) =>
       _mapInterface.queryRenderedFeatures(geometry, options);
 
   /// Queries the map for source features.
-  Future<List<QueriedFeature?>> querySourceFeatures(
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
       _mapInterface.querySourceFeatures(sourceId, options);
 
@@ -489,14 +440,6 @@ class MapboxMap extends ChangeNotifier {
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
 
-  /// Gets the resource options for the map.
-  ///
-  /// All optional fields of the returned object are initialized with the actual values.
-  ///
-  /// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-  Future<ResourceOptions> getResourceOptions() =>
-      _mapInterface.getResourceOptions();
-
   /// Gets elevation for the given coordinate.
   /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
   Future<double?> getElevation(Map<String?, Object?> coordinate) =>
@@ -551,11 +494,11 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// If null is set, the memory budget in tile units will be dynamically calculated based on
   /// the current viewport size.
-  Future<void> setMemoryBudget(
-          MapMemoryBudgetInMegabytes? mapMemoryBudgetInMegabytes,
-          MapMemoryBudgetInTiles? mapMemoryBudgetInTiles) =>
-      _mapInterface.setMemoryBudget(
-          mapMemoryBudgetInMegabytes, mapMemoryBudgetInTiles);
+  Future<void> setTileCacheBudget(
+          TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
+          TileCacheBudgetInTiles? tileCacheBudgetInTiles) =>
+      _mapInterface.setTileCacheBudget(
+          tileCacheBudgetInMegabytes, tileCacheBudgetInTiles);
 
   /// Ease the map camera to a given camera options and animation options
   Future<void> easeTo(CameraOptions cameraOptions,

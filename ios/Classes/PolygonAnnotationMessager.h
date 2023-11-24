@@ -96,7 +96,7 @@ NSObject<FlutterMessageCodec> *FLT_PolygonAnnotationMessagerGetCodec(void);
 - (void)setFillTranslateManagerId:(NSString *)managerId fillTranslate:(NSArray<NSNumber *> *)fillTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getFillTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setFillTranslateAnchorManagerId:(NSString *)managerId fillTranslateAnchor:(FLTFillTranslateAnchor)fillTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getFillTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getFillTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTFLTFillTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void FLT_PolygonAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_PolygonAnnotationMessager> *_Nullable api);

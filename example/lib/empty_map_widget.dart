@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
-
 Future<MapboxMap> main() {
   final completer = Completer<MapboxMap>();
 
@@ -13,9 +11,7 @@ Future<MapboxMap> main() {
           key: ValueKey("mapWidget"),
           onMapCreated: (MapboxMap mapboxMap) {
             completer.complete(mapboxMap);
-          },
-          resourceOptions:
-              ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN))));
+          })));
 
   return completer.future;
 }
@@ -33,8 +29,7 @@ Future<MapboxMap> runFixedSizeMap() {
           key: ValueKey("mapWidget"),
           onMapCreated: (MapboxMap mapboxMap) {
             completer.complete(mapboxMap);
-          },
-          resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN)),
+          }),
     ),
   )));
 

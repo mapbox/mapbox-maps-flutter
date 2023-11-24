@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
-import 'main.dart';
 import 'page.dart';
 
 class StyleClustersPage extends ExamplePage {
@@ -162,7 +160,6 @@ class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
         key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];

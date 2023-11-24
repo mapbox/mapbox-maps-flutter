@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
-import 'main.dart';
 import 'page.dart';
 
 class FullMapPage extends ExamplePage {
@@ -26,17 +24,9 @@ class FullMapState extends State<FullMap> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.subscribe(_eventObserver, [
-      MapEvents.STYLE_LOADED,
-      MapEvents.MAP_LOADED,
-      MapEvents.MAP_IDLE,
-    ]);
+    mapboxMap.style;
   }
-
-  _eventObserver(Event event) {
-    print("Receive event, type: ${event.type}, data: ${event.data}");
-  }
-
+  
   _onStyleLoadedCallback(StyleLoadedEventData data) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Style loaded :), begin: ${data.begin}"),
@@ -122,7 +112,6 @@ class FullMapState extends State<FullMap> {
         ),
         body: MapWidget(
           key: ValueKey("mapWidget"),
-          resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(
               center: Point(
                   coordinates: Position(

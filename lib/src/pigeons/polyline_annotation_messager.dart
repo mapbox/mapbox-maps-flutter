@@ -438,7 +438,7 @@ class _PolylineAnnotationMessager {
     }
   }
 
-  Future<int?> getLineCap(String arg_managerId) async {
+  Future<LineCap?> getLineCap(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineCap',
         codec,
@@ -457,7 +457,9 @@ class _PolylineAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : LineCap.values[replyList[0]! as int];
     }
   }
 
@@ -674,7 +676,8 @@ class _PolylineAnnotationMessager {
     }
   }
 
-  Future<int?> getLineTranslateAnchor(String arg_managerId) async {
+  Future<LineTranslateAnchor?> getLineTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslateAnchor',
         codec,
@@ -693,7 +696,9 @@ class _PolylineAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : LineTranslateAnchor.values[replyList[0]! as int];
     }
   }
 
