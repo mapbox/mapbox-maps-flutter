@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class VectorTileSourcePage extends ExamplePage {
@@ -46,7 +44,6 @@ class VectorTileSourceWidgetState extends State<VectorTileSourceWidget> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       styleUri: MapboxStyles.LIGHT,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-122.447303, 37.753574)).toJson(),

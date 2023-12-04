@@ -340,6 +340,31 @@ public class FLTMapInterfaces {
     }
   }
 
+  public enum StyleProjectionName {
+    MERCATOR(0),
+    GLOBE(1);
+
+    final int index;
+
+    private StyleProjectionName(final int index) {
+      this.index = index;
+    }
+  }
+
+  /** Whether extruded geometries are lit relative to the map or viewport. */
+  public enum Anchor {
+    /** The position of the light source is aligned to the rotation of the map. */
+    MAP(0),
+    /** The position of the light source is aligned to the rotation of the viewport. */
+    VIEWPORT(1);
+
+    final int index;
+
+    private Anchor(final int index) {
+      this.index = index;
+    }
+  }
+
   /** HTTP defines a set of request methods to indicate the desired action to be performed for a given resource. */
   public enum HttpMethod {
     /** The GET method requests a representation of the specified resource. Requests using GET should only retrieve data. */
@@ -462,6 +487,29 @@ public class FLTMapInterfaces {
     final int index;
 
     private TileRegionErrorType(final int index) {
+      this.index = index;
+    }
+  }
+
+  public enum _MapEvent {
+    MAP_LOADED(0),
+    MAP_LOADING_ERROR(1),
+    STYLE_LOADED(2),
+    STYLE_DATA_LOADED(3),
+    CAMERA_CHANGED(4),
+    MAP_IDLE(5),
+    SOURCE_ADDED(6),
+    SOURCE_REMOVED(7),
+    SOURCE_DATA_LOADED(8),
+    STYLE_IMAGE_MISSING(9),
+    STYLE_IMAGE_REMOVE_UNUSED(10),
+    RENDER_FRAME_STARTED(11),
+    RENDER_FRAME_FINISHED(12),
+    RESOURCE_REQUEST(13);
+
+    final int index;
+
+    private _MapEvent(final int index) {
       this.index = index;
     }
   }
@@ -1550,7 +1598,7 @@ public class FLTMapInterfaces {
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
-  public static final class MapMemoryBudgetInMegabytes {
+  public static final class TileCacheBudgetInMegabytes {
     private @NonNull Long size;
 
     public @NonNull Long getSize() {
@@ -1565,7 +1613,7 @@ public class FLTMapInterfaces {
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
-    MapMemoryBudgetInMegabytes() {}
+    TileCacheBudgetInMegabytes() {}
 
     public static final class Builder {
 
@@ -1576,8 +1624,8 @@ public class FLTMapInterfaces {
         return this;
       }
 
-      public @NonNull MapMemoryBudgetInMegabytes build() {
-        MapMemoryBudgetInMegabytes pigeonReturn = new MapMemoryBudgetInMegabytes();
+      public @NonNull TileCacheBudgetInMegabytes build() {
+        TileCacheBudgetInMegabytes pigeonReturn = new TileCacheBudgetInMegabytes();
         pigeonReturn.setSize(size);
         return pigeonReturn;
       }
@@ -1590,8 +1638,8 @@ public class FLTMapInterfaces {
       return toListResult;
     }
 
-    static @NonNull MapMemoryBudgetInMegabytes fromList(@NonNull ArrayList<Object> list) {
-      MapMemoryBudgetInMegabytes pigeonResult = new MapMemoryBudgetInMegabytes();
+    static @NonNull TileCacheBudgetInMegabytes fromList(@NonNull ArrayList<Object> list) {
+      TileCacheBudgetInMegabytes pigeonResult = new TileCacheBudgetInMegabytes();
       Object size = list.get(0);
       pigeonResult.setSize((size == null) ? null : ((size instanceof Integer) ? (Integer) size : (Long) size));
       return pigeonResult;
@@ -1603,7 +1651,7 @@ public class FLTMapInterfaces {
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
-  public static final class MapMemoryBudgetInTiles {
+  public static final class TileCacheBudgetInTiles {
     private @NonNull Long size;
 
     public @NonNull Long getSize() {
@@ -1618,7 +1666,7 @@ public class FLTMapInterfaces {
     }
 
     /** Constructor is non-public to enforce null safety; use Builder. */
-    MapMemoryBudgetInTiles() {}
+    TileCacheBudgetInTiles() {}
 
     public static final class Builder {
 
@@ -1629,8 +1677,8 @@ public class FLTMapInterfaces {
         return this;
       }
 
-      public @NonNull MapMemoryBudgetInTiles build() {
-        MapMemoryBudgetInTiles pigeonReturn = new MapMemoryBudgetInTiles();
+      public @NonNull TileCacheBudgetInTiles build() {
+        TileCacheBudgetInTiles pigeonReturn = new TileCacheBudgetInTiles();
         pigeonReturn.setSize(size);
         return pigeonReturn;
       }
@@ -1643,8 +1691,8 @@ public class FLTMapInterfaces {
       return toListResult;
     }
 
-    static @NonNull MapMemoryBudgetInTiles fromList(@NonNull ArrayList<Object> list) {
-      MapMemoryBudgetInTiles pigeonResult = new MapMemoryBudgetInTiles();
+    static @NonNull TileCacheBudgetInTiles fromList(@NonNull ArrayList<Object> list) {
+      TileCacheBudgetInTiles pigeonResult = new TileCacheBudgetInTiles();
       Object size = list.get(0);
       pigeonResult.setSize((size == null) ? null : ((size instanceof Integer) ? (Integer) size : (Long) size));
       return pigeonResult;
@@ -1729,25 +1777,6 @@ public class FLTMapInterfaces {
     }
 
     /**
-     * With terrain on, if `true`, the map will render for performance
-     * priority, which may lead to layer reordering allowing to maximize
-     * performance (layers that are draped over terrain will be drawn first,
-     * including fill, line, background, hillshade and raster). Any layers that
-     * are positioned after symbols are draped last, over symbols. Otherwise, if
-     * set to `false`, the map will always be drawn for layer order priority.
-     * By default, it is set to `true`.
-     */
-    private @Nullable Boolean optimizeForTerrain;
-
-    public @Nullable Boolean getOptimizeForTerrain() {
-      return optimizeForTerrain;
-    }
-
-    public void setOptimizeForTerrain(@Nullable Boolean setterArg) {
-      this.optimizeForTerrain = setterArg;
-    }
-
-    /**
      * The size to resize the map object and renderer backend.
      * The size is given in `logical pixel` units. macOS and iOS platforms use
      * device-independent pixel units, while other platforms, such as Android,
@@ -1828,13 +1857,6 @@ public class FLTMapInterfaces {
         return this;
       }
 
-      private @Nullable Boolean optimizeForTerrain;
-
-      public @NonNull Builder setOptimizeForTerrain(@Nullable Boolean setterArg) {
-        this.optimizeForTerrain = setterArg;
-        return this;
-      }
-
       private @Nullable Size size;
 
       public @NonNull Builder setSize(@Nullable Size setterArg) {
@@ -1863,7 +1885,6 @@ public class FLTMapInterfaces {
         pigeonReturn.setViewportMode(viewportMode);
         pigeonReturn.setOrientation(orientation);
         pigeonReturn.setCrossSourceCollisions(crossSourceCollisions);
-        pigeonReturn.setOptimizeForTerrain(optimizeForTerrain);
         pigeonReturn.setSize(size);
         pigeonReturn.setPixelRatio(pixelRatio);
         pigeonReturn.setGlyphsRasterizationOptions(glyphsRasterizationOptions);
@@ -1873,13 +1894,12 @@ public class FLTMapInterfaces {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(9);
+      ArrayList<Object> toListResult = new ArrayList<Object>(8);
       toListResult.add(contextMode == null ? null : contextMode.index);
       toListResult.add(constrainMode == null ? null : constrainMode.index);
       toListResult.add(viewportMode == null ? null : viewportMode.index);
       toListResult.add(orientation == null ? null : orientation.index);
       toListResult.add(crossSourceCollisions);
-      toListResult.add(optimizeForTerrain);
       toListResult.add((size == null) ? null : size.toList());
       toListResult.add(pixelRatio);
       toListResult.add((glyphsRasterizationOptions == null) ? null : glyphsRasterizationOptions.toList());
@@ -1898,13 +1918,11 @@ public class FLTMapInterfaces {
       pigeonResult.setOrientation(orientation == null ? null : NorthOrientation.values()[(int) orientation]);
       Object crossSourceCollisions = list.get(4);
       pigeonResult.setCrossSourceCollisions((Boolean) crossSourceCollisions);
-      Object optimizeForTerrain = list.get(5);
-      pigeonResult.setOptimizeForTerrain((Boolean) optimizeForTerrain);
-      Object size = list.get(6);
+      Object size = list.get(5);
       pigeonResult.setSize((size == null) ? null : Size.fromList((ArrayList<Object>) size));
-      Object pixelRatio = list.get(7);
+      Object pixelRatio = list.get(6);
       pigeonResult.setPixelRatio((Double) pixelRatio);
-      Object glyphsRasterizationOptions = list.get(8);
+      Object glyphsRasterizationOptions = list.get(7);
       pigeonResult.setGlyphsRasterizationOptions((glyphsRasterizationOptions == null) ? null : GlyphsRasterizationOptions.fromList((ArrayList<Object>) glyphsRasterizationOptions));
       return pigeonResult;
     }
@@ -2532,6 +2550,145 @@ public class FLTMapInterfaces {
       pigeonResult.setBelow((String) below);
       Object at = list.get(2);
       pigeonResult.setAt((at == null) ? null : ((at instanceof Integer) ? (Integer) at : (Long) at));
+      return pigeonResult;
+    }
+  }
+
+  /**
+   * Represents query result that is returned in QueryRenderedFeaturesCallback.
+   * @see `queryRenderedFeatures`
+   *
+   * Generated class from Pigeon that represents data sent in messages.
+   */
+  public static final class QueriedRenderedFeature {
+    /** Feature returned by the query. */
+    private @NonNull QueriedFeature queriedFeature;
+
+    public @NonNull QueriedFeature getQueriedFeature() {
+      return queriedFeature;
+    }
+
+    public void setQueriedFeature(@NonNull QueriedFeature setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"queriedFeature\" is null.");
+      }
+      this.queriedFeature = setterArg;
+    }
+
+    /**
+     * An array of layer Ids for the queried feature.
+     * If the feature has been rendered in multiple layers, multiple Ids will be provided.
+     * If the feature is only rendered in one layer, a single Id will be provided.
+     */
+    private @NonNull List<String> layers;
+
+    public @NonNull List<String> getLayers() {
+      return layers;
+    }
+
+    public void setLayers(@NonNull List<String> setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"layers\" is null.");
+      }
+      this.layers = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    QueriedRenderedFeature() {}
+
+    public static final class Builder {
+
+      private @Nullable QueriedFeature queriedFeature;
+
+      public @NonNull Builder setQueriedFeature(@NonNull QueriedFeature setterArg) {
+        this.queriedFeature = setterArg;
+        return this;
+      }
+
+      private @Nullable List<String> layers;
+
+      public @NonNull Builder setLayers(@NonNull List<String> setterArg) {
+        this.layers = setterArg;
+        return this;
+      }
+
+      public @NonNull QueriedRenderedFeature build() {
+        QueriedRenderedFeature pigeonReturn = new QueriedRenderedFeature();
+        pigeonReturn.setQueriedFeature(queriedFeature);
+        pigeonReturn.setLayers(layers);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(2);
+      toListResult.add((queriedFeature == null) ? null : queriedFeature.toList());
+      toListResult.add(layers);
+      return toListResult;
+    }
+
+    static @NonNull QueriedRenderedFeature fromList(@NonNull ArrayList<Object> list) {
+      QueriedRenderedFeature pigeonResult = new QueriedRenderedFeature();
+      Object queriedFeature = list.get(0);
+      pigeonResult.setQueriedFeature((queriedFeature == null) ? null : QueriedFeature.fromList((ArrayList<Object>) queriedFeature));
+      Object layers = list.get(1);
+      pigeonResult.setLayers((List<String>) layers);
+      return pigeonResult;
+    }
+  }
+
+  /**
+   * Represents query result that is returned in QuerySourceFeaturesCallback.
+   * @see `querySourceFeatures`
+   *
+   * Generated class from Pigeon that represents data sent in messages.
+   */
+  public static final class QueriedSourceFeature {
+    /** Feature returned by the query. */
+    private @NonNull QueriedFeature queriedFeature;
+
+    public @NonNull QueriedFeature getQueriedFeature() {
+      return queriedFeature;
+    }
+
+    public void setQueriedFeature(@NonNull QueriedFeature setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"queriedFeature\" is null.");
+      }
+      this.queriedFeature = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    QueriedSourceFeature() {}
+
+    public static final class Builder {
+
+      private @Nullable QueriedFeature queriedFeature;
+
+      public @NonNull Builder setQueriedFeature(@NonNull QueriedFeature setterArg) {
+        this.queriedFeature = setterArg;
+        return this;
+      }
+
+      public @NonNull QueriedSourceFeature build() {
+        QueriedSourceFeature pigeonReturn = new QueriedSourceFeature();
+        pigeonReturn.setQueriedFeature(queriedFeature);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(1);
+      toListResult.add((queriedFeature == null) ? null : queriedFeature.toList());
+      return toListResult;
+    }
+
+    static @NonNull QueriedSourceFeature fromList(@NonNull ArrayList<Object> list) {
+      QueriedSourceFeature pigeonResult = new QueriedSourceFeature();
+      Object queriedFeature = list.get(0);
+      pigeonResult.setQueriedFeature((queriedFeature == null) ? null : QueriedFeature.fromList((ArrayList<Object>) queriedFeature));
       return pigeonResult;
     }
   }
@@ -3277,160 +3434,6 @@ public class FLTMapInterfaces {
   }
 
   /**
-   * Options to configure a resource
-   *
-   * Generated class from Pigeon that represents data sent in messages.
-   */
-  public static final class ResourceOptions {
-    /** The access token that is used to access resources provided by Mapbox services. */
-    private @NonNull String accessToken;
-
-    public @NonNull String getAccessToken() {
-      return accessToken;
-    }
-
-    public void setAccessToken(@NonNull String setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"accessToken\" is null.");
-      }
-      this.accessToken = setterArg;
-    }
-
-    /** The base URL that would be used to make HTTP requests. By default it is `https://api.mapbox.com`. */
-    private @Nullable String baseURL;
-
-    public @Nullable String getBaseURL() {
-      return baseURL;
-    }
-
-    public void setBaseURL(@Nullable String setterArg) {
-      this.baseURL = setterArg;
-    }
-
-    /**
-     * The path to the map data folder.
-     *
-     * The implementation will use this folder for storing offline style packages and temporary data.
-     *
-     * The application must have sufficient permissions to create files within the provided directory.
-     * If a dataPath is not provided, the default location will be used (the application data path defined
-     * in the `Mapbox Common SystemInformation API`).
-     */
-    private @Nullable String dataPath;
-
-    public @Nullable String getDataPath() {
-      return dataPath;
-    }
-
-    public void setDataPath(@Nullable String setterArg) {
-      this.dataPath = setterArg;
-    }
-
-    /**
-     * The path to the folder where application assets are located. Resources whose protocol is `asset://`
-     * will be fetched from an asset folder or asset management system provided by respective platform.
-     * This option is ignored for Android platform. An iOS application may provide path to an application bundle's path.
-     */
-    private @Nullable String assetPath;
-
-    public @Nullable String getAssetPath() {
-      return assetPath;
-    }
-
-    public void setAssetPath(@Nullable String setterArg) {
-      this.assetPath = setterArg;
-    }
-
-    /** The tile store usage mode. */
-    private @Nullable TileStoreUsageMode tileStoreUsageMode;
-
-    public @Nullable TileStoreUsageMode getTileStoreUsageMode() {
-      return tileStoreUsageMode;
-    }
-
-    public void setTileStoreUsageMode(@Nullable TileStoreUsageMode setterArg) {
-      this.tileStoreUsageMode = setterArg;
-    }
-
-    /** Constructor is non-public to enforce null safety; use Builder. */
-    ResourceOptions() {}
-
-    public static final class Builder {
-
-      private @Nullable String accessToken;
-
-      public @NonNull Builder setAccessToken(@NonNull String setterArg) {
-        this.accessToken = setterArg;
-        return this;
-      }
-
-      private @Nullable String baseURL;
-
-      public @NonNull Builder setBaseURL(@Nullable String setterArg) {
-        this.baseURL = setterArg;
-        return this;
-      }
-
-      private @Nullable String dataPath;
-
-      public @NonNull Builder setDataPath(@Nullable String setterArg) {
-        this.dataPath = setterArg;
-        return this;
-      }
-
-      private @Nullable String assetPath;
-
-      public @NonNull Builder setAssetPath(@Nullable String setterArg) {
-        this.assetPath = setterArg;
-        return this;
-      }
-
-      private @Nullable TileStoreUsageMode tileStoreUsageMode;
-
-      public @NonNull Builder setTileStoreUsageMode(@Nullable TileStoreUsageMode setterArg) {
-        this.tileStoreUsageMode = setterArg;
-        return this;
-      }
-
-      public @NonNull ResourceOptions build() {
-        ResourceOptions pigeonReturn = new ResourceOptions();
-        pigeonReturn.setAccessToken(accessToken);
-        pigeonReturn.setBaseURL(baseURL);
-        pigeonReturn.setDataPath(dataPath);
-        pigeonReturn.setAssetPath(assetPath);
-        pigeonReturn.setTileStoreUsageMode(tileStoreUsageMode);
-        return pigeonReturn;
-      }
-    }
-
-    @NonNull
-    ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(5);
-      toListResult.add(accessToken);
-      toListResult.add(baseURL);
-      toListResult.add(dataPath);
-      toListResult.add(assetPath);
-      toListResult.add(tileStoreUsageMode == null ? null : tileStoreUsageMode.index);
-      return toListResult;
-    }
-
-    static @NonNull ResourceOptions fromList(@NonNull ArrayList<Object> list) {
-      ResourceOptions pigeonResult = new ResourceOptions();
-      Object accessToken = list.get(0);
-      pigeonResult.setAccessToken((String) accessToken);
-      Object baseURL = list.get(1);
-      pigeonResult.setBaseURL((String) baseURL);
-      Object dataPath = list.get(2);
-      pigeonResult.setDataPath((String) dataPath);
-      Object assetPath = list.get(3);
-      pigeonResult.setAssetPath((String) assetPath);
-      Object tileStoreUsageMode = list.get(4);
-      pigeonResult.setTileStoreUsageMode(tileStoreUsageMode == null ? null : TileStoreUsageMode.values()[(int) tileStoreUsageMode]);
-      return pigeonResult;
-    }
-  }
-
-  /**
    * The information about style object (source or layer).
    *
    * Generated class from Pigeon that represents data sent in messages.
@@ -3505,6 +3508,663 @@ public class FLTMapInterfaces {
       pigeonResult.setId((String) id);
       Object type = list.get(1);
       pigeonResult.setType((String) type);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class StyleProjection {
+    private @NonNull StyleProjectionName name;
+
+    public @NonNull StyleProjectionName getName() {
+      return name;
+    }
+
+    public void setName(@NonNull StyleProjectionName setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"name\" is null.");
+      }
+      this.name = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    StyleProjection() {}
+
+    public static final class Builder {
+
+      private @Nullable StyleProjectionName name;
+
+      public @NonNull Builder setName(@NonNull StyleProjectionName setterArg) {
+        this.name = setterArg;
+        return this;
+      }
+
+      public @NonNull StyleProjection build() {
+        StyleProjection pigeonReturn = new StyleProjection();
+        pigeonReturn.setName(name);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(1);
+      toListResult.add(name == null ? null : name.index);
+      return toListResult;
+    }
+
+    static @NonNull StyleProjection fromList(@NonNull ArrayList<Object> list) {
+      StyleProjection pigeonResult = new StyleProjection();
+      Object name = list.get(0);
+      pigeonResult.setName(StyleProjectionName.values()[(int) name]);
+      return pigeonResult;
+    }
+  }
+
+  /**
+   * A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
+   *
+   * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+   *
+   * Generated class from Pigeon that represents data sent in messages.
+   */
+  public static final class FlatLight {
+    /** Unique light name */
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Whether extruded geometries are lit relative to the map or viewport. */
+    private @Nullable Anchor anchor;
+
+    public @Nullable Anchor getAnchor() {
+      return anchor;
+    }
+
+    public void setAnchor(@Nullable Anchor setterArg) {
+      this.anchor = setterArg;
+    }
+
+    /** Color tint for lighting extruded geometries. */
+    private @Nullable Long color;
+
+    public @Nullable Long getColor() {
+      return color;
+    }
+
+    public void setColor(@Nullable Long setterArg) {
+      this.color = setterArg;
+    }
+
+    /** Transition property for `color` */
+    private @Nullable TransitionOptions colorTransition;
+
+    public @Nullable TransitionOptions getColorTransition() {
+      return colorTransition;
+    }
+
+    public void setColorTransition(@Nullable TransitionOptions setterArg) {
+      this.colorTransition = setterArg;
+    }
+
+    /** Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast. */
+    private @Nullable Double intensity;
+
+    public @Nullable Double getIntensity() {
+      return intensity;
+    }
+
+    public void setIntensity(@Nullable Double setterArg) {
+      this.intensity = setterArg;
+    }
+
+    /** Transition property for `intensity` */
+    private @Nullable TransitionOptions intensityTransition;
+
+    public @Nullable TransitionOptions getIntensityTransition() {
+      return intensityTransition;
+    }
+
+    public void setIntensityTransition(@Nullable TransitionOptions setterArg) {
+      this.intensityTransition = setterArg;
+    }
+
+    /** Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below). */
+    private @Nullable List<Double> position;
+
+    public @Nullable List<Double> getPosition() {
+      return position;
+    }
+
+    public void setPosition(@Nullable List<Double> setterArg) {
+      this.position = setterArg;
+    }
+
+    /** Transition property for `position` */
+    private @Nullable TransitionOptions positionTransition;
+
+    public @Nullable TransitionOptions getPositionTransition() {
+      return positionTransition;
+    }
+
+    public void setPositionTransition(@Nullable TransitionOptions setterArg) {
+      this.positionTransition = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    FlatLight() {}
+
+    public static final class Builder {
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable Anchor anchor;
+
+      public @NonNull Builder setAnchor(@Nullable Anchor setterArg) {
+        this.anchor = setterArg;
+        return this;
+      }
+
+      private @Nullable Long color;
+
+      public @NonNull Builder setColor(@Nullable Long setterArg) {
+        this.color = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions colorTransition;
+
+      public @NonNull Builder setColorTransition(@Nullable TransitionOptions setterArg) {
+        this.colorTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable Double intensity;
+
+      public @NonNull Builder setIntensity(@Nullable Double setterArg) {
+        this.intensity = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions intensityTransition;
+
+      public @NonNull Builder setIntensityTransition(@Nullable TransitionOptions setterArg) {
+        this.intensityTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable List<Double> position;
+
+      public @NonNull Builder setPosition(@Nullable List<Double> setterArg) {
+        this.position = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions positionTransition;
+
+      public @NonNull Builder setPositionTransition(@Nullable TransitionOptions setterArg) {
+        this.positionTransition = setterArg;
+        return this;
+      }
+
+      public @NonNull FlatLight build() {
+        FlatLight pigeonReturn = new FlatLight();
+        pigeonReturn.setId(id);
+        pigeonReturn.setAnchor(anchor);
+        pigeonReturn.setColor(color);
+        pigeonReturn.setColorTransition(colorTransition);
+        pigeonReturn.setIntensity(intensity);
+        pigeonReturn.setIntensityTransition(intensityTransition);
+        pigeonReturn.setPosition(position);
+        pigeonReturn.setPositionTransition(positionTransition);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(8);
+      toListResult.add(id);
+      toListResult.add(anchor == null ? null : anchor.index);
+      toListResult.add(color);
+      toListResult.add((colorTransition == null) ? null : colorTransition.toList());
+      toListResult.add(intensity);
+      toListResult.add((intensityTransition == null) ? null : intensityTransition.toList());
+      toListResult.add(position);
+      toListResult.add((positionTransition == null) ? null : positionTransition.toList());
+      return toListResult;
+    }
+
+    static @NonNull FlatLight fromList(@NonNull ArrayList<Object> list) {
+      FlatLight pigeonResult = new FlatLight();
+      Object id = list.get(0);
+      pigeonResult.setId((String) id);
+      Object anchor = list.get(1);
+      pigeonResult.setAnchor(anchor == null ? null : Anchor.values()[(int) anchor]);
+      Object color = list.get(2);
+      pigeonResult.setColor((color == null) ? null : ((color instanceof Integer) ? (Integer) color : (Long) color));
+      Object colorTransition = list.get(3);
+      pigeonResult.setColorTransition((colorTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) colorTransition));
+      Object intensity = list.get(4);
+      pigeonResult.setIntensity((Double) intensity);
+      Object intensityTransition = list.get(5);
+      pigeonResult.setIntensityTransition((intensityTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) intensityTransition));
+      Object position = list.get(6);
+      pigeonResult.setPosition((List<Double>) position);
+      Object positionTransition = list.get(7);
+      pigeonResult.setPositionTransition((positionTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) positionTransition));
+      return pigeonResult;
+    }
+  }
+
+  /**
+   * A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
+   *
+   * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+   *
+   * Generated class from Pigeon that represents data sent in messages.
+   */
+  public static final class DirectionalLight {
+    /** Unique light name */
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Enable/Disable shadow casting for this light */
+    private @Nullable Boolean castShadows;
+
+    public @Nullable Boolean getCastShadows() {
+      return castShadows;
+    }
+
+    public void setCastShadows(@Nullable Boolean setterArg) {
+      this.castShadows = setterArg;
+    }
+
+    /** Color of the directional light. */
+    private @Nullable Long color;
+
+    public @Nullable Long getColor() {
+      return color;
+    }
+
+    public void setColor(@Nullable Long setterArg) {
+      this.color = setterArg;
+    }
+
+    /** Transition property for `color` */
+    private @Nullable TransitionOptions colorTransition;
+
+    public @Nullable TransitionOptions getColorTransition() {
+      return colorTransition;
+    }
+
+    public void setColorTransition(@Nullable TransitionOptions setterArg) {
+      this.colorTransition = setterArg;
+    }
+
+    /** Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below). */
+    private @Nullable List<Double> direction;
+
+    public @Nullable List<Double> getDirection() {
+      return direction;
+    }
+
+    public void setDirection(@Nullable List<Double> setterArg) {
+      this.direction = setterArg;
+    }
+
+    /** Transition property for `direction` */
+    private @Nullable TransitionOptions directionTransition;
+
+    public @Nullable TransitionOptions getDirectionTransition() {
+      return directionTransition;
+    }
+
+    public void setDirectionTransition(@Nullable TransitionOptions setterArg) {
+      this.directionTransition = setterArg;
+    }
+
+    /** A multiplier for the color of the directional light. */
+    private @Nullable Double intensity;
+
+    public @Nullable Double getIntensity() {
+      return intensity;
+    }
+
+    public void setIntensity(@Nullable Double setterArg) {
+      this.intensity = setterArg;
+    }
+
+    /** Transition property for `intensity` */
+    private @Nullable TransitionOptions intensityTransition;
+
+    public @Nullable TransitionOptions getIntensityTransition() {
+      return intensityTransition;
+    }
+
+    public void setIntensityTransition(@Nullable TransitionOptions setterArg) {
+      this.intensityTransition = setterArg;
+    }
+
+    /** Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1. */
+    private @Nullable Double shadowIntensity;
+
+    public @Nullable Double getShadowIntensity() {
+      return shadowIntensity;
+    }
+
+    public void setShadowIntensity(@Nullable Double setterArg) {
+      this.shadowIntensity = setterArg;
+    }
+
+    /** Transition property for `shadowIntensity` */
+    private @Nullable TransitionOptions shadowIntensityTransition;
+
+    public @Nullable TransitionOptions getShadowIntensityTransition() {
+      return shadowIntensityTransition;
+    }
+
+    public void setShadowIntensityTransition(@Nullable TransitionOptions setterArg) {
+      this.shadowIntensityTransition = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    DirectionalLight() {}
+
+    public static final class Builder {
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable Boolean castShadows;
+
+      public @NonNull Builder setCastShadows(@Nullable Boolean setterArg) {
+        this.castShadows = setterArg;
+        return this;
+      }
+
+      private @Nullable Long color;
+
+      public @NonNull Builder setColor(@Nullable Long setterArg) {
+        this.color = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions colorTransition;
+
+      public @NonNull Builder setColorTransition(@Nullable TransitionOptions setterArg) {
+        this.colorTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable List<Double> direction;
+
+      public @NonNull Builder setDirection(@Nullable List<Double> setterArg) {
+        this.direction = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions directionTransition;
+
+      public @NonNull Builder setDirectionTransition(@Nullable TransitionOptions setterArg) {
+        this.directionTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable Double intensity;
+
+      public @NonNull Builder setIntensity(@Nullable Double setterArg) {
+        this.intensity = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions intensityTransition;
+
+      public @NonNull Builder setIntensityTransition(@Nullable TransitionOptions setterArg) {
+        this.intensityTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable Double shadowIntensity;
+
+      public @NonNull Builder setShadowIntensity(@Nullable Double setterArg) {
+        this.shadowIntensity = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions shadowIntensityTransition;
+
+      public @NonNull Builder setShadowIntensityTransition(@Nullable TransitionOptions setterArg) {
+        this.shadowIntensityTransition = setterArg;
+        return this;
+      }
+
+      public @NonNull DirectionalLight build() {
+        DirectionalLight pigeonReturn = new DirectionalLight();
+        pigeonReturn.setId(id);
+        pigeonReturn.setCastShadows(castShadows);
+        pigeonReturn.setColor(color);
+        pigeonReturn.setColorTransition(colorTransition);
+        pigeonReturn.setDirection(direction);
+        pigeonReturn.setDirectionTransition(directionTransition);
+        pigeonReturn.setIntensity(intensity);
+        pigeonReturn.setIntensityTransition(intensityTransition);
+        pigeonReturn.setShadowIntensity(shadowIntensity);
+        pigeonReturn.setShadowIntensityTransition(shadowIntensityTransition);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(10);
+      toListResult.add(id);
+      toListResult.add(castShadows);
+      toListResult.add(color);
+      toListResult.add((colorTransition == null) ? null : colorTransition.toList());
+      toListResult.add(direction);
+      toListResult.add((directionTransition == null) ? null : directionTransition.toList());
+      toListResult.add(intensity);
+      toListResult.add((intensityTransition == null) ? null : intensityTransition.toList());
+      toListResult.add(shadowIntensity);
+      toListResult.add((shadowIntensityTransition == null) ? null : shadowIntensityTransition.toList());
+      return toListResult;
+    }
+
+    static @NonNull DirectionalLight fromList(@NonNull ArrayList<Object> list) {
+      DirectionalLight pigeonResult = new DirectionalLight();
+      Object id = list.get(0);
+      pigeonResult.setId((String) id);
+      Object castShadows = list.get(1);
+      pigeonResult.setCastShadows((Boolean) castShadows);
+      Object color = list.get(2);
+      pigeonResult.setColor((color == null) ? null : ((color instanceof Integer) ? (Integer) color : (Long) color));
+      Object colorTransition = list.get(3);
+      pigeonResult.setColorTransition((colorTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) colorTransition));
+      Object direction = list.get(4);
+      pigeonResult.setDirection((List<Double>) direction);
+      Object directionTransition = list.get(5);
+      pigeonResult.setDirectionTransition((directionTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) directionTransition));
+      Object intensity = list.get(6);
+      pigeonResult.setIntensity((Double) intensity);
+      Object intensityTransition = list.get(7);
+      pigeonResult.setIntensityTransition((intensityTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) intensityTransition));
+      Object shadowIntensity = list.get(8);
+      pigeonResult.setShadowIntensity((Double) shadowIntensity);
+      Object shadowIntensityTransition = list.get(9);
+      pigeonResult.setShadowIntensityTransition((shadowIntensityTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) shadowIntensityTransition));
+      return pigeonResult;
+    }
+  }
+
+  /**
+   * An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
+   *
+   * - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+   *
+   * Generated class from Pigeon that represents data sent in messages.
+   */
+  public static final class AmbientLight {
+    /** Unique light name */
+    private @NonNull String id;
+
+    public @NonNull String getId() {
+      return id;
+    }
+
+    public void setId(@NonNull String setterArg) {
+      if (setterArg == null) {
+        throw new IllegalStateException("Nonnull field \"id\" is null.");
+      }
+      this.id = setterArg;
+    }
+
+    /** Color of the ambient light. */
+    private @Nullable Long color;
+
+    public @Nullable Long getColor() {
+      return color;
+    }
+
+    public void setColor(@Nullable Long setterArg) {
+      this.color = setterArg;
+    }
+
+    /** Transition property for `color` */
+    private @Nullable TransitionOptions colorTransition;
+
+    public @Nullable TransitionOptions getColorTransition() {
+      return colorTransition;
+    }
+
+    public void setColorTransition(@Nullable TransitionOptions setterArg) {
+      this.colorTransition = setterArg;
+    }
+
+    /** A multiplier for the color of the ambient light. */
+    private @Nullable Double intensity;
+
+    public @Nullable Double getIntensity() {
+      return intensity;
+    }
+
+    public void setIntensity(@Nullable Double setterArg) {
+      this.intensity = setterArg;
+    }
+
+    /** Transition property for `intensity` */
+    private @Nullable TransitionOptions intensityTransition;
+
+    public @Nullable TransitionOptions getIntensityTransition() {
+      return intensityTransition;
+    }
+
+    public void setIntensityTransition(@Nullable TransitionOptions setterArg) {
+      this.intensityTransition = setterArg;
+    }
+
+    /** Constructor is non-public to enforce null safety; use Builder. */
+    AmbientLight() {}
+
+    public static final class Builder {
+
+      private @Nullable String id;
+
+      public @NonNull Builder setId(@NonNull String setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+
+      private @Nullable Long color;
+
+      public @NonNull Builder setColor(@Nullable Long setterArg) {
+        this.color = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions colorTransition;
+
+      public @NonNull Builder setColorTransition(@Nullable TransitionOptions setterArg) {
+        this.colorTransition = setterArg;
+        return this;
+      }
+
+      private @Nullable Double intensity;
+
+      public @NonNull Builder setIntensity(@Nullable Double setterArg) {
+        this.intensity = setterArg;
+        return this;
+      }
+
+      private @Nullable TransitionOptions intensityTransition;
+
+      public @NonNull Builder setIntensityTransition(@Nullable TransitionOptions setterArg) {
+        this.intensityTransition = setterArg;
+        return this;
+      }
+
+      public @NonNull AmbientLight build() {
+        AmbientLight pigeonReturn = new AmbientLight();
+        pigeonReturn.setId(id);
+        pigeonReturn.setColor(color);
+        pigeonReturn.setColorTransition(colorTransition);
+        pigeonReturn.setIntensity(intensity);
+        pigeonReturn.setIntensityTransition(intensityTransition);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(5);
+      toListResult.add(id);
+      toListResult.add(color);
+      toListResult.add((colorTransition == null) ? null : colorTransition.toList());
+      toListResult.add(intensity);
+      toListResult.add((intensityTransition == null) ? null : intensityTransition.toList());
+      return toListResult;
+    }
+
+    static @NonNull AmbientLight fromList(@NonNull ArrayList<Object> list) {
+      AmbientLight pigeonResult = new AmbientLight();
+      Object id = list.get(0);
+      pigeonResult.setId((String) id);
+      Object color = list.get(1);
+      pigeonResult.setColor((color == null) ? null : ((color instanceof Integer) ? (Integer) color : (Long) color));
+      Object colorTransition = list.get(2);
+      pigeonResult.setColorTransition((colorTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) colorTransition));
+      Object intensity = list.get(3);
+      pigeonResult.setIntensity((Double) intensity);
+      Object intensityTransition = list.get(4);
+      pigeonResult.setIntensityTransition((intensityTransition == null) ? null : TransitionOptions.fromList((ArrayList<Object>) intensityTransition));
       return pigeonResult;
     }
   }
@@ -4374,72 +5034,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -4448,107 +5118,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -4751,12 +5436,6 @@ public class FLTMapInterfaces {
     @NonNull 
     CameraBounds getBounds();
     /**
-     * Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-     *
-     * @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
-     */
-    void dragStart(@NonNull ScreenCoordinate point);
-    /**
      * Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
      *
      * @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
@@ -4765,9 +5444,7 @@ public class FLTMapInterfaces {
      * @return The `camera options` object showing the end point.
      */
     @NonNull 
-    CameraOptions getDragCameraOptions(@NonNull ScreenCoordinate fromPoint, @NonNull ScreenCoordinate toPoint);
-    /** Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`. */
-    void dragEnd();
+    CameraOptions cameraForDrag(@NonNull ScreenCoordinate fromPoint, @NonNull ScreenCoordinate toPoint);
 
     /** The codec used by _CameraManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -5169,31 +5846,7 @@ public class FLTMapInterfaces {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragStart", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                ScreenCoordinate pointArg = (ScreenCoordinate) args.get(0);
-                try {
-                  api.dragStart(pointArg);
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getDragCameraOptions", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForDrag", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
@@ -5202,30 +5855,8 @@ public class FLTMapInterfaces {
                 ScreenCoordinate fromPointArg = (ScreenCoordinate) args.get(0);
                 ScreenCoordinate toPointArg = (ScreenCoordinate) args.get(1);
                 try {
-                  CameraOptions output = api.getDragCameraOptions(fromPointArg, toPointArg);
+                  CameraOptions output = api.cameraForDrag(fromPointArg, toPointArg);
                   wrapped.add(0, output);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragEnd", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                try {
-                  api.dragEnd();
-                  wrapped.add(0, null);
                 }
  catch (Throwable exception) {
                   ArrayList<Object> wrappedError = wrapError(exception);
@@ -5249,72 +5880,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -5323,107 +5964,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -5445,7 +6101,7 @@ public class FLTMapInterfaces {
 
     void clearData(@NonNull Result<Void> result);
 
-    void setMemoryBudget(@Nullable MapMemoryBudgetInMegabytes mapMemoryBudgetInMegabytes, @Nullable MapMemoryBudgetInTiles mapMemoryBudgetInTiles);
+    void setTileCacheBudget(@Nullable TileCacheBudgetInMegabytes tileCacheBudgetInMegabytes, @Nullable TileCacheBudgetInTiles tileCacheBudgetInTiles);
     /**
      * Gets the size of the map.
      *
@@ -5535,14 +6191,14 @@ public class FLTMapInterfaces {
      * @param options The `render query options` for querying rendered features.
      * @return A `cancelable` object that could be used to cancel the pending query.
      */
-    void queryRenderedFeatures(@NonNull RenderedQueryGeometry geometry, @NonNull RenderedQueryOptions options, @NonNull Result<List<QueriedFeature>> result);
+    void queryRenderedFeatures(@NonNull RenderedQueryGeometry geometry, @NonNull RenderedQueryOptions options, @NonNull Result<List<QueriedRenderedFeature>> result);
     /**
      * Queries the map for source features.
      *
      * @param sourceId The style source identifier used to query for source features.
      * @param options The `source query options` for querying source features.
      */
-    void querySourceFeatures(@NonNull String sourceId, @NonNull SourceQueryOptions options, @NonNull Result<List<QueriedFeature>> result);
+    void querySourceFeatures(@NonNull String sourceId, @NonNull SourceQueryOptions options, @NonNull Result<List<QueriedSourceFeature>> result);
     /**
      * Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
      * to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -5593,7 +6249,7 @@ public class FLTMapInterfaces {
      * @param featureId The feature identifier of the feature whose state should be updated.
      * @param state The `state` object with properties to update with their respective new values.
      */
-    void setFeatureState(@NonNull String sourceId, @Nullable String sourceLayerId, @NonNull String featureId, @NonNull String state);
+    void setFeatureState(@NonNull String sourceId, @Nullable String sourceLayerId, @NonNull String featureId, @NonNull String state, @NonNull Result<Void> result);
     /**
      * Gets the state map of a feature within a style source.
      *
@@ -5619,20 +6275,9 @@ public class FLTMapInterfaces {
      * @param featureId The feature identifier of the feature whose state should be removed.
      * @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
      */
-    void removeFeatureState(@NonNull String sourceId, @Nullable String sourceLayerId, @NonNull String featureId, @Nullable String stateKey);
+    void removeFeatureState(@NonNull String sourceId, @Nullable String sourceLayerId, @NonNull String featureId, @Nullable String stateKey, @NonNull Result<Void> result);
     /** Reduces memory use. Useful to call when the application gets paused or sent to background. */
     void reduceMemoryUse();
-    /**
-     * Gets the resource options for the map.
-     *
-     * All optional fields of the retuned object are initialized with the actual values.
-     *
-     * Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-     *
-     * @return The `resource options` for the map.
-     */
-    @NonNull 
-    ResourceOptions getResourceOptions();
     /**
      * Gets elevation for the given coordinate.
      * Note: Elevation is only available for the visible region on the screen.
@@ -5737,16 +6382,16 @@ public class FLTMapInterfaces {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setMemoryBudget", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setTileCacheBudget", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                MapMemoryBudgetInMegabytes mapMemoryBudgetInMegabytesArg = (MapMemoryBudgetInMegabytes) args.get(0);
-                MapMemoryBudgetInTiles mapMemoryBudgetInTilesArg = (MapMemoryBudgetInTiles) args.get(1);
+                TileCacheBudgetInMegabytes tileCacheBudgetInMegabytesArg = (TileCacheBudgetInMegabytes) args.get(0);
+                TileCacheBudgetInTiles tileCacheBudgetInTilesArg = (TileCacheBudgetInTiles) args.get(1);
                 try {
-                  api.setMemoryBudget(mapMemoryBudgetInMegabytesArg, mapMemoryBudgetInTilesArg);
+                  api.setTileCacheBudget(tileCacheBudgetInMegabytesArg, tileCacheBudgetInTilesArg);
                   wrapped.add(0, null);
                 }
  catch (Throwable exception) {
@@ -6093,9 +6738,9 @@ public class FLTMapInterfaces {
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 RenderedQueryGeometry geometryArg = (RenderedQueryGeometry) args.get(0);
                 RenderedQueryOptions optionsArg = (RenderedQueryOptions) args.get(1);
-                Result<List<QueriedFeature>> resultCallback =
-                    new Result<List<QueriedFeature>>() {
-                      public void success(List<QueriedFeature> result) {
+                Result<List<QueriedRenderedFeature>> resultCallback =
+                    new Result<List<QueriedRenderedFeature>>() {
+                      public void success(List<QueriedRenderedFeature> result) {
                         wrapped.add(0, result);
                         reply.reply(wrapped);
                       }
@@ -6123,9 +6768,9 @@ public class FLTMapInterfaces {
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String sourceIdArg = (String) args.get(0);
                 SourceQueryOptions optionsArg = (SourceQueryOptions) args.get(1);
-                Result<List<QueriedFeature>> resultCallback =
-                    new Result<List<QueriedFeature>>() {
-                      public void success(List<QueriedFeature> result) {
+                Result<List<QueriedSourceFeature>> resultCallback =
+                    new Result<List<QueriedSourceFeature>>() {
+                      public void success(List<QueriedSourceFeature> result) {
                         wrapped.add(0, result);
                         reply.reply(wrapped);
                       }
@@ -6247,15 +6892,20 @@ public class FLTMapInterfaces {
                 String sourceLayerIdArg = (String) args.get(1);
                 String featureIdArg = (String) args.get(2);
                 String stateArg = (String) args.get(3);
-                try {
-                  api.setFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateArg);
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -6305,15 +6955,20 @@ public class FLTMapInterfaces {
                 String sourceLayerIdArg = (String) args.get(1);
                 String featureIdArg = (String) args.get(2);
                 String stateKeyArg = (String) args.get(3);
-                try {
-                  api.removeFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateKeyArg);
-                  wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.removeFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateKeyArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -6330,28 +6985,6 @@ public class FLTMapInterfaces {
                 try {
                   api.reduceMemoryUse();
                   wrapped.add(0, null);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getResourceOptions", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                try {
-                  ResourceOptions output = api.getResourceOptions();
-                  wrapped.add(0, output);
                 }
  catch (Throwable exception) {
                   ArrayList<Object> wrappedError = wrapError(exception);
@@ -6761,72 +7394,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -6835,107 +7478,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -7138,6 +7796,283 @@ public class FLTMapInterfaces {
       }
     }
   }
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface _MapboxOptions {
+
+    @NonNull 
+    String getAccessToken();
+
+    void setAccessToken(@NonNull String token);
+
+    /** The codec used by _MapboxOptions. */
+    static @NonNull MessageCodec<Object> getCodec() {
+      return new StandardMessageCodec();
+    }
+    /**Sets up an instance of `_MapboxOptions` to handle messages through the `binaryMessenger`. */
+    static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable _MapboxOptions api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.getAccessToken", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  String output = api.getAccessToken();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.setAccessToken", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String tokenArg = (String) args.get(0);
+                try {
+                  api.setAccessToken(tokenArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface _MapboxMapsOptions {
+
+    @NonNull 
+    String getBaseUrl();
+
+    void setBaseUrl(@NonNull String url);
+
+    @NonNull 
+    String getDataPath();
+
+    void setDataPath(@NonNull String path);
+
+    @NonNull 
+    String getAssetPath();
+
+    void setAssetPath(@NonNull String path);
+
+    @NonNull 
+    TileStoreUsageMode getTileStoreUsageMode();
+
+    void setTileStoreUsageMode(@NonNull TileStoreUsageMode mode);
+
+    /** The codec used by _MapboxMapsOptions. */
+    static @NonNull MessageCodec<Object> getCodec() {
+      return new StandardMessageCodec();
+    }
+    /**Sets up an instance of `_MapboxMapsOptions` to handle messages through the `binaryMessenger`. */
+    static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable _MapboxMapsOptions api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getBaseUrl", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  String output = api.getBaseUrl();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setBaseUrl", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String urlArg = (String) args.get(0);
+                try {
+                  api.setBaseUrl(urlArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getDataPath", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  String output = api.getDataPath();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setDataPath", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String pathArg = (String) args.get(0);
+                try {
+                  api.setDataPath(pathArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getAssetPath", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  String output = api.getAssetPath();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setAssetPath", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String pathArg = (String) args.get(0);
+                try {
+                  api.setAssetPath(pathArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  TileStoreUsageMode output = api.getTileStoreUsageMode();
+                  wrapped.add(0, output.index);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setTileStoreUsageMode", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                TileStoreUsageMode modeArg = TileStoreUsageMode.values()[(int) args.get(0)];
+                try {
+                  api.setTileStoreUsageMode(modeArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
   /**
    * Settings class provides non-persistent, in-process key-value storage.
    *
@@ -7228,72 +8163,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -7302,107 +8247,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -7557,72 +8517,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -7631,107 +8601,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -7947,72 +8932,82 @@ public class FLTMapInterfaces {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte) 128:
-          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return AmbientLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
-          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraBoundsOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
-          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 132:
-          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
+          return CameraState.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 133:
-          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
+          return CanonicalTileID.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 134:
-          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBounds.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 135:
-          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
+          return CoordinateBoundsZoom.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 136:
-          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return DirectionalLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 137:
-          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
+          return FeatureExtensionValue.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 138:
-          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
+          return FlatLight.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 139:
-          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
+          return GlyphsRasterizationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 140:
-          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageContent.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 141:
-          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ImageStretches.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 142:
-          return MapMemoryBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+          return LayerPosition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 143:
-          return MapMemoryBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+          return MapAnimationOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 144:
-          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return MapDebugOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 145:
-          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
+          return MapOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 146:
-          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxEdgeInsets.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 147:
-          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return MbxImage.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 148:
-          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return MercatorCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 149:
-          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionGeometryDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 150:
-          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
+          return OfflineRegionTilePyramidDefinition.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 151:
-          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
+          return ProjectedMeters.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 152:
-          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 153:
-          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedRenderedFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 154:
-          return ResourceOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return QueriedSourceFeature.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 155:
-          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryGeometry.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 156:
-          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
+          return RenderedQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 157:
-          return Size.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenBox.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 158:
-          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
+          return ScreenCoordinate.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 159:
-          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+          return Size.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 160:
-          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+          return SourceQueryOptions.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 161:
+          return StyleObjectInfo.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 162:
+          return StyleProjection.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 163:
+          return StylePropertyValue.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 164:
+          return TileCacheBudgetInMegabytes.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 165:
+          return TileCacheBudgetInTiles.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 166:
           return TransitionOptions.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -8021,107 +9016,122 @@ public class FLTMapInterfaces {
 
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value) {
-      if (value instanceof CameraBounds) {
+      if (value instanceof AmbientLight) {
         stream.write(128);
+        writeValue(stream, ((AmbientLight) value).toList());
+      } else if (value instanceof CameraBounds) {
+        stream.write(129);
         writeValue(stream, ((CameraBounds) value).toList());
       } else if (value instanceof CameraBoundsOptions) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((CameraBoundsOptions) value).toList());
       } else if (value instanceof CameraOptions) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((CameraOptions) value).toList());
       } else if (value instanceof CameraState) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((CameraState) value).toList());
       } else if (value instanceof CanonicalTileID) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((CanonicalTileID) value).toList());
       } else if (value instanceof CoordinateBounds) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((CoordinateBounds) value).toList());
       } else if (value instanceof CoordinateBoundsZoom) {
-        stream.write(134);
-        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
-      } else if (value instanceof FeatureExtensionValue) {
         stream.write(135);
-        writeValue(stream, ((FeatureExtensionValue) value).toList());
-      } else if (value instanceof GlyphsRasterizationOptions) {
+        writeValue(stream, ((CoordinateBoundsZoom) value).toList());
+      } else if (value instanceof DirectionalLight) {
         stream.write(136);
+        writeValue(stream, ((DirectionalLight) value).toList());
+      } else if (value instanceof FeatureExtensionValue) {
+        stream.write(137);
+        writeValue(stream, ((FeatureExtensionValue) value).toList());
+      } else if (value instanceof FlatLight) {
+        stream.write(138);
+        writeValue(stream, ((FlatLight) value).toList());
+      } else if (value instanceof GlyphsRasterizationOptions) {
+        stream.write(139);
         writeValue(stream, ((GlyphsRasterizationOptions) value).toList());
       } else if (value instanceof ImageContent) {
-        stream.write(137);
+        stream.write(140);
         writeValue(stream, ((ImageContent) value).toList());
       } else if (value instanceof ImageStretches) {
-        stream.write(138);
+        stream.write(141);
         writeValue(stream, ((ImageStretches) value).toList());
       } else if (value instanceof LayerPosition) {
-        stream.write(139);
+        stream.write(142);
         writeValue(stream, ((LayerPosition) value).toList());
       } else if (value instanceof MapAnimationOptions) {
-        stream.write(140);
+        stream.write(143);
         writeValue(stream, ((MapAnimationOptions) value).toList());
       } else if (value instanceof MapDebugOptions) {
-        stream.write(141);
-        writeValue(stream, ((MapDebugOptions) value).toList());
-      } else if (value instanceof MapMemoryBudgetInMegabytes) {
-        stream.write(142);
-        writeValue(stream, ((MapMemoryBudgetInMegabytes) value).toList());
-      } else if (value instanceof MapMemoryBudgetInTiles) {
-        stream.write(143);
-        writeValue(stream, ((MapMemoryBudgetInTiles) value).toList());
-      } else if (value instanceof MapOptions) {
         stream.write(144);
+        writeValue(stream, ((MapDebugOptions) value).toList());
+      } else if (value instanceof MapOptions) {
+        stream.write(145);
         writeValue(stream, ((MapOptions) value).toList());
       } else if (value instanceof MbxEdgeInsets) {
-        stream.write(145);
+        stream.write(146);
         writeValue(stream, ((MbxEdgeInsets) value).toList());
       } else if (value instanceof MbxImage) {
-        stream.write(146);
+        stream.write(147);
         writeValue(stream, ((MbxImage) value).toList());
       } else if (value instanceof MercatorCoordinate) {
-        stream.write(147);
+        stream.write(148);
         writeValue(stream, ((MercatorCoordinate) value).toList());
       } else if (value instanceof OfflineRegionGeometryDefinition) {
-        stream.write(148);
+        stream.write(149);
         writeValue(stream, ((OfflineRegionGeometryDefinition) value).toList());
       } else if (value instanceof OfflineRegionTilePyramidDefinition) {
-        stream.write(149);
+        stream.write(150);
         writeValue(stream, ((OfflineRegionTilePyramidDefinition) value).toList());
       } else if (value instanceof ProjectedMeters) {
-        stream.write(150);
+        stream.write(151);
         writeValue(stream, ((ProjectedMeters) value).toList());
       } else if (value instanceof QueriedFeature) {
-        stream.write(151);
-        writeValue(stream, ((QueriedFeature) value).toList());
-      } else if (value instanceof RenderedQueryGeometry) {
         stream.write(152);
+        writeValue(stream, ((QueriedFeature) value).toList());
+      } else if (value instanceof QueriedRenderedFeature) {
+        stream.write(153);
+        writeValue(stream, ((QueriedRenderedFeature) value).toList());
+      } else if (value instanceof QueriedSourceFeature) {
+        stream.write(154);
+        writeValue(stream, ((QueriedSourceFeature) value).toList());
+      } else if (value instanceof RenderedQueryGeometry) {
+        stream.write(155);
         writeValue(stream, ((RenderedQueryGeometry) value).toList());
       } else if (value instanceof RenderedQueryOptions) {
-        stream.write(153);
+        stream.write(156);
         writeValue(stream, ((RenderedQueryOptions) value).toList());
-      } else if (value instanceof ResourceOptions) {
-        stream.write(154);
-        writeValue(stream, ((ResourceOptions) value).toList());
       } else if (value instanceof ScreenBox) {
-        stream.write(155);
+        stream.write(157);
         writeValue(stream, ((ScreenBox) value).toList());
       } else if (value instanceof ScreenCoordinate) {
-        stream.write(156);
+        stream.write(158);
         writeValue(stream, ((ScreenCoordinate) value).toList());
       } else if (value instanceof Size) {
-        stream.write(157);
+        stream.write(159);
         writeValue(stream, ((Size) value).toList());
       } else if (value instanceof SourceQueryOptions) {
-        stream.write(158);
+        stream.write(160);
         writeValue(stream, ((SourceQueryOptions) value).toList());
       } else if (value instanceof StyleObjectInfo) {
-        stream.write(159);
-        writeValue(stream, ((StyleObjectInfo) value).toList());
-      } else if (value instanceof StylePropertyValue) {
-        stream.write(160);
-        writeValue(stream, ((StylePropertyValue) value).toList());
-      } else if (value instanceof TransitionOptions) {
         stream.write(161);
+        writeValue(stream, ((StyleObjectInfo) value).toList());
+      } else if (value instanceof StyleProjection) {
+        stream.write(162);
+        writeValue(stream, ((StyleProjection) value).toList());
+      } else if (value instanceof StylePropertyValue) {
+        stream.write(163);
+        writeValue(stream, ((StylePropertyValue) value).toList());
+      } else if (value instanceof TileCacheBudgetInMegabytes) {
+        stream.write(164);
+        writeValue(stream, ((TileCacheBudgetInMegabytes) value).toList());
+      } else if (value instanceof TileCacheBudgetInTiles) {
+        stream.write(165);
+        writeValue(stream, ((TileCacheBudgetInTiles) value).toList());
+      } else if (value instanceof TransitionOptions) {
+        stream.write(166);
         writeValue(stream, ((TransitionOptions) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -8186,6 +9196,59 @@ public class FLTMapInterfaces {
      * @return The `transition options` of the current style in use.
      */
     void getStyleTransition(@NonNull Result<TransitionOptions> result);
+    /** Returns the list containing information about existing style import objects. */
+    @NonNull 
+    List<StyleObjectInfo> getStyleImports();
+    /**
+     * Removes an existing style import.
+     *
+     * @param importId Identifier of the style import to remove.
+     */
+    void removeStyleImport(@NonNull String importId);
+    /**
+     * Gets the style import schema.
+     *
+     * @param importId Identifier of the style import.
+     *
+     * Returns the style import schema, containing the default configurations for the style import.
+     */
+    @NonNull 
+    Object getStyleImportSchema(@NonNull String importId);
+    /**
+     * Gets style import config.
+     *
+     * @param importId Identifier of the style import.
+     *
+     * Returns the style import configuration or a string describing an error if the operation was not successful.
+     */
+    @NonNull 
+    Map<String, StylePropertyValue> getStyleImportConfigProperties(@NonNull String importId);
+    /**
+     * Gets the value of style import config.
+     *
+     * @param importId Identifier of the style import.
+     * @param config The style import config name.
+     *
+     * Returns the style import configuration or a string describing an error if the operation was not successful.
+     */
+    @NonNull 
+    StylePropertyValue getStyleImportConfigProperty(@NonNull String importId, @NonNull String config);
+    /**
+     * Sets style import config.
+     * This method can be used to perform batch update for a style import configurations.
+     *
+     * @param importId Identifier of the style import.
+     * @param configs A map of style import configurations.
+     */
+    void setStyleImportConfigProperties(@NonNull String importId, @NonNull Map<String, Object> configs);
+    /**
+     * Sets a value to a style import config.
+     *
+     * @param importId Identifier of the style import.
+     * @param config The style import config name.
+     * @param value The style import config value.
+     */
+    void setStyleImportConfigProperty(@NonNull String importId, @NonNull String config, @NonNull Object value);
     /**
      * Overrides the map style's transition options with user-provided options.
      *
@@ -8378,6 +9441,22 @@ public class FLTMapInterfaces {
      * @return The list containing the information about existing style source objects.
      */
     void getStyleSources(@NonNull Result<List<StyleObjectInfo>> result);
+    /** Returns an ordered list of the current style lights. */
+    @NonNull 
+    List<StyleObjectInfo> getStyleLights();
+    /**
+     * Set global directional lightning.
+     *
+     * @param flatLight The flat light source.
+     */
+    void setLight(@NonNull FlatLight flatLight);
+    /**
+     * Set dynamic lightning.
+     * 
+     * @param ambientLight The ambient light source.
+     * @param directionalLight The directional light source.
+     */
+    void setLights(@NonNull AmbientLight ambientLight, @NonNull DirectionalLight directionalLight);
     /**
      * Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
      *
@@ -8390,18 +9469,20 @@ public class FLTMapInterfaces {
      * Gets the value of a style light property.
      *
      * @param property The style light property name.
+     * @param id The unique identifier of the style light in lights list.
      * @return The style light property value.
      */
-    void getStyleLightProperty(@NonNull String property, @NonNull Result<StylePropertyValue> result);
+    void getStyleLightProperty(@NonNull String id, @NonNull String property, @NonNull Result<StylePropertyValue> result);
     /**
      * Sets a value to the the style light property.
      *
      * @param property The style light property name.
+     * @param id The unique identifier of the style light in lights list.
      * @param value The style light property value.
      *
      * @return A string describing an error if the operation was not successful, empty otherwise.
      */
-    void setStyleLightProperty(@NonNull String property, @NonNull Object value, @NonNull Result<Void> result);
+    void setStyleLightProperty(@NonNull String id, @NonNull String property, @NonNull Object value, @NonNull Result<Void> result);
     /**
      * Sets the style global [terrain](https://docs.mapbox.com/mapbox-gl-js/style-spec/#terrain) properties.
      *
@@ -8512,13 +9593,14 @@ public class FLTMapInterfaces {
      *
      * @return Projection that is currently applied to the map
      */
-    void getProjection(@NonNull Result<String> result);
+    @Nullable 
+    StyleProjection getProjection();
     /**
      * Function to set the projection provided by the Style Extension.
      *
      * @param projection The projection to be set.
      */
-    void setProjection(@NonNull String projection, @NonNull Result<Void> result);
+    void setProjection(@NonNull StyleProjection projection);
     /**
      * Function to localize style labels.
      *
@@ -8694,6 +9776,176 @@ public class FLTMapInterfaces {
                     };
 
                 api.getStyleTransition(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  List<StyleObjectInfo> output = api.getStyleImports();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  api.removeStyleImport(importIdArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  Object output = api.getStyleImportSchema(importIdArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  Map<String, StylePropertyValue> output = api.getStyleImportConfigProperties(importIdArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                String configArg = (String) args.get(1);
+                try {
+                  StylePropertyValue output = api.getStyleImportConfigProperty(importIdArg, configArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                Map<String, Object> configsArg = (Map<String, Object>) args.get(1);
+                try {
+                  api.setStyleImportConfigProperties(importIdArg, configsArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                String configArg = (String) args.get(1);
+                Object valueArg = args.get(2);
+                try {
+                  api.setStyleImportConfigProperty(importIdArg, configArg, valueArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
               });
         } else {
           channel.setMessageHandler(null);
@@ -9320,6 +10572,77 @@ public class FLTMapInterfaces {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  List<StyleObjectInfo> output = api.getStyleLights();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                FlatLight flatLightArg = (FlatLight) args.get(0);
+                try {
+                  api.setLight(flatLightArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLights", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                AmbientLight ambientLightArg = (AmbientLight) args.get(0);
+                DirectionalLight directionalLightArg = (DirectionalLight) args.get(1);
+                try {
+                  api.setLights(ambientLightArg, directionalLightArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
                 binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLight", getCodec());
         if (api != null) {
           channel.setMessageHandler(
@@ -9355,7 +10678,8 @@ public class FLTMapInterfaces {
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                String propertyArg = (String) args.get(0);
+                String idArg = (String) args.get(0);
+                String propertyArg = (String) args.get(1);
                 Result<StylePropertyValue> resultCallback =
                     new Result<StylePropertyValue>() {
                       public void success(StylePropertyValue result) {
@@ -9369,7 +10693,7 @@ public class FLTMapInterfaces {
                       }
                     };
 
-                api.getStyleLightProperty(propertyArg, resultCallback);
+                api.getStyleLightProperty(idArg, propertyArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -9384,8 +10708,9 @@ public class FLTMapInterfaces {
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                String propertyArg = (String) args.get(0);
-                Object valueArg = args.get(1);
+                String idArg = (String) args.get(0);
+                String propertyArg = (String) args.get(1);
+                Object valueArg = args.get(2);
                 Result<Void> resultCallback =
                     new Result<Void>() {
                       public void success(Void result) {
@@ -9399,7 +10724,7 @@ public class FLTMapInterfaces {
                       }
                     };
 
-                api.setStyleLightProperty(propertyArg, valueArg, resultCallback);
+                api.setStyleLightProperty(idArg, propertyArg, valueArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -9710,20 +11035,15 @@ public class FLTMapInterfaces {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
-                Result<String> resultCallback =
-                    new Result<String>() {
-                      public void success(String result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.getProjection(resultCallback);
+                try {
+                  StyleProjection output = api.getProjection();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
               });
         } else {
           channel.setMessageHandler(null);
@@ -9738,21 +11058,16 @@ public class FLTMapInterfaces {
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
-                String projectionArg = (String) args.get(0);
-                Result<Void> resultCallback =
-                    new Result<Void>() {
-                      public void success(Void result) {
-                        wrapped.add(0, null);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.setProjection(projectionArg, resultCallback);
+                StyleProjection projectionArg = (StyleProjection) args.get(0);
+                try {
+                  api.setProjection(projectionArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
               });
         } else {
           channel.setMessageHandler(null);

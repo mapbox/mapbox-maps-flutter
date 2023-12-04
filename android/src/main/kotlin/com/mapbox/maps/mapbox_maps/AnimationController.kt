@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import com.mapbox.common.Cancelable
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.*

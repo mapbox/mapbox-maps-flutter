@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
-
-import 'main.dart';
 import 'page.dart';
 
 class CameraPage extends ExamplePage {
@@ -431,7 +428,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
       child: Text('getDragCameraOptions'),
       onPressed: () {
         mapboxMap
-            ?.getDragCameraOptions(
+            ?.cameraForDrag(
                 ScreenCoordinate(x: 1, y: 1), ScreenCoordinate(x: 100, y: 100))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -446,10 +443,8 @@ class CameraPageBodyState extends State<CameraPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

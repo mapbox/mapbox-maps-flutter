@@ -4,15 +4,15 @@ package com.mapbox.maps.mapbox_maps.mapping
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
+import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.LocationPuck3D
-import com.mapbox.maps.plugin.PuckBearingSource
-import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSettingsInterface2
+import com.mapbox.maps.plugin.PuckBearing
+import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSettingsInterface
 import java.io.ByteArrayOutputStream
 
-fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.LocationComponentSettings, context: Context) {
+fun LocationComponentSettingsInterface.applyFromFLT(settings: FLTSettings.LocationComponentSettings) {
   settings.enabled?.let { enabled = it }
   settings.pulsingEnabled?.let { pulsingEnabled = it }
   settings.pulsingColor?.let { pulsingColor = it.toInt() }
@@ -24,7 +24,7 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
   settings.layerBelow?.let { layerBelow = it }
   settings.puckBearingEnabled?.let { puckBearingEnabled = it }
   settings.puckBearingSource?.let {
-    puckBearingSource = PuckBearingSource.values()[it.ordinal]
+    puckBearing = PuckBearing.values()[it.ordinal]
   }
   settings.locationPuck?.let {
     val puck2D = it.locationPuck2D
@@ -43,16 +43,16 @@ fun LocationComponentSettingsInterface2.applyFromFLT(settings: FLTSettings.Locat
       }
     } else {
       LocationPuck2D().apply {
-        puck2D?.topImage?.let { topImage = BitmapDrawable(context.resources, BitmapFactory.decodeByteArray(it, 0, it.size)) }
-        puck2D?.bearingImage?.let { bearingImage = BitmapDrawable(context.resources, BitmapFactory.decodeByteArray(it, 0, it.size)) }
-        puck2D?.shadowImage?.let { shadowImage = BitmapDrawable(context.resources, BitmapFactory.decodeByteArray(it, 0, it.size)) }
+        puck2D?.topImage?.let { topImage = ImageHolder.Companion.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
+        puck2D?.bearingImage?.let { bearingImage = ImageHolder.Companion.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
+        puck2D?.shadowImage?.let { shadowImage = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
         puck2D?.scaleExpression?.let { scaleExpression = it }
       }
     }
   }
 }
 
-fun LocationComponentSettingsInterface2.toFLT() = FLTSettings.LocationComponentSettings.Builder().let { settings ->
+fun LocationComponentSettingsInterface.toFLT() = FLTSettings.LocationComponentSettings.Builder().let { settings ->
   settings.setEnabled(enabled)
   settings.setPulsingEnabled(pulsingEnabled)
   settings.setPulsingColor(pulsingColor.toUInt().toLong())
@@ -63,26 +63,20 @@ fun LocationComponentSettingsInterface2.toFLT() = FLTSettings.LocationComponentS
   settings.setLayerAbove(layerAbove)
   settings.setLayerBelow(layerBelow)
   settings.setPuckBearingEnabled(puckBearingEnabled)
-  settings.setPuckBearingSource(FLTSettings.PuckBearingSource.values()[puckBearingSource.ordinal])
+  settings.setPuckBearingSource(FLTSettings.PuckBearingSource.values()[puckBearing.ordinal])
   settings.setLocationPuck(
     FLTSettings.LocationPuck().also {
       (locationPuck as? LocationPuck2D)?.let { puck2D ->
         it.locationPuck2D = FLTSettings.LocationPuck2D().also {
-          it.topImage = (puck2D.topImage as? BitmapDrawable)?.let { drawable ->
-            ByteArrayOutputStream().also { stream ->
-              drawable.bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+          it.topImage = ByteArrayOutputStream().also { stream ->
+              puck2D.topImage?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
             }.toByteArray()
-          }
-          it.bearingImage = (puck2D.bearingImage as? BitmapDrawable)?.let { drawable ->
-            ByteArrayOutputStream().also { stream ->
-              drawable.bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+          it.bearingImage = ByteArrayOutputStream().also { stream ->
+              puck2D.bearingImage?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
             }.toByteArray()
-          }
-          it.shadowImage = (puck2D.shadowImage as? BitmapDrawable)?.let { drawable ->
-            ByteArrayOutputStream().also { stream ->
-              drawable.bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+          it.shadowImage = ByteArrayOutputStream().also { stream ->
+              puck2D.shadowImage?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
             }.toByteArray()
-          }
           it.scaleExpression = puck2D.scaleExpression
         }
       }

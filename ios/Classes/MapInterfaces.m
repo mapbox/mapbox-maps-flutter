@@ -157,6 +157,27 @@
 }
 @end
 
+@implementation FLTStyleProjectionNameBox
+- (instancetype)initWithValue:(FLTStyleProjectionName)value {
+  self = [super init];
+  if (self) {
+    _value = value;
+  }
+  return self;
+}
+@end
+
+/// Whether extruded geometries are lit relative to the map or viewport.
+@implementation FLTAnchorBox
+- (instancetype)initWithValue:(FLTAnchor)value {
+  self = [super init];
+  if (self) {
+    _value = value;
+  }
+  return self;
+}
+@end
+
 /// HTTP defines a set of request methods to indicate the desired action to be performed for a given resource.
 @implementation FLTHttpMethodBox
 - (instancetype)initWithValue:(FLTHttpMethod)value {
@@ -234,6 +255,16 @@
 }
 @end
 
+@implementation FLT_MapEventBox
+- (instancetype)initWithValue:(FLT_MapEvent)value {
+  self = [super init];
+  if (self) {
+    _value = value;
+  }
+  return self;
+}
+@end
+
 static NSArray *wrapResult(id result, FlutterError *error) {
   if (error) {
     return @[
@@ -301,15 +332,15 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 - (NSArray *)toList;
 @end
 
-@interface FLTMapMemoryBudgetInMegabytes ()
-+ (FLTMapMemoryBudgetInMegabytes *)fromList:(NSArray *)list;
-+ (nullable FLTMapMemoryBudgetInMegabytes *)nullableFromList:(NSArray *)list;
+@interface FLTTileCacheBudgetInMegabytes ()
++ (FLTTileCacheBudgetInMegabytes *)fromList:(NSArray *)list;
++ (nullable FLTTileCacheBudgetInMegabytes *)nullableFromList:(NSArray *)list;
 - (NSArray *)toList;
 @end
 
-@interface FLTMapMemoryBudgetInTiles ()
-+ (FLTMapMemoryBudgetInTiles *)fromList:(NSArray *)list;
-+ (nullable FLTMapMemoryBudgetInTiles *)nullableFromList:(NSArray *)list;
+@interface FLTTileCacheBudgetInTiles ()
++ (FLTTileCacheBudgetInTiles *)fromList:(NSArray *)list;
++ (nullable FLTTileCacheBudgetInTiles *)nullableFromList:(NSArray *)list;
 - (NSArray *)toList;
 @end
 
@@ -367,6 +398,18 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 - (NSArray *)toList;
 @end
 
+@interface FLTQueriedRenderedFeature ()
++ (FLTQueriedRenderedFeature *)fromList:(NSArray *)list;
++ (nullable FLTQueriedRenderedFeature *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
+@interface FLTQueriedSourceFeature ()
++ (FLTQueriedSourceFeature *)fromList:(NSArray *)list;
++ (nullable FLTQueriedSourceFeature *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
 @interface FLTQueriedFeature ()
 + (FLTQueriedFeature *)fromList:(NSArray *)list;
 + (nullable FLTQueriedFeature *)nullableFromList:(NSArray *)list;
@@ -403,15 +446,33 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 - (NSArray *)toList;
 @end
 
-@interface FLTResourceOptions ()
-+ (FLTResourceOptions *)fromList:(NSArray *)list;
-+ (nullable FLTResourceOptions *)nullableFromList:(NSArray *)list;
-- (NSArray *)toList;
-@end
-
 @interface FLTStyleObjectInfo ()
 + (FLTStyleObjectInfo *)fromList:(NSArray *)list;
 + (nullable FLTStyleObjectInfo *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
+@interface FLTStyleProjection ()
++ (FLTStyleProjection *)fromList:(NSArray *)list;
++ (nullable FLTStyleProjection *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
+@interface FLTFlatLight ()
++ (FLTFlatLight *)fromList:(NSArray *)list;
++ (nullable FLTFlatLight *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
+@interface FLTDirectionalLight ()
++ (FLTDirectionalLight *)fromList:(NSArray *)list;
++ (nullable FLTDirectionalLight *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
+@interface FLTAmbientLight ()
++ (FLTAmbientLight *)fromList:(NSArray *)list;
++ (nullable FLTAmbientLight *)nullableFromList:(NSArray *)list;
 - (NSArray *)toList;
 @end
 
@@ -753,20 +814,20 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 }
 @end
 
-@implementation FLTMapMemoryBudgetInMegabytes
+@implementation FLTTileCacheBudgetInMegabytes
 + (instancetype)makeWithSize:(NSNumber *)size {
-  FLTMapMemoryBudgetInMegabytes* pigeonResult = [[FLTMapMemoryBudgetInMegabytes alloc] init];
+  FLTTileCacheBudgetInMegabytes* pigeonResult = [[FLTTileCacheBudgetInMegabytes alloc] init];
   pigeonResult.size = size;
   return pigeonResult;
 }
-+ (FLTMapMemoryBudgetInMegabytes *)fromList:(NSArray *)list {
-  FLTMapMemoryBudgetInMegabytes *pigeonResult = [[FLTMapMemoryBudgetInMegabytes alloc] init];
++ (FLTTileCacheBudgetInMegabytes *)fromList:(NSArray *)list {
+  FLTTileCacheBudgetInMegabytes *pigeonResult = [[FLTTileCacheBudgetInMegabytes alloc] init];
   pigeonResult.size = GetNullableObjectAtIndex(list, 0);
   NSAssert(pigeonResult.size != nil, @"");
   return pigeonResult;
 }
-+ (nullable FLTMapMemoryBudgetInMegabytes *)nullableFromList:(NSArray *)list {
-  return (list) ? [FLTMapMemoryBudgetInMegabytes fromList:list] : nil;
++ (nullable FLTTileCacheBudgetInMegabytes *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTTileCacheBudgetInMegabytes fromList:list] : nil;
 }
 - (NSArray *)toList {
   return @[
@@ -775,20 +836,20 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 }
 @end
 
-@implementation FLTMapMemoryBudgetInTiles
+@implementation FLTTileCacheBudgetInTiles
 + (instancetype)makeWithSize:(NSNumber *)size {
-  FLTMapMemoryBudgetInTiles* pigeonResult = [[FLTMapMemoryBudgetInTiles alloc] init];
+  FLTTileCacheBudgetInTiles* pigeonResult = [[FLTTileCacheBudgetInTiles alloc] init];
   pigeonResult.size = size;
   return pigeonResult;
 }
-+ (FLTMapMemoryBudgetInTiles *)fromList:(NSArray *)list {
-  FLTMapMemoryBudgetInTiles *pigeonResult = [[FLTMapMemoryBudgetInTiles alloc] init];
++ (FLTTileCacheBudgetInTiles *)fromList:(NSArray *)list {
+  FLTTileCacheBudgetInTiles *pigeonResult = [[FLTTileCacheBudgetInTiles alloc] init];
   pigeonResult.size = GetNullableObjectAtIndex(list, 0);
   NSAssert(pigeonResult.size != nil, @"");
   return pigeonResult;
 }
-+ (nullable FLTMapMemoryBudgetInTiles *)nullableFromList:(NSArray *)list {
-  return (list) ? [FLTMapMemoryBudgetInTiles fromList:list] : nil;
++ (nullable FLTTileCacheBudgetInTiles *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTTileCacheBudgetInTiles fromList:list] : nil;
 }
 - (NSArray *)toList {
   return @[
@@ -803,7 +864,6 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     viewportMode:(nullable FLTViewportModeBox *)viewportMode
     orientation:(nullable FLTNorthOrientationBox *)orientation
     crossSourceCollisions:(nullable NSNumber *)crossSourceCollisions
-    optimizeForTerrain:(nullable NSNumber *)optimizeForTerrain
     size:(nullable FLTSize *)size
     pixelRatio:(NSNumber *)pixelRatio
     glyphsRasterizationOptions:(nullable FLTGlyphsRasterizationOptions *)glyphsRasterizationOptions {
@@ -813,7 +873,6 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.viewportMode = viewportMode;
   pigeonResult.orientation = orientation;
   pigeonResult.crossSourceCollisions = crossSourceCollisions;
-  pigeonResult.optimizeForTerrain = optimizeForTerrain;
   pigeonResult.size = size;
   pigeonResult.pixelRatio = pixelRatio;
   pigeonResult.glyphsRasterizationOptions = glyphsRasterizationOptions;
@@ -834,11 +893,10 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   FLTNorthOrientationBox *orientation = orientationAsNumber == nil ? nil : [[FLTNorthOrientationBox alloc] initWithValue: [orientationAsNumber integerValue]];
   pigeonResult.orientation = orientation;
   pigeonResult.crossSourceCollisions = GetNullableObjectAtIndex(list, 4);
-  pigeonResult.optimizeForTerrain = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.size = [FLTSize nullableFromList:(GetNullableObjectAtIndex(list, 6))];
-  pigeonResult.pixelRatio = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.size = [FLTSize nullableFromList:(GetNullableObjectAtIndex(list, 5))];
+  pigeonResult.pixelRatio = GetNullableObjectAtIndex(list, 6);
   NSAssert(pigeonResult.pixelRatio != nil, @"");
-  pigeonResult.glyphsRasterizationOptions = [FLTGlyphsRasterizationOptions nullableFromList:(GetNullableObjectAtIndex(list, 8))];
+  pigeonResult.glyphsRasterizationOptions = [FLTGlyphsRasterizationOptions nullableFromList:(GetNullableObjectAtIndex(list, 7))];
   return pigeonResult;
 }
 + (nullable FLTMapOptions *)nullableFromList:(NSArray *)list {
@@ -851,7 +909,6 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.viewportMode == nil ? [NSNull null] : [NSNumber numberWithInteger:self.viewportMode.value]),
     (self.orientation == nil ? [NSNull null] : [NSNumber numberWithInteger:self.orientation.value]),
     (self.crossSourceCollisions ?: [NSNull null]),
-    (self.optimizeForTerrain ?: [NSNull null]),
     (self.size ? [self.size toList] : [NSNull null]),
     (self.pixelRatio ?: [NSNull null]),
     (self.glyphsRasterizationOptions ? [self.glyphsRasterizationOptions toList] : [NSNull null]),
@@ -1072,6 +1129,55 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 }
 @end
 
+@implementation FLTQueriedRenderedFeature
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature
+    layers:(NSArray<NSString *> *)layers {
+  FLTQueriedRenderedFeature* pigeonResult = [[FLTQueriedRenderedFeature alloc] init];
+  pigeonResult.queriedFeature = queriedFeature;
+  pigeonResult.layers = layers;
+  return pigeonResult;
+}
++ (FLTQueriedRenderedFeature *)fromList:(NSArray *)list {
+  FLTQueriedRenderedFeature *pigeonResult = [[FLTQueriedRenderedFeature alloc] init];
+  pigeonResult.queriedFeature = [FLTQueriedFeature nullableFromList:(GetNullableObjectAtIndex(list, 0))];
+  NSAssert(pigeonResult.queriedFeature != nil, @"");
+  pigeonResult.layers = GetNullableObjectAtIndex(list, 1);
+  NSAssert(pigeonResult.layers != nil, @"");
+  return pigeonResult;
+}
++ (nullable FLTQueriedRenderedFeature *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTQueriedRenderedFeature fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    (self.queriedFeature ? [self.queriedFeature toList] : [NSNull null]),
+    (self.layers ?: [NSNull null]),
+  ];
+}
+@end
+
+@implementation FLTQueriedSourceFeature
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature {
+  FLTQueriedSourceFeature* pigeonResult = [[FLTQueriedSourceFeature alloc] init];
+  pigeonResult.queriedFeature = queriedFeature;
+  return pigeonResult;
+}
++ (FLTQueriedSourceFeature *)fromList:(NSArray *)list {
+  FLTQueriedSourceFeature *pigeonResult = [[FLTQueriedSourceFeature alloc] init];
+  pigeonResult.queriedFeature = [FLTQueriedFeature nullableFromList:(GetNullableObjectAtIndex(list, 0))];
+  NSAssert(pigeonResult.queriedFeature != nil, @"");
+  return pigeonResult;
+}
++ (nullable FLTQueriedSourceFeature *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTQueriedSourceFeature fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    (self.queriedFeature ? [self.queriedFeature toList] : [NSNull null]),
+  ];
+}
+@end
+
 @implementation FLTQueriedFeature
 + (instancetype)makeWithFeature:(NSDictionary<NSString *, id> *)feature
     source:(NSString *)source
@@ -1280,46 +1386,6 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 }
 @end
 
-@implementation FLTResourceOptions
-+ (instancetype)makeWithAccessToken:(NSString *)accessToken
-    baseURL:(nullable NSString *)baseURL
-    dataPath:(nullable NSString *)dataPath
-    assetPath:(nullable NSString *)assetPath
-    tileStoreUsageMode:(nullable FLTTileStoreUsageModeBox *)tileStoreUsageMode {
-  FLTResourceOptions* pigeonResult = [[FLTResourceOptions alloc] init];
-  pigeonResult.accessToken = accessToken;
-  pigeonResult.baseURL = baseURL;
-  pigeonResult.dataPath = dataPath;
-  pigeonResult.assetPath = assetPath;
-  pigeonResult.tileStoreUsageMode = tileStoreUsageMode;
-  return pigeonResult;
-}
-+ (FLTResourceOptions *)fromList:(NSArray *)list {
-  FLTResourceOptions *pigeonResult = [[FLTResourceOptions alloc] init];
-  pigeonResult.accessToken = GetNullableObjectAtIndex(list, 0);
-  NSAssert(pigeonResult.accessToken != nil, @"");
-  pigeonResult.baseURL = GetNullableObjectAtIndex(list, 1);
-  pigeonResult.dataPath = GetNullableObjectAtIndex(list, 2);
-  pigeonResult.assetPath = GetNullableObjectAtIndex(list, 3);
-  NSNumber *tileStoreUsageModeAsNumber = GetNullableObjectAtIndex(list, 4);
-  FLTTileStoreUsageModeBox *tileStoreUsageMode = tileStoreUsageModeAsNumber == nil ? nil : [[FLTTileStoreUsageModeBox alloc] initWithValue: [tileStoreUsageModeAsNumber integerValue]];
-  pigeonResult.tileStoreUsageMode = tileStoreUsageMode;
-  return pigeonResult;
-}
-+ (nullable FLTResourceOptions *)nullableFromList:(NSArray *)list {
-  return (list) ? [FLTResourceOptions fromList:list] : nil;
-}
-- (NSArray *)toList {
-  return @[
-    (self.accessToken ?: [NSNull null]),
-    (self.baseURL ?: [NSNull null]),
-    (self.dataPath ?: [NSNull null]),
-    (self.assetPath ?: [NSNull null]),
-    (self.tileStoreUsageMode == nil ? [NSNull null] : [NSNumber numberWithInteger:self.tileStoreUsageMode.value]),
-  ];
-}
-@end
-
 @implementation FLTStyleObjectInfo
 + (instancetype)makeWithId:(NSString *)id
     type:(NSString *)type {
@@ -1343,6 +1409,175 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   return @[
     (self.id ?: [NSNull null]),
     (self.type ?: [NSNull null]),
+  ];
+}
+@end
+
+@implementation FLTStyleProjection
++ (instancetype)makeWithName:(FLTStyleProjectionName)name {
+  FLTStyleProjection* pigeonResult = [[FLTStyleProjection alloc] init];
+  pigeonResult.name = name;
+  return pigeonResult;
+}
++ (FLTStyleProjection *)fromList:(NSArray *)list {
+  FLTStyleProjection *pigeonResult = [[FLTStyleProjection alloc] init];
+  pigeonResult.name = [GetNullableObjectAtIndex(list, 0) integerValue];
+  return pigeonResult;
+}
++ (nullable FLTStyleProjection *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTStyleProjection fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    @(self.name),
+  ];
+}
+@end
+
+@implementation FLTFlatLight
++ (instancetype)makeWithId:(NSString *)id
+    anchor:(nullable FLTAnchorBox *)anchor
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    position:(nullable NSArray<NSNumber *> *)position
+    positionTransition:(nullable FLTTransitionOptions *)positionTransition {
+  FLTFlatLight* pigeonResult = [[FLTFlatLight alloc] init];
+  pigeonResult.id = id;
+  pigeonResult.anchor = anchor;
+  pigeonResult.color = color;
+  pigeonResult.colorTransition = colorTransition;
+  pigeonResult.intensity = intensity;
+  pigeonResult.intensityTransition = intensityTransition;
+  pigeonResult.position = position;
+  pigeonResult.positionTransition = positionTransition;
+  return pigeonResult;
+}
++ (FLTFlatLight *)fromList:(NSArray *)list {
+  FLTFlatLight *pigeonResult = [[FLTFlatLight alloc] init];
+  pigeonResult.id = GetNullableObjectAtIndex(list, 0);
+  NSAssert(pigeonResult.id != nil, @"");
+  NSNumber *anchorAsNumber = GetNullableObjectAtIndex(list, 1);
+  FLTAnchorBox *anchor = anchorAsNumber == nil ? nil : [[FLTAnchorBox alloc] initWithValue: [anchorAsNumber integerValue]];
+  pigeonResult.anchor = anchor;
+  pigeonResult.color = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.colorTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 3))];
+  pigeonResult.intensity = GetNullableObjectAtIndex(list, 4);
+  pigeonResult.intensityTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 5))];
+  pigeonResult.position = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.positionTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 7))];
+  return pigeonResult;
+}
++ (nullable FLTFlatLight *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTFlatLight fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    (self.id ?: [NSNull null]),
+    (self.anchor == nil ? [NSNull null] : [NSNumber numberWithInteger:self.anchor.value]),
+    (self.color ?: [NSNull null]),
+    (self.colorTransition ? [self.colorTransition toList] : [NSNull null]),
+    (self.intensity ?: [NSNull null]),
+    (self.intensityTransition ? [self.intensityTransition toList] : [NSNull null]),
+    (self.position ?: [NSNull null]),
+    (self.positionTransition ? [self.positionTransition toList] : [NSNull null]),
+  ];
+}
+@end
+
+@implementation FLTDirectionalLight
++ (instancetype)makeWithId:(NSString *)id
+    castShadows:(nullable NSNumber *)castShadows
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    direction:(nullable NSArray<NSNumber *> *)direction
+    directionTransition:(nullable FLTTransitionOptions *)directionTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    shadowIntensity:(nullable NSNumber *)shadowIntensity
+    shadowIntensityTransition:(nullable FLTTransitionOptions *)shadowIntensityTransition {
+  FLTDirectionalLight* pigeonResult = [[FLTDirectionalLight alloc] init];
+  pigeonResult.id = id;
+  pigeonResult.castShadows = castShadows;
+  pigeonResult.color = color;
+  pigeonResult.colorTransition = colorTransition;
+  pigeonResult.direction = direction;
+  pigeonResult.directionTransition = directionTransition;
+  pigeonResult.intensity = intensity;
+  pigeonResult.intensityTransition = intensityTransition;
+  pigeonResult.shadowIntensity = shadowIntensity;
+  pigeonResult.shadowIntensityTransition = shadowIntensityTransition;
+  return pigeonResult;
+}
++ (FLTDirectionalLight *)fromList:(NSArray *)list {
+  FLTDirectionalLight *pigeonResult = [[FLTDirectionalLight alloc] init];
+  pigeonResult.id = GetNullableObjectAtIndex(list, 0);
+  NSAssert(pigeonResult.id != nil, @"");
+  pigeonResult.castShadows = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.color = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.colorTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 3))];
+  pigeonResult.direction = GetNullableObjectAtIndex(list, 4);
+  pigeonResult.directionTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 5))];
+  pigeonResult.intensity = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.intensityTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 7))];
+  pigeonResult.shadowIntensity = GetNullableObjectAtIndex(list, 8);
+  pigeonResult.shadowIntensityTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 9))];
+  return pigeonResult;
+}
++ (nullable FLTDirectionalLight *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTDirectionalLight fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    (self.id ?: [NSNull null]),
+    (self.castShadows ?: [NSNull null]),
+    (self.color ?: [NSNull null]),
+    (self.colorTransition ? [self.colorTransition toList] : [NSNull null]),
+    (self.direction ?: [NSNull null]),
+    (self.directionTransition ? [self.directionTransition toList] : [NSNull null]),
+    (self.intensity ?: [NSNull null]),
+    (self.intensityTransition ? [self.intensityTransition toList] : [NSNull null]),
+    (self.shadowIntensity ?: [NSNull null]),
+    (self.shadowIntensityTransition ? [self.shadowIntensityTransition toList] : [NSNull null]),
+  ];
+}
+@end
+
+@implementation FLTAmbientLight
++ (instancetype)makeWithId:(NSString *)id
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition {
+  FLTAmbientLight* pigeonResult = [[FLTAmbientLight alloc] init];
+  pigeonResult.id = id;
+  pigeonResult.color = color;
+  pigeonResult.colorTransition = colorTransition;
+  pigeonResult.intensity = intensity;
+  pigeonResult.intensityTransition = intensityTransition;
+  return pigeonResult;
+}
++ (FLTAmbientLight *)fromList:(NSArray *)list {
+  FLTAmbientLight *pigeonResult = [[FLTAmbientLight alloc] init];
+  pigeonResult.id = GetNullableObjectAtIndex(list, 0);
+  NSAssert(pigeonResult.id != nil, @"");
+  pigeonResult.color = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.colorTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 2))];
+  pigeonResult.intensity = GetNullableObjectAtIndex(list, 3);
+  pigeonResult.intensityTransition = [FLTTransitionOptions nullableFromList:(GetNullableObjectAtIndex(list, 4))];
+  return pigeonResult;
+}
++ (nullable FLTAmbientLight *)nullableFromList:(NSArray *)list {
+  return (list) ? [FLTAmbientLight fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    (self.id ?: [NSNull null]),
+    (self.color ?: [NSNull null]),
+    (self.colorTransition ? [self.colorTransition toList] : [NSNull null]),
+    (self.intensity ?: [NSNull null]),
+    (self.intensityTransition ? [self.intensityTransition toList] : [NSNull null]),
   ];
 }
 @end
@@ -1744,72 +1979,82 @@ void FLT_AnimationManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObj
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -1821,107 +2066,122 @@ void FLT_AnimationManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObj
 @end
 @implementation FLT_CameraManagerCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -2388,28 +2648,6 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
       [channel setMessageHandler:nil];
     }
   }
-  /// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-  ///
-  /// @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragStart"
-        binaryMessenger:binaryMessenger
-        codec:FLT_CameraManagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(dragStartPoint:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(dragStartPoint:error:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        FLTScreenCoordinate *arg_point = GetNullableObjectAtIndex(args, 0);
-        FlutterError *error;
-        [api dragStartPoint:arg_point error:&error];
-        callback(wrapResult(nil, error));
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
   /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
   ///
   /// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
@@ -2419,36 +2657,18 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getDragCameraOptions"
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForDrag"
         binaryMessenger:binaryMessenger
         codec:FLT_CameraManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(getDragCameraOptionsFromPoint:toPoint:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(getDragCameraOptionsFromPoint:toPoint:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(cameraForDragFromPoint:toPoint:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(cameraForDragFromPoint:toPoint:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         FLTScreenCoordinate *arg_fromPoint = GetNullableObjectAtIndex(args, 0);
         FLTScreenCoordinate *arg_toPoint = GetNullableObjectAtIndex(args, 1);
         FlutterError *error;
-        FLTCameraOptions *output = [api getDragCameraOptionsFromPoint:arg_fromPoint toPoint:arg_toPoint error:&error];
+        FLTCameraOptions *output = [api cameraForDragFromPoint:arg_fromPoint toPoint:arg_toPoint error:&error];
         callback(wrapResult(output, error));
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  /// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.dragEnd"
-        binaryMessenger:binaryMessenger
-        codec:FLT_CameraManagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(dragEndWithError:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(dragEndWithError:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        FlutterError *error;
-        [api dragEndWithError:&error];
-        callback(wrapResult(nil, error));
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -2461,72 +2681,82 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -2538,107 +2768,122 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
 @end
 @implementation FLT_MapInterfaceCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -2726,17 +2971,17 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setMemoryBudget"
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setTileCacheBudget"
         binaryMessenger:binaryMessenger
         codec:FLT_MapInterfaceGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(setMemoryBudgetMapMemoryBudgetInMegabytes:mapMemoryBudgetInTiles:error:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(setMemoryBudgetMapMemoryBudgetInMegabytes:mapMemoryBudgetInTiles:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(setTileCacheBudgetTileCacheBudgetInMegabytes:tileCacheBudgetInTiles:error:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(setTileCacheBudgetTileCacheBudgetInMegabytes:tileCacheBudgetInTiles:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
-        FLTMapMemoryBudgetInMegabytes *arg_mapMemoryBudgetInMegabytes = GetNullableObjectAtIndex(args, 0);
-        FLTMapMemoryBudgetInTiles *arg_mapMemoryBudgetInTiles = GetNullableObjectAtIndex(args, 1);
+        FLTTileCacheBudgetInMegabytes *arg_tileCacheBudgetInMegabytes = GetNullableObjectAtIndex(args, 0);
+        FLTTileCacheBudgetInTiles *arg_tileCacheBudgetInTiles = GetNullableObjectAtIndex(args, 1);
         FlutterError *error;
-        [api setMemoryBudgetMapMemoryBudgetInMegabytes:arg_mapMemoryBudgetInMegabytes mapMemoryBudgetInTiles:arg_mapMemoryBudgetInTiles error:&error];
+        [api setTileCacheBudgetTileCacheBudgetInMegabytes:arg_tileCacheBudgetInMegabytes tileCacheBudgetInTiles:arg_tileCacheBudgetInTiles error:&error];
         callback(wrapResult(nil, error));
       }];
     } else {
@@ -3056,7 +3301,7 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         NSArray *args = message;
         FLTRenderedQueryGeometry *arg_geometry = GetNullableObjectAtIndex(args, 0);
         FLTRenderedQueryOptions *arg_options = GetNullableObjectAtIndex(args, 1);
-        [api queryRenderedFeaturesGeometry:arg_geometry options:arg_options completion:^(NSArray<FLTQueriedFeature *> *_Nullable output, FlutterError *_Nullable error) {
+        [api queryRenderedFeaturesGeometry:arg_geometry options:arg_options completion:^(NSArray<FLTQueriedRenderedFeature *> *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -3081,7 +3326,7 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         NSArray *args = message;
         NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
         FLTSourceQueryOptions *arg_options = GetNullableObjectAtIndex(args, 1);
-        [api querySourceFeaturesSourceId:arg_sourceId options:arg_options completion:^(NSArray<FLTQueriedFeature *> *_Nullable output, FlutterError *_Nullable error) {
+        [api querySourceFeaturesSourceId:arg_sourceId options:arg_options completion:^(NSArray<FLTQueriedSourceFeature *> *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -3200,16 +3445,16 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         binaryMessenger:binaryMessenger
         codec:FLT_MapInterfaceGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(setFeatureStateSourceId:sourceLayerId:featureId:state:error:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(setFeatureStateSourceId:sourceLayerId:featureId:state:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(setFeatureStateSourceId:sourceLayerId:featureId:state:completion:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(setFeatureStateSourceId:sourceLayerId:featureId:state:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
         NSString *arg_sourceLayerId = GetNullableObjectAtIndex(args, 1);
         NSString *arg_featureId = GetNullableObjectAtIndex(args, 2);
         NSString *arg_state = GetNullableObjectAtIndex(args, 3);
-        FlutterError *error;
-        [api setFeatureStateSourceId:arg_sourceId sourceLayerId:arg_sourceLayerId featureId:arg_featureId state:arg_state error:&error];
-        callback(wrapResult(nil, error));
+        [api setFeatureStateSourceId:arg_sourceId sourceLayerId:arg_sourceLayerId featureId:arg_featureId state:arg_state completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -3264,16 +3509,16 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         binaryMessenger:binaryMessenger
         codec:FLT_MapInterfaceGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(removeFeatureStateSourceId:sourceLayerId:featureId:stateKey:error:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(removeFeatureStateSourceId:sourceLayerId:featureId:stateKey:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(removeFeatureStateSourceId:sourceLayerId:featureId:stateKey:completion:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(removeFeatureStateSourceId:sourceLayerId:featureId:stateKey:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_sourceId = GetNullableObjectAtIndex(args, 0);
         NSString *arg_sourceLayerId = GetNullableObjectAtIndex(args, 1);
         NSString *arg_featureId = GetNullableObjectAtIndex(args, 2);
         NSString *arg_stateKey = GetNullableObjectAtIndex(args, 3);
-        FlutterError *error;
-        [api removeFeatureStateSourceId:arg_sourceId sourceLayerId:arg_sourceLayerId featureId:arg_featureId stateKey:arg_stateKey error:&error];
-        callback(wrapResult(nil, error));
+        [api removeFeatureStateSourceId:arg_sourceId sourceLayerId:arg_sourceLayerId featureId:arg_featureId stateKey:arg_stateKey completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -3292,30 +3537,6 @@ void FLT_MapInterfaceSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<
         FlutterError *error;
         [api reduceMemoryUseWithError:&error];
         callback(wrapResult(nil, error));
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  /// Gets the resource options for the map.
-  ///
-  /// All optional fields of the retuned object are initialized with the actual values.
-  ///
-  /// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-  ///
-  /// @return The `resource options` for the map.
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getResourceOptions"
-        binaryMessenger:binaryMessenger
-        codec:FLT_MapInterfaceGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(getResourceOptionsWithError:)], @"FLT_MapInterface api (%@) doesn't respond to @selector(getResourceOptionsWithError:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        FlutterError *error;
-        FLTResourceOptions *output = [api getResourceOptionsWithError:&error];
-        callback(wrapResult(output, error));
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -3623,72 +3844,82 @@ void FLTOfflineRegionManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NS
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -3700,107 +3931,122 @@ void FLTOfflineRegionManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NS
 @end
 @implementation FLTProjectionCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -3966,6 +4212,203 @@ void FLTProjectionSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT
     }
   }
 }
+NSObject<FlutterMessageCodec> *FLT_MapboxOptionsGetCodec(void) {
+  static FlutterStandardMessageCodec *sSharedObject = nil;
+  sSharedObject = [FlutterStandardMessageCodec sharedInstance];
+  return sSharedObject;
+}
+
+void FLT_MapboxOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxOptions> *api) {
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.getAccessToken"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getAccessTokenWithError:)], @"FLT_MapboxOptions api (%@) doesn't respond to @selector(getAccessTokenWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getAccessTokenWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.setAccessToken"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setAccessTokenToken:error:)], @"FLT_MapboxOptions api (%@) doesn't respond to @selector(setAccessTokenToken:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_token = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setAccessTokenToken:arg_token error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+}
+NSObject<FlutterMessageCodec> *FLT_MapboxMapsOptionsGetCodec(void) {
+  static FlutterStandardMessageCodec *sSharedObject = nil;
+  sSharedObject = [FlutterStandardMessageCodec sharedInstance];
+  return sSharedObject;
+}
+
+void FLT_MapboxMapsOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxMapsOptions> *api) {
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getBaseUrl"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getBaseUrlWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getBaseUrlWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getBaseUrlWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setBaseUrl"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setBaseUrlUrl:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setBaseUrlUrl:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_url = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setBaseUrlUrl:arg_url error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getDataPath"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getDataPathWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getDataPathWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getDataPathWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setDataPath"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setDataPathPath:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setDataPathPath:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_path = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setDataPathPath:arg_path error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getAssetPath"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getAssetPathWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getAssetPathWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getAssetPathWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setAssetPath"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setAssetPathPath:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setAssetPathPath:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_path = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setAssetPathPath:arg_path error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getTileStoreUsageModeWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getTileStoreUsageModeWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        FLTTileStoreUsageMode enumValue = [api getTileStoreUsageModeWithError:&error];
+        NSNumber *output = [NSNumber numberWithInteger:enumValue];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setTileStoreUsageMode"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setTileStoreUsageModeMode:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setTileStoreUsageModeMode:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        FLTTileStoreUsageMode arg_mode = [GetNullableObjectAtIndex(args, 0) integerValue];
+        FlutterError *error;
+        [api setTileStoreUsageModeMode:arg_mode error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+}
 NSObject<FlutterMessageCodec> *FLTSettingsGetCodec(void) {
   static FlutterStandardMessageCodec *sSharedObject = nil;
   sSharedObject = [FlutterStandardMessageCodec sharedInstance];
@@ -4028,72 +4471,82 @@ void FLTSettingsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTSe
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -4105,107 +4558,122 @@ void FLTSettingsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTSe
 @end
 @implementation FLTMapSnapshotCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -4328,72 +4796,82 @@ void FLTMapSnapshotSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FL
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -4405,107 +4883,122 @@ void FLTMapSnapshotSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FL
 @end
 @implementation FLTMapSnapshotterCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -4674,72 +5167,82 @@ void FLTMapSnapshotterSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
-      return [FLTCameraBounds fromList:[self readValue]];
+      return [FLTAmbientLight fromList:[self readValue]];
     case 129: 
-      return [FLTCameraBoundsOptions fromList:[self readValue]];
+      return [FLTCameraBounds fromList:[self readValue]];
     case 130: 
-      return [FLTCameraOptions fromList:[self readValue]];
+      return [FLTCameraBoundsOptions fromList:[self readValue]];
     case 131: 
-      return [FLTCameraState fromList:[self readValue]];
+      return [FLTCameraOptions fromList:[self readValue]];
     case 132: 
-      return [FLTCanonicalTileID fromList:[self readValue]];
+      return [FLTCameraState fromList:[self readValue]];
     case 133: 
-      return [FLTCoordinateBounds fromList:[self readValue]];
+      return [FLTCanonicalTileID fromList:[self readValue]];
     case 134: 
-      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
+      return [FLTCoordinateBounds fromList:[self readValue]];
     case 135: 
-      return [FLTFeatureExtensionValue fromList:[self readValue]];
+      return [FLTCoordinateBoundsZoom fromList:[self readValue]];
     case 136: 
-      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
+      return [FLTDirectionalLight fromList:[self readValue]];
     case 137: 
-      return [FLTImageContent fromList:[self readValue]];
+      return [FLTFeatureExtensionValue fromList:[self readValue]];
     case 138: 
-      return [FLTImageStretches fromList:[self readValue]];
+      return [FLTFlatLight fromList:[self readValue]];
     case 139: 
-      return [FLTLayerPosition fromList:[self readValue]];
+      return [FLTGlyphsRasterizationOptions fromList:[self readValue]];
     case 140: 
-      return [FLTMapAnimationOptions fromList:[self readValue]];
+      return [FLTImageContent fromList:[self readValue]];
     case 141: 
-      return [FLTMapDebugOptions fromList:[self readValue]];
+      return [FLTImageStretches fromList:[self readValue]];
     case 142: 
-      return [FLTMapMemoryBudgetInMegabytes fromList:[self readValue]];
+      return [FLTLayerPosition fromList:[self readValue]];
     case 143: 
-      return [FLTMapMemoryBudgetInTiles fromList:[self readValue]];
+      return [FLTMapAnimationOptions fromList:[self readValue]];
     case 144: 
-      return [FLTMapOptions fromList:[self readValue]];
+      return [FLTMapDebugOptions fromList:[self readValue]];
     case 145: 
-      return [FLTMbxEdgeInsets fromList:[self readValue]];
+      return [FLTMapOptions fromList:[self readValue]];
     case 146: 
-      return [FLTMbxImage fromList:[self readValue]];
+      return [FLTMbxEdgeInsets fromList:[self readValue]];
     case 147: 
-      return [FLTMercatorCoordinate fromList:[self readValue]];
+      return [FLTMbxImage fromList:[self readValue]];
     case 148: 
-      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
+      return [FLTMercatorCoordinate fromList:[self readValue]];
     case 149: 
-      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
+      return [FLTOfflineRegionGeometryDefinition fromList:[self readValue]];
     case 150: 
-      return [FLTProjectedMeters fromList:[self readValue]];
+      return [FLTOfflineRegionTilePyramidDefinition fromList:[self readValue]];
     case 151: 
-      return [FLTQueriedFeature fromList:[self readValue]];
+      return [FLTProjectedMeters fromList:[self readValue]];
     case 152: 
-      return [FLTRenderedQueryGeometry fromList:[self readValue]];
+      return [FLTQueriedFeature fromList:[self readValue]];
     case 153: 
-      return [FLTRenderedQueryOptions fromList:[self readValue]];
+      return [FLTQueriedRenderedFeature fromList:[self readValue]];
     case 154: 
-      return [FLTResourceOptions fromList:[self readValue]];
+      return [FLTQueriedSourceFeature fromList:[self readValue]];
     case 155: 
-      return [FLTScreenBox fromList:[self readValue]];
+      return [FLTRenderedQueryGeometry fromList:[self readValue]];
     case 156: 
-      return [FLTScreenCoordinate fromList:[self readValue]];
+      return [FLTRenderedQueryOptions fromList:[self readValue]];
     case 157: 
-      return [FLTSize fromList:[self readValue]];
+      return [FLTScreenBox fromList:[self readValue]];
     case 158: 
-      return [FLTSourceQueryOptions fromList:[self readValue]];
+      return [FLTScreenCoordinate fromList:[self readValue]];
     case 159: 
-      return [FLTStyleObjectInfo fromList:[self readValue]];
+      return [FLTSize fromList:[self readValue]];
     case 160: 
-      return [FLTStylePropertyValue fromList:[self readValue]];
+      return [FLTSourceQueryOptions fromList:[self readValue]];
     case 161: 
+      return [FLTStyleObjectInfo fromList:[self readValue]];
+    case 162: 
+      return [FLTStyleProjection fromList:[self readValue]];
+    case 163: 
+      return [FLTStylePropertyValue fromList:[self readValue]];
+    case 164: 
+      return [FLTTileCacheBudgetInMegabytes fromList:[self readValue]];
+    case 165: 
+      return [FLTTileCacheBudgetInTiles fromList:[self readValue]];
+    case 166: 
       return [FLTTransitionOptions fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -4751,107 +5254,122 @@ void FLTMapSnapshotterSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
 @end
 @implementation FLTStyleManagerCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[FLTCameraBounds class]]) {
+  if ([value isKindOfClass:[FLTAmbientLight class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBounds class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
+  } else if ([value isKindOfClass:[FLTCameraBoundsOptions class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCameraState class]]) {
+  } else if ([value isKindOfClass:[FLTCameraOptions class]]) {
     [self writeByte:131];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
+  } else if ([value isKindOfClass:[FLTCameraState class]]) {
     [self writeByte:132];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
+  } else if ([value isKindOfClass:[FLTCanonicalTileID class]]) {
     [self writeByte:133];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBounds class]]) {
     [self writeByte:134];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
+  } else if ([value isKindOfClass:[FLTCoordinateBoundsZoom class]]) {
     [self writeByte:135];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTDirectionalLight class]]) {
     [self writeByte:136];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageContent class]]) {
+  } else if ([value isKindOfClass:[FLTFeatureExtensionValue class]]) {
     [self writeByte:137];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
+  } else if ([value isKindOfClass:[FLTFlatLight class]]) {
     [self writeByte:138];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
+  } else if ([value isKindOfClass:[FLTGlyphsRasterizationOptions class]]) {
     [self writeByte:139];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageContent class]]) {
     [self writeByte:140];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
+  } else if ([value isKindOfClass:[FLTImageStretches class]]) {
     [self writeByte:141];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInMegabytes class]]) {
+  } else if ([value isKindOfClass:[FLTLayerPosition class]]) {
     [self writeByte:142];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapMemoryBudgetInTiles class]]) {
+  } else if ([value isKindOfClass:[FLTMapAnimationOptions class]]) {
     [self writeByte:143];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
+  } else if ([value isKindOfClass:[FLTMapDebugOptions class]]) {
     [self writeByte:144];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
+  } else if ([value isKindOfClass:[FLTMapOptions class]]) {
     [self writeByte:145];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
+  } else if ([value isKindOfClass:[FLTMbxEdgeInsets class]]) {
     [self writeByte:146];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTMbxImage class]]) {
     [self writeByte:147];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTMercatorCoordinate class]]) {
     [self writeByte:148];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionGeometryDefinition class]]) {
     [self writeByte:149];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
+  } else if ([value isKindOfClass:[FLTOfflineRegionTilePyramidDefinition class]]) {
     [self writeByte:150];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
+  } else if ([value isKindOfClass:[FLTProjectedMeters class]]) {
     [self writeByte:151];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedFeature class]]) {
     [self writeByte:152];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedRenderedFeature class]]) {
     [self writeByte:153];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTResourceOptions class]]) {
+  } else if ([value isKindOfClass:[FLTQueriedSourceFeature class]]) {
     [self writeByte:154];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryGeometry class]]) {
     [self writeByte:155];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
+  } else if ([value isKindOfClass:[FLTRenderedQueryOptions class]]) {
     [self writeByte:156];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSize class]]) {
+  } else if ([value isKindOfClass:[FLTScreenBox class]]) {
     [self writeByte:157];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
+  } else if ([value isKindOfClass:[FLTScreenCoordinate class]]) {
     [self writeByte:158];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
+  } else if ([value isKindOfClass:[FLTSize class]]) {
     [self writeByte:159];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+  } else if ([value isKindOfClass:[FLTSourceQueryOptions class]]) {
     [self writeByte:160];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+  } else if ([value isKindOfClass:[FLTStyleObjectInfo class]]) {
     [self writeByte:161];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStyleProjection class]]) {
+    [self writeByte:162];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTStylePropertyValue class]]) {
+    [self writeByte:163];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInMegabytes class]]) {
+    [self writeByte:164];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTileCacheBudgetInTiles class]]) {
+    [self writeByte:165];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[FLTTransitionOptions class]]) {
+    [self writeByte:166];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -5015,6 +5533,171 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
         [api getStyleTransitionWithCompletion:^(FLTTransitionOptions *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Returns the list containing information about existing style import objects.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportsWithError:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportsWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSArray<FLTStyleObjectInfo *> *output = [api getStyleImportsWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Removes an existing style import.
+  ///
+  /// @param importId Identifier of the style import to remove.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(removeStyleImportImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(removeStyleImportImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api removeStyleImportImportId:arg_importId error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets the style import schema.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import schema, containing the default configurations for the style import.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportSchemaImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportSchemaImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        id output = [api getStyleImportSchemaImportId:arg_importId error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportConfigPropertiesImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportConfigPropertiesImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        NSDictionary<NSString *, FLTStylePropertyValue *> *output = [api getStyleImportConfigPropertiesImportId:arg_importId error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets the value of style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportConfigPropertyImportId:config:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportConfigPropertyImportId:config:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_config = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        FLTStylePropertyValue *output = [api getStyleImportConfigPropertyImportId:arg_importId config:arg_config error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Sets style import config.
+  /// This method can be used to perform batch update for a style import configurations.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param configs A map of style import configurations.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setStyleImportConfigPropertiesImportId:configs:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleImportConfigPropertiesImportId:configs:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSDictionary<NSString *, id> *arg_configs = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api setStyleImportConfigPropertiesImportId:arg_importId configs:arg_configs error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Sets a value to a style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  /// @param value The style import config value.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setStyleImportConfigPropertyImportId:config:value:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleImportConfigPropertyImportId:config:value:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_config = GetNullableObjectAtIndex(args, 1);
+        id arg_value = GetNullableObjectAtIndex(args, 2);
+        FlutterError *error;
+        [api setStyleImportConfigPropertyImportId:arg_importId config:arg_config value:arg_value error:&error];
+        callback(wrapResult(nil, error));
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -5557,6 +6240,70 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
       [channel setMessageHandler:nil];
     }
   }
+  /// Returns an ordered list of the current style lights.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleLightsWithError:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleLightsWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSArray<FLTStyleObjectInfo *> *output = [api getStyleLightsWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Set global directional lightning.
+  ///
+  /// @param flatLight The flat light source.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setLightFlatLight:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setLightFlatLight:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        FLTFlatLight *arg_flatLight = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setLightFlatLight:arg_flatLight error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Set dynamic lightning.
+  /// 
+  /// @param ambientLight The ambient light source.
+  /// @param directionalLight The directional light source.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLights"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setLightsAmbientLight:directionalLight:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setLightsAmbientLight:directionalLight:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        FLTAmbientLight *arg_ambientLight = GetNullableObjectAtIndex(args, 0);
+        FLTDirectionalLight *arg_directionalLight = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api setLightsAmbientLight:arg_ambientLight directionalLight:arg_directionalLight error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
   /// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
   ///
   /// @param properties A map of style light properties values, with their names as a key.
@@ -5584,6 +6331,7 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
   /// Gets the value of a style light property.
   ///
   /// @param property The style light property name.
+  /// @param id The unique identifier of the style light in lights list.
   /// @return The style light property value.
   {
     FlutterBasicMessageChannel *channel =
@@ -5592,11 +6340,12 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
         binaryMessenger:binaryMessenger
         codec:FLTStyleManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(getStyleLightPropertyProperty:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleLightPropertyProperty:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(getStyleLightPropertyId:property:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleLightPropertyId:property:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
-        NSString *arg_property = GetNullableObjectAtIndex(args, 0);
-        [api getStyleLightPropertyProperty:arg_property completion:^(FLTStylePropertyValue *_Nullable output, FlutterError *_Nullable error) {
+        NSString *arg_id = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_property = GetNullableObjectAtIndex(args, 1);
+        [api getStyleLightPropertyId:arg_id property:arg_property completion:^(FLTStylePropertyValue *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -5607,6 +6356,7 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
   /// Sets a value to the the style light property.
   ///
   /// @param property The style light property name.
+  /// @param id The unique identifier of the style light in lights list.
   /// @param value The style light property value.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
@@ -5617,12 +6367,13 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
         binaryMessenger:binaryMessenger
         codec:FLTStyleManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(setStyleLightPropertyProperty:value:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleLightPropertyProperty:value:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(setStyleLightPropertyId:property:value:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleLightPropertyId:property:value:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
-        NSString *arg_property = GetNullableObjectAtIndex(args, 0);
-        id arg_value = GetNullableObjectAtIndex(args, 1);
-        [api setStyleLightPropertyProperty:arg_property value:arg_value completion:^(FlutterError *_Nullable error) {
+        NSString *arg_id = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_property = GetNullableObjectAtIndex(args, 1);
+        id arg_value = GetNullableObjectAtIndex(args, 2);
+        [api setStyleLightPropertyId:arg_id property:arg_property value:arg_value completion:^(FlutterError *_Nullable error) {
           callback(wrapResult(nil, error));
         }];
       }];
@@ -5912,11 +6663,11 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
         binaryMessenger:binaryMessenger
         codec:FLTStyleManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(getProjectionWithCompletion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getProjectionWithCompletion:)", api);
+      NSCAssert([api respondsToSelector:@selector(getProjectionWithError:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getProjectionWithError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        [api getProjectionWithCompletion:^(NSString *_Nullable output, FlutterError *_Nullable error) {
-          callback(wrapResult(output, error));
-        }];
+        FlutterError *error;
+        FLTStyleProjection *output = [api getProjectionWithError:&error];
+        callback(wrapResult(output, error));
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -5932,13 +6683,13 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
         binaryMessenger:binaryMessenger
         codec:FLTStyleManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(setProjectionProjection:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setProjectionProjection:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(setProjectionProjection:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setProjectionProjection:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
-        NSString *arg_projection = GetNullableObjectAtIndex(args, 0);
-        [api setProjectionProjection:arg_projection completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
-        }];
+        FLTStyleProjection *arg_projection = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setProjectionProjection:arg_projection error:&error];
+        callback(wrapResult(nil, error));
       }];
     } else {
       [channel setMessageHandler:nil];

@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class ImageSourcePage extends ExamplePage {
@@ -57,7 +55,6 @@ class ImageSourceWidgetState extends State<ImageSourceWidget> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       styleUri: MapboxStyles.DARK,
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),

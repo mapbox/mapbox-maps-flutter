@@ -75,15 +75,6 @@ enum FillExtrusionTranslateAnchor {
   VIEWPORT,
 }
 
-/// Whether extruded geometries are lit relative to the map or viewport.
-enum Anchor {
-  /// The position of the light source is aligned to the rotation of the map.
-  MAP,
-
-  /// The position of the light source is aligned to the rotation of the viewport.
-  VIEWPORT,
-}
-
 /// Define the duration and delay for a style transition.
 class StyleTransition {
   StyleTransition({this.duration, this.delay});
@@ -137,8 +128,6 @@ abstract class Layer {
 
 /// Super class for all different types of sources.
 abstract class Source {
-  Map<String, dynamic> _properties = Map();
-
   /// The ID of the Source.
   String id;
 
@@ -267,14 +256,6 @@ extension StyleSource on StyleManager {
 
     source?.bind(this);
     return Future.value(source);
-  }
-}
-
-/// Extension for StyleManager to set light in the current style.
-extension StyleLight on StyleManager {
-  Future<void> setLight(Light light) {
-    final encode = light.encode();
-    return setStyleLight(encode);
   }
 }
 
