@@ -1,11 +1,15 @@
 // This file is generated.
-import Foundation
 import MapboxMaps
 import UIKit
 
-class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager {
+final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
+
+    private typealias AnnotationManager = PolygonAnnotationManager
+    private enum `Error`: Swift.Error {
+        case managerNotFound(String)
+    }
 
     init(withDelegate delegate: ControllerDelegate) {
         self.delegate = delegate
@@ -100,171 +104,179 @@ class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager {
         completion(nil)
     }
 
-func setFillAntialiasManagerId(_ managerId: String, fillAntialias: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    private func getManager(id: String) throws -> AnnotationManager {
+        if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
+            return manager
+        } else {
+            throw Error.managerNotFound(id)
+        }
+    }
+
+    // MARK: Properties
+
+    func setFillAntialiasManagerId(_ managerId: String, fillAntialias: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                manager.fillAntialias = fillAntialias.boolValue
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.fillAntialias = fillAntialias.boolValue
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getFillAntialiasManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getFillAntialiasManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-               if let fillAntialias = manager.fillAntialias {
-                completion(NSNumber(value: fillAntialias), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let fillAntialias = manager.fillAntialias else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: fillAntialias), nil)
         } catch {
-              completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setFillTranslateManagerId(_ managerId: String, fillTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setFillEmissiveStrengthManagerId(_ managerId: String, fillEmissiveStrength: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                manager.fillTranslate = fillTranslate.map({$0.doubleValue})
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.fillEmissiveStrength = fillEmissiveStrength.doubleValue
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getFillTranslateManagerId(_ managerId: String, completion: @escaping ( [NSNumber]?, FlutterError?) -> Void) {
+    func getFillEmissiveStrengthManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-               if let fillTranslate = manager.fillTranslate {
-                completion(fillTranslate.map {NSNumber(value: $0)}, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let fillEmissiveStrength = manager.fillEmissiveStrength else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: fillEmissiveStrength), nil)
         } catch {
-              completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setFillTranslateAnchorManagerId(_ managerId: String, fillTranslateAnchor: FLTFillTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+    func setFillTranslateManagerId(_ managerId: String, fillTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                manager.fillTranslateAnchor = FillTranslateAnchor.allCases[Int(fillTranslateAnchor.rawValue)]
+            let manager = try getManager(id: managerId)
+            manager.fillTranslate = fillTranslate.map {$0.doubleValue}
 
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getFillTranslateAnchorManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getFillTranslateManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-               if let fillTranslateAnchor = manager.fillTranslateAnchor {
-                let index = FillTranslateAnchor.allCases.firstIndex(of: fillTranslateAnchor)!
-                completion(NSNumber(value: index), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let fillTranslate = manager.fillTranslate else {
+                completion(nil, nil)
+                return
             }
+
+            completion(fillTranslate.map(NSNumber.init(value:)), nil)
         } catch {
-              completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
+
+    func setFillTranslateAnchorManagerId(_ managerId: String, fillTranslateAnchor: FLTFillTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillTranslateAnchor = FillTranslateAnchor(fillTranslateAnchor)
+
+            completion(nil)
+        } catch {
+            completion(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func getFillTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            guard let fillTranslateAnchor = manager.fillTranslateAnchor else {
+                completion(nil, nil)
+                return
+            }
+
+            completion(fillTranslateAnchor.toFLTFillTranslateAnchor()?.nsNumberValue, nil)
+        } catch {
+            completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 }
 
 extension FLTPolygonAnnotationOptions {
+
     func toPolygonAnnotation() -> PolygonAnnotation {
-    var annotation = PolygonAnnotation(polygon: convertDictionaryToPolygon(dict: self.geometry!))
-        if let fillSortKey = self.fillSortKey {
-           annotation.fillSortKey = fillSortKey.doubleValue
+        var annotation = PolygonAnnotation(polygon: convertDictionaryToPolygon(dict: self.geometry!))
+        if let fillSortKey {
+            annotation.fillSortKey = fillSortKey.doubleValue
         }
-        if let fillColor = self.fillColor {
-           annotation.fillColor = StyleColor.init(uiColorFromHex(rgbValue: fillColor.intValue))
+        if let fillColor {
+            annotation.fillColor = StyleColor.init(uiColorFromHex(rgbValue: fillColor.intValue))
         }
-        if let fillOpacity = self.fillOpacity {
-           annotation.fillOpacity = fillOpacity.doubleValue
+        if let fillOpacity {
+            annotation.fillOpacity = fillOpacity.doubleValue
         }
-        if let fillOutlineColor = self.fillOutlineColor {
-           annotation.fillOutlineColor = StyleColor.init(uiColorFromHex(rgbValue: fillOutlineColor.intValue))
+        if let fillOutlineColor {
+            annotation.fillOutlineColor = StyleColor.init(uiColorFromHex(rgbValue: fillOutlineColor.intValue))
         }
-        if let fillPattern = self.fillPattern {
-           annotation.fillPattern = fillPattern
+        if let fillPattern {
+            annotation.fillPattern = fillPattern
         }
         return annotation
     }
 }
 
 extension FLTPolygonAnnotation {
+
     func toPolygonAnnotation() -> PolygonAnnotation {
-    var annotation = PolygonAnnotation(id: self.id, polygon: convertDictionaryToPolygon(dict: self.geometry!))
-    if let fillSortKey = self.fillSortKey {
-       annotation.fillSortKey = fillSortKey.doubleValue
-    }
-    if let fillColor = self.fillColor {
-       annotation.fillColor = StyleColor.init(uiColorFromHex(rgbValue: fillColor.intValue))
-    }
-    if let fillOpacity = self.fillOpacity {
-       annotation.fillOpacity = fillOpacity.doubleValue
-    }
-    if let fillOutlineColor = self.fillOutlineColor {
-       annotation.fillOutlineColor = StyleColor.init(uiColorFromHex(rgbValue: fillOutlineColor.intValue))
-    }
-    if let fillPattern = self.fillPattern {
-       annotation.fillPattern = fillPattern
-    }
+                var annotation = PolygonAnnotation(id: self.id, polygon: convertDictionaryToPolygon(dict: self.geometry!))
+                if let fillSortKey {
+            annotation.fillSortKey = fillSortKey.doubleValue
+        }
+        if let fillColor {
+            annotation.fillColor = StyleColor.init(uiColorFromHex(rgbValue: fillColor.intValue))
+        }
+        if let fillOpacity {
+            annotation.fillOpacity = fillOpacity.doubleValue
+        }
+        if let fillOutlineColor {
+            annotation.fillOutlineColor = StyleColor.init(uiColorFromHex(rgbValue: fillOutlineColor.intValue))
+        }
+        if let fillPattern {
+            annotation.fillPattern = fillPattern
+        }
         return annotation
     }
 }
 extension PolygonAnnotation {
     func toFLTPolygonAnnotation() -> FLTPolygonAnnotation {
-        var fillSortKey: NSNumber?
-        if self.fillSortKey != nil {
-            fillSortKey = NSNumber(value: self.fillSortKey!)
-        }
-        var fillColor: NSNumber?
-        if self.fillColor != nil {
-            fillColor = NSNumber(value: self.fillColor!.rgb())
-        }
-        var fillOpacity: NSNumber?
-        if self.fillOpacity != nil {
-            fillOpacity = NSNumber(value: self.fillOpacity!)
-        }
-        var fillOutlineColor: NSNumber?
-        if self.fillOutlineColor != nil {
-            fillOutlineColor = NSNumber(value: self.fillOutlineColor!.rgb())
-        }
-        var fillPattern: String?
-        if self.fillPattern != nil {
-            fillPattern =  self.fillPattern!
-        }
+        let fillSortKey = fillSortKey.map(NSNumber.init(value:))
+        let fillColor = fillColor?.nsNumberValue
+        let fillOpacity = fillOpacity.map(NSNumber.init(value:))
+        let fillOutlineColor = fillOutlineColor?.nsNumberValue
+        let fillPattern = fillPattern
 
-    return FLTPolygonAnnotation.make(
-        withId: self.id,
-        geometry: self.polygon.toMap(),
-        fillSortKey: fillSortKey,
-        fillColor: fillColor,
-        fillOpacity: fillOpacity,
-        fillOutlineColor: fillOutlineColor,
-        fillPattern: fillPattern
-    )
+        return FLTPolygonAnnotation.make(
+            withId: id,
+            geometry: geometry.toMap(),
+            fillSortKey: fillSortKey,
+            fillColor: fillColor,
+            fillOpacity: fillOpacity,
+            fillOutlineColor: fillOutlineColor,
+            fillPattern: fillPattern
+        )
     }
 }
 // End of generated file.

@@ -26,11 +26,14 @@ void main() {
       iconOffset: [0.0, 1.0],
       iconRotate: 1.0,
       iconSize: 1.0,
+      iconTextFit: IconTextFit.NONE,
+      iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
       symbolSortKey: 1.0,
       textAnchor: TextAnchor.CENTER,
       textField: "abc",
       textJustify: TextJustify.AUTO,
       textLetterSpacing: 1.0,
+      textLineHeight: 1.0,
       textMaxWidth: 1.0,
       textOffset: [0.0, 1.0],
       textRadialOffset: 1.0,
@@ -38,11 +41,14 @@ void main() {
       textSize: 1.0,
       textTransform: TextTransform.NONE,
       iconColor: Colors.red.value,
+      iconEmissiveStrength: 1.0,
       iconHaloBlur: 1.0,
       iconHaloColor: Colors.red.value,
       iconHaloWidth: 1.0,
+      iconImageCrossFade: 1.0,
       iconOpacity: 1.0,
       textColor: Colors.red.value,
+      textEmissiveStrength: 1.0,
       textHaloBlur: 1.0,
       textHaloColor: Colors.red.value,
       textHaloWidth: 1.0,
@@ -57,11 +63,14 @@ void main() {
     expect([0.0, 1.0], annotation.iconOffset);
     expect(1.0, annotation.iconRotate);
     expect(1.0, annotation.iconSize);
+    expect(IconTextFit.NONE, annotation.iconTextFit);
+    expect([0.0, 1.0, 2.0, 3.0], annotation.iconTextFitPadding);
     expect(1.0, annotation.symbolSortKey);
     expect(TextAnchor.CENTER, annotation.textAnchor);
     expect("abc", annotation.textField);
     expect(TextJustify.AUTO, annotation.textJustify);
     expect(1.0, annotation.textLetterSpacing);
+    expect(1.0, annotation.textLineHeight);
     expect(1.0, annotation.textMaxWidth);
     expect([0.0, 1.0], annotation.textOffset);
     expect(1.0, annotation.textRadialOffset);
@@ -69,11 +78,14 @@ void main() {
     expect(1.0, annotation.textSize);
     expect(TextTransform.NONE, annotation.textTransform);
     expect(Colors.red.value, annotation.iconColor);
+    expect(1.0, annotation.iconEmissiveStrength);
     expect(1.0, annotation.iconHaloBlur);
     expect(Colors.red.value, annotation.iconHaloColor);
     expect(1.0, annotation.iconHaloWidth);
+    expect(1.0, annotation.iconImageCrossFade);
     expect(1.0, annotation.iconOpacity);
     expect(Colors.red.value, annotation.textColor);
+    expect(1.0, annotation.textEmissiveStrength);
     expect(1.0, annotation.textHaloBlur);
     expect(Colors.red.value, annotation.textHaloColor);
     expect(1.0, annotation.textHaloWidth);
@@ -92,9 +104,7 @@ void main() {
     );
     final annotation = await manager.create(pointAnnotationOptions);
     var point = Point.fromJson((annotation.geometry)!.cast());
-    var newPoint = Point(
-        coordinates:
-            Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+    var newPoint = Point( coordinates: Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
     annotation.geometry = newPoint.toJson();
     await manager.update(annotation);
     await manager.delete(annotation);

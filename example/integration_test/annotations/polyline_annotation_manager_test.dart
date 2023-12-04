@@ -12,13 +12,11 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
-  testWidgets('create PolylineAnnotation_manager ',
-      (WidgetTester tester) async {
+  testWidgets('create PolylineAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
+    final manager = await mapboxMap.annotations.createPolylineAnnotationManager();
     await addDelay(1000);
 
     await manager.setLineCap(LineCap.BUTT);
@@ -36,6 +34,14 @@ void main() {
     await manager.setLineDasharray([1.0, 2.0]);
     var lineDasharray = await manager.getLineDasharray();
     expect([1.0, 2.0], lineDasharray);
+
+    await manager.setLineDepthOcclusionFactor(1.0);
+    var lineDepthOcclusionFactor = await manager.getLineDepthOcclusionFactor();
+    expect(1.0, lineDepthOcclusionFactor);
+
+    await manager.setLineEmissiveStrength(1.0);
+    var lineEmissiveStrength = await manager.getLineEmissiveStrength();
+    expect(1.0, lineEmissiveStrength);
 
     await manager.setLineTranslate([0.0, 1.0]);
     var lineTranslate = await manager.getLineTranslate();

@@ -252,6 +252,22 @@ extension StylePropertyValue {
     }
 }
 
+extension Geometry {
+
+    func toMap() -> [String: Any] {
+        switch self {
+        case .point(let point):
+            return point.toMap()
+        case .lineString(let line):
+            return line.toMap()
+        case .polygon(let polygon):
+            return polygon.toMap()
+        case .multiPoint, .multiLineString, .multiPolygon, .geometryCollection:
+            return [:]
+        }
+    }
+}
+
 extension Point {
     func toMap() -> [String: Any] {
         return [COORDINATES: [coordinates.longitude, coordinates.latitude]]
@@ -383,6 +399,10 @@ extension StyleColor {
             blue: Int(self.blue)
         )
     }
+
+    var nsNumberValue: NSNumber {
+        NSNumber(value: rgb())
+    }
 }
 
 extension UIColor {
@@ -403,4 +423,11 @@ extension UIColor {
              return 0
          }
      }
+}
+
+extension RawRepresentable where RawValue == UInt {
+
+    var nsNumberValue: NSNumber {
+        NSNumber(value: rawValue)
+    }
 }

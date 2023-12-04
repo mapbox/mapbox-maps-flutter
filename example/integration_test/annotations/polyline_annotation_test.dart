@@ -16,16 +16,16 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
-    var geometry =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+    final manager = await mapboxMap.annotations.createPolylineAnnotationManager();
+    var geometry = LineString(coordinates: [ Position( 1.0, 2.0), Position( 10.0, 20.0) ]);
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry.toJson(),
       lineJoin: LineJoin.BEVEL,
       lineSortKey: 1.0,
       lineBlur: 1.0,
+      lineBorderColor: Colors.red.value,
+      lineBorderWidth: 1.0,
       lineColor: Colors.red.value,
       lineGapWidth: 1.0,
       lineOffset: 1.0,
@@ -44,6 +44,8 @@ void main() {
     expect(LineJoin.BEVEL, annotation.lineJoin);
     expect(1.0, annotation.lineSortKey);
     expect(1.0, annotation.lineBlur);
+    expect(Colors.red.value, annotation.lineBorderColor);
+    expect(1.0, annotation.lineBorderWidth);
     expect(Colors.red.value, annotation.lineColor);
     expect(1.0, annotation.lineGapWidth);
     expect(1.0, annotation.lineOffset);
@@ -52,25 +54,19 @@ void main() {
     expect(1.0, annotation.lineWidth);
   });
 
-  testWidgets('update and delete PolylineAnnotation',
-      (WidgetTester tester) async {
+  testWidgets('update and delete PolylineAnnotation', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolylineAnnotationManager();
-    var geometry =
-        LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
+    final manager = await mapboxMap.annotations.createPolylineAnnotationManager();
+    var geometry = LineString(coordinates: [ Position( 1.0, 2.0), Position( 10.0, 20.0) ]);
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry.toJson(),
     );
     final annotation = await manager.create(polylineAnnotationOptions);
     var lineString = LineString.fromJson((annotation.geometry)!.cast());
-    var newlineString = LineString(
-        coordinates: lineString.coordinates
-            .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
-            .toList());
+    var newlineString = LineString( coordinates: lineString.coordinates .map((e) => Position(e.lng + 1.0, e.lat + 1.0)) .toList());
     annotation.geometry = newlineString.toJson();
     await manager.update(annotation);
     await manager.delete(annotation);

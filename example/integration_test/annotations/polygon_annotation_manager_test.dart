@@ -16,13 +16,16 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager =
-        await mapboxMap.annotations.createPolygonAnnotationManager();
+    final manager = await mapboxMap.annotations.createPolygonAnnotationManager();
     await addDelay(1000);
 
     await manager.setFillAntialias(true);
     var fillAntialias = await manager.getFillAntialias();
     expect(true, fillAntialias);
+
+    await manager.setFillEmissiveStrength(1.0);
+    var fillEmissiveStrength = await manager.getFillEmissiveStrength();
+    expect(1.0, fillEmissiveStrength);
 
     await manager.setFillTranslate([0.0, 1.0]);
     var fillTranslate = await manager.getFillTranslate();

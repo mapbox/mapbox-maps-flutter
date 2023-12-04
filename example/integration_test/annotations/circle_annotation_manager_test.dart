@@ -19,6 +19,10 @@ void main() {
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
     await addDelay(1000);
 
+    await manager.setCircleEmissiveStrength(1.0);
+    var circleEmissiveStrength = await manager.getCircleEmissiveStrength();
+    expect(1.0, circleEmissiveStrength);
+
     await manager.setCirclePitchAlignment(CirclePitchAlignment.MAP);
     var circlePitchAlignment = await manager.getCirclePitchAlignment();
     expect(CirclePitchAlignment.MAP, circlePitchAlignment);
