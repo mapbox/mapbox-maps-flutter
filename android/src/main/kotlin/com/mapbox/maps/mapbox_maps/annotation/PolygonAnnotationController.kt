@@ -49,10 +49,8 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
         managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
       } else {
-        managerCreateAnnotationMap[managerId]!!.addAll(
-          annotations.map { it.id.toString() }
-            .toList()
-        )
+        managerCreateAnnotationMap[managerId]!!.addAll(annotations.map { it.id.toString() }
+          .toList())
       }
       result.success(annotations.map { it.toFLTPolygonAnnotation() }.toMutableList())
     } catch (e: Exception) {
@@ -160,6 +158,28 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     if (manager.fillAntialias != null) {
       result.success(manager.fillAntialias!!)
+    } else {
+      result.success(null)
+    }
+  }
+
+  override fun setFillEmissiveStrength(
+    managerId: String,
+    fillEmissiveStrength: Double,
+    result: FLTPolygonAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillEmissiveStrength = fillEmissiveStrength
+    result.success(null)
+  }
+
+  override fun getFillEmissiveStrength(
+    managerId: String,
+    result: FLTPolygonAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    if (manager.fillEmissiveStrength != null) {
+      result.success(manager.fillEmissiveStrength!!)
     } else {
       result.success(null)
     }

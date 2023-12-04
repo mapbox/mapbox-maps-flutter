@@ -289,11 +289,11 @@ public class FLTPointAnnotationMessager {
     }
   }
 
-  /** The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant. */
+  /** The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement. */
   public enum TextWritingMode {
-    /** If a text's language supports horizontal writing mode, symbols with point placement would be laid out horizontally. */
+    /** If a text's language supports horizontal writing mode, symbols would be laid out horizontally. */
     HORIZONTAL(0),
-    /** If a text's language supports vertical writing mode, symbols with point placement would be laid out vertically. */
+    /** If a text's language supports vertical writing mode, symbols would be laid out vertically. */
     VERTICAL(1);
 
     final int index;
@@ -427,7 +427,29 @@ public class FLTPointAnnotationMessager {
       this.iconSize = setterArg;
     }
 
-    /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
+    /** Scales the icon to fit around the associated text. */
+    private @Nullable IconTextFit iconTextFit;
+
+    public @Nullable IconTextFit getIconTextFit() {
+      return iconTextFit;
+    }
+
+    public void setIconTextFit(@Nullable IconTextFit setterArg) {
+      this.iconTextFit = setterArg;
+    }
+
+    /** Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. */
+    private @Nullable List<Double> iconTextFitPadding;
+
+    public @Nullable List<Double> getIconTextFitPadding() {
+      return iconTextFitPadding;
+    }
+
+    public void setIconTextFitPadding(@Nullable List<Double> setterArg) {
+      this.iconTextFitPadding = setterArg;
+    }
+
+    /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
     private @Nullable Double symbolSortKey;
 
     public @Nullable Double getSymbolSortKey() {
@@ -449,7 +471,7 @@ public class FLTPointAnnotationMessager {
       this.textAnchor = setterArg;
     }
 
-    /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. */
+    /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. */
     private @Nullable String textField;
 
     public @Nullable String getTextField() {
@@ -480,6 +502,17 @@ public class FLTPointAnnotationMessager {
 
     public void setTextLetterSpacing(@Nullable Double setterArg) {
       this.textLetterSpacing = setterArg;
+    }
+
+    /** Text leading value for multi-line text. */
+    private @Nullable Double textLineHeight;
+
+    public @Nullable Double getTextLineHeight() {
+      return textLineHeight;
+    }
+
+    public void setTextLineHeight(@Nullable Double setterArg) {
+      this.textLineHeight = setterArg;
     }
 
     /** The maximum line width for text wrapping. */
@@ -548,7 +581,7 @@ public class FLTPointAnnotationMessager {
       this.textTransform = setterArg;
     }
 
-    /** The color of the icon. This can only be used with sdf icons. */
+    /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
     private @Nullable Long iconColor;
 
     public @Nullable Long getIconColor() {
@@ -557,6 +590,17 @@ public class FLTPointAnnotationMessager {
 
     public void setIconColor(@Nullable Long setterArg) {
       this.iconColor = setterArg;
+    }
+
+    /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+    private @Nullable Double iconEmissiveStrength;
+
+    public @Nullable Double getIconEmissiveStrength() {
+      return iconEmissiveStrength;
+    }
+
+    public void setIconEmissiveStrength(@Nullable Double setterArg) {
+      this.iconEmissiveStrength = setterArg;
     }
 
     /** Fade out the halo towards the outside. */
@@ -570,7 +614,7 @@ public class FLTPointAnnotationMessager {
       this.iconHaloBlur = setterArg;
     }
 
-    /** The color of the icon's halo. Icon halos can only be used with SDF icons. */
+    /** The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
     private @Nullable Long iconHaloColor;
 
     public @Nullable Long getIconHaloColor() {
@@ -590,6 +634,17 @@ public class FLTPointAnnotationMessager {
 
     public void setIconHaloWidth(@Nullable Double setterArg) {
       this.iconHaloWidth = setterArg;
+    }
+
+    /** Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. */
+    private @Nullable Double iconImageCrossFade;
+
+    public @Nullable Double getIconImageCrossFade() {
+      return iconImageCrossFade;
+    }
+
+    public void setIconImageCrossFade(@Nullable Double setterArg) {
+      this.iconImageCrossFade = setterArg;
     }
 
     /** The opacity at which the icon will be drawn. */
@@ -612,6 +667,17 @@ public class FLTPointAnnotationMessager {
 
     public void setTextColor(@Nullable Long setterArg) {
       this.textColor = setterArg;
+    }
+
+    /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+    private @Nullable Double textEmissiveStrength;
+
+    public @Nullable Double getTextEmissiveStrength() {
+      return textEmissiveStrength;
+    }
+
+    public void setTextEmissiveStrength(@Nullable Double setterArg) {
+      this.textEmissiveStrength = setterArg;
     }
 
     /** The halo's fadeout distance towards the outside. */
@@ -719,6 +785,20 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable IconTextFit iconTextFit;
+
+      public @NonNull Builder setIconTextFit(@Nullable IconTextFit setterArg) {
+        this.iconTextFit = setterArg;
+        return this;
+      }
+
+      private @Nullable List<Double> iconTextFitPadding;
+
+      public @NonNull Builder setIconTextFitPadding(@Nullable List<Double> setterArg) {
+        this.iconTextFitPadding = setterArg;
+        return this;
+      }
+
       private @Nullable Double symbolSortKey;
 
       public @NonNull Builder setSymbolSortKey(@Nullable Double setterArg) {
@@ -751,6 +831,13 @@ public class FLTPointAnnotationMessager {
 
       public @NonNull Builder setTextLetterSpacing(@Nullable Double setterArg) {
         this.textLetterSpacing = setterArg;
+        return this;
+      }
+
+      private @Nullable Double textLineHeight;
+
+      public @NonNull Builder setTextLineHeight(@Nullable Double setterArg) {
+        this.textLineHeight = setterArg;
         return this;
       }
 
@@ -803,6 +890,13 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable Double iconEmissiveStrength;
+
+      public @NonNull Builder setIconEmissiveStrength(@Nullable Double setterArg) {
+        this.iconEmissiveStrength = setterArg;
+        return this;
+      }
+
       private @Nullable Double iconHaloBlur;
 
       public @NonNull Builder setIconHaloBlur(@Nullable Double setterArg) {
@@ -824,6 +918,13 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable Double iconImageCrossFade;
+
+      public @NonNull Builder setIconImageCrossFade(@Nullable Double setterArg) {
+        this.iconImageCrossFade = setterArg;
+        return this;
+      }
+
       private @Nullable Double iconOpacity;
 
       public @NonNull Builder setIconOpacity(@Nullable Double setterArg) {
@@ -835,6 +936,13 @@ public class FLTPointAnnotationMessager {
 
       public @NonNull Builder setTextColor(@Nullable Long setterArg) {
         this.textColor = setterArg;
+        return this;
+      }
+
+      private @Nullable Double textEmissiveStrength;
+
+      public @NonNull Builder setTextEmissiveStrength(@Nullable Double setterArg) {
+        this.textEmissiveStrength = setterArg;
         return this;
       }
 
@@ -876,11 +984,14 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setIconOffset(iconOffset);
         pigeonReturn.setIconRotate(iconRotate);
         pigeonReturn.setIconSize(iconSize);
+        pigeonReturn.setIconTextFit(iconTextFit);
+        pigeonReturn.setIconTextFitPadding(iconTextFitPadding);
         pigeonReturn.setSymbolSortKey(symbolSortKey);
         pigeonReturn.setTextAnchor(textAnchor);
         pigeonReturn.setTextField(textField);
         pigeonReturn.setTextJustify(textJustify);
         pigeonReturn.setTextLetterSpacing(textLetterSpacing);
+        pigeonReturn.setTextLineHeight(textLineHeight);
         pigeonReturn.setTextMaxWidth(textMaxWidth);
         pigeonReturn.setTextOffset(textOffset);
         pigeonReturn.setTextRadialOffset(textRadialOffset);
@@ -888,11 +999,14 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setTextSize(textSize);
         pigeonReturn.setTextTransform(textTransform);
         pigeonReturn.setIconColor(iconColor);
+        pigeonReturn.setIconEmissiveStrength(iconEmissiveStrength);
         pigeonReturn.setIconHaloBlur(iconHaloBlur);
         pigeonReturn.setIconHaloColor(iconHaloColor);
         pigeonReturn.setIconHaloWidth(iconHaloWidth);
+        pigeonReturn.setIconImageCrossFade(iconImageCrossFade);
         pigeonReturn.setIconOpacity(iconOpacity);
         pigeonReturn.setTextColor(textColor);
+        pigeonReturn.setTextEmissiveStrength(textEmissiveStrength);
         pigeonReturn.setTextHaloBlur(textHaloBlur);
         pigeonReturn.setTextHaloColor(textHaloColor);
         pigeonReturn.setTextHaloWidth(textHaloWidth);
@@ -903,7 +1017,7 @@ public class FLTPointAnnotationMessager {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(29);
+      ArrayList<Object> toListResult = new ArrayList<Object>(35);
       toListResult.add(id);
       toListResult.add(geometry);
       toListResult.add(image);
@@ -912,11 +1026,14 @@ public class FLTPointAnnotationMessager {
       toListResult.add(iconOffset);
       toListResult.add(iconRotate);
       toListResult.add(iconSize);
+      toListResult.add(iconTextFit == null ? null : iconTextFit.index);
+      toListResult.add(iconTextFitPadding);
       toListResult.add(symbolSortKey);
       toListResult.add(textAnchor == null ? null : textAnchor.index);
       toListResult.add(textField);
       toListResult.add(textJustify == null ? null : textJustify.index);
       toListResult.add(textLetterSpacing);
+      toListResult.add(textLineHeight);
       toListResult.add(textMaxWidth);
       toListResult.add(textOffset);
       toListResult.add(textRadialOffset);
@@ -924,11 +1041,14 @@ public class FLTPointAnnotationMessager {
       toListResult.add(textSize);
       toListResult.add(textTransform == null ? null : textTransform.index);
       toListResult.add(iconColor);
+      toListResult.add(iconEmissiveStrength);
       toListResult.add(iconHaloBlur);
       toListResult.add(iconHaloColor);
       toListResult.add(iconHaloWidth);
+      toListResult.add(iconImageCrossFade);
       toListResult.add(iconOpacity);
       toListResult.add(textColor);
+      toListResult.add(textEmissiveStrength);
       toListResult.add(textHaloBlur);
       toListResult.add(textHaloColor);
       toListResult.add(textHaloWidth);
@@ -954,47 +1074,59 @@ public class FLTPointAnnotationMessager {
       pigeonResult.setIconRotate((Double) iconRotate);
       Object iconSize = list.get(7);
       pigeonResult.setIconSize((Double) iconSize);
-      Object symbolSortKey = list.get(8);
+      Object iconTextFit = list.get(8);
+      pigeonResult.setIconTextFit(iconTextFit == null ? null : IconTextFit.values()[(int) iconTextFit]);
+      Object iconTextFitPadding = list.get(9);
+      pigeonResult.setIconTextFitPadding((List<Double>) iconTextFitPadding);
+      Object symbolSortKey = list.get(10);
       pigeonResult.setSymbolSortKey((Double) symbolSortKey);
-      Object textAnchor = list.get(9);
+      Object textAnchor = list.get(11);
       pigeonResult.setTextAnchor(textAnchor == null ? null : TextAnchor.values()[(int) textAnchor]);
-      Object textField = list.get(10);
+      Object textField = list.get(12);
       pigeonResult.setTextField((String) textField);
-      Object textJustify = list.get(11);
+      Object textJustify = list.get(13);
       pigeonResult.setTextJustify(textJustify == null ? null : TextJustify.values()[(int) textJustify]);
-      Object textLetterSpacing = list.get(12);
+      Object textLetterSpacing = list.get(14);
       pigeonResult.setTextLetterSpacing((Double) textLetterSpacing);
-      Object textMaxWidth = list.get(13);
+      Object textLineHeight = list.get(15);
+      pigeonResult.setTextLineHeight((Double) textLineHeight);
+      Object textMaxWidth = list.get(16);
       pigeonResult.setTextMaxWidth((Double) textMaxWidth);
-      Object textOffset = list.get(14);
+      Object textOffset = list.get(17);
       pigeonResult.setTextOffset((List<Double>) textOffset);
-      Object textRadialOffset = list.get(15);
+      Object textRadialOffset = list.get(18);
       pigeonResult.setTextRadialOffset((Double) textRadialOffset);
-      Object textRotate = list.get(16);
+      Object textRotate = list.get(19);
       pigeonResult.setTextRotate((Double) textRotate);
-      Object textSize = list.get(17);
+      Object textSize = list.get(20);
       pigeonResult.setTextSize((Double) textSize);
-      Object textTransform = list.get(18);
+      Object textTransform = list.get(21);
       pigeonResult.setTextTransform(textTransform == null ? null : TextTransform.values()[(int) textTransform]);
-      Object iconColor = list.get(19);
+      Object iconColor = list.get(22);
       pigeonResult.setIconColor((iconColor == null) ? null : ((iconColor instanceof Integer) ? (Integer) iconColor : (Long) iconColor));
-      Object iconHaloBlur = list.get(20);
+      Object iconEmissiveStrength = list.get(23);
+      pigeonResult.setIconEmissiveStrength((Double) iconEmissiveStrength);
+      Object iconHaloBlur = list.get(24);
       pigeonResult.setIconHaloBlur((Double) iconHaloBlur);
-      Object iconHaloColor = list.get(21);
+      Object iconHaloColor = list.get(25);
       pigeonResult.setIconHaloColor((iconHaloColor == null) ? null : ((iconHaloColor instanceof Integer) ? (Integer) iconHaloColor : (Long) iconHaloColor));
-      Object iconHaloWidth = list.get(22);
+      Object iconHaloWidth = list.get(26);
       pigeonResult.setIconHaloWidth((Double) iconHaloWidth);
-      Object iconOpacity = list.get(23);
+      Object iconImageCrossFade = list.get(27);
+      pigeonResult.setIconImageCrossFade((Double) iconImageCrossFade);
+      Object iconOpacity = list.get(28);
       pigeonResult.setIconOpacity((Double) iconOpacity);
-      Object textColor = list.get(24);
+      Object textColor = list.get(29);
       pigeonResult.setTextColor((textColor == null) ? null : ((textColor instanceof Integer) ? (Integer) textColor : (Long) textColor));
-      Object textHaloBlur = list.get(25);
+      Object textEmissiveStrength = list.get(30);
+      pigeonResult.setTextEmissiveStrength((Double) textEmissiveStrength);
+      Object textHaloBlur = list.get(31);
       pigeonResult.setTextHaloBlur((Double) textHaloBlur);
-      Object textHaloColor = list.get(26);
+      Object textHaloColor = list.get(32);
       pigeonResult.setTextHaloColor((textHaloColor == null) ? null : ((textHaloColor instanceof Integer) ? (Integer) textHaloColor : (Long) textHaloColor));
-      Object textHaloWidth = list.get(27);
+      Object textHaloWidth = list.get(33);
       pigeonResult.setTextHaloWidth((Double) textHaloWidth);
-      Object textOpacity = list.get(28);
+      Object textOpacity = list.get(34);
       pigeonResult.setTextOpacity((Double) textOpacity);
       return pigeonResult;
     }
@@ -1082,7 +1214,29 @@ public class FLTPointAnnotationMessager {
       this.iconSize = setterArg;
     }
 
-    /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
+    /** Scales the icon to fit around the associated text. */
+    private @Nullable IconTextFit iconTextFit;
+
+    public @Nullable IconTextFit getIconTextFit() {
+      return iconTextFit;
+    }
+
+    public void setIconTextFit(@Nullable IconTextFit setterArg) {
+      this.iconTextFit = setterArg;
+    }
+
+    /** Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. */
+    private @Nullable List<Double> iconTextFitPadding;
+
+    public @Nullable List<Double> getIconTextFitPadding() {
+      return iconTextFitPadding;
+    }
+
+    public void setIconTextFitPadding(@Nullable List<Double> setterArg) {
+      this.iconTextFitPadding = setterArg;
+    }
+
+    /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
     private @Nullable Double symbolSortKey;
 
     public @Nullable Double getSymbolSortKey() {
@@ -1104,7 +1258,7 @@ public class FLTPointAnnotationMessager {
       this.textAnchor = setterArg;
     }
 
-    /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. */
+    /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. */
     private @Nullable String textField;
 
     public @Nullable String getTextField() {
@@ -1135,6 +1289,17 @@ public class FLTPointAnnotationMessager {
 
     public void setTextLetterSpacing(@Nullable Double setterArg) {
       this.textLetterSpacing = setterArg;
+    }
+
+    /** Text leading value for multi-line text. */
+    private @Nullable Double textLineHeight;
+
+    public @Nullable Double getTextLineHeight() {
+      return textLineHeight;
+    }
+
+    public void setTextLineHeight(@Nullable Double setterArg) {
+      this.textLineHeight = setterArg;
     }
 
     /** The maximum line width for text wrapping. */
@@ -1203,7 +1368,7 @@ public class FLTPointAnnotationMessager {
       this.textTransform = setterArg;
     }
 
-    /** The color of the icon. This can only be used with sdf icons. */
+    /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
     private @Nullable Long iconColor;
 
     public @Nullable Long getIconColor() {
@@ -1212,6 +1377,17 @@ public class FLTPointAnnotationMessager {
 
     public void setIconColor(@Nullable Long setterArg) {
       this.iconColor = setterArg;
+    }
+
+    /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+    private @Nullable Double iconEmissiveStrength;
+
+    public @Nullable Double getIconEmissiveStrength() {
+      return iconEmissiveStrength;
+    }
+
+    public void setIconEmissiveStrength(@Nullable Double setterArg) {
+      this.iconEmissiveStrength = setterArg;
     }
 
     /** Fade out the halo towards the outside. */
@@ -1225,7 +1401,7 @@ public class FLTPointAnnotationMessager {
       this.iconHaloBlur = setterArg;
     }
 
-    /** The color of the icon's halo. Icon halos can only be used with SDF icons. */
+    /** The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
     private @Nullable Long iconHaloColor;
 
     public @Nullable Long getIconHaloColor() {
@@ -1245,6 +1421,17 @@ public class FLTPointAnnotationMessager {
 
     public void setIconHaloWidth(@Nullable Double setterArg) {
       this.iconHaloWidth = setterArg;
+    }
+
+    /** Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. */
+    private @Nullable Double iconImageCrossFade;
+
+    public @Nullable Double getIconImageCrossFade() {
+      return iconImageCrossFade;
+    }
+
+    public void setIconImageCrossFade(@Nullable Double setterArg) {
+      this.iconImageCrossFade = setterArg;
     }
 
     /** The opacity at which the icon will be drawn. */
@@ -1267,6 +1454,17 @@ public class FLTPointAnnotationMessager {
 
     public void setTextColor(@Nullable Long setterArg) {
       this.textColor = setterArg;
+    }
+
+    /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+    private @Nullable Double textEmissiveStrength;
+
+    public @Nullable Double getTextEmissiveStrength() {
+      return textEmissiveStrength;
+    }
+
+    public void setTextEmissiveStrength(@Nullable Double setterArg) {
+      this.textEmissiveStrength = setterArg;
     }
 
     /** The halo's fadeout distance towards the outside. */
@@ -1364,6 +1562,20 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable IconTextFit iconTextFit;
+
+      public @NonNull Builder setIconTextFit(@Nullable IconTextFit setterArg) {
+        this.iconTextFit = setterArg;
+        return this;
+      }
+
+      private @Nullable List<Double> iconTextFitPadding;
+
+      public @NonNull Builder setIconTextFitPadding(@Nullable List<Double> setterArg) {
+        this.iconTextFitPadding = setterArg;
+        return this;
+      }
+
       private @Nullable Double symbolSortKey;
 
       public @NonNull Builder setSymbolSortKey(@Nullable Double setterArg) {
@@ -1396,6 +1608,13 @@ public class FLTPointAnnotationMessager {
 
       public @NonNull Builder setTextLetterSpacing(@Nullable Double setterArg) {
         this.textLetterSpacing = setterArg;
+        return this;
+      }
+
+      private @Nullable Double textLineHeight;
+
+      public @NonNull Builder setTextLineHeight(@Nullable Double setterArg) {
+        this.textLineHeight = setterArg;
         return this;
       }
 
@@ -1448,6 +1667,13 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable Double iconEmissiveStrength;
+
+      public @NonNull Builder setIconEmissiveStrength(@Nullable Double setterArg) {
+        this.iconEmissiveStrength = setterArg;
+        return this;
+      }
+
       private @Nullable Double iconHaloBlur;
 
       public @NonNull Builder setIconHaloBlur(@Nullable Double setterArg) {
@@ -1469,6 +1695,13 @@ public class FLTPointAnnotationMessager {
         return this;
       }
 
+      private @Nullable Double iconImageCrossFade;
+
+      public @NonNull Builder setIconImageCrossFade(@Nullable Double setterArg) {
+        this.iconImageCrossFade = setterArg;
+        return this;
+      }
+
       private @Nullable Double iconOpacity;
 
       public @NonNull Builder setIconOpacity(@Nullable Double setterArg) {
@@ -1480,6 +1713,13 @@ public class FLTPointAnnotationMessager {
 
       public @NonNull Builder setTextColor(@Nullable Long setterArg) {
         this.textColor = setterArg;
+        return this;
+      }
+
+      private @Nullable Double textEmissiveStrength;
+
+      public @NonNull Builder setTextEmissiveStrength(@Nullable Double setterArg) {
+        this.textEmissiveStrength = setterArg;
         return this;
       }
 
@@ -1520,11 +1760,14 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setIconOffset(iconOffset);
         pigeonReturn.setIconRotate(iconRotate);
         pigeonReturn.setIconSize(iconSize);
+        pigeonReturn.setIconTextFit(iconTextFit);
+        pigeonReturn.setIconTextFitPadding(iconTextFitPadding);
         pigeonReturn.setSymbolSortKey(symbolSortKey);
         pigeonReturn.setTextAnchor(textAnchor);
         pigeonReturn.setTextField(textField);
         pigeonReturn.setTextJustify(textJustify);
         pigeonReturn.setTextLetterSpacing(textLetterSpacing);
+        pigeonReturn.setTextLineHeight(textLineHeight);
         pigeonReturn.setTextMaxWidth(textMaxWidth);
         pigeonReturn.setTextOffset(textOffset);
         pigeonReturn.setTextRadialOffset(textRadialOffset);
@@ -1532,11 +1775,14 @@ public class FLTPointAnnotationMessager {
         pigeonReturn.setTextSize(textSize);
         pigeonReturn.setTextTransform(textTransform);
         pigeonReturn.setIconColor(iconColor);
+        pigeonReturn.setIconEmissiveStrength(iconEmissiveStrength);
         pigeonReturn.setIconHaloBlur(iconHaloBlur);
         pigeonReturn.setIconHaloColor(iconHaloColor);
         pigeonReturn.setIconHaloWidth(iconHaloWidth);
+        pigeonReturn.setIconImageCrossFade(iconImageCrossFade);
         pigeonReturn.setIconOpacity(iconOpacity);
         pigeonReturn.setTextColor(textColor);
+        pigeonReturn.setTextEmissiveStrength(textEmissiveStrength);
         pigeonReturn.setTextHaloBlur(textHaloBlur);
         pigeonReturn.setTextHaloColor(textHaloColor);
         pigeonReturn.setTextHaloWidth(textHaloWidth);
@@ -1547,7 +1793,7 @@ public class FLTPointAnnotationMessager {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(28);
+      ArrayList<Object> toListResult = new ArrayList<Object>(34);
       toListResult.add(geometry);
       toListResult.add(image);
       toListResult.add(iconAnchor == null ? null : iconAnchor.index);
@@ -1555,11 +1801,14 @@ public class FLTPointAnnotationMessager {
       toListResult.add(iconOffset);
       toListResult.add(iconRotate);
       toListResult.add(iconSize);
+      toListResult.add(iconTextFit == null ? null : iconTextFit.index);
+      toListResult.add(iconTextFitPadding);
       toListResult.add(symbolSortKey);
       toListResult.add(textAnchor == null ? null : textAnchor.index);
       toListResult.add(textField);
       toListResult.add(textJustify == null ? null : textJustify.index);
       toListResult.add(textLetterSpacing);
+      toListResult.add(textLineHeight);
       toListResult.add(textMaxWidth);
       toListResult.add(textOffset);
       toListResult.add(textRadialOffset);
@@ -1567,11 +1816,14 @@ public class FLTPointAnnotationMessager {
       toListResult.add(textSize);
       toListResult.add(textTransform == null ? null : textTransform.index);
       toListResult.add(iconColor);
+      toListResult.add(iconEmissiveStrength);
       toListResult.add(iconHaloBlur);
       toListResult.add(iconHaloColor);
       toListResult.add(iconHaloWidth);
+      toListResult.add(iconImageCrossFade);
       toListResult.add(iconOpacity);
       toListResult.add(textColor);
+      toListResult.add(textEmissiveStrength);
       toListResult.add(textHaloBlur);
       toListResult.add(textHaloColor);
       toListResult.add(textHaloWidth);
@@ -1595,47 +1847,59 @@ public class FLTPointAnnotationMessager {
       pigeonResult.setIconRotate((Double) iconRotate);
       Object iconSize = list.get(6);
       pigeonResult.setIconSize((Double) iconSize);
-      Object symbolSortKey = list.get(7);
+      Object iconTextFit = list.get(7);
+      pigeonResult.setIconTextFit(iconTextFit == null ? null : IconTextFit.values()[(int) iconTextFit]);
+      Object iconTextFitPadding = list.get(8);
+      pigeonResult.setIconTextFitPadding((List<Double>) iconTextFitPadding);
+      Object symbolSortKey = list.get(9);
       pigeonResult.setSymbolSortKey((Double) symbolSortKey);
-      Object textAnchor = list.get(8);
+      Object textAnchor = list.get(10);
       pigeonResult.setTextAnchor(textAnchor == null ? null : TextAnchor.values()[(int) textAnchor]);
-      Object textField = list.get(9);
+      Object textField = list.get(11);
       pigeonResult.setTextField((String) textField);
-      Object textJustify = list.get(10);
+      Object textJustify = list.get(12);
       pigeonResult.setTextJustify(textJustify == null ? null : TextJustify.values()[(int) textJustify]);
-      Object textLetterSpacing = list.get(11);
+      Object textLetterSpacing = list.get(13);
       pigeonResult.setTextLetterSpacing((Double) textLetterSpacing);
-      Object textMaxWidth = list.get(12);
+      Object textLineHeight = list.get(14);
+      pigeonResult.setTextLineHeight((Double) textLineHeight);
+      Object textMaxWidth = list.get(15);
       pigeonResult.setTextMaxWidth((Double) textMaxWidth);
-      Object textOffset = list.get(13);
+      Object textOffset = list.get(16);
       pigeonResult.setTextOffset((List<Double>) textOffset);
-      Object textRadialOffset = list.get(14);
+      Object textRadialOffset = list.get(17);
       pigeonResult.setTextRadialOffset((Double) textRadialOffset);
-      Object textRotate = list.get(15);
+      Object textRotate = list.get(18);
       pigeonResult.setTextRotate((Double) textRotate);
-      Object textSize = list.get(16);
+      Object textSize = list.get(19);
       pigeonResult.setTextSize((Double) textSize);
-      Object textTransform = list.get(17);
+      Object textTransform = list.get(20);
       pigeonResult.setTextTransform(textTransform == null ? null : TextTransform.values()[(int) textTransform]);
-      Object iconColor = list.get(18);
+      Object iconColor = list.get(21);
       pigeonResult.setIconColor((iconColor == null) ? null : ((iconColor instanceof Integer) ? (Integer) iconColor : (Long) iconColor));
-      Object iconHaloBlur = list.get(19);
+      Object iconEmissiveStrength = list.get(22);
+      pigeonResult.setIconEmissiveStrength((Double) iconEmissiveStrength);
+      Object iconHaloBlur = list.get(23);
       pigeonResult.setIconHaloBlur((Double) iconHaloBlur);
-      Object iconHaloColor = list.get(20);
+      Object iconHaloColor = list.get(24);
       pigeonResult.setIconHaloColor((iconHaloColor == null) ? null : ((iconHaloColor instanceof Integer) ? (Integer) iconHaloColor : (Long) iconHaloColor));
-      Object iconHaloWidth = list.get(21);
+      Object iconHaloWidth = list.get(25);
       pigeonResult.setIconHaloWidth((Double) iconHaloWidth);
-      Object iconOpacity = list.get(22);
+      Object iconImageCrossFade = list.get(26);
+      pigeonResult.setIconImageCrossFade((Double) iconImageCrossFade);
+      Object iconOpacity = list.get(27);
       pigeonResult.setIconOpacity((Double) iconOpacity);
-      Object textColor = list.get(23);
+      Object textColor = list.get(28);
       pigeonResult.setTextColor((textColor == null) ? null : ((textColor instanceof Integer) ? (Integer) textColor : (Long) textColor));
-      Object textHaloBlur = list.get(24);
+      Object textEmissiveStrength = list.get(29);
+      pigeonResult.setTextEmissiveStrength((Double) textEmissiveStrength);
+      Object textHaloBlur = list.get(30);
       pigeonResult.setTextHaloBlur((Double) textHaloBlur);
-      Object textHaloColor = list.get(25);
+      Object textHaloColor = list.get(31);
       pigeonResult.setTextHaloColor((textHaloColor == null) ? null : ((textHaloColor instanceof Integer) ? (Integer) textHaloColor : (Long) textHaloColor));
-      Object textHaloWidth = list.get(26);
+      Object textHaloWidth = list.get(32);
       pigeonResult.setTextHaloWidth((Double) textHaloWidth);
-      Object textOpacity = list.get(27);
+      Object textOpacity = list.get(33);
       pigeonResult.setTextOpacity((Double) textOpacity);
       return pigeonResult;
     }
@@ -1773,14 +2037,6 @@ public class FLTPointAnnotationMessager {
 
     void getIconRotationAlignment(@NonNull String managerId, @NonNull Result<Long> result);
 
-    void setIconTextFit(@NonNull String managerId, @NonNull IconTextFit iconTextFit, @NonNull Result<Void> result);
-
-    void getIconTextFit(@NonNull String managerId, @NonNull Result<Long> result);
-
-    void setIconTextFitPadding(@NonNull String managerId, @NonNull List<Double> iconTextFitPadding, @NonNull Result<Void> result);
-
-    void getIconTextFitPadding(@NonNull String managerId, @NonNull Result<List<Double>> result);
-
     void setSymbolAvoidEdges(@NonNull String managerId, @NonNull Boolean symbolAvoidEdges, @NonNull Result<Void> result);
 
     void getSymbolAvoidEdges(@NonNull String managerId, @NonNull Result<Boolean> result);
@@ -1792,6 +2048,10 @@ public class FLTPointAnnotationMessager {
     void setSymbolSpacing(@NonNull String managerId, @NonNull Double symbolSpacing, @NonNull Result<Void> result);
 
     void getSymbolSpacing(@NonNull String managerId, @NonNull Result<Double> result);
+
+    void setSymbolZElevate(@NonNull String managerId, @NonNull Boolean symbolZElevate, @NonNull Result<Void> result);
+
+    void getSymbolZElevate(@NonNull String managerId, @NonNull Result<Boolean> result);
 
     void setSymbolZOrder(@NonNull String managerId, @NonNull SymbolZOrder symbolZOrder, @NonNull Result<Void> result);
 
@@ -1812,10 +2072,6 @@ public class FLTPointAnnotationMessager {
     void setTextKeepUpright(@NonNull String managerId, @NonNull Boolean textKeepUpright, @NonNull Result<Void> result);
 
     void getTextKeepUpright(@NonNull String managerId, @NonNull Result<Boolean> result);
-
-    void setTextLineHeight(@NonNull String managerId, @NonNull Double textLineHeight, @NonNull Result<Void> result);
-
-    void getTextLineHeight(@NonNull String managerId, @NonNull Result<Double> result);
 
     void setTextMaxAngle(@NonNull String managerId, @NonNull Double textMaxAngle, @NonNull Result<Void> result);
 
@@ -2424,124 +2680,6 @@ public class FLTPointAnnotationMessager {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFit", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                IconTextFit iconTextFitArg = IconTextFit.values()[(int) args.get(1)];
-                Result<Void> resultCallback =
-                    new Result<Void>() {
-                      public void success(Void result) {
-                        wrapped.add(0, null);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.setIconTextFit(managerIdArg, iconTextFitArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFit", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.getIconTextFit(managerIdArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFitPadding", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                List<Double> iconTextFitPaddingArg = (List<Double>) args.get(1);
-                Result<Void> resultCallback =
-                    new Result<Void>() {
-                      public void success(Void result) {
-                        wrapped.add(0, null);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.setIconTextFitPadding(managerIdArg, iconTextFitPaddingArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFitPadding", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                Result<List<Double>> resultCallback =
-                    new Result<List<Double>>() {
-                      public void success(List<Double> result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.getIconTextFitPadding(managerIdArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
                 binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolAvoidEdges", getCodec());
         if (api != null) {
           channel.setMessageHandler(
@@ -2711,6 +2849,65 @@ public class FLTPointAnnotationMessager {
                     };
 
                 api.getSymbolSpacing(managerIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZElevate", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Boolean symbolZElevateArg = (Boolean) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setSymbolZElevate(managerIdArg, symbolZElevateArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZElevate", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Result<Boolean> resultCallback =
+                    new Result<Boolean>() {
+                      public void success(Boolean result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getSymbolZElevate(managerIdArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
@@ -3006,65 +3203,6 @@ public class FLTPointAnnotationMessager {
                     };
 
                 api.getTextKeepUpright(managerIdArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextLineHeight", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                Double textLineHeightArg = (Double) args.get(1);
-                Result<Void> resultCallback =
-                    new Result<Void>() {
-                      public void success(Void result) {
-                        wrapped.add(0, null);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.setTextLineHeight(managerIdArg, textLineHeightArg, resultCallback);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextLineHeight", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                String managerIdArg = (String) args.get(0);
-                Result<Double> resultCallback =
-                    new Result<Double>() {
-                      public void success(Double result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.getTextLineHeight(managerIdArg, resultCallback);
               });
         } else {
           channel.setMessageHandler(null);
