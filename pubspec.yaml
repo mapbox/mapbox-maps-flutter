@@ -1,10 +1,10 @@
 name: mapbox_maps_flutter
 description: A Flutter plugin for integrating Mapbox Maps SDK v11 in Android/iOS application.
-version: 0.4.5
+version: 0.5.0
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=2.19.0 <4.0.0"
   flutter: ">=2.0.0"
 
 dependencies:

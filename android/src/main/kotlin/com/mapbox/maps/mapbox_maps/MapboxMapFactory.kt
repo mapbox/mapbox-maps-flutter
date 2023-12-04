@@ -63,8 +63,8 @@ class MapboxMapFactory(
         (it as ArrayList<Double>).let { size ->
           mapOptionsBuilder.size(
             Size(
-              size[0].toFloat(),
-              size[1].toFloat()
+              size[0].toDevicePixels(context),
+              size[1].toDevicePixels(context)
             )
           )
         }
@@ -104,13 +104,18 @@ class MapboxMapFactory(
       (cameraOptions[1] as? ArrayList<Double>?)?.let {
         cameraOptionsBuilder.padding(
           EdgeInsets(
-            it[0], it[1],
-            it[2], it[3]
+            it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble(),
+            it[2].toDevicePixels(context).toDouble(), it[3].toDevicePixels(context).toDouble()
           )
         )
       }
       (cameraOptions[2] as? ArrayList<Double>?)?.let {
-        cameraOptionsBuilder.anchor(ScreenCoordinate(it[0], it[1]))
+        cameraOptionsBuilder.anchor(
+          ScreenCoordinate(
+            it[0].toDevicePixels(context).toDouble(),
+            it[1].toDevicePixels(context).toDouble()
+          )
+        )
       }
     }
 

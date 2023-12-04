@@ -8,16 +8,16 @@ class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
         switch settings.position?.value {
         case .BOTTOM_LEFT:
             scaleBar.position = .bottomLeading
-            scaleBar.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            scaleBar.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .BOTTOM_RIGHT:
             scaleBar.position = .bottomTrailing
-            scaleBar.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            scaleBar.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .TOP_LEFT, .none:
             scaleBar.position = .topLeading
-            scaleBar.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            scaleBar.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         case .TOP_RIGHT:
             scaleBar.position = .topTrailing
-            scaleBar.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            scaleBar.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         }
         if let isMetric = settings.isMetricUnits?.boolValue {
             scaleBar.useMetricUnits = isMetric
@@ -36,10 +36,10 @@ class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
         let settings = FLT_SETTINGSScaleBarSettings.make(
             withEnabled: NSNumber(value: mapView.ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden),
             position: .init(value: position),
-            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginLeft: NSNumber(value: options.margins.x),
+            marginTop: NSNumber(value: options.margins.y),
+            marginRight: NSNumber(value: options.margins.x),
+            marginBottom: NSNumber(value: options.margins.y),
             textColor: nil,
             primaryColor: nil,
             secondaryColor: nil,

@@ -8,7 +8,7 @@ import com.mapbox.maps.plugin.attribution.attribution
 
 class AttributionController(private val mapView: MapView) :
   FLTSettings.AttributionSettingsInterface {
-  override fun getSettings(): FLTSettings.AttributionSettings = mapView.attribution.toFLT()
+  override fun getSettings(): FLTSettings.AttributionSettings = mapView.attribution.toFLT(mapView.context)
   override fun updateSettings(settings: FLTSettings.AttributionSettings) {
     mapView.attribution.applyFromFLT(settings, mapView.context)
   }

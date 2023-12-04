@@ -8,7 +8,7 @@ import com.mapbox.maps.plugin.logo.logo
 
 class LogoController(private val mapView: MapView) :
   FLTSettings.LogoSettingsInterface {
-  override fun getSettings(): FLTSettings.LogoSettings = mapView.logo.toFLT()
+  override fun getSettings(): FLTSettings.LogoSettings = mapView.logo.toFLT(mapView.context)
   override fun updateSettings(settings: FLTSettings.LogoSettings) {
     mapView.logo.applyFromFLT(settings, mapView.context)
   }

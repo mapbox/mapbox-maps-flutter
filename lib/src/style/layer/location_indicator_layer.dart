@@ -164,9 +164,15 @@ class LocationIndicatorLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      bearingImage: map["layout"]["bearing-image"],
-      shadowImage: map["layout"]["shadow-image"],
-      topImage: map["layout"]["top-image"],
+      bearingImage: map["layout"]["bearing-image"] is String?
+          ? map["layout"]["bearing-image"] as String?
+          : null,
+      shadowImage: map["layout"]["shadow-image"] is String?
+          ? map["layout"]["shadow-image"] as String?
+          : null,
+      topImage: map["layout"]["top-image"] is String?
+          ? map["layout"]["top-image"] as String?
+          : null,
       accuracyRadius: map["paint"]["accuracy-radius"] is num?
           ? (map["paint"]["accuracy-radius"] as num?)?.toDouble()
           : null,

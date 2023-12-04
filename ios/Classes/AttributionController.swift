@@ -8,16 +8,16 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         switch settings.position?.value {
         case .BOTTOM_LEFT:
             attributionButton.position = .bottomLeading
-            attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .BOTTOM_RIGHT, .none:
             attributionButton.position = .bottomTrailing
-            attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .TOP_LEFT:
             attributionButton.position = .topLeading
-            attributionButton.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         case .TOP_RIGHT:
             attributionButton.position = .topTrailing
-            attributionButton.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            attributionButton.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         }
 
         mapView.ornaments.options.attributionButton = attributionButton
@@ -35,10 +35,10 @@ class AttributionController: NSObject, FLT_SETTINGSAttributionSettingsInterface 
         let settings = FLT_SETTINGSAttributionSettings.make(
             withIconColor: NSNumber(value: iconColor),
             position: .init(value: position),
-            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginLeft: NSNumber(value: options.margins.x),
+            marginTop: NSNumber(value: options.margins.y),
+            marginRight: NSNumber(value: options.margins.x),
+            marginBottom: NSNumber(value: options.margins.y),
             clickable: nil)
 
         return settings

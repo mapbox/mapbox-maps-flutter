@@ -8,16 +8,16 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         switch settings.position?.value {
         case .BOTTOM_LEFT:
             compass.position = .bottomLeading
-            compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            compass.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .BOTTOM_RIGHT:
             compass.position = .bottomTrailing
-            compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            compass.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
         case .TOP_LEFT:
             compass.position = .topLeading
-            compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            compass.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         case .TOP_RIGHT, .none:
             compass.position = .topTrailing
-            compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+            compass.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
         }
 
         if let data = settings.image?.data {
@@ -27,10 +27,11 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         if let visible = settings.enabled?.boolValue {
             let fadeWhenFacingNorth = settings.fadeWhenFacingNorth?.boolValue ?? true
 
-            let visibility: OrnamentVisibility = switch (visible, fadeWhenFacingNorth) {
-            case (true, true): .adaptive
-            case (true, false): .visible
-            case (false, _): .hidden
+            let visibility: OrnamentVisibility
+            switch (visible, fadeWhenFacingNorth) {
+            case (true, true): visibility = .adaptive
+            case (true, false): visibility = .visible
+            case (false, _): visibility = .hidden
             }
 
             compass.visibility = visibility
@@ -64,10 +65,10 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
         let settings = FLT_SETTINGSCompassSettings.make(
             withEnabled: true,
             position: .init(value: position),
-            marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale),
-            marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale),
-            marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale),
+            marginLeft: NSNumber(value: options.margins.x),
+            marginTop: NSNumber(value: options.margins.y),
+            marginRight: NSNumber(value: options.margins.x),
+            marginBottom: NSNumber(value: options.margins.y),
             opacity: NSNumber(value: 0.0),
             rotation: NSNumber(value: 0.0),
             visibility: visibility,
