@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import androidx.lifecycle.Lifecycle
+import com.mapbox.maps.pigeons.FLTMapInterfaces
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -12,6 +13,8 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 /** MapboxMapsPlugin */
 class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+  private val optionsController = MapboxOptionsController()
+
   private var lifecycle: Lifecycle? = null
 
   // / The MethodChannel that will the communication between Flutter and native Android
@@ -23,6 +26,12 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "mapbox_maps")
     channel.setMethodCallHandler(this)
+
+    // static options handling should be setup upon attachment,
+    // as options can before configured before the map view is setup
+    FLTMapInterfaces._MapboxMapsOptions.setup(flutterPluginBinding.binaryMessenger, optionsController)
+    FLTMapInterfaces._MapboxOptions.setup(flutterPluginBinding.binaryMessenger, optionsController)
+
     flutterPluginBinding
       .platformViewRegistry
       .registerViewFactory(

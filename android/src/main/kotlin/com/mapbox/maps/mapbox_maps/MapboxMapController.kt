@@ -42,7 +42,6 @@ class MapboxMapController(
   private val attributionController = AttributionController(mapView)
   private val scaleBarController = ScaleBarController(mapView)
   private val compassController = CompassController(mapView)
-  private val optionsController = MapboxOptionsController()
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
   init {
@@ -60,9 +59,6 @@ class MapboxMapController(
     FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, attributionController)
     FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, scaleBarController)
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
-
-    FLTMapInterfaces._MapboxMapsOptions.setup(messenger, optionsController)
-    FLTMapInterfaces._MapboxOptions.setup(messenger, optionsController)
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)

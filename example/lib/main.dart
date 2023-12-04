@@ -55,7 +55,6 @@ class MapsDemo extends StatelessWidget {
   static const String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 
   void _pushPage(BuildContext context, ExamplePage page) async {
-    MapboxOptions.setAccessToken(MapsDemo.ACCESS_TOKEN);
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (_) => Scaffold(
               appBar: AppBar(title: Text(page.title)),
@@ -110,6 +109,7 @@ class MapsDemo extends StatelessWidget {
 }
 
 void main() {
-
+  WidgetsFlutterBinding.ensureInitialized();
+  MapboxOptions.setAccessToken(MapsDemo.ACCESS_TOKEN);
   runApp(MaterialApp(home: MapsDemo()));
 }
