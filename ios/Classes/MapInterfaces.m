@@ -5538,6 +5538,171 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
       [channel setMessageHandler:nil];
     }
   }
+  /// Returns the list containing information about existing style import objects.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportsWithError:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportsWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSArray<FLTStyleObjectInfo *> *output = [api getStyleImportsWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Removes an existing style import.
+  ///
+  /// @param importId Identifier of the style import to remove.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(removeStyleImportImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(removeStyleImportImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api removeStyleImportImportId:arg_importId error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets the style import schema.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import schema, containing the default configurations for the style import.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportSchemaImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportSchemaImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        id output = [api getStyleImportSchemaImportId:arg_importId error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportConfigPropertiesImportId:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportConfigPropertiesImportId:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        NSDictionary<NSString *, FLTStylePropertyValue *> *output = [api getStyleImportConfigPropertiesImportId:arg_importId error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Gets the value of style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getStyleImportConfigPropertyImportId:config:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(getStyleImportConfigPropertyImportId:config:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_config = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        FLTStylePropertyValue *output = [api getStyleImportConfigPropertyImportId:arg_importId config:arg_config error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Sets style import config.
+  /// This method can be used to perform batch update for a style import configurations.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param configs A map of style import configurations.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setStyleImportConfigPropertiesImportId:configs:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleImportConfigPropertiesImportId:configs:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSDictionary<NSString *, id> *arg_configs = GetNullableObjectAtIndex(args, 1);
+        FlutterError *error;
+        [api setStyleImportConfigPropertiesImportId:arg_importId configs:arg_configs error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  /// Sets a value to a style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  /// @param value The style import config value.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty"
+        binaryMessenger:binaryMessenger
+        codec:FLTStyleManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setStyleImportConfigPropertyImportId:config:value:error:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleImportConfigPropertyImportId:config:value:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_importId = GetNullableObjectAtIndex(args, 0);
+        NSString *arg_config = GetNullableObjectAtIndex(args, 1);
+        id arg_value = GetNullableObjectAtIndex(args, 2);
+        FlutterError *error;
+        [api setStyleImportConfigPropertyImportId:arg_importId config:arg_config value:arg_value error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
   /// Overrides the map style's transition options with user-provided options.
   ///
   /// The style transition is re-evaluated when a new style is loaded.

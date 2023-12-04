@@ -1848,6 +1848,51 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 ///
 /// @return The `transition options` of the current style in use.
 - (void)getStyleTransitionWithCompletion:(void (^)(FLTTransitionOptions *_Nullable, FlutterError *_Nullable))completion;
+/// Returns the list containing information about existing style import objects.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSArray<FLTStyleObjectInfo *> *)getStyleImportsWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// Removes an existing style import.
+///
+/// @param importId Identifier of the style import to remove.
+- (void)removeStyleImportImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets the style import schema.
+///
+/// @param importId Identifier of the style import.
+///
+/// Returns the style import schema, containing the default configurations for the style import.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable id)getStyleImportSchemaImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets style import config.
+///
+/// @param importId Identifier of the style import.
+///
+/// Returns the style import configuration or a string describing an error if the operation was not successful.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSDictionary<NSString *, FLTStylePropertyValue *> *)getStyleImportConfigPropertiesImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets the value of style import config.
+///
+/// @param importId Identifier of the style import.
+/// @param config The style import config name.
+///
+/// Returns the style import configuration or a string describing an error if the operation was not successful.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable FLTStylePropertyValue *)getStyleImportConfigPropertyImportId:(NSString *)importId config:(NSString *)config error:(FlutterError *_Nullable *_Nonnull)error;
+/// Sets style import config.
+/// This method can be used to perform batch update for a style import configurations.
+///
+/// @param importId Identifier of the style import.
+/// @param configs A map of style import configurations.
+- (void)setStyleImportConfigPropertiesImportId:(NSString *)importId configs:(NSDictionary<NSString *, id> *)configs error:(FlutterError *_Nullable *_Nonnull)error;
+/// Sets a value to a style import config.
+///
+/// @param importId Identifier of the style import.
+/// @param config The style import config name.
+/// @param value The style import config value.
+- (void)setStyleImportConfigPropertyImportId:(NSString *)importId config:(NSString *)config value:(id)value error:(FlutterError *_Nullable *_Nonnull)error;
 /// Overrides the map style's transition options with user-provided options.
 ///
 /// The style transition is re-evaluated when a new style is loaded.

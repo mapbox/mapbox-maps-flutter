@@ -342,6 +342,13 @@ fun Number.toDevicePixels(context: Context): Float {
 
 // Android to FLT
 
+fun StylePropertyValue.toFLTStylePropertyValue(): FLTMapInterfaces.StylePropertyValue {
+  return FLTMapInterfaces.StylePropertyValue.Builder()
+    .setValue(value.toJson())
+    .setKind(FLTMapInterfaces.StylePropertyValueKind.values()[kind.ordinal])
+    .build()
+}
+
 fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
   return when (this) {
     ProjectionName.GLOBE -> StyleProjectionName.GLOBE

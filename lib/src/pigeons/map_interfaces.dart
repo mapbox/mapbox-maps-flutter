@@ -6252,6 +6252,221 @@ class StyleManager {
     }
   }
 
+  /// Returns the list containing information about existing style import objects.
+  Future<List<StyleObjectInfo?>> getStyleImports() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as List<Object?>?)!.cast<StyleObjectInfo?>();
+    }
+  }
+
+  /// Removes an existing style import.
+  ///
+  /// @param importId Identifier of the style import to remove.
+  Future<void> removeStyleImport(String arg_importId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_importId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Gets the style import schema.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import schema, containing the default configurations for the style import.
+  Future<Object> getStyleImportSchema(String arg_importId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_importId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return replyList[0]!;
+    }
+  }
+
+  /// Gets style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  Future<Map<String?, StylePropertyValue?>> getStyleImportConfigProperties(
+      String arg_importId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_importId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as Map<Object?, Object?>?)!
+          .cast<String?, StylePropertyValue?>();
+    }
+  }
+
+  /// Gets the value of style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  ///
+  /// Returns the style import configuration or a string describing an error if the operation was not successful.
+  Future<StylePropertyValue> getStyleImportConfigProperty(
+      String arg_importId, String arg_config) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_importId, arg_config]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as StylePropertyValue?)!;
+    }
+  }
+
+  /// Sets style import config.
+  /// This method can be used to perform batch update for a style import configurations.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param configs A map of style import configurations.
+  Future<void> setStyleImportConfigProperties(
+      String arg_importId, Map<String?, Object?> arg_configs) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_importId, arg_configs]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Sets a value to a style import config.
+  ///
+  /// @param importId Identifier of the style import.
+  /// @param config The style import config name.
+  /// @param value The style import config value.
+  Future<void> setStyleImportConfigProperty(
+      String arg_importId, String arg_config, Object arg_value) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_importId, arg_config, arg_value]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   /// Overrides the map style's transition options with user-provided options.
   ///
   /// The style transition is re-evaluated when a new style is loaded.

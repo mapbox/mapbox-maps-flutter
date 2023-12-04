@@ -9196,6 +9196,59 @@ public class FLTMapInterfaces {
      * @return The `transition options` of the current style in use.
      */
     void getStyleTransition(@NonNull Result<TransitionOptions> result);
+    /** Returns the list containing information about existing style import objects. */
+    @NonNull 
+    List<StyleObjectInfo> getStyleImports();
+    /**
+     * Removes an existing style import.
+     *
+     * @param importId Identifier of the style import to remove.
+     */
+    void removeStyleImport(@NonNull String importId);
+    /**
+     * Gets the style import schema.
+     *
+     * @param importId Identifier of the style import.
+     *
+     * Returns the style import schema, containing the default configurations for the style import.
+     */
+    @NonNull 
+    Object getStyleImportSchema(@NonNull String importId);
+    /**
+     * Gets style import config.
+     *
+     * @param importId Identifier of the style import.
+     *
+     * Returns the style import configuration or a string describing an error if the operation was not successful.
+     */
+    @NonNull 
+    Map<String, StylePropertyValue> getStyleImportConfigProperties(@NonNull String importId);
+    /**
+     * Gets the value of style import config.
+     *
+     * @param importId Identifier of the style import.
+     * @param config The style import config name.
+     *
+     * Returns the style import configuration or a string describing an error if the operation was not successful.
+     */
+    @NonNull 
+    StylePropertyValue getStyleImportConfigProperty(@NonNull String importId, @NonNull String config);
+    /**
+     * Sets style import config.
+     * This method can be used to perform batch update for a style import configurations.
+     *
+     * @param importId Identifier of the style import.
+     * @param configs A map of style import configurations.
+     */
+    void setStyleImportConfigProperties(@NonNull String importId, @NonNull Map<String, Object> configs);
+    /**
+     * Sets a value to a style import config.
+     *
+     * @param importId Identifier of the style import.
+     * @param config The style import config name.
+     * @param value The style import config value.
+     */
+    void setStyleImportConfigProperty(@NonNull String importId, @NonNull String config, @NonNull Object value);
     /**
      * Overrides the map style's transition options with user-provided options.
      *
@@ -9723,6 +9776,176 @@ public class FLTMapInterfaces {
                     };
 
                 api.getStyleTransition(resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  List<StyleObjectInfo> output = api.getStyleImports();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  api.removeStyleImport(importIdArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  Object output = api.getStyleImportSchema(importIdArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                try {
+                  Map<String, StylePropertyValue> output = api.getStyleImportConfigProperties(importIdArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                String configArg = (String) args.get(1);
+                try {
+                  StylePropertyValue output = api.getStyleImportConfigProperty(importIdArg, configArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                Map<String, Object> configsArg = (Map<String, Object>) args.get(1);
+                try {
+                  api.setStyleImportConfigProperties(importIdArg, configsArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String importIdArg = (String) args.get(0);
+                String configArg = (String) args.get(1);
+                Object valueArg = args.get(2);
+                try {
+                  api.setStyleImportConfigProperty(importIdArg, configArg, valueArg);
+                  wrapped.add(0, null);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
               });
         } else {
           channel.setMessageHandler(null);

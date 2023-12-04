@@ -11,7 +11,9 @@ import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
+import java.lang.RuntimeException
 import java.nio.ByteBuffer
+import java.util.HashMap
 import java.util.Locale
 
 class StyleController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces.StyleManager {
@@ -48,6 +50,48 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
         .setEnablePlacementTransitions(transitionOptions.enablePlacementTransitions)
         .build()
     )
+  }
+
+  override fun getStyleImports(): MutableList<FLTMapInterfaces.StyleObjectInfo> {
+    return mapboxMap.getStyleImports().map { it.toFLTStyleObjectInfo() }.toMutableList()
+  }
+
+  override fun removeStyleImport(importId: String) {
+    mapboxMap.removeStyleImport(importId)
+  }
+
+  override fun getStyleImportSchema(importId: String): Any {
+    return mapboxMap.getStyleImportSchema(importId)
+      .getValueOrElse {
+        throw RuntimeException(it)
+      }
+  }
+
+  override fun getStyleImportConfigProperties(importId: String): MutableMap<String, FLTMapInterfaces.StylePropertyValue> {
+    return mapboxMap.getStyleImportConfigProperties(importId)
+      .getValueOrElse { throw  RuntimeException(it) }
+      .mapValues { it.value.toFLTStylePropertyValue() }
+      .toMutableMap()
+  }
+
+  override fun getStyleImportConfigProperty(
+    importId: String,
+    config: String
+  ): FLTMapInterfaces.StylePropertyValue {
+    return mapboxMap.getStyleImportConfigProperty(importId, config)
+      .getValueOrElse { throw RuntimeException(it) }
+      .toFLTStylePropertyValue()
+  }
+
+  override fun setStyleImportConfigProperties(importId: String, configs: MutableMap<String, Any>) {
+    mapboxMap.setStyleImportConfigProperties(
+      importId,
+      configs.mapValues { it.toValue() } as HashMap<String, Value>
+    )
+  }
+
+  override fun setStyleImportConfigProperty(importId: String, config: String, value: Any) {
+    mapboxMap.setStyleImportConfigProperty(importId, config, value.toValue())
   }
 
   override fun setStyleTransition(
@@ -151,7 +195,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
 
   override fun getStyleLayers(result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.StyleObjectInfo>>) {
     result.success(
-      mapboxMap.getStyleLayers().map { it.toFLTStyleObjectInfo() }.toMutableList()
+      mapboxMap.styleLayers.map { it.toFLTStyleObjectInfo() }.toMutableList()
     )
   }
 
@@ -330,9 +374,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
 
   override fun getStyleSources(result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.StyleObjectInfo>>) {
     result.success(
-      mapboxMap.getStyleSources().map {
-        it.toFLTStyleObjectInfo()
-      }.toMutableList()
+      mapboxMap.styleSources.map {it.toFLTStyleObjectInfo() }.toMutableList()
     )
   }
 
