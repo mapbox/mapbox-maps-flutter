@@ -2,8 +2,12 @@ import Foundation
 import MapboxMaps
 import UIKit
 class CameraController: NSObject, FLT_CameraManager {
-    func camera(forCoordinateBoundsBounds bounds: FLTCoordinateBounds, padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: bounds.toCoordinateBounds(), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue)
+    func cameraForDrag(fromPoint: FLTScreenCoordinate, toPoint: FLTScreenCoordinate, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
+        return self.mapboxMap.dragCameraOptions(from: fromPoint.toCGPoint(), to: toPoint.toCGPoint()).toFLTCameraOptions()
+    }
+
+    func camera(forCoordinateBoundsBounds bounds: FLTCoordinateBounds, padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, maxZoom: NSNumber?, offset: FLTScreenCoordinate?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
+        let cameraOptions = self.mapboxMap.camera(for: bounds.toCoordinateBounds(), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue, maxZoom: maxZoom?.doubleValue, offset: offset?.toScreenCoordinate())
         return cameraOptions.toFLTCameraOptions()
     }
 
@@ -82,18 +86,6 @@ class CameraController: NSObject, FLT_CameraManager {
 
     func getBoundsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraBounds? {
         return self.mapboxMap.cameraBounds.toFLTCameraBounds()
-    }
-
-    func dragStartPoint(_ point: FLTScreenCoordinate, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        self.mapboxMap.dragStart(for: point.toCGPoint())
-    }
-
-    func getDragCameraOptions(fromPoint: FLTScreenCoordinate, toPoint: FLTScreenCoordinate, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        return self.mapboxMap.dragCameraOptions(from: fromPoint.toCGPoint(), to: toPoint.toCGPoint()).toFLTCameraOptions()
-    }
-
-    func dragEndWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        self.mapboxMap.dragEnd()
     }
 
     private var mapboxMap: MapboxMap

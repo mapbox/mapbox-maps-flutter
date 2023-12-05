@@ -2356,15 +2356,25 @@ class _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  Future<CameraOptions> cameraForCoordinateBounds(CoordinateBounds arg_bounds,
-      MbxEdgeInsets arg_padding, double? arg_bearing, double? arg_pitch) async {
+  Future<CameraOptions> cameraForCoordinateBounds(
+      CoordinateBounds arg_bounds,
+      MbxEdgeInsets arg_padding,
+      double? arg_bearing,
+      double? arg_pitch,
+      double? arg_maxZoom,
+      ScreenCoordinate? arg_offset) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinateBounds',
         codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-            .send(<Object?>[arg_bounds, arg_padding, arg_bearing, arg_pitch])
-        as List<Object?>?;
+    final List<Object?>? replyList = await channel.send(<Object?>[
+      arg_bounds,
+      arg_padding,
+      arg_bearing,
+      arg_pitch,
+      arg_maxZoom,
+      arg_offset
+    ]) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',

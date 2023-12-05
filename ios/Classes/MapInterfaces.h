@@ -1189,7 +1189,7 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// @return The `camera options` object representing the provided parameters.
 ///
 /// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that returns the `camera options` object for given parameters.
 ///
 /// @param coordinates The `coordinates` representing the bounds of the camera.

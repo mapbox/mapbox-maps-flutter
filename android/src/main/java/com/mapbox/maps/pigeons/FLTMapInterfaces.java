@@ -5258,7 +5258,7 @@ public class FLTMapInterfaces {
      * @return The `camera options` object representing the provided parameters.
      */
     @NonNull 
-    CameraOptions cameraForCoordinateBounds(@NonNull CoordinateBounds bounds, @NonNull MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch);
+    CameraOptions cameraForCoordinateBounds(@NonNull CoordinateBounds bounds, @NonNull MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch, @Nullable Double maxZoom, @Nullable ScreenCoordinate offset);
     /**
      * Convenience method that returns the `camera options` object for given parameters.
      *
@@ -5465,8 +5465,10 @@ public class FLTMapInterfaces {
                 MbxEdgeInsets paddingArg = (MbxEdgeInsets) args.get(1);
                 Double bearingArg = (Double) args.get(2);
                 Double pitchArg = (Double) args.get(3);
+                Double maxZoomArg = (Double) args.get(4);
+                ScreenCoordinate offsetArg = (ScreenCoordinate) args.get(5);
                 try {
-                  CameraOptions output = api.cameraForCoordinateBounds(boundsArg, paddingArg, bearingArg, pitchArg);
+                  CameraOptions output = api.cameraForCoordinateBounds(boundsArg, paddingArg, bearingArg, pitchArg, maxZoomArg, offsetArg);
                   wrapped.add(0, output);
                 }
  catch (Throwable exception) {

@@ -2226,15 +2226,17 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
         binaryMessenger:binaryMessenger
         codec:FLT_CameraManagerGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(cameraForCoordinateBoundsBounds:padding:bearing:pitch:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(cameraForCoordinateBoundsBounds:padding:bearing:pitch:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(cameraForCoordinateBoundsBounds:padding:bearing:pitch:maxZoom:offset:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(cameraForCoordinateBoundsBounds:padding:bearing:pitch:maxZoom:offset:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         FLTCoordinateBounds *arg_bounds = GetNullableObjectAtIndex(args, 0);
         FLTMbxEdgeInsets *arg_padding = GetNullableObjectAtIndex(args, 1);
         NSNumber *arg_bearing = GetNullableObjectAtIndex(args, 2);
         NSNumber *arg_pitch = GetNullableObjectAtIndex(args, 3);
+        NSNumber *arg_maxZoom = GetNullableObjectAtIndex(args, 4);
+        FLTScreenCoordinate *arg_offset = GetNullableObjectAtIndex(args, 5);
         FlutterError *error;
-        FLTCameraOptions *output = [api cameraForCoordinateBoundsBounds:arg_bounds padding:arg_padding bearing:arg_bearing pitch:arg_pitch error:&error];
+        FLTCameraOptions *output = [api cameraForCoordinateBoundsBounds:arg_bounds padding:arg_padding bearing:arg_bearing pitch:arg_pitch maxZoom:arg_maxZoom offset:arg_offset error:&error];
         callback(wrapResult(output, error));
       }];
     } else {

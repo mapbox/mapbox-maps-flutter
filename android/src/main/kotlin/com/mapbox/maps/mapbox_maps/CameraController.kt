@@ -10,13 +10,17 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
     bounds: FLTMapInterfaces.CoordinateBounds,
     padding: FLTMapInterfaces.MbxEdgeInsets,
     bearing: Double?,
-    pitch: Double?
+    pitch: Double?,
+    maxZoom: Double?,
+    offset: FLTMapInterfaces.ScreenCoordinate?
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinateBounds(
       bounds.toCoordinateBounds(),
       padding.toEdgeInsets(context),
       bearing,
-      pitch
+      pitch,
+      maxZoom,
+      offset?.toScreenCoordinate(context)
     )
     return cameraOptions.toFLTCameraOptions(context)
   }
