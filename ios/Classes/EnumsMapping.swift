@@ -12,7 +12,7 @@ extension FillTranslateAnchor {
     }
 
     init?(_ fltValueBox: FLTFillTranslateAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTFillTranslateAnchor() -> FLTFillTranslateAnchor? {
@@ -24,7 +24,7 @@ extension FillTranslateAnchor {
     }
 
     func toFLTFillTranslateAnchorBox() -> FLTFillTranslateAnchorBox? {
-        toFLTFillTranslateAnchor.map(FLTFillTranslateAnchorBox.init(value:))
+        toFLTFillTranslateAnchor().map(FLTFillTranslateAnchorBox.init(value:))
     }
 }
 extension LineCap {
@@ -39,7 +39,7 @@ extension LineCap {
     }
 
     init?(_ fltValueBox: FLTLineCapBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTLineCap() -> FLTLineCap? {
@@ -52,7 +52,7 @@ extension LineCap {
     }
 
     func toFLTLineCapBox() -> FLTLineCapBox? {
-        toFLTLineCap.map(FLTLineCapBox.init(value:))
+        toFLTLineCap().map(FLTLineCapBox.init(value:))
     }
 }
 extension LineJoin {
@@ -67,7 +67,7 @@ extension LineJoin {
     }
 
     init?(_ fltValueBox: FLTLineJoinBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTLineJoin() -> FLTLineJoin? {
@@ -80,7 +80,7 @@ extension LineJoin {
     }
 
     func toFLTLineJoinBox() -> FLTLineJoinBox? {
-        toFLTLineJoin.map(FLTLineJoinBox.init(value:))
+        toFLTLineJoin().map(FLTLineJoinBox.init(value:))
     }
 }
 extension LineTranslateAnchor {
@@ -94,7 +94,7 @@ extension LineTranslateAnchor {
     }
 
     init?(_ fltValueBox: FLTLineTranslateAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTLineTranslateAnchor() -> FLTLineTranslateAnchor? {
@@ -106,7 +106,7 @@ extension LineTranslateAnchor {
     }
 
     func toFLTLineTranslateAnchorBox() -> FLTLineTranslateAnchorBox? {
-        toFLTLineTranslateAnchor.map(FLTLineTranslateAnchorBox.init(value:))
+        toFLTLineTranslateAnchor().map(FLTLineTranslateAnchorBox.init(value:))
     }
 }
 extension IconAnchor {
@@ -127,7 +127,7 @@ extension IconAnchor {
     }
 
     init?(_ fltValueBox: FLTIconAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTIconAnchor() -> FLTIconAnchor? {
@@ -146,7 +146,7 @@ extension IconAnchor {
     }
 
     func toFLTIconAnchorBox() -> FLTIconAnchorBox? {
-        toFLTIconAnchor.map(FLTIconAnchorBox.init(value:))
+        toFLTIconAnchor().map(FLTIconAnchorBox.init(value:))
     }
 }
 extension IconPitchAlignment {
@@ -161,7 +161,7 @@ extension IconPitchAlignment {
     }
 
     init?(_ fltValueBox: FLTIconPitchAlignmentBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTIconPitchAlignment() -> FLTIconPitchAlignment? {
@@ -174,7 +174,7 @@ extension IconPitchAlignment {
     }
 
     func toFLTIconPitchAlignmentBox() -> FLTIconPitchAlignmentBox? {
-        toFLTIconPitchAlignment.map(FLTIconPitchAlignmentBox.init(value:))
+        toFLTIconPitchAlignment().map(FLTIconPitchAlignmentBox.init(value:))
     }
 }
 extension IconRotationAlignment {
@@ -189,7 +189,7 @@ extension IconRotationAlignment {
     }
 
     init?(_ fltValueBox: FLTIconRotationAlignmentBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTIconRotationAlignment() -> FLTIconRotationAlignment? {
@@ -202,7 +202,7 @@ extension IconRotationAlignment {
     }
 
     func toFLTIconRotationAlignmentBox() -> FLTIconRotationAlignmentBox? {
-        toFLTIconRotationAlignment.map(FLTIconRotationAlignmentBox.init(value:))
+        toFLTIconRotationAlignment().map(FLTIconRotationAlignmentBox.init(value:))
     }
 }
 extension IconTextFit {
@@ -218,7 +218,7 @@ extension IconTextFit {
     }
 
     init?(_ fltValueBox: FLTIconTextFitBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTIconTextFit() -> FLTIconTextFit? {
@@ -232,7 +232,7 @@ extension IconTextFit {
     }
 
     func toFLTIconTextFitBox() -> FLTIconTextFitBox? {
-        toFLTIconTextFit.map(FLTIconTextFitBox.init(value:))
+        toFLTIconTextFit().map(FLTIconTextFitBox.init(value:))
     }
 }
 extension SymbolPlacement {
@@ -247,7 +247,7 @@ extension SymbolPlacement {
     }
 
     init?(_ fltValueBox: FLTSymbolPlacementBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTSymbolPlacement() -> FLTSymbolPlacement? {
@@ -260,7 +260,7 @@ extension SymbolPlacement {
     }
 
     func toFLTSymbolPlacementBox() -> FLTSymbolPlacementBox? {
-        toFLTSymbolPlacement.map(FLTSymbolPlacementBox.init(value:))
+        toFLTSymbolPlacement().map(FLTSymbolPlacementBox.init(value:))
     }
 }
 extension SymbolZOrder {
@@ -275,7 +275,7 @@ extension SymbolZOrder {
     }
 
     init?(_ fltValueBox: FLTSymbolZOrderBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTSymbolZOrder() -> FLTSymbolZOrder? {
@@ -288,7 +288,7 @@ extension SymbolZOrder {
     }
 
     func toFLTSymbolZOrderBox() -> FLTSymbolZOrderBox? {
-        toFLTSymbolZOrder.map(FLTSymbolZOrderBox.init(value:))
+        toFLTSymbolZOrder().map(FLTSymbolZOrderBox.init(value:))
     }
 }
 extension TextAnchor {
@@ -309,7 +309,7 @@ extension TextAnchor {
     }
 
     init?(_ fltValueBox: FLTTextAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextAnchor() -> FLTTextAnchor? {
@@ -328,7 +328,7 @@ extension TextAnchor {
     }
 
     func toFLTTextAnchorBox() -> FLTTextAnchorBox? {
-        toFLTTextAnchor.map(FLTTextAnchorBox.init(value:))
+        toFLTTextAnchor().map(FLTTextAnchorBox.init(value:))
     }
 }
 extension TextJustify {
@@ -344,7 +344,7 @@ extension TextJustify {
     }
 
     init?(_ fltValueBox: FLTTextJustifyBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextJustify() -> FLTTextJustify? {
@@ -358,7 +358,7 @@ extension TextJustify {
     }
 
     func toFLTTextJustifyBox() -> FLTTextJustifyBox? {
-        toFLTTextJustify.map(FLTTextJustifyBox.init(value:))
+        toFLTTextJustify().map(FLTTextJustifyBox.init(value:))
     }
 }
 extension TextPitchAlignment {
@@ -373,7 +373,7 @@ extension TextPitchAlignment {
     }
 
     init?(_ fltValueBox: FLTTextPitchAlignmentBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextPitchAlignment() -> FLTTextPitchAlignment? {
@@ -386,7 +386,7 @@ extension TextPitchAlignment {
     }
 
     func toFLTTextPitchAlignmentBox() -> FLTTextPitchAlignmentBox? {
-        toFLTTextPitchAlignment.map(FLTTextPitchAlignmentBox.init(value:))
+        toFLTTextPitchAlignment().map(FLTTextPitchAlignmentBox.init(value:))
     }
 }
 extension TextRotationAlignment {
@@ -401,7 +401,7 @@ extension TextRotationAlignment {
     }
 
     init?(_ fltValueBox: FLTTextRotationAlignmentBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextRotationAlignment() -> FLTTextRotationAlignment? {
@@ -414,7 +414,7 @@ extension TextRotationAlignment {
     }
 
     func toFLTTextRotationAlignmentBox() -> FLTTextRotationAlignmentBox? {
-        toFLTTextRotationAlignment.map(FLTTextRotationAlignmentBox.init(value:))
+        toFLTTextRotationAlignment().map(FLTTextRotationAlignmentBox.init(value:))
     }
 }
 extension TextTransform {
@@ -429,7 +429,7 @@ extension TextTransform {
     }
 
     init?(_ fltValueBox: FLTTextTransformBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextTransform() -> FLTTextTransform? {
@@ -442,7 +442,7 @@ extension TextTransform {
     }
 
     func toFLTTextTransformBox() -> FLTTextTransformBox? {
-        toFLTTextTransform.map(FLTTextTransformBox.init(value:))
+        toFLTTextTransform().map(FLTTextTransformBox.init(value:))
     }
 }
 extension IconTranslateAnchor {
@@ -456,7 +456,7 @@ extension IconTranslateAnchor {
     }
 
     init?(_ fltValueBox: FLTIconTranslateAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTIconTranslateAnchor() -> FLTIconTranslateAnchor? {
@@ -468,7 +468,7 @@ extension IconTranslateAnchor {
     }
 
     func toFLTIconTranslateAnchorBox() -> FLTIconTranslateAnchorBox? {
-        toFLTIconTranslateAnchor.map(FLTIconTranslateAnchorBox.init(value:))
+        toFLTIconTranslateAnchor().map(FLTIconTranslateAnchorBox.init(value:))
     }
 }
 extension TextTranslateAnchor {
@@ -482,7 +482,7 @@ extension TextTranslateAnchor {
     }
 
     init?(_ fltValueBox: FLTTextTranslateAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTTextTranslateAnchor() -> FLTTextTranslateAnchor? {
@@ -494,7 +494,7 @@ extension TextTranslateAnchor {
     }
 
     func toFLTTextTranslateAnchorBox() -> FLTTextTranslateAnchorBox? {
-        toFLTTextTranslateAnchor.map(FLTTextTranslateAnchorBox.init(value:))
+        toFLTTextTranslateAnchor().map(FLTTextTranslateAnchorBox.init(value:))
     }
 }
 extension CirclePitchAlignment {
@@ -508,7 +508,7 @@ extension CirclePitchAlignment {
     }
 
     init?(_ fltValueBox: FLTCirclePitchAlignmentBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTCirclePitchAlignment() -> FLTCirclePitchAlignment? {
@@ -520,7 +520,7 @@ extension CirclePitchAlignment {
     }
 
     func toFLTCirclePitchAlignmentBox() -> FLTCirclePitchAlignmentBox? {
-        toFLTCirclePitchAlignment.map(FLTCirclePitchAlignmentBox.init(value:))
+        toFLTCirclePitchAlignment().map(FLTCirclePitchAlignmentBox.init(value:))
     }
 }
 extension CirclePitchScale {
@@ -534,7 +534,7 @@ extension CirclePitchScale {
     }
 
     init?(_ fltValueBox: FLTCirclePitchScaleBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTCirclePitchScale() -> FLTCirclePitchScale? {
@@ -546,7 +546,7 @@ extension CirclePitchScale {
     }
 
     func toFLTCirclePitchScaleBox() -> FLTCirclePitchScaleBox? {
-        toFLTCirclePitchScale.map(FLTCirclePitchScaleBox.init(value:))
+        toFLTCirclePitchScale().map(FLTCirclePitchScaleBox.init(value:))
     }
 }
 extension CircleTranslateAnchor {
@@ -560,7 +560,7 @@ extension CircleTranslateAnchor {
     }
 
     init?(_ fltValueBox: FLTCircleTranslateAnchorBox) {
-        self.init(fltValue: fltValueBox.value)
+        self.init(fltValueBox.value)
     }
 
     func toFLTCircleTranslateAnchor() -> FLTCircleTranslateAnchor? {
@@ -572,6 +572,6 @@ extension CircleTranslateAnchor {
     }
 
     func toFLTCircleTranslateAnchorBox() -> FLTCircleTranslateAnchorBox? {
-        toFLTCircleTranslateAnchor.map(FLTCircleTranslateAnchorBox.init(value:))
+        toFLTCircleTranslateAnchor().map(FLTCircleTranslateAnchorBox.init(value:))
     }
 }
