@@ -258,7 +258,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconPitchAlignment.toFLTIconPitchAlignment()?.nsNumberValue, nil)
+            completion(iconPitchAlignment.toFLTIconPitchAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -283,7 +283,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconRotationAlignment.toFLTIconRotationAlignment()?.nsNumberValue, nil)
+            completion(iconRotationAlignment.toFLTIconRotationAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -333,7 +333,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(symbolPlacement.toFLTSymbolPlacement()?.nsNumberValue, nil)
+            completion(symbolPlacement.toFLTSymbolPlacementBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -408,7 +408,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(symbolZOrder.toFLTSymbolZOrder()?.nsNumberValue, nil)
+            completion(symbolZOrder.toFLTSymbolZOrderBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -608,7 +608,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textPitchAlignment.toFLTTextPitchAlignment()?.nsNumberValue, nil)
+            completion(textPitchAlignment.toFLTTextPitchAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -633,7 +633,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textRotationAlignment.toFLTTextRotationAlignment()?.nsNumberValue, nil)
+            completion(textRotationAlignment.toFLTTextRotationAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -683,7 +683,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconTranslateAnchor.toFLTIconTranslateAnchor()?.nsNumberValue, nil)
+            completion(iconTranslateAnchor.toFLTIconTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -733,7 +733,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textTranslateAnchor.toFLTTextTranslateAnchor()?.nsNumberValue, nil)
+            completion(textTranslateAnchor.toFLTTextTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

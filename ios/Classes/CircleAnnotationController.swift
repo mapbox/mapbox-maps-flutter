@@ -158,7 +158,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                 return
             }
 
-            completion(circlePitchAlignment.toFLTCirclePitchAlignment()?.nsNumberValue, nil)
+            completion(circlePitchAlignment.toFLTCirclePitchAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -183,7 +183,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                 return
             }
 
-            completion(circlePitchScale.toFLTCirclePitchScale()?.nsNumberValue, nil)
+            completion(circlePitchScale.toFLTCirclePitchScaleBox(), nil)
         } catch {
             completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -233,7 +233,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                 return
             }
 
-            completion(circleTranslateAnchor.toFLTCircleTranslateAnchor()?.nsNumberValue, nil)
+            completion(circleTranslateAnchor.toFLTCircleTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

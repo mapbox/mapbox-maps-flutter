@@ -133,7 +133,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
                 return
             }
 
-            completion(lineCap.toFLTLineCap()?.nsNumberValue, nil)
+            completion(lineCap.toFLTLineCapBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -308,7 +308,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
                 return
             }
 
-            completion(lineTranslateAnchor.toFLTLineTranslateAnchor()?.nsNumberValue, nil)
+            completion(lineTranslateAnchor.toFLTLineTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

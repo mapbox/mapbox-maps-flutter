@@ -208,7 +208,7 @@ final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager
                 return
             }
 
-            completion(fillTranslateAnchor.toFLTFillTranslateAnchor()?.nsNumberValue, nil)
+            completion(fillTranslateAnchor.toFLTFillTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
