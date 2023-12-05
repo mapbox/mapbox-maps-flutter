@@ -53,11 +53,11 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         }
     }
 
-    func setMemoryBudgetMapMemoryBudgetInMegabytes(_ mapMemoryBudgetInMegabytes: FLTMapMemoryBudgetInMegabytes?, mapMemoryBudgetInTiles: FLTMapMemoryBudgetInTiles?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        if mapMemoryBudgetInMegabytes != nil {
-            self.mapboxMap.setMemoryBudget(MapMemoryBudget.fromMapMemoryBudget(mapMemoryBudgetInMegabytes!.toMapMemoryBudgetInMegabytes()))
-        } else if mapMemoryBudgetInTiles != nil {
-            self.mapboxMap.setMemoryBudget(MapMemoryBudget.fromMapMemoryBudget(mapMemoryBudgetInTiles!.toTMapMemoryBudgetInTiles()))
+    func setTileCacheBudgetTileCacheBudgetInMegabytes(_ tileCacheBudgetInMegabytes: FLTTileCacheBudgetInMegabytes?, tileCacheBudgetInTiles: FLTTileCacheBudgetInTiles?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        if let tileCacheBudgetInMegabytes {
+            self.mapboxMap.setTileCacheBudget(TileCacheBudget.fromTileCacheBudget(tileCacheBudgetInMegabytes.toTileCacheBudgetInMegabytes()))
+        } else if let tileCacheBudgetInTiles {
+            self.mapboxMap.setTileCacheBudget(TileCacheBudget.fromTileCacheBudget(tileCacheBudgetInTiles.toTileCacheBudgetInTiles()))
         }
     }
 

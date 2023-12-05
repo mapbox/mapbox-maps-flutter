@@ -3,15 +3,15 @@ import MapboxMaps
 
 let COORDINATES = "coordinates"
 // FLT to Mapbox
-extension FLTMapMemoryBudgetInMegabytes {
-    func toMapMemoryBudgetInMegabytes() -> MapMemoryBudgetInMegabytes {
-        return MapMemoryBudgetInMegabytes.init(size: size.uint64Value)
+extension FLTTileCacheBudgetInMegabytes {
+    func toTileCacheBudgetInMegabytes() -> TileCacheBudgetInMegabytes {
+        return .init(size: size.uint64Value)
     }
 }
 
-extension FLTMapMemoryBudgetInTiles {
-    func toTMapMemoryBudgetInTiles() -> MapMemoryBudgetInTiles {
-        return MapMemoryBudgetInTiles.init(size: size.uint64Value)
+extension FLTTileCacheBudgetInTiles {
+    func toTileCacheBudgetInTiles() -> TileCacheBudgetInTiles {
+        return .init(size: size.uint64Value)
     }
 }
 
