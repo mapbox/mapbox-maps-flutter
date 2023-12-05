@@ -18,7 +18,7 @@ class DirectionalLight {
   });
 
   final String id;
-  final String lightType = .Directional
+  final String lightType = "directional"
   /// Enable/Disable shadow casting for this light
   bool? castShadows;
   /// Color of the directional light.
@@ -40,6 +40,8 @@ class DirectionalLight {
 
   String encode() {
     var properties = <String, dynamic>{};
+    properties["id"] = id;
+    properties["type"] = lightType;
     if (castShadows != null) {
       properties["cast-shadows"] = castShadows;
     }

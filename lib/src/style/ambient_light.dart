@@ -13,7 +13,7 @@ class AmbientLight {
   });
 
   final String id;
-  final String lightType = .Ambient
+  final String lightType = "ambient"
   /// Color of the ambient light.
   int? color;
   /// Color of the ambient light.
@@ -25,6 +25,8 @@ class AmbientLight {
 
   String encode() {
     var properties = <String, dynamic>{};
+    properties["id"] = id;
+    properties["type"] = lightType;
     if (color != null) {
       properties["color"] = color?.toRGBA();
     }

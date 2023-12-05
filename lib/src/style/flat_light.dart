@@ -16,7 +16,7 @@ class FlatLight {
   });
 
   final String id;
-  final String lightType = .Flat
+  final String lightType = "flat"
   /// Whether extruded geometries are lit relative to the map or viewport.
   Anchor? anchor;
   /// Color tint for lighting extruded geometries.
@@ -34,6 +34,8 @@ class FlatLight {
 
   String encode() {
     var properties = <String, dynamic>{};
+    properties["id"] = id;
+    properties["type"] = lightType;
     if (anchor != null) {
       properties["anchor"] = anchor?.toString().split('.').last.toLowerCase();
     }
