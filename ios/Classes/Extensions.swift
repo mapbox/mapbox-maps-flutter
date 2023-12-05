@@ -1,5 +1,6 @@
 import Foundation
 import MapboxMaps
+import MapboxCoreMaps_Private
 
 let COORDINATES = "coordinates"
 // FLT to Mapbox
@@ -47,13 +48,13 @@ extension FLTMapDebugOptions {
     }
 }
 extension FLTCameraOptions {
-    func toCameraOptions() -> CameraOptions {
+    func toCameraOptions() -> MapboxMaps.CameraOptions {
         return CameraOptions(center: convertDictionaryToCLLocationCoordinate2D(dict: self.center), padding: self.padding?.toUIEdgeInsets(), anchor: self.anchor?.toCGPoint(), zoom: self.zoom?.CGFloat, bearing: self.bearing?.CLLocationDirection, pitch: self.pitch?.CGFloat)
     }
 }
 
 extension FLTCameraBoundsOptions {
-    func toCameraBoundsOptions() -> CameraBoundsOptions {
+    func toCameraBoundsOptions() -> MapboxMaps.CameraBoundsOptions {
         return CameraBoundsOptions(bounds: self.bounds?.toCoordinateBounds(), maxZoom: self.maxZoom?.CGFloat, minZoom: self.minZoom?.CGFloat, maxPitch: self.maxPitch?.CGFloat, minPitch: self.minPitch?.CGFloat)
     }
 }
@@ -95,7 +96,7 @@ extension FLTCanonicalTileID {
 }
 
 extension FLTLayerPosition {
-    func toLayerPosition() -> LayerPosition {
+    func toLayerPosition() -> MapboxMaps.LayerPosition {
         var position = LayerPosition.default
         if self.above != nil {position = LayerPosition.above(self.above!)} else if self.below != nil {position = LayerPosition.below(self.below!)} else if self.at != nil {position = LayerPosition.at(Int(truncating: (self.at)!))}
         return position
@@ -138,6 +139,16 @@ extension FeatureExtensionValue {
         return FLTFeatureExtensionValue.make(withValue: resultValue, featureCollection: featureCollection)
     }
 }
+extension QueriedSourceFeature {
+    func toFLTQueriedSourceFeature() -> FLTQueriedSourceFeature {
+        return FLTQueriedSourceFeature.make(with: queriedFeature.toFLTQueriedFeature())
+    }
+}
+extension QueriedRenderedFeature {
+    func toFLTQueriedRenderedFeature() -> FLTQueriedRenderedFeature {
+        return FLTQueriedRenderedFeature.make(with: queriedFeature.toFLTQueriedFeature(), layers: layers)
+    }
+}
 extension QueriedFeature {
     func toFLTQueriedFeature() -> FLTQueriedFeature {
         let stateString = convertDictionaryToString(dict: state as? [String: Any])
@@ -147,18 +158,6 @@ extension QueriedFeature {
 extension MercatorCoordinate {
     func toFLTMercatorCoordinate() -> FLTMercatorCoordinate {
         return FLTMercatorCoordinate.makeWith(x: NSNumber(value: x), y: NSNumber(value: y))
-    }
-}
-extension ResourceOptions {
-    func toFLTResourceOptions() -> FLTResourceOptions {
-        let data = FLTTileStoreUsageMode(rawValue: UInt(self.tileStoreUsageMode.rawValue))
-        return FLTResourceOptions.make(
-            withAccessToken: self.accessToken,
-            baseURL: self.baseURL?.absoluteString,
-            dataPath: self.dataPathURL?.absoluteString,
-            assetPath: self.assetPathURL?.absoluteString,
-            tileStoreUsageMode: .init(value: data!)
-        )
     }
 }
 extension MapDebugOptions {
@@ -187,14 +186,13 @@ extension MapOptions {
             viewportMode: .init(value: .DEFAULT),
             orientation: .init(value: .UPWARDS),
             crossSourceCollisions: NSNumber(value: self.crossSourceCollisions),
-            optimizeForTerrain: NSNumber(value: self.optimizeForTerrain),
             size: self.size?.toFLTSize(),
             pixelRatio: NSNumber(value: self.pixelRatio),
             glyphsRasterizationOptions: self.glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions()
         )
     }
 }
-extension CameraBounds {
+extension MapboxMaps.CameraBounds {
     func toFLTCameraBounds() -> FLTCameraBounds {
         return FLTCameraBounds.make(with: self.bounds.toFLTCoordinateBounds(), maxZoom: NSNumber(value: self.maxZoom), minZoom: NSNumber(value: self.minZoom), maxPitch: NSNumber(value: self.maxPitch), minPitch: NSNumber(value: self.minPitch))
     }
@@ -435,5 +433,9 @@ extension RawRepresentable where RawValue == UInt {
 extension NSNumber {
     internal var CGFloat: CGFloat {
         CoreGraphics.CGFloat(doubleValue)
+    }
+
+    internal var CLLocationDirection: CLLocationDirection {
+        CoreLocation.CLLocationDirection(doubleValue)
     }
 }
