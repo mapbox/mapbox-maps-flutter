@@ -23,26 +23,28 @@ void main() {
 
     await mapboxMap.style
         .addSource(RasterSource(id: "source", tileSize: 256, tiles: [
-      "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
-          "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
-          "&transparent=true&width=256&height=256&layers=Natural2015"
-    ]));
+        "https://img.nj.gov/imagerywms/Natural2015?bbox={bbox-epsg-3857}" +
+        "&format=image/png&service=WMS&version=1.1.1&request=GetMap&srs=EPSG:3857" +
+        "&transparent=true&width=256&height=256&layers=Natural2015"]));
 
     await mapboxMap.style.addLayer(RasterLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      rasterBrightnessMax: 1.0,
-      rasterBrightnessMin: 1.0,
-      rasterContrast: 1.0,
-      rasterFadeDuration: 1.0,
-      rasterHueRotate: 1.0,
-      rasterOpacity: 1.0,
-      rasterResampling: RasterResampling.LINEAR,
-      rasterSaturation: 1.0,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        rasterBrightnessMax: 1.0,
+        rasterBrightnessMin: 1.0,
+        rasterColor: Colors.red.value,
+        rasterColorMix: [0.0, 1.0, 2.0, 3.0],
+        rasterColorRange: [0.0, 1.0],
+        rasterContrast: 1.0,
+        rasterFadeDuration: 1.0,
+        rasterHueRotate: 1.0,
+        rasterOpacity: 1.0,
+        rasterResampling: RasterResampling.LINEAR,
+        rasterSaturation: 1.0,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as RasterLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -50,6 +52,9 @@ void main() {
     expect(layer.visibility, Visibility.NONE);
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
+    expect(layer.rasterColor, Colors.red.value);
+    expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
+    expect(layer.rasterColorRange, [0.0, 1.0]);
     expect(layer.rasterContrast, 1.0);
     expect(layer.rasterFadeDuration, 1.0);
     expect(layer.rasterHueRotate, 1.0);

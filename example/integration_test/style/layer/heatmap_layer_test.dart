@@ -21,23 +21,21 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
-    await mapboxMap.style.addSource(GeoJsonSource(
-        id: "source",
-        data:
-            "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"));
+    await mapboxMap.style
+        .addSource(GeoJsonSource(id: "source", data: "https://www.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson"));
 
     await mapboxMap.style.addLayer(HeatmapLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      heatmapColor: Colors.red.value,
-      heatmapIntensity: 1.0,
-      heatmapOpacity: 1.0,
-      heatmapRadius: 1.0,
-      heatmapWeight: 1.0,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        heatmapColor: Colors.red.value,
+        heatmapIntensity: 1.0,
+        heatmapOpacity: 1.0,
+        heatmapRadius: 1.0,
+        heatmapWeight: 1.0,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as HeatmapLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);

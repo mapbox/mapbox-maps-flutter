@@ -3,8 +3,7 @@ part of mapbox_maps_flutter;
 
 /// Raster map textures such as satellite imagery.
 class RasterLayer extends Layer {
-  RasterLayer({
-    required id,
+  RasterLayer({required id,
     visibility,
     minZoom,
     maxZoom,
@@ -12,6 +11,9 @@ class RasterLayer extends Layer {
     this.sourceLayer,
     this.rasterBrightnessMax,
     this.rasterBrightnessMin,
+    this.rasterColor,
+    this.rasterColorMix,
+    this.rasterColorRange,
     this.rasterContrast,
     this.rasterFadeDuration,
     this.rasterHueRotate,
@@ -19,7 +21,11 @@ class RasterLayer extends Layer {
     this.rasterResampling,
     this.rasterSaturation,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+      id: id, 
+      visibility: visibility, 
+      maxZoom: maxZoom, 
+      minZoom: minZoom
+  );
 
   @override
   String getType() => "raster";
@@ -29,12 +35,20 @@ class RasterLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
-
   /// Increase or reduce the brightness of the image. The value is the maximum brightness.
   double? rasterBrightnessMax;
 
   /// Increase or reduce the brightness of the image. The value is the minimum brightness.
   double? rasterBrightnessMin;
+
+  /// Defines a color map by which to colorize a raster layer, parameterized by the `["raster-value"]` expression and evaluated at 1024 uniformly spaced steps over the range specified by `raster-color-range`.
+  int? rasterColor;
+
+  /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
+  List<double?>? rasterColorMix;
+
+  /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`.
+  List<double?>? rasterColorRange;
 
   /// Increase or reduce the contrast of the image.
   double? rasterContrast;
@@ -54,12 +68,12 @@ class RasterLayer extends Layer {
   /// Increase or reduce the saturation of the image.
   double? rasterSaturation;
 
-  @override
+
+@override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
     }
     var paint = {};
     if (rasterBrightnessMax != null) {
@@ -67,6 +81,15 @@ class RasterLayer extends Layer {
     }
     if (rasterBrightnessMin != null) {
       paint["raster-brightness-min"] = rasterBrightnessMin;
+    }
+    if (rasterColor != null) {
+      paint["raster-color"] = rasterColor?.toRGBA();
+    }
+    if (rasterColorMix != null) {
+      paint["raster-color-mix"] = rasterColorMix;
+    }
+    if (rasterColorRange != null) {
+      paint["raster-color-range"] = rasterColorRange;
     }
     if (rasterContrast != null) {
       paint["raster-contrast"] = rasterContrast;
@@ -81,8 +104,7 @@ class RasterLayer extends Layer {
       paint["raster-opacity"] = rasterOpacity;
     }
     if (rasterResampling != null) {
-      paint["raster-resampling"] =
-          rasterResampling?.toString().split('.').last.toLowerCase();
+      paint["raster-resampling"] = rasterResampling?.toString().split('.').last.toLowerCase();
     }
     if (rasterSaturation != null) {
       paint["raster-saturation"] = rasterSaturation;
@@ -115,49 +137,29 @@ class RasterLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return RasterLayer(
-      id: map["id"],
+    return RasterLayer(id: map["id"],
       sourceId: map["source"],
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
-      rasterBrightnessMax: map["paint"]["raster-brightness-max"] is num?
-          ? (map["paint"]["raster-brightness-max"] as num?)?.toDouble()
-          : null,
-      rasterBrightnessMin: map["paint"]["raster-brightness-min"] is num?
-          ? (map["paint"]["raster-brightness-min"] as num?)?.toDouble()
-          : null,
-      rasterContrast: map["paint"]["raster-contrast"] is num?
-          ? (map["paint"]["raster-contrast"] as num?)?.toDouble()
-          : null,
-      rasterFadeDuration: map["paint"]["raster-fade-duration"] is num?
-          ? (map["paint"]["raster-fade-duration"] as num?)?.toDouble()
-          : null,
-      rasterHueRotate: map["paint"]["raster-hue-rotate"] is num?
-          ? (map["paint"]["raster-hue-rotate"] as num?)?.toDouble()
-          : null,
-      rasterOpacity: map["paint"]["raster-opacity"] is num?
-          ? (map["paint"]["raster-opacity"] as num?)?.toDouble()
-          : null,
-      rasterResampling: map["paint"]["raster-resampling"] == null
-          ? null
-          : RasterResampling.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["paint"]["raster-resampling"])),
-      rasterSaturation: map["paint"]["raster-saturation"] is num?
-          ? (map["paint"]["raster-saturation"] as num?)?.toDouble()
-          : null,
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+      rasterBrightnessMax: map["paint"]["raster-brightness-max"] is num? ? (map["paint"]["raster-brightness-max"] as num?)?.toDouble() : null,
+      rasterBrightnessMin: map["paint"]["raster-brightness-min"] is num? ? (map["paint"]["raster-brightness-min"] as num?)?.toDouble() : null,
+      rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
+      rasterColorMix: (map["paint"]["raster-color-mix"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      rasterColorRange: (map["paint"]["raster-color-range"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      rasterContrast: map["paint"]["raster-contrast"] is num? ? (map["paint"]["raster-contrast"] as num?)?.toDouble() : null,
+      rasterFadeDuration: map["paint"]["raster-fade-duration"] is num? ? (map["paint"]["raster-fade-duration"] as num?)?.toDouble() : null,
+      rasterHueRotate: map["paint"]["raster-hue-rotate"] is num? ? (map["paint"]["raster-hue-rotate"] as num?)?.toDouble() : null,
+      rasterOpacity: map["paint"]["raster-opacity"] is num? ? (map["paint"]["raster-opacity"] as num?)?.toDouble() : null,
+      rasterResampling:
+      map["paint"]["raster-resampling"] == null
+            ? null
+            : RasterResampling.values.firstWhere((e) =>
+            e.toString().split('.').last.toLowerCase().contains(map["paint"]["raster-resampling"])),
+      rasterSaturation: map["paint"]["raster-saturation"] is num? ? (map["paint"]["raster-saturation"] as num?)?.toDouble() : null,
     );
   }
 }

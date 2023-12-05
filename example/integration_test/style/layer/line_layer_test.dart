@@ -27,29 +27,33 @@ void main() {
         .addSource(GeoJsonSource(id: "source", data: json.encode(line)));
 
     await mapboxMap.style.addLayer(LineLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      lineCap: LineCap.BUTT,
-      lineJoin: LineJoin.BEVEL,
-      lineMiterLimit: 1.0,
-      lineRoundLimit: 1.0,
-      lineSortKey: 1.0,
-      lineBlur: 1.0,
-      lineColor: Colors.red.value,
-      lineDasharray: [1.0, 2.0],
-      lineGapWidth: 1.0,
-      lineGradient: Colors.red.value,
-      lineOffset: 1.0,
-      lineOpacity: 1.0,
-      linePattern: "abc",
-      lineTranslate: [0.0, 1.0],
-      lineTranslateAnchor: LineTranslateAnchor.MAP,
-      lineTrimOffset: [0.0, 1.0],
-      lineWidth: 1.0,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        lineCap: LineCap.BUTT,
+        lineJoin: LineJoin.BEVEL,
+        lineMiterLimit: 1.0,
+        lineRoundLimit: 1.0,
+        lineSortKey: 1.0,
+        lineBlur: 1.0,
+        lineBorderColor: Colors.red.value,
+        lineBorderWidth: 1.0,
+        lineColor: Colors.red.value,
+        lineDasharray: [1.0, 2.0],
+        lineDepthOcclusionFactor: 1.0,
+        lineEmissiveStrength: 1.0,
+        lineGapWidth: 1.0,
+        lineGradient: Colors.red.value,
+        lineOffset: 1.0,
+        lineOpacity: 1.0,
+        linePattern: "abc",
+        lineTranslate: [0.0, 1.0],
+        lineTranslateAnchor: LineTranslateAnchor.MAP,
+        lineTrimOffset: [0.0, 1.0],
+        lineWidth: 1.0,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as LineLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -61,8 +65,12 @@ void main() {
     expect(layer.lineRoundLimit, 1.0);
     expect(layer.lineSortKey, 1.0);
     expect(layer.lineBlur, 1.0);
+    expect(layer.lineBorderColor, Colors.red.value);
+    expect(layer.lineBorderWidth, 1.0);
     expect(layer.lineColor, Colors.red.value);
     expect(layer.lineDasharray, [1.0, 2.0]);
+    expect(layer.lineDepthOcclusionFactor, 1.0);
+    expect(layer.lineEmissiveStrength, 1.0);
     expect(layer.lineGapWidth, 1.0);
     expect(layer.lineGradient, Colors.red.value);
     expect(layer.lineOffset, 1.0);

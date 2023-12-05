@@ -26,66 +26,70 @@ void main() {
         .addSource(GeoJsonSource(id: "source", data: json.encode(point)));
 
     await mapboxMap.style.addLayer(SymbolLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      iconAllowOverlap: true,
-      iconAnchor: IconAnchor.CENTER,
-      iconIgnorePlacement: true,
-      iconImage: "abc",
-      iconKeepUpright: true,
-      iconOffset: [0.0, 1.0],
-      iconOptional: true,
-      iconPadding: 1.0,
-      iconPitchAlignment: IconPitchAlignment.MAP,
-      iconRotate: 1.0,
-      iconRotationAlignment: IconRotationAlignment.MAP,
-      iconSize: 1.0,
-      iconTextFit: IconTextFit.NONE,
-      iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
-      symbolAvoidEdges: true,
-      symbolPlacement: SymbolPlacement.POINT,
-      symbolSortKey: 1.0,
-      symbolSpacing: 1.0,
-      symbolZOrder: SymbolZOrder.AUTO,
-      textAllowOverlap: true,
-      textAnchor: TextAnchor.CENTER,
-      textFont: ["a", "b", "c"],
-      textIgnorePlacement: true,
-      textJustify: TextJustify.AUTO,
-      textKeepUpright: true,
-      textLetterSpacing: 1.0,
-      textLineHeight: 1.0,
-      textMaxAngle: 1.0,
-      textMaxWidth: 1.0,
-      textOffset: [0.0, 1.0],
-      textOptional: true,
-      textPadding: 1.0,
-      textPitchAlignment: TextPitchAlignment.MAP,
-      textRadialOffset: 1.0,
-      textRotate: 1.0,
-      textRotationAlignment: TextRotationAlignment.MAP,
-      textSize: 1.0,
-      textTransform: TextTransform.NONE,
-      textVariableAnchor: ["center", "left"],
-      textWritingMode: ["horizontal", "vertical"],
-      iconColor: Colors.red.value,
-      iconHaloBlur: 1.0,
-      iconHaloColor: Colors.red.value,
-      iconHaloWidth: 1.0,
-      iconOpacity: 1.0,
-      iconTranslate: [0.0, 1.0],
-      iconTranslateAnchor: IconTranslateAnchor.MAP,
-      textColor: Colors.red.value,
-      textHaloBlur: 1.0,
-      textHaloColor: Colors.red.value,
-      textHaloWidth: 1.0,
-      textOpacity: 1.0,
-      textTranslate: [0.0, 1.0],
-      textTranslateAnchor: TextTranslateAnchor.MAP,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        iconAllowOverlap: true,
+        iconAnchor: IconAnchor.CENTER,
+        iconIgnorePlacement: true,
+        iconImage: "abc",
+        iconKeepUpright: true,
+        iconOffset: [0.0, 1.0],
+        iconOptional: true,
+        iconPadding: 1.0,
+        iconPitchAlignment: IconPitchAlignment.MAP,
+        iconRotate: 1.0,
+        iconRotationAlignment: IconRotationAlignment.MAP,
+        iconSize: 1.0,
+        iconTextFit: IconTextFit.NONE,
+        iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
+        symbolAvoidEdges: true,
+        symbolPlacement: SymbolPlacement.POINT,
+        symbolSortKey: 1.0,
+        symbolSpacing: 1.0,
+        symbolZElevate: true,
+        symbolZOrder: SymbolZOrder.AUTO,
+        textAllowOverlap: true,
+        textAnchor: TextAnchor.CENTER,
+        textFont: ["a", "b", "c"],
+        textIgnorePlacement: true,
+        textJustify: TextJustify.AUTO,
+        textKeepUpright: true,
+        textLetterSpacing: 1.0,
+        textLineHeight: 1.0,
+        textMaxAngle: 1.0,
+        textMaxWidth: 1.0,
+        textOffset: [0.0, 1.0],
+        textOptional: true,
+        textPadding: 1.0,
+        textPitchAlignment: TextPitchAlignment.MAP,
+        textRadialOffset: 1.0,
+        textRotate: 1.0,
+        textRotationAlignment: TextRotationAlignment.MAP,
+        textSize: 1.0,
+        textTransform: TextTransform.NONE,
+        textVariableAnchor: ["center", "left"],
+        textWritingMode: ["horizontal", "vertical"],
+        iconColor: Colors.red.value,
+        iconEmissiveStrength: 1.0,
+        iconHaloBlur: 1.0,
+        iconHaloColor: Colors.red.value,
+        iconHaloWidth: 1.0,
+        iconImageCrossFade: 1.0,
+        iconOpacity: 1.0,
+        iconTranslate: [0.0, 1.0],
+        iconTranslateAnchor: IconTranslateAnchor.MAP,
+        textColor: Colors.red.value,
+        textEmissiveStrength: 1.0,
+        textHaloBlur: 1.0,
+        textHaloColor: Colors.red.value,
+        textHaloWidth: 1.0,
+        textOpacity: 1.0,
+        textTranslate: [0.0, 1.0],
+        textTranslateAnchor: TextTranslateAnchor.MAP,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as SymbolLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -109,6 +113,7 @@ void main() {
     expect(layer.symbolPlacement, SymbolPlacement.POINT);
     expect(layer.symbolSortKey, 1.0);
     expect(layer.symbolSpacing, 1.0);
+    expect(layer.symbolZElevate, true);
     expect(layer.symbolZOrder, SymbolZOrder.AUTO);
     expect(layer.textAllowOverlap, true);
     expect(layer.textAnchor, TextAnchor.CENTER);
@@ -132,13 +137,16 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColor, Colors.red.value);
     expect(layer.iconHaloWidth, 1.0);
+    expect(layer.iconImageCrossFade, 1.0);
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
     expect(layer.textColor, Colors.red.value);
+    expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColor, Colors.red.value);
     expect(layer.textHaloWidth, 1.0);

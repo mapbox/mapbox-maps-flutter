@@ -21,21 +21,22 @@ void main() {
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
+
     await mapboxMap.style.addLayer(SkyLayer(
-      id: 'layer',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      skyAtmosphereColor: Colors.red.value,
-      skyAtmosphereHaloColor: Colors.red.value,
-      skyAtmosphereSun: [0.0, 1.0],
-      skyAtmosphereSunIntensity: 1.0,
-      skyGradient: Colors.red.value,
-      skyGradientCenter: [0.0, 1.0],
-      skyGradientRadius: 1.0,
-      skyOpacity: 1.0,
-      skyType: SkyType.GRADIENT,
-    ));
+        id: 'layer',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        skyAtmosphereColor: Colors.red.value,
+        skyAtmosphereHaloColor: Colors.red.value,
+        skyAtmosphereSun: [0.0, 1.0],
+        skyAtmosphereSunIntensity: 1.0,
+        skyGradient: Colors.red.value,
+        skyGradientCenter: [0.0, 1.0],
+        skyGradientRadius: 1.0,
+        skyOpacity: 1.0,
+        skyType: SkyType.GRADIENT,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as SkyLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);

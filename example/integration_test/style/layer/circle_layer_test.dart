@@ -26,24 +26,25 @@ void main() {
         .addSource(GeoJsonSource(id: "source", data: json.encode(point)));
 
     await mapboxMap.style.addLayer(CircleLayer(
-      id: 'layer',
-      sourceId: 'source',
-      visibility: Visibility.NONE,
-      minZoom: 1.0,
-      maxZoom: 20.0,
-      circleSortKey: 1.0,
-      circleBlur: 1.0,
-      circleColor: Colors.red.value,
-      circleOpacity: 1.0,
-      circlePitchAlignment: CirclePitchAlignment.MAP,
-      circlePitchScale: CirclePitchScale.MAP,
-      circleRadius: 1.0,
-      circleStrokeColor: Colors.red.value,
-      circleStrokeOpacity: 1.0,
-      circleStrokeWidth: 1.0,
-      circleTranslate: [0.0, 1.0],
-      circleTranslateAnchor: CircleTranslateAnchor.MAP,
-    ));
+        id: 'layer',
+        sourceId: 'source',
+        visibility: Visibility.NONE,
+        minZoom: 1.0,
+        maxZoom: 20.0,
+        circleSortKey: 1.0,
+        circleBlur: 1.0,
+        circleColor: Colors.red.value,
+        circleEmissiveStrength: 1.0,
+        circleOpacity: 1.0,
+        circlePitchAlignment: CirclePitchAlignment.MAP,
+        circlePitchScale: CirclePitchScale.MAP,
+        circleRadius: 1.0,
+        circleStrokeColor: Colors.red.value,
+        circleStrokeOpacity: 1.0,
+        circleStrokeWidth: 1.0,
+        circleTranslate: [0.0, 1.0],
+        circleTranslateAnchor: CircleTranslateAnchor.MAP,
+        ));
     var layer = await mapboxMap.style.getLayer('layer') as CircleLayer;
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
@@ -52,6 +53,7 @@ void main() {
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColor, Colors.red.value);
+    expect(layer.circleEmissiveStrength, 1.0);
     expect(layer.circleOpacity, 1.0);
     expect(layer.circlePitchAlignment, CirclePitchAlignment.MAP);
     expect(layer.circlePitchScale, CirclePitchScale.MAP);

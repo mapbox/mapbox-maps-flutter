@@ -3,8 +3,7 @@ part of mapbox_maps_flutter;
 
 /// A spherical dome around the map that is always rendered behind all other layers.
 class SkyLayer extends Layer {
-  SkyLayer({
-    required id,
+  SkyLayer({required id,
     visibility,
     minZoom,
     maxZoom,
@@ -18,7 +17,11 @@ class SkyLayer extends Layer {
     this.skyOpacity,
     this.skyType,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+      id: id, 
+      visibility: visibility, 
+      maxZoom: maxZoom, 
+      minZoom: minZoom
+  );
 
   @override
   String getType() => "sky";
@@ -50,12 +53,12 @@ class SkyLayer extends Layer {
   /// The type of the sky
   SkyType? skyType;
 
-  @override
+
+@override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
     }
     var paint = {};
     if (skyAtmosphereColor != null) {
@@ -109,47 +112,25 @@ class SkyLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return SkyLayer(
-      id: map["id"],
+    return SkyLayer(id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
-      skyAtmosphereColor:
-          (map["paint"]["sky-atmosphere-color"] as List?)?.toRGBAInt(),
-      skyAtmosphereHaloColor:
-          (map["paint"]["sky-atmosphere-halo-color"] as List?)?.toRGBAInt(),
-      skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      skyAtmosphereSunIntensity: map["paint"]["sky-atmosphere-sun-intensity"]
-              is num?
-          ? (map["paint"]["sky-atmosphere-sun-intensity"] as num?)?.toDouble()
-          : null,
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+      skyAtmosphereColor: (map["paint"]["sky-atmosphere-color"] as List?)?.toRGBAInt(),
+      skyAtmosphereHaloColor: (map["paint"]["sky-atmosphere-halo-color"] as List?)?.toRGBAInt(),
+      skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      skyAtmosphereSunIntensity: map["paint"]["sky-atmosphere-sun-intensity"] is num? ? (map["paint"]["sky-atmosphere-sun-intensity"] as num?)?.toDouble() : null,
       skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
-      skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      skyGradientRadius: map["paint"]["sky-gradient-radius"] is num?
-          ? (map["paint"]["sky-gradient-radius"] as num?)?.toDouble()
-          : null,
-      skyOpacity: map["paint"]["sky-opacity"] is num?
-          ? (map["paint"]["sky-opacity"] as num?)?.toDouble()
-          : null,
-      skyType: map["paint"]["sky-type"] == null
-          ? null
-          : SkyType.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["paint"]["sky-type"])),
+      skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      skyGradientRadius: map["paint"]["sky-gradient-radius"] is num? ? (map["paint"]["sky-gradient-radius"] as num?)?.toDouble() : null,
+      skyOpacity: map["paint"]["sky-opacity"] is num? ? (map["paint"]["sky-opacity"] as num?)?.toDouble() : null,
+      skyType:
+      map["paint"]["sky-type"] == null
+            ? null
+            : SkyType.values.firstWhere((e) =>
+            e.toString().split('.').last.toLowerCase().contains(map["paint"]["sky-type"])),
     );
   }
 }

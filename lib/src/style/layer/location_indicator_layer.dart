@@ -3,8 +3,7 @@ part of mapbox_maps_flutter;
 
 /// Location Indicator layer.
 class LocationIndicatorLayer extends Layer {
-  LocationIndicatorLayer({
-    required id,
+  LocationIndicatorLayer({required id,
     visibility,
     minZoom,
     maxZoom,
@@ -20,11 +19,16 @@ class LocationIndicatorLayer extends Layer {
     this.emphasisCircleRadius,
     this.imagePitchDisplacement,
     this.location,
+    this.locationIndicatorOpacity,
     this.perspectiveCompensation,
     this.shadowImageSize,
     this.topImageSize,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+      id: id, 
+      visibility: visibility, 
+      maxZoom: maxZoom, 
+      minZoom: minZoom
+  );
 
   @override
   String getType() => "location-indicator";
@@ -65,6 +69,9 @@ class LocationIndicatorLayer extends Layer {
   /// An array of [latitude, longitude, altitude] position of the location indicator.
   List<double?>? location;
 
+  /// The opacity of the entire location indicator layer.
+  double? locationIndicatorOpacity;
+
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
   double? perspectiveCompensation;
 
@@ -74,12 +81,12 @@ class LocationIndicatorLayer extends Layer {
   /// The size of the top image, as a scale factor applied to the size of the specified image.
   double? topImageSize;
 
-  @override
+
+@override
   String _encode() {
     var layout = {};
     if (visibility != null) {
-      layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+      layout["visibility"] = visibility?.toString().split('.').last.toLowerCase();
     }
     if (bearingImage != null) {
       layout["bearing-image"] = bearingImage;
@@ -95,8 +102,7 @@ class LocationIndicatorLayer extends Layer {
       paint["accuracy-radius"] = accuracyRadius;
     }
     if (accuracyRadiusBorderColor != null) {
-      paint["accuracy-radius-border-color"] =
-          accuracyRadiusBorderColor?.toRGBA();
+      paint["accuracy-radius-border-color"] = accuracyRadiusBorderColor?.toRGBA();
     }
     if (accuracyRadiusColor != null) {
       paint["accuracy-radius-color"] = accuracyRadiusColor?.toRGBA();
@@ -118,6 +124,9 @@ class LocationIndicatorLayer extends Layer {
     }
     if (location != null) {
       paint["location"] = location;
+    }
+    if (locationIndicatorOpacity != null) {
+      paint["location-indicator-opacity"] = locationIndicatorOpacity;
     }
     if (perspectiveCompensation != null) {
       paint["perspective-compensation"] = perspectiveCompensation;
@@ -152,60 +161,28 @@ class LocationIndicatorLayer extends Layer {
     if (map["paint"] == null) {
       map["paint"] = {};
     }
-    return LocationIndicatorLayer(
-      id: map["id"],
+    return LocationIndicatorLayer(id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
-      bearingImage: map["layout"]["bearing-image"] is String?
-          ? map["layout"]["bearing-image"] as String?
-          : null,
-      shadowImage: map["layout"]["shadow-image"] is String?
-          ? map["layout"]["shadow-image"] as String?
-          : null,
-      topImage: map["layout"]["top-image"] is String?
-          ? map["layout"]["top-image"] as String?
-          : null,
-      accuracyRadius: map["paint"]["accuracy-radius"] is num?
-          ? (map["paint"]["accuracy-radius"] as num?)?.toDouble()
-          : null,
-      accuracyRadiusBorderColor:
-          (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
-      accuracyRadiusColor:
-          (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
-      bearing: map["paint"]["bearing"] is num?
-          ? (map["paint"]["bearing"] as num?)?.toDouble()
-          : null,
-      bearingImageSize: map["paint"]["bearing-image-size"] is num?
-          ? (map["paint"]["bearing-image-size"] as num?)?.toDouble()
-          : null,
-      emphasisCircleColor:
-          (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
-      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"] is num?
-          ? (map["paint"]["emphasis-circle-radius"] as num?)?.toDouble()
-          : null,
-      imagePitchDisplacement: map["paint"]["image-pitch-displacement"] is num?
-          ? (map["paint"]["image-pitch-displacement"] as num?)?.toDouble()
-          : null,
-      location: (map["paint"]["location"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      perspectiveCompensation: map["paint"]["perspective-compensation"] is num?
-          ? (map["paint"]["perspective-compensation"] as num?)?.toDouble()
-          : null,
-      shadowImageSize: map["paint"]["shadow-image-size"] is num?
-          ? (map["paint"]["shadow-image-size"] as num?)?.toDouble()
-          : null,
-      topImageSize: map["paint"]["top-image-size"] is num?
-          ? (map["paint"]["top-image-size"] as num?)?.toDouble()
-          : null,
+            ? Visibility.VISIBLE
+            : Visibility.values.firstWhere((e) => e.toString().split('.').last.toLowerCase().contains(map["layout"]["visibility"])),
+      bearingImage: map["layout"]["bearing-image"] is String? ? map["layout"]["bearing-image"] as String? : null,
+      shadowImage: map["layout"]["shadow-image"] is String? ? map["layout"]["shadow-image"] as String? : null,
+      topImage: map["layout"]["top-image"] is String? ? map["layout"]["top-image"] as String? : null,
+      accuracyRadius: map["paint"]["accuracy-radius"] is num? ? (map["paint"]["accuracy-radius"] as num?)?.toDouble() : null,
+      accuracyRadiusBorderColor: (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
+      accuracyRadiusColor: (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
+      bearing: map["paint"]["bearing"] is num? ? (map["paint"]["bearing"] as num?)?.toDouble() : null,
+      bearingImageSize: map["paint"]["bearing-image-size"] is num? ? (map["paint"]["bearing-image-size"] as num?)?.toDouble() : null,
+      emphasisCircleColor: (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
+      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"] is num? ? (map["paint"]["emphasis-circle-radius"] as num?)?.toDouble() : null,
+      imagePitchDisplacement: map["paint"]["image-pitch-displacement"] is num? ? (map["paint"]["image-pitch-displacement"] as num?)?.toDouble() : null,
+      location: (map["paint"]["location"] as List?)?.map<double?>((e) => e.toDouble()).toList(),
+      locationIndicatorOpacity: map["paint"]["location-indicator-opacity"] is num? ? (map["paint"]["location-indicator-opacity"] as num?)?.toDouble() : null,
+      perspectiveCompensation: map["paint"]["perspective-compensation"] is num? ? (map["paint"]["perspective-compensation"] as num?)?.toDouble() : null,
+      shadowImageSize: map["paint"]["shadow-image-size"] is num? ? (map["paint"]["shadow-image-size"] as num?)?.toDouble() : null,
+      topImageSize: map["paint"]["top-image-size"] is num? ? (map["paint"]["top-image-size"] as num?)?.toDouble() : null,
     );
   }
 }
