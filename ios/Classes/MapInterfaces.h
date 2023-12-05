@@ -1698,7 +1698,7 @@ NSObject<FlutterMessageCodec> *FLT_MapboxMapsOptionsGetCodec(void);
 - (nullable NSString *)getAssetPathWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setAssetPathPath:(NSString *)path error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
-- (FLTFLTTileStoreUsageMode)getTileStoreUsageModeWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (FLTTileStoreUsageMode)getTileStoreUsageModeWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setTileStoreUsageModeMode:(FLTTileStoreUsageMode)mode error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 

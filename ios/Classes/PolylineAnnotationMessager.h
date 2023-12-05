@@ -160,7 +160,7 @@ NSObject<FlutterMessageCodec> *FLT_PolylineAnnotationMessagerGetCodec(void);
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)setLineCapManagerId:(NSString *)managerId lineCap:(FLTLineCap)lineCap completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getLineCapManagerId:(NSString *)managerId completion:(void (^)(FLTFLTLineCapBox *_Nullable, FlutterError *_Nullable))completion;
+- (void)getLineCapManagerId:(NSString *)managerId completion:(void (^)(FLTLineCapBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineMiterLimitManagerId:(NSString *)managerId lineMiterLimit:(NSNumber *)lineMiterLimit completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineMiterLimitManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineRoundLimitManagerId:(NSString *)managerId lineRoundLimit:(NSNumber *)lineRoundLimit completion:(void (^)(FlutterError *_Nullable))completion;
@@ -174,7 +174,7 @@ NSObject<FlutterMessageCodec> *FLT_PolylineAnnotationMessagerGetCodec(void);
 - (void)setLineTranslateManagerId:(NSString *)managerId lineTranslate:(NSArray<NSNumber *> *)lineTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineTranslateAnchorManagerId:(NSString *)managerId lineTranslateAnchor:(FLTLineTranslateAnchor)lineTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getLineTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTFLTLineTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
+- (void)getLineTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTLineTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineTrimOffsetManagerId:(NSString *)managerId lineTrimOffset:(NSArray<NSNumber *> *)lineTrimOffset completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineTrimOffsetManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 @end
