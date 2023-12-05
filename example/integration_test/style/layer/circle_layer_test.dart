@@ -34,6 +34,7 @@ void main() {
       circleSortKey: 1.0,
       circleBlur: 1.0,
       circleColor: Colors.red.value,
+      circleEmissiveStrength: 1.0,
       circleOpacity: 1.0,
       circlePitchAlignment: CirclePitchAlignment.MAP,
       circlePitchScale: CirclePitchScale.MAP,
@@ -52,6 +53,7 @@ void main() {
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColor, Colors.red.value);
+    expect(layer.circleEmissiveStrength, 1.0);
     expect(layer.circleOpacity, 1.0);
     expect(layer.circlePitchAlignment, CirclePitchAlignment.MAP);
     expect(layer.circlePitchScale, CirclePitchScale.MAP);

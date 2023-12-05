@@ -9,6 +9,7 @@ class BackgroundLayer extends Layer {
     minZoom,
     maxZoom,
     this.backgroundColor,
+    this.backgroundEmissiveStrength,
     this.backgroundOpacity,
     this.backgroundPattern,
   }) : super(
@@ -19,6 +20,9 @@ class BackgroundLayer extends Layer {
 
   /// The color with which the background will be drawn.
   int? backgroundColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? backgroundEmissiveStrength;
 
   /// The opacity at which the background will be drawn.
   double? backgroundOpacity;
@@ -36,6 +40,9 @@ class BackgroundLayer extends Layer {
     var paint = {};
     if (backgroundColor != null) {
       paint["background-color"] = backgroundColor?.toRGBA();
+    }
+    if (backgroundEmissiveStrength != null) {
+      paint["background-emissive-strength"] = backgroundEmissiveStrength;
     }
     if (backgroundOpacity != null) {
       paint["background-opacity"] = backgroundOpacity;
@@ -80,6 +87,10 @@ class BackgroundLayer extends Layer {
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
+      backgroundEmissiveStrength: map["paint"]["background-emissive-strength"]
+              is num?
+          ? (map["paint"]["background-emissive-strength"] as num?)?.toDouble()
+          : null,
       backgroundOpacity: map["paint"]["background-opacity"] is num?
           ? (map["paint"]["background-opacity"] as num?)?.toDouble()
           : null,

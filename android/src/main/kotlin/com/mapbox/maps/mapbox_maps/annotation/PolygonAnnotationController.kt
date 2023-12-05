@@ -167,6 +167,28 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun setFillEmissiveStrength(
+    managerId: String,
+    fillEmissiveStrength: Double,
+    result: FLTPolygonAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillEmissiveStrength = fillEmissiveStrength
+    result.success(null)
+  }
+
+  override fun getFillEmissiveStrength(
+    managerId: String,
+    result: FLTPolygonAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    if (manager.fillEmissiveStrength != null) {
+      result.success(manager.fillEmissiveStrength!!)
+    } else {
+      result.success(null)
+    }
+  }
+
   override fun setFillTranslate(
     managerId: String,
     fillTranslate: List<Double>,

@@ -13,6 +13,7 @@ class CircleLayer extends Layer {
     this.circleSortKey,
     this.circleBlur,
     this.circleColor,
+    this.circleEmissiveStrength,
     this.circleOpacity,
     this.circlePitchAlignment,
     this.circlePitchScale,
@@ -42,6 +43,9 @@ class CircleLayer extends Layer {
 
   /// The fill color of the circle.
   int? circleColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? circleEmissiveStrength;
 
   /// The opacity at which the circle will be drawn.
   double? circleOpacity;
@@ -86,6 +90,9 @@ class CircleLayer extends Layer {
     }
     if (circleColor != null) {
       paint["circle-color"] = circleColor?.toRGBA();
+    }
+    if (circleEmissiveStrength != null) {
+      paint["circle-emissive-strength"] = circleEmissiveStrength;
     }
     if (circleOpacity != null) {
       paint["circle-opacity"] = circleOpacity;
@@ -166,6 +173,9 @@ class CircleLayer extends Layer {
           ? (map["paint"]["circle-blur"] as num?)?.toDouble()
           : null,
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
+      circleEmissiveStrength: map["paint"]["circle-emissive-strength"] is num?
+          ? (map["paint"]["circle-emissive-strength"] as num?)?.toDouble()
+          : null,
       circleOpacity: map["paint"]["circle-opacity"] is num?
           ? (map["paint"]["circle-opacity"] as num?)?.toDouble()
           : null,

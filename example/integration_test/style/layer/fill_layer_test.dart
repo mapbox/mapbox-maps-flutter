@@ -41,6 +41,7 @@ void main() {
       fillSortKey: 1.0,
       fillAntialias: true,
       fillColor: Colors.red.value,
+      fillEmissiveStrength: 1.0,
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
@@ -55,6 +56,7 @@ void main() {
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillColor, Colors.red.value);
+    expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColor, Colors.red.value);
     expect(layer.fillPattern, "abc");

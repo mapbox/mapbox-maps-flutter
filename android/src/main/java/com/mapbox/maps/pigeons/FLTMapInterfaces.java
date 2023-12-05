@@ -9452,7 +9452,7 @@ public class FLTMapInterfaces {
     void setLight(@NonNull FlatLight flatLight);
     /**
      * Set dynamic lightning.
-     * 
+     *
      * @param ambientLight The ambient light source.
      * @param directionalLight The directional light source.
      */

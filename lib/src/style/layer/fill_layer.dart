@@ -13,6 +13,7 @@ class FillLayer extends Layer {
     this.fillSortKey,
     this.fillAntialias,
     this.fillColor,
+    this.fillEmissiveStrength,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
@@ -38,6 +39,9 @@ class FillLayer extends Layer {
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   int? fillColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   double? fillOpacity;
@@ -70,6 +74,9 @@ class FillLayer extends Layer {
     }
     if (fillColor != null) {
       paint["fill-color"] = fillColor?.toRGBA();
+    }
+    if (fillEmissiveStrength != null) {
+      paint["fill-emissive-strength"] = fillEmissiveStrength;
     }
     if (fillOpacity != null) {
       paint["fill-opacity"] = fillOpacity;
@@ -136,6 +143,9 @@ class FillLayer extends Layer {
           ? map["paint"]["fill-antialias"] as bool?
           : null,
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
+      fillEmissiveStrength: map["paint"]["fill-emissive-strength"] is num?
+          ? (map["paint"]["fill-emissive-strength"] as num?)?.toDouble()
+          : null,
       fillOpacity: map["paint"]["fill-opacity"] is num?
           ? (map["paint"]["fill-opacity"] as num?)?.toDouble()
           : null,

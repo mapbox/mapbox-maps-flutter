@@ -6281,7 +6281,7 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
     }
   }
   /// Set dynamic lightning.
-  /// 
+  ///
   /// @param ambientLight The ambient light source.
   /// @param directionalLight The directional light source.
   {

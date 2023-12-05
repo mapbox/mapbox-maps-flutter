@@ -26,7 +26,7 @@ class FullMapState extends State<FullMap> {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
   }
-  
+
   _onStyleLoadedCallback(StyleLoadedEventData data) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Style loaded :), begin: ${data.begin}"),

@@ -230,7 +230,7 @@ class LocationPageBodyState extends State<LocationPageBody> {
                   Location settings : 
                     enabled : ${value.enabled}, 
                     puckBearingEnabled : ${value.puckBearingEnabled}
-                    puckBearingSource : ${value.puckBearingSource}
+                    puckBearing : ${value.puckBearing}
                     pulsing : ${value.pulsingEnabled}
                     pulsing radius : ${value.pulsingMaxRadius}
                     pulsing color : ${value.pulsingColor}

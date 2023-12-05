@@ -69,7 +69,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
 
   override fun getStyleImportConfigProperties(importId: String): MutableMap<String, FLTMapInterfaces.StylePropertyValue> {
     return mapboxMap.getStyleImportConfigProperties(importId)
-      .getValueOrElse { throw  RuntimeException(it) }
+      .getValueOrElse { throw RuntimeException(it) }
       .mapValues { it.value.toFLTStylePropertyValue() }
       .toMutableMap()
   }
@@ -374,7 +374,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
 
   override fun getStyleSources(result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.StyleObjectInfo>>) {
     result.success(
-      mapboxMap.styleSources.map {it.toFLTStyleObjectInfo() }.toMutableList()
+      mapboxMap.styleSources.map { it.toFLTStyleObjectInfo() }.toMutableList()
     )
   }
 

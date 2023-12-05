@@ -157,6 +157,28 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
     return originalAnnotation
   }
 
+  override fun setCircleEmissiveStrength(
+    managerId: String,
+    circleEmissiveStrength: Double,
+    result: FLTCircleAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleEmissiveStrength = circleEmissiveStrength
+    result.success(null)
+  }
+
+  override fun getCircleEmissiveStrength(
+    managerId: String,
+    result: FLTCircleAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    if (manager.circleEmissiveStrength != null) {
+      result.success(manager.circleEmissiveStrength!!)
+    } else {
+      result.success(null)
+    }
+  }
+
   override fun setCirclePitchAlignment(
     managerId: String,
     circlePitchAlignment: FLTCircleAnnotationMessager.CirclePitchAlignment,

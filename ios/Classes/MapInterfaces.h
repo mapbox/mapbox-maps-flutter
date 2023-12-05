@@ -2052,7 +2052,7 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 /// @param flatLight The flat light source.
 - (void)setLightFlatLight:(FLTFlatLight *)flatLight error:(FlutterError *_Nullable *_Nonnull)error;
 /// Set dynamic lightning.
-/// 
+///
 /// @param ambientLight The ambient light source.
 /// @param directionalLight The directional light source.
 - (void)setLightsAmbientLight:(FLTAmbientLight *)ambientLight directionalLight:(FLTDirectionalLight *)directionalLight error:(FlutterError *_Nullable *_Nonnull)error;

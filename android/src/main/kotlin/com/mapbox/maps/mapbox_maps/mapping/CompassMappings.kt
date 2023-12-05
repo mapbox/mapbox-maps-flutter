@@ -4,7 +4,6 @@ package com.mapbox.maps.mapbox_maps.mapping
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
@@ -24,7 +23,7 @@ fun CompassSettingsInterface.applyFromFLT(settings: FLTSettings.CompassSettings,
   settings.visibility?.let { visibility = it }
   settings.fadeWhenFacingNorth?.let { fadeWhenFacingNorth = it }
   settings.clickable?.let { clickable = it }
-  settings.image?.let { image = ImageHolder.Companion.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
+  settings.image?.let { image = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
 }
 
 fun CompassSettingsInterface.toFLT(context: Context) = FLTSettings.CompassSettings.Builder().let { settings ->
@@ -40,9 +39,11 @@ fun CompassSettingsInterface.toFLT(context: Context) = FLTSettings.CompassSettin
   settings.setFadeWhenFacingNorth(fadeWhenFacingNorth)
   settings.setClickable(clickable)
   settings.setImage(
-    ByteArrayOutputStream().also { stream ->
-      image?.bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
-    }.toByteArray()
+    image?.bitmap?.let { bitmap ->
+      ByteArrayOutputStream().also { stream ->
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+      }.toByteArray()
+    }
   )
   settings.build()
 }

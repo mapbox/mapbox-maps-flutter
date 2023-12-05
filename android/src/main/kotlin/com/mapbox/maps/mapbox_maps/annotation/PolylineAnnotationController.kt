@@ -140,6 +140,12 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     annotation.lineBlur?.let {
       originalAnnotation.lineBlur = it
     }
+    annotation.lineBorderColor?.let {
+      originalAnnotation.lineBorderColorInt = it.toInt()
+    }
+    annotation.lineBorderWidth?.let {
+      originalAnnotation.lineBorderWidth = it
+    }
     annotation.lineColor?.let {
       originalAnnotation.lineColorInt = it.toInt()
     }
@@ -249,6 +255,50 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun setLineDepthOcclusionFactor(
+    managerId: String,
+    lineDepthOcclusionFactor: Double,
+    result: FLTPolylineAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor
+    result.success(null)
+  }
+
+  override fun getLineDepthOcclusionFactor(
+    managerId: String,
+    result: FLTPolylineAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    if (manager.lineDepthOcclusionFactor != null) {
+      result.success(manager.lineDepthOcclusionFactor!!)
+    } else {
+      result.success(null)
+    }
+  }
+
+  override fun setLineEmissiveStrength(
+    managerId: String,
+    lineEmissiveStrength: Double,
+    result: FLTPolylineAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineEmissiveStrength = lineEmissiveStrength
+    result.success(null)
+  }
+
+  override fun getLineEmissiveStrength(
+    managerId: String,
+    result: FLTPolylineAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    if (manager.lineEmissiveStrength != null) {
+      result.success(manager.lineEmissiveStrength!!)
+    } else {
+      result.success(null)
+    }
+  }
+
   override fun setLineTranslate(
     managerId: String,
     lineTranslate: List<Double>,
@@ -332,6 +382,13 @@ fun PolylineAnnotation.toFLTPolylineAnnotation(): FLTPolylineAnnotationMessager.
   this.lineBlur?.let {
     builder.setLineBlur(it)
   }
+  this.lineBorderColorInt?.let {
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    builder.setLineBorderColor(it.toUInt().toLong())
+  }
+  this.lineBorderWidth?.let {
+    builder.setLineBorderWidth(it)
+  }
   this.lineColorInt?.let {
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     builder.setLineColor(it.toUInt().toLong())
@@ -368,6 +425,12 @@ fun FLTPolylineAnnotationMessager.PolylineAnnotationOptions.toPolylineAnnotation
   }
   this.lineBlur?.let {
     options.withLineBlur(it)
+  }
+  this.lineBorderColor?.let {
+    options.withLineBorderColor(it.toInt())
+  }
+  this.lineBorderWidth?.let {
+    options.withLineBorderWidth(it)
   }
   this.lineColor?.let {
     options.withLineColor(it.toInt())

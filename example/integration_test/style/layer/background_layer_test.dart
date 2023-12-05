@@ -27,6 +27,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       backgroundColor: Colors.red.value,
+      backgroundEmissiveStrength: 1.0,
       backgroundOpacity: 1.0,
       backgroundPattern: "abc",
     ));
@@ -35,6 +36,7 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.backgroundColor, Colors.red.value);
+    expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPattern, "abc");
   });

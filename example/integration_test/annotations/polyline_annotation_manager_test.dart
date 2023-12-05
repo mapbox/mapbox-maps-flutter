@@ -12,11 +12,13 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
-  testWidgets('create PolylineAnnotation_manager ', (WidgetTester tester) async {
+  testWidgets('create PolylineAnnotation_manager ',
+      (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    final manager = await mapboxMap.annotations.createPolylineAnnotationManager();
+    final manager =
+        await mapboxMap.annotations.createPolylineAnnotationManager();
     await addDelay(1000);
 
     await manager.setLineCap(LineCap.BUTT);

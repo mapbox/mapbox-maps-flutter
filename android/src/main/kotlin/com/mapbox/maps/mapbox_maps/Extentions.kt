@@ -18,11 +18,21 @@ import com.mapbox.maps.extension.style.types.StyleTransition
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjectionName
+import com.mapbox.maps.pigeons.FLTSettings
+import com.mapbox.maps.plugin.ModelScaleMode
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import org.json.JSONArray
 import org.json.JSONObject
 
 // FLT to Android
+
+fun FLTSettings.ModelScaleMode.toModelScaleMode(): ModelScaleMode {
+  return when (this) {
+    FLTSettings.ModelScaleMode.VIEWPORT -> ModelScaleMode.VIEWPORT
+    FLTSettings.ModelScaleMode.MAP -> ModelScaleMode.MAP
+    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+  }
+}
 
 fun FLTMapInterfaces.TileStoreUsageMode.toTileStoreUsageMode(): TileStoreUsageMode {
   return when (this) {
@@ -342,6 +352,13 @@ fun Number.toDevicePixels(context: Context): Float {
 
 // Android to FLT
 
+fun ModelScaleMode.toFLTModelScaleMode(): FLTSettings.ModelScaleMode {
+  return when (this) {
+    ModelScaleMode.VIEWPORT -> FLTSettings.ModelScaleMode.VIEWPORT
+    ModelScaleMode.MAP -> FLTSettings.ModelScaleMode.MAP
+    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+  }
+}
 fun StylePropertyValue.toFLTStylePropertyValue(): FLTMapInterfaces.StylePropertyValue {
   return FLTMapInterfaces.StylePropertyValue.Builder()
     .setValue(value.toJson())

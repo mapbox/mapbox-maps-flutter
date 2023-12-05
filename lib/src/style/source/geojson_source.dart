@@ -105,7 +105,7 @@ class GeoJsonSource extends Source {
 
   /// If the data is a collection of point features, setting this to true clusters the points by radius into groups. Cluster groups become new `Point` features in the source with additional properties:
   ///  * `cluster` Is `true` if the point is a cluster
-  ///  * `cluster_id` A unqiue id for the cluster to be used in conjunction with the cluster inspection methods
+  ///  * `cluster_id` A unqiue id for the cluster to be used in conjunction with the [cluster inspection methods](https://www.mapbox.com/mapbox-gl-js/api/#geojsonsource#getclusterexpansionzoom)
   ///  * `point_count` Number of original points grouped into this cluster
   ///  * `point_count_abbreviated` An abbreviated point count
   Future<bool?> get cluster async {

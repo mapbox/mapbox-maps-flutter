@@ -38,6 +38,7 @@ void main() {
       emphasisCircleRadius: 1.0,
       imagePitchDisplacement: 1.0,
       location: [0.0, 1.0, 2.0],
+      locationIndicatorOpacity: 1.0,
       perspectiveCompensation: 1.0,
       shadowImageSize: 1.0,
       topImageSize: 1.0,
@@ -59,6 +60,7 @@ void main() {
     expect(layer.emphasisCircleRadius, 1.0);
     expect(layer.imagePitchDisplacement, 1.0);
     expect(layer.location, [0.0, 1.0, 2.0]);
+    expect(layer.locationIndicatorOpacity, 1.0);
     expect(layer.perspectiveCompensation, 1.0);
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImageSize, 1.0);
