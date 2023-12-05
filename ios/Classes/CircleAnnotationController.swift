@@ -150,7 +150,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         }
     }
 
-    func getCirclePitchAlignmentManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getCirclePitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTCirclePitchAlignmentBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let circlePitchAlignment = manager.circlePitchAlignment else {
@@ -175,7 +175,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         }
     }
 
-    func getCirclePitchScaleManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getCirclePitchScaleManagerId(_ managerId: String, completion: @escaping (FLTCirclePitchScaleBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let circlePitchScale = manager.circlePitchScale else {
@@ -225,7 +225,7 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         }
     }
 
-    func getCircleTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getCircleTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTCircleTranslateAnchorBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let circleTranslateAnchor = manager.circleTranslateAnchor else {

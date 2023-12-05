@@ -431,3 +431,9 @@ extension RawRepresentable where RawValue == UInt {
         NSNumber(value: rawValue)
     }
 }
+
+extension NSNumber {
+    internal var CGFloat: CGFloat {
+        CoreGraphics.CGFloat(doubleValue)
+    }
+}
