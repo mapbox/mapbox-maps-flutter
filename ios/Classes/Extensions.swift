@@ -533,3 +533,31 @@ struct SupportedStyleColor: Encodable {
         (a << 24) + (r << 16) + << (g << 8) + b
     }
 }
+
+// MARK: Style Projection
+
+extension StyleProjectionName {
+
+    init(_ fltValue: FLTStyleProjectionName) {
+        switch fltValue {
+        case .mercator: self = .mercator
+        case .globe: self = .globe
+        @unknown default: self.init(rawValue: "undefined")
+        }
+    }
+
+    func toFLTStyleProjectionName() -> FLTStyleProjectionName? {
+        switch self {
+        case .globe: return .globe
+        case .mercator: return .mercator
+        default: return nil
+        }
+    }
+}
+
+extension StyleProjection {
+
+    func toFLTStyleProjection() -> FLTStyleProjection? {
+        name.toFLTStyleProjectionName().map(FLTStyleProjection.make(with:))
+    }
+}
