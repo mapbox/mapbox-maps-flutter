@@ -29,60 +29,60 @@ class FullMapState extends State<FullMap> {
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Style loaded :), begin: ${data.begin}"),
+      content: Text("Style loaded :), time: ${data.timeInterval}"),
       backgroundColor: Theme.of(context).primaryColor,
       duration: Duration(seconds: 1),
     ));
   }
 
   _onCameraChangeListener(CameraChangedEventData data) {
-    print("CameraChangedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("CameraChangedEventData: timestamp: ${data.timestamp}");
   }
 
   _onMapIdleListener(MapIdleEventData data) {
-    print("MapIdleEventData: begin: ${data.begin}, end: ${data.end}");
+    print("MapIdleEventData: timestamp: ${data.timestamp}");
   }
 
   _onMapLoadedListener(MapLoadedEventData data) {
-    print("MapLoadedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("MapLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onMapLoadingErrorListener(MapLoadingErrorEventData data) {
-    print("MapLoadingErrorEventData: begin: ${data.begin}, end: ${data.end}");
+    print("MapLoadingErrorEventData: timestamp: ${data.timestamp}");
   }
 
   _onRenderFrameStartedListener(RenderFrameStartedEventData data) {
     print(
-        "RenderFrameStartedEventData: begin: ${data.begin}, end: ${data.end}");
+        "RenderFrameStartedEventData: timestamp: ${data.timestamp}");
   }
 
   _onRenderFrameFinishedListener(RenderFrameFinishedEventData data) {
     print(
-        "RenderFrameFinishedEventData: begin: ${data.begin}, end: ${data.end}");
+        "RenderFrameFinishedEventData: time: ${data.timeInterval}");
   }
 
   _onSourceAddedListener(SourceAddedEventData data) {
-    print("SourceAddedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("SourceAddedEventData: timestamp: ${data.timestamp}");
   }
 
   _onSourceDataLoadedListener(SourceDataLoadedEventData data) {
-    print("SourceDataLoadedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("SourceDataLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onSourceRemovedListener(SourceRemovedEventData data) {
-    print("SourceRemovedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("SourceRemovedEventData: timestamp: ${data.timestamp}");
   }
 
   _onStyleDataLoadedListener(StyleDataLoadedEventData data) {
-    print("StyleDataLoadedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("StyleDataLoadedEventData: time: ${data.timeInterval}");
   }
 
   _onStyleImageMissingListener(StyleImageMissingEventData data) {
-    print("StyleImageMissingEventData: begin: ${data.begin}, end: ${data.end}");
+    print("StyleImageMissingEventData: timestamp: ${data.timestamp}");
   }
 
   _onStyleImageUnusedListener(StyleImageUnusedEventData data) {
-    print("StyleImageUnusedEventData: begin: ${data.begin}, end: ${data.end}");
+    print("StyleImageUnusedEventData: timestamp: ${data.timestamp}");
   }
 
   @override

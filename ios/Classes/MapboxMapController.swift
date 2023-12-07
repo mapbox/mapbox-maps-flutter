@@ -2,18 +2,6 @@ import Flutter
 import MapboxMaps
 import UIKit
 
-class EventsObserver: Observer {
-    var notificationHandler: (MapboxCoreMaps.Event) -> Void
-
-    init(with notificationHandler: @escaping (MapboxCoreMaps.Event) -> Void) {
-        self.notificationHandler = notificationHandler
-    }
-
-    func notify(for event: MapboxCoreMaps.Event) {
-        notificationHandler(event)
-    }
-}
-
 class ProxyBinaryMessenger: NSObject, FlutterBinaryMessenger {
 
     let channelSuffix: String
@@ -49,6 +37,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     private var annotationController: AnnotationController?
     private var gesturesController: GesturesController?
     private var proxyBinaryMessenger: ProxyBinaryMessenger
+    private var cancelables = Set<AnyCancelable>()
 
     func view() -> UIView {
         return mapView
@@ -58,14 +47,14 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
         channelSuffix: Int,
-        eventTypes: [String],
+        eventTypes: [Int],
         arguments args: Any?,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String
     ) {
         self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(channelSuffix)")
 
-        HttpServiceFactory.getInstance().setInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
+        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
@@ -117,31 +106,76 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)
 
-        let observer = EventsObserver(with: { [weak self] (resourceEvent) in
-            guard let self = self else {
-                return
-            }
-            guard let eventData = resourceEvent.data as? [String: Any] else {
-                return
-            }
+        for eventType in eventTypes.compactMap({ FLT_MapEvent(rawValue: UInt($0)) }) {
+            subscribeToEvent(eventType)
+        }
+    }
 
-            self.channel.invokeMethod(self.getEventMethodName(eventType: resourceEvent.type),
-                                      arguments: self.convertDictionaryToString(dict: eventData))
-        })
-        mapboxMap.subscribe(observer, events: eventTypes)
+    private func subscribeToEvent(_ event: FLT_MapEvent) {
+        switch event {
+        case .mapLoaded:
+            mapboxMap.onMapLoaded.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .mapLoadingError:
+            mapboxMap.onMapLoadingError.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .styleLoaded:
+            mapboxMap.onStyleLoaded.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .styleDataLoaded:
+            mapboxMap.onStyleDataLoaded.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .cameraChanged:
+            mapboxMap.onCameraChanged.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .mapIdle:
+            mapboxMap.onMapIdle.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .sourceAdded:
+            mapboxMap.onSourceAdded.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .sourceRemoved:
+            mapboxMap.onSourceRemoved.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .sourceDataLoaded:
+            mapboxMap.onSourceDataLoaded.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .styleImageMissing:
+            mapboxMap.onStyleImageMissing.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .styleImageRemoveUnused:
+            mapboxMap.onStyleImageRemoveUnused.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .renderFrameStarted:
+            mapboxMap.onRenderFrameStarted.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .renderFrameFinished:
+            mapboxMap.onRenderFrameFinished.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        case .resourceRequest:
+            mapboxMap.onResourceRequest.observe { [weak self] payload in
+                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
+            }.store(in: &cancelables)
+        @unknown default:
+            fatalError("Event \(event) is not supported.")
+        }
     }
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         switch methodCall.method {
-        case "map#subscribe":
-            guard let arguments = methodCall.arguments as? [String: Any] else { return }
-            guard let eventType = arguments["event"] as? String else { return }
-            mapboxMap.onEvery(MapEvents.EventKind(rawValue: eventType)!) { (event) in
-                guard let data = event.data as? [String: Any] else {return}
-                self.channel.invokeMethod(self.getEventMethodName(eventType: eventType),
-                                          arguments: self.convertDictionaryToString(dict: data))
-            }
-            result(nil)
         case "annotation#create_manager":
             annotationController!.handleCreateManager(methodCall: methodCall, result: result)
         case "annotation#remove_manager":
@@ -157,28 +191,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         }
     }
 
-    private func getEventMethodName(eventType: String) -> String {
-        return "event#\(eventType)"
-    }
-
-    private func convertDictionaryToString(dict: [String: Any]) -> String {
-        var result: String = ""
-        do {
-            let jsonData =
-            try JSONSerialization.data(
-                withJSONObject: dict,
-                options: JSONSerialization.WritingOptions.init(rawValue: 0)
-            )
-
-            if let JSONString = String(data: jsonData, encoding: String.Encoding.utf8) {
-                result = JSONString
-            }
-        } catch {
-            result = ""
-        }
-        return result
-    }
-
     final class HttpUseragentInterceptor: HttpServiceInterceptorInterface {
 
         private var pluginVersion: String
@@ -187,20 +199,20 @@ class MapboxMapController: NSObject, FlutterPlatformView {
             self.pluginVersion = pluginVersion
         }
 
-        func onRequest(for request: HttpRequest) -> HttpRequest {
-            if let oldUseragent = request.headers[HttpHeaders.userAgent] {
-                request.headers[HttpHeaders.userAgent] = "\(oldUseragent) FlutterPlugin/\(self.pluginVersion)"
+        func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
+            if let oldUseragent = request.headers["userAgent"] {
+                request.headers["userAgent"] = "\(oldUseragent) FlutterPlugin/\(self.pluginVersion)"
             }
 
-            return request
+            continuation(.fromHttpRequest(request))
         }
 
-        func onDownload(forDownload download: DownloadOptions) -> DownloadOptions {
-            return download
-        }
-
-        func onResponse(for response: HttpResponse) -> HttpResponse {
-            return response
+        func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
+            continuation(response)
         }
     }
+}
+
+private extension FLT_MapEvent {
+    var methodName: String { "event#\(rawValue)" }
 }

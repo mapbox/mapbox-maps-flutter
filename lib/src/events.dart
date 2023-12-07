@@ -69,57 +69,53 @@ part of mapbox_maps_flutter;
 ///        │                           │                                │
 /// ```
 
-/// The class for camera-changed event in Observer
-class CameraChangedEventData {
+/// The time interval of an event. The `begin` property represents the time
+/// origin of an event, and the `end` property represents the time when the particular
+/// operation is complete. The timestamps are sampled at the origin and do not include
+/// the time required to dispatch an event.
+class EventTimeInterval {
   /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
   final int begin;
 
   /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
   /// of an event completion.
-  final int? end;
+  final int end;
 
-  CameraChangedEventData.fromJson(Map<String, dynamic> json)
+  EventTimeInterval.fromJson(Map<String, dynamic> json)
       : begin = json['begin'],
         end = json['end'];
+}
+
+/// The class for camera-changed event in Observer
+class CameraChangedEventData {
+/// The time when the camera was changed.
+final int timestamp;
+
+  CameraChangedEventData.fromJson(Map<String, dynamic> json)
+      : timestamp = json['timestamp'];
 }
 
 /// The class for map-idle event in Observer
 class MapIdleEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The timestamp of the `MapIdle` event.
+  final int timestamp;
 
   MapIdleEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'];
+      : timestamp = json['timestamp'];
 }
 
 /// The class for map-loaded event in Observer
 class MapLoadedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The `timeInterval.begin` represents the time when a style is set, and the
+  /// `timeInterval.end` is taken when the `map` is fully loaded.
+  final EventTimeInterval timeInterval;
 
   MapLoadedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'];
+      : timeInterval = EventTimeInterval.fromJson(json['timeInteval']);
 }
 
 /// The class for map-loading-error event in Observer
 class MapLoadingErrorEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
-
   /// Defines what resource could not be loaded.
   final MapLoadErrorType type;
 
@@ -132,25 +128,23 @@ class MapLoadingErrorEventData {
   /// In case of `tile` loading errors; `tile-id` will contain the id of the tile.
   final TileID? tileId;
 
+  /// The timestamp of the `MapLoadingError` event.
+  final int timestamp;
+
   MapLoadingErrorEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        type = EnumToString.fromString(MapLoadErrorType.values,
-            json['type'].toUpperCase().replaceAll("-", "_"))!,
+      : type = MapLoadErrorType.values[json['type']],
         message = json['message'],
         sourceId = json['source-id'],
         tileId =
-            json['tile-id'] != null ? TileID.fromJson(json['tile-id']) : null;
+            json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
+        timestamp = json['timestamp'];
 }
 
 /// The class for render-frame-finished event in Observer
 class RenderFrameFinishedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The `timeInterval.begin` is when the `map` started rendering the frame, and
+  /// `timeInterval.end` is when the frame was rendered.
+  final EventTimeInterval timeInterval;
 
   /// The render-mode finalue tells whether the Map has all {"full"} required to render the visible viewport.
   final RenderMode renderMode;
@@ -162,12 +156,10 @@ class RenderFrameFinishedEventData {
   final bool placementChanged;
 
   RenderFrameFinishedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        renderMode = EnumToString.fromString(RenderMode.values,
-            json['render-mode'].toUpperCase().replaceAll("-", "_"))!,
-        placementChanged = json['placement-changed'],
-        needsRepaint = json['needs-repaint'];
+      : timeInterval = json['timeInterval'],
+        renderMode = RenderMode.values[json['renderMode']],
+        placementChanged = json['placementChanged'],
+        needsRepaint = json['needsRepaint'];
 }
 
 /// Describes whether a map or frame has been fully rendered or not.
@@ -184,28 +176,20 @@ enum RenderMode {
 
 /// The class for render-frame-started event in Observer
 class RenderFrameStartedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The timestamp of an event when the `map` started rendering the frame.
+  final int timestamp;
 
   RenderFrameStartedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'];
+      : timestamp = json['timestamp'];
 }
 
 ///The class for event in Observer
 class ResourceEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
+  /// The timestamps of the resource request event. The `timeInterval.begin` is when
+  /// the resource request is made, and the `timeInterval.end` is when the request is completed.
+  final EventTimeInterval timeInterval;
 
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
-
-  /// "data-source" property
+  /// The type of data source from which the resource is requested.
   final DataSourceType dataSource;
 
   /// "request" property
@@ -218,10 +202,8 @@ class ResourceEventData {
   final bool cancelled;
 
   ResourceEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        dataSource = EnumToString.fromString(DataSourceType.values,
-            json['data-source'].toUpperCase().replaceAll("-", "_"))!,
+      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
+        dataSource = DataSourceType.values[json['dataSource']],
         request = Request.fromJson(json['request']),
         response = json['response'] != null
             ? Response.fromJson(json['response'])
@@ -232,49 +214,37 @@ class ResourceEventData {
 /// Describes data source of request for resource-request event.
 /// @param value String value of this enum
 enum DataSourceType {
-  /// data source as resource-loader.
-  RESOURCE_LOADER,
-
-  /// data source as network.
-  NETWORK,
+  /// data source as asset.
+  ASSET,
 
   /// data source as database.
   DATABASE,
 
-  /// data source as asset.
-  ASSET,
-
   /// data source as file-system.
   FILE_SYSTEM,
+
+  /// data source as network.
+  NETWORK,
+
+  /// data source as resource-loader.
+  RESOURCE_LOADER,
 }
 
 /// The class for source-added event in Observer
 class SourceAddedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The timestamp of source addition.
+  final int timestamp;
 
   /// The ID of the added source.
   final String id;
 
   SourceAddedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        id = json['id'];
+      : id = json['sourceId'],
+        timestamp = json['timestamp'];
 }
 
 /// The class for source-data-loaded event in Observer
 class SourceDataLoadedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
-
   /// The 'id' property defines the source id.
   final String id;
 
@@ -287,107 +257,87 @@ class SourceDataLoadedEventData {
   /// The 'tile-id' property defines the tile id if the 'type' field equals 'tile'.
   final TileID? tileID;
 
+  /// When the `type` of an event is `SourceDataLoadedType.Metadata` and the
+  /// data identifier was provided to the `setStyleGeoJSONSourceData` method,
+  /// this property can be used to determine what data was loaded by the `GeoJSON` source.
+  final String? dataId;
+
+  /// The `timeInterval.begin` is when source data begins loading, and the `timeInterval.end` is when source data is loaded.
+  final EventTimeInterval timeInterval;
+
   SourceDataLoadedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        id = json['id'],
-        type = EnumToString.fromString(SourceDataType.values,
-            json['type'].toUpperCase().replaceAll("-", "_"))!,
+      : id = json['sourceId'],
+        type = SourceDataType.values[json['type']],
         loaded = json['loaded'],
         tileID =
-            json['tile-id'] != null ? TileID.fromJson(json['tile-id']) : null;
+            json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
+        dataId = json['dataId'],
+        timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for source-removed event in Observer
 class SourceRemovedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
+  /// The timestamp of source removal.
+  final int timestamp;
 
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
-
-  /// The ID of the removed source.
+  /// The ID of the removal source.
   final String id;
 
   SourceRemovedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        id = json['id'];
+      : id = json['sourceId'],
+        timestamp = json['timestamp'];
 }
 
 /// The class for style-data-loaded event in Observer
 class StyleDataLoadedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The `timeInterval.begin` is when style data begins loading, and the `timeInterval.end` is when style data is loaded. */
+  final EventTimeInterval timeInterval;
 
   /// The 'type' property defines what kind of style has been loaded.
   final StyleDataType type;
 
   StyleDataLoadedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        type = EnumToString.fromString(StyleDataType.values,
-            json['type'].toUpperCase().replaceAll("-", "_"))!;
+      : type = StyleDataType.values[json['type']],
+        timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for style-image-missing event in Observer
 class StyleImageMissingEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+  /// The timestamp of an event when the `map` requested a missing image.
+  final int timestamp;
 
   /// The ID of the missing image.
   final String id;
 
   StyleImageMissingEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        id = json['id'];
+      : timestamp = json['timestamp'],
+        id = json['imageId'];
 }
 
 /// The class for style-image-remove-unused event in Observer
 class StyleImageUnusedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
+  /// The timestamp of an event when the `map` no longer needs a previously added image.
+  final int timestamp;
 
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
-
-  /// The ID of the unused image.
+  /// The identifier of an image that is not used by the `map`.
   final String id;
 
   StyleImageUnusedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'],
-        id = json['id'];
+      : timestamp = json['timestamp'],
+        id = json['imageId'];
 }
 
 /// The class for style-loaded event in Observer
 class StyleLoadedEventData {
-  /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
-
-  /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion.
-  final int? end;
+/// The `timeInterval.begin` is when the style begins loading, and the `timeInterval.end` is when the style is loaded. */
+final EventTimeInterval timeInterval;
 
   StyleLoadedEventData.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'];
+      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// Describes an error type while loading the map.
 /// Defines what resource could not be loaded.
-/// @param finalue String finalue of this enum
 enum MapLoadErrorType {
   /// An error related to style.
   STYLE,
@@ -398,11 +348,11 @@ enum MapLoadErrorType {
   /// An error related to source.
   SOURCE,
 
-  /// An error related to tile.
-  TILE,
-
   /// An error related to glyphs.
-  GLYPHS
+  GLYPHS,
+
+  /// An error related to tile.
+  TILE
 }
 
 /// Defines what kind of style data has been loaded in a style-data-loaded event.
@@ -456,8 +406,7 @@ class Error {
   final String message;
 
   Error.fromJson(Map<String, dynamic> json)
-      : reason = EnumToString.fromString(ResponseErrorReason.values,
-            json['reason'].toUpperCase().replaceAll("-", "_"))!,
+      : reason = ResponseErrorReason.values[json['reason']],
         message = json['message'];
 }
 
@@ -473,7 +422,7 @@ class Response {
   final bool noContent;
 
   /// "modified" property
-  final String modified;
+  final String? modified;
 
   /// "source" property
   final ResponseSourceType source;
@@ -492,12 +441,11 @@ class Response {
 
   Response.fromJson(Map<String, dynamic> json)
       : eTag = json['etag'],
-        mustRevalidate = json['must-revalidate'],
-        noContent = json['no-content'],
+        mustRevalidate = json['mustRevalidate'],
+        noContent = json['noContent'],
         modified = json['modified'],
-        source = EnumToString.fromString(ResponseSourceType.values,
-            json['source'].toUpperCase().replaceAll("-", "_"))!,
-        notModified = json['not-modified'],
+        source = ResponseSourceType.values[json['source']],
+        notModified = json['notModified'],
         expires = json['expires'],
         size = json['size'],
         error = json['error'] != null ? Error.fromJson(json['error']) : null;
@@ -519,27 +467,33 @@ enum ResponseSourceType {
   LOCAL_FILE,
 }
 
+/// The enumeration defines the method used to make a resource request.
+enum RequestLoadingMethodType {
+  /// The engine should try loading a resource from the network.
+  NETWORK,
+  /// The engine should try loading a resource from the cache.
+  CACHE
+}
+
 /// The request data class that included in EventData
 class Request {
   /// "loading-method" property
-  final List<String> loadingMethod;
+  final List<RequestLoadingMethodType> loadingMethod;
 
   /// "url" property
   final String url;
 
-  /// "kind" property
+  /// The type of a requested resource
   final RequestType kind;
 
   /// "priority" property
   final RequestPriority priority;
 
   Request.fromJson(Map<String, dynamic> json)
-      : loadingMethod = json['loading-method'],
+      : loadingMethod = (json['loading-method'] as List<int>).map((e) => RequestLoadingMethodType.values[e]).toList(),
         url = json['url'],
-        kind = EnumToString.fromString(RequestType.values,
-            json['kind'].toUpperCase().replaceAll("-", "_"))!,
-        priority = EnumToString.fromString(RequestPriority.values,
-            json['priority'].toUpperCase().replaceAll("-", "_"))!;
+        kind = RequestType.values[json['resource']],
+        priority = RequestPriority.values[json['priority']];
 }
 
 /// Describes type for request object.
@@ -568,6 +522,9 @@ enum RequestType {
 
   /// Request type image.
   IMAGE,
+
+  /// The resource type is a 3D model.
+  MODEL
 }
 
 /// Describes priority for request object.
@@ -579,37 +536,3 @@ enum RequestPriority {
   /// low priority. */
   LOW
 }
-
-/// Describes priority for request object.
-/// @param finalue String finalue of this enum
-enum RequestPriorit {
-  /// Regular priority. */
-  REGULAR,
-
-  /// low priority. */
-  LOW
-}
-
-/// Generic Event type used to notify an `observer`.
-class Event {
-  Event({required this.type, required this.data});
-
-  /// Type of the event.
-  String type;
-
-  /// Generic container for an event's data (Object). By default, event data will contain `begin` key, whose value
-  /// is a number representing timestamp taken at the time of an event creation, in microseconds, since the epoch.
-  /// For an interval events, an optional `end` property will be present that represents timestamp taken at the time
-  /// of an event completion. Additional data properties are docummented by respective events.
-  ///
-  /// ``` text
-  /// Event data format (Object):
-  /// .
-  /// ├── begin - Number
-  /// └── end - optional Number
-  /// ```
-  String data;
-}
-
-/// An `observer` interface used to subscribe for an `observable` events. */
-typedef void Observer(Event event);

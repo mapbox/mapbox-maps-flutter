@@ -23,11 +23,11 @@ extension LocationOptions {
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled.boolValue
         }
-        switch settings.puckBearingSource?.value {
+        switch settings.puckBearing?.value {
         case .COURSE:
-            options.puckBearingSource = .course
+            options.puckBearing = .course
         default:
-            options.puckBearingSource = .heading
+            options.puckBearing = .heading
         }
         if settings.enabled == false {
             options.puckType = nil
@@ -109,8 +109,7 @@ extension LocationOptions {
             enabled = NSNumber(true)
         }
         let puckBearingEnabled = NSNumber(value: self.puckBearingEnabled)
-        let puckBearingSource: FLT_SETTINGSPuckBearingSource = self.puckBearingSource == .heading ?
-            .HEADING : .COURSE
+        let puckBearing: FLT_SETTINGSPuckBearing = self.puckBearing == .heading ? .HEADING : .COURSE
         var accuracyRingColor: NSNumber?
         var accuracyRingBorderColor: NSNumber?
         var showAccuracyRing: NSNumber?
@@ -178,7 +177,7 @@ extension LocationOptions {
             layerAbove: nil,
             layerBelow: nil,
             puckBearingEnabled: puckBearingEnabled,
-            puckBearingSource: .init(value: puckBearingSource),
+            puckBearing: .init(value: puckBearing),
             locationPuck: locationPuck
         )
     }

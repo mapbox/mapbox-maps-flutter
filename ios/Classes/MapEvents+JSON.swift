@@ -1,0 +1,206 @@
+import Foundation
+import MapboxCoreMaps
+
+protocol MapEventEncodable {
+    var toJSON: [String: Any?] { get }
+    var toJSONString: String { get }
+}
+
+extension EventTimeInterval {
+    var toJSON: [String: Any] {
+        [
+            "begin": begin,
+            "end": end
+        ]
+    }
+}
+
+extension CanonicalTileID {
+    var toJSON: [String: Any] {
+        [
+            "x": x,
+            "y": y,
+            "z": z
+        ]
+    }
+}
+
+extension MapLoaded: MapEventEncodable {
+    var toJSON: [String: Any?] {
+        [
+            "timeInterval": timeInterval.toJSON
+        ]
+    }
+}
+
+extension MapLoadingError: MapEventEncodable {
+    var toJSON: [String: Any?] {
+        return [
+            "type": type.rawValue,
+            "message": message,
+            "sourceId": sourceId,
+            "tileId": tileId?.toJSON,
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension StyleLoaded: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "timeInterval": timeInterval
+        ]
+    }
+}
+
+extension StyleDataLoaded: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "type": type.rawValue,
+            "timeInterval": timeInterval
+        ]
+    }
+}
+
+extension CameraChanged: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension MapIdle: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension SourceAdded: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "sourceId": sourceId,
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension SourceRemoved: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "sourceId": sourceId,
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension SourceDataLoaded: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "sourceId": sourceId,
+            "type": type.rawValue,
+            "loaded": loaded,
+            "tileId": tileId?.toJSON,
+            "dataId": dataId,
+            "timeInterval": timeInterval.toJSON
+        ]
+    }
+}
+
+extension StyleImageMissing: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "imageId": imageId,
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension StyleImageRemoveUnused: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "imageId": imageId,
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension RenderFrameStarted: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "timestamp": timestamp
+        ]
+    }
+}
+
+extension RenderFrameFinished: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "renderMode": renderMode.rawValue,
+            "timeInterval": timeInterval.toJSON,
+            "needsRepaint": needsRepaint,
+            "placementChanged": placementChanged
+        ]
+    }
+}
+
+extension RequestInfo {
+    var toJSON: [String : Any] {
+        [
+            "url": url,
+            "resource": resource.rawValue,
+            "priority": priority.rawValue,
+            "loadingMethod": loadingMethod.map(\.rawValue)
+        ]
+    }
+}
+
+extension ResourceRequestError {
+    var toJSON: [String : Any] {
+        [
+            "reason": reason.rawValue,
+            "message": message
+        ]
+    }
+}
+
+extension ResponseInfo {
+    var toJSON: [String : Any] {
+        var result = [String: Any]()
+        result["noContent"] = noContent
+        result["notModified"] = notModified
+        result["mustRevalidate"] = mustRevalidate
+        result["source"] = source.rawValue
+        result["size"] = size
+        result["modified"] = modified
+        result["expires"] = expires
+        result["etag"] = etag
+        result["error"] = error?.toJSON
+        return result
+    }
+}
+
+extension ResourceRequest: MapEventEncodable {
+    var toJSON: [String : Any?] {
+        [
+            "source": source.rawValue,
+            "request": request.toJSON,
+            "response": response?.toJSON,
+            "cancelled": cancelled,
+            "timeInterval": timeInterval.toJSON
+        ]
+    }
+}
+
+extension MapEventEncodable {
+    var toJSONString: String {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: toJSON.compactMapValues { $0 })
+            return String(data: jsonData, encoding: String.Encoding.utf8) ?? ""
+        } catch {
+            return ""
+        }
+    }
+}

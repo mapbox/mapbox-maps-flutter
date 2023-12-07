@@ -13,31 +13,9 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         return FlutterStandardMessageCodec.sharedInstance()
     }
 
-    private func createResourceOptions(args: [String: Any]) -> ResourceOptions {
-        var resourceOptions = ResourceOptions(accessToken: "")
-        if let resourceOptionsMap = args["resourceOptions"] as? [Any] {
-            if let token = resourceOptionsMap[0] as? String {
-                resourceOptions.accessToken = token
-            }
-            if let baseURL = resourceOptionsMap[1] as? String {
-                resourceOptions.baseURL = URL(string: baseURL)
-            }
-            if let dataPath = resourceOptionsMap[2] as? String {
-                resourceOptions.dataPathURL = URL(string: dataPath)
-            }
-            if let assetPath = resourceOptionsMap[3] as? String {
-                resourceOptions.assetPathURL = URL(string: assetPath)
-            }
-            if let tileStoreUsageMode = resourceOptionsMap[4] as? Int {
-                resourceOptions.tileStoreUsageMode = TileStoreUsageMode(rawValue: tileStoreUsageMode)!
-            }
-        }
-        return resourceOptions
-    }
-
     private func createGlyphsRasterizationOptions(args: [Any]) -> GlyphsRasterizationOptions {
         var glyphsRasterizationOptions: GlyphsRasterizationOptions = GlyphsRasterizationOptions(fontFamilies: [])
-        if let glyphsRasterizationOptionsList = args[8] as? [Any] {
+        if let glyphsRasterizationOptionsList = args[7] as? [Any] {
             if let rasterizationModeValue = glyphsRasterizationOptionsList[0] as? Int {
                 let rasterizationMode = GlyphsRasterizationMode(rawValue: rasterizationModeValue)
                 var fontFamilies: [String] = []
@@ -59,7 +37,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             var viewportMode: ViewportMode = .default
             var orientation: NorthOrientation = .upwards
             var crossSourceCollisions: Bool = true
-            var optimizeForTerrain: Bool = true
             var size: CGSize?
             var pixelRatio: CGFloat = UIScreen.main.nativeScale
             if let constrainModeInt = mapOptionsMap[1] as? Int {
@@ -74,13 +51,10 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             if let crossSourceCollisionsBool = mapOptionsMap[4] as? Bool {
                 crossSourceCollisions = crossSourceCollisionsBool
             }
-            if let optimizeForTerrainBool = mapOptionsMap[5] as? Bool {
-                optimizeForTerrain = optimizeForTerrainBool
-            }
-            if let sizeMap = mapOptionsMap[6] as? [CGFloat] {
+            if let sizeMap = mapOptionsMap[5] as? [CGFloat] {
                 size = CGSize(width: sizeMap[0], height: sizeMap[1])
             }
-            if let pixelRatioFloat = mapOptionsMap[7] as? CGFloat {
+            if let pixelRatioFloat = mapOptionsMap[6] as? CGFloat {
                 pixelRatio = pixelRatioFloat
             }
 
@@ -89,7 +63,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 viewportMode: viewportMode,
                 orientation: orientation,
                 crossSourceCollisions: crossSourceCollisions,
-                optimizeForTerrain: optimizeForTerrain,
                 size: size,
                 pixelRatio: pixelRatio,
                 glyphsRasterizationOptions: createGlyphsRasterizationOptions(args: mapOptionsMap)
@@ -137,7 +110,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64,
                 arguments args: Any?) -> FlutterPlatformView {
         var mapInitOptions = MapInitOptions()
-        var eventTypes = [String]()
+        var eventTypes = [Int]()
         var pluginVersion = ""
         var channelSuffix = 0
 
@@ -156,11 +129,10 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         if let styleURIString = args["styleUri"] as? String {
             styleURI = StyleURI(rawValue: styleURIString)
         }
-        if let types = args["eventTypes"] as? [String] {
+        if let types = args["eventTypes"] as? [Int] {
             eventTypes = types
         }
-        mapInitOptions = MapInitOptions(resourceOptions: createResourceOptions(args: args),
-                                        mapOptions: createMapOptions(args: args),
+        mapInitOptions = MapInitOptions(mapOptions: createMapOptions(args: args),
                                         cameraOptions: createCameraOptions(args: args),
                                         styleURI: styleURI
         )

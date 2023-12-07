@@ -7,7 +7,7 @@ class CameraController: NSObject, FLT_CameraManager {
     }
 
     func camera(forCoordinateBoundsBounds bounds: FLTCoordinateBounds, padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, maxZoom: NSNumber?, offset: FLTScreenCoordinate?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: bounds.toCoordinateBounds(), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue, maxZoom: maxZoom?.doubleValue, offset: offset?.toScreenCoordinate())
+        let cameraOptions = self.mapboxMap.camera(for: bounds.toCoordinateBounds(), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue, maxZoom: maxZoom?.doubleValue, offset: offset?.toCGPoint())
         return cameraOptions.toFLTCameraOptions()
     }
 

@@ -209,10 +209,10 @@ extension CoordinateBoundsZoom {
 }
 extension CoordinateBounds {
     func toFLTCoordinateBounds() -> FLTCoordinateBounds {
-        return FLTCoordinateBounds.make(withSouthwest: self.southwest.toDict(), northeast: self.northeast.toDict(), infiniteBounds: NSNumber(value: self.isInfiniteBounds))
+        return FLTCoordinateBounds.make(withSouthwest: self.southwest.toDict(), northeast: self.northeast.toDict(), infiniteBounds: NSNumber(value: self.infiniteBounds))
     }
 }
-extension CameraOptions {
+extension MapboxMaps.CameraOptions {
     func toFLTCameraOptions() -> FLTCameraOptions {
         let center = self.center != nil ? self.center?.toDict(): nil
         let padding = self.padding != nil ? FLTMbxEdgeInsets.make(
