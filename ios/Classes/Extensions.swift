@@ -209,7 +209,10 @@ extension CoordinateBoundsZoom {
 }
 extension CoordinateBounds {
     func toFLTCoordinateBounds() -> FLTCoordinateBounds {
-        return FLTCoordinateBounds.make(withSouthwest: self.southwest.toDict(), northeast: self.northeast.toDict(), infiniteBounds: NSNumber(value: self.infiniteBounds))
+        FLTCoordinateBounds.make(
+            withSouthwest: southwest.toDict(),
+            northeast: northeast.toDict(),
+            infiniteBounds: NSNumber(value: infiniteBounds))
     }
 }
 extension MapboxMaps.CameraOptions {
@@ -388,21 +391,6 @@ func toRgb(alpha: Int, red: Int, green: Int, blue: Int) -> Int {
     return (alpha << 24) + (red << 16) + (green << 8) + blue
 }
 
-extension StyleColor {
-    func rgb() -> Int {
-        return toRgb(
-            alpha: Int(self.alpha * 255),
-            red: Int(self.red),
-            green: Int(self.green),
-            blue: Int(self.blue)
-        )
-    }
-
-    var nsNumberValue: NSNumber {
-        NSNumber(value: rgb())
-    }
-}
-
 extension UIColor {
     func rgb() -> Int {
          var fRed: CGFloat = 0
@@ -437,5 +425,111 @@ extension NSNumber {
 
     internal var CLLocationDirection: CLLocationDirection {
         CoreLocation.CLLocationDirection(doubleValue)
+    }
+}
+
+extension String {
+
+    subscript(_ nsRange: NSRange) -> String? {
+        guard let range = Range(nsRange, in: self) else { return nil }
+        return String(self[range])
+    }
+}
+
+// MARK: StyleColor
+
+extension StyleColor {
+
+    var nsNumberValue: NSNumber? {
+        do {
+            let color = SupportedStyleColor(styleColor: self)
+            return NSNumber(value: color.intValue)
+        } catch {
+            return nil
+        }
+    }
+}
+
+/// - Note: Current supports HSL(A) and RGB(A) color values.
+struct SupportedStyleColor: Encodable {
+    var r, g, b, a: Double
+
+    private enum StyleColorConversionError: Swift.Error {
+        case invalidStyleColor
+        case unsupportedStyleColor
+    }
+
+    init(styleColor: StyleColor) throws {
+        let pattern = #"((?<tag>rgb|rgba|hsl|hsla))\((?<value>.*)\)"#
+        let regex = try NSRegularExpression(pattern: pattern)
+        let colorString = styleColor.rawValue
+
+        guard let match = regex.firstMatch(in: colorString, range: NSRange(colorString.startIndex..<colorString.endIndex, in: colorString)) else {
+            throw StyleColorConversionError.unsupportedStyleColor
+        }
+        guard
+            let tag = colorString[match.range(withName: "tag")],
+            let valueString = colorString[match.range(withName: "value")]
+        else {
+            throw StyleColorConversionError.invalidStyleColor
+        }
+
+        try self.init(tag: tag, values: valueString.components(separatedBy: ",").compactMap(Double.init(_:)))
+    }
+
+    private init(tag: String, values: [Double]) throws {
+        var values = values
+
+        var r = values.removeFirst()
+        var g = values.removeFirst()
+        var b = values.removeFirst()
+
+        if tag == "hsl" || tag == "hsla" {
+            let (h, s, l) = (r, g, b)
+
+            guard case 0...360 = h, case 0...1 = s, case 0...1 = l else {
+                throw StyleColorConversionError.invalidStyleColor
+            }
+
+            let chroma = (1 - abs((2 * l) - 1)) * s
+            let h60 = h / 60.0
+            let x = chroma * (1 - abs((h60.truncatingRemainder(dividingBy: 2)) - 1))
+
+            if h60 < 1 {
+                r = chroma
+                g = x
+            } else if h60 < 2 {
+                r = x
+                g = chroma
+            } else if h60 < 3 {
+                g = chroma
+                b = x
+            } else if h60 < 4 {
+                g = x
+                b = chroma
+            } else if h60 < 5 {
+                r = x
+                b = chroma
+            } else if h60 < 6 {
+                r = chroma
+                b = x
+            }
+
+            let m = l - (chroma / 2)
+
+            r = r + m
+            g = g + m
+            b = b + m
+        }
+
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = values.first ?? 1.0
+    }
+
+    var intValue: Int {
+        // Bits 24-31 are alpha, 16-23 are red, 8-15 are green, 0-7 are blue
+        (a << 24) + (r << 16) + << (g << 8) + b
     }
 }
