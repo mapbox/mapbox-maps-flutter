@@ -1,28 +1,67 @@
-import Foundation
 import MapboxMaps
 import UIKit
+
 class CameraController: NSObject, FLT_CameraManager {
-    func cameraForDrag(fromPoint: FLTScreenCoordinate, toPoint: FLTScreenCoordinate, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        return self.mapboxMap.dragCameraOptions(from: fromPoint.toCGPoint(), to: toPoint.toCGPoint()).toFLTCameraOptions()
+    func camera(
+        forCoordinateBoundsBounds bounds: FLTCoordinateBounds,
+        padding: FLTMbxEdgeInsets,
+        bearing: NSNumber?,
+        pitch: NSNumber?,
+        maxZoom: NSNumber?,
+        offset: FLTScreenCoordinate?,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) -> FLTCameraOptions? {
+
+        let coordinateBounds = bounds.toCoordinateBounds()
+        let camera = mapboxMap.camera(
+            for: [coordinateBounds.northeast, coordinateBounds.southwest],
+            camera: CameraOptions(),
+            coordinatesPadding: padding.toUIEdgeInsets(),
+            maxZoom: maxZoom?.doubleValue,
+            offset: offset?.toCGPoint())
+        return camera.toFLTCameraOptions()
     }
 
-    func camera(forCoordinateBoundsBounds bounds: FLTCoordinateBounds, padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, maxZoom: NSNumber?, offset: FLTScreenCoordinate?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: bounds.toCoordinateBounds(), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue, maxZoom: maxZoom?.doubleValue, offset: offset?.toCGPoint())
+    func camera(
+        forCoordinatesCoordinates coordinates: [[String: Any]],
+        padding: FLTMbxEdgeInsets,
+        bearing: NSNumber?,
+        pitch: NSNumber?,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) -> FLTCameraOptions? {
+        let cameraOptions = mapboxMap.camera(
+            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}),
+            padding: padding.toUIEdgeInsets(),
+            bearing: bearing?.doubleValue,
+            pitch: pitch?.doubleValue)
         return cameraOptions.toFLTCameraOptions()
     }
 
-    func camera(forCoordinatesCoordinates coordinates: [[String: Any]], padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}), padding: padding.toUIEdgeInsets(), bearing: bearing?.doubleValue, pitch: pitch?.doubleValue)
+    func camera(
+        forCoordinatesCameraOptionsCoordinates coordinates: [[String: Any]],
+        camera: FLTCameraOptions, 
+        box: FLTScreenBox,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) -> FLTCameraOptions? {
+        let cameraOptions = mapboxMap.camera(
+            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}), 
+            camera: camera.toCameraOptions(),
+            rect: box.toCGRect())
         return cameraOptions.toFLTCameraOptions()
     }
 
-    func camera(forCoordinatesCameraOptionsCoordinates coordinates: [[String: Any]], camera: FLTCameraOptions, box: FLTScreenBox, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}), camera: camera.toCameraOptions(), rect: box.toCGRect())
-        return cameraOptions.toFLTCameraOptions()
-    }
-
-    func camera(forGeometryGeometry geometry: [String: Any], padding: FLTMbxEdgeInsets, bearing: NSNumber?, pitch: NSNumber?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraOptions? {
-        let cameraOptions = self.mapboxMap.camera(for: convertDictionaryToGeometry(dict: geometry)!, padding: padding.toUIEdgeInsets(), bearing: bearing?.CGFloat, pitch: pitch?.CGFloat)
+    func camera(
+        forGeometryGeometry geometry: [String: Any],
+        padding: FLTMbxEdgeInsets, 
+        bearing: NSNumber?,
+        pitch: NSNumber?,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) -> FLTCameraOptions? {
+        let cameraOptions = mapboxMap.camera(
+            for: convertDictionaryToGeometry(dict: geometry)!,
+            padding: padding.toUIEdgeInsets(),
+            bearing: bearing?.cgFloatValue,
+            pitch: pitch?.cgFloatValue)
         return cameraOptions.toFLTCameraOptions()
     }
 
@@ -87,7 +126,7 @@ class CameraController: NSObject, FLT_CameraManager {
     func getBoundsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraBounds? {
         return self.mapboxMap.cameraBounds.toFLTCameraBounds()
     }
-
+    
     private var mapboxMap: MapboxMap
     init(withMapboxMap mapboxMap: MapboxMap) {
         self.mapboxMap = mapboxMap

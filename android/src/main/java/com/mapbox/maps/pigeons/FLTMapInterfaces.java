@@ -5435,16 +5435,6 @@ public class FLTMapInterfaces {
      */
     @NonNull 
     CameraBounds getBounds();
-    /**
-     * Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-     *
-     * @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
-     * @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
-     *
-     * @return The `camera options` object showing the end point.
-     */
-    @NonNull 
-    CameraOptions cameraForDrag(@NonNull ScreenCoordinate fromPoint, @NonNull ScreenCoordinate toPoint);
 
     /** The codec used by _CameraManager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -5833,31 +5823,6 @@ public class FLTMapInterfaces {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 try {
                   CameraBounds output = api.getBounds();
-                  wrapped.add(0, output);
-                }
- catch (Throwable exception) {
-                  ArrayList<Object> wrappedError = wrapError(exception);
-                  wrapped = wrappedError;
-                }
-                reply.reply(wrapped);
-              });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForDrag", getCodec());
-        if (api != null) {
-          channel.setMessageHandler(
-              (message, reply) -> {
-                ArrayList<Object> wrapped = new ArrayList<Object>();
-                ArrayList<Object> args = (ArrayList<Object>) message;
-                ScreenCoordinate fromPointArg = (ScreenCoordinate) args.get(0);
-                ScreenCoordinate toPointArg = (ScreenCoordinate) args.get(1);
-                try {
-                  CameraOptions output = api.cameraForDrag(fromPointArg, toPointArg);
                   wrapped.add(0, output);
                 }
  catch (Throwable exception) {

@@ -1349,15 +1349,6 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTCameraBounds *)getBoundsWithError:(FlutterError *_Nullable *_Nonnull)error;
-/// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-///
-/// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
-/// @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
-///
-/// @return The `camera options` object showing the end point.
-///
-/// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)cameraForDragFromPoint:(FLTScreenCoordinate *)fromPoint toPoint:(FLTScreenCoordinate *)toPoint error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_CameraManager> *_Nullable api);

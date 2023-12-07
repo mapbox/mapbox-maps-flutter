@@ -2949,41 +2949,6 @@ class _CameraManager {
       return (replyList[0] as CameraBounds?)!;
     }
   }
-
-  /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-  ///
-  /// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
-  /// @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
-  ///
-  /// @return The `camera options` object showing the end point.
-  Future<CameraOptions> cameraForDrag(
-      ScreenCoordinate arg_fromPoint, ScreenCoordinate arg_toPoint) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForDrag',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_fromPoint, arg_toPoint]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else if (replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (replyList[0] as CameraOptions?)!;
-    }
-  }
 }
 
 class __MapInterfaceCodec extends StandardMessageCodec {

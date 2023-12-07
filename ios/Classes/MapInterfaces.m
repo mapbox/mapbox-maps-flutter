@@ -2650,32 +2650,6 @@ void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
       [channel setMessageHandler:nil];
     }
   }
-  /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-  ///
-  /// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
-  /// @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
-  ///
-  /// @return The `camera options` object showing the end point.
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForDrag"
-        binaryMessenger:binaryMessenger
-        codec:FLT_CameraManagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(cameraForDragFromPoint:toPoint:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(cameraForDragFromPoint:toPoint:error:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        FLTScreenCoordinate *arg_fromPoint = GetNullableObjectAtIndex(args, 0);
-        FLTScreenCoordinate *arg_toPoint = GetNullableObjectAtIndex(args, 1);
-        FlutterError *error;
-        FLTCameraOptions *output = [api cameraForDragFromPoint:arg_fromPoint toPoint:arg_toPoint error:&error];
-        callback(wrapResult(output, error));
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
 }
 @interface FLT_MapInterfaceCodecReader : FlutterStandardReader
 @end
