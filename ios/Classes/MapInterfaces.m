@@ -6280,30 +6280,6 @@ void FLTStyleManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<F
       [channel setMessageHandler:nil];
     }
   }
-  /// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
-  ///
-  /// @param properties A map of style light properties values, with their names as a key.
-  ///
-  /// @return A string describing an error if the operation was not successful, empty otherwise.
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLight"
-        binaryMessenger:binaryMessenger
-        codec:FLTStyleManagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(setStyleLightProperties:completion:)], @"FLTStyleManager api (%@) doesn't respond to @selector(setStyleLightProperties:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_properties = GetNullableObjectAtIndex(args, 0);
-        [api setStyleLightProperties:arg_properties completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
   /// Gets the value of a style light property.
   ///
   /// @param property The style light property name.

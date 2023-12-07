@@ -2047,12 +2047,6 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 /// @param ambientLight The ambient light source.
 /// @param directionalLight The directional light source.
 - (void)setLightsAmbientLight:(FLTAmbientLight *)ambientLight directionalLight:(FLTDirectionalLight *)directionalLight error:(FlutterError *_Nullable *_Nonnull)error;
-/// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
-///
-/// @param properties A map of style light properties values, with their names as a key.
-///
-/// @return A string describing an error if the operation was not successful, empty otherwise.
-- (void)setStyleLightProperties:(NSString *)properties completion:(void (^)(FlutterError *_Nullable))completion;
 /// Gets the value of a style light property.
 ///
 /// @param property The style light property name.

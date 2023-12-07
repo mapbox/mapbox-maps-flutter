@@ -442,7 +442,7 @@ extension StyleColor {
 
     var nsNumberValue: NSNumber? {
         do {
-            let color = SupportedStyleColor(styleColor: self)
+            let color = try SupportedStyleColor(styleColor: self)
             return NSNumber(value: color.intValue)
         } catch {
             return nil
@@ -474,7 +474,14 @@ struct SupportedStyleColor: Encodable {
             throw StyleColorConversionError.invalidStyleColor
         }
 
-        try self.init(tag: tag, values: valueString.components(separatedBy: ",").compactMap(Double.init(_:)))
+        try self.init(
+            tag: tag,
+            values: valueString.components(separatedBy: ",").compactMap {
+                let scanner = Scanner(string: $0)
+                var doubleValue: Double = 0
+                scanner.scanDouble(&doubleValue)
+                return doubleValue
+            })
     }
 
     private init(tag: String, values: [Double]) throws {
@@ -529,8 +536,12 @@ struct SupportedStyleColor: Encodable {
     }
 
     var intValue: Int {
+        let red = Int(r * 255.0)
+        let green = Int(g * 255.0)
+        let blue = Int(b * 255.0)
+        let alpha = Int(a * 255.0)
         // Bits 24-31 are alpha, 16-23 are red, 8-15 are green, 0-7 are blue
-        (a << 24) + (r << 16) + << (g << 8) + b
+        return (alpha << 24) + (red << 16) + (green << 8) + blue
     }
 }
 

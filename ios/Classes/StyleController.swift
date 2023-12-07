@@ -57,11 +57,10 @@ final class StyleController: NSObject, FLTStyleManager {
     func addPersistentStyleLayerProperties(_ properties: String, layerPosition: FLTLayerPosition?,
                                            completion: @escaping (FlutterError?) -> Void) {
         do {
-            try styleManager.style
-                .addPersistentLayer(
-                    with: convertStringToDictionary(properties: properties),
-                    layerPosition: layerPosition?.toLayerPosition()
-                )
+            try styleManager.addPersistentLayer(
+                with: convertStringToDictionary(properties: properties),
+                layerPosition: layerPosition?.toLayerPosition()
+            )
             completion(nil)
         } catch {
             completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
@@ -245,33 +244,6 @@ final class StyleController: NSObject, FLTStyleManager {
         completion(sourcesInfos, nil)
     }
 
-    func setStyleLightProperties(_ properties: String, completion: @escaping (FlutterError?) -> Void) {
-        let data = properties.data(using: String.Encoding.utf8)!
-        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
-        do {
-            try styleManager.setLight(properties: jsonObject as? [String: Any] ?? [:])
-            completion(nil)
-        } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
-        }
-    }
-
-    func getStyleLightPropertyProperty(_ property: String,
-                                       completion: @escaping (FLTStylePropertyValue?, FlutterError?) -> Void) {
-        let lightProperty: StylePropertyValue = styleManager.lightProperty(property)
-        completion(lightProperty.toFLTStylePropertyValue(property: property), nil)
-    }
-
-    func setStyleLightPropertyProperty(_ property: String, value: Any,
-                                       completion: @escaping (FlutterError?) -> Void) {
-        do {
-            try styleManager.setLightProperty(property, value: value)
-            completion(nil)
-        } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
-        }
-    }
-
     func setStyleTerrainProperties(_ properties: String, completion: @escaping (FlutterError?) -> Void) {
         let data = properties.data(using: String.Encoding.utf8)!
         let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
@@ -402,16 +374,7 @@ final class StyleController: NSObject, FLTStyleManager {
     }
 
     func isStyleLoaded(completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        completion(NSNumber(value: (styleManager.isLoaded)), nil)
-    }
-
-    func getProjectionWithCompletion(_ completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(styleManager.projection.name.rawValue, nil)
-    }
-
-    func setProjectionProjection(_ projection: String, completion: @escaping (FlutterError?) -> Void) {
-        try! styleManager.setProjection(projection == "globe" ? StyleProjection(name: StyleProjectionName.globe) : StyleProjection(name: StyleProjectionName.mercator))
-        completion(nil)
+        completion(NSNumber(value: (styleManager.isStyleLoaded)), nil)
     }
 
     func localizeLabelsLocale(_ locale: String, layerIds: [String]?, completion: @escaping (FlutterError?) -> Void) {
@@ -447,7 +410,10 @@ final class StyleController: NSObject, FLTStyleManager {
     func getStyleImportConfigPropertiesImportId(_ importId: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [String : FLTStylePropertyValue]? {
         do {
             let styleImportsConfig = try styleManager.getStyleImportConfigProperties(for: importId)
-            return styleImportsConfig.map { ($0, $1.toFLTStylePropertyValue(property: $0)) }
+            return styleImportsConfig.reduce(into: [:]) { partialResult, pair in
+                let (key, value) = pair
+                partialResult[key] = value.toFLTStylePropertyValue(property: key)
+            }
         } catch let styleError {
             error.pointee = FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
             return nil
@@ -499,7 +465,12 @@ final class StyleController: NSObject, FLTStyleManager {
     }
 
     func setStyleLightPropertyId(_ id: String, property: String, value: Any, completion: @escaping (FlutterError?) -> Void) {
-        fatalError()
+        do {
+            try styleManager.setLightProperty(for: id, property: property, value: value)
+            completion(nil)
+        } catch let styleError {
+            completion(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil))
+        }
     }
 
     // MARK: Style Projection

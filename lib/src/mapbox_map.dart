@@ -198,8 +198,8 @@ class MapboxMap extends ChangeNotifier {
 
   /// Convenience method that returns the `camera options` object for given parameters.
   Future<CameraOptions> cameraForCoordinateBounds(CoordinateBounds bounds,
-          MbxEdgeInsets padding, double? bearing, double? pitch) =>
-      _cameraManager.cameraForCoordinateBounds(bounds, padding, bearing, pitch);
+          MbxEdgeInsets padding, double? bearing, double? pitch, double? maxZoom, ScreenCoordinate? offset) =>
+      _cameraManager.cameraForCoordinateBounds(bounds, padding, bearing, pitch, maxZoom, offset);
 
   /// Convenience method that returns the `camera options` object for given parameters.
   Future<CameraOptions> cameraForCoordinates(
@@ -307,11 +307,6 @@ class MapboxMap extends ChangeNotifier {
 
   /// Returns the `camera bounds` of the map.
   Future<CameraBounds> getBounds() => _cameraManager.getBounds();
-
-  /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-  Future<CameraOptions> cameraForDrag(
-          ScreenCoordinate fromPoint, ScreenCoordinate toPoint) =>
-      _cameraManager.cameraForDrag(fromPoint, toPoint);
 
   /// Gets the size of the map.
   /// Note : not supported for iOS.

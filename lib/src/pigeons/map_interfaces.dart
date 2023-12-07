@@ -7198,34 +7198,6 @@ class StyleManager {
     }
   }
 
-  /// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
-  ///
-  /// @param properties A map of style light properties values, with their names as a key.
-  ///
-  /// @return A string describing an error if the operation was not successful, empty otherwise.
-  Future<void> setStyleLight(String arg_properties) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLight',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_properties]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
   /// Gets the value of a style light property.
   ///
   /// @param property The style light property name.

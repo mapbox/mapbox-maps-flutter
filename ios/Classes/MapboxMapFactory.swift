@@ -107,6 +107,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         }
         return cameraOptions
     }
+
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64,
                 arguments args: Any?) -> FlutterPlatformView {
         var mapInitOptions = MapInitOptions()
@@ -132,9 +133,11 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         if let types = args["eventTypes"] as? [Int] {
             eventTypes = types
         }
-        mapInitOptions = MapInitOptions(mapOptions: createMapOptions(args: args),
-                                        cameraOptions: createCameraOptions(args: args),
-                                        styleURI: styleURI
+
+        mapInitOptions = MapInitOptions(
+            mapOptions: createMapOptions(args: args),
+            cameraOptions: createCameraOptions(args: args),
+            styleURI: styleURI
         )
 
         if let version = args["mapboxPluginVersion"] as? String {

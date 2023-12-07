@@ -57,7 +57,9 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     infiniteBounds: true),
                 MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 10,
-                20)
+                20, 
+                null, 
+                null)
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
@@ -423,24 +425,6 @@ class CameraPageBodyState extends State<CameraPageBody> {
     );
   }
 
-  Widget _getDragCameraOptions() {
-    return TextButton(
-      child: Text('getDragCameraOptions'),
-      onPressed: () {
-        mapboxMap
-            ?.cameraForDrag(
-                ScreenCoordinate(x: 1, y: 1), ScreenCoordinate(x: 100, y: 100))
-            .then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Camera state zoom: ${value.zoom}, pitch: ${value.pitch}, bearing: ${value.bearing},padding: ${value.padding},center: ${value.center}"),
-                      backgroundColor: Theme.of(context).primaryColor,
-                      duration: Duration(seconds: 2),
-                    )));
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final MapWidget mapWidget =
@@ -466,7 +450,6 @@ class CameraPageBodyState extends State<CameraPageBody> {
         _getCameraState(),
         _setBounds(),
         _getBounds(),
-        _getDragCameraOptions(),
       ],
     );
 
