@@ -1,6 +1,6 @@
-import Foundation
 @_spi(Experimental) import MapboxMaps
 import UIKit
+
 class LocationController: NSObject, FLT_SETTINGSLocationComponentSettingsInterface {
     func updateSettingsSettings(_ settings: FLT_SETTINGSLocationComponentSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         mapView.location.options = mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(settings: settings)
@@ -23,12 +23,11 @@ extension LocationOptions {
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled.boolValue
         }
-        switch settings.puckBearing?.value {
-        case .COURSE:
-            options.puckBearing = .course
-        default:
-            options.puckBearing = .heading
+
+        if let puckBearing = settings.puckBearing.flatMap(PuckBearing.init) {
+            options.puckBearing = puckBearing
         }
+
         if settings.enabled == false {
             options.puckType = nil
         } else {
@@ -109,7 +108,7 @@ extension LocationOptions {
             enabled = NSNumber(true)
         }
         let puckBearingEnabled = NSNumber(value: self.puckBearingEnabled)
-        let puckBearing: FLT_SETTINGSPuckBearing = self.puckBearing == .heading ? .HEADING : .COURSE
+        let puckBearing = puckBearing.toFLTPuckBearing()
         var accuracyRingColor: NSNumber?
         var accuracyRingBorderColor: NSNumber?
         var showAccuracyRing: NSNumber?
@@ -180,5 +179,23 @@ extension LocationOptions {
             puckBearing: .init(value: puckBearing),
             locationPuck: locationPuck
         )
+    }
+}
+
+private extension PuckBearing {
+
+    init?(_ box: FLT_SETTINGSPuckBearingBox) {
+        switch box.value {
+        case .HEADING: self = .heading
+        case .COURSE: self = .course
+        @unknown default: return nil
+        }
+    }
+
+    func toFLTPuckBearing() -> FLT_SETTINGSPuckBearing {
+        switch self {
+        case .heading: return .HEADING
+        case .course: return .COURSE
+        }
     }
 }

@@ -9,8 +9,8 @@ protocol MapEventEncodable {
 extension EventTimeInterval {
     var toJSON: [String: Any] {
         [
-            "begin": begin,
-            "end": end
+            "begin": begin.microsecondsSince1970,
+            "end": end.microsecondsSince1970
         ]
     }
 }
@@ -40,64 +40,64 @@ extension MapLoadingError: MapEventEncodable {
             "message": message,
             "sourceId": sourceId,
             "tileId": tileId?.toJSON,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension StyleLoaded: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
-            "timeInterval": timeInterval
+            "timeInterval": timeInterval.toJSON
         ]
     }
 }
 
 extension StyleDataLoaded: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "type": type.rawValue,
-            "timeInterval": timeInterval
+            "timeInterval": timeInterval.toJSON
         ]
     }
 }
 
 extension CameraChanged: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension MapIdle: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension SourceAdded: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "sourceId": sourceId,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension SourceRemoved: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "sourceId": sourceId,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension SourceDataLoaded: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "sourceId": sourceId,
             "type": type.rawValue,
@@ -110,7 +110,7 @@ extension SourceDataLoaded: MapEventEncodable {
 }
 
 extension StyleImageMissing: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "imageId": imageId,
             "timestamp": timestamp
@@ -119,24 +119,24 @@ extension StyleImageMissing: MapEventEncodable {
 }
 
 extension StyleImageRemoveUnused: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "imageId": imageId,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension RenderFrameStarted: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
 
 extension RenderFrameFinished: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "renderMode": renderMode.rawValue,
             "timeInterval": timeInterval.toJSON,
@@ -147,7 +147,7 @@ extension RenderFrameFinished: MapEventEncodable {
 }
 
 extension RequestInfo {
-    var toJSON: [String : Any] {
+    var toJSON: [String: Any] {
         [
             "url": url,
             "resource": resource.rawValue,
@@ -158,7 +158,7 @@ extension RequestInfo {
 }
 
 extension ResourceRequestError {
-    var toJSON: [String : Any] {
+    var toJSON: [String: Any] {
         [
             "reason": reason.rawValue,
             "message": message
@@ -167,7 +167,7 @@ extension ResourceRequestError {
 }
 
 extension ResponseInfo {
-    var toJSON: [String : Any] {
+    var toJSON: [String: Any] {
         var result = [String: Any]()
         result["noContent"] = noContent
         result["notModified"] = notModified
@@ -183,7 +183,7 @@ extension ResponseInfo {
 }
 
 extension ResourceRequest: MapEventEncodable {
-    var toJSON: [String : Any?] {
+    var toJSON: [String: Any?] {
         [
             "source": source.rawValue,
             "request": request.toJSON,
@@ -202,5 +202,14 @@ extension MapEventEncodable {
         } catch {
             return ""
         }
+    }
+}
+
+// MARK: Date
+
+private extension Date {
+
+    var microsecondsSince1970: Int64 {
+        Int64((timeIntervalSince1970 * 1_000_000).rounded())
     }
 }

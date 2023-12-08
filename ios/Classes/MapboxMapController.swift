@@ -1,5 +1,5 @@
 import Flutter
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import UIKit
 
 class ProxyBinaryMessenger: NSObject, FlutterBinaryMessenger {
@@ -70,7 +70,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
 
-        let styleController = StyleController(withMapboxMap: mapboxMap)
+        let styleController = StyleController(styleManager: mapboxMap)
         FLTStyleManagerSetup(proxyBinaryMessenger, styleController)
 
         let cameraController = CameraController(withMapboxMap: mapboxMap)

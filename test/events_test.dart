@@ -19,8 +19,8 @@ void main() {
         MapLoadedEventData.fromJson(<String, dynamic>{
           'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
           });
-    expect(mapLoadedEventData.timeInterval.begin, 1);
-    expect(mapLoadedEventData.timeInterval.end, 2);
+    expect(mapLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(mapLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
   });
 
   test('MapLoadingErrorEventData fromJson', () {
@@ -65,8 +65,8 @@ void main() {
       'placementChanged': true,
       'needsRepaint': false
     });
-    expect(renderFrameFinishedEventData.timeInterval.begin, 1);
-    expect(renderFrameFinishedEventData.timeInterval.end, 2);
+    expect(renderFrameFinishedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(renderFrameFinishedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
     expect(renderFrameFinishedEventData.renderMode, RenderMode.FULL);
     expect(renderFrameFinishedEventData.placementChanged, true);
     expect(renderFrameFinishedEventData.needsRepaint, false);
@@ -82,11 +82,11 @@ void main() {
     var resourceEventData = ResourceEventData.fromJson(<String, dynamic>{
       'timeInterval': <String, dynamic>{'begin': 1, 'end': 2},
       'cancelled': false,
-      'data-source': 3,
+      'source': 3,
       'request': <String, dynamic>{
         'loading-method': [0],
         'url': 'https://api.mapbox.com',
-        'kind': 'tile',
+        'resource': 3,
         'priority': 0
       },
       'response': <String, dynamic>{
@@ -104,8 +104,8 @@ void main() {
         }
       }
     });
-    expect(resourceEventData.timeInterval.begin, 1);
-    expect(resourceEventData.timeInterval.end, 2);
+    expect(resourceEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(resourceEventData.timeInterval.end.microsecondsSinceEpoch, 2);
     expect(resourceEventData.cancelled, false);
     expect(resourceEventData.dataSource, DataSourceType.NETWORK);
     expect(resourceEventData.request.kind, RequestType.TILE);
@@ -140,10 +140,10 @@ void main() {
       'sourceId': 'id',
       'type': 1,
       'loaded': false,
-      'tile-id': <String, dynamic>{'x': 1, 'y': 2, 'z': 3}
+      'tileId': <String, dynamic>{'x': 1, 'y': 2, 'z': 3}
     });
-    expect(sourceDataLoadedEventData.timeInterval.begin, 1);
-    expect(sourceDataLoadedEventData.timeInterval.end, 2);
+    expect(sourceDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(sourceDataLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
     expect(sourceDataLoadedEventData.id, 'id');
     expect(sourceDataLoadedEventData.type, SourceDataType.TILE);
     expect(sourceDataLoadedEventData.loaded, false);
@@ -164,7 +164,7 @@ void main() {
       'timeInterval': <String, dynamic>{'begin': 1, 'end': 2},
       'type': 0
     });
-    expect(styleDataLoadedEventData.timeInterval.begin, 1);
+    expect(styleDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
     expect(styleDataLoadedEventData.type, StyleDataType.STYLE);
   });
 
@@ -187,7 +187,7 @@ void main() {
         <String, dynamic>{
           'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
         });
-    expect(styleLoadedEventData.timeInterval.begin, 1);
-    expect(styleLoadedEventData.timeInterval.end, 2);
+    expect(styleLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(styleLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
   });
 }

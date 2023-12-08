@@ -7,6 +7,11 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
 
     init(withRegistrar registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
+
+        // Register MapboxMapsOptions and MapboxOptions
+        let mapboxOptionsController = MapboxOptionsController()
+        FLT_MapboxOptionsSetup(registrar.messenger(), mapboxOptionsController)
+        FLT_MapboxMapsOptionsSetup(registrar.messenger(), mapboxOptionsController)
     }
 
     func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
@@ -107,8 +112,13 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         }
         return cameraOptions
     }
-    func create(withFrame frame: CGRect, viewIdentifier viewId: Int64,
-                arguments args: Any?) -> FlutterPlatformView {
+
+    func create(
+        withFrame frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?
+    ) -> FlutterPlatformView {
+
         var mapInitOptions = MapInitOptions()
         var eventTypes = [Int]()
         var pluginVersion = ""
@@ -132,9 +142,11 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         if let types = args["eventTypes"] as? [Int] {
             eventTypes = types
         }
-        mapInitOptions = MapInitOptions(mapOptions: createMapOptions(args: args),
-                                        cameraOptions: createCameraOptions(args: args),
-                                        styleURI: styleURI
+
+        mapInitOptions = MapInitOptions(
+            mapOptions: createMapOptions(args: args),
+            cameraOptions: createCameraOptions(args: args),
+            styleURI: styleURI
         )
 
         if let version = args["mapboxPluginVersion"] as? String {
