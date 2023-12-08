@@ -47,12 +47,12 @@ class CameraController: NSObject, FLT_CameraManager {
 
     func camera(
         forCoordinatesCameraOptionsCoordinates coordinates: [[String: Any]],
-        camera: FLTCameraOptions, 
+        camera: FLTCameraOptions,
         box: FLTScreenBox,
         error: AutoreleasingUnsafeMutablePointer<FlutterError?>
     ) -> FLTCameraOptions? {
         let cameraOptions = mapboxMap.camera(
-            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}), 
+            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}),
             camera: camera.toCameraOptions(),
             rect: box.toCGRect())
         return cameraOptions.toFLTCameraOptions()
@@ -60,7 +60,7 @@ class CameraController: NSObject, FLT_CameraManager {
 
     func camera(
         forGeometryGeometry geometry: [String: Any],
-        padding: FLTMbxEdgeInsets, 
+        padding: FLTMbxEdgeInsets,
         bearing: NSNumber?,
         pitch: NSNumber?,
         error: AutoreleasingUnsafeMutablePointer<FlutterError?>

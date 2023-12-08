@@ -2,7 +2,7 @@ import MapboxMaps
 import UIKit
 
 final class StyleController: NSObject, FLTStyleManager {
-    
+
     // MARK: -
     private let styleManager: StyleManager
     init(styleManager: StyleManager) {
@@ -407,7 +407,7 @@ final class StyleController: NSObject, FLTStyleManager {
         }
     }
 
-    func getStyleImportConfigPropertiesImportId(_ importId: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [String : FLTStylePropertyValue]? {
+    func getStyleImportConfigPropertiesImportId(_ importId: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [String: FLTStylePropertyValue]? {
         do {
             let styleImportsConfig = try styleManager.getStyleImportConfigProperties(for: importId)
             return styleImportsConfig.reduce(into: [:]) { partialResult, pair in
@@ -430,7 +430,7 @@ final class StyleController: NSObject, FLTStyleManager {
         }
     }
 
-    func setStyleImportConfigPropertiesImportId(_ importId: String, configs: [String : Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setStyleImportConfigPropertiesImportId(_ importId: String, configs: [String: Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         do {
             try styleManager.setStyleImportConfigProperties(for: importId, configs: configs)
         } catch let styleError {
