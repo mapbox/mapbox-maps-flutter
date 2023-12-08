@@ -35,7 +35,8 @@ void main() {
             infiniteBounds: true),
         MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
         10,
-        20);
+        20, 
+        null, null);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
     expect(camera.padding!.top, 1);
