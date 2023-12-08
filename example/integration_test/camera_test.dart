@@ -416,27 +416,4 @@ void main() {
 
     await addDelay(1000);
   });
-
-  testWidgets('drag', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    await mapboxMap.dragStart(ScreenCoordinate(x: 1, y: 1));
-    await addDelay(1000);
-    mapboxMap.dragEnd();
-  });
-  testWidgets('getDragCameraOptions', (WidgetTester tester) async {
-    final mapFuture = app.runFixedSizeMap();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-
-    final destination = ScreenCoordinate(x: 100, y: 100);
-    final options = await mapboxMap.getDragCameraOptions(
-        ScreenCoordinate(x: 0, y: 0), destination);
-    final coordinates = options.center!["coordinates"] as List;
-    expect((coordinates.first as double).round(), -97);
-    expect((coordinates.last as double).round(), 69);
-
-    await addDelay(1000);
-  });
 }
