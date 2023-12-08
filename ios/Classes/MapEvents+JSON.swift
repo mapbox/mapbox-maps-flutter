@@ -9,8 +9,8 @@ protocol MapEventEncodable {
 extension EventTimeInterval {
     var toJSON: [String: Any] {
         [
-            "begin": begin.timeIntervalSince1970,
-            "end": end.timeIntervalSince1970
+            "begin": begin.milisecondsSince1970,
+            "end": end.milisecondsSince1970
         ]
     }
 }
@@ -40,7 +40,7 @@ extension MapLoadingError: MapEventEncodable {
             "message": message,
             "sourceId": sourceId,
             "tileId": tileId?.toJSON,
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -65,7 +65,7 @@ extension StyleDataLoaded: MapEventEncodable {
 extension CameraChanged: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -73,7 +73,7 @@ extension CameraChanged: MapEventEncodable {
 extension MapIdle: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -82,7 +82,7 @@ extension SourceAdded: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
             "sourceId": sourceId,
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -91,7 +91,7 @@ extension SourceRemoved: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
             "sourceId": sourceId,
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -122,7 +122,7 @@ extension StyleImageRemoveUnused: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
             "imageId": imageId,
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -130,7 +130,7 @@ extension StyleImageRemoveUnused: MapEventEncodable {
 extension RenderFrameStarted: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp.timeIntervalSince1970
+            "timestamp": timestamp.milisecondsSince1970
         ]
     }
 }
@@ -202,5 +202,14 @@ extension MapEventEncodable {
         } catch {
             return ""
         }
+    }
+}
+
+// MARK: Date
+
+private extension Date {
+
+    var milisecondsSince1970: Int64 {
+        Int64((timeIntervalSince1970 * 1000).rounded())
     }
 }
