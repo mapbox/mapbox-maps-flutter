@@ -82,11 +82,11 @@ void main() {
     var resourceEventData = ResourceEventData.fromJson(<String, dynamic>{
       'timeInterval': <String, dynamic>{'begin': 1, 'end': 2},
       'cancelled': false,
-      'data-source': 3,
+      'source': 3,
       'request': <String, dynamic>{
         'loading-method': [0],
         'url': 'https://api.mapbox.com',
-        'kind': 'tile',
+        'resource': 3,
         'priority': 0
       },
       'response': <String, dynamic>{
@@ -140,7 +140,7 @@ void main() {
       'sourceId': 'id',
       'type': 1,
       'loaded': false,
-      'tile-id': <String, dynamic>{'x': 1, 'y': 2, 'z': 3}
+      'tileId': <String, dynamic>{'x': 1, 'y': 2, 'z': 3}
     });
     expect(sourceDataLoadedEventData.timeInterval.begin, 1);
     expect(sourceDataLoadedEventData.timeInterval.end, 2);

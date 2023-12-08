@@ -111,7 +111,7 @@ class MapLoadedEventData {
   final EventTimeInterval timeInterval;
 
   MapLoadedEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = EventTimeInterval.fromJson(json['timeInteval']);
+      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
 }
 
 /// The class for map-loading-error event in Observer
@@ -134,7 +134,7 @@ class MapLoadingErrorEventData {
   MapLoadingErrorEventData.fromJson(Map<String, dynamic> json)
       : type = MapLoadErrorType.values[json['type']],
         message = json['message'],
-        sourceId = json['source-id'],
+        sourceId = json['sourceId'],
         tileId =
             json['tileId'] != null ? TileID.fromJson(json['tileId']) : null,
         timestamp = json['timestamp'];
@@ -156,7 +156,7 @@ class RenderFrameFinishedEventData {
   final bool placementChanged;
 
   RenderFrameFinishedEventData.fromJson(Map<String, dynamic> json)
-      : timeInterval = json['timeInterval'],
+      : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
         renderMode = RenderMode.values[json['renderMode']],
         placementChanged = json['placementChanged'],
         needsRepaint = json['needsRepaint'];
@@ -203,7 +203,7 @@ class ResourceEventData {
 
   ResourceEventData.fromJson(Map<String, dynamic> json)
       : timeInterval = EventTimeInterval.fromJson(json['timeInterval']),
-        dataSource = DataSourceType.values[json['dataSource']],
+        dataSource = DataSourceType.values[json['source']],
         request = Request.fromJson(json['request']),
         response = json['response'] != null
             ? Response.fromJson(json['response'])
