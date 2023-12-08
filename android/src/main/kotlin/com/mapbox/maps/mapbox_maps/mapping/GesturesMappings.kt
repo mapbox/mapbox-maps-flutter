@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.pigeons.FLTSettings
