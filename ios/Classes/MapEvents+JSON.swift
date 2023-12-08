@@ -210,6 +210,6 @@ extension MapEventEncodable {
 private extension Date {
 
     var milisecondsSince1970: Int64 {
-        Int64((timeIntervalSince1970 * 1000).rounded())
+        Int64((timeIntervalSince1970 * 1_000_000).rounded())
     }
 }

@@ -75,15 +75,15 @@ part of mapbox_maps_flutter;
 /// the time required to dispatch an event.
 class EventTimeInterval {
   /// Representing timestamp taken at the time of an event creation; in microseconds; since the epoch.
-  final int begin;
+  final DateTime begin;
 
   /// For an interfinal events; an optional `end` property will be present that represents timestamp taken at the time
   /// of an event completion.
-  final int end;
+  final DateTime end;
 
   EventTimeInterval.fromJson(Map<String, dynamic> json)
-      : begin = json['begin'],
-        end = json['end'];
+      : begin = DateTime.fromMicrosecondsSinceEpoch(json['begin']),
+        end = DateTime.fromMicrosecondsSinceEpoch(json['end']);
 }
 
 /// The class for camera-changed event in Observer
