@@ -119,10 +119,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         arguments args: Any?
     ) -> FlutterPlatformView {
 
-        let mapboxOptionsController = MapboxOptionsController()
-        FLT_MapboxOptionsSetup(registrar.messenger(), mapboxOptionsController)
-        FLT_MapboxMapsOptionsSetup(registrar.messenger(), mapboxOptionsController)
-
         var mapInitOptions = MapInitOptions()
         var eventTypes = [Int]()
         var pluginVersion = ""
