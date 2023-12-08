@@ -5,7 +5,6 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
 
 class _MapboxMapsPlatform {
-  final observers = ArgumentCallbacks<Event>();
   final onStyleLoadedPlatform = ArgumentCallbacks<StyleLoadedEventData>();
   final onCameraChangeListenerPlatform =
       ArgumentCallbacks<CameraChangedEventData>();
@@ -45,58 +44,57 @@ class _MapboxMapsPlatform {
   }
 
   void handleEvents(MethodCall call) {
-    var eventType = call.method.split("#")[1];
-    observers(Event(type: eventType, data: call.arguments));
+    final eventType = _MapEvent.values[int.parse(call.method.split("#")[1])];
     switch (eventType) {
-      case MapEvents.STYLE_LOADED:
+      case _MapEvent.styleLoaded:
         onStyleLoadedPlatform(
             StyleLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.CAMERA_CHANGED:
+      case _MapEvent.cameraChanged:
         onCameraChangeListenerPlatform(
             CameraChangedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_IDLE:
+      case _MapEvent.mapIdle:
         onMapIdlePlatform(
             MapIdleEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_LOADED:
+      case _MapEvent.mapLoaded:
         onMapLoadedPlatform(
             MapLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_LOADING_ERROR:
+      case _MapEvent.mapLoadingError:
         onMapLoadErrorPlatform(
             MapLoadingErrorEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.RENDER_FRAME_FINISHED:
+      case _MapEvent.renderFrameFinished:
         onRenderFrameFinishedPlatform(
             RenderFrameFinishedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.RENDER_FRAME_STARTED:
+      case _MapEvent.renderFrameStarted:
         onRenderFrameStartedPlatform(
             RenderFrameStartedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_ADDED:
+      case _MapEvent.sourceAdded:
         onSourceAddedPlatform(
             SourceAddedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_REMOVED:
+      case _MapEvent.sourceRemoved:
         onSourceRemovedPlatform(
             SourceRemovedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_DATA_LOADED:
+      case _MapEvent.sourceDataLoaded:
         onSourceDataLoadedPlatform(
             SourceDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_DATA_LOADED:
+      case _MapEvent.styleDataLoaded:
         onStyleDataLoadedPlatform(
             StyleDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_IMAGE_MISSING:
+      case _MapEvent.styleImageMissing:
         onStyleImageMissingPlatform(
             StyleImageMissingEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_IMAGE_REMOVE_UNUSED:
+      case _MapEvent.styleImageRemoveUnused:
         onStyleImageUnusedPlatform(
             StyleImageUnusedEventData.fromJson(jsonDecode(call.arguments)));
         break;
@@ -144,7 +142,7 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(null);
   }
 
-  Future<void> addEventListener(String event) async {
+  Future<void> addEventListener(_MapEvent event) async {
     try {
       await _channel
           .invokeMethod('map#subscribe', <String, dynamic>{'event': event});

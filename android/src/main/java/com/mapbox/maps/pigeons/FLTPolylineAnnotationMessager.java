@@ -809,7 +809,7 @@ public class FLTPolylineAnnotationMessager {
 
     void setLineCap(@NonNull String managerId, @NonNull LineCap lineCap, @NonNull Result<Void> result);
 
-    void getLineCap(@NonNull String managerId, @NonNull Result<Long> result);
+    void getLineCap(@NonNull String managerId, @NonNull Result<LineCap> result);
 
     void setLineMiterLimit(@NonNull String managerId, @NonNull Double lineMiterLimit, @NonNull Result<Void> result);
 
@@ -837,7 +837,7 @@ public class FLTPolylineAnnotationMessager {
 
     void setLineTranslateAnchor(@NonNull String managerId, @NonNull LineTranslateAnchor lineTranslateAnchor, @NonNull Result<Void> result);
 
-    void getLineTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getLineTranslateAnchor(@NonNull String managerId, @NonNull Result<LineTranslateAnchor> result);
 
     void setLineTrimOffset(@NonNull String managerId, @NonNull List<Double> lineTrimOffset, @NonNull Result<Void> result);
 
@@ -1038,10 +1038,10 @@ public class FLTPolylineAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<LineCap> resultCallback =
+                    new Result<LineCap>() {
+                      public void success(LineCap result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -1451,10 +1451,10 @@ public class FLTPolylineAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<LineTranslateAnchor> resultCallback =
+                    new Result<LineTranslateAnchor>() {
+                      public void success(LineTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

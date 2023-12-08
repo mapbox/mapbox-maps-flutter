@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/helpers.dart';
 
 import 'page.dart';
 
@@ -46,21 +44,11 @@ class AnimatedRouteState extends State<AnimatedRoute>
     this.pointAnnotationManager =
         await mapboxMap.annotations.createPointAnnotationManager();
 
-    mapboxMap.subscribe(_eventObserver, [
-      MapEvents.STYLE_LOADED,
-      MapEvents.MAP_LOADED,
-      MapEvents.MAP_IDLE,
-    ]);
-
     await _getPermission();
   }
 
   _getPermission() async {
     await Permission.locationWhenInUse.request();
-  }
-
-  _eventObserver(Event event) {
-    // print("Receive event, type: ${event.type}, data: ${event.data}");
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
@@ -107,7 +95,6 @@ class AnimatedRouteState extends State<AnimatedRoute>
         ),
         body: MapWidget(
           key: const ValueKey("mapWidget"),
-          resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(zoom: 3.0),
           styleUri: MapboxStyles.LIGHT,
           textureView: true,

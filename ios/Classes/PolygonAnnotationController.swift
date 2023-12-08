@@ -200,7 +200,7 @@ final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager
         }
     }
 
-    func getFillTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getFillTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTFillTranslateAnchorBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let fillTranslateAnchor = manager.fillTranslateAnchor else {
@@ -208,7 +208,7 @@ final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager
                 return
             }
 
-            completion(fillTranslateAnchor.toFLTFillTranslateAnchor()?.nsNumberValue, nil)
+            completion(fillTranslateAnchor.toFLTFillTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

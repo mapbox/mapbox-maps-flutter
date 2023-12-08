@@ -677,11 +677,11 @@ public class FLTCircleAnnotationMessager {
 
     void setCirclePitchAlignment(@NonNull String managerId, @NonNull CirclePitchAlignment circlePitchAlignment, @NonNull Result<Void> result);
 
-    void getCirclePitchAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCirclePitchAlignment(@NonNull String managerId, @NonNull Result<CirclePitchAlignment> result);
 
     void setCirclePitchScale(@NonNull String managerId, @NonNull CirclePitchScale circlePitchScale, @NonNull Result<Void> result);
 
-    void getCirclePitchScale(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCirclePitchScale(@NonNull String managerId, @NonNull Result<CirclePitchScale> result);
 
     void setCircleTranslate(@NonNull String managerId, @NonNull List<Double> circleTranslate, @NonNull Result<Void> result);
 
@@ -689,7 +689,7 @@ public class FLTCircleAnnotationMessager {
 
     void setCircleTranslateAnchor(@NonNull String managerId, @NonNull CircleTranslateAnchor circleTranslateAnchor, @NonNull Result<Void> result);
 
-    void getCircleTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCircleTranslateAnchor(@NonNull String managerId, @NonNull Result<CircleTranslateAnchor> result);
 
     /** The codec used by _CircleAnnotationMessager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -945,10 +945,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CirclePitchAlignment> resultCallback =
+                    new Result<CirclePitchAlignment>() {
+                      public void success(CirclePitchAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -1004,10 +1004,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CirclePitchScale> resultCallback =
+                    new Result<CirclePitchScale>() {
+                      public void success(CirclePitchScale result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -1122,10 +1122,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CircleTranslateAnchor> resultCallback =
+                    new Result<CircleTranslateAnchor>() {
+                      public void success(CircleTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

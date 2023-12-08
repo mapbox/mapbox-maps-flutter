@@ -250,7 +250,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getIconPitchAlignmentManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconPitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTIconPitchAlignmentBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let iconPitchAlignment = manager.iconPitchAlignment else {
@@ -258,7 +258,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconPitchAlignment.toFLTIconPitchAlignment()?.nsNumberValue, nil)
+            completion(iconPitchAlignment.toFLTIconPitchAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -275,7 +275,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getIconRotationAlignmentManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconRotationAlignmentManagerId(_ managerId: String, completion: @escaping (FLTIconRotationAlignmentBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let iconRotationAlignment = manager.iconRotationAlignment else {
@@ -283,7 +283,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconRotationAlignment.toFLTIconRotationAlignment()?.nsNumberValue, nil)
+            completion(iconRotationAlignment.toFLTIconRotationAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -325,7 +325,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getSymbolPlacementManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getSymbolPlacementManagerId(_ managerId: String, completion: @escaping (FLTSymbolPlacementBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let symbolPlacement = manager.symbolPlacement else {
@@ -333,7 +333,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(symbolPlacement.toFLTSymbolPlacement()?.nsNumberValue, nil)
+            completion(symbolPlacement.toFLTSymbolPlacementBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -400,7 +400,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getSymbolZOrderManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getSymbolZOrderManagerId(_ managerId: String, completion: @escaping (FLTSymbolZOrderBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let symbolZOrder = manager.symbolZOrder else {
@@ -408,7 +408,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(symbolZOrder.toFLTSymbolZOrder()?.nsNumberValue, nil)
+            completion(symbolZOrder.toFLTSymbolZOrderBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -600,7 +600,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getTextPitchAlignmentManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextPitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTTextPitchAlignmentBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let textPitchAlignment = manager.textPitchAlignment else {
@@ -608,7 +608,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textPitchAlignment.toFLTTextPitchAlignment()?.nsNumberValue, nil)
+            completion(textPitchAlignment.toFLTTextPitchAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -625,7 +625,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getTextRotationAlignmentManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextRotationAlignmentManagerId(_ managerId: String, completion: @escaping (FLTTextRotationAlignmentBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let textRotationAlignment = manager.textRotationAlignment else {
@@ -633,7 +633,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textRotationAlignment.toFLTTextRotationAlignment()?.nsNumberValue, nil)
+            completion(textRotationAlignment.toFLTTextRotationAlignmentBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -675,7 +675,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getIconTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTIconTranslateAnchorBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let iconTranslateAnchor = manager.iconTranslateAnchor else {
@@ -683,7 +683,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(iconTranslateAnchor.toFLTIconTranslateAnchor()?.nsNumberValue, nil)
+            completion(iconTranslateAnchor.toFLTIconTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -725,7 +725,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func getTextTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTTextTranslateAnchorBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let textTranslateAnchor = manager.textTranslateAnchor else {
@@ -733,7 +733,7 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 return
             }
 
-            completion(textTranslateAnchor.toFLTTextTranslateAnchor()?.nsNumberValue, nil)
+            completion(textTranslateAnchor.toFLTTextTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

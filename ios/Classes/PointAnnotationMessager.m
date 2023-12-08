@@ -984,7 +984,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconPitchAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconPitchAlignmentManagerId:arg_managerId completion:^(FLTIconPitchAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1023,7 +1024,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconRotationAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconRotationAlignmentManagerId:arg_managerId completion:^(FLTIconRotationAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1101,7 +1103,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getSymbolPlacementManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getSymbolPlacementManagerId:arg_managerId completion:^(FLTSymbolPlacementBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1218,7 +1221,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getSymbolZOrderManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getSymbolZOrderManagerId:arg_managerId completion:^(FLTSymbolZOrderBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1530,7 +1534,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextPitchAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextPitchAlignmentManagerId:arg_managerId completion:^(FLTTextPitchAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1569,7 +1574,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextRotationAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextRotationAlignmentManagerId:arg_managerId completion:^(FLTTextRotationAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1647,7 +1653,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconTranslateAnchorManagerId:arg_managerId completion:^(FLTIconTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1725,7 +1732,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextTranslateAnchorManagerId:arg_managerId completion:^(FLTTextTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];

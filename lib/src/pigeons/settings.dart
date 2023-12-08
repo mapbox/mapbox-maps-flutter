@@ -20,12 +20,21 @@ enum ScrollMode {
 }
 
 /// The enum controls how the puck is oriented
-enum PuckBearingSource {
+enum PuckBearing {
   /// Orients the puck to match the direction in which the device is facing.
   HEADING,
 
   /// Orients the puck to match the direction in which the device is moving.
   COURSE,
+}
+
+/// Defines scaling mode. Only applies to location-indicator type layers.
+enum ModelScaleMode {
+  /// Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover.
+  MAP,
+
+  /// Model is scaled so that it's always the same size on the screen. The property model-scale specifies how many pixels each unit in model file should cover.
+  VIEWPORT,
 }
 
 /// Gesture configuration allows to control the user touch interaction.
@@ -156,6 +165,7 @@ class LocationPuck2D {
     this.bearingImage,
     this.shadowImage,
     this.scaleExpression,
+    this.opacity,
   });
 
   /// Name of image in sprite to use as the top of the location indicator.
@@ -170,12 +180,16 @@ class LocationPuck2D {
   /// The scale expression of the images. If defined, it will be applied to all the three images.
   String? scaleExpression;
 
+  /// The opacity of the entire location puck
+  double? opacity;
+
   Object encode() {
     return <Object?>[
       topImage,
       bearingImage,
       shadowImage,
       scaleExpression,
+      opacity,
     ];
   }
 
@@ -186,6 +200,7 @@ class LocationPuck2D {
       bearingImage: result[1] as Uint8List?,
       shadowImage: result[2] as Uint8List?,
       scaleExpression: result[3] as String?,
+      opacity: result[4] as double?,
     );
   }
 }
@@ -199,6 +214,11 @@ class LocationPuck3D {
     this.modelScaleExpression,
     this.modelTranslation,
     this.modelRotation,
+    this.modelCastShadows,
+    this.modelReceiveShadows,
+    this.modelScaleMode,
+    this.modelEmissiveStrength,
+    this.modelEmissiveStrengthExpression,
   });
 
   /// An URL for the model file in gltf format.
@@ -222,6 +242,21 @@ class LocationPuck3D {
   /// The rotation of the model.
   List<double?>? modelRotation;
 
+  /// Enable/Disable shadow casting for the 3D location puck.
+  bool? modelCastShadows;
+
+  /// Enable/Disable shadow receiving for the 3D location puck.
+  bool? modelReceiveShadows;
+
+  /// Defines scaling mode. Only applies to location-indicator type layers.
+  ModelScaleMode? modelScaleMode;
+
+  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+  double? modelEmissiveStrength;
+
+  /// Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+  String? modelEmissiveStrengthExpression;
+
   Object encode() {
     return <Object?>[
       modelUri,
@@ -231,6 +266,11 @@ class LocationPuck3D {
       modelScaleExpression,
       modelTranslation,
       modelRotation,
+      modelCastShadows,
+      modelReceiveShadows,
+      modelScaleMode?.index,
+      modelEmissiveStrength,
+      modelEmissiveStrengthExpression,
     ];
   }
 
@@ -244,11 +284,17 @@ class LocationPuck3D {
       modelScaleExpression: result[4] as String?,
       modelTranslation: (result[5] as List<Object?>?)?.cast<double?>(),
       modelRotation: (result[6] as List<Object?>?)?.cast<double?>(),
+      modelCastShadows: result[7] as bool?,
+      modelReceiveShadows: result[8] as bool?,
+      modelScaleMode:
+          result[9] != null ? ModelScaleMode.values[result[9]! as int] : null,
+      modelEmissiveStrength: result[10] as double?,
+      modelEmissiveStrengthExpression: result[11] as String?,
     );
   }
 }
 
-/// Defines what the customised look of the location puck.
+/// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
 class LocationPuck {
   LocationPuck({
     this.locationPuck2D,
@@ -292,7 +338,7 @@ class LocationComponentSettings {
     this.layerAbove,
     this.layerBelow,
     this.puckBearingEnabled,
-    this.puckBearingSource,
+    this.puckBearing,
     this.locationPuck,
   });
 
@@ -305,7 +351,7 @@ class LocationComponentSettings {
   /// The color of the pulsing circle. Works for 2D location puck only.
   int? pulsingColor;
 
-  /// The maximum radius of the pulsing circle. Works for 2D location puck only. This property is specified in pixels.
+  /// The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle. This property is specified in pixels.
   double? pulsingMaxRadius;
 
   /// Whether show accuracy ring with location puck. Works for 2D location puck only.
@@ -327,9 +373,9 @@ class LocationComponentSettings {
   bool? puckBearingEnabled;
 
   /// The enum controls how the puck is oriented
-  PuckBearingSource? puckBearingSource;
+  PuckBearing? puckBearing;
 
-  /// Defines what the customised look of the location puck.
+  /// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
   LocationPuck? locationPuck;
 
   Object encode() {
@@ -344,7 +390,7 @@ class LocationComponentSettings {
       layerAbove,
       layerBelow,
       puckBearingEnabled,
-      puckBearingSource?.index,
+      puckBearing?.index,
       locationPuck?.encode(),
     ];
   }
@@ -362,9 +408,8 @@ class LocationComponentSettings {
       layerAbove: result[7] as String?,
       layerBelow: result[8] as String?,
       puckBearingEnabled: result[9] as bool?,
-      puckBearingSource: result[10] != null
-          ? PuckBearingSource.values[result[10]! as int]
-          : null,
+      puckBearing:
+          result[10] != null ? PuckBearing.values[result[10]! as int] : null,
       locationPuck: result[11] != null
           ? LocationPuck.decode(result[11]! as List<Object?>)
           : null,

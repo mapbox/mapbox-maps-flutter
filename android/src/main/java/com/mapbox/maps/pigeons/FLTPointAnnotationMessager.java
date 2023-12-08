@@ -2031,11 +2031,11 @@ public class FLTPointAnnotationMessager {
 
     void setIconPitchAlignment(@NonNull String managerId, @NonNull IconPitchAlignment iconPitchAlignment, @NonNull Result<Void> result);
 
-    void getIconPitchAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getIconPitchAlignment(@NonNull String managerId, @NonNull Result<IconPitchAlignment> result);
 
     void setIconRotationAlignment(@NonNull String managerId, @NonNull IconRotationAlignment iconRotationAlignment, @NonNull Result<Void> result);
 
-    void getIconRotationAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getIconRotationAlignment(@NonNull String managerId, @NonNull Result<IconRotationAlignment> result);
 
     void setSymbolAvoidEdges(@NonNull String managerId, @NonNull Boolean symbolAvoidEdges, @NonNull Result<Void> result);
 
@@ -2043,7 +2043,7 @@ public class FLTPointAnnotationMessager {
 
     void setSymbolPlacement(@NonNull String managerId, @NonNull SymbolPlacement symbolPlacement, @NonNull Result<Void> result);
 
-    void getSymbolPlacement(@NonNull String managerId, @NonNull Result<Long> result);
+    void getSymbolPlacement(@NonNull String managerId, @NonNull Result<SymbolPlacement> result);
 
     void setSymbolSpacing(@NonNull String managerId, @NonNull Double symbolSpacing, @NonNull Result<Void> result);
 
@@ -2055,7 +2055,7 @@ public class FLTPointAnnotationMessager {
 
     void setSymbolZOrder(@NonNull String managerId, @NonNull SymbolZOrder symbolZOrder, @NonNull Result<Void> result);
 
-    void getSymbolZOrder(@NonNull String managerId, @NonNull Result<Long> result);
+    void getSymbolZOrder(@NonNull String managerId, @NonNull Result<SymbolZOrder> result);
 
     void setTextAllowOverlap(@NonNull String managerId, @NonNull Boolean textAllowOverlap, @NonNull Result<Void> result);
 
@@ -2087,11 +2087,11 @@ public class FLTPointAnnotationMessager {
 
     void setTextPitchAlignment(@NonNull String managerId, @NonNull TextPitchAlignment textPitchAlignment, @NonNull Result<Void> result);
 
-    void getTextPitchAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getTextPitchAlignment(@NonNull String managerId, @NonNull Result<TextPitchAlignment> result);
 
     void setTextRotationAlignment(@NonNull String managerId, @NonNull TextRotationAlignment textRotationAlignment, @NonNull Result<Void> result);
 
-    void getTextRotationAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getTextRotationAlignment(@NonNull String managerId, @NonNull Result<TextRotationAlignment> result);
 
     void setIconTranslate(@NonNull String managerId, @NonNull List<Double> iconTranslate, @NonNull Result<Void> result);
 
@@ -2099,7 +2099,7 @@ public class FLTPointAnnotationMessager {
 
     void setIconTranslateAnchor(@NonNull String managerId, @NonNull IconTranslateAnchor iconTranslateAnchor, @NonNull Result<Void> result);
 
-    void getIconTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getIconTranslateAnchor(@NonNull String managerId, @NonNull Result<IconTranslateAnchor> result);
 
     void setTextTranslate(@NonNull String managerId, @NonNull List<Double> textTranslate, @NonNull Result<Void> result);
 
@@ -2107,7 +2107,7 @@ public class FLTPointAnnotationMessager {
 
     void setTextTranslateAnchor(@NonNull String managerId, @NonNull TextTranslateAnchor textTranslateAnchor, @NonNull Result<Void> result);
 
-    void getTextTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getTextTranslateAnchor(@NonNull String managerId, @NonNull Result<TextTranslateAnchor> result);
 
     /** The codec used by _PointAnnotationMessager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -2599,10 +2599,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<IconPitchAlignment> resultCallback =
+                    new Result<IconPitchAlignment>() {
+                      public void success(IconPitchAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -2658,10 +2658,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<IconRotationAlignment> resultCallback =
+                    new Result<IconRotationAlignment>() {
+                      public void success(IconRotationAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -2776,10 +2776,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<SymbolPlacement> resultCallback =
+                    new Result<SymbolPlacement>() {
+                      public void success(SymbolPlacement result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -2953,10 +2953,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<SymbolZOrder> resultCallback =
+                    new Result<SymbolZOrder>() {
+                      public void success(SymbolZOrder result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -3425,10 +3425,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<TextPitchAlignment> resultCallback =
+                    new Result<TextPitchAlignment>() {
+                      public void success(TextPitchAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -3484,10 +3484,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<TextRotationAlignment> resultCallback =
+                    new Result<TextRotationAlignment>() {
+                      public void success(TextRotationAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -3602,10 +3602,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<IconTranslateAnchor> resultCallback =
+                    new Result<IconTranslateAnchor>() {
+                      public void success(IconTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -3720,10 +3720,10 @@ public class FLTPointAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<TextTranslateAnchor> resultCallback =
+                    new Result<TextTranslateAnchor>() {
+                      public void success(TextTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

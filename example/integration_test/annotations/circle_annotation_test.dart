@@ -44,7 +44,8 @@ void main() {
     expect(1.0, annotation.circleStrokeWidth);
   });
 
-  testWidgets('update and delete CircleAnnotation', (WidgetTester tester) async {
+  testWidgets('update and delete CircleAnnotation',
+      (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
@@ -56,7 +57,9 @@ void main() {
     );
     final annotation = await manager.create(circleAnnotationOptions);
     var point = Point.fromJson((annotation.geometry)!.cast());
-    var newPoint = Point( coordinates: Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
+    var newPoint = Point(
+        coordinates:
+            Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
     annotation.geometry = newPoint.toJson();
     await manager.update(annotation);
     await manager.delete(annotation);

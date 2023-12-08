@@ -509,7 +509,8 @@ class _PolygonAnnotationMessager {
     }
   }
 
-  Future<int?> getFillTranslateAnchor(String arg_managerId) async {
+  Future<FillTranslateAnchor?> getFillTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslateAnchor',
         codec,
@@ -528,7 +529,9 @@ class _PolygonAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : FillTranslateAnchor.values[replyList[0]! as int];
     }
   }
 }

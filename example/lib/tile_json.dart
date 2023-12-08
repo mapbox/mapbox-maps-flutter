@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class TileJsonPage extends ExamplePage {
@@ -49,7 +47,6 @@ class TileJsonWidgetState extends State<TileJsonWidget> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       cameraOptions: CameraOptions(
           center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
           zoom: 12.0),

@@ -125,7 +125,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func getLineCapManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getLineCapManagerId(_ managerId: String, completion: @escaping (FLTLineCapBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let lineCap = manager.lineCap else {
@@ -133,7 +133,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
                 return
             }
 
-            completion(lineCap.toFLTLineCap()?.nsNumberValue, nil)
+            completion(lineCap.toFLTLineCapBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
@@ -300,7 +300,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func getLineTranslateAnchorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getLineTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTLineTranslateAnchorBox?, FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             guard let lineTranslateAnchor = manager.lineTranslateAnchor else {
@@ -308,7 +308,7 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
                 return
             }
 
-            completion(lineTranslateAnchor.toFLTLineTranslateAnchor()?.nsNumberValue, nil)
+            completion(lineTranslateAnchor.toFLTLineTranslateAnchorBox(), nil)
         } catch {
             completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }

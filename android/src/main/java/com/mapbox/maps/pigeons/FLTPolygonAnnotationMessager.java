@@ -525,7 +525,7 @@ public class FLTPolygonAnnotationMessager {
 
     void setFillTranslateAnchor(@NonNull String managerId, @NonNull FillTranslateAnchor fillTranslateAnchor, @NonNull Result<Void> result);
 
-    void getFillTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getFillTranslateAnchor(@NonNull String managerId, @NonNull Result<FillTranslateAnchor> result);
 
     /** The codec used by _PolygonAnnotationMessager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -899,10 +899,10 @@ public class FLTPolygonAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<FillTranslateAnchor> resultCallback =
+                    new Result<FillTranslateAnchor>() {
+                      public void success(FillTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
