@@ -241,6 +241,7 @@ extension TransitionOptions {
         return FLTTransitionOptions.make(withDuration: duration, delay: delay, enablePlacementTransitions: enablePlacementTransitions)
     }
 }
+
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
@@ -447,6 +448,10 @@ extension StyleColor {
         } catch {
             return nil
         }
+    }
+
+    init(rgb: Int) {
+        self.init(uiColorFromHex(rgbValue: rgb))
     }
 }
 

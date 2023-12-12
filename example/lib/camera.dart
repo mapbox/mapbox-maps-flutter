@@ -57,8 +57,8 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     infiniteBounds: true),
                 MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 10,
-                20, 
-                null, 
+                20,
+                null,
                 null)
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(

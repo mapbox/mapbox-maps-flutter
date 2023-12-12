@@ -449,19 +449,35 @@ final class StyleController: NSObject, FLTStyleManager {
     // MARK: Style Lights
 
     func getStyleLightsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [FLTStyleObjectInfo]? {
-        fatalError()
+        styleManager.allLightIdentifiers.map {
+            FLTStyleObjectInfo.make(withId: $0.id, type: $0.type.rawValue)
+        }
     }
 
     func setLightFlatLight(_ flatLight: FLTFlatLight, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        fatalError()
+        do {
+            try styleManager.setLights(FlatLight(flatLight))
+        } catch let styleError {
+            error.pointee = FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: error)
+        }
     }
 
     func setLightsAmbientLight(_ ambientLight: FLTAmbientLight, directionalLight: FLTDirectionalLight, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        fatalError()
+        do {
+            try styleManager.setLights(ambient: AmbientLight(ambientLight), directional: DirectionalLight(directionalLight))
+        } catch let styleError {
+            error.pointee = FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: error)
+        }
     }
 
     func getStyleLightPropertyId(_ id: String, property: String, completion: @escaping (FLTStylePropertyValue?, FlutterError?) -> Void) {
-        fatalError()
+        let value = styleManager.lightProperty(for: id, property: property)
+        var kind = StylePropertyValueKind.constant
+        // FIXME: Remove workaround to get property kind one MapboxMaps iOS SDK updates.
+        if property.hasSuffix("transition") {
+            kind = .transition
+        }
+        completion(StylePropertyValue(value: value, kind: kind).toFLTStylePropertyValue(property: property), nil)
     }
 
     func setStyleLightPropertyId(_ id: String, property: String, value: Any, completion: @escaping (FlutterError?) -> Void) {
