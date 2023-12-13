@@ -16,13 +16,18 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
+  setUp(() {
+    const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+    MapboxOptions.setAccessToken(ACCESS_TOKEN);
+  });
+  
   testWidgets('Style uri', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     await expectLater(
-        style.getStyleURI(), completion(MapboxStyles.MAPBOX_STREETS));
+        style.getStyleURI(), completion(MapboxStyles.STANDARD));
     style.setStyleURI(MapboxStyles.DARK);
     await expectLater(style.getStyleURI(), completion(MapboxStyles.DARK));
   });
@@ -96,6 +101,8 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+
+    await style.setStyleURI(MapboxStyles.MAPBOX_STREETS);
 
     await expectLater(style.styleLayerExists('custom'), completion(false));
     await expectLater(style.styleSourceExists('source'), completion(false));
@@ -226,11 +233,12 @@ void main() {
 
     // Add source and layer
     style.addStyleSource('source', source);
-    var styleSourcePropertiesString =
-        await style.getStyleSourceProperties('source');
-    var styleSourceProperties =
-        json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
-    expect(styleSourceProperties.length, 2);
+    var styleSourcePropertiesString = await style.getStyleSourceProperties('source');
+    var styleSourceProperties = json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
+    expect(styleSourceProperties.length, 3);
+    expect(styleSourceProperties['type'], 'geojson');
+    expect(styleSourceProperties['attribution'], '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
+    expect(styleSourceProperties['id'], 'source');
   });
 
   testWidgets('getStyleDefaultCamera', (WidgetTester tester) async {
@@ -238,6 +246,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    await style.setStyleURI(MapboxStyles.MAPBOX_STREETS);
 
     var camera = await style.getStyleDefaultCamera();
     expect(camera.bearing, 0);
@@ -254,14 +263,18 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
-    await style.setStyleLightProperty('color', 'white');
-    await style.setStyleLightProperty('intensity', 0.4);
 
-    var intensity = await style.getStyleLightProperty('intensity');
+    await style.setLight(FlatLight(
+      id: 'flat-light-id',
+    ));
+    await style.setStyleLightProperty('flat-light-id', 'color', 'white');
+    await style.setStyleLightProperty('flat-light-id', 'intensity', 0.4);
+
+    var intensity = await style.getStyleLightProperty('flat-light-id', 'intensity');
     expect(intensity.value, isNotNull);
     expect(double.parse(intensity.value).toStringAsFixed(1), '0.4');
 
-    var color = await style.getStyleLightProperty('color');
+    var color = await style.getStyleLightProperty('flat-light-id', 'color');
     if (Platform.isIOS) {
       expect(
           color.value,
@@ -365,7 +378,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var projection = await mapboxMap.style.getProjection();
     expect(projection, "globe");
-    await mapboxMap.style.setProjection("mercator");
+    await mapboxMap.style.setProjection(
+      StyleProjection(name: StyleProjectionName.mercator),
+    );
     projection = await mapboxMap.style.getProjection();
     expect(projection, "mercator");
     await addDelay(1000);

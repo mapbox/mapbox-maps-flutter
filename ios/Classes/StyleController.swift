@@ -1,4 +1,4 @@
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import UIKit
 
 final class StyleController: NSObject, FLTStyleManager {
@@ -9,37 +9,43 @@ final class StyleController: NSObject, FLTStyleManager {
         self.styleManager = styleManager
     }
     func getStyleURI(completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(styleManager.uri?.rawValue, nil)
+        completion(styleManager.styleURI?.rawValue, nil)
     }
 
     func setStyleURIUri(_ uri: String, completion: @escaping (FlutterError?) -> Void) {
-        styleManager.uri = StyleURI(rawValue: uri)
-        completion(nil)
+        guard let styleURI = StyleURI(rawValue: uri) else {
+            completion(FlutterError(code: StyleController.errorCode, message: "Invalid style uri", details: nil))
+            return
+        }
+        styleManager.load(mapStyle: MapStyle(uri: styleURI)) { error in
+            completion(error.map { FlutterError(code: StyleController.errorCode, message: $0.localizedDescription, details: $0) })
+        }
     }
 
     func getStyleJSON(completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(styleManager.JSON, nil)
+        completion(styleManager.styleJSON, nil)
     }
 
     func setStyleJSONJson(_ json: String, completion: @escaping (FlutterError?) -> Void) {
-        styleManager.JSON = json
-        completion(nil)
+        styleManager.load(mapStyle: MapStyle(json: json)) { error in
+            completion(error.map { FlutterError(code: StyleController.errorCode, message: $0.localizedDescription, details: $0) })
+        }
     }
 
     func getStyleDefaultCamera(completion: @escaping (FLTCameraOptions?, FlutterError?) -> Void) {
-        let camera = styleManager.defaultCamera
+        let camera = styleManager.styleDefaultCamera
         completion(camera.toFLTCameraOptions(), nil)
     }
 
     func getStyleTransition(completion: @escaping (FLTTransitionOptions?, FlutterError?) -> Void) {
-        let transition = styleManager.transition
+        let transition = styleManager.styleTransition
         completion(transition.toFLTTransitionOptions(), nil)
 
     }
 
     func setStyleTransitionTransitionOptions(_ transitionOptions: FLTTransitionOptions,
                                              completion: @escaping (FlutterError?) -> Void) {
-        styleManager.transition = transitionOptions.toTransitionOptions()
+        styleManager.styleTransition = transitionOptions.toTransitionOptions()
         completion(nil)
     }
 
@@ -204,8 +210,7 @@ final class StyleController: NSObject, FLTStyleManager {
     func setStyleSourcePropertiesSourceId(_ sourceId: String, properties: String,
                                           completion: @escaping (FlutterError?) -> Void) {
         do {
-            try styleManager.setSourceProperties(for: sourceId,
-                                                       properties: convertStringToDictionary(properties: properties))
+            try styleManager.setSourceProperties(for: sourceId, properties: convertStringToDictionary(properties: properties))
             completion(nil)
         } catch {
             completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))

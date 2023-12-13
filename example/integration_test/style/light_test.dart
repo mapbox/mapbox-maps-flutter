@@ -13,18 +13,20 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
+  setUp(() {
+    const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+    MapboxOptions.setAccessToken(ACCESS_TOKEN);
+  });
+
   testWidgets('Add Style Light', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await addDelay(1000);
 
-    await mapboxMap.style.setLight(Light(
-      anchor: Anchor.MAP,
-      color: Colors.red.value,
-      intensity: 1.0,
-      position: [1.0, 2.0, 3.0],
-    ));
+    await mapboxMap.style.setLights(FlatLight(
+      id: 'flat-light-id',
+    ))
 
     var anchor = await mapboxMap.style.getStyleLightProperty("anchor");
     expect(anchor.value, "map");
