@@ -1,3 +1,8 @@
+### 0.5.1
+### Android
+
+* Fix registry token lookup failing with an unrelated error in certain circumstances.
+
 ## 0.5.0
 ### Common
 
