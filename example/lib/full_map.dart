@@ -52,13 +52,11 @@ class FullMapState extends State<FullMap> {
   }
 
   _onRenderFrameStartedListener(RenderFrameStartedEventData data) {
-    print(
-        "RenderFrameStartedEventData: timestamp: ${data.timestamp}");
+    print("RenderFrameStartedEventData: timestamp: ${data.timestamp}");
   }
 
   _onRenderFrameFinishedListener(RenderFrameFinishedEventData data) {
-    print(
-        "RenderFrameFinishedEventData: time: ${data.timeInterval}");
+    print("RenderFrameFinishedEventData: time: ${data.timeInterval}");
   }
 
   _onSourceAddedListener(SourceAddedEventData data) {

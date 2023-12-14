@@ -5,6 +5,28 @@ class CameraController: NSObject, FLT_CameraManager {
     private static let errorCode = "0"
 
     func camera(
+        forCoordinatesPaddingCoordinates coordinates: [[String : Any]],
+        camera: FLTCameraOptions,
+        coordinatesPadding: FLTMbxEdgeInsets?,
+        maxZoom: NSNumber?,
+        offset: FLTScreenCoordinate?,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) -> FLTCameraOptions? {
+        do {
+            let camera = try mapboxMap.camera(
+                for: coordinates.compactMap(convertDictionaryToCLLocationCoordinate2D(dict:)),
+                camera: camera.toCameraOptions(),
+                coordinatesPadding: coordinatesPadding?.toUIEdgeInsets(),
+                maxZoom: maxZoom?.doubleValue,
+                offset: offset?.toCGPoint())
+            return camera.toFLTCameraOptions()
+        } catch let cameraError {
+            error.pointee = FlutterError(code: CameraController.errorCode, message: cameraError.localizedDescription, details: nil)
+            return nil
+        }
+    }
+
+    func camera(
         forCoordinateBoundsBounds bounds: FLTCoordinateBounds,
         padding: FLTMbxEdgeInsets,
         bearing: NSNumber?,
@@ -13,21 +35,14 @@ class CameraController: NSObject, FLT_CameraManager {
         offset: FLTScreenCoordinate?,
         error: AutoreleasingUnsafeMutablePointer<FlutterError?>
     ) -> FLTCameraOptions? {
-
-        do {
-            let coordinateBounds = bounds.toCoordinateBounds()
-            let camera = try mapboxMap.camera(
-                for: [coordinateBounds.northeast, coordinateBounds.southwest],
-                camera: CameraOptions(),
-                coordinatesPadding: padding.toUIEdgeInsets(),
-                maxZoom: maxZoom?.doubleValue,
-                offset: offset?.toCGPoint())
-            return camera.toFLTCameraOptions()
-
-        } catch let cameraError {
-            error.pointee = FlutterError(code: CameraController.errorCode, message: cameraError.localizedDescription, details: nil)
-            return nil
-        }
+        let camera = mapboxMap.camera(
+            for: bounds.toCoordinateBounds(),
+            padding: padding.toUIEdgeInsets(),
+            bearing: bearing?.doubleValue,
+            pitch: pitch?.doubleValue,
+            maxZoom: maxZoom?.doubleValue,
+            offset: offset?.toCGPoint())
+        return camera.toFLTCameraOptions()
     }
 
     func camera(

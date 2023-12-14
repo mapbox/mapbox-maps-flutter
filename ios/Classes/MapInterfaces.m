@@ -2211,13 +2211,47 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void) {
 }
 
 void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_CameraManager> *api) {
+  /// Convenience method that returns a `camera options` object for the given parameters.
+  ///
+  /// @param coordinates The `coordinates` representing the bounds of the camera.
+  /// @param camera The `camera options` which will be applied before calculating the camera for the coordinates.
+  /// If any of the fields in camera options is not provided then the current value from the map for that field will be used.
+  /// @param coordinatesPadding The amount of padding in screen points to add to the given `coordinates`.
+  /// This padding is not applied to the map but to the coordinates provided. If you want to apply padding to the map use `camera` parameter.
+  /// @param maxZoom The maximum zoom level allowed in the returned camera options.
+  /// @param offset The center of the given bounds relative to map center in screen points.
+  /// @return The `camera options` object representing the provided parameters.
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding"
+        binaryMessenger:binaryMessenger
+        codec:FLT_CameraManagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(cameraForCoordinatesPaddingCoordinates:camera:coordinatesPadding:maxZoom:offset:error:)], @"FLT_CameraManager api (%@) doesn't respond to @selector(cameraForCoordinatesPaddingCoordinates:camera:coordinatesPadding:maxZoom:offset:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSArray<NSDictionary<NSString *, id> *> *arg_coordinates = GetNullableObjectAtIndex(args, 0);
+        FLTCameraOptions *arg_camera = GetNullableObjectAtIndex(args, 1);
+        FLTMbxEdgeInsets *arg_coordinatesPadding = GetNullableObjectAtIndex(args, 2);
+        NSNumber *arg_maxZoom = GetNullableObjectAtIndex(args, 3);
+        FLTScreenCoordinate *arg_offset = GetNullableObjectAtIndex(args, 4);
+        FlutterError *error;
+        FLTCameraOptions *output = [api cameraForCoordinatesPaddingCoordinates:arg_coordinates camera:arg_camera coordinatesPadding:arg_coordinatesPadding maxZoom:arg_maxZoom offset:arg_offset error:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
   /// Convenience method that returns the `camera options` object for given parameters.
   ///
   /// @param bounds The `coordinate bounds` of the camera.
   /// @param padding The `edge insets` of the camera.
   /// @param bearing The bearing of the camera.
   /// @param pitch The pitch of the camera.
-  ///
+  /// @param maxZoom The maximum zoom level allowed in the returned camera options.
+  /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
   {
     FlutterBasicMessageChannel *channel =
