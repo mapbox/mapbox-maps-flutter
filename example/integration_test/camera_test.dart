@@ -14,6 +14,41 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
+  testWidgets('cameraForCoordinatesPadding', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await addDelay(1000);
+
+    var reference = CameraOptions(
+      center: Point(coordinates: Position(1.0, 2.0)).toJson(),
+      padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+      anchor: null,
+      zoom: 5,
+      bearing: 20,
+      pitch: 30);
+    var camera = await mapboxMap.cameraForCoordinatesPadding([
+      Point(
+          coordinates: Position(
+        1.0,
+        2.0,
+      )).toJson(),
+      Point(
+          coordinates: Position(
+        3.0,
+        4.0,
+      )).toJson()
+    ], reference, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, ScreenCoordinate(x: 5, y: 5));
+
+    expect(camera.bearing, 20);
+    expect(camera.pitch, closeTo(30, 0.1));
+    expect(camera.zoom, lessThanOrEqualTo(10));
+    expect(camera.padding!.top, 1);
+    expect(camera.padding!.left, 2);
+    expect(camera.padding!.bottom, 3);
+    expect(camera.padding!.right, 4);
+  });
+
   testWidgets('cameraForCoordinateBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

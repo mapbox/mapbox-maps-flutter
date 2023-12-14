@@ -197,6 +197,17 @@ class MapboxMap extends ChangeNotifier {
   }
 
   /// Convenience method that returns the `camera options` object for given parameters.
+  Future<CameraOptions> cameraForCoordinatesPadding(
+    List<Map<String?, Object?>?> coordinates,
+    CameraOptions camera,
+    MbxEdgeInsets? coordinatesPadding,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) => _cameraManager.cameraForCoordinatesPadding(
+    coordinates, camera, coordinatesPadding, maxZoom, offset,
+  );
+
+  /// Convenience method that returns the `camera options` object for given parameters.
   Future<CameraOptions> cameraForCoordinateBounds(
           CoordinateBounds bounds,
           MbxEdgeInsets padding,
