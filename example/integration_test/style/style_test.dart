@@ -264,17 +264,22 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    await style.setLight(FlatLight(
-      id: 'flat-light-id',
-    ));
-    await style.setStyleLightProperty('flat-light-id', 'color', 'white');
-    await style.setStyleLightProperty('flat-light-id', 'intensity', 0.4);
+    await style.setLights(
+      AmbientLight(
+        id: 'ambient-light-id',
+      ),
+      DirectionalLight(
+        id: 'directional-light-id',
+      )
+    );
+    await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
+    await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
 
-    var intensity = await style.getStyleLightProperty('flat-light-id', 'intensity');
+    var intensity = await style.getStyleLightProperty('directional-light-id', 'intensity');
     expect(intensity.value, isNotNull);
     expect(double.parse(intensity.value).toStringAsFixed(1), '0.4');
 
-    var color = await style.getStyleLightProperty('flat-light-id', 'color');
+    var color = await style.getStyleLightProperty('ambient-light-id', 'color');
     if (Platform.isIOS) {
       expect(
           color.value,
@@ -376,13 +381,11 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    var projection = await mapboxMap.style.getProjection();
-    expect(projection, "globe");
     await mapboxMap.style.setProjection(
       StyleProjection(name: StyleProjectionName.mercator),
     );
-    projection = await mapboxMap.style.getProjection();
-    expect(projection, "mercator");
+    var projection = await mapboxMap.style.getProjection();
+    expect(projection?.name, StyleProjectionName.mercator);
     await addDelay(1000);
   });
 }
