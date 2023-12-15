@@ -88,8 +88,8 @@ class EventTimeInterval {
 
 /// The class for camera-changed event in Observer
 class CameraChangedEventData {
-/// The time when the camera was changed.
-final int timestamp;
+  /// The time when the camera was changed.
+  final int timestamp;
 
   CameraChangedEventData.fromJson(Map<String, dynamic> json)
       : timestamp = json['timestamp'];
@@ -329,8 +329,8 @@ class StyleImageUnusedEventData {
 
 /// The class for style-loaded event in Observer
 class StyleLoadedEventData {
-/// The `timeInterval.begin` is when the style begins loading, and the `timeInterval.end` is when the style is loaded. */
-final EventTimeInterval timeInterval;
+  /// The `timeInterval.begin` is when the style begins loading, and the `timeInterval.end` is when the style is loaded. */
+  final EventTimeInterval timeInterval;
 
   StyleLoadedEventData.fromJson(Map<String, dynamic> json)
       : timeInterval = EventTimeInterval.fromJson(json['timeInterval']);
@@ -471,6 +471,7 @@ enum ResponseSourceType {
 enum RequestLoadingMethodType {
   /// The engine should try loading a resource from the network.
   NETWORK,
+
   /// The engine should try loading a resource from the cache.
   CACHE
 }
@@ -490,7 +491,9 @@ class Request {
   final RequestPriority priority;
 
   Request.fromJson(Map<String, dynamic> json)
-      : loadingMethod = (json['loading-method'] as List<int>).map((e) => RequestLoadingMethodType.values[e]).toList(),
+      : loadingMethod = (json['loading-method'] as List<int>)
+            .map((e) => RequestLoadingMethodType.values[e])
+            .toList(),
         url = json['url'],
         kind = RequestType.values[json['resource']],
         priority = RequestPriority.values[json['priority']];

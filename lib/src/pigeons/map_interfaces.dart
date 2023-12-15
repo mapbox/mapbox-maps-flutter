@@ -153,9 +153,6 @@ enum StylePackErrorType {
 
 /// Describes the reason for an offline request response error.
 enum ResponseErrorReason {
-  /// No error occurred during the resource request.
-  SUCCESS,
-
   /// The resource is not found.
   NOT_FOUND,
 
@@ -167,9 +164,6 @@ enum ResponseErrorReason {
 
   /// The error happened because of a rate limit.
   RATE_LIMIT,
-
-  /// The resource cannot be loaded because the device is in offline mode.
-  IN_OFFLINE_MODE,
 
   /// Other reason.
   OTHER,
@@ -2354,13 +2348,62 @@ class _CameraManager {
 
   static const MessageCodec<Object?> codec = __CameraManagerCodec();
 
+  /// Convenience method that returns a `camera options` object for the given parameters.
+  ///
+  /// @param coordinates The `coordinates` representing the bounds of the camera.
+  /// @param camera The `camera options` which will be applied before calculating the camera for the coordinates.
+  /// If any of the fields in camera options is not provided then the current value from the map for that field will be used.
+  /// @param coordinatesPadding The amount of padding in screen points to add to the given `coordinates`.
+  /// This padding is not applied to the map but to the coordinates provided. If you want to apply padding to the map use `camera` parameter.
+  /// @param maxZoom The maximum zoom level allowed in the returned camera options.
+  /// @param offset The center of the given bounds relative to map center in screen points.
+  /// @return The `camera options` object representing the provided parameters.
+  Future<CameraOptions> cameraForCoordinatesPadding(
+      List<Map<String?, Object?>?> arg_coordinates,
+      CameraOptions arg_camera,
+      MbxEdgeInsets? arg_coordinatesPadding,
+      double? arg_maxZoom,
+      ScreenCoordinate? arg_offset) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel.send(<Object?>[
+      arg_coordinates,
+      arg_camera,
+      arg_coordinatesPadding,
+      arg_maxZoom,
+      arg_offset
+    ]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as CameraOptions?)!;
+    }
+  }
+
   /// Convenience method that returns the `camera options` object for given parameters.
   ///
   /// @param bounds The `coordinate bounds` of the camera.
   /// @param padding The `edge insets` of the camera.
   /// @param bearing The bearing of the camera.
   /// @param pitch The pitch of the camera.
-  ///
+  /// @param maxZoom The maximum zoom level allowed in the returned camera options.
+  /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinateBounds(
       CoordinateBounds arg_bounds,
