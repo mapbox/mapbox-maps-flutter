@@ -5,7 +5,7 @@ class CameraController: NSObject, FLT_CameraManager {
     private static let errorCode = "0"
 
     func camera(
-        forCoordinatesPaddingCoordinates coordinates: [[String : Any]],
+        forCoordinatesPaddingCoordinates coordinates: [[String: Any]],
         camera: FLTCameraOptions,
         coordinatesPadding: FLTMbxEdgeInsets?,
         maxZoom: NSNumber?,
