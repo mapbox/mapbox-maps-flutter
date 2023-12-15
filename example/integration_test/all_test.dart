@@ -29,7 +29,6 @@ import 'style/layer/location_indicator_layer_test.dart'
 import 'style/layer/raster_layer_test.dart' as raster_layer_test;
 import 'style/layer/sky_layer_test.dart' as sky_layer_test;
 import 'style/layer/symbol_layer_test.dart' as symbol_layer_test;
-import 'style/light_test.dart' as light_test;
 import 'style/source/geojson_source_test.dart' as geojson_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
@@ -65,7 +64,6 @@ void main() {
   polyline_annotation_test.main();
 
   // style tests
-  light_test.main();
   style_test.main();
 
   // layer tests

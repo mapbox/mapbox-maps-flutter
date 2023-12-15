@@ -532,11 +532,15 @@ struct SupportedStyleColor: Encodable {
             r = r + m
             g = g + m
             b = b + m
+        } else {
+            r /= 255
+            g /= 255
+            b /= 255
         }
 
-        self.r = r
-        self.g = g
-        self.b = b
+        self.r = r / 255
+        self.g = g / 255
+        self.b = b / 255
         self.a = values.first ?? 1.0
     }
 
