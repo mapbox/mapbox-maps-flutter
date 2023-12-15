@@ -2,7 +2,7 @@
 import MapboxMaps
 
 extension DirectionalLight {
-  
+
   init(_ fltValue: FLTDirectionalLight) {
     self.init(id: fltValue.id)
 
@@ -14,7 +14,7 @@ extension DirectionalLight {
     }
     if let colorTransition = fltValue.colorTransition, let duration = colorTransition.duration, let delay = colorTransition.delay {
       self.colorTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let direction = fltValue.direction {
@@ -22,7 +22,7 @@ extension DirectionalLight {
     }
     if let directionTransition = fltValue.directionTransition, let duration = directionTransition.duration, let delay = directionTransition.delay {
       self.directionTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let intensity = fltValue.intensity {
@@ -30,7 +30,7 @@ extension DirectionalLight {
     }
     if let intensityTransition = fltValue.intensityTransition, let duration = intensityTransition.duration, let delay = intensityTransition.delay {
       self.intensityTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let shadowIntensity = fltValue.shadowIntensity {
@@ -38,13 +38,13 @@ extension DirectionalLight {
     }
     if let shadowIntensityTransition = fltValue.shadowIntensityTransition, let duration = shadowIntensityTransition.duration, let delay = shadowIntensityTransition.delay {
       self.shadowIntensityTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
   }
 }
 extension AmbientLight {
-  
+
   init(_ fltValue: FLTAmbientLight) {
     self.init(id: fltValue.id)
 
@@ -53,7 +53,7 @@ extension AmbientLight {
     }
     if let colorTransition = fltValue.colorTransition, let duration = colorTransition.duration, let delay = colorTransition.delay {
       self.colorTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let intensity = fltValue.intensity {
@@ -61,13 +61,13 @@ extension AmbientLight {
     }
     if let intensityTransition = fltValue.intensityTransition, let duration = intensityTransition.duration, let delay = intensityTransition.delay {
       self.intensityTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
   }
 }
 extension FlatLight {
-  
+
   init(_ fltValue: FLTFlatLight) {
     self.init(id: fltValue.id)
 
@@ -79,7 +79,7 @@ extension FlatLight {
     }
     if let colorTransition = fltValue.colorTransition, let duration = colorTransition.duration, let delay = colorTransition.delay {
       self.colorTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let intensity = fltValue.intensity {
@@ -87,7 +87,7 @@ extension FlatLight {
     }
     if let intensityTransition = fltValue.intensityTransition, let duration = intensityTransition.duration, let delay = intensityTransition.delay {
       self.intensityTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
     if let position = fltValue.position {
@@ -95,7 +95,7 @@ extension FlatLight {
     }
     if let positionTransition = fltValue.positionTransition, let duration = positionTransition.duration, let delay = positionTransition.delay {
       self.positionTransition = StyleTransition(
-        duration: duration.doubleValue * 1000, 
+        duration: duration.doubleValue * 1000,
         delay: delay.doubleValue * 1000)
     }
   }
