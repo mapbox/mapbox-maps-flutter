@@ -1179,13 +1179,27 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 
 /// Interface for managing camera.
 @protocol FLT_CameraManager
+/// Convenience method that returns a `camera options` object for the given parameters.
+///
+/// @param coordinates The `coordinates` representing the bounds of the camera.
+/// @param camera The `camera options` which will be applied before calculating the camera for the coordinates.
+/// If any of the fields in camera options is not provided then the current value from the map for that field will be used.
+/// @param coordinatesPadding The amount of padding in screen points to add to the given `coordinates`.
+/// This padding is not applied to the map but to the coordinates provided. If you want to apply padding to the map use `camera` parameter.
+/// @param maxZoom The maximum zoom level allowed in the returned camera options.
+/// @param offset The center of the given bounds relative to map center in screen points.
+/// @return The `camera options` object representing the provided parameters.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable FLTCameraOptions *)cameraForCoordinatesPaddingCoordinates:(NSArray<NSDictionary<NSString *, id> *> *)coordinates camera:(FLTCameraOptions *)camera coordinatesPadding:(nullable FLTMbxEdgeInsets *)coordinatesPadding maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that returns the `camera options` object for given parameters.
 ///
 /// @param bounds The `coordinate bounds` of the camera.
 /// @param padding The `edge insets` of the camera.
 /// @param bearing The bearing of the camera.
 /// @param pitch The pitch of the camera.
-///
+/// @param maxZoom The maximum zoom level allowed in the returned camera options.
+/// @param offset The center of the given bounds relative to map center in screen points.
 /// @return The `camera options` object representing the provided parameters.
 ///
 /// @return `nil` only when `error != nil`.

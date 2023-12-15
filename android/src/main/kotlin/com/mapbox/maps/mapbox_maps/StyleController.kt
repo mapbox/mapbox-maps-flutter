@@ -393,7 +393,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     mapboxMap.style?.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
   }
 
-  override fun setStyleLight(properties: String, result: FLTMapInterfaces.Result<Void>) {
+  fun setStyleLight(properties: String, result: FLTMapInterfaces.Result<Void>) {
     val expected = mapboxMap.style?.setStyleLights(properties.toValue())
     if (expected?.isError == true) {
       result.error(Throwable(expected.error))

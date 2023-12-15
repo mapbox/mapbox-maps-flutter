@@ -5248,13 +5248,28 @@ public class FLTMapInterfaces {
    */
   public interface _CameraManager {
     /**
+     * Convenience method that returns a `camera options` object for the given parameters.
+     *
+     * @param coordinates The `coordinates` representing the bounds of the camera.
+     * @param camera The `camera options` which will be applied before calculating the camera for the coordinates.
+     * If any of the fields in camera options is not provided then the current value from the map for that field will be used.
+     * @param coordinatesPadding The amount of padding in screen points to add to the given `coordinates`.
+     * This padding is not applied to the map but to the coordinates provided. If you want to apply padding to the map use `camera` parameter.
+     * @param maxZoom The maximum zoom level allowed in the returned camera options.
+     * @param offset The center of the given bounds relative to map center in screen points.
+     * @return The `camera options` object representing the provided parameters.
+     */
+    @NonNull 
+    CameraOptions cameraForCoordinatesPadding(@NonNull List<Map<String, Object>> coordinates, @NonNull CameraOptions camera, @Nullable MbxEdgeInsets coordinatesPadding, @Nullable Double maxZoom, @Nullable ScreenCoordinate offset);
+    /**
      * Convenience method that returns the `camera options` object for given parameters.
      *
      * @param bounds The `coordinate bounds` of the camera.
      * @param padding The `edge insets` of the camera.
      * @param bearing The bearing of the camera.
      * @param pitch The pitch of the camera.
-     *
+     * @param maxZoom The maximum zoom level allowed in the returned camera options.
+     * @param offset The center of the given bounds relative to map center in screen points.
      * @return The `camera options` object representing the provided parameters.
      */
     @NonNull 
@@ -5442,6 +5457,34 @@ public class FLTMapInterfaces {
     }
     /**Sets up an instance of `_CameraManager` to handle messages through the `binaryMessenger`. */
     static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable _CameraManager api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                List<Map<String, Object>> coordinatesArg = (List<Map<String, Object>>) args.get(0);
+                CameraOptions cameraArg = (CameraOptions) args.get(1);
+                MbxEdgeInsets coordinatesPaddingArg = (MbxEdgeInsets) args.get(2);
+                Double maxZoomArg = (Double) args.get(3);
+                ScreenCoordinate offsetArg = (ScreenCoordinate) args.get(4);
+                try {
+                  CameraOptions output = api.cameraForCoordinatesPadding(coordinatesArg, cameraArg, coordinatesPaddingArg, maxZoomArg, offsetArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
