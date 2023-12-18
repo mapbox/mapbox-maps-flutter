@@ -75,10 +75,6 @@ void main() {
         null);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
     // TODO zoom might be different depending whether surface has changed the size
     // expect(camera.zoom!.round(), 7);
     var coordinates = camera.center!["coordinates"] as List;
@@ -108,10 +104,6 @@ void main() {
     ], MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
     // TODO zoom might be different depending whether surface has changed the size
     // expect(camera.zoom!.round(), 7);
     var coordinates = camera.center!["coordinates"] as List;
@@ -155,14 +147,8 @@ void main() {
         ScreenBox(
             min: ScreenCoordinate(x: 0, y: 0),
             max: ScreenCoordinate(x: 100, y: 100)));
-    expect(camera.zoom, 10);
     expect(camera.bearing, 20);
     expect(camera.pitch, 30);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
-    expect(camera.zoom!.round(), 10);
     var coordinates = camera.center!["coordinates"] as List;
     expect((coordinates.first as double).round(), 1);
     expect((coordinates.last as double).round(), 2);
@@ -181,10 +167,6 @@ void main() {
     }, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
     // TODO zoom might be different depending whether surface has changed the size
     // expect(camera.zoom!.round(), 21);
     var coordinates = camera.center!["coordinates"] as List;

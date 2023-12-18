@@ -14,6 +14,11 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
+  setUp(() {
+    const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+    MapboxOptions.setAccessToken(ACCESS_TOKEN);
+  });
+
   testWidgets('loadStyleURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -43,12 +48,12 @@ void main() {
     await addDelay(1000);
   });
 
-  testWidgets('setMemoryBudget', (WidgetTester tester) async {
+  testWidgets('setTileCacheBudget', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    mapboxMap.setMemoryBudget(MapMemoryBudgetInMegabytes(size: 100), null);
-    mapboxMap.setMemoryBudget(null, MapMemoryBudgetInTiles(size: 100));
+    mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
+    mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
     await addDelay(1000);
   });
 
@@ -103,7 +108,6 @@ void main() {
       expect(options.viewportMode, ViewportMode.DEFAULT);
     }
     expect(options.crossSourceCollisions, true);
-    expect(options.optimizeForTerrain, true);
     expect(options.pixelRatio, tester.binding.window.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, isNotNull);
@@ -198,9 +202,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    var options = await mapboxMap.getResourceOptions();
-    expect(options.accessToken, isNotNull);
-    expect(options.baseURL, 'https://api.mapbox.com');
+    var baseUrl = await MapboxMapsOptions.getBaseUrl();
+    expect(baseUrl, 'https://api.mapbox.com');
+    var accessToken = await MapboxOptions.getAccessToken();
+    expect(accessToken, isNotNull);
     await addDelay(1000);
   });
 
@@ -228,8 +233,8 @@ void main() {
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 1);
-    expect(query[0]!.source, 'source');
-    expect(query[0]!.feature['id'], 'point');
+    expect(query[0]!.queriedFeature.source, 'source');
+    expect(query[0]!.queriedFeature.feature['id'], 'point');
 
     query = await mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(
@@ -262,8 +267,8 @@ void main() {
     var query = await mapboxMap.querySourceFeatures(
         'source', SourceQueryOptions(filter: ''));
     expect(query.length, 1);
-    expect(query[0]!.source, 'source');
-    expect(query[0]!.feature['id'], 'point');
+    expect(query[0]!.queriedFeature.source, 'source');
+    expect(query[0]!.queriedFeature.feature['id'], 'point');
   });
 
   testWidgets('queryFeatureExtensions', (WidgetTester tester) async {

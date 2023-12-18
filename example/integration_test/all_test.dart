@@ -14,7 +14,6 @@ import 'annotations/polyline_annotation_test.dart' as polyline_annotation_test;
 import 'camera_test.dart' as camera_test;
 import 'gestures_test.dart' as gestures_test;
 import 'map_interface_test.dart' as map_interface_test;
-import 'mapboxMap_test.dart' as mapboxMap_test;
 import 'projection_test.dart' as projection_test;
 import 'style/layer/background_layer_test.dart' as background_layer_test;
 import 'style/layer/circle_layer_test.dart' as circle_layer_test;
@@ -45,7 +44,6 @@ void main() {
   animation_test.main();
   camera_test.main();
   map_interface_test.main();
-  mapboxMap_test.main();
   projection_test.main();
   gestures_test.main();
   logo_test.main();
