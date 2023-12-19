@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/utils.dart';
-import 'package:turf/helpers.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'main.dart';
 import 'page.dart';
@@ -23,9 +22,16 @@ class PolygonAnnotationPageBody extends StatefulWidget {
 }
 
 class AnnotationClickListener extends OnPolygonAnnotationClickListener {
+  AnnotationClickListener({
+    required this.onAnnotationClick,
+  });
+
+  final void Function(PolygonAnnotation annotation) onAnnotationClick;
+
   @override
   void onPolygonAnnotationClick(PolygonAnnotation annotation) {
     print("onAnnotationClick, id: ${annotation.id}");
+    onAnnotationClick(annotation);
   }
 }
 
@@ -50,8 +56,11 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
             fillColor: createRandomColor()));
       }
       polygonAnnotationManager?.createMulti(options);
-      polygonAnnotationManager
-          ?.addOnPolygonAnnotationClickListener(AnnotationClickListener());
+      polygonAnnotationManager?.addOnPolygonAnnotationClickListener(
+        AnnotationClickListener(
+          onAnnotationClick: (annotation) => polygonAnnotation = annotation,
+        ),
+      );
     });
   }
 
@@ -114,6 +123,7 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
       onPressed: () {
         if (polygonAnnotation != null) {
           polygonAnnotationManager?.delete(polygonAnnotation!);
+          polygonAnnotation = null;
         }
       },
     );
@@ -124,6 +134,7 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
       child: Text('delete all polygon annotations'),
       onPressed: () {
         polygonAnnotationManager?.deleteAll();
+        polygonAnnotation = null;
       },
     );
   }
