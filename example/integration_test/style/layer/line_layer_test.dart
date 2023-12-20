@@ -32,6 +32,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       lineCap: LineCap.BUTT,
       lineJoin: LineJoin.BEVEL,
       lineMiterLimit: 1.0,
@@ -58,6 +59,7 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.lineCap, LineCap.BUTT);
     expect(layer.lineJoin, LineJoin.BEVEL);

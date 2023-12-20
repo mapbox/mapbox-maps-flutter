@@ -20,14 +20,13 @@ void main() {
     const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
     MapboxOptions.setAccessToken(ACCESS_TOKEN);
   });
-  
+
   testWidgets('Style uri', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
-    await expectLater(
-        style.getStyleURI(), completion(MapboxStyles.STANDARD));
+    await expectLater(style.getStyleURI(), completion(MapboxStyles.STANDARD));
     style.setStyleURI(MapboxStyles.DARK);
     await expectLater(style.getStyleURI(), completion(MapboxStyles.DARK));
   });
@@ -233,11 +232,14 @@ void main() {
 
     // Add source and layer
     style.addStyleSource('source', source);
-    var styleSourcePropertiesString = await style.getStyleSourceProperties('source');
-    var styleSourceProperties = json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
+    var styleSourcePropertiesString =
+        await style.getStyleSourceProperties('source');
+    var styleSourceProperties =
+        json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
     expect(styleSourceProperties.length, 3);
     expect(styleSourceProperties['type'], 'geojson');
-    expect(styleSourceProperties['attribution'], '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
+    expect(styleSourceProperties['attribution'],
+        '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
     expect(styleSourceProperties['id'], 'source');
   });
 
@@ -265,17 +267,17 @@ void main() {
     var style = mapboxMap.style;
 
     await style.setLights(
-      AmbientLight(
-        id: 'ambient-light-id',
-      ),
-      DirectionalLight(
-        id: 'directional-light-id',
-      )
-    );
+        AmbientLight(
+          id: 'ambient-light-id',
+        ),
+        DirectionalLight(
+          id: 'directional-light-id',
+        ));
     await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
     await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
 
-    var intensity = await style.getStyleLightProperty('directional-light-id', 'intensity');
+    var intensity =
+        await style.getStyleLightProperty('directional-light-id', 'intensity');
     expect(intensity.value, isNotNull);
     expect(double.parse(intensity.value).toStringAsFixed(1), '0.4');
 

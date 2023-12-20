@@ -38,6 +38,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       fillSortKey: 1.0,
       fillAntialias: true,
       fillColor: Colors.red.value,
@@ -52,6 +53,7 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
