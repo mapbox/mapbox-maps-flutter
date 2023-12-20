@@ -42,7 +42,7 @@ void main() {
         puckBearingEnabled: true,
         layerAbove: "layer-above",
         layerBelow: "layer-below",
-        puckBearingSource: PuckBearingSource.COURSE,
+        puckBearing: PuckBearing.COURSE,
         locationPuck: LocationPuck(
             locationPuck2D: LocationPuck2D(
                 bearingImage: list,
@@ -62,7 +62,7 @@ void main() {
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
     expect(updatedSettings.puckBearingEnabled, settings.puckBearingEnabled);
-    expect(updatedSettings.puckBearingSource, settings.puckBearingSource);
+    expect(updatedSettings.puckBearing, settings.puckBearing);
     expect(updatedSettings.showAccuracyRing, settings.showAccuracyRing);
     // FIXME bitmaps are decoded incorrectly for some reason
     expect(updatedSettings.accuracyRingBorderColor,
@@ -100,7 +100,7 @@ void main() {
 
     final settings = LocationComponentSettings(
         enabled: true,
-        puckBearingSource: PuckBearingSource.COURSE,
+        puckBearing: PuckBearing.COURSE,
         locationPuck: LocationPuck(
             locationPuck3D: LocationPuck3D(
                 modelUri:

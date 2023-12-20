@@ -241,6 +241,7 @@ extension TransitionOptions {
         return FLTTransitionOptions.make(withDuration: duration, delay: delay, enablePlacementTransitions: enablePlacementTransitions)
     }
 }
+
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
@@ -448,6 +449,10 @@ extension StyleColor {
             return nil
         }
     }
+
+    init(rgb: Int) {
+        self.init(uiColorFromHex(rgbValue: rgb))
+    }
 }
 
 /// - Note: Current supports HSL(A) and RGB(A) color values.
@@ -527,6 +532,10 @@ struct SupportedStyleColor: Encodable {
             r = r + m
             g = g + m
             b = b + m
+        } else {
+            r /= 255
+            g /= 255
+            b /= 255
         }
 
         self.r = r

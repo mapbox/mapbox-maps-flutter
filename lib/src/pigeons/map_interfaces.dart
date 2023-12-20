@@ -153,6 +153,9 @@ enum StylePackErrorType {
 
 /// Describes the reason for an offline request response error.
 enum ResponseErrorReason {
+  /// No error occurred during the resource request.
+  SUCCESS,
+
   /// The resource is not found.
   NOT_FOUND,
 
@@ -164,6 +167,9 @@ enum ResponseErrorReason {
 
   /// The error happened because of a rate limit.
   RATE_LIMIT,
+
+  /// The resource cannot be loaded because the device is in offline mode.
+  IN_OFFLINE_MODE,
 
   /// Other reason.
   OTHER,

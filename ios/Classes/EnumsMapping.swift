@@ -575,3 +575,29 @@ extension CircleTranslateAnchor {
         toFLTCircleTranslateAnchor().map(FLTCircleTranslateAnchorBox.init(value:))
     }
 }
+extension Anchor {
+
+    init?(_ fltValue: FLTAnchor) {
+        switch fltValue {
+        case .MAP: self = .map
+        case .VIEWPORT: self = .viewport
+        @unknown default: return nil
+        }
+    }
+
+    init?(_ fltValueBox: FLTAnchorBox) {
+        self.init(fltValueBox.value)
+    }
+
+    func toFLTAnchor() -> FLTAnchor? {
+        switch self {
+        case .map: return .MAP
+        case .viewport: return .VIEWPORT
+        default: return nil
+        }
+    }
+
+    func toFLTAnchorBox() -> FLTAnchorBox? {
+        toFLTAnchor().map(FLTAnchorBox.init(value:))
+    }
+}
