@@ -8,6 +8,7 @@ class FillExtrusionLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     required this.sourceId,
     this.sourceLayer,
     this.fillExtrusionEdgeRadius,
@@ -33,7 +34,11 @@ class FillExtrusionLayer extends Layer {
     this.fillExtrusionVerticalGradient,
     this.fillExtrusionVerticalScale,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "fill-extrusion";
@@ -214,6 +219,9 @@ class FillExtrusionLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -232,6 +240,7 @@ class FillExtrusionLayer extends Layer {
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e

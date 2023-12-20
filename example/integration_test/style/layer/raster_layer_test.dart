@@ -34,6 +34,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       rasterBrightnessMax: 1.0,
       rasterBrightnessMin: 1.0,
       rasterColor: Colors.red.value,
@@ -50,6 +51,7 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);

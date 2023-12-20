@@ -26,6 +26,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       skyAtmosphereColor: Colors.red.value,
       skyAtmosphereHaloColor: Colors.red.value,
       skyAtmosphereSun: [0.0, 1.0],
@@ -39,6 +40,7 @@ void main() {
     var layer = await mapboxMap.style.getLayer('layer') as SkyLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.skyAtmosphereColor, Colors.red.value);
     expect(layer.skyAtmosphereHaloColor, Colors.red.value);

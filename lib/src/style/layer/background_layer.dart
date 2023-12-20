@@ -8,12 +8,17 @@ class BackgroundLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     this.backgroundColor,
     this.backgroundEmissiveStrength,
     this.backgroundOpacity,
     this.backgroundPattern,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "background";
@@ -62,6 +67,9 @@ class BackgroundLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -78,6 +86,7 @@ class BackgroundLayer extends Layer {
       id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e

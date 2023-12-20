@@ -8,6 +8,7 @@ class LocationIndicatorLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     this.bearingImage,
     this.shadowImage,
     this.topImage,
@@ -25,7 +26,11 @@ class LocationIndicatorLayer extends Layer {
     this.shadowImageSize,
     this.topImageSize,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "location-indicator";
@@ -147,6 +152,9 @@ class LocationIndicatorLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -163,6 +171,7 @@ class LocationIndicatorLayer extends Layer {
       id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e

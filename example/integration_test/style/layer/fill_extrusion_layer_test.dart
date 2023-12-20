@@ -28,6 +28,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       fillExtrusionEdgeRadius: 1.0,
       fillExtrusionAmbientOcclusionGroundAttenuation: 1.0,
       fillExtrusionAmbientOcclusionGroundRadius: 1.0,
@@ -55,6 +56,7 @@ void main() {
     expect('composite', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.fillExtrusionEdgeRadius, 1.0);
     expect(layer.fillExtrusionAmbientOcclusionGroundAttenuation, 1.0);

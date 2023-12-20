@@ -8,6 +8,7 @@ class SkyLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     this.skyAtmosphereColor,
     this.skyAtmosphereHaloColor,
     this.skyAtmosphereSun,
@@ -18,7 +19,11 @@ class SkyLayer extends Layer {
     this.skyOpacity,
     this.skyType,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "sky";
@@ -97,6 +102,9 @@ class SkyLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -113,6 +121,7 @@ class SkyLayer extends Layer {
       id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e

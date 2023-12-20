@@ -31,6 +31,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       circleSortKey: 1.0,
       circleBlur: 1.0,
       circleColor: Colors.red.value,
@@ -49,6 +50,7 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
