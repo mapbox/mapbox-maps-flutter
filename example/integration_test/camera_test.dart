@@ -71,12 +71,11 @@ void main() {
         MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
         10,
         20,
-        null,
+        10,
         null);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    // TODO zoom might be different depending whether surface has changed the size
-    // expect(camera.zoom!.round(), 7);
+    expect(camera.zoom, lessThanOrEqualTo(10));
     var coordinates = camera.center!["coordinates"] as List;
     expect((coordinates.first as double).round(), 2);
     expect((coordinates.last as double).round(), 3);
@@ -154,6 +153,11 @@ void main() {
     expect((coordinates.last as double).round(), 2);
     expect(camera.anchor!.x, 1);
     expect(camera.anchor!.y, 1);
+    expect(camera.padding!.top, option.padding!.top);
+    expect(camera.padding!.left, option.padding!.left);
+    expect(camera.padding!.bottom, option.padding!.bottom);
+    expect(camera.padding!.right, option.padding!.right);
+    expect(camera.zoom!.round(), 10);
     await addDelay(1000);
   });
 
@@ -232,6 +236,7 @@ void main() {
     expect((southwest.last as double).round(), 2);
     await addDelay(1000);
   });
+
   testWidgets('coordinateBoundsZoomForCamera', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
