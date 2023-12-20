@@ -118,12 +118,20 @@ abstract class Layer {
   ///       maximum: 24
   double? maxZoom;
 
+  /// The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.
+  String? slot;
+
   /// Get the type of current layer as a String.
   String getType();
 
   String _encode();
 
-  Layer({required this.id, this.visibility, this.maxZoom, this.minZoom});
+  Layer(
+      {required this.id,
+      this.visibility,
+      this.maxZoom,
+      this.minZoom,
+      this.slot});
 }
 
 /// Super class for all different types of sources.
