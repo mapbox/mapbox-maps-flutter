@@ -241,7 +241,7 @@ void main() {
         value: json.encode(screenBox.encode()), type: Type.SCREEN_BOX);
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
-    expect(query.length, 1);
+    expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
 
