@@ -242,7 +242,12 @@ void main() {
         await style.getStyleSourceProperties('source');
     var styleSourceProperties =
         json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
-    expect(styleSourceProperties.length, 2);
+    if (Platform.isIOS) {
+      expect(styleSourceProperties.length, 3);
+      expect(styleSourceProperties['id'], 'source');
+    } else {
+      expect(styleSourceProperties.length, 2);
+    }
     expect(styleSourceProperties['type'], 'geojson');
     expect(styleSourceProperties['attribution'],
         '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
