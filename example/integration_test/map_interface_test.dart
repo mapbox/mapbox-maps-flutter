@@ -31,7 +31,6 @@ void main() {
     var styleJson = await rootBundle.loadString('assets/style.json');
     mapboxMap.loadStyleJson(styleJson);
 
-    app.resetOnMapLoaded();
     await app.onMapLoaded.future;
 
     var getStyleJson = await mapboxMap.style.getStyleJSON();

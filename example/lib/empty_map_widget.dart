@@ -15,6 +15,7 @@ Future<MapboxMap> main() {
   const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
+  resetOnMapLoaded();
   runApp(MaterialApp(
       home: MapWidget(
     key: ValueKey("mapWidget"),

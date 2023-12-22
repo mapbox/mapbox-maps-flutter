@@ -22,7 +22,6 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    app.resetOnMapLoaded();
     await app.onMapLoaded.future;
 
     await expectLater(style.getStyleURI(), completion(MapboxStyles.STANDARD));
@@ -39,7 +38,6 @@ void main() {
     var style = mapboxMap.style;
     var styleJson = await rootBundle.loadString('assets/style.json');
     style.setStyleJSON(styleJson);
-    app.resetOnMapLoaded();
     await app.onMapLoaded.future;
     await expectLater(style.getStyleJSON(), completion(styleJson));
   });
