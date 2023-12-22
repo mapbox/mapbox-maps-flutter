@@ -26,8 +26,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+
     app.resetOnMapLoaded();
     await app.onMapLoaded.future;
+
     await expectLater(style.getStyleURI(), completion(MapboxStyles.STANDARD));
     style.setStyleURI(MapboxStyles.DARK);
     app.resetOnMapLoaded();
@@ -242,6 +244,7 @@ void main() {
         await style.getStyleSourceProperties('source');
     var styleSourceProperties =
         json.decode(styleSourcePropertiesString) as Map<String, dynamic>;
+
     if (Platform.isIOS) {
       expect(styleSourceProperties.length, 3);
       expect(styleSourceProperties['id'], 'source');

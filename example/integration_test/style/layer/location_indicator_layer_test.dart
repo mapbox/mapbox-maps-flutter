@@ -26,6 +26,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       bearingImage: "abc",
       shadowImage: "abc",
       topImage: "abc",
@@ -47,6 +48,7 @@ void main() {
         await mapboxMap.style.getLayer('layer') as LocationIndicatorLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.bearingImage, "abc");
     expect(layer.shadowImage, "abc");
