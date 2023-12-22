@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -12,6 +11,9 @@ void resetOnMapLoaded() {
 
 Future<MapboxMap> main() {
   final completer = Completer<MapboxMap>();
+
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
   runApp(MaterialApp(
       home: MapWidget(
@@ -31,6 +33,9 @@ Future<MapboxMap> main() {
 
 Future<MapboxMap> runFixedSizeMap() {
   final completer = Completer<MapboxMap>();
+
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
   runApp(MaterialApp(
       home: Align(

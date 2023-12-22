@@ -14,11 +14,6 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
-  setUp(() {
-    const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
-    MapboxOptions.setAccessToken(ACCESS_TOKEN);
-  });
-
   testWidgets('loadStyleURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
