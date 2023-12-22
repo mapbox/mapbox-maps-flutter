@@ -472,11 +472,13 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     result: FLTMapInterfaces.Result<FLTMapInterfaces.MbxImage>
   ) {
     mapboxMap.getStyleImage(imageId)?.let { image ->
+      val byteArray = ByteArray(image.data.buffer.capacity())
+      image.data.buffer.get(byteArray)
       result.success(
         FLTMapInterfaces.MbxImage.Builder()
           .setWidth(image.width.toLong())
           .setHeight(image.height.toLong())
-          .setData(image.data.buffer.array())
+          .setData(byteArray)
           .build()
       )
     }
