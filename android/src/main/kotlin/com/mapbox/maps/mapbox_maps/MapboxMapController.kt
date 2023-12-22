@@ -4,7 +4,11 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import com.mapbox.common.*
 import com.mapbox.maps.*
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
@@ -14,6 +18,8 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import java.lang.reflect.Type
+import java.util.Date
 
 class MapboxMapController(
   context: Context,
@@ -44,6 +50,7 @@ class MapboxMapController(
   private val compassController = CompassController(mapView)
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
+  private val gson = GsonBuilder().registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter).create()
   init {
     changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
@@ -70,49 +77,48 @@ class MapboxMapController(
   }
 
   private fun subscribeToEvent(event: FLTMapInterfaces._MapEvent) {
-    // check deserialization of these events, as they are separate structs declared in GL Native and Flutter plugin
     when (event) {
       FLTMapInterfaces._MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.MAP_LOADING_ERROR -> mapboxMap.subscribeMapLoadingError {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.STYLE_LOADED -> mapboxMap.subscribeStyleLoaded {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.STYLE_DATA_LOADED -> mapboxMap.subscribeStyleDataLoaded {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.CAMERA_CHANGED -> mapboxMap.subscribeCameraChanged {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.MAP_IDLE -> mapboxMap.subscribeMapIdle {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.SOURCE_ADDED -> mapboxMap.subscribeSourceAdded {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.SOURCE_REMOVED -> mapboxMap.subscribeSourceRemoved {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.SOURCE_DATA_LOADED -> mapboxMap.subscribeSourceDataLoaded {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.STYLE_IMAGE_MISSING -> mapboxMap.subscribeStyleImageMissing {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> mapboxMap.subscribeStyleImageRemoveUnused {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.RENDER_FRAME_STARTED -> mapboxMap.subscribeRenderFrameStarted {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.RENDER_FRAME_FINISHED -> mapboxMap.subscribeRenderFrameFinished {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
       FLTMapInterfaces._MapEvent.RESOURCE_REQUEST -> mapboxMap.subscribeResourceRequest {
-        methodChannel.invokeMethod(event.methodName, Gson().toJson(it))
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
     }
   }
@@ -196,3 +202,13 @@ class MapboxMapController(
 
 private val FLTMapInterfaces._MapEvent.methodName: String
   get() = "event#$ordinal"
+
+object MicrosecondsDateTypeAdapter: JsonSerializer<Date> {
+  override fun serialize(
+    src: Date,
+    typeOfSrc: Type?,
+    context: JsonSerializationContext?
+  ): JsonElement {
+    return JsonPrimitive(src.time * 1000)
+  }
+}
