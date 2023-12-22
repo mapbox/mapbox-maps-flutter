@@ -21,7 +21,8 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
+
+    await app.onMapLoaded.future;
 
     await mapboxMap.style.addSource(GeoJsonSource(
       id: "source",
