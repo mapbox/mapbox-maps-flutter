@@ -203,7 +203,7 @@ class MapboxMapController(
 private val FLTMapInterfaces._MapEvent.methodName: String
   get() = "event#$ordinal"
 
-object MicrosecondsDateTypeAdapter: JsonSerializer<Date> {
+object MicrosecondsDateTypeAdapter : JsonSerializer<Date> {
   override fun serialize(
     src: Date,
     typeOfSrc: Type?,
