@@ -181,6 +181,9 @@ void main() {
     var style = mapboxMap.style;
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    await app.onMapLoaded.future;
+
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
     await addDelay(1000);
@@ -217,13 +220,8 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(
-            coordinates: Position(
-              -77.032667,
-              38.913175
-            )).toJson(),
-      zoom: 10
-    );
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10);
     mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
@@ -271,14 +269,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-      center: Point(
-          coordinates: Position(
-              -77.032667,
-              38.913175
-          )).toJson(),
-      zoom: 10,
-      pitch: 0
-    );
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10,
+        pitch: 0);
     mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
