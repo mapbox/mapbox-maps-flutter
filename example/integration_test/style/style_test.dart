@@ -26,6 +26,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    app.resetOnMapLoaded();
     await app.onMapLoaded.future;
     await expectLater(style.getStyleURI(), completion(MapboxStyles.STANDARD));
     style.setStyleURI(MapboxStyles.DARK);
