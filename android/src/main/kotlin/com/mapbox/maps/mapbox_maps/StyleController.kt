@@ -18,7 +18,7 @@ import java.util.Locale
 
 class StyleController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
-    result.success(mapboxMap.style?.styleURI)
+    result.success(mapboxMap.style?.styleURI ?: "")
   }
 
   override fun setStyleURI(uri: String, result: FLTMapInterfaces.Result<Void>) {
@@ -28,7 +28,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleJSON(result: FLTMapInterfaces.Result<String>) {
-    result.success(mapboxMap.style?.styleJSON)
+    result.success(mapboxMap.style?.styleJSON ?: "")
   }
 
   override fun setStyleJSON(json: String, result: FLTMapInterfaces.Result<Void>) {
