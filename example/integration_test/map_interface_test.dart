@@ -35,6 +35,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var styleJson = await rootBundle.loadString('assets/style.json');
     mapboxMap.loadStyleJson(styleJson);
+
+    await app.onMapLoaded.future;
+
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
     await addDelay(1000);
