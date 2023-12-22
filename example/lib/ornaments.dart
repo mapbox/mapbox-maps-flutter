@@ -28,16 +28,24 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
   final colors = [Colors.amber, Colors.black, Colors.blue];
 
   MapboxMap? mapboxMap;
-  bool showOrnaments = true;
+  bool showCompass = true;
   OrnamentPosition compassPosition = OrnamentPosition.TOP_RIGHT;
   bool showScaleBar = true;
   OrnamentPosition scaleBarPosition = OrnamentPosition.TOP_LEFT;
   OrnamentPosition logoPosition = OrnamentPosition.BOTTOM_LEFT;
   OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  void _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
+    _updateSettings();
+  }
 
+  void _updateSettings() {
+    if (this.mapboxMap == null) {
+      return;
+    }
+
+    final mapboxMap = this.mapboxMap!;
     mapboxMap.setCamera(CameraOptions(
       center: Point(
           coordinates: Position(
@@ -53,7 +61,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
 
     mapboxMap.compass.updateSettings(CompassSettings(
       position: compassPosition,
-      enabled: showOrnaments,
+      enabled: showCompass,
       marginBottom: 10,
       marginLeft: 10,
       marginTop: 10,
@@ -122,22 +130,19 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     );
   }
 
-  _toggleOrnaments() {
+  _toggleCompass() {
     return TextButton(
       child: Text('toggle compass'),
       onPressed: () {
         setState(() {
-          if (showOrnaments) {
-            showOrnaments = false;
-          } else {
-            showOrnaments = true;
-          }
+          showCompass = !showCompass;
+          _updateSettings();
         });
       },
     );
   }
 
-  Widget _moveOrnaments() {
+  Widget _moveCompass() {
     return TextButton(
       child: Text('move compass'),
       onPressed: () {
@@ -156,6 +161,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               compassPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateSettings();
         });
       },
     );
@@ -166,11 +172,8 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       child: Text('toggle scale bar'),
       onPressed: () {
         setState(() {
-          if (showScaleBar) {
-            showScaleBar = false;
-          } else {
-            showScaleBar = true;
-          }
+          showScaleBar = !showScaleBar;
+          _updateSettings();
         });
       },
     );
@@ -195,6 +198,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateSettings();
         });
       },
     );
@@ -219,6 +223,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               attributionPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateSettings();
         });
       },
     );
@@ -243,6 +248,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
               logoPosition = OrnamentPosition.BOTTOM_LEFT;
               break;
           }
+          _updateSettings();
         });
       },
     );
@@ -261,8 +267,8 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     listViewChildren.addAll(
       <Widget>[
         _getCompassSettings(),
-        _toggleOrnaments(),
-        _moveOrnaments(),
+        _toggleCompass(),
+        _moveCompass(),
         _toggleScaleBar(),
         _moveScaleBar(),
         _moveAttribution(),
