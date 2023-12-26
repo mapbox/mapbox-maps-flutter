@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/helpers.dart';
 
 import 'page.dart';
 
@@ -41,32 +39,26 @@ class AnimatedRouteState extends State<AnimatedRoute>
   var trackLocation = true;
   var showAnnotations = false;
 
+  void dispose() {
+    super.dispose();
+
+    timer?.cancel();
+  }
+
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     this.pointAnnotationManager =
         await mapboxMap.annotations.createPointAnnotationManager();
 
-    mapboxMap.subscribe(_eventObserver, [
-      MapEvents.STYLE_LOADED,
-      MapEvents.MAP_LOADED,
-      MapEvents.MAP_IDLE,
-    ]);
-
     await _getPermission();
+
+    setLocationComponent();
+    refreshTrackLocation();
+    refreshCarAnnotations();
   }
 
   _getPermission() async {
     await Permission.locationWhenInUse.request();
-  }
-
-  _eventObserver(Event event) {
-    // print("Receive event, type: ${event.type}, data: ${event.data}");
-  }
-
-  _onStyleLoadedCallback(StyleLoadedEventData data) {
-    setLocationComponent();
-    refreshTrackLocation();
-    refreshCarAnnotations();
   }
 
   @override
@@ -106,13 +98,12 @@ class AnimatedRouteState extends State<AnimatedRoute>
           ),
         ),
         body: MapWidget(
-          key: const ValueKey("mapWidget"),
+          key: const ValueKey('mapWidget'),
           resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
           cameraOptions: CameraOptions(zoom: 3.0),
           styleUri: MapboxStyles.LIGHT,
           textureView: true,
           onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoadedCallback,
         ));
   }
 
@@ -189,9 +180,12 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
   @override
   void onPointAnnotationClick(PointAnnotation annotation) async {
-    if (await mapState.mapboxMap.style.styleSourceExists("source")) {
-      await mapState.mapboxMap.style.removeStyleLayer("layer");
-      await mapState.mapboxMap.style.removeStyleSource("source");
+    // Ensure the animation is stopped before adding/removing layers.
+    controller?.stop();
+
+    if (await mapState.mapboxMap.style.styleSourceExists('source')) {
+      await mapState.mapboxMap.style.removeStyleLayer('layer');
+      await mapState.mapboxMap.style.removeStyleSource('source');
     }
 
     // build route from puck position to the clicked annotation
@@ -206,47 +200,38 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
   drawRouteLowLevel(List<Position> polyline) async {
     final line = LineString(coordinates: polyline);
-    mapState.mapboxMap.style.styleSourceExists("source").then((exists) async {
-      if (exists) {
-        // if source exists - just update it
-        final source = await mapState.mapboxMap.style.getSource("source");
-        (source as GeoJsonSource).updateGeoJSON(json.encode(line));
-      } else {
-        await mapState.mapboxMap.style.addSource(GeoJsonSource(
-            id: "source", data: json.encode(line), lineMetrics: true));
 
-        await mapState.mapboxMap.style.addLayer(LineLayer(
-          id: 'layer',
-          sourceId: 'source',
-          lineCap: LineCap.ROUND,
-          lineJoin: LineJoin.ROUND,
-          lineBlur: 1.0,
-          lineColor: Colors.deepOrangeAccent.value,
-          lineDasharray: [1.0, 2.0],
-          lineTrimOffset: [0.0, 0.0],
-          lineWidth: 5.0,
-        ));
-      }
+    await mapState.mapboxMap.style.addSource(GeoJsonSource(
+        id: 'source', data: json.encode(line), lineMetrics: true));
+    await mapState.mapboxMap.style.addLayer(LineLayer(
+      id: 'layer',
+      sourceId: 'source',
+      lineCap: LineCap.ROUND,
+      lineJoin: LineJoin.ROUND,
+      lineBlur: 1.0,
+      lineColor: Colors.deepOrangeAccent.value,
+      lineDasharray: [1.0, 2.0],
+      lineTrimOffset: [0.0, 1.0],
+      lineWidth: 5.0,
+    ));
 
-      // query line layer
-      final lineLayer =
-          await mapState.mapboxMap.style.getLayer('layer') as LineLayer;
+    // query line layer
+    final lineLayer =
+        await mapState.mapboxMap.style.getLayer('layer') as LineLayer;
 
-      // draw layer with gradient
-      mapState.mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
-          '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
+    // draw layer with rainbow gradient
+    mapState.mapboxMap.style.setStyleLayerProperty('layer', 'line-gradient',
+        '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
 
-      // animate layer to reveal it from start to end
-      controller?.stop();
-      controller = AnimationController(
-          duration: const Duration(seconds: 2), vsync: mapState);
-      animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
-        ..addListener(() async {
-          // set the animated value of lineTrim and update the layer
-          lineLayer.lineTrimOffset = [animation?.value, 1.0];
-          mapState.mapboxMap.style.updateLayer(lineLayer);
-        });
-      controller?.forward();
-    });
+    // animate layer to reveal it from start to end
+    controller = AnimationController(
+        duration: const Duration(seconds: 2), vsync: mapState);
+    animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
+      ..addListener(() async {
+        // set the animated value of lineTrim and update the layer
+        lineLayer.lineTrimOffset = [animation?.value, 1.0];
+        await mapState.mapboxMap.style.updateLayer(lineLayer);
+      });
+    controller?.forward();
   }
 }

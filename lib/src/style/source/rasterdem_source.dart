@@ -5,7 +5,7 @@ part of mapbox_maps_flutter;
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#raster_dem)
 class RasterDemSource extends Source {
   RasterDemSource({
-    required id,
+    required String id,
     String? url,
     List<String?>? tiles,
     List<double?>? bounds,

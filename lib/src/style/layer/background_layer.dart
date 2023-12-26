@@ -4,10 +4,10 @@ part of mapbox_maps_flutter;
 /// The background color or pattern of the map.
 class BackgroundLayer extends Layer {
   BackgroundLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
     this.backgroundColor,
     this.backgroundOpacity,
     this.backgroundPattern,
