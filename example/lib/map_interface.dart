@@ -6,14 +6,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'page.dart';
 
-class Foo {
-  static String bar = "";
-}
-
-extension Baz on Foo {
-  static int foobar = 0;
-}
-
 class MapInterfacePage extends ExamplePage {
   MapInterfacePage() : super(const Icon(Icons.map), 'MapInterface');
 

@@ -559,7 +559,6 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     content: FLTMapInterfaces.ImageContent?,
     result: FLTMapInterfaces.Result<Void>
   ) {
-    Log.d("foooo", "fooo adding an image")
     var bitmap = BitmapFactory.decodeByteArray(
       image.data,
       0,
