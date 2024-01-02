@@ -76,41 +76,41 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         return mapOptions
     }
 
-    private func createCameraOptions(args: [String: Any]) -> CameraOptions {
-        var cameraOptions = CameraOptions()
-        if let cameraOptionsMap = args["cameraOptions"] as? [Any] {
-            var center: CLLocationCoordinate2D?
-            var padding: UIEdgeInsets?
-            var anchor: CGPoint?
-            let zoom: CGFloat? =  cameraOptionsMap[3] as? CGFloat
-            let bearing: CLLocationDirection? =  cameraOptionsMap[4] as? CLLocationDirection
-            let pitch: CGFloat? =  cameraOptionsMap[5] as? CGFloat
-
-            if let centerMap = cameraOptionsMap[0] as? [String: Any] {
-                center = convertDictionaryToCLLocationCoordinate2D(dict: centerMap)
-            }
-
-            if let paddingMap = cameraOptionsMap[1] as? [CGFloat] {
-                padding = UIEdgeInsets(
-                    top: paddingMap[0],
-                    left: paddingMap[1],
-                    bottom: paddingMap[2],
-                    right: paddingMap[3]
-                )
-            }
-
-            if let anchorMap = cameraOptionsMap[2] as? [CGFloat] {
-                anchor = CGPoint(x: anchorMap[0], y: anchorMap[1])
-            }
-
-            cameraOptions = CameraOptions(center: center,
-                                          padding: padding,
-                                          anchor: anchor,
-                                          zoom: zoom,
-                                          bearing: bearing,
-                                          pitch: pitch)
+    private func createCameraOptions(args: [String: Any]) -> CameraOptions? {
+        guard let cameraOptionsMap = args["cameraOptions"] as? [Any] else {
+            return nil
         }
-        return cameraOptions
+
+        var center: CLLocationCoordinate2D?
+        var padding: UIEdgeInsets?
+        var anchor: CGPoint?
+        let zoom: CGFloat? =  cameraOptionsMap[3] as? CGFloat
+        let bearing: CLLocationDirection? =  cameraOptionsMap[4] as? CLLocationDirection
+        let pitch: CGFloat? =  cameraOptionsMap[5] as? CGFloat
+
+        if let centerMap = cameraOptionsMap[0] as? [String: Any] {
+            center = convertDictionaryToCLLocationCoordinate2D(dict: centerMap)
+        }
+
+        if let paddingMap = cameraOptionsMap[1] as? [CGFloat] {
+            padding = UIEdgeInsets(
+                top: paddingMap[0],
+                left: paddingMap[1],
+                bottom: paddingMap[2],
+                right: paddingMap[3]
+            )
+        }
+
+        if let anchorMap = cameraOptionsMap[2] as? [CGFloat] {
+            anchor = CGPoint(x: anchorMap[0], y: anchorMap[1])
+        }
+
+        return CameraOptions(center: center,
+                             padding: padding,
+                             anchor: anchor,
+                             zoom: zoom,
+                             bearing: bearing,
+                             pitch: pitch)
     }
 
     func create(

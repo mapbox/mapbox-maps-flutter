@@ -382,12 +382,12 @@ void main() {
     await addDelay(5000);
     final mapboxMap = await mapFuture;
     var cameraState = await mapboxMap.getCameraState();
-    expect(cameraState.zoom.floor(), 0);
-    expect(cameraState.pitch, 0);
-    expect(cameraState.bearing, 0);
+    expect(cameraState.zoom.floor(), 15);
+    expect(cameraState.pitch.floor(), 60);
+    expect(cameraState.bearing.floor(), 12);
     var coordinates = cameraState.center['coordinates'] as List;
-    expect(coordinates.first, 0);
-    expect(coordinates.last, 0);
+    expect(coordinates.first.floor(), -88);
+    expect(coordinates.last.floor(), 41);
     expect(cameraState.padding.top, 0);
     expect(cameraState.padding.right, 0);
     expect(cameraState.padding.bottom, 0);

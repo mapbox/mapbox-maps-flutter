@@ -11,6 +11,7 @@ import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
+import io.flutter.Log
 import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.util.HashMap
@@ -18,7 +19,7 @@ import java.util.Locale
 
 class StyleController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
-    result.success(mapboxMap.style?.styleURI)
+    result.success(mapboxMap.style?.styleURI ?: "")
   }
 
   override fun setStyleURI(uri: String, result: FLTMapInterfaces.Result<Void>) {
@@ -28,7 +29,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleJSON(result: FLTMapInterfaces.Result<String>) {
-    result.success(mapboxMap.style?.styleJSON)
+    result.success(mapboxMap.style?.styleJSON ?: "")
   }
 
   override fun setStyleJSON(json: String, result: FLTMapInterfaces.Result<Void>) {
@@ -340,7 +341,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (bitmap.config != Bitmap.Config.ARGB_8888) {
       bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
     }
-    val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
+    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
 
     val expected = mapboxMap.updateStyleImageSourceImage(
@@ -471,11 +472,13 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     result: FLTMapInterfaces.Result<FLTMapInterfaces.MbxImage>
   ) {
     mapboxMap.getStyleImage(imageId)?.let { image ->
+      val byteArray = ByteArray(image.data.buffer.capacity())
+      image.data.buffer.get(byteArray)
       result.success(
         FLTMapInterfaces.MbxImage.Builder()
           .setWidth(image.width.toLong())
           .setHeight(image.height.toLong())
-          .setData(image.data.buffer.array())
+          .setData(byteArray)
           .build()
       )
     }
@@ -556,6 +559,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     content: FLTMapInterfaces.ImageContent?,
     result: FLTMapInterfaces.Result<Void>
   ) {
+    Log.d("foooo", "fooo adding an image")
     var bitmap = BitmapFactory.decodeByteArray(
       image.data,
       0,
@@ -564,7 +568,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (bitmap.config != Bitmap.Config.ARGB_8888) {
       bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
     }
-    val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
+    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
     val expected = mapboxMap.addStyleImage(
       imageId, scale.toFloat(),

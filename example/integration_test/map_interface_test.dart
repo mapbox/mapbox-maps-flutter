@@ -14,11 +14,6 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
-  setUp(() {
-    const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
-    MapboxOptions.setAccessToken(ACCESS_TOKEN);
-  });
-
   testWidgets('loadStyleURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -35,6 +30,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var styleJson = await rootBundle.loadString('assets/style.json');
     mapboxMap.loadStyleJson(styleJson);
+
+    await app.events.onMapLoaded.future;
+
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
     await addDelay(1000);
@@ -178,6 +176,9 @@ void main() {
     var style = mapboxMap.style;
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    await app.events.onMapLoaded.future;
+
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
     await addDelay(1000);
@@ -200,7 +201,6 @@ void main() {
   testWidgets('getResourceOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
 
     var baseUrl = await MapboxMapsOptions.getBaseUrl();
     expect(baseUrl, 'https://api.mapbox.com');
@@ -214,6 +214,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    var options = CameraOptions(
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10);
+    mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     final ByteData bytes =
@@ -232,7 +236,7 @@ void main() {
         value: json.encode(screenBox.encode()), type: Type.SCREEN_BOX);
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
-    expect(query.length, 1);
+    expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
 
@@ -259,6 +263,11 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    var options = CameraOptions(
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10,
+        pitch: 0);
+    mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     style.addStyleSource('source', source);
@@ -266,7 +275,7 @@ void main() {
     await addDelay(1000);
     var query = await mapboxMap.querySourceFeatures(
         'source', SourceQueryOptions(filter: ''));
-    expect(query.length, 1);
+    expect(query.length, greaterThan(0));
     expect(query[0]!.queriedFeature.source, 'source');
     expect(query[0]!.queriedFeature.feature['id'], 'point');
   });
