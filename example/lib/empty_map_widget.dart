@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-var onMapLoaded = Completer();
+class Events {
+  var onMapLoaded = Completer();
 
-void resetOnMapLoaded() {
-  onMapLoaded = Completer();
+  void resetOnMapLoaded() {
+    onMapLoaded = Completer();
+  }
 }
+
+var events = Events();
 
 Future<MapboxMap> main() {
   final completer = Completer<MapboxMap>();
@@ -15,7 +19,7 @@ Future<MapboxMap> main() {
   const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
-  resetOnMapLoaded();
+  events = Events();
   runApp(MaterialApp(
       home: MapWidget(
     key: ValueKey("mapWidget"),
@@ -23,8 +27,8 @@ Future<MapboxMap> main() {
       completer.complete(mapboxMap);
     },
     onMapLoadedListener: (MapLoadedEventData data) {
-      if (!onMapLoaded.isCompleted) {
-        onMapLoaded.complete();
+      if (!events.onMapLoaded.isCompleted) {
+        events.onMapLoaded.complete();
       }
     },
   )));

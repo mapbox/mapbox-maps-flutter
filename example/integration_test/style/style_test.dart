@@ -22,12 +22,12 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     await expectLater(style.getStyleURI(), completion(MapboxStyles.STANDARD));
     style.setStyleURI(MapboxStyles.DARK);
-    app.resetOnMapLoaded();
-    await app.onMapLoaded.future;
+    app.events.resetOnMapLoaded();
+    await app.events.onMapLoaded.future;
     await expectLater(style.getStyleURI(), completion(MapboxStyles.DARK));
   });
 
@@ -38,7 +38,7 @@ void main() {
     var style = mapboxMap.style;
     var styleJson = await rootBundle.loadString('assets/style.json');
     style.setStyleJSON(styleJson);
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
     await expectLater(style.getStyleJSON(), completion(styleJson));
   });
 
@@ -272,7 +272,7 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     await style.setLights(
         AmbientLight(
@@ -392,7 +392,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     await mapboxMap.style.setProjection(
       StyleProjection(name: StyleProjectionName.mercator),

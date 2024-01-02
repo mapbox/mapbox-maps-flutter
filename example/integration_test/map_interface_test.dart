@@ -31,7 +31,7 @@ void main() {
     var styleJson = await rootBundle.loadString('assets/style.json');
     mapboxMap.loadStyleJson(styleJson);
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
@@ -177,7 +177,7 @@ void main() {
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);

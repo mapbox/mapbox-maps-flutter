@@ -22,7 +22,7 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
 
-    await app.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
     await mapboxMap.style.addSource(GeoJsonSource(
       id: "source",
