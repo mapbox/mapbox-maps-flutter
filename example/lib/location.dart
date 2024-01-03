@@ -30,7 +30,7 @@ class LocationPageBodyState extends State<LocationPageBody> {
   int _accuracyColor = 0;
   int _pulsingColor = 0;
   int _accuracyBorderColor = 0;
-  double _puckScale = 1.0;
+  double _puckScale = 10.0;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -196,8 +196,8 @@ class LocationPageBodyState extends State<LocationPageBody> {
       child: Text('scale 3d puck'),
       onPressed: () {
         _puckScale /= 2;
-        if (_puckScale < 0.1) {
-          _puckScale = 1.0;
+        if (_puckScale < 1) {
+          _puckScale = 10.0;
         }
         print("Scale : $_puckScale");
         mapboxMap?.location.updateSettings(LocationComponentSettings(
