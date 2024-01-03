@@ -84,6 +84,11 @@ class EventTimeInterval {
   EventTimeInterval.fromJson(Map<String, dynamic> json)
       : begin = DateTime.fromMicrosecondsSinceEpoch(json['begin']),
         end = DateTime.fromMicrosecondsSinceEpoch(json['end']);
+
+  @override
+  String toString() {
+    return "EventTimeInterval begin: $begin, end: $end";
+  }
 }
 
 /// The class for camera-changed event in Observer
