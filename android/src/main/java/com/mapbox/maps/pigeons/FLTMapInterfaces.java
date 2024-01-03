@@ -249,16 +249,20 @@ public class FLTMapInterfaces {
 
   /** Describes the reason for an offline request response error. */
   public enum ResponseErrorReason {
+    /** No error occurred during the resource request. */
+    SUCCESS(0),
     /** The resource is not found. */
-    NOT_FOUND(0),
+    NOT_FOUND(1),
     /** The server error. */
-    SERVER(1),
+    SERVER(2),
     /** The connection error. */
-    CONNECTION(2),
+    CONNECTION(3),
     /** The error happened because of a rate limit. */
-    RATE_LIMIT(3),
+    RATE_LIMIT(4),
+    /** The resource cannot be loaded because the device is in offline mode. */
+    IN_OFFLINE_MODE(5),
     /** Other reason. */
-    OTHER(4);
+    OTHER(6);
 
     final int index;
 
@@ -4696,13 +4700,13 @@ public class FLTMapInterfaces {
    */
   public static final class StylePropertyValue {
     /** The property value. */
-    private @NonNull String value;
+    private @NonNull Object value;
 
-    public @NonNull String getValue() {
+    public @NonNull Object getValue() {
       return value;
     }
 
-    public void setValue(@NonNull String setterArg) {
+    public void setValue(@NonNull Object setterArg) {
       if (setterArg == null) {
         throw new IllegalStateException("Nonnull field \"value\" is null.");
       }
@@ -4728,9 +4732,9 @@ public class FLTMapInterfaces {
 
     public static final class Builder {
 
-      private @Nullable String value;
+      private @Nullable Object value;
 
-      public @NonNull Builder setValue(@NonNull String setterArg) {
+      public @NonNull Builder setValue(@NonNull Object setterArg) {
         this.value = setterArg;
         return this;
       }
@@ -4761,7 +4765,7 @@ public class FLTMapInterfaces {
     static @NonNull StylePropertyValue fromList(@NonNull ArrayList<Object> list) {
       StylePropertyValue pigeonResult = new StylePropertyValue();
       Object value = list.get(0);
-      pigeonResult.setValue((String) value);
+      pigeonResult.setValue(value);
       Object kind = list.get(1);
       pigeonResult.setKind(StylePropertyValueKind.values()[(int) kind]);
       return pigeonResult;

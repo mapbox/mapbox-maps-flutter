@@ -248,6 +248,16 @@ extension TransitionOptions {
     }
 }
 
+extension StyleTransition {
+    func toFLTTransitionOptions() -> FLTTransitionOptions {
+        return FLTTransitionOptions.make(
+            withDuration: NSNumber(value: duration),
+            delay: NSNumber(value: delay),
+            enablePlacementTransitions: nil
+        )
+    }
+}
+
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
@@ -255,7 +265,14 @@ extension StylePropertyValue {
             let valueData = try? JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted])
             return FLTStylePropertyValue.make(withValue: String(data: valueData!, encoding: .utf8)!, kind: data)
         } else {
-            return FLTStylePropertyValue.make(withValue: String(describing: self.value), kind: data)
+            let convertedValue: Any
+            switch value {
+            case is [AnyHashable: Any], is [Any], is NSNumber:
+                convertedValue = value
+            default:
+                convertedValue = String(describing: value)
+            }
+            return FLTStylePropertyValue.make(withValue: convertedValue, kind: data)
         }
     }
 }

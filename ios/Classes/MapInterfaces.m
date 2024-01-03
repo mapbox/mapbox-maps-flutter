@@ -1740,7 +1740,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 @end
 
 @implementation FLTStylePropertyValue
-+ (instancetype)makeWithValue:(NSString *)value
++ (instancetype)makeWithValue:(id )value
     kind:(FLTStylePropertyValueKind)kind {
   FLTStylePropertyValue* pigeonResult = [[FLTStylePropertyValue alloc] init];
   pigeonResult.value = value;
