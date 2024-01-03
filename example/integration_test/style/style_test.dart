@@ -254,6 +254,74 @@ void main() {
 
     await app.events.onMapLoaded.future;
 
+  await style.setLights(AmbientLight(id: "ambient-light-id"), DirectionalLight(id: "directional-light-id"));
+
+    await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
+    await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
+
+    var intensity =
+        await style.getStyleLightProperty('directional-light-id', 'intensity');
+    expect(intensity.value, isNotNull);
+    expect(intensity.value, closeTo(0.4, 0.00001));
+
+    var color = await style.getStyleLightProperty('ambient-light-id', 'color');
+    expect(color.value, Colors.white.toRGBAList());
+  });
+
+  testWidgets('Flat Light', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    final flatLight = FlatLight(
+        id: "flat-light-id",
+        anchor: Anchor.MAP,
+        color: Colors.red.value,
+        colorTransition: TransitionOptions(duration: 300, delay: 200),
+        intensity: 3,
+        intensityTransition: TransitionOptions(duration: 100, delay: 50),
+        position: [1, 2, 3],
+        positionTransition: TransitionOptions(duration: 10, delay: 5));
+    await style.setLight(flatLight);
+
+    // TODO: use the correct light identifier once Maps SDK v11.1.0 is adopted
+    expect(
+        (await style.getStyleLightProperty("", "color")).value,
+        listCloseTo(Colors.red.toRGBAList(), 0.0001));
+    expect(
+        (await style.getStyleLightProperty(
+            "", "color-transition"))
+            .value,
+        flatLight.colorTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("", "intensity"))
+            .value,
+        3);
+    expect(
+        (await style.getStyleLightProperty(
+            "", "intensity-transition"))
+            .value,
+        flatLight.intensityTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("", "position"))
+            .value,
+        [1, 2, 3]);
+    expect(
+        (await style.getStyleLightProperty(
+            "", "position-transition"))
+            .value,
+        flatLight.positionTransition?.toJSON());
+  });
+
+  testWidgets('3D Lights', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    await app.events.onMapLoaded.future;
+
     final ambientLight = AmbientLight(
         id: 'ambient-light-id',
         color: Colors.blue.value,
@@ -333,17 +401,6 @@ void main() {
                 "ambient-light-id", "intensity-transition"))
             .value,
         ambientLight.intensityTransition?.toJSON());
-
-    await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
-    await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
-
-    var intensity =
-        await style.getStyleLightProperty('directional-light-id', 'intensity');
-    expect(intensity.value, isNotNull);
-    expect(intensity.value, closeTo(0.4, 0.00001));
-
-    var color = await style.getStyleLightProperty('ambient-light-id', 'color');
-    expect(color.value, Colors.white.toRGBAList());
   });
 
   testWidgets('StyleTerrain', (WidgetTester tester) async {

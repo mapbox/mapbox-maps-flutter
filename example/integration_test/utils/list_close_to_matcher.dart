@@ -1,22 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:collection/collection.dart';
 
-Matcher listCloseTo(List<dynamic> value, num delta) =>
+Matcher listCloseTo(List<dynamic>? value, num delta) =>
     _IsListCloseTo(value, delta);
 
 class _IsListCloseTo extends Matcher {
-  final List<dynamic> _value;
+  final List<dynamic>? _value;
   final num _delta;
 
   const _IsListCloseTo(this._value, this._delta);
 
   @override
   bool matches(dynamic list, Map<dynamic, dynamic> matchState) {
-    if (_value.length != list.length) {
+    if (_value == null || list == null) {
       return false;
     }
-    for (var i = 0; i < _value.length; i++) {
-      final expected = _value[i];
+    if (_value!.length != list.length) {
+      return false;
+    }
+    for (var i = 0; i < _value!.length; i++) {
+      final expected = _value![i];
       final actual = list[i];
       if (expected is num && actual is num) {
         final pairIsCloseTo = closeTo(expected, _delta).matches(actual, {});
