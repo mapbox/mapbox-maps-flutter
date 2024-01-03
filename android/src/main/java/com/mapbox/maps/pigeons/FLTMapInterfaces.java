@@ -4700,16 +4700,13 @@ public class FLTMapInterfaces {
    */
   public static final class StylePropertyValue {
     /** The property value. */
-    private @NonNull Object value;
+    private @Nullable Object value;
 
-    public @NonNull Object getValue() {
+    public @Nullable Object getValue() {
       return value;
     }
 
-    public void setValue(@NonNull Object setterArg) {
-      if (setterArg == null) {
-        throw new IllegalStateException("Nonnull field \"value\" is null.");
-      }
+    public void setValue(@Nullable Object setterArg) {
       this.value = setterArg;
     }
 
@@ -4734,7 +4731,7 @@ public class FLTMapInterfaces {
 
       private @Nullable Object value;
 
-      public @NonNull Builder setValue(@NonNull Object setterArg) {
+      public @NonNull Builder setValue(@Nullable Object setterArg) {
         this.value = setterArg;
         return this;
       }

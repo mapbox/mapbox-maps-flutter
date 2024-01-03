@@ -11,7 +11,6 @@ import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
-import org.json.JSONObject
 import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.util.HashMap
@@ -650,11 +649,7 @@ fun Any.toValue(): Value {
   }
 }
 
-fun Value.toFLTValue(): Any {
-  if (contents == null) {
-    return JSONObject.NULL
-  }
-
+fun Value.toFLTValue(): Any? {
   return when (contents) {
     is List<*> -> {
       (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
@@ -665,7 +660,7 @@ fun Value.toFLTValue(): Any {
         .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
     }
     else -> {
-      contents!!
+      contents
     }
   }
 }

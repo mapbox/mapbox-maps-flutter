@@ -1740,7 +1740,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 @end
 
 @implementation FLTStylePropertyValue
-+ (instancetype)makeWithValue:(id )value
++ (instancetype)makeWithValue:(nullable id )value
     kind:(FLTStylePropertyValueKind)kind {
   FLTStylePropertyValue* pigeonResult = [[FLTStylePropertyValue alloc] init];
   pigeonResult.value = value;
@@ -1750,7 +1750,6 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 + (FLTStylePropertyValue *)fromList:(NSArray *)list {
   FLTStylePropertyValue *pigeonResult = [[FLTStylePropertyValue alloc] init];
   pigeonResult.value = GetNullableObjectAtIndex(list, 0);
-  NSAssert(pigeonResult.value != nil, @"");
   pigeonResult.kind = [GetNullableObjectAtIndex(list, 1) integerValue];
   return pigeonResult;
 }

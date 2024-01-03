@@ -1154,10 +1154,10 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @interface FLTStylePropertyValue : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithValue:(id )value
++ (instancetype)makeWithValue:(nullable id )value
     kind:(FLTStylePropertyValueKind)kind;
 /// The property value.
-@property(nonatomic, strong) id  value;
+@property(nonatomic, strong, nullable) id  value;
 /// The kind of the property value.
 @property(nonatomic, assign) FLTStylePropertyValueKind kind;
 @end

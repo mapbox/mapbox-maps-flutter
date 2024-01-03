@@ -41,7 +41,7 @@ class GeoJsonSource extends Source {
   /// A URL to a GeoJSON file, or inline GeoJSON.
   Future<String?> get data async {
     return _style?.getStyleSourceProperty(id, "data").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return value.value as String;
       } else {
         return null;
@@ -54,7 +54,7 @@ class GeoJsonSource extends Source {
   /// Maximum zoom level at which to create vector tiles (higher means greater detail at high zoom levels).
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;
@@ -67,7 +67,7 @@ class GeoJsonSource extends Source {
   /// Contains an attribution to be displayed when the map is shown to a user.
   Future<String?> get attribution async {
     return _style?.getStyleSourceProperty(id, "attribution").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return value.value as String;
       } else {
         return null;
@@ -80,7 +80,7 @@ class GeoJsonSource extends Source {
   /// Size of the tile buffer on each side. A value of 0 produces no buffer. A value of 512 produces a buffer as wide as the tile itself. Larger values produce fewer rendering artifacts near tile edges and slower performance.
   Future<double?> get buffer async {
     return _style?.getStyleSourceProperty(id, "buffer").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;
@@ -93,7 +93,7 @@ class GeoJsonSource extends Source {
   /// Douglas-Peucker simplification tolerance (higher means simpler geometries and faster performance).
   Future<double?> get tolerance async {
     return _style?.getStyleSourceProperty(id, "tolerance").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;
@@ -110,7 +110,7 @@ class GeoJsonSource extends Source {
   ///  * `point_count_abbreviated` An abbreviated point count
   Future<bool?> get cluster async {
     return _style?.getStyleSourceProperty(id, "cluster").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return value.value as bool;
       } else {
         return null;
@@ -123,7 +123,7 @@ class GeoJsonSource extends Source {
   /// Radius of each cluster if clustering is enabled. A value of 512 indicates a radius equal to the width of a tile.
   Future<double?> get clusterRadius async {
     return _style?.getStyleSourceProperty(id, "clusterRadius").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;
@@ -136,7 +136,7 @@ class GeoJsonSource extends Source {
   /// Max zoom on which to cluster points if clustering is enabled. Defaults to one zoom less than maxzoom (so that last zoom features are not clustered). Clusters are re-evaluated at integer zoom levels so setting clusterMaxZoom to 14 means the clusters will be displayed until z15.
   Future<double?> get clusterMaxZoom async {
     return _style?.getStyleSourceProperty(id, "clusterMaxZoom").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;
@@ -156,7 +156,7 @@ class GeoJsonSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "clusterProperties")
         .then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return Map<String, dynamic>.from(value.value as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
         ;
@@ -171,7 +171,7 @@ class GeoJsonSource extends Source {
   /// Whether to calculate line distance metrics. This is required for line layers that specify `line-gradient` values.
   Future<bool?> get lineMetrics async {
     return _style?.getStyleSourceProperty(id, "lineMetrics").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return value.value as bool;
       } else {
         return null;
@@ -184,7 +184,7 @@ class GeoJsonSource extends Source {
   /// Whether to generate ids for the geojson features. When enabled, the `feature.id` property will be auto assigned based on its index in the `features` array, over-writing any previous values.
   Future<bool?> get generateId async {
     return _style?.getStyleSourceProperty(id, "generateId").then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return value.value as bool;
       } else {
         return null;
@@ -199,7 +199,7 @@ class GeoJsonSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
-      if (value.value != '<null>') {
+      if (value.value != null) {
         return (value.value as num).toDouble();
       } else {
         return null;

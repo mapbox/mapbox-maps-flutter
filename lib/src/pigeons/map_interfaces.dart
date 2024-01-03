@@ -1875,12 +1875,12 @@ class CanonicalTileID {
 /// Holds a style property value with meta data.
 class StylePropertyValue {
   StylePropertyValue({
-    required this.value,
+    this.value,
     required this.kind,
   });
 
   /// The property value.
-  Object value;
+  Object? value;
 
   /// The kind of the property value.
   StylePropertyValueKind kind;
@@ -1895,7 +1895,7 @@ class StylePropertyValue {
   static StylePropertyValue decode(Object result) {
     result as List<Object?>;
     return StylePropertyValue(
-      value: result[0]!,
+      value: result[0],
       kind: StylePropertyValueKind.values[result[1]! as int],
     );
   }

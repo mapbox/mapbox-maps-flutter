@@ -261,10 +261,12 @@ extension StyleTransition {
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
-        let convertedValue: Any
+        let convertedValue: Any?
         switch value {
         case is [AnyHashable: Any], is [Any], is NSNumber:
             convertedValue = value
+        case is NSNull:
+            convertedValue = nil
         default:
             convertedValue = String(describing: value)
         }
