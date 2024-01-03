@@ -42,7 +42,7 @@ class GeoJsonSource extends Source {
   Future<String?> get data async {
     return _style?.getStyleSourceProperty(id, "data").then((value) {
       if (value.value != '<null>') {
-        return value.value;
+        return value.value as String;
       } else {
         return null;
       }
@@ -55,7 +55,7 @@ class GeoJsonSource extends Source {
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -68,7 +68,7 @@ class GeoJsonSource extends Source {
   Future<String?> get attribution async {
     return _style?.getStyleSourceProperty(id, "attribution").then((value) {
       if (value.value != '<null>') {
-        return value.value;
+        return value.value as String;
       } else {
         return null;
       }
@@ -81,7 +81,7 @@ class GeoJsonSource extends Source {
   Future<double?> get buffer async {
     return _style?.getStyleSourceProperty(id, "buffer").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -94,7 +94,7 @@ class GeoJsonSource extends Source {
   Future<double?> get tolerance async {
     return _style?.getStyleSourceProperty(id, "tolerance").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -111,11 +111,7 @@ class GeoJsonSource extends Source {
   Future<bool?> get cluster async {
     return _style?.getStyleSourceProperty(id, "cluster").then((value) {
       if (value.value != '<null>') {
-        if (Platform.isIOS) {
-          return value.value.toLowerCase() == '1';
-        } else {
-          return value.value.toLowerCase() == 'true';
-        }
+        return value.value as bool;
       } else {
         return null;
       }
@@ -128,7 +124,7 @@ class GeoJsonSource extends Source {
   Future<double?> get clusterRadius async {
     return _style?.getStyleSourceProperty(id, "clusterRadius").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -141,7 +137,7 @@ class GeoJsonSource extends Source {
   Future<double?> get clusterMaxZoom async {
     return _style?.getStyleSourceProperty(id, "clusterMaxZoom").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -161,7 +157,9 @@ class GeoJsonSource extends Source {
         ?.getStyleSourceProperty(id, "clusterProperties")
         .then((value) {
       if (value.value != '<null>') {
-        return json.decode(value.value);
+        return Map<String, dynamic>.from(value.value as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+        ;
       } else {
         return null;
       }
@@ -174,11 +172,7 @@ class GeoJsonSource extends Source {
   Future<bool?> get lineMetrics async {
     return _style?.getStyleSourceProperty(id, "lineMetrics").then((value) {
       if (value.value != '<null>') {
-        if (Platform.isIOS) {
-          return value.value.toLowerCase() == '1';
-        } else {
-          return value.value.toLowerCase() == 'true';
-        }
+        return value.value as bool;
       } else {
         return null;
       }
@@ -191,11 +185,7 @@ class GeoJsonSource extends Source {
   Future<bool?> get generateId async {
     return _style?.getStyleSourceProperty(id, "generateId").then((value) {
       if (value.value != '<null>') {
-        if (Platform.isIOS) {
-          return value.value.toLowerCase() == '1';
-        } else {
-          return value.value.toLowerCase() == 'true';
-        }
+        return value.value as bool;
       } else {
         return null;
       }
@@ -210,7 +200,7 @@ class GeoJsonSource extends Source {
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }

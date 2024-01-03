@@ -11,7 +11,6 @@ import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
-import io.flutter.Log
 import org.json.JSONObject
 import java.lang.RuntimeException
 import java.nio.ByteBuffer
@@ -278,12 +277,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     val styleLayerProperty = mapboxMap.getStyleSourceProperty(sourceId, property)
     val stylePropertyValueKind =
       FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
-    val value =
-      if (property == "tiles" || property == "bounds" || property == "clusterProperties") {
-        styleLayerProperty.value.toJson()
-      } else {
-        styleLayerProperty.value.toFLTValue()
-      }
+    val value = styleLayerProperty.value.toFLTValue()
     val stylePropertyValue =
       FLTMapInterfaces.StylePropertyValue.Builder()
         .setValue(value)

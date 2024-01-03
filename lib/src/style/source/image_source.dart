@@ -24,7 +24,7 @@ class ImageSource extends Source {
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
       if (value.value != '<null>') {
-        return value.value;
+        return value.value as String;
       } else {
         return null;
       }
@@ -37,7 +37,8 @@ class ImageSource extends Source {
   Future<List<List<double?>?>?> get coordinates async {
     return _style?.getStyleSourceProperty(id, "coordinates").then((value) {
       if (value.value != '<null>') {
-        return (json.decode(value.value) as List).cast<List<double>>();
+        return List<List<double>>.from((value.value as List<dynamic>)
+            .map((e) => List<double>.from(e as List<dynamic>)));
       } else {
         return null;
       }
@@ -52,7 +53,7 @@ class ImageSource extends Source {
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return (value.value as num).toDouble();
       } else {
         return null;
       }

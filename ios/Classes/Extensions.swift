@@ -261,19 +261,14 @@ extension StyleTransition {
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
-        if property == "tiles" || property == "bounds" || property == "clusterProperties" {
-            let valueData = try? JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted])
-            return FLTStylePropertyValue.make(withValue: String(data: valueData!, encoding: .utf8)!, kind: data)
-        } else {
-            let convertedValue: Any
-            switch value {
-            case is [AnyHashable: Any], is [Any], is NSNumber:
-                convertedValue = value
-            default:
-                convertedValue = String(describing: value)
-            }
-            return FLTStylePropertyValue.make(withValue: convertedValue, kind: data)
+        let convertedValue: Any
+        switch value {
+        case is [AnyHashable: Any], is [Any], is NSNumber:
+            convertedValue = value
+        default:
+            convertedValue = String(describing: value)
         }
+        return FLTStylePropertyValue.make(withValue: convertedValue, kind: data)
     }
 }
 

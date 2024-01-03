@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:collection/collection.dart';
 
-Matcher listCloseTo(List<dynamic> value, num delta) => _IsListCloseTo(value, delta);
+Matcher listCloseTo(List<dynamic> value, num delta) =>
+    _IsListCloseTo(value, delta);
 
 class _IsListCloseTo extends Matcher {
   final List<dynamic> _value;
