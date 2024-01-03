@@ -4,13 +4,20 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
+import com.google.gson.TypeAdapter
+import com.google.gson.TypeAdapterFactory
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import com.mapbox.common.*
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.observable.model.RenderMode
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTSettings
@@ -50,7 +57,10 @@ class MapboxMapController(
   private val compassController = CompassController(mapView)
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
-  private val gson = GsonBuilder().registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter).create()
+  private val gson = GsonBuilder()
+    .registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter)
+    .registerTypeAdapterFactory(EnumOrdinalTypeAdapterFactory)
+    .create()
   init {
     changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
@@ -210,5 +220,24 @@ object MicrosecondsDateTypeAdapter : JsonSerializer<Date> {
     context: JsonSerializationContext?
   ): JsonElement {
     return JsonPrimitive(src.time * 1000)
+  }
+}
+
+class EnumOrdinalTypeAdapter<T>() : TypeAdapter<T>() {
+  override fun write(out: JsonWriter?, value: T) {
+    out?.value((value as Enum<*>).ordinal)
+  }
+  override fun read(`in`: JsonReader?): T {
+    throw NotImplementedError("Not supported")
+  }
+}
+
+object EnumOrdinalTypeAdapterFactory: TypeAdapterFactory {
+  override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
+    if (type == null || !type.rawType.isEnum) {
+      return null
+    }
+
+    return EnumOrdinalTypeAdapter()
   }
 }
