@@ -11,13 +11,13 @@ import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces
-import io.flutter.Log
 import java.lang.RuntimeException
 import java.nio.ByteBuffer
 import java.util.HashMap
 import java.util.Locale
 
-class StyleController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces.StyleManager {
+class StyleController(private val mapboxMap: MapboxMap, private val context: Context) :
+  FLTMapInterfaces.StyleManager {
   override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
     result.success(mapboxMap.style?.styleURI ?: "")
   }
@@ -210,7 +210,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
       FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
     val stylePropertyValue =
       FLTMapInterfaces.StylePropertyValue.Builder()
-        .setValue(styleLayerProperty.value.toString())
+        .setValue(styleLayerProperty.value.toFLTValue())
         .setKind(stylePropertyValueKind).build()
     result.success(stylePropertyValue)
   }
@@ -276,11 +276,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     val styleLayerProperty = mapboxMap.getStyleSourceProperty(sourceId, property)
     val stylePropertyValueKind =
       FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
-    val value = if (property == "tiles" || property == "bounds" || property == "clusterProperties") {
-      styleLayerProperty.value.toJson()
-    } else {
-      styleLayerProperty.value.toString()
-    }
+    val value = styleLayerProperty.value.toFLTValue()
     val stylePropertyValue =
       FLTMapInterfaces.StylePropertyValue.Builder()
         .setValue(value)
@@ -380,7 +376,8 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleLights(): MutableList<FLTMapInterfaces.StyleObjectInfo> {
-    return mapboxMap.style?.getStyleLights()?.map { it.toFLTStyleObjectInfo() }?.toMutableList() ?: mutableListOf()
+    return mapboxMap.style?.getStyleLights()?.map { it.toFLTStyleObjectInfo() }?.toMutableList()
+      ?: mutableListOf()
   }
 
   override fun setLight(flatLight: FLTMapInterfaces.FlatLight) {
@@ -416,14 +413,19 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
           .setKind(
             FLTMapInterfaces.StylePropertyValueKind.values()[styleLightProperty.kind.ordinal]
           )
-          .setValue(styleLightProperty.value.toString()).build()
+          .setValue(styleLightProperty.value.toFLTValue()).build()
       )
     } else {
       result.error(Throwable("No style available"))
     }
   }
 
-  override fun setStyleLightProperty(id: String, property: String, value: Any, result: FLTMapInterfaces.Result<Void>) {
+  override fun setStyleLightProperty(
+    id: String,
+    property: String,
+    value: Any,
+    result: FLTMapInterfaces.Result<Void>
+  ) {
     val expected = mapboxMap.style?.setStyleLightProperty(id, property, value.toValue())
     if (expected?.isError == true) {
       result.error(Throwable(expected.error))
@@ -449,7 +451,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     val stylePropertyValueKind =
       FLTMapInterfaces.StylePropertyValueKind.values()[styleProperty.kind.ordinal]
     val stylePropertyValue =
-      FLTMapInterfaces.StylePropertyValue.Builder().setValue(styleProperty.value.toString())
+      FLTMapInterfaces.StylePropertyValue.Builder().setValue(styleProperty.value.toFLTValue())
         .setKind(stylePropertyValueKind).build()
     result.success(stylePropertyValue)
   }
@@ -559,7 +561,6 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     content: FLTMapInterfaces.ImageContent?,
     result: FLTMapInterfaces.Result<Void>
   ) {
-    Log.d("foooo", "fooo adding an image")
     var bitmap = BitmapFactory.decodeByteArray(
       image.data,
       0,
@@ -645,5 +646,21 @@ fun Any.toValue(): Value {
       "Can not map value, type is not supported: ${this::class.java.canonicalName}"
     )
     Value.valueOf("")
+  }
+}
+
+fun Value.toFLTValue(): Any? {
+  return when (contents) {
+    is List<*> -> {
+      (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
+    }
+    is Map<*, *> -> {
+      (contents as Map<*, *>)
+        .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
+        .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
+    }
+    else -> {
+      contents
+    }
   }
 }

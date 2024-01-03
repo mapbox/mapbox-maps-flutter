@@ -110,6 +110,12 @@ extension FLTTransitionOptions {
             delay: self.delay?.doubleValue,
             enablePlacementTransitions: self.enablePlacementTransitions?.boolValue)
     }
+
+    func toStyleTransition() -> StyleTransition {
+        return StyleTransition(
+            duration: self.duration.map { $0.doubleValue / 1000.0 } ?? 0,
+            delay: self.delay.map { $0.doubleValue / 1000.0 } ?? 0)
+    }
 }
 
 extension FLTMbxEdgeInsets {
@@ -242,15 +248,29 @@ extension TransitionOptions {
     }
 }
 
+extension StyleTransition {
+    func toFLTTransitionOptions() -> FLTTransitionOptions {
+        return FLTTransitionOptions.make(
+            withDuration: NSNumber(value: duration),
+            delay: NSNumber(value: delay),
+            enablePlacementTransitions: nil
+        )
+    }
+}
+
 extension StylePropertyValue {
     func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
         let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
-        if property == "tiles" || property == "bounds" || property == "clusterProperties" {
-            let valueData = try? JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted])
-            return FLTStylePropertyValue.make(withValue: String(data: valueData!, encoding: .utf8)!, kind: data)
-        } else {
-            return FLTStylePropertyValue.make(withValue: String(describing: self.value), kind: data)
+        let convertedValue: Any?
+        switch value {
+        case is [AnyHashable: Any], is [Any], is NSNumber:
+            convertedValue = value
+        case is NSNull:
+            convertedValue = nil
+        default:
+            convertedValue = String(describing: value)
         }
+        return FLTStylePropertyValue.make(withValue: convertedValue, kind: data)
     }
 }
 

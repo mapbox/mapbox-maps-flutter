@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 import 'package:turf/helpers.dart';
+
+import '../utils/list_close_to_matcher.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -141,43 +144,20 @@ void main() {
     style.addStyleLayer(layer, null);
 
     var radius = await style.getStyleLayerProperty('custom', 'circle-radius');
-    expect(double.parse(radius.value), 20.0);
+    expect(radius.value, 20.0);
     var color = await style.getStyleLayerProperty('custom', 'circle-color');
-    if (Platform.isIOS) {
-      expect(
-          color.value,
-          '(\n'
-          '    rgba,\n'
-          '    255,\n'
-          '    "51.00000381469727",\n'
-          '    0,\n'
-          '    1\n'
-          ')');
-    } else {
-      expect(color.value, '[rgba, 255.0, 51.000003814697266, 0.0, 1.0]');
-    }
+    expect(color.value, listCloseTo(Color(0xFFFF3300).toRGBAList(), 0.00001));
+
     var styleLayerProperty =
         await style.getStyleLayerProperty('custom', 'circle-radius');
-    expect(double.parse(styleLayerProperty.value), 20.0);
+    expect(styleLayerProperty.value, 20.0);
     await style.setStyleLayerProperty('custom', 'circle-radius', 1.0);
     await style.setStyleLayerProperty('custom', 'circle-color', 'red');
 
     radius = await style.getStyleLayerProperty('custom', 'circle-radius');
-    expect(double.parse(radius.value), 1.0);
+    expect(radius.value, 1.0);
     color = await style.getStyleLayerProperty('custom', 'circle-color');
-    if (Platform.isIOS) {
-      expect(
-          color.value,
-          '(\n'
-          '    rgba,\n'
-          '    255,\n'
-          '    0,\n'
-          '    0,\n'
-          '    1\n'
-          ')');
-    } else {
-      expect(color.value, '[rgba, 255.0, 0.0, 0.0, 1.0]');
-    }
+    expect(color.value, listCloseTo(Color(0xFFFF0000).toRGBAList(), 0.00001));
   });
 
   testWidgets('StyleLayerProperties', (WidgetTester tester) async {
@@ -274,35 +254,140 @@ void main() {
 
     await app.events.onMapLoaded.future;
 
-    await style.setLights(
-        AmbientLight(
-          id: 'ambient-light-id',
-        ),
-        DirectionalLight(
-          id: 'directional-light-id',
-        ));
+    await style.setLights(AmbientLight(id: "ambient-light-id"),
+        DirectionalLight(id: "directional-light-id"));
+
     await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
     await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
 
     var intensity =
         await style.getStyleLightProperty('directional-light-id', 'intensity');
     expect(intensity.value, isNotNull);
-    expect(double.parse(intensity.value).toStringAsFixed(1), '0.4');
+    expect(intensity.value, closeTo(0.4, 0.00001));
 
     var color = await style.getStyleLightProperty('ambient-light-id', 'color');
-    if (Platform.isIOS) {
-      expect(
-          color.value,
-          '(\n'
-          '    rgba,\n'
-          '    255,\n'
-          '    255,\n'
-          '    255,\n'
-          '    1\n'
-          ')');
-    } else {
-      expect(color.value, '[rgba, 255.0, 255.0, 255.0, 1.0]');
-    }
+    expect(color.value, Colors.white.toRGBAList());
+  });
+
+  testWidgets('Flat Light', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    final flatLight = FlatLight(
+        id: "flat-light-id",
+        anchor: Anchor.MAP,
+        color: Colors.red.value,
+        colorTransition: TransitionOptions(duration: 300, delay: 200),
+        intensity: 3,
+        intensityTransition: TransitionOptions(duration: 100, delay: 50),
+        position: [1, 2, 3],
+        positionTransition: TransitionOptions(duration: 10, delay: 5));
+    await style.setLight(flatLight);
+
+    // TODO: use the correct light identifier once Maps SDK v11.1.0 is adopted
+    expect((await style.getStyleLightProperty("", "color")).value,
+        listCloseTo(Colors.red.toRGBAList(), 0.0001));
+    expect((await style.getStyleLightProperty("", "color-transition")).value,
+        flatLight.colorTransition?.toJSON());
+    expect((await style.getStyleLightProperty("", "intensity")).value, 3);
+    expect(
+        (await style.getStyleLightProperty("", "intensity-transition")).value,
+        flatLight.intensityTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("", "position")).value, [1, 2, 3]);
+    expect((await style.getStyleLightProperty("", "position-transition")).value,
+        flatLight.positionTransition?.toJSON());
+  });
+
+  testWidgets('3D Lights', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    await app.events.onMapLoaded.future;
+
+    final ambientLight = AmbientLight(
+        id: 'ambient-light-id',
+        color: Colors.blue.value,
+        colorTransition: TransitionOptions(duration: 300, delay: 200),
+        intensity: 3,
+        intensityTransition: TransitionOptions(duration: 100, delay: 50));
+    final directionalLight = DirectionalLight(
+        id: 'directional-light-id',
+        castShadows: true,
+        color: Colors.blue.value,
+        colorTransition: TransitionOptions(duration: 300, delay: 200),
+        direction: [1, 2],
+        directionTransition: TransitionOptions(duration: 10, delay: 5),
+        intensity: 3,
+        intensityTransition: TransitionOptions(duration: 100, delay: 50),
+        shadowIntensity: 5,
+        shadowIntensityTransition: TransitionOptions(duration: 1, delay: 3));
+    await style.setLights(ambientLight, directionalLight);
+
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "cast-shadows"))
+            .value,
+        true);
+    expect(
+        (await style.getStyleLightProperty("directional-light-id", "color"))
+            .value,
+        listCloseTo(Colors.blue.toRGBAList(), 0.0001));
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "color-transition"))
+            .value,
+        directionalLight.colorTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("directional-light-id", "direction"))
+            .value,
+        [1, 2]);
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "direction-transition"))
+            .value,
+        directionalLight.directionTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("directional-light-id", "intensity"))
+            .value,
+        3);
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "intensity-transition"))
+            .value,
+        directionalLight.intensityTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "shadow-intensity"))
+            .value,
+        5);
+    expect(
+        (await style.getStyleLightProperty(
+                "directional-light-id", "shadow-intensity-transition"))
+            .value,
+        directionalLight.shadowIntensityTransition?.toJSON());
+
+    expect(
+        (await style.getStyleLightProperty("ambient-light-id", "color")).value,
+        listCloseTo(Colors.blue.toRGBAList(), 0.0001));
+    expect(
+        (await style.getStyleLightProperty(
+                "ambient-light-id", "color-transition"))
+            .value,
+        ambientLight.colorTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("ambient-light-id", "intensity"))
+            .value,
+        3);
+    expect(
+        (await style.getStyleLightProperty(
+                "ambient-light-id", "intensity-transition"))
+            .value,
+        ambientLight.intensityTransition?.toJSON());
   });
 
   testWidgets('StyleTerrain', (WidgetTester tester) async {
@@ -317,11 +402,11 @@ void main() {
     expect(source.value, "mapbox-raster-dem");
 
     var exaggeration = await style.getStyleTerrainProperty('exaggeration');
-    expect(double.parse(exaggeration.value), 2);
+    expect(exaggeration.value, 2);
 
     await style.setStyleTerrainProperty('exaggeration', 3);
     exaggeration = await style.getStyleTerrainProperty('exaggeration');
-    expect(double.parse(exaggeration.value), 3);
+    expect(exaggeration.value, 3);
   });
 
   testWidgets('invalidateStyleCustomGeometrySourceTile',
@@ -401,4 +486,16 @@ void main() {
     expect(projection?.name, StyleProjectionName.mercator);
     await addDelay(1000);
   });
+}
+
+extension ToJSON on TransitionOptions {
+  Map<String, dynamic> toJSON() {
+    return {'duration': duration, 'delay': delay};
+  }
+}
+
+extension ToList on Color {
+  List<dynamic> toRGBAList() {
+    return ['rgba', red, green, blue, alpha / 255.0];
+  }
 }

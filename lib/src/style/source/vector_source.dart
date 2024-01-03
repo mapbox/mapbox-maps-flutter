@@ -43,8 +43,8 @@ class VectorSource extends Source {
   /// A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`.
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
-      if (value.value != '<null>') {
-        return value.value;
+      if (value.value != null) {
+        return value.value as String;
       } else {
         return null;
       }
@@ -56,8 +56,8 @@ class VectorSource extends Source {
   /// An array of one or more tile source URLs, as in the TileJSON spec.
   Future<List<String?>?> get tiles async {
     return _style?.getStyleSourceProperty(id, "tiles").then((value) {
-      if (value.value != '<null>') {
-        return (json.decode(value.value) as List).cast<String>();
+      if (value.value != null) {
+        return (value.value as List<dynamic>).cast();
       } else {
         return null;
       }
@@ -69,15 +69,8 @@ class VectorSource extends Source {
   /// An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
   Future<List<double?>?> get bounds async {
     return _style?.getStyleSourceProperty(id, "bounds").then((value) {
-      if (value.value != '<null>') {
-        if (Platform.isIOS) {
-          return (json.decode(value.value) as List)
-              .cast<int>()
-              .map((e) => e.toDouble())
-              .toList();
-        } else {
-          return (json.decode(value.value) as List).cast<double>();
-        }
+      if (value.value != null) {
+        return (value.value as List<dynamic>).cast();
       } else {
         return null;
       }
@@ -89,9 +82,13 @@ class VectorSource extends Source {
   /// Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed.
   Future<Scheme?> get scheme async {
     return _style?.getStyleSourceProperty(id, "scheme").then((value) {
-      if (value.value != '<null>') {
-        return Scheme.values.firstWhere((e) =>
-            e.toString().split('.').last.toLowerCase().contains(value.value));
+      if (value.value != null) {
+        return Scheme.values.firstWhere((e) => e
+            .toString()
+            .split('.')
+            .last
+            .toLowerCase()
+            .contains(value.value as String));
       } else {
         return null;
       }
@@ -103,8 +100,8 @@ class VectorSource extends Source {
   /// Minimum zoom level for which tiles are available, as in the TileJSON spec.
   Future<double?> get minzoom async {
     return _style?.getStyleSourceProperty(id, "minzoom").then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -116,8 +113,8 @@ class VectorSource extends Source {
   /// Maximum zoom level for which tiles are available, as in the TileJSON spec. Data from tiles at the maxzoom are used when displaying the map at higher zoom levels.
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -129,8 +126,8 @@ class VectorSource extends Source {
   /// Contains an attribution to be displayed when the map is shown to a user.
   Future<String?> get attribution async {
     return _style?.getStyleSourceProperty(id, "attribution").then((value) {
-      if (value.value != '<null>') {
-        return value.value;
+      if (value.value != null) {
+        return value.value as String;
       } else {
         return null;
       }
@@ -142,12 +139,8 @@ class VectorSource extends Source {
   /// A setting to determine whether a source's tiles are cached locally.
   Future<bool?> get volatile async {
     return _style?.getStyleSourceProperty(id, "volatile").then((value) {
-      if (value.value != '<null>') {
-        if (Platform.isIOS) {
-          return value.value.toLowerCase() == '1';
-        } else {
-          return value.value.toLowerCase() == 'true';
-        }
+      if (value.value != null) {
+        return value.value as bool;
       } else {
         return null;
       }
@@ -161,8 +154,8 @@ class VectorSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -176,8 +169,8 @@ class VectorSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "minimum-tile-update-interval")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -191,8 +184,8 @@ class VectorSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "max-overscale-factor-for-parent-tiles")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -206,8 +199,8 @@ class VectorSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "tile-requests-delay")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }
@@ -221,8 +214,8 @@ class VectorSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "tile-network-requests-delay")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }

@@ -188,16 +188,20 @@ typedef NS_ENUM(NSUInteger, FLTStylePackErrorType) {
 
 /// Describes the reason for an offline request response error.
 typedef NS_ENUM(NSUInteger, FLTResponseErrorReason) {
+  /// No error occurred during the resource request.
+  FLTResponseErrorReasonSUCCESS = 0,
   /// The resource is not found.
-  FLTResponseErrorReasonNOT_FOUND = 0,
+  FLTResponseErrorReasonNOT_FOUND = 1,
   /// The server error.
-  FLTResponseErrorReasonSERVER = 1,
+  FLTResponseErrorReasonSERVER = 2,
   /// The connection error.
-  FLTResponseErrorReasonCONNECTION = 2,
+  FLTResponseErrorReasonCONNECTION = 3,
   /// The error happened because of a rate limit.
-  FLTResponseErrorReasonRATE_LIMIT = 3,
+  FLTResponseErrorReasonRATE_LIMIT = 4,
+  /// The resource cannot be loaded because the device is in offline mode.
+  FLTResponseErrorReasonIN_OFFLINE_MODE = 5,
   /// Other reason.
-  FLTResponseErrorReasonOTHER = 4,
+  FLTResponseErrorReasonOTHER = 6,
 };
 
 /// Wrapper for FLTResponseErrorReason to allow for nullability.
@@ -1150,10 +1154,10 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @interface FLTStylePropertyValue : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithValue:(NSString *)value
++ (instancetype)makeWithValue:(nullable id )value
     kind:(FLTStylePropertyValueKind)kind;
 /// The property value.
-@property(nonatomic, copy) NSString * value;
+@property(nonatomic, strong, nullable) id  value;
 /// The kind of the property value.
 @property(nonatomic, assign) FLTStylePropertyValueKind kind;
 @end

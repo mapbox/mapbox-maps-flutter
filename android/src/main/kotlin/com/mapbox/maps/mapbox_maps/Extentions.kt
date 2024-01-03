@@ -352,6 +352,12 @@ fun Number.toDevicePixels(context: Context): Float {
 
 // Android to FLT
 
+fun StyleTransition.toFLTTransitionOptions(): FLTMapInterfaces.TransitionOptions {
+  return FLTMapInterfaces.TransitionOptions.Builder()
+    .setDelay(delay)
+    .setDuration(duration)
+    .build()
+}
 fun ModelScaleMode.toFLTModelScaleMode(): FLTSettings.ModelScaleMode {
   return when (this) {
     ModelScaleMode.VIEWPORT -> FLTSettings.ModelScaleMode.VIEWPORT
