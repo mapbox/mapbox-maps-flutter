@@ -25,7 +25,7 @@ class TileJsonWidgetState extends State<TileJsonWidget> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
-    mapboxMap.style.setStyleJSON("{}}");
+    mapboxMap.style.setStyleJSON("{}");
   }
 
   _onStyleLoaded(StyleLoadedEventData data) async {
