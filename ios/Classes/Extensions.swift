@@ -110,6 +110,12 @@ extension FLTTransitionOptions {
             delay: self.delay?.doubleValue,
             enablePlacementTransitions: self.enablePlacementTransitions?.boolValue)
     }
+
+    func toStyleTransition() -> StyleTransition {
+        return StyleTransition(
+            duration: self.duration.map { $0.doubleValue / 1000.0 } ?? 0,
+            delay: self.delay.map { $0.doubleValue / 1000.0 } ?? 0)
+    }
 }
 
 extension FLTMbxEdgeInsets {

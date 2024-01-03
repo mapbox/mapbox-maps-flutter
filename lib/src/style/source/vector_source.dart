@@ -44,7 +44,7 @@ class VectorSource extends Source {
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
       if (value.value != '<null>') {
-        return value.value;
+        return value.value as String;
       } else {
         return null;
       }
@@ -57,7 +57,7 @@ class VectorSource extends Source {
   Future<List<String?>?> get tiles async {
     return _style?.getStyleSourceProperty(id, "tiles").then((value) {
       if (value.value != '<null>') {
-        return (json.decode(value.value) as List).cast<String>();
+        return (json.decode(value.value as String) as List).cast<String>();
       } else {
         return null;
       }
@@ -71,12 +71,12 @@ class VectorSource extends Source {
     return _style?.getStyleSourceProperty(id, "bounds").then((value) {
       if (value.value != '<null>') {
         if (Platform.isIOS) {
-          return (json.decode(value.value) as List)
+          return (json.decode(value.value as String) as List)
               .cast<int>()
               .map((e) => e.toDouble())
               .toList();
         } else {
-          return (json.decode(value.value) as List).cast<double>();
+          return (json.decode(value.value as String) as List).cast<double>();
         }
       } else {
         return null;
@@ -90,8 +90,12 @@ class VectorSource extends Source {
   Future<Scheme?> get scheme async {
     return _style?.getStyleSourceProperty(id, "scheme").then((value) {
       if (value.value != '<null>') {
-        return Scheme.values.firstWhere((e) =>
-            e.toString().split('.').last.toLowerCase().contains(value.value));
+        return Scheme.values.firstWhere((e) => e
+            .toString()
+            .split('.')
+            .last
+            .toLowerCase()
+            .contains(value.value as String));
       } else {
         return null;
       }
@@ -104,7 +108,7 @@ class VectorSource extends Source {
   Future<double?> get minzoom async {
     return _style?.getStyleSourceProperty(id, "minzoom").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -117,7 +121,7 @@ class VectorSource extends Source {
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -130,7 +134,7 @@ class VectorSource extends Source {
   Future<String?> get attribution async {
     return _style?.getStyleSourceProperty(id, "attribution").then((value) {
       if (value.value != '<null>') {
-        return value.value;
+        return value.value as String;
       } else {
         return null;
       }
@@ -144,9 +148,9 @@ class VectorSource extends Source {
     return _style?.getStyleSourceProperty(id, "volatile").then((value) {
       if (value.value != '<null>') {
         if (Platform.isIOS) {
-          return value.value.toLowerCase() == '1';
+          return (value.value as String).toLowerCase() == '1';
         } else {
-          return value.value.toLowerCase() == 'true';
+          return (value.value as String).toLowerCase() == 'true';
         }
       } else {
         return null;
@@ -162,7 +166,7 @@ class VectorSource extends Source {
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -177,7 +181,7 @@ class VectorSource extends Source {
         ?.getStyleSourceProperty(id, "minimum-tile-update-interval")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -192,7 +196,7 @@ class VectorSource extends Source {
         ?.getStyleSourceProperty(id, "max-overscale-factor-for-parent-tiles")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -207,7 +211,7 @@ class VectorSource extends Source {
         ?.getStyleSourceProperty(id, "tile-requests-delay")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
@@ -222,7 +226,7 @@ class VectorSource extends Source {
         ?.getStyleSourceProperty(id, "tile-network-requests-delay")
         .then((value) {
       if (value.value != '<null>') {
-        return double.parse(value.value);
+        return double.parse(value.value as String);
       } else {
         return null;
       }
