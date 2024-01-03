@@ -254,7 +254,8 @@ void main() {
 
     await app.events.onMapLoaded.future;
 
-  await style.setLights(AmbientLight(id: "ambient-light-id"), DirectionalLight(id: "directional-light-id"));
+    await style.setLights(AmbientLight(id: "ambient-light-id"),
+        DirectionalLight(id: "directional-light-id"));
 
     await style.setStyleLightProperty('ambient-light-id', 'color', 'white');
     await style.setStyleLightProperty('directional-light-id', 'intensity', 0.4);
@@ -286,31 +287,17 @@ void main() {
     await style.setLight(flatLight);
 
     // TODO: use the correct light identifier once Maps SDK v11.1.0 is adopted
-    expect(
-        (await style.getStyleLightProperty("", "color")).value,
+    expect((await style.getStyleLightProperty("", "color")).value,
         listCloseTo(Colors.red.toRGBAList(), 0.0001));
-    expect(
-        (await style.getStyleLightProperty(
-            "", "color-transition"))
-            .value,
+    expect((await style.getStyleLightProperty("", "color-transition")).value,
         flatLight.colorTransition?.toJSON());
+    expect((await style.getStyleLightProperty("", "intensity")).value, 3);
     expect(
-        (await style.getStyleLightProperty("", "intensity"))
-            .value,
-        3);
-    expect(
-        (await style.getStyleLightProperty(
-            "", "intensity-transition"))
-            .value,
+        (await style.getStyleLightProperty("", "intensity-transition")).value,
         flatLight.intensityTransition?.toJSON());
     expect(
-        (await style.getStyleLightProperty("", "position"))
-            .value,
-        [1, 2, 3]);
-    expect(
-        (await style.getStyleLightProperty(
-            "", "position-transition"))
-            .value,
+        (await style.getStyleLightProperty("", "position")).value, [1, 2, 3]);
+    expect((await style.getStyleLightProperty("", "position-transition")).value,
         flatLight.positionTransition?.toJSON());
   });
 
