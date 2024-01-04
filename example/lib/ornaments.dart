@@ -127,11 +127,11 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('toggle compass'),
       onPressed: () {
-          if (showOrnaments) {
-            showOrnaments = false;
-          } else {
-            showOrnaments = true;
-          }
+        if (showOrnaments) {
+          showOrnaments = false;
+        } else {
+          showOrnaments = true;
+        }
         _updateOrnamentSettings();
       },
     );
@@ -141,21 +141,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move compass'),
       onPressed: () {
-          switch (compassPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              compassPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              compassPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              compassPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              compassPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-          _updateOrnamentSettings();
+        switch (compassPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            compassPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            compassPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            compassPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            compassPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -164,12 +164,12 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('toggle scale bar'),
       onPressed: () {
-          if (showScaleBar) {
-            showScaleBar = false;
-          } else {
-            showScaleBar = true;
-          }
-          _updateOrnamentSettings();
+        if (showScaleBar) {
+          showScaleBar = false;
+        } else {
+          showScaleBar = true;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -178,21 +178,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move scale bar'),
       onPressed: () {
-          switch (scaleBarPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              scaleBarPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              scaleBarPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              scaleBarPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-          _updateOrnamentSettings();
+        switch (scaleBarPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            scaleBarPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            scaleBarPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            scaleBarPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -201,21 +201,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move attribution'),
       onPressed: () {
-          switch (attributionPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              attributionPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              attributionPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              attributionPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-          _updateOrnamentSettings();
+        switch (attributionPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            attributionPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            attributionPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            attributionPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -224,21 +224,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move logo'),
       onPressed: () {
-          switch (logoPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              logoPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              logoPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              logoPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              logoPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-          _updateOrnamentSettings();
+        switch (logoPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            logoPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            logoPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            logoPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            logoPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }

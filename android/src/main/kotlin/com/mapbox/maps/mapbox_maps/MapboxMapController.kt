@@ -17,7 +17,6 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import com.mapbox.common.*
 import com.mapbox.maps.*
-import com.mapbox.maps.extension.observable.model.RenderMode
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTSettings
@@ -232,7 +231,7 @@ class EnumOrdinalTypeAdapter<T>() : TypeAdapter<T>() {
   }
 }
 
-object EnumOrdinalTypeAdapterFactory: TypeAdapterFactory {
+object EnumOrdinalTypeAdapterFactory : TypeAdapterFactory {
   override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
     if (type == null || !type.rawType.isEnum) {
       return null
