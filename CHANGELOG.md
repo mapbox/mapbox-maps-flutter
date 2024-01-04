@@ -1,3 +1,7 @@
+### 1.0.0-beta.1
+
+Bump platform Maps SDK dependencies to 11.0.0.
+
 ### 0.5.1
 ### Android
 
