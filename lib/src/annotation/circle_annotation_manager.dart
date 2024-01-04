@@ -37,6 +37,14 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messager.deleteAll(id);
 
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
+      messager.setCircleEmissiveStrength(id, circleEmissiveStrength);
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<double?> getCircleEmissiveStrength() =>
+      messager.getCircleEmissiveStrength(id);
+
   /// Orientation of circle when map is pitched.
   Future<void> setCirclePitchAlignment(
           CirclePitchAlignment circlePitchAlignment) =>
@@ -44,17 +52,15 @@ class CircleAnnotationManager extends BaseAnnotationManager {
 
   /// Orientation of circle when map is pitched.
   Future<CirclePitchAlignment?> getCirclePitchAlignment() =>
-      messager.getCirclePitchAlignment(id).then(
-          (value) => value != null ? CirclePitchAlignment.values[value] : null);
+      messager.getCirclePitchAlignment(id);
 
   /// Controls the scaling behavior of the circle when the map is pitched.
   Future<void> setCirclePitchScale(CirclePitchScale circlePitchScale) =>
       messager.setCirclePitchScale(id, circlePitchScale);
 
   /// Controls the scaling behavior of the circle when the map is pitched.
-  Future<CirclePitchScale?> getCirclePitchScale() => messager
-      .getCirclePitchScale(id)
-      .then((value) => value != null ? CirclePitchScale.values[value] : null);
+  Future<CirclePitchScale?> getCirclePitchScale() =>
+      messager.getCirclePitchScale(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   Future<void> setCircleTranslate(List<double?> circleTranslate) =>
@@ -71,7 +77,6 @@ class CircleAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `circle-translate`.
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
-      messager.getCircleTranslateAnchor(id).then((value) =>
-          value != null ? CircleTranslateAnchor.values[value] : null);
+      messager.getCircleTranslateAnchor(id);
 }
 // End of generated file.

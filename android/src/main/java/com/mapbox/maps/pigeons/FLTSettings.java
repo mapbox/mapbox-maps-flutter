@@ -87,7 +87,7 @@ public class FLTSettings {
   }
 
   /** The enum controls how the puck is oriented */
-  public enum PuckBearingSource {
+  public enum PuckBearing {
     /** Orients the puck to match the direction in which the device is facing. */
     HEADING(0),
     /** Orients the puck to match the direction in which the device is moving. */
@@ -95,7 +95,21 @@ public class FLTSettings {
 
     final int index;
 
-    private PuckBearingSource(final int index) {
+    private PuckBearing(final int index) {
+      this.index = index;
+    }
+  }
+
+  /** Defines scaling mode. Only applies to location-indicator type layers. */
+  public enum ModelScaleMode {
+    /** Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover. */
+    MAP(0),
+    /** Model is scaled so that it's always the same size on the screen. The property model-scale specifies how many pixels each unit in model file should cover. */
+    VIEWPORT(1);
+
+    final int index;
+
+    private ModelScaleMode(final int index) {
       this.index = index;
     }
   }
@@ -626,6 +640,17 @@ public class FLTSettings {
       this.scaleExpression = setterArg;
     }
 
+    /** The opacity of the entire location puck */
+    private @Nullable Double opacity;
+
+    public @Nullable Double getOpacity() {
+      return opacity;
+    }
+
+    public void setOpacity(@Nullable Double setterArg) {
+      this.opacity = setterArg;
+    }
+
     public static final class Builder {
 
       private @Nullable byte[] topImage;
@@ -656,23 +681,32 @@ public class FLTSettings {
         return this;
       }
 
+      private @Nullable Double opacity;
+
+      public @NonNull Builder setOpacity(@Nullable Double setterArg) {
+        this.opacity = setterArg;
+        return this;
+      }
+
       public @NonNull LocationPuck2D build() {
         LocationPuck2D pigeonReturn = new LocationPuck2D();
         pigeonReturn.setTopImage(topImage);
         pigeonReturn.setBearingImage(bearingImage);
         pigeonReturn.setShadowImage(shadowImage);
         pigeonReturn.setScaleExpression(scaleExpression);
+        pigeonReturn.setOpacity(opacity);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(4);
+      ArrayList<Object> toListResult = new ArrayList<Object>(5);
       toListResult.add(topImage);
       toListResult.add(bearingImage);
       toListResult.add(shadowImage);
       toListResult.add(scaleExpression);
+      toListResult.add(opacity);
       return toListResult;
     }
 
@@ -686,6 +720,8 @@ public class FLTSettings {
       pigeonResult.setShadowImage((byte[]) shadowImage);
       Object scaleExpression = list.get(3);
       pigeonResult.setScaleExpression((String) scaleExpression);
+      Object opacity = list.get(4);
+      pigeonResult.setOpacity((Double) opacity);
       return pigeonResult;
     }
   }
@@ -769,6 +805,61 @@ public class FLTSettings {
       this.modelRotation = setterArg;
     }
 
+    /** Enable/Disable shadow casting for the 3D location puck. */
+    private @Nullable Boolean modelCastShadows;
+
+    public @Nullable Boolean getModelCastShadows() {
+      return modelCastShadows;
+    }
+
+    public void setModelCastShadows(@Nullable Boolean setterArg) {
+      this.modelCastShadows = setterArg;
+    }
+
+    /** Enable/Disable shadow receiving for the 3D location puck. */
+    private @Nullable Boolean modelReceiveShadows;
+
+    public @Nullable Boolean getModelReceiveShadows() {
+      return modelReceiveShadows;
+    }
+
+    public void setModelReceiveShadows(@Nullable Boolean setterArg) {
+      this.modelReceiveShadows = setterArg;
+    }
+
+    /** Defines scaling mode. Only applies to location-indicator type layers. */
+    private @Nullable ModelScaleMode modelScaleMode;
+
+    public @Nullable ModelScaleMode getModelScaleMode() {
+      return modelScaleMode;
+    }
+
+    public void setModelScaleMode(@Nullable ModelScaleMode setterArg) {
+      this.modelScaleMode = setterArg;
+    }
+
+    /** Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). */
+    private @Nullable Double modelEmissiveStrength;
+
+    public @Nullable Double getModelEmissiveStrength() {
+      return modelEmissiveStrength;
+    }
+
+    public void setModelEmissiveStrength(@Nullable Double setterArg) {
+      this.modelEmissiveStrength = setterArg;
+    }
+
+    /** Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). */
+    private @Nullable String modelEmissiveStrengthExpression;
+
+    public @Nullable String getModelEmissiveStrengthExpression() {
+      return modelEmissiveStrengthExpression;
+    }
+
+    public void setModelEmissiveStrengthExpression(@Nullable String setterArg) {
+      this.modelEmissiveStrengthExpression = setterArg;
+    }
+
     public static final class Builder {
 
       private @Nullable String modelUri;
@@ -820,6 +911,41 @@ public class FLTSettings {
         return this;
       }
 
+      private @Nullable Boolean modelCastShadows;
+
+      public @NonNull Builder setModelCastShadows(@Nullable Boolean setterArg) {
+        this.modelCastShadows = setterArg;
+        return this;
+      }
+
+      private @Nullable Boolean modelReceiveShadows;
+
+      public @NonNull Builder setModelReceiveShadows(@Nullable Boolean setterArg) {
+        this.modelReceiveShadows = setterArg;
+        return this;
+      }
+
+      private @Nullable ModelScaleMode modelScaleMode;
+
+      public @NonNull Builder setModelScaleMode(@Nullable ModelScaleMode setterArg) {
+        this.modelScaleMode = setterArg;
+        return this;
+      }
+
+      private @Nullable Double modelEmissiveStrength;
+
+      public @NonNull Builder setModelEmissiveStrength(@Nullable Double setterArg) {
+        this.modelEmissiveStrength = setterArg;
+        return this;
+      }
+
+      private @Nullable String modelEmissiveStrengthExpression;
+
+      public @NonNull Builder setModelEmissiveStrengthExpression(@Nullable String setterArg) {
+        this.modelEmissiveStrengthExpression = setterArg;
+        return this;
+      }
+
       public @NonNull LocationPuck3D build() {
         LocationPuck3D pigeonReturn = new LocationPuck3D();
         pigeonReturn.setModelUri(modelUri);
@@ -829,13 +955,18 @@ public class FLTSettings {
         pigeonReturn.setModelScaleExpression(modelScaleExpression);
         pigeonReturn.setModelTranslation(modelTranslation);
         pigeonReturn.setModelRotation(modelRotation);
+        pigeonReturn.setModelCastShadows(modelCastShadows);
+        pigeonReturn.setModelReceiveShadows(modelReceiveShadows);
+        pigeonReturn.setModelScaleMode(modelScaleMode);
+        pigeonReturn.setModelEmissiveStrength(modelEmissiveStrength);
+        pigeonReturn.setModelEmissiveStrengthExpression(modelEmissiveStrengthExpression);
         return pigeonReturn;
       }
     }
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(7);
+      ArrayList<Object> toListResult = new ArrayList<Object>(12);
       toListResult.add(modelUri);
       toListResult.add(position);
       toListResult.add(modelOpacity);
@@ -843,6 +974,11 @@ public class FLTSettings {
       toListResult.add(modelScaleExpression);
       toListResult.add(modelTranslation);
       toListResult.add(modelRotation);
+      toListResult.add(modelCastShadows);
+      toListResult.add(modelReceiveShadows);
+      toListResult.add(modelScaleMode == null ? null : modelScaleMode.index);
+      toListResult.add(modelEmissiveStrength);
+      toListResult.add(modelEmissiveStrengthExpression);
       return toListResult;
     }
 
@@ -862,12 +998,22 @@ public class FLTSettings {
       pigeonResult.setModelTranslation((List<Double>) modelTranslation);
       Object modelRotation = list.get(6);
       pigeonResult.setModelRotation((List<Double>) modelRotation);
+      Object modelCastShadows = list.get(7);
+      pigeonResult.setModelCastShadows((Boolean) modelCastShadows);
+      Object modelReceiveShadows = list.get(8);
+      pigeonResult.setModelReceiveShadows((Boolean) modelReceiveShadows);
+      Object modelScaleMode = list.get(9);
+      pigeonResult.setModelScaleMode(modelScaleMode == null ? null : ModelScaleMode.values()[(int) modelScaleMode]);
+      Object modelEmissiveStrength = list.get(10);
+      pigeonResult.setModelEmissiveStrength((Double) modelEmissiveStrength);
+      Object modelEmissiveStrengthExpression = list.get(11);
+      pigeonResult.setModelEmissiveStrengthExpression((String) modelEmissiveStrengthExpression);
       return pigeonResult;
     }
   }
 
   /**
-   * Defines what the customised look of the location puck.
+   * Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
    *
    * Generated class from Pigeon that represents data sent in messages.
    */
@@ -973,7 +1119,7 @@ public class FLTSettings {
       this.pulsingColor = setterArg;
     }
 
-    /** The maximum radius of the pulsing circle. Works for 2D location puck only. This property is specified in pixels. */
+    /** The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle. This property is specified in pixels. */
     private @Nullable Double pulsingMaxRadius;
 
     public @Nullable Double getPulsingMaxRadius() {
@@ -1051,17 +1197,17 @@ public class FLTSettings {
     }
 
     /** The enum controls how the puck is oriented */
-    private @Nullable PuckBearingSource puckBearingSource;
+    private @Nullable PuckBearing puckBearing;
 
-    public @Nullable PuckBearingSource getPuckBearingSource() {
-      return puckBearingSource;
+    public @Nullable PuckBearing getPuckBearing() {
+      return puckBearing;
     }
 
-    public void setPuckBearingSource(@Nullable PuckBearingSource setterArg) {
-      this.puckBearingSource = setterArg;
+    public void setPuckBearing(@Nullable PuckBearing setterArg) {
+      this.puckBearing = setterArg;
     }
 
-    /** Defines what the customised look of the location puck. */
+    /** Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time. */
     private @Nullable LocationPuck locationPuck;
 
     public @Nullable LocationPuck getLocationPuck() {
@@ -1144,10 +1290,10 @@ public class FLTSettings {
         return this;
       }
 
-      private @Nullable PuckBearingSource puckBearingSource;
+      private @Nullable PuckBearing puckBearing;
 
-      public @NonNull Builder setPuckBearingSource(@Nullable PuckBearingSource setterArg) {
-        this.puckBearingSource = setterArg;
+      public @NonNull Builder setPuckBearing(@Nullable PuckBearing setterArg) {
+        this.puckBearing = setterArg;
         return this;
       }
 
@@ -1170,7 +1316,7 @@ public class FLTSettings {
         pigeonReturn.setLayerAbove(layerAbove);
         pigeonReturn.setLayerBelow(layerBelow);
         pigeonReturn.setPuckBearingEnabled(puckBearingEnabled);
-        pigeonReturn.setPuckBearingSource(puckBearingSource);
+        pigeonReturn.setPuckBearing(puckBearing);
         pigeonReturn.setLocationPuck(locationPuck);
         return pigeonReturn;
       }
@@ -1189,7 +1335,7 @@ public class FLTSettings {
       toListResult.add(layerAbove);
       toListResult.add(layerBelow);
       toListResult.add(puckBearingEnabled);
-      toListResult.add(puckBearingSource == null ? null : puckBearingSource.index);
+      toListResult.add(puckBearing == null ? null : puckBearing.index);
       toListResult.add((locationPuck == null) ? null : locationPuck.toList());
       return toListResult;
     }
@@ -1216,8 +1362,8 @@ public class FLTSettings {
       pigeonResult.setLayerBelow((String) layerBelow);
       Object puckBearingEnabled = list.get(9);
       pigeonResult.setPuckBearingEnabled((Boolean) puckBearingEnabled);
-      Object puckBearingSource = list.get(10);
-      pigeonResult.setPuckBearingSource(puckBearingSource == null ? null : PuckBearingSource.values()[(int) puckBearingSource]);
+      Object puckBearing = list.get(10);
+      pigeonResult.setPuckBearing(puckBearing == null ? null : PuckBearing.values()[(int) puckBearing]);
       Object locationPuck = list.get(11);
       pigeonResult.setLocationPuck((locationPuck == null) ? null : LocationPuck.fromList((ArrayList<Object>) locationPuck));
       return pigeonResult;

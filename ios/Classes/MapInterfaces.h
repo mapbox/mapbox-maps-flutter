@@ -188,16 +188,20 @@ typedef NS_ENUM(NSUInteger, FLTStylePackErrorType) {
 
 /// Describes the reason for an offline request response error.
 typedef NS_ENUM(NSUInteger, FLTResponseErrorReason) {
+  /// No error occurred during the resource request.
+  FLTResponseErrorReasonSUCCESS = 0,
   /// The resource is not found.
-  FLTResponseErrorReasonNOT_FOUND = 0,
+  FLTResponseErrorReasonNOT_FOUND = 1,
   /// The server error.
-  FLTResponseErrorReasonSERVER = 1,
+  FLTResponseErrorReasonSERVER = 2,
   /// The connection error.
-  FLTResponseErrorReasonCONNECTION = 2,
+  FLTResponseErrorReasonCONNECTION = 3,
   /// The error happened because of a rate limit.
-  FLTResponseErrorReasonRATE_LIMIT = 3,
+  FLTResponseErrorReasonRATE_LIMIT = 4,
+  /// The resource cannot be loaded because the device is in offline mode.
+  FLTResponseErrorReasonIN_OFFLINE_MODE = 5,
   /// Other reason.
-  FLTResponseErrorReasonOTHER = 4,
+  FLTResponseErrorReasonOTHER = 6,
 };
 
 /// Wrapper for FLTResponseErrorReason to allow for nullability.
@@ -271,6 +275,31 @@ typedef NS_ENUM(NSUInteger, FLTStylePropertyValueKind) {
 @interface FLTStylePropertyValueKindBox : NSObject
 @property(nonatomic, assign) FLTStylePropertyValueKind value;
 - (instancetype)initWithValue:(FLTStylePropertyValueKind)value;
+@end
+
+typedef NS_ENUM(NSUInteger, FLTStyleProjectionName) {
+  FLTStyleProjectionNameMercator = 0,
+  FLTStyleProjectionNameGlobe = 1,
+};
+
+/// Wrapper for FLTStyleProjectionName to allow for nullability.
+@interface FLTStyleProjectionNameBox : NSObject
+@property(nonatomic, assign) FLTStyleProjectionName value;
+- (instancetype)initWithValue:(FLTStyleProjectionName)value;
+@end
+
+/// Whether extruded geometries are lit relative to the map or viewport.
+typedef NS_ENUM(NSUInteger, FLTAnchor) {
+  /// The position of the light source is aligned to the rotation of the map.
+  FLTAnchorMAP = 0,
+  /// The position of the light source is aligned to the rotation of the viewport.
+  FLTAnchorVIEWPORT = 1,
+};
+
+/// Wrapper for FLTAnchor to allow for nullability.
+@interface FLTAnchorBox : NSObject
+@property(nonatomic, assign) FLTAnchor value;
+- (instancetype)initWithValue:(FLTAnchor)value;
 @end
 
 /// HTTP defines a set of request methods to indicate the desired action to be performed for a given resource.
@@ -399,6 +428,29 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 - (instancetype)initWithValue:(FLTTileRegionErrorType)value;
 @end
 
+typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
+  FLT_MapEventMapLoaded = 0,
+  FLT_MapEventMapLoadingError = 1,
+  FLT_MapEventStyleLoaded = 2,
+  FLT_MapEventStyleDataLoaded = 3,
+  FLT_MapEventCameraChanged = 4,
+  FLT_MapEventMapIdle = 5,
+  FLT_MapEventSourceAdded = 6,
+  FLT_MapEventSourceRemoved = 7,
+  FLT_MapEventSourceDataLoaded = 8,
+  FLT_MapEventStyleImageMissing = 9,
+  FLT_MapEventStyleImageRemoveUnused = 10,
+  FLT_MapEventRenderFrameStarted = 11,
+  FLT_MapEventRenderFrameFinished = 12,
+  FLT_MapEventResourceRequest = 13,
+};
+
+/// Wrapper for FLT_MapEvent to allow for nullability.
+@interface FLT_MapEventBox : NSObject
+@property(nonatomic, assign) FLT_MapEvent value;
+- (instancetype)initWithValue:(FLT_MapEvent)value;
+@end
+
 @class FLTMbxEdgeInsets;
 @class FLTCameraOptions;
 @class FLTCameraState;
@@ -408,8 +460,8 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @class FLTCoordinateBounds;
 @class FLTMapDebugOptions;
 @class FLTGlyphsRasterizationOptions;
-@class FLTMapMemoryBudgetInMegabytes;
-@class FLTMapMemoryBudgetInTiles;
+@class FLTTileCacheBudgetInMegabytes;
+@class FLTTileCacheBudgetInTiles;
 @class FLTMapOptions;
 @class FLTScreenCoordinate;
 @class FLTScreenBox;
@@ -419,14 +471,19 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @class FLTSourceQueryOptions;
 @class FLTFeatureExtensionValue;
 @class FLTLayerPosition;
+@class FLTQueriedRenderedFeature;
+@class FLTQueriedSourceFeature;
 @class FLTQueriedFeature;
 @class FLTRenderedQueryGeometry;
 @class FLTOfflineRegionGeometryDefinition;
 @class FLTOfflineRegionTilePyramidDefinition;
 @class FLTProjectedMeters;
 @class FLTMercatorCoordinate;
-@class FLTResourceOptions;
 @class FLTStyleObjectInfo;
+@class FLTStyleProjection;
+@class FLTFlatLight;
+@class FLTDirectionalLight;
+@class FLTAmbientLight;
 @class FLTMbxImage;
 @class FLTImageStretches;
 @class FLTImageContent;
@@ -607,7 +664,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @end
 
 /// Map memory budget in megabytes.
-@interface FLTMapMemoryBudgetInMegabytes : NSObject
+@interface FLTTileCacheBudgetInMegabytes : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithSize:(NSNumber *)size;
@@ -615,7 +672,7 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @end
 
 /// Map memory budget in tiles.
-@interface FLTMapMemoryBudgetInTiles : NSObject
+@interface FLTTileCacheBudgetInTiles : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
 + (instancetype)makeWithSize:(NSNumber *)size;
@@ -631,7 +688,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
     viewportMode:(nullable FLTViewportModeBox *)viewportMode
     orientation:(nullable FLTNorthOrientationBox *)orientation
     crossSourceCollisions:(nullable NSNumber *)crossSourceCollisions
-    optimizeForTerrain:(nullable NSNumber *)optimizeForTerrain
     size:(nullable FLTSize *)size
     pixelRatio:(NSNumber *)pixelRatio
     glyphsRasterizationOptions:(nullable FLTGlyphsRasterizationOptions *)glyphsRasterizationOptions;
@@ -651,14 +707,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 /// Specify whether to enable cross-source symbol collision detection
 /// or not. By default, it is set to `true`.
 @property(nonatomic, strong, nullable) NSNumber * crossSourceCollisions;
-/// With terrain on, if `true`, the map will render for performance
-/// priority, which may lead to layer reordering allowing to maximize
-/// performance (layers that are draped over terrain will be drawn first,
-/// including fill, line, background, hillshade and raster). Any layers that
-/// are positioned after symbols are draped last, over symbols. Otherwise, if
-/// set to `false`, the map will always be drawn for layer order priority.
-/// By default, it is set to `true`.
-@property(nonatomic, strong, nullable) NSNumber * optimizeForTerrain;
 /// The size to resize the map object and renderer backend.
 /// The size is given in `logical pixel` units. macOS and iOS platforms use
 /// device-independent pixel units, while other platforms, such as Android,
@@ -763,6 +811,31 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, copy, nullable) NSString * below;
 /// Layer should be positioned at specified index in a layers stack.
 @property(nonatomic, strong, nullable) NSNumber * at;
+@end
+
+/// Represents query result that is returned in QueryRenderedFeaturesCallback.
+/// @see `queryRenderedFeatures`
+@interface FLTQueriedRenderedFeature : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature
+    layers:(NSArray<NSString *> *)layers;
+/// Feature returned by the query.
+@property(nonatomic, strong) FLTQueriedFeature * queriedFeature;
+/// An array of layer Ids for the queried feature.
+/// If the feature has been rendered in multiple layers, multiple Ids will be provided.
+/// If the feature is only rendered in one layer, a single Id will be provided.
+@property(nonatomic, strong) NSArray<NSString *> * layers;
+@end
+
+/// Represents query result that is returned in QuerySourceFeaturesCallback.
+/// @see `querySourceFeatures`
+@interface FLTQueriedSourceFeature : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithQueriedFeature:(FLTQueriedFeature *)queriedFeature;
+/// Feature returned by the query.
+@property(nonatomic, strong) FLTQueriedFeature * queriedFeature;
 @end
 
 /// Represents query result that is returned in QueryFeaturesCallback.
@@ -882,35 +955,6 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, strong) NSNumber * y;
 @end
 
-/// Options to configure a resource
-@interface FLTResourceOptions : NSObject
-/// `init` unavailable to enforce nonnull fields, see the `make` class method.
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithAccessToken:(NSString *)accessToken
-    baseURL:(nullable NSString *)baseURL
-    dataPath:(nullable NSString *)dataPath
-    assetPath:(nullable NSString *)assetPath
-    tileStoreUsageMode:(nullable FLTTileStoreUsageModeBox *)tileStoreUsageMode;
-/// The access token that is used to access resources provided by Mapbox services.
-@property(nonatomic, copy) NSString * accessToken;
-/// The base URL that would be used to make HTTP requests. By default it is `https://api.mapbox.com`.
-@property(nonatomic, copy, nullable) NSString * baseURL;
-/// The path to the map data folder.
-///
-/// The implementation will use this folder for storing offline style packages and temporary data.
-///
-/// The application must have sufficient permissions to create files within the provided directory.
-/// If a dataPath is not provided, the default location will be used (the application data path defined
-/// in the `Mapbox Common SystemInformation API`).
-@property(nonatomic, copy, nullable) NSString * dataPath;
-/// The path to the folder where application assets are located. Resources whose protocol is `asset://`
-/// will be fetched from an asset folder or asset management system provided by respective platform.
-/// This option is ignored for Android platform. An iOS application may provide path to an application bundle's path.
-@property(nonatomic, copy, nullable) NSString * assetPath;
-/// The tile store usage mode.
-@property(nonatomic, strong, nullable) FLTTileStoreUsageModeBox * tileStoreUsageMode;
-@end
-
 /// The information about style object (source or layer).
 @interface FLTStyleObjectInfo : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
@@ -921,6 +965,106 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @property(nonatomic, copy) NSString * id;
 /// The object's type.
 @property(nonatomic, copy) NSString * type;
+@end
+
+@interface FLTStyleProjection : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithName:(FLTStyleProjectionName)name;
+@property(nonatomic, assign) FLTStyleProjectionName name;
+@end
+
+/// A global directional light source which is only applied on 3D layers and hillshade layers. Using this type disables other light sources.
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTFlatLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    anchor:(nullable FLTAnchorBox *)anchor
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    position:(nullable NSArray<NSNumber *> *)position
+    positionTransition:(nullable FLTTransitionOptions *)positionTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Whether extruded geometries are lit relative to the map or viewport.
+@property(nonatomic, strong, nullable) FLTAnchorBox * anchor;
+/// Color tint for lighting extruded geometries.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
+/// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * position;
+/// Transition property for `position`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * positionTransition;
+@end
+
+/// A light that has a direction and is located at infinite, so its rays are parallel. Simulates the sun light and it can cast shadows
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTDirectionalLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    castShadows:(nullable NSNumber *)castShadows
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    direction:(nullable NSArray<NSNumber *> *)direction
+    directionTransition:(nullable FLTTransitionOptions *)directionTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition
+    shadowIntensity:(nullable NSNumber *)shadowIntensity
+    shadowIntensityTransition:(nullable FLTTransitionOptions *)shadowIntensityTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Enable/Disable shadow casting for this light
+@property(nonatomic, strong, nullable) NSNumber * castShadows;
+/// Color of the directional light.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * direction;
+/// Transition property for `direction`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * directionTransition;
+/// A multiplier for the color of the directional light.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
+/// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
+@property(nonatomic, strong, nullable) NSNumber * shadowIntensity;
+/// Transition property for `shadowIntensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * shadowIntensityTransition;
+@end
+
+/// An indirect light affecting all objects in the map adding a constant amount of light on them. It has no explicit direction and cannot cast shadows.
+///
+/// - SeeAlso: [Mapbox Style Specification](https://www.mapbox.com/mapbox-gl-style-spec/#light)
+@interface FLTAmbientLight : NSObject
+/// `init` unavailable to enforce nonnull fields, see the `make` class method.
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)makeWithId:(NSString *)id
+    color:(nullable NSNumber *)color
+    colorTransition:(nullable FLTTransitionOptions *)colorTransition
+    intensity:(nullable NSNumber *)intensity
+    intensityTransition:(nullable FLTTransitionOptions *)intensityTransition;
+/// Unique light name
+@property(nonatomic, copy) NSString * id;
+/// Color of the ambient light.
+@property(nonatomic, strong, nullable) NSNumber * color;
+/// Transition property for `color`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * colorTransition;
+/// A multiplier for the color of the ambient light.
+@property(nonatomic, strong, nullable) NSNumber * intensity;
+/// Transition property for `intensity`
+@property(nonatomic, strong, nullable) FLTTransitionOptions * intensityTransition;
 @end
 
 /// Image type.
@@ -1010,10 +1154,10 @@ typedef NS_ENUM(NSUInteger, FLTTileRegionErrorType) {
 @interface FLTStylePropertyValue : NSObject
 /// `init` unavailable to enforce nonnull fields, see the `make` class method.
 - (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)makeWithValue:(NSString *)value
++ (instancetype)makeWithValue:(nullable id )value
     kind:(FLTStylePropertyValueKind)kind;
 /// The property value.
-@property(nonatomic, copy) NSString * value;
+@property(nonatomic, strong, nullable) id  value;
 /// The kind of the property value.
 @property(nonatomic, assign) FLTStylePropertyValueKind kind;
 @end
@@ -1039,17 +1183,31 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 
 /// Interface for managing camera.
 @protocol FLT_CameraManager
+/// Convenience method that returns a `camera options` object for the given parameters.
+///
+/// @param coordinates The `coordinates` representing the bounds of the camera.
+/// @param camera The `camera options` which will be applied before calculating the camera for the coordinates.
+/// If any of the fields in camera options is not provided then the current value from the map for that field will be used.
+/// @param coordinatesPadding The amount of padding in screen points to add to the given `coordinates`.
+/// This padding is not applied to the map but to the coordinates provided. If you want to apply padding to the map use `camera` parameter.
+/// @param maxZoom The maximum zoom level allowed in the returned camera options.
+/// @param offset The center of the given bounds relative to map center in screen points.
+/// @return The `camera options` object representing the provided parameters.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable FLTCameraOptions *)cameraForCoordinatesPaddingCoordinates:(NSArray<NSDictionary<NSString *, id> *> *)coordinates camera:(FLTCameraOptions *)camera coordinatesPadding:(nullable FLTMbxEdgeInsets *)coordinatesPadding maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that returns the `camera options` object for given parameters.
 ///
 /// @param bounds The `coordinate bounds` of the camera.
 /// @param padding The `edge insets` of the camera.
 /// @param bearing The bearing of the camera.
 /// @param pitch The pitch of the camera.
-///
+/// @param maxZoom The maximum zoom level allowed in the returned camera options.
+/// @param offset The center of the given bounds relative to map center in screen points.
 /// @return The `camera options` object representing the provided parameters.
 ///
 /// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that returns the `camera options` object for given parameters.
 ///
 /// @param coordinates The `coordinates` representing the bounds of the camera.
@@ -1209,21 +1367,6 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 ///
 /// @return `nil` only when `error != nil`.
 - (nullable FLTCameraBounds *)getBoundsWithError:(FlutterError *_Nullable *_Nonnull)error;
-/// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-///
-/// @param point The pivot `screen coordinate`, measured in `logical pixels` from top to bottom and from left to right.
-- (void)dragStartPoint:(FLTScreenCoordinate *)point error:(FlutterError *_Nullable *_Nonnull)error;
-/// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-///
-/// @param fromPoint The `screen coordinate` to drag the map from, measured in `logical pixels` from top to bottom and from left to right.
-/// @param toPoint The `screen coordinate` to drag the map to, measured in `logical pixels` from top to bottom and from left to right.
-///
-/// @return The `camera options` object showing the end point.
-///
-/// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)getDragCameraOptionsFromPoint:(FLTScreenCoordinate *)fromPoint toPoint:(FLTScreenCoordinate *)toPoint error:(FlutterError *_Nullable *_Nonnull)error;
-/// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
-- (void)dragEndWithError:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLT_CameraManagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_CameraManager> *_Nullable api);
@@ -1237,7 +1380,7 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 - (void)loadStyleURIStyleURI:(NSString *)styleURI completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)loadStyleJsonStyleJson:(NSString *)styleJson completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)clearDataWithCompletion:(void (^)(FlutterError *_Nullable))completion;
-- (void)setMemoryBudgetMapMemoryBudgetInMegabytes:(nullable FLTMapMemoryBudgetInMegabytes *)mapMemoryBudgetInMegabytes mapMemoryBudgetInTiles:(nullable FLTMapMemoryBudgetInTiles *)mapMemoryBudgetInTiles error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setTileCacheBudgetTileCacheBudgetInMegabytes:(nullable FLTTileCacheBudgetInMegabytes *)tileCacheBudgetInMegabytes tileCacheBudgetInTiles:(nullable FLTTileCacheBudgetInTiles *)tileCacheBudgetInTiles error:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets the size of the map.
 ///
 /// @return The `size` of the map in `logical pixels`.
@@ -1312,13 +1455,13 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param options The `render query options` for querying rendered features.
 /// @param completion The `query features completion` called when the query completes.
 /// @return A `cancelable` object that could be used to cancel the pending query.
-- (void)queryRenderedFeaturesGeometry:(FLTRenderedQueryGeometry *)geometry options:(FLTRenderedQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedFeature *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)queryRenderedFeaturesGeometry:(FLTRenderedQueryGeometry *)geometry options:(FLTRenderedQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedRenderedFeature *> *_Nullable, FlutterError *_Nullable))completion;
 /// Queries the map for source features.
 ///
 /// @param sourceId The style source identifier used to query for source features.
 /// @param options The `source query options` for querying source features.
 /// @param completion The `query features completion` called when the query completes.
-- (void)querySourceFeaturesSourceId:(NSString *)sourceId options:(FLTSourceQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedFeature *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)querySourceFeaturesSourceId:(NSString *)sourceId options:(FLTSourceQueryOptions *)options completion:(void (^)(NSArray<FLTQueriedSourceFeature *> *_Nullable, FlutterError *_Nullable))completion;
 /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
 /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
 ///
@@ -1364,7 +1507,7 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
 /// @param featureId The feature identifier of the feature whose state should be updated.
 /// @param state The `state` object with properties to update with their respective new values.
-- (void)setFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId state:(NSString *)state error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId state:(NSString *)state completion:(void (^)(FlutterError *_Nullable))completion;
 /// Gets the state map of a feature within a style source.
 ///
 /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -1387,19 +1530,9 @@ NSObject<FlutterMessageCodec> *FLT_MapInterfaceGetCodec(void);
 /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
 /// @param featureId The feature identifier of the feature whose state should be removed.
 /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
-- (void)removeFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId stateKey:(nullable NSString *)stateKey error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)removeFeatureStateSourceId:(NSString *)sourceId sourceLayerId:(nullable NSString *)sourceLayerId featureId:(NSString *)featureId stateKey:(nullable NSString *)stateKey completion:(void (^)(FlutterError *_Nullable))completion;
 /// Reduces memory use. Useful to call when the application gets paused or sent to background.
 - (void)reduceMemoryUseWithError:(FlutterError *_Nullable *_Nonnull)error;
-/// Gets the resource options for the map.
-///
-/// All optional fields of the retuned object are initialized with the actual values.
-///
-/// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-///
-/// @return The `resource options` for the map.
-///
-/// @return `nil` only when `error != nil`.
-- (nullable FLTResourceOptions *)getResourceOptionsWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets elevation for the given coordinate.
 /// Note: Elevation is only available for the visible region on the screen.
 ///
@@ -1549,6 +1682,37 @@ NSObject<FlutterMessageCodec> *FLTProjectionGetCodec(void);
 
 extern void FLTProjectionSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTProjection> *_Nullable api);
 
+/// The codec used by FLT_MapboxOptions.
+NSObject<FlutterMessageCodec> *FLT_MapboxOptionsGetCodec(void);
+
+@protocol FLT_MapboxOptions
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getAccessTokenWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setAccessTokenToken:(NSString *)token error:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void FLT_MapboxOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxOptions> *_Nullable api);
+
+/// The codec used by FLT_MapboxMapsOptions.
+NSObject<FlutterMessageCodec> *FLT_MapboxMapsOptionsGetCodec(void);
+
+@protocol FLT_MapboxMapsOptions
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getBaseUrlWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setBaseUrlUrl:(NSString *)url error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getDataPathWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setDataPathPath:(NSString *)path error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSString *)getAssetPathWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setAssetPathPath:(NSString *)path error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (FLTTileStoreUsageMode)getTileStoreUsageModeWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setTileStoreUsageModeMode:(FLTTileStoreUsageMode)mode error:(FlutterError *_Nullable *_Nonnull)error;
+@end
+
+extern void FLT_MapboxMapsOptionsSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxMapsOptions> *_Nullable api);
+
 /// The codec used by FLTSettings.
 NSObject<FlutterMessageCodec> *FLTSettingsGetCodec(void);
 
@@ -1693,6 +1857,51 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 ///
 /// @return The `transition options` of the current style in use.
 - (void)getStyleTransitionWithCompletion:(void (^)(FLTTransitionOptions *_Nullable, FlutterError *_Nullable))completion;
+/// Returns the list containing information about existing style import objects.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSArray<FLTStyleObjectInfo *> *)getStyleImportsWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// Removes an existing style import.
+///
+/// @param importId Identifier of the style import to remove.
+- (void)removeStyleImportImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets the style import schema.
+///
+/// @param importId Identifier of the style import.
+///
+/// Returns the style import schema, containing the default configurations for the style import.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable id)getStyleImportSchemaImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets style import config.
+///
+/// @param importId Identifier of the style import.
+///
+/// Returns the style import configuration or a string describing an error if the operation was not successful.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable NSDictionary<NSString *, FLTStylePropertyValue *> *)getStyleImportConfigPropertiesImportId:(NSString *)importId error:(FlutterError *_Nullable *_Nonnull)error;
+/// Gets the value of style import config.
+///
+/// @param importId Identifier of the style import.
+/// @param config The style import config name.
+///
+/// Returns the style import configuration or a string describing an error if the operation was not successful.
+///
+/// @return `nil` only when `error != nil`.
+- (nullable FLTStylePropertyValue *)getStyleImportConfigPropertyImportId:(NSString *)importId config:(NSString *)config error:(FlutterError *_Nullable *_Nonnull)error;
+/// Sets style import config.
+/// This method can be used to perform batch update for a style import configurations.
+///
+/// @param importId Identifier of the style import.
+/// @param configs A map of style import configurations.
+- (void)setStyleImportConfigPropertiesImportId:(NSString *)importId configs:(NSDictionary<NSString *, id> *)configs error:(FlutterError *_Nullable *_Nonnull)error;
+/// Sets a value to a style import config.
+///
+/// @param importId Identifier of the style import.
+/// @param config The style import config name.
+/// @param value The style import config value.
+- (void)setStyleImportConfigPropertyImportId:(NSString *)importId config:(NSString *)config value:(id)value error:(FlutterError *_Nullable *_Nonnull)error;
 /// Overrides the map style's transition options with user-provided options.
 ///
 /// The style transition is re-evaluated when a new style is loaded.
@@ -1843,24 +2052,33 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 ///
 /// @return The list containing the information about existing style source objects.
 - (void)getStyleSourcesWithCompletion:(void (^)(NSArray<FLTStyleObjectInfo *> *_Nullable, FlutterError *_Nullable))completion;
-/// Sets the style global [light](https://docs.mapbox.com/mapbox-gl-js/style-spec/#light) properties.
+/// Returns an ordered list of the current style lights.
 ///
-/// @param properties A map of style light properties values, with their names as a key.
+/// @return `nil` only when `error != nil`.
+- (nullable NSArray<FLTStyleObjectInfo *> *)getStyleLightsWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// Set global directional lightning.
 ///
-/// @return A string describing an error if the operation was not successful, empty otherwise.
-- (void)setStyleLightProperties:(NSString *)properties completion:(void (^)(FlutterError *_Nullable))completion;
+/// @param flatLight The flat light source.
+- (void)setLightFlatLight:(FLTFlatLight *)flatLight error:(FlutterError *_Nullable *_Nonnull)error;
+/// Set dynamic lightning.
+///
+/// @param ambientLight The ambient light source.
+/// @param directionalLight The directional light source.
+- (void)setLightsAmbientLight:(FLTAmbientLight *)ambientLight directionalLight:(FLTDirectionalLight *)directionalLight error:(FlutterError *_Nullable *_Nonnull)error;
 /// Gets the value of a style light property.
 ///
 /// @param property The style light property name.
+/// @param id The unique identifier of the style light in lights list.
 /// @return The style light property value.
-- (void)getStyleLightPropertyProperty:(NSString *)property completion:(void (^)(FLTStylePropertyValue *_Nullable, FlutterError *_Nullable))completion;
+- (void)getStyleLightPropertyId:(NSString *)id property:(NSString *)property completion:(void (^)(FLTStylePropertyValue *_Nullable, FlutterError *_Nullable))completion;
 /// Sets a value to the the style light property.
 ///
 /// @param property The style light property name.
+/// @param id The unique identifier of the style light in lights list.
 /// @param value The style light property value.
 ///
 /// @return A string describing an error if the operation was not successful, empty otherwise.
-- (void)setStyleLightPropertyProperty:(NSString *)property value:(id)value completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)setStyleLightPropertyId:(NSString *)id property:(NSString *)property value:(id)value completion:(void (^)(FlutterError *_Nullable))completion;
 /// Sets the style global [terrain](https://docs.mapbox.com/mapbox-gl-js/style-spec/#terrain) properties.
 ///
 /// @param properties A map of style terrain properties values, with their names as a key.
@@ -1949,11 +2167,11 @@ NSObject<FlutterMessageCodec> *FLTStyleManagerGetCodec(void);
 /// Function to get the projection provided by the Style Extension.
 ///
 /// @return Projection that is currently applied to the map
-- (void)getProjectionWithCompletion:(void (^)(NSString *_Nullable, FlutterError *_Nullable))completion;
+- (nullable FLTStyleProjection *)getProjectionWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// Function to set the projection provided by the Style Extension.
 ///
 /// @param projection The projection to be set.
-- (void)setProjectionProjection:(NSString *)projection completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)setProjectionProjection:(FLTStyleProjection *)projection error:(FlutterError *_Nullable *_Nonnull)error;
 /// Function to localize style labels.
 ///
 /// @param locale The locale to apply for localization

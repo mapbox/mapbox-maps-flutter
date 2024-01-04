@@ -35,8 +35,19 @@
 @end
 
 /// The enum controls how the puck is oriented
-@implementation FLT_SETTINGSPuckBearingSourceBox
-- (instancetype)initWithValue:(FLT_SETTINGSPuckBearingSource)value {
+@implementation FLT_SETTINGSPuckBearingBox
+- (instancetype)initWithValue:(FLT_SETTINGSPuckBearing)value {
+  self = [super init];
+  if (self) {
+    _value = value;
+  }
+  return self;
+}
+@end
+
+/// Defines scaling mode. Only applies to location-indicator type layers.
+@implementation FLT_SETTINGSModelScaleModeBox
+- (instancetype)initWithValue:(FLT_SETTINGSModelScaleMode)value {
   self = [super init];
   if (self) {
     _value = value;
@@ -236,12 +247,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 + (instancetype)makeWithTopImage:(nullable FlutterStandardTypedData *)topImage
     bearingImage:(nullable FlutterStandardTypedData *)bearingImage
     shadowImage:(nullable FlutterStandardTypedData *)shadowImage
-    scaleExpression:(nullable NSString *)scaleExpression {
+    scaleExpression:(nullable NSString *)scaleExpression
+    opacity:(nullable NSNumber *)opacity {
   FLT_SETTINGSLocationPuck2D* pigeonResult = [[FLT_SETTINGSLocationPuck2D alloc] init];
   pigeonResult.topImage = topImage;
   pigeonResult.bearingImage = bearingImage;
   pigeonResult.shadowImage = shadowImage;
   pigeonResult.scaleExpression = scaleExpression;
+  pigeonResult.opacity = opacity;
   return pigeonResult;
 }
 + (FLT_SETTINGSLocationPuck2D *)fromList:(NSArray *)list {
@@ -250,6 +263,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.bearingImage = GetNullableObjectAtIndex(list, 1);
   pigeonResult.shadowImage = GetNullableObjectAtIndex(list, 2);
   pigeonResult.scaleExpression = GetNullableObjectAtIndex(list, 3);
+  pigeonResult.opacity = GetNullableObjectAtIndex(list, 4);
   return pigeonResult;
 }
 + (nullable FLT_SETTINGSLocationPuck2D *)nullableFromList:(NSArray *)list {
@@ -261,6 +275,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.bearingImage ?: [NSNull null]),
     (self.shadowImage ?: [NSNull null]),
     (self.scaleExpression ?: [NSNull null]),
+    (self.opacity ?: [NSNull null]),
   ];
 }
 @end
@@ -272,7 +287,12 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     modelScale:(nullable NSArray<NSNumber *> *)modelScale
     modelScaleExpression:(nullable NSString *)modelScaleExpression
     modelTranslation:(nullable NSArray<NSNumber *> *)modelTranslation
-    modelRotation:(nullable NSArray<NSNumber *> *)modelRotation {
+    modelRotation:(nullable NSArray<NSNumber *> *)modelRotation
+    modelCastShadows:(nullable NSNumber *)modelCastShadows
+    modelReceiveShadows:(nullable NSNumber *)modelReceiveShadows
+    modelScaleMode:(nullable FLT_SETTINGSModelScaleModeBox *)modelScaleMode
+    modelEmissiveStrength:(nullable NSNumber *)modelEmissiveStrength
+    modelEmissiveStrengthExpression:(nullable NSString *)modelEmissiveStrengthExpression {
   FLT_SETTINGSLocationPuck3D* pigeonResult = [[FLT_SETTINGSLocationPuck3D alloc] init];
   pigeonResult.modelUri = modelUri;
   pigeonResult.position = position;
@@ -281,6 +301,11 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.modelScaleExpression = modelScaleExpression;
   pigeonResult.modelTranslation = modelTranslation;
   pigeonResult.modelRotation = modelRotation;
+  pigeonResult.modelCastShadows = modelCastShadows;
+  pigeonResult.modelReceiveShadows = modelReceiveShadows;
+  pigeonResult.modelScaleMode = modelScaleMode;
+  pigeonResult.modelEmissiveStrength = modelEmissiveStrength;
+  pigeonResult.modelEmissiveStrengthExpression = modelEmissiveStrengthExpression;
   return pigeonResult;
 }
 + (FLT_SETTINGSLocationPuck3D *)fromList:(NSArray *)list {
@@ -292,6 +317,13 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.modelScaleExpression = GetNullableObjectAtIndex(list, 4);
   pigeonResult.modelTranslation = GetNullableObjectAtIndex(list, 5);
   pigeonResult.modelRotation = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.modelCastShadows = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.modelReceiveShadows = GetNullableObjectAtIndex(list, 8);
+  NSNumber *modelScaleModeAsNumber = GetNullableObjectAtIndex(list, 9);
+  FLT_SETTINGSModelScaleModeBox *modelScaleMode = modelScaleModeAsNumber == nil ? nil : [[FLT_SETTINGSModelScaleModeBox alloc] initWithValue: [modelScaleModeAsNumber integerValue]];
+  pigeonResult.modelScaleMode = modelScaleMode;
+  pigeonResult.modelEmissiveStrength = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.modelEmissiveStrengthExpression = GetNullableObjectAtIndex(list, 11);
   return pigeonResult;
 }
 + (nullable FLT_SETTINGSLocationPuck3D *)nullableFromList:(NSArray *)list {
@@ -306,6 +338,11 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.modelScaleExpression ?: [NSNull null]),
     (self.modelTranslation ?: [NSNull null]),
     (self.modelRotation ?: [NSNull null]),
+    (self.modelCastShadows ?: [NSNull null]),
+    (self.modelReceiveShadows ?: [NSNull null]),
+    (self.modelScaleMode == nil ? [NSNull null] : [NSNumber numberWithInteger:self.modelScaleMode.value]),
+    (self.modelEmissiveStrength ?: [NSNull null]),
+    (self.modelEmissiveStrengthExpression ?: [NSNull null]),
   ];
 }
 @end
@@ -346,7 +383,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     layerAbove:(nullable NSString *)layerAbove
     layerBelow:(nullable NSString *)layerBelow
     puckBearingEnabled:(nullable NSNumber *)puckBearingEnabled
-    puckBearingSource:(nullable FLT_SETTINGSPuckBearingSourceBox *)puckBearingSource
+    puckBearing:(nullable FLT_SETTINGSPuckBearingBox *)puckBearing
     locationPuck:(nullable FLT_SETTINGSLocationPuck *)locationPuck {
   FLT_SETTINGSLocationComponentSettings* pigeonResult = [[FLT_SETTINGSLocationComponentSettings alloc] init];
   pigeonResult.enabled = enabled;
@@ -359,7 +396,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.layerAbove = layerAbove;
   pigeonResult.layerBelow = layerBelow;
   pigeonResult.puckBearingEnabled = puckBearingEnabled;
-  pigeonResult.puckBearingSource = puckBearingSource;
+  pigeonResult.puckBearing = puckBearing;
   pigeonResult.locationPuck = locationPuck;
   return pigeonResult;
 }
@@ -375,9 +412,9 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.layerAbove = GetNullableObjectAtIndex(list, 7);
   pigeonResult.layerBelow = GetNullableObjectAtIndex(list, 8);
   pigeonResult.puckBearingEnabled = GetNullableObjectAtIndex(list, 9);
-  NSNumber *puckBearingSourceAsNumber = GetNullableObjectAtIndex(list, 10);
-  FLT_SETTINGSPuckBearingSourceBox *puckBearingSource = puckBearingSourceAsNumber == nil ? nil : [[FLT_SETTINGSPuckBearingSourceBox alloc] initWithValue: [puckBearingSourceAsNumber integerValue]];
-  pigeonResult.puckBearingSource = puckBearingSource;
+  NSNumber *puckBearingAsNumber = GetNullableObjectAtIndex(list, 10);
+  FLT_SETTINGSPuckBearingBox *puckBearing = puckBearingAsNumber == nil ? nil : [[FLT_SETTINGSPuckBearingBox alloc] initWithValue: [puckBearingAsNumber integerValue]];
+  pigeonResult.puckBearing = puckBearing;
   pigeonResult.locationPuck = [FLT_SETTINGSLocationPuck nullableFromList:(GetNullableObjectAtIndex(list, 11))];
   return pigeonResult;
 }
@@ -396,7 +433,7 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.layerAbove ?: [NSNull null]),
     (self.layerBelow ?: [NSNull null]),
     (self.puckBearingEnabled ?: [NSNull null]),
-    (self.puckBearingSource == nil ? [NSNull null] : [NSNumber numberWithInteger:self.puckBearingSource.value]),
+    (self.puckBearing == nil ? [NSNull null] : [NSNumber numberWithInteger:self.puckBearing.value]),
     (self.locationPuck ? [self.locationPuck toList] : [NSNull null]),
   ];
 }

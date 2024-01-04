@@ -23,8 +23,8 @@ class ImageSource extends Source {
   /// URL that points to an image.
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
-      if (value.value != '<null>') {
-        return value.value;
+      if (value.value != null) {
+        return value.value as String;
       } else {
         return null;
       }
@@ -33,11 +33,12 @@ class ImageSource extends Source {
 
   List<List<double?>?>? _coordinates;
 
-  /// Corners of image specified in longitude, latitude pairs.
+  /// Corners of image specified in longitude, latitude pairs. Note: When using globe projection, the image will be centered at the North or South Pole in the respective hemisphere if the average latitude value exceeds 85 degrees or falls below -85 degrees.
   Future<List<List<double?>?>?> get coordinates async {
     return _style?.getStyleSourceProperty(id, "coordinates").then((value) {
-      if (value.value != '<null>') {
-        return (json.decode(value.value) as List).cast<List<double>>();
+      if (value.value != null) {
+        return List<List<double>>.from((value.value as List<dynamic>)
+            .map((e) => List<double>.from(e as List<dynamic>)));
       } else {
         return null;
       }
@@ -51,8 +52,8 @@ class ImageSource extends Source {
     return _style
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
         .then((value) {
-      if (value.value != '<null>') {
-        return double.parse(value.value);
+      if (value.value != null) {
+        return (value.value as num).toDouble();
       } else {
         return null;
       }

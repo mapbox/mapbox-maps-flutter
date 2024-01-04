@@ -37,6 +37,14 @@ void main() {
     var lineDasharray = await manager.getLineDasharray();
     expect([1.0, 2.0], lineDasharray);
 
+    await manager.setLineDepthOcclusionFactor(1.0);
+    var lineDepthOcclusionFactor = await manager.getLineDepthOcclusionFactor();
+    expect(1.0, lineDepthOcclusionFactor);
+
+    await manager.setLineEmissiveStrength(1.0);
+    var lineEmissiveStrength = await manager.getLineEmissiveStrength();
+    expect(1.0, lineEmissiveStrength);
+
     await manager.setLineTranslate([0.0, 1.0]);
     var lineTranslate = await manager.getLineTranslate();
     expect([0.0, 1.0], lineTranslate);

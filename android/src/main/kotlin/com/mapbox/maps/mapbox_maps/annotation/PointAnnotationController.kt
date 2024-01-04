@@ -9,6 +9,32 @@ import com.mapbox.maps.pigeons.FLTPointAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import toFLTIconAnchor
+import toFLTIconPitchAlignment
+import toFLTIconRotationAlignment
+import toFLTIconTextFit
+import toFLTIconTranslateAnchor
+import toFLTSymbolPlacement
+import toFLTSymbolZOrder
+import toFLTTextAnchor
+import toFLTTextJustify
+import toFLTTextPitchAlignment
+import toFLTTextRotationAlignment
+import toFLTTextTransform
+import toFLTTextTranslateAnchor
+import toIconAnchor
+import toIconPitchAlignment
+import toIconRotationAlignment
+import toIconTextFit
+import toIconTranslateAnchor
+import toSymbolPlacement
+import toSymbolZOrder
+import toTextAnchor
+import toTextJustify
+import toTextPitchAlignment
+import toTextRotationAlignment
+import toTextTransform
+import toTextTranslateAnchor
 import java.util.*
 
 class PointAnnotationController(private val delegate: ControllerDelegate) :
@@ -24,11 +50,11 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     try {
       val manager = delegate.getManager(managerId) as PointAnnotationManager
       val annotation = manager.create(annotationOption.toPointAnnotationOptions())
-      annotationMap[annotation.id.toString()] = annotation
+      annotationMap[annotation.id] = annotation
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id.toString())
+        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id)
       } else {
-        managerCreateAnnotationMap[managerId]!!.add(annotation.id.toString())
+        managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       result.success(annotation.toFLTPointAnnotation())
     } catch (e: Exception) {
@@ -45,13 +71,13 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       val manager = delegate.getManager(managerId) as PointAnnotationManager
       val annotations = manager.create(annotationOptions.map { it.toPointAnnotationOptions() })
       annotations.forEach {
-        annotationMap[it.id.toString()] = it
+        annotationMap[it.id] = it
       }
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
+        managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
         managerCreateAnnotationMap[managerId]!!.addAll(
-          annotations.map { it.id.toString() }
+          annotations.map { it.id }
             .toList()
         )
       }
@@ -130,7 +156,7 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       originalAnnotation.iconImageBitmap = (BitmapFactory.decodeByteArray(it, 0, it.size))
     }
     annotation.iconAnchor?.let {
-      originalAnnotation.iconAnchor = IconAnchor.values()[it.ordinal]
+      originalAnnotation.iconAnchor = it.toIconAnchor()
     }
     annotation.iconImage?.let {
       originalAnnotation.iconImage = it
@@ -144,20 +170,29 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     annotation.iconSize?.let {
       originalAnnotation.iconSize = it
     }
+    annotation.iconTextFit?.let {
+      originalAnnotation.iconTextFit = it.toIconTextFit()
+    }
+    annotation.iconTextFitPadding?.let {
+      originalAnnotation.iconTextFitPadding = it
+    }
     annotation.symbolSortKey?.let {
       originalAnnotation.symbolSortKey = it
     }
     annotation.textAnchor?.let {
-      originalAnnotation.textAnchor = TextAnchor.values()[it.ordinal]
+      originalAnnotation.textAnchor = it.toTextAnchor()
     }
     annotation.textField?.let {
       originalAnnotation.textField = it
     }
     annotation.textJustify?.let {
-      originalAnnotation.textJustify = TextJustify.values()[it.ordinal]
+      originalAnnotation.textJustify = it.toTextJustify()
     }
     annotation.textLetterSpacing?.let {
       originalAnnotation.textLetterSpacing = it
+    }
+    annotation.textLineHeight?.let {
+      originalAnnotation.textLineHeight = it
     }
     annotation.textMaxWidth?.let {
       originalAnnotation.textMaxWidth = it
@@ -175,10 +210,13 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
       originalAnnotation.textSize = it
     }
     annotation.textTransform?.let {
-      originalAnnotation.textTransform = TextTransform.values()[it.ordinal]
+      originalAnnotation.textTransform = it.toTextTransform()
     }
     annotation.iconColor?.let {
       originalAnnotation.iconColorInt = it.toInt()
+    }
+    annotation.iconEmissiveStrength?.let {
+      originalAnnotation.iconEmissiveStrength = it
     }
     annotation.iconHaloBlur?.let {
       originalAnnotation.iconHaloBlur = it
@@ -189,11 +227,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     annotation.iconHaloWidth?.let {
       originalAnnotation.iconHaloWidth = it
     }
+    annotation.iconImageCrossFade?.let {
+      originalAnnotation.iconImageCrossFade = it
+    }
     annotation.iconOpacity?.let {
       originalAnnotation.iconOpacity = it
     }
     annotation.textColor?.let {
       originalAnnotation.textColorInt = it.toInt()
+    }
+    annotation.textEmissiveStrength?.let {
+      originalAnnotation.textEmissiveStrength = it
     }
     annotation.textHaloBlur?.let {
       originalAnnotation.textHaloBlur = it
@@ -326,17 +370,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconPitchAlignment = IconPitchAlignment.values()[iconPitchAlignment.ordinal]
+    manager.iconPitchAlignment = iconPitchAlignment.toIconPitchAlignment()
     result.success(null)
   }
 
   override fun getIconPitchAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.IconPitchAlignment>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconPitchAlignment != null) {
-      result.success(manager.iconPitchAlignment!!.ordinal.toLong())
+      result.success(manager.iconPitchAlignment!!.toFLTIconPitchAlignment())
     } else {
       result.success(null)
     }
@@ -348,61 +392,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconRotationAlignment = IconRotationAlignment.values()[iconRotationAlignment.ordinal]
+    manager.iconRotationAlignment = iconRotationAlignment.toIconRotationAlignment()
     result.success(null)
   }
 
   override fun getIconRotationAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.IconRotationAlignment>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconRotationAlignment != null) {
-      result.success(manager.iconRotationAlignment!!.ordinal.toLong())
-    } else {
-      result.success(null)
-    }
-  }
-
-  override fun setIconTextFit(
-    managerId: String,
-    iconTextFit: FLTPointAnnotationMessager.IconTextFit,
-    result: FLTPointAnnotationMessager.Result<Void>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconTextFit = IconTextFit.values()[iconTextFit.ordinal]
-    result.success(null)
-  }
-
-  override fun getIconTextFit(
-    managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTextFit != null) {
-      result.success(manager.iconTextFit!!.ordinal.toLong())
-    } else {
-      result.success(null)
-    }
-  }
-
-  override fun setIconTextFitPadding(
-    managerId: String,
-    iconTextFitPadding: List<Double>,
-    result: FLTPointAnnotationMessager.Result<Void>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconTextFitPadding = iconTextFitPadding
-    result.success(null)
-  }
-
-  override fun getIconTextFitPadding(
-    managerId: String,
-    result: FLTPointAnnotationMessager.Result<List<Double>>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTextFitPadding != null) {
-      result.success(manager.iconTextFitPadding!!)
+      result.success(manager.iconRotationAlignment!!.toFLTIconRotationAlignment())
     } else {
       result.success(null)
     }
@@ -436,17 +436,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.symbolPlacement = SymbolPlacement.values()[symbolPlacement.ordinal]
+    manager.symbolPlacement = symbolPlacement.toSymbolPlacement()
     result.success(null)
   }
 
   override fun getSymbolPlacement(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.SymbolPlacement>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolPlacement != null) {
-      result.success(manager.symbolPlacement!!.ordinal.toLong())
+      result.success(manager.symbolPlacement!!.toFLTSymbolPlacement())
     } else {
       result.success(null)
     }
@@ -474,23 +474,45 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun setSymbolZElevate(
+    managerId: String,
+    symbolZElevate: Boolean,
+    result: FLTPointAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.symbolZElevate = symbolZElevate
+    result.success(null)
+  }
+
+  override fun getSymbolZElevate(
+    managerId: String,
+    result: FLTPointAnnotationMessager.Result<Boolean>
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    if (manager.symbolZElevate != null) {
+      result.success(manager.symbolZElevate!!)
+    } else {
+      result.success(null)
+    }
+  }
+
   override fun setSymbolZOrder(
     managerId: String,
     symbolZOrder: FLTPointAnnotationMessager.SymbolZOrder,
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.symbolZOrder = SymbolZOrder.values()[symbolZOrder.ordinal]
+    manager.symbolZOrder = symbolZOrder.toSymbolZOrder()
     result.success(null)
   }
 
   override fun getSymbolZOrder(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.SymbolZOrder>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.symbolZOrder != null) {
-      result.success(manager.symbolZOrder!!.ordinal.toLong())
+      result.success(manager.symbolZOrder!!.toFLTSymbolZOrder())
     } else {
       result.success(null)
     }
@@ -584,28 +606,6 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
-  override fun setTextLineHeight(
-    managerId: String,
-    textLineHeight: Double,
-    result: FLTPointAnnotationMessager.Result<Void>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textLineHeight = textLineHeight
-    result.success(null)
-  }
-
-  override fun getTextLineHeight(
-    managerId: String,
-    result: FLTPointAnnotationMessager.Result<Double>
-  ) {
-    val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textLineHeight != null) {
-      result.success(manager.textLineHeight!!)
-    } else {
-      result.success(null)
-    }
-  }
-
   override fun setTextMaxAngle(
     managerId: String,
     textMaxAngle: Double,
@@ -678,17 +678,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textPitchAlignment = TextPitchAlignment.values()[textPitchAlignment.ordinal]
+    manager.textPitchAlignment = textPitchAlignment.toTextPitchAlignment()
     result.success(null)
   }
 
   override fun getTextPitchAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.TextPitchAlignment>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textPitchAlignment != null) {
-      result.success(manager.textPitchAlignment!!.ordinal.toLong())
+      result.success(manager.textPitchAlignment!!.toFLTTextPitchAlignment())
     } else {
       result.success(null)
     }
@@ -700,17 +700,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textRotationAlignment = TextRotationAlignment.values()[textRotationAlignment.ordinal]
+    manager.textRotationAlignment = textRotationAlignment.toTextRotationAlignment()
     result.success(null)
   }
 
   override fun getTextRotationAlignment(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.TextRotationAlignment>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textRotationAlignment != null) {
-      result.success(manager.textRotationAlignment!!.ordinal.toLong())
+      result.success(manager.textRotationAlignment!!.toFLTTextRotationAlignment())
     } else {
       result.success(null)
     }
@@ -744,17 +744,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconTranslateAnchor = IconTranslateAnchor.values()[iconTranslateAnchor.ordinal]
+    manager.iconTranslateAnchor = iconTranslateAnchor.toIconTranslateAnchor()
     result.success(null)
   }
 
   override fun getIconTranslateAnchor(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.IconTranslateAnchor>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTranslateAnchor != null) {
-      result.success(manager.iconTranslateAnchor!!.ordinal.toLong())
+      result.success(manager.iconTranslateAnchor!!.toFLTIconTranslateAnchor())
     } else {
       result.success(null)
     }
@@ -788,17 +788,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPointAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textTranslateAnchor = TextTranslateAnchor.values()[textTranslateAnchor.ordinal]
+    manager.textTranslateAnchor = textTranslateAnchor.toTextTranslateAnchor()
     result.success(null)
   }
 
   override fun getTextTranslateAnchor(
     managerId: String,
-    result: FLTPointAnnotationMessager.Result<Long>
+    result: FLTPointAnnotationMessager.Result<FLTPointAnnotationMessager.TextTranslateAnchor>
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.textTranslateAnchor != null) {
-      result.success(manager.textTranslateAnchor!!.ordinal.toLong())
+      result.success(manager.textTranslateAnchor!!.toFLTTextTranslateAnchor())
     } else {
       result.success(null)
     }
@@ -813,7 +813,7 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
     builder.setGeometry(it.toMap())
   }
   this.iconAnchor?.let {
-    builder.setIconAnchor(FLTPointAnnotationMessager.IconAnchor.values()[it.ordinal])
+    builder.setIconAnchor(it.toFLTIconAnchor())
   }
   this.iconImage?.let {
     builder.setIconImage(it)
@@ -827,20 +827,29 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
   this.iconSize?.let {
     builder.setIconSize(it)
   }
+  this.iconTextFit?.let {
+    builder.setIconTextFit(it.toFLTIconTextFit())
+  }
+  this.iconTextFitPadding?.let {
+    builder.setIconTextFitPadding(it)
+  }
   this.symbolSortKey?.let {
     builder.setSymbolSortKey(it)
   }
   this.textAnchor?.let {
-    builder.setTextAnchor(FLTPointAnnotationMessager.TextAnchor.values()[it.ordinal])
+    builder.setTextAnchor(it.toFLTTextAnchor())
   }
   this.textField?.let {
     builder.setTextField(it)
   }
   this.textJustify?.let {
-    builder.setTextJustify(FLTPointAnnotationMessager.TextJustify.values()[it.ordinal])
+    builder.setTextJustify(it.toFLTTextJustify())
   }
   this.textLetterSpacing?.let {
     builder.setTextLetterSpacing(it)
+  }
+  this.textLineHeight?.let {
+    builder.setTextLineHeight(it)
   }
   this.textMaxWidth?.let {
     builder.setTextMaxWidth(it)
@@ -858,11 +867,14 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
     builder.setTextSize(it)
   }
   this.textTransform?.let {
-    builder.setTextTransform(FLTPointAnnotationMessager.TextTransform.values()[it.ordinal])
+    builder.setTextTransform(it.toFLTTextTransform())
   }
   this.iconColorInt?.let {
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     builder.setIconColor(it.toUInt().toLong())
+  }
+  this.iconEmissiveStrength?.let {
+    builder.setIconEmissiveStrength(it)
   }
   this.iconHaloBlur?.let {
     builder.setIconHaloBlur(it)
@@ -874,12 +886,18 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
   this.iconHaloWidth?.let {
     builder.setIconHaloWidth(it)
   }
+  this.iconImageCrossFade?.let {
+    builder.setIconImageCrossFade(it)
+  }
   this.iconOpacity?.let {
     builder.setIconOpacity(it)
   }
   this.textColorInt?.let {
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     builder.setTextColor(it.toUInt().toLong())
+  }
+  this.textEmissiveStrength?.let {
+    builder.setTextEmissiveStrength(it)
   }
   this.textHaloBlur?.let {
     builder.setTextHaloBlur(it)
@@ -907,7 +925,7 @@ fun FLTPointAnnotationMessager.PointAnnotationOptions.toPointAnnotationOptions()
     options.withIconImage(BitmapFactory.decodeByteArray(it, 0, it.size))
   }
   this.iconAnchor?.let {
-    options.withIconAnchor(IconAnchor.values()[it.ordinal])
+    options.withIconAnchor(it.toIconAnchor())
   }
   this.iconImage?.let {
     options.withIconImage(it)
@@ -921,20 +939,29 @@ fun FLTPointAnnotationMessager.PointAnnotationOptions.toPointAnnotationOptions()
   this.iconSize?.let {
     options.withIconSize(it)
   }
+  this.iconTextFit?.let {
+    options.withIconTextFit(it.toIconTextFit())
+  }
+  this.iconTextFitPadding?.let {
+    options.withIconTextFitPadding(it)
+  }
   this.symbolSortKey?.let {
     options.withSymbolSortKey(it)
   }
   this.textAnchor?.let {
-    options.withTextAnchor(TextAnchor.values()[it.ordinal])
+    options.withTextAnchor(it.toTextAnchor())
   }
   this.textField?.let {
     options.withTextField(it)
   }
   this.textJustify?.let {
-    options.withTextJustify(TextJustify.values()[it.ordinal])
+    options.withTextJustify(it.toTextJustify())
   }
   this.textLetterSpacing?.let {
     options.withTextLetterSpacing(it)
+  }
+  this.textLineHeight?.let {
+    options.withTextLineHeight(it)
   }
   this.textMaxWidth?.let {
     options.withTextMaxWidth(it)
@@ -952,10 +979,13 @@ fun FLTPointAnnotationMessager.PointAnnotationOptions.toPointAnnotationOptions()
     options.withTextSize(it)
   }
   this.textTransform?.let {
-    options.withTextTransform(TextTransform.values()[it.ordinal])
+    options.withTextTransform(it.toTextTransform())
   }
   this.iconColor?.let {
     options.withIconColor(it.toInt())
+  }
+  this.iconEmissiveStrength?.let {
+    options.withIconEmissiveStrength(it)
   }
   this.iconHaloBlur?.let {
     options.withIconHaloBlur(it)
@@ -966,11 +996,17 @@ fun FLTPointAnnotationMessager.PointAnnotationOptions.toPointAnnotationOptions()
   this.iconHaloWidth?.let {
     options.withIconHaloWidth(it)
   }
+  this.iconImageCrossFade?.let {
+    options.withIconImageCrossFade(it)
+  }
   this.iconOpacity?.let {
     options.withIconOpacity(it)
   }
   this.textColor?.let {
     options.withTextColor(it.toInt())
+  }
+  this.textEmissiveStrength?.let {
+    options.withTextEmissiveStrength(it)
   }
   this.textHaloBlur?.let {
     options.withTextHaloBlur(it)

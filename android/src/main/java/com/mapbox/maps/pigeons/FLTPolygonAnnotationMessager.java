@@ -515,13 +515,17 @@ public class FLTPolygonAnnotationMessager {
 
     void getFillAntialias(@NonNull String managerId, @NonNull Result<Boolean> result);
 
+    void setFillEmissiveStrength(@NonNull String managerId, @NonNull Double fillEmissiveStrength, @NonNull Result<Void> result);
+
+    void getFillEmissiveStrength(@NonNull String managerId, @NonNull Result<Double> result);
+
     void setFillTranslate(@NonNull String managerId, @NonNull List<Double> fillTranslate, @NonNull Result<Void> result);
 
     void getFillTranslate(@NonNull String managerId, @NonNull Result<List<Double>> result);
 
     void setFillTranslateAnchor(@NonNull String managerId, @NonNull FillTranslateAnchor fillTranslateAnchor, @NonNull Result<Void> result);
 
-    void getFillTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getFillTranslateAnchor(@NonNull String managerId, @NonNull Result<FillTranslateAnchor> result);
 
     /** The codec used by _PolygonAnnotationMessager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -740,6 +744,65 @@ public class FLTPolygonAnnotationMessager {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Double fillEmissiveStrengthArg = (Double) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setFillEmissiveStrength(managerIdArg, fillEmissiveStrengthArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Result<Double> resultCallback =
+                    new Result<Double>() {
+                      public void success(Double result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getFillEmissiveStrength(managerIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
                 binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslate", getCodec());
         if (api != null) {
           channel.setMessageHandler(
@@ -836,10 +899,10 @@ public class FLTPolygonAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<FillTranslateAnchor> resultCallback =
+                    new Result<FillTranslateAnchor>() {
+                      public void success(FillTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

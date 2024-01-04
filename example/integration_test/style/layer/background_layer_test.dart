@@ -26,15 +26,19 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       backgroundColor: Colors.red.value,
+      backgroundEmissiveStrength: 1.0,
       backgroundOpacity: 1.0,
       backgroundPattern: "abc",
     ));
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.backgroundColor, Colors.red.value);
+    expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPattern, "abc");
   });

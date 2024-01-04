@@ -67,6 +67,8 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
     lineJoin:(nullable FLTLineJoinBox *)lineJoin
     lineSortKey:(nullable NSNumber *)lineSortKey
     lineBlur:(nullable NSNumber *)lineBlur
+    lineBorderColor:(nullable NSNumber *)lineBorderColor
+    lineBorderWidth:(nullable NSNumber *)lineBorderWidth
     lineColor:(nullable NSNumber *)lineColor
     lineGapWidth:(nullable NSNumber *)lineGapWidth
     lineOffset:(nullable NSNumber *)lineOffset
@@ -83,6 +85,10 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * lineSortKey;
 /// Blur applied to the line, in pixels.
 @property(nonatomic, strong, nullable) NSNumber * lineBlur;
+/// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+@property(nonatomic, strong, nullable) NSNumber * lineBorderColor;
+/// The width of the line border. A value of zero means no border.
+@property(nonatomic, strong, nullable) NSNumber * lineBorderWidth;
 /// The color with which the line will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * lineColor;
 /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
@@ -102,6 +108,8 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
     lineJoin:(nullable FLTLineJoinBox *)lineJoin
     lineSortKey:(nullable NSNumber *)lineSortKey
     lineBlur:(nullable NSNumber *)lineBlur
+    lineBorderColor:(nullable NSNumber *)lineBorderColor
+    lineBorderWidth:(nullable NSNumber *)lineBorderWidth
     lineColor:(nullable NSNumber *)lineColor
     lineGapWidth:(nullable NSNumber *)lineGapWidth
     lineOffset:(nullable NSNumber *)lineOffset
@@ -116,6 +124,10 @@ typedef NS_ENUM(NSUInteger, FLTLineTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * lineSortKey;
 /// Blur applied to the line, in pixels.
 @property(nonatomic, strong, nullable) NSNumber * lineBlur;
+/// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+@property(nonatomic, strong, nullable) NSNumber * lineBorderColor;
+/// The width of the line border. A value of zero means no border.
+@property(nonatomic, strong, nullable) NSNumber * lineBorderWidth;
 /// The color with which the line will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * lineColor;
 /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
@@ -148,17 +160,21 @@ NSObject<FlutterMessageCodec> *FLT_PolylineAnnotationMessagerGetCodec(void);
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTPolylineAnnotation *)annotation completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)setLineCapManagerId:(NSString *)managerId lineCap:(FLTLineCap)lineCap completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getLineCapManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getLineCapManagerId:(NSString *)managerId completion:(void (^)(FLTLineCapBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineMiterLimitManagerId:(NSString *)managerId lineMiterLimit:(NSNumber *)lineMiterLimit completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineMiterLimitManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineRoundLimitManagerId:(NSString *)managerId lineRoundLimit:(NSNumber *)lineRoundLimit completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineRoundLimitManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineDasharrayManagerId:(NSString *)managerId lineDasharray:(NSArray<NSNumber *> *)lineDasharray completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineDasharrayManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)setLineDepthOcclusionFactorManagerId:(NSString *)managerId lineDepthOcclusionFactor:(NSNumber *)lineDepthOcclusionFactor completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)getLineDepthOcclusionFactorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)setLineEmissiveStrengthManagerId:(NSString *)managerId lineEmissiveStrength:(NSNumber *)lineEmissiveStrength completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)getLineEmissiveStrengthManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineTranslateManagerId:(NSString *)managerId lineTranslate:(NSArray<NSNumber *> *)lineTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineTranslateAnchorManagerId:(NSString *)managerId lineTranslateAnchor:(FLTLineTranslateAnchor)lineTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getLineTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getLineTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTLineTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setLineTrimOffsetManagerId:(NSString *)managerId lineTrimOffset:(NSArray<NSNumber *> *)lineTrimOffset completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getLineTrimOffsetManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 @end

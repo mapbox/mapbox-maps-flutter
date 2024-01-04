@@ -44,6 +44,14 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Whether or not the fill should be antialiased.
   Future<bool?> getFillAntialias() => messager.getFillAntialias(id);
 
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<void> setFillEmissiveStrength(double fillEmissiveStrength) =>
+      messager.setFillEmissiveStrength(id, fillEmissiveStrength);
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<double?> getFillEmissiveStrength() =>
+      messager.getFillEmissiveStrength(id);
+
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   Future<void> setFillTranslate(List<double?> fillTranslate) =>
       messager.setFillTranslate(id, fillTranslate);
@@ -58,7 +66,6 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `fill-translate`.
   Future<FillTranslateAnchor?> getFillTranslateAnchor() =>
-      messager.getFillTranslateAnchor(id).then(
-          (value) => value != null ? FillTranslateAnchor.values[value] : null);
+      messager.getFillTranslateAnchor(id);
 }
 // End of generated file.

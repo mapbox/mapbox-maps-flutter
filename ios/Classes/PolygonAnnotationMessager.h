@@ -93,10 +93,12 @@ NSObject<FlutterMessageCodec> *FLT_PolygonAnnotationMessagerGetCodec(void);
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)setFillAntialiasManagerId:(NSString *)managerId fillAntialias:(NSNumber *)fillAntialias completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getFillAntialiasManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)setFillEmissiveStrengthManagerId:(NSString *)managerId fillEmissiveStrength:(NSNumber *)fillEmissiveStrength completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)getFillEmissiveStrengthManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setFillTranslateManagerId:(NSString *)managerId fillTranslate:(NSArray<NSNumber *> *)fillTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getFillTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setFillTranslateAnchorManagerId:(NSString *)managerId fillTranslateAnchor:(FLTFillTranslateAnchor)fillTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getFillTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getFillTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTFillTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void FLT_PolygonAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_PolygonAnnotationMessager> *_Nullable api);

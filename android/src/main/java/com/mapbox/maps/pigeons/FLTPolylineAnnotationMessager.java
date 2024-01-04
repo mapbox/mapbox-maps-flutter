@@ -163,6 +163,28 @@ public class FLTPolylineAnnotationMessager {
       this.lineBlur = setterArg;
     }
 
+    /** The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. */
+    private @Nullable Long lineBorderColor;
+
+    public @Nullable Long getLineBorderColor() {
+      return lineBorderColor;
+    }
+
+    public void setLineBorderColor(@Nullable Long setterArg) {
+      this.lineBorderColor = setterArg;
+    }
+
+    /** The width of the line border. A value of zero means no border. */
+    private @Nullable Double lineBorderWidth;
+
+    public @Nullable Double getLineBorderWidth() {
+      return lineBorderWidth;
+    }
+
+    public void setLineBorderWidth(@Nullable Double setterArg) {
+      this.lineBorderWidth = setterArg;
+    }
+
     /** The color with which the line will be drawn. */
     private @Nullable Long lineColor;
 
@@ -269,6 +291,20 @@ public class FLTPolylineAnnotationMessager {
         return this;
       }
 
+      private @Nullable Long lineBorderColor;
+
+      public @NonNull Builder setLineBorderColor(@Nullable Long setterArg) {
+        this.lineBorderColor = setterArg;
+        return this;
+      }
+
+      private @Nullable Double lineBorderWidth;
+
+      public @NonNull Builder setLineBorderWidth(@Nullable Double setterArg) {
+        this.lineBorderWidth = setterArg;
+        return this;
+      }
+
       private @Nullable Long lineColor;
 
       public @NonNull Builder setLineColor(@Nullable Long setterArg) {
@@ -318,6 +354,8 @@ public class FLTPolylineAnnotationMessager {
         pigeonReturn.setLineJoin(lineJoin);
         pigeonReturn.setLineSortKey(lineSortKey);
         pigeonReturn.setLineBlur(lineBlur);
+        pigeonReturn.setLineBorderColor(lineBorderColor);
+        pigeonReturn.setLineBorderWidth(lineBorderWidth);
         pigeonReturn.setLineColor(lineColor);
         pigeonReturn.setLineGapWidth(lineGapWidth);
         pigeonReturn.setLineOffset(lineOffset);
@@ -330,12 +368,14 @@ public class FLTPolylineAnnotationMessager {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(11);
+      ArrayList<Object> toListResult = new ArrayList<Object>(13);
       toListResult.add(id);
       toListResult.add(geometry);
       toListResult.add(lineJoin == null ? null : lineJoin.index);
       toListResult.add(lineSortKey);
       toListResult.add(lineBlur);
+      toListResult.add(lineBorderColor);
+      toListResult.add(lineBorderWidth);
       toListResult.add(lineColor);
       toListResult.add(lineGapWidth);
       toListResult.add(lineOffset);
@@ -357,17 +397,21 @@ public class FLTPolylineAnnotationMessager {
       pigeonResult.setLineSortKey((Double) lineSortKey);
       Object lineBlur = list.get(4);
       pigeonResult.setLineBlur((Double) lineBlur);
-      Object lineColor = list.get(5);
+      Object lineBorderColor = list.get(5);
+      pigeonResult.setLineBorderColor((lineBorderColor == null) ? null : ((lineBorderColor instanceof Integer) ? (Integer) lineBorderColor : (Long) lineBorderColor));
+      Object lineBorderWidth = list.get(6);
+      pigeonResult.setLineBorderWidth((Double) lineBorderWidth);
+      Object lineColor = list.get(7);
       pigeonResult.setLineColor((lineColor == null) ? null : ((lineColor instanceof Integer) ? (Integer) lineColor : (Long) lineColor));
-      Object lineGapWidth = list.get(6);
+      Object lineGapWidth = list.get(8);
       pigeonResult.setLineGapWidth((Double) lineGapWidth);
-      Object lineOffset = list.get(7);
+      Object lineOffset = list.get(9);
       pigeonResult.setLineOffset((Double) lineOffset);
-      Object lineOpacity = list.get(8);
+      Object lineOpacity = list.get(10);
       pigeonResult.setLineOpacity((Double) lineOpacity);
-      Object linePattern = list.get(9);
+      Object linePattern = list.get(11);
       pigeonResult.setLinePattern((String) linePattern);
-      Object lineWidth = list.get(10);
+      Object lineWidth = list.get(12);
       pigeonResult.setLineWidth((Double) lineWidth);
       return pigeonResult;
     }
@@ -417,6 +461,28 @@ public class FLTPolylineAnnotationMessager {
 
     public void setLineBlur(@Nullable Double setterArg) {
       this.lineBlur = setterArg;
+    }
+
+    /** The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. */
+    private @Nullable Long lineBorderColor;
+
+    public @Nullable Long getLineBorderColor() {
+      return lineBorderColor;
+    }
+
+    public void setLineBorderColor(@Nullable Long setterArg) {
+      this.lineBorderColor = setterArg;
+    }
+
+    /** The width of the line border. A value of zero means no border. */
+    private @Nullable Double lineBorderWidth;
+
+    public @Nullable Double getLineBorderWidth() {
+      return lineBorderWidth;
+    }
+
+    public void setLineBorderWidth(@Nullable Double setterArg) {
+      this.lineBorderWidth = setterArg;
     }
 
     /** The color with which the line will be drawn. */
@@ -515,6 +581,20 @@ public class FLTPolylineAnnotationMessager {
         return this;
       }
 
+      private @Nullable Long lineBorderColor;
+
+      public @NonNull Builder setLineBorderColor(@Nullable Long setterArg) {
+        this.lineBorderColor = setterArg;
+        return this;
+      }
+
+      private @Nullable Double lineBorderWidth;
+
+      public @NonNull Builder setLineBorderWidth(@Nullable Double setterArg) {
+        this.lineBorderWidth = setterArg;
+        return this;
+      }
+
       private @Nullable Long lineColor;
 
       public @NonNull Builder setLineColor(@Nullable Long setterArg) {
@@ -563,6 +643,8 @@ public class FLTPolylineAnnotationMessager {
         pigeonReturn.setLineJoin(lineJoin);
         pigeonReturn.setLineSortKey(lineSortKey);
         pigeonReturn.setLineBlur(lineBlur);
+        pigeonReturn.setLineBorderColor(lineBorderColor);
+        pigeonReturn.setLineBorderWidth(lineBorderWidth);
         pigeonReturn.setLineColor(lineColor);
         pigeonReturn.setLineGapWidth(lineGapWidth);
         pigeonReturn.setLineOffset(lineOffset);
@@ -575,11 +657,13 @@ public class FLTPolylineAnnotationMessager {
 
     @NonNull
     ArrayList<Object> toList() {
-      ArrayList<Object> toListResult = new ArrayList<Object>(10);
+      ArrayList<Object> toListResult = new ArrayList<Object>(12);
       toListResult.add(geometry);
       toListResult.add(lineJoin == null ? null : lineJoin.index);
       toListResult.add(lineSortKey);
       toListResult.add(lineBlur);
+      toListResult.add(lineBorderColor);
+      toListResult.add(lineBorderWidth);
       toListResult.add(lineColor);
       toListResult.add(lineGapWidth);
       toListResult.add(lineOffset);
@@ -599,17 +683,21 @@ public class FLTPolylineAnnotationMessager {
       pigeonResult.setLineSortKey((Double) lineSortKey);
       Object lineBlur = list.get(3);
       pigeonResult.setLineBlur((Double) lineBlur);
-      Object lineColor = list.get(4);
+      Object lineBorderColor = list.get(4);
+      pigeonResult.setLineBorderColor((lineBorderColor == null) ? null : ((lineBorderColor instanceof Integer) ? (Integer) lineBorderColor : (Long) lineBorderColor));
+      Object lineBorderWidth = list.get(5);
+      pigeonResult.setLineBorderWidth((Double) lineBorderWidth);
+      Object lineColor = list.get(6);
       pigeonResult.setLineColor((lineColor == null) ? null : ((lineColor instanceof Integer) ? (Integer) lineColor : (Long) lineColor));
-      Object lineGapWidth = list.get(5);
+      Object lineGapWidth = list.get(7);
       pigeonResult.setLineGapWidth((Double) lineGapWidth);
-      Object lineOffset = list.get(6);
+      Object lineOffset = list.get(8);
       pigeonResult.setLineOffset((Double) lineOffset);
-      Object lineOpacity = list.get(7);
+      Object lineOpacity = list.get(9);
       pigeonResult.setLineOpacity((Double) lineOpacity);
-      Object linePattern = list.get(8);
+      Object linePattern = list.get(10);
       pigeonResult.setLinePattern((String) linePattern);
-      Object lineWidth = list.get(9);
+      Object lineWidth = list.get(11);
       pigeonResult.setLineWidth((Double) lineWidth);
       return pigeonResult;
     }
@@ -721,7 +809,7 @@ public class FLTPolylineAnnotationMessager {
 
     void setLineCap(@NonNull String managerId, @NonNull LineCap lineCap, @NonNull Result<Void> result);
 
-    void getLineCap(@NonNull String managerId, @NonNull Result<Long> result);
+    void getLineCap(@NonNull String managerId, @NonNull Result<LineCap> result);
 
     void setLineMiterLimit(@NonNull String managerId, @NonNull Double lineMiterLimit, @NonNull Result<Void> result);
 
@@ -735,13 +823,21 @@ public class FLTPolylineAnnotationMessager {
 
     void getLineDasharray(@NonNull String managerId, @NonNull Result<List<Double>> result);
 
+    void setLineDepthOcclusionFactor(@NonNull String managerId, @NonNull Double lineDepthOcclusionFactor, @NonNull Result<Void> result);
+
+    void getLineDepthOcclusionFactor(@NonNull String managerId, @NonNull Result<Double> result);
+
+    void setLineEmissiveStrength(@NonNull String managerId, @NonNull Double lineEmissiveStrength, @NonNull Result<Void> result);
+
+    void getLineEmissiveStrength(@NonNull String managerId, @NonNull Result<Double> result);
+
     void setLineTranslate(@NonNull String managerId, @NonNull List<Double> lineTranslate, @NonNull Result<Void> result);
 
     void getLineTranslate(@NonNull String managerId, @NonNull Result<List<Double>> result);
 
     void setLineTranslateAnchor(@NonNull String managerId, @NonNull LineTranslateAnchor lineTranslateAnchor, @NonNull Result<Void> result);
 
-    void getLineTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getLineTranslateAnchor(@NonNull String managerId, @NonNull Result<LineTranslateAnchor> result);
 
     void setLineTrimOffset(@NonNull String managerId, @NonNull List<Double> lineTrimOffset, @NonNull Result<Void> result);
 
@@ -942,10 +1038,10 @@ public class FLTPolylineAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<LineCap> resultCallback =
+                    new Result<LineCap>() {
+                      public void success(LineCap result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -1141,6 +1237,124 @@ public class FLTPolylineAnnotationMessager {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDepthOcclusionFactor", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Double lineDepthOcclusionFactorArg = (Double) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setLineDepthOcclusionFactor(managerIdArg, lineDepthOcclusionFactorArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDepthOcclusionFactor", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Result<Double> resultCallback =
+                    new Result<Double>() {
+                      public void success(Double result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getLineDepthOcclusionFactor(managerIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Double lineEmissiveStrengthArg = (Double) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setLineEmissiveStrength(managerIdArg, lineEmissiveStrengthArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Result<Double> resultCallback =
+                    new Result<Double>() {
+                      public void success(Double result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getLineEmissiveStrength(managerIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
                 binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslate", getCodec());
         if (api != null) {
           channel.setMessageHandler(
@@ -1237,10 +1451,10 @@ public class FLTPolylineAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<LineTranslateAnchor> resultCallback =
+                    new Result<LineTranslateAnchor>() {
+                      public void success(LineTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

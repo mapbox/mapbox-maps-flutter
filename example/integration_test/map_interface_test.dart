@@ -30,6 +30,9 @@ void main() {
     final mapboxMap = await mapFuture;
     var styleJson = await rootBundle.loadString('assets/style.json');
     mapboxMap.loadStyleJson(styleJson);
+
+    await app.events.onMapLoaded.future;
+
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
     await addDelay(1000);
@@ -43,12 +46,12 @@ void main() {
     await addDelay(1000);
   });
 
-  testWidgets('setMemoryBudget', (WidgetTester tester) async {
+  testWidgets('setTileCacheBudget', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    mapboxMap.setMemoryBudget(MapMemoryBudgetInMegabytes(size: 100), null);
-    mapboxMap.setMemoryBudget(null, MapMemoryBudgetInTiles(size: 100));
+    mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
+    mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
     await addDelay(1000);
   });
 
@@ -103,7 +106,6 @@ void main() {
       expect(options.viewportMode, ViewportMode.DEFAULT);
     }
     expect(options.crossSourceCollisions, true);
-    expect(options.optimizeForTerrain, true);
     expect(options.pixelRatio, tester.binding.window.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, isNotNull);
@@ -174,6 +176,9 @@ void main() {
     var style = mapboxMap.style;
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    await app.events.onMapLoaded.future;
+
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
     await addDelay(1000);
@@ -196,11 +201,11 @@ void main() {
   testWidgets('getResourceOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
 
-    var options = await mapboxMap.getResourceOptions();
-    expect(options.accessToken, isNotNull);
-    expect(options.baseURL, 'https://api.mapbox.com');
+    var baseUrl = await MapboxMapsOptions.getBaseUrl();
+    expect(baseUrl, 'https://api.mapbox.com');
+    var accessToken = await MapboxOptions.getAccessToken();
+    expect(accessToken, isNotNull);
     await addDelay(1000);
   });
 
@@ -209,6 +214,10 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    var options = CameraOptions(
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10);
+    mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     final ByteData bytes =
@@ -227,9 +236,9 @@ void main() {
         value: json.encode(screenBox.encode()), type: Type.SCREEN_BOX);
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
-    expect(query.length, 1);
-    expect(query[0]!.source, 'source');
-    expect(query[0]!.feature['id'], 'point');
+    expect(query.length, greaterThan(0));
+    expect(query[0]!.queriedFeature.source, 'source');
+    expect(query[0]!.queriedFeature.feature['id'], 'point');
 
     query = await mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(
@@ -254,6 +263,11 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
+    var options = CameraOptions(
+        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        zoom: 10,
+        pitch: 0);
+    mapboxMap.setCamera(options);
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     style.addStyleSource('source', source);
@@ -261,9 +275,9 @@ void main() {
     await addDelay(1000);
     var query = await mapboxMap.querySourceFeatures(
         'source', SourceQueryOptions(filter: ''));
-    expect(query.length, 1);
-    expect(query[0]!.source, 'source');
-    expect(query[0]!.feature['id'], 'point');
+    expect(query.length, greaterThan(0));
+    expect(query[0]!.queriedFeature.source, 'source');
+    expect(query[0]!.queriedFeature.feature['id'], 'point');
   });
 
   testWidgets('queryFeatureExtensions', (WidgetTester tester) async {

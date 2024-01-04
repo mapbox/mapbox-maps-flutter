@@ -6,17 +6,38 @@ import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.plugin.animation.*
 
 class CameraController(private val mapboxMap: MapboxMap, private val context: Context) : FLTMapInterfaces._CameraManager {
+  override fun cameraForCoordinatesPadding(
+    coordinates: MutableList<MutableMap<String, Any>>,
+    camera: FLTMapInterfaces.CameraOptions,
+    coordinatesPadding: FLTMapInterfaces.MbxEdgeInsets?,
+    maxZoom: Double?,
+    offset: FLTMapInterfaces.ScreenCoordinate?
+  ): FLTMapInterfaces.CameraOptions {
+    val cameraOptions = mapboxMap.cameraForCoordinates(
+      coordinates.map { it.toPoint() },
+      camera.toCameraOptions(context),
+      coordinatesPadding?.toEdgeInsets(context),
+      maxZoom,
+      offset?.toScreenCoordinate(context)
+    )
+    return cameraOptions.toFLTCameraOptions(context)
+  }
+
   override fun cameraForCoordinateBounds(
     bounds: FLTMapInterfaces.CoordinateBounds,
     padding: FLTMapInterfaces.MbxEdgeInsets,
     bearing: Double?,
-    pitch: Double?
+    pitch: Double?,
+    maxZoom: Double?,
+    offset: FLTMapInterfaces.ScreenCoordinate?
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinateBounds(
       bounds.toCoordinateBounds(),
       padding.toEdgeInsets(context),
       bearing,
-      pitch
+      pitch,
+      maxZoom,
+      offset?.toScreenCoordinate(context)
     )
     return cameraOptions.toFLTCameraOptions(context)
   }
@@ -120,23 +141,5 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
 
   override fun getBounds(): FLTMapInterfaces.CameraBounds {
     return mapboxMap.getBounds().toFLTCameraBounds()
-  }
-
-  override fun dragStart(point: FLTMapInterfaces.ScreenCoordinate) {
-    mapboxMap.dragStart(point.toScreenCoordinate(context))
-  }
-
-  override fun getDragCameraOptions(
-    fromPoint: FLTMapInterfaces.ScreenCoordinate,
-    toPoint: FLTMapInterfaces.ScreenCoordinate
-  ): FLTMapInterfaces.CameraOptions {
-    return mapboxMap.getDragCameraOptions(
-      fromPoint.toScreenCoordinate(context),
-      toPoint.toScreenCoordinate(context)
-    ).toFLTCameraOptions(context)
-  }
-
-  override fun dragEnd() {
-    mapboxMap.dragEnd()
   }
 }

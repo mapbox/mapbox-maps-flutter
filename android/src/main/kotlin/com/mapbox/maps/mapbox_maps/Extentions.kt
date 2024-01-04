@@ -4,12 +4,146 @@ import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
+import com.mapbox.maps.extension.style.layers.properties.generated.Anchor
+import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
+import com.mapbox.maps.extension.style.light.LightPosition
+import com.mapbox.maps.extension.style.light.generated.AmbientLight
+import com.mapbox.maps.extension.style.light.generated.DirectionalLight
+import com.mapbox.maps.extension.style.light.generated.FlatLight
+import com.mapbox.maps.extension.style.light.generated.ambientLight
+import com.mapbox.maps.extension.style.light.generated.directionalLight
+import com.mapbox.maps.extension.style.light.generated.flatLight
+import com.mapbox.maps.extension.style.projection.generated.Projection
+import com.mapbox.maps.extension.style.types.StyleTransition
 import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjection
+import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjectionName
+import com.mapbox.maps.pigeons.FLTSettings
+import com.mapbox.maps.plugin.ModelScaleMode
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import org.json.JSONArray
 import org.json.JSONObject
 
 // FLT to Android
+
+fun FLTSettings.ModelScaleMode.toModelScaleMode(): ModelScaleMode {
+  return when (this) {
+    FLTSettings.ModelScaleMode.VIEWPORT -> ModelScaleMode.VIEWPORT
+    FLTSettings.ModelScaleMode.MAP -> ModelScaleMode.MAP
+    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+  }
+}
+
+fun FLTMapInterfaces.TileStoreUsageMode.toTileStoreUsageMode(): TileStoreUsageMode {
+  return when (this) {
+    FLTMapInterfaces.TileStoreUsageMode.DISABLED -> TileStoreUsageMode.DISABLED
+    FLTMapInterfaces.TileStoreUsageMode.READ_AND_UPDATE -> TileStoreUsageMode.READ_AND_UPDATE
+    FLTMapInterfaces.TileStoreUsageMode.READ_ONLY -> TileStoreUsageMode.READ_ONLY
+  }
+}
+fun StyleProjectionName.toProjectionName(): ProjectionName {
+  return when (this) {
+    StyleProjectionName.GLOBE -> ProjectionName.GLOBE
+    StyleProjectionName.MERCATOR -> ProjectionName.MERCATOR
+  }
+}
+fun StyleProjection.toProjection(): com.mapbox.maps.extension.style.projection.generated.Projection {
+  return Projection(name.toProjectionName())
+}
+fun FLTMapInterfaces.TransitionOptions.toStyleTransition(): StyleTransition {
+  val builder = StyleTransition.Builder()
+  duration?.let {
+    builder.duration(it)
+  }
+  delay?.let {
+    builder.delay(it)
+  }
+
+  return builder.build()
+}
+fun FLTMapInterfaces.Anchor.toAnchor(): Anchor {
+  return when (this) {
+    FLTMapInterfaces.Anchor.MAP -> Anchor.MAP
+    FLTMapInterfaces.Anchor.VIEWPORT -> Anchor.VIEWPORT
+  }
+}
+fun FLTMapInterfaces.FlatLight.toFlatLight(): FlatLight {
+  return flatLight(id) {
+    anchor?.let {
+      anchor(it.toAnchor())
+    }
+    color?.let {
+      color(it.toInt())
+    }
+    colorTransition?.let {
+      colorTransition(it.toStyleTransition())
+    }
+    intensity?.let {
+      intensity(it)
+    }
+    intensityTransition?.let {
+      intensityTransition(it.toStyleTransition())
+    }
+    position?.let {
+      if (it.size == 3) {
+        position(LightPosition(it[0], it[1], it[2]))
+      }
+    }
+    positionTransition?.let {
+      positionTransition(it.toStyleTransition())
+    }
+  }
+}
+
+fun FLTMapInterfaces.AmbientLight.toAmbientLight(): AmbientLight {
+  return ambientLight(id) {
+    color?.let {
+      color(it.toInt())
+    }
+    colorTransition?.let {
+      colorTransition(it.toStyleTransition())
+    }
+    intensity?.let {
+      intensity(it)
+    }
+    intensityTransition?.let {
+      intensityTransition(it.toStyleTransition())
+    }
+  }
+}
+
+fun FLTMapInterfaces.DirectionalLight.toDirectionalLight(): DirectionalLight {
+  return directionalLight(id) {
+    castShadows?.let {
+      castShadows(it)
+    }
+    color?.let {
+      color(it.toInt())
+    }
+    colorTransition?.let {
+      colorTransition(it.toStyleTransition())
+    }
+    direction?.let {
+      direction(it)
+    }
+    directionTransition?.let {
+      directionTransition(it.toStyleTransition())
+    }
+    intensity?.let {
+      intensity(it)
+    }
+    intensityTransition?.let {
+      intensityTransition(it.toStyleTransition())
+    }
+    shadowIntensity?.let {
+      shadowIntensity(it)
+    }
+    shadowIntensityTransition?.let {
+      shadowIntensityTransition(it.toStyleTransition())
+    }
+  }
+}
+
 fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOptions {
   val builder = MapAnimationOptions.Builder()
   duration?.let {
@@ -21,12 +155,12 @@ fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOp
   return builder.build()
 }
 
-fun FLTMapInterfaces.MapMemoryBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): MapMemoryBudgetInMegabytes {
-  return MapMemoryBudgetInMegabytes(size)
+fun FLTMapInterfaces.TileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): TileCacheBudgetInMegabytes {
+  return TileCacheBudgetInMegabytes(size)
 }
 
-fun FLTMapInterfaces.MapMemoryBudgetInTiles.toMapMemoryBudgetInTiles(): MapMemoryBudgetInTiles {
-  return MapMemoryBudgetInTiles(size)
+fun FLTMapInterfaces.TileCacheBudgetInTiles.toMapMemoryBudgetInTiles(): TileCacheBudgetInTiles {
+  return TileCacheBudgetInTiles(size)
 }
 
 fun FLTMapInterfaces.SourceQueryOptions.toSourceQueryOptions(): SourceQueryOptions {
@@ -217,6 +351,46 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun StyleTransition.toFLTTransitionOptions(): FLTMapInterfaces.TransitionOptions {
+  return FLTMapInterfaces.TransitionOptions.Builder()
+    .setDelay(delay)
+    .setDuration(duration)
+    .build()
+}
+fun ModelScaleMode.toFLTModelScaleMode(): FLTSettings.ModelScaleMode {
+  return when (this) {
+    ModelScaleMode.VIEWPORT -> FLTSettings.ModelScaleMode.VIEWPORT
+    ModelScaleMode.MAP -> FLTSettings.ModelScaleMode.MAP
+    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+  }
+}
+fun StylePropertyValue.toFLTStylePropertyValue(): FLTMapInterfaces.StylePropertyValue {
+  return FLTMapInterfaces.StylePropertyValue.Builder()
+    .setValue(value.toJson())
+    .setKind(FLTMapInterfaces.StylePropertyValueKind.values()[kind.ordinal])
+    .build()
+}
+
+fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
+  return when (this) {
+    ProjectionName.GLOBE -> StyleProjectionName.GLOBE
+    ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
+    else -> { throw java.lang.RuntimeException("Projection $this is not supported.") }
+  }
+}
+fun Projection.toFLTProjection(): StyleProjection {
+  return StyleProjection.Builder()
+    .setName(name.toFLTProjectionName())
+    .build()
+}
+fun StyleObjectInfo.toFLTStyleObjectInfo(): FLTMapInterfaces.StyleObjectInfo {
+  return FLTMapInterfaces.StyleObjectInfo.Builder()
+    .setId(id)
+    .setType(type)
+    .build()
+}
+
 fun MercatorCoordinate.toFLTMercatorCoordinate(): FLTMapInterfaces.MercatorCoordinate {
   return FLTMapInterfaces.MercatorCoordinate.Builder()
     .setX(x)
@@ -248,24 +422,20 @@ fun QueriedFeature.toFLTQueriedFeature(): FLTMapInterfaces.QueriedFeature {
     .build()
 }
 
-fun TileStoreUsageMode.toFLTTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
-  return FLTMapInterfaces.TileStoreUsageMode.values()[ordinal]
+fun QueriedRenderedFeature.toFLTQueriedRenderedFeature(): FLTMapInterfaces.QueriedRenderedFeature {
+  return FLTMapInterfaces.QueriedRenderedFeature.Builder()
+    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
+    .setLayers(this.layers)
+    .build()
+}
+fun QueriedSourceFeature.toFLTQueriedSourceFeature(): FLTMapInterfaces.QueriedSourceFeature {
+  return FLTMapInterfaces.QueriedSourceFeature.Builder()
+    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
+    .build()
 }
 
-fun ResourceOptions.toFLTResourceOptions(): FLTMapInterfaces.ResourceOptions {
-  val builder = FLTMapInterfaces.ResourceOptions.Builder()
-    .setAccessToken(accessToken)
-    .setTileStoreUsageMode(tileStoreUsageMode.toFLTTileStoreUsageMode())
-  baseURL?.let {
-    builder.setBaseURL(it)
-  }
-  dataPath?.let {
-    builder.setDataPath(it)
-  }
-  assetPath?.let {
-    builder.setAssetPath(it)
-  }
-  return builder.build()
+fun TileStoreUsageMode.toFLTTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
+  return FLTMapInterfaces.TileStoreUsageMode.values()[ordinal]
 }
 
 fun MapDebugOptions.toFLTMapDebugOptions(): FLTMapInterfaces.MapDebugOptions {
@@ -307,9 +477,6 @@ fun MapOptions.toFLTMapOptions(context: Context): FLTMapInterfaces.MapOptions {
   }
   crossSourceCollisions?.let {
     builder.setCrossSourceCollisions(it)
-  }
-  optimizeForTerrain?.let {
-    builder.setOptimizeForTerrain(it)
   }
   size?.let {
     builder.setSize(it.toFLTSize(context))

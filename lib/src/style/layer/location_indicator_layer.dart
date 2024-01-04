@@ -8,6 +8,7 @@ class LocationIndicatorLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     this.bearingImage,
     this.shadowImage,
     this.topImage,
@@ -20,11 +21,16 @@ class LocationIndicatorLayer extends Layer {
     this.emphasisCircleRadius,
     this.imagePitchDisplacement,
     this.location,
+    this.locationIndicatorOpacity,
     this.perspectiveCompensation,
     this.shadowImageSize,
     this.topImageSize,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "location-indicator";
@@ -64,6 +70,9 @@ class LocationIndicatorLayer extends Layer {
 
   /// An array of [latitude, longitude, altitude] position of the location indicator.
   List<double?>? location;
+
+  /// The opacity of the entire location indicator layer.
+  double? locationIndicatorOpacity;
 
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
   double? perspectiveCompensation;
@@ -119,6 +128,9 @@ class LocationIndicatorLayer extends Layer {
     if (location != null) {
       paint["location"] = location;
     }
+    if (locationIndicatorOpacity != null) {
+      paint["location-indicator-opacity"] = locationIndicatorOpacity;
+    }
     if (perspectiveCompensation != null) {
       paint["perspective-compensation"] = perspectiveCompensation;
     }
@@ -140,6 +152,9 @@ class LocationIndicatorLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -156,6 +171,7 @@ class LocationIndicatorLayer extends Layer {
       id: map["id"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e
@@ -197,6 +213,10 @@ class LocationIndicatorLayer extends Layer {
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
+      locationIndicatorOpacity:
+          map["paint"]["location-indicator-opacity"] is num?
+              ? (map["paint"]["location-indicator-opacity"] as num?)?.toDouble()
+              : null,
       perspectiveCompensation: map["paint"]["perspective-compensation"] is num?
           ? (map["paint"]["perspective-compensation"] as num?)?.toDouble()
           : null,

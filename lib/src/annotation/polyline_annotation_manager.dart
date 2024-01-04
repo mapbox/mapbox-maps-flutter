@@ -41,9 +41,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<void> setLineCap(LineCap lineCap) => messager.setLineCap(id, lineCap);
 
   /// The display of line endings.
-  Future<LineCap?> getLineCap() => messager
-      .getLineCap(id)
-      .then((value) => value != null ? LineCap.values[value] : null);
+  Future<LineCap?> getLineCap() => messager.getLineCap(id);
 
   /// Used to automatically convert miter joins to bevel joins for sharp angles.
   Future<void> setLineMiterLimit(double lineMiterLimit) =>
@@ -66,6 +64,22 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   Future<List<double?>?> getLineDasharray() => messager.getLineDasharray(id);
 
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  Future<void> setLineDepthOcclusionFactor(double lineDepthOcclusionFactor) =>
+      messager.setLineDepthOcclusionFactor(id, lineDepthOcclusionFactor);
+
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  Future<double?> getLineDepthOcclusionFactor() =>
+      messager.getLineDepthOcclusionFactor(id);
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<void> setLineEmissiveStrength(double lineEmissiveStrength) =>
+      messager.setLineEmissiveStrength(id, lineEmissiveStrength);
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  Future<double?> getLineEmissiveStrength() =>
+      messager.getLineEmissiveStrength(id);
+
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   Future<void> setLineTranslate(List<double?> lineTranslate) =>
       messager.setLineTranslate(id, lineTranslate);
@@ -80,14 +94,13 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `line-translate`.
   Future<LineTranslateAnchor?> getLineTranslateAnchor() =>
-      messager.getLineTranslateAnchor(id).then(
-          (value) => value != null ? LineTranslateAnchor.values[value] : null);
+      messager.getLineTranslateAnchor(id);
 
-  /// The line trim-off percentage range based on the whole line gradinet range [0.0, 1.0]. The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. If either 'trim-start' or 'trim-end' offset is out of valid range, the default range will be set.
+  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   Future<void> setLineTrimOffset(List<double?> lineTrimOffset) =>
       messager.setLineTrimOffset(id, lineTrimOffset);
 
-  /// The line trim-off percentage range based on the whole line gradinet range [0.0, 1.0]. The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. If either 'trim-start' or 'trim-end' offset is out of valid range, the default range will be set.
+  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   Future<List<double?>?> getLineTrimOffset() => messager.getLineTrimOffset(id);
 }
 // End of generated file.

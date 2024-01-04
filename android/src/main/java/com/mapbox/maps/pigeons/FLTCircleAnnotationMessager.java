@@ -671,13 +671,17 @@ public class FLTCircleAnnotationMessager {
 
     void deleteAll(@NonNull String managerId, @NonNull Result<Void> result);
 
+    void setCircleEmissiveStrength(@NonNull String managerId, @NonNull Double circleEmissiveStrength, @NonNull Result<Void> result);
+
+    void getCircleEmissiveStrength(@NonNull String managerId, @NonNull Result<Double> result);
+
     void setCirclePitchAlignment(@NonNull String managerId, @NonNull CirclePitchAlignment circlePitchAlignment, @NonNull Result<Void> result);
 
-    void getCirclePitchAlignment(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCirclePitchAlignment(@NonNull String managerId, @NonNull Result<CirclePitchAlignment> result);
 
     void setCirclePitchScale(@NonNull String managerId, @NonNull CirclePitchScale circlePitchScale, @NonNull Result<Void> result);
 
-    void getCirclePitchScale(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCirclePitchScale(@NonNull String managerId, @NonNull Result<CirclePitchScale> result);
 
     void setCircleTranslate(@NonNull String managerId, @NonNull List<Double> circleTranslate, @NonNull Result<Void> result);
 
@@ -685,7 +689,7 @@ public class FLTCircleAnnotationMessager {
 
     void setCircleTranslateAnchor(@NonNull String managerId, @NonNull CircleTranslateAnchor circleTranslateAnchor, @NonNull Result<Void> result);
 
-    void getCircleTranslateAnchor(@NonNull String managerId, @NonNull Result<Long> result);
+    void getCircleTranslateAnchor(@NonNull String managerId, @NonNull Result<CircleTranslateAnchor> result);
 
     /** The codec used by _CircleAnnotationMessager. */
     static @NonNull MessageCodec<Object> getCodec() {
@@ -845,6 +849,65 @@ public class FLTCircleAnnotationMessager {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Double circleEmissiveStrengthArg = (Double) args.get(1);
+                Result<Void> resultCallback =
+                    new Result<Void>() {
+                      public void success(Void result) {
+                        wrapped.add(0, null);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.setCircleEmissiveStrength(managerIdArg, circleEmissiveStrengthArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                String managerIdArg = (String) args.get(0);
+                Result<Double> resultCallback =
+                    new Result<Double>() {
+                      public void success(Double result) {
+                        wrapped.add(0, result);
+                        reply.reply(wrapped);
+                      }
+
+                      public void error(Throwable error) {
+                        ArrayList<Object> wrappedError = wrapError(error);
+                        reply.reply(wrappedError);
+                      }
+                    };
+
+                api.getCircleEmissiveStrength(managerIdArg, resultCallback);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
                 binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment", getCodec());
         if (api != null) {
           channel.setMessageHandler(
@@ -882,10 +945,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CirclePitchAlignment> resultCallback =
+                    new Result<CirclePitchAlignment>() {
+                      public void success(CirclePitchAlignment result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -941,10 +1004,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CirclePitchScale> resultCallback =
+                    new Result<CirclePitchScale>() {
+                      public void success(CirclePitchScale result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 
@@ -1059,10 +1122,10 @@ public class FLTCircleAnnotationMessager {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 String managerIdArg = (String) args.get(0);
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
+                Result<CircleTranslateAnchor> resultCallback =
+                    new Result<CircleTranslateAnchor>() {
+                      public void success(CircleTranslateAnchor result) {
+                        wrapped.add(0, result == null ? null : result.index);
                         reply.reply(wrapped);
                       }
 

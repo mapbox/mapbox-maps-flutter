@@ -8,10 +8,14 @@ class RasterLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     required this.sourceId,
     this.sourceLayer,
     this.rasterBrightnessMax,
     this.rasterBrightnessMin,
+    this.rasterColor,
+    this.rasterColorMix,
+    this.rasterColorRange,
     this.rasterContrast,
     this.rasterFadeDuration,
     this.rasterHueRotate,
@@ -19,7 +23,11 @@ class RasterLayer extends Layer {
     this.rasterResampling,
     this.rasterSaturation,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "raster";
@@ -35,6 +43,15 @@ class RasterLayer extends Layer {
 
   /// Increase or reduce the brightness of the image. The value is the minimum brightness.
   double? rasterBrightnessMin;
+
+  /// Defines a color map by which to colorize a raster layer, parameterized by the `["raster-value"]` expression and evaluated at 1024 uniformly spaced steps over the range specified by `raster-color-range`.
+  int? rasterColor;
+
+  /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
+  List<double?>? rasterColorMix;
+
+  /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`.
+  List<double?>? rasterColorRange;
 
   /// Increase or reduce the contrast of the image.
   double? rasterContrast;
@@ -67,6 +84,15 @@ class RasterLayer extends Layer {
     }
     if (rasterBrightnessMin != null) {
       paint["raster-brightness-min"] = rasterBrightnessMin;
+    }
+    if (rasterColor != null) {
+      paint["raster-color"] = rasterColor?.toRGBA();
+    }
+    if (rasterColorMix != null) {
+      paint["raster-color-mix"] = rasterColorMix;
+    }
+    if (rasterColorRange != null) {
+      paint["raster-color-range"] = rasterColorRange;
     }
     if (rasterContrast != null) {
       paint["raster-contrast"] = rasterContrast;
@@ -103,6 +129,9 @@ class RasterLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -121,6 +150,7 @@ class RasterLayer extends Layer {
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e
@@ -135,6 +165,13 @@ class RasterLayer extends Layer {
       rasterBrightnessMin: map["paint"]["raster-brightness-min"] is num?
           ? (map["paint"]["raster-brightness-min"] as num?)?.toDouble()
           : null,
+      rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
+      rasterColorMix: (map["paint"]["raster-color-mix"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
+      rasterColorRange: (map["paint"]["raster-color-range"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
       rasterContrast: map["paint"]["raster-contrast"] is num?
           ? (map["paint"]["raster-contrast"] as num?)?.toDouble()
           : null,

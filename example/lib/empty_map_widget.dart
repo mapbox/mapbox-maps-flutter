@@ -3,25 +3,44 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
+class Events {
+  var onMapLoaded = Completer();
+
+  void resetOnMapLoaded() {
+    onMapLoaded = Completer();
+  }
+}
+
+var events = Events();
 
 Future<MapboxMap> main() {
   final completer = Completer<MapboxMap>();
 
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
+
+  events = Events();
   runApp(MaterialApp(
       home: MapWidget(
-          key: ValueKey("mapWidget"),
-          onMapCreated: (MapboxMap mapboxMap) {
-            completer.complete(mapboxMap);
-          },
-          resourceOptions:
-              ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN))));
+    key: ValueKey("mapWidget"),
+    onMapCreated: (MapboxMap mapboxMap) {
+      completer.complete(mapboxMap);
+    },
+    onMapLoadedListener: (MapLoadedEventData data) {
+      if (!events.onMapLoaded.isCompleted) {
+        events.onMapLoaded.complete();
+      }
+    },
+  )));
 
   return completer.future;
 }
 
 Future<MapboxMap> runFixedSizeMap() {
   final completer = Completer<MapboxMap>();
+
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
   runApp(MaterialApp(
       home: Align(
@@ -33,8 +52,7 @@ Future<MapboxMap> runFixedSizeMap() {
           key: ValueKey("mapWidget"),
           onMapCreated: (MapboxMap mapboxMap) {
             completer.complete(mapboxMap);
-          },
-          resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN)),
+          }),
     ),
   )));
 

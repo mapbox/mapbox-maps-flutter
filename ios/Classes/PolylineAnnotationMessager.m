@@ -77,6 +77,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     lineJoin:(nullable FLTLineJoinBox *)lineJoin
     lineSortKey:(nullable NSNumber *)lineSortKey
     lineBlur:(nullable NSNumber *)lineBlur
+    lineBorderColor:(nullable NSNumber *)lineBorderColor
+    lineBorderWidth:(nullable NSNumber *)lineBorderWidth
     lineColor:(nullable NSNumber *)lineColor
     lineGapWidth:(nullable NSNumber *)lineGapWidth
     lineOffset:(nullable NSNumber *)lineOffset
@@ -89,6 +91,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.lineJoin = lineJoin;
   pigeonResult.lineSortKey = lineSortKey;
   pigeonResult.lineBlur = lineBlur;
+  pigeonResult.lineBorderColor = lineBorderColor;
+  pigeonResult.lineBorderWidth = lineBorderWidth;
   pigeonResult.lineColor = lineColor;
   pigeonResult.lineGapWidth = lineGapWidth;
   pigeonResult.lineOffset = lineOffset;
@@ -107,12 +111,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.lineJoin = lineJoin;
   pigeonResult.lineSortKey = GetNullableObjectAtIndex(list, 3);
   pigeonResult.lineBlur = GetNullableObjectAtIndex(list, 4);
-  pigeonResult.lineColor = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.lineGapWidth = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.lineOffset = GetNullableObjectAtIndex(list, 7);
-  pigeonResult.lineOpacity = GetNullableObjectAtIndex(list, 8);
-  pigeonResult.linePattern = GetNullableObjectAtIndex(list, 9);
-  pigeonResult.lineWidth = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.lineBorderColor = GetNullableObjectAtIndex(list, 5);
+  pigeonResult.lineBorderWidth = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.lineColor = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.lineGapWidth = GetNullableObjectAtIndex(list, 8);
+  pigeonResult.lineOffset = GetNullableObjectAtIndex(list, 9);
+  pigeonResult.lineOpacity = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.linePattern = GetNullableObjectAtIndex(list, 11);
+  pigeonResult.lineWidth = GetNullableObjectAtIndex(list, 12);
   return pigeonResult;
 }
 + (nullable FLTPolylineAnnotation *)nullableFromList:(NSArray *)list {
@@ -125,6 +131,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.lineJoin == nil ? [NSNull null] : [NSNumber numberWithInteger:self.lineJoin.value]),
     (self.lineSortKey ?: [NSNull null]),
     (self.lineBlur ?: [NSNull null]),
+    (self.lineBorderColor ?: [NSNull null]),
+    (self.lineBorderWidth ?: [NSNull null]),
     (self.lineColor ?: [NSNull null]),
     (self.lineGapWidth ?: [NSNull null]),
     (self.lineOffset ?: [NSNull null]),
@@ -140,6 +148,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     lineJoin:(nullable FLTLineJoinBox *)lineJoin
     lineSortKey:(nullable NSNumber *)lineSortKey
     lineBlur:(nullable NSNumber *)lineBlur
+    lineBorderColor:(nullable NSNumber *)lineBorderColor
+    lineBorderWidth:(nullable NSNumber *)lineBorderWidth
     lineColor:(nullable NSNumber *)lineColor
     lineGapWidth:(nullable NSNumber *)lineGapWidth
     lineOffset:(nullable NSNumber *)lineOffset
@@ -151,6 +161,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.lineJoin = lineJoin;
   pigeonResult.lineSortKey = lineSortKey;
   pigeonResult.lineBlur = lineBlur;
+  pigeonResult.lineBorderColor = lineBorderColor;
+  pigeonResult.lineBorderWidth = lineBorderWidth;
   pigeonResult.lineColor = lineColor;
   pigeonResult.lineGapWidth = lineGapWidth;
   pigeonResult.lineOffset = lineOffset;
@@ -167,12 +179,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.lineJoin = lineJoin;
   pigeonResult.lineSortKey = GetNullableObjectAtIndex(list, 2);
   pigeonResult.lineBlur = GetNullableObjectAtIndex(list, 3);
-  pigeonResult.lineColor = GetNullableObjectAtIndex(list, 4);
-  pigeonResult.lineGapWidth = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.lineOffset = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.lineOpacity = GetNullableObjectAtIndex(list, 7);
-  pigeonResult.linePattern = GetNullableObjectAtIndex(list, 8);
-  pigeonResult.lineWidth = GetNullableObjectAtIndex(list, 9);
+  pigeonResult.lineBorderColor = GetNullableObjectAtIndex(list, 4);
+  pigeonResult.lineBorderWidth = GetNullableObjectAtIndex(list, 5);
+  pigeonResult.lineColor = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.lineGapWidth = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.lineOffset = GetNullableObjectAtIndex(list, 8);
+  pigeonResult.lineOpacity = GetNullableObjectAtIndex(list, 9);
+  pigeonResult.linePattern = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.lineWidth = GetNullableObjectAtIndex(list, 11);
   return pigeonResult;
 }
 + (nullable FLTPolylineAnnotationOptions *)nullableFromList:(NSArray *)list {
@@ -184,6 +198,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.lineJoin == nil ? [NSNull null] : [NSNumber numberWithInteger:self.lineJoin.value]),
     (self.lineSortKey ?: [NSNull null]),
     (self.lineBlur ?: [NSNull null]),
+    (self.lineBorderColor ?: [NSNull null]),
+    (self.lineBorderWidth ?: [NSNull null]),
     (self.lineColor ?: [NSNull null]),
     (self.lineGapWidth ?: [NSNull null]),
     (self.lineOffset ?: [NSNull null]),
@@ -449,7 +465,8 @@ void FLT_PolylineAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessen
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getLineCapManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getLineCapManagerId:arg_managerId completion:^(FLTLineCapBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -577,6 +594,84 @@ void FLT_PolylineAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessen
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDepthOcclusionFactor"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolylineAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setLineDepthOcclusionFactorManagerId:lineDepthOcclusionFactor:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(setLineDepthOcclusionFactorManagerId:lineDepthOcclusionFactor:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_lineDepthOcclusionFactor = GetNullableObjectAtIndex(args, 1);
+        [api setLineDepthOcclusionFactorManagerId:arg_managerId lineDepthOcclusionFactor:arg_lineDepthOcclusionFactor completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDepthOcclusionFactor"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolylineAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getLineDepthOcclusionFactorManagerId:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(getLineDepthOcclusionFactorManagerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        [api getLineDepthOcclusionFactorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolylineAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setLineEmissiveStrengthManagerId:lineEmissiveStrength:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(setLineEmissiveStrengthManagerId:lineEmissiveStrength:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_lineEmissiveStrength = GetNullableObjectAtIndex(args, 1);
+        [api setLineEmissiveStrengthManagerId:arg_managerId lineEmissiveStrength:arg_lineEmissiveStrength completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolylineAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getLineEmissiveStrengthManagerId:completion:)], @"FLT_PolylineAnnotationMessager api (%@) doesn't respond to @selector(getLineEmissiveStrengthManagerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        [api getLineEmissiveStrengthManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslate"
         binaryMessenger:binaryMessenger
         codec:FLT_PolylineAnnotationMessagerGetCodec()];
@@ -644,7 +739,8 @@ void FLT_PolylineAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessen
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getLineTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getLineTranslateAnchorManagerId:arg_managerId completion:^(FLTLineTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];

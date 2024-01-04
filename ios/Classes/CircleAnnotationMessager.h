@@ -137,14 +137,16 @@ NSObject<FlutterMessageCodec> *FLT_CircleAnnotationMessagerGetCodec(void);
 - (void)updateManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)deleteManagerId:(NSString *)managerId annotation:(FLTCircleAnnotation *)annotation completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)deleteAllManagerId:(NSString *)managerId completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)setCircleEmissiveStrengthManagerId:(NSString *)managerId circleEmissiveStrength:(NSNumber *)circleEmissiveStrength completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)getCircleEmissiveStrengthManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchAlignmentManagerId:(NSString *)managerId circlePitchAlignment:(FLTCirclePitchAlignment)circlePitchAlignment completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getCirclePitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getCirclePitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(FLTCirclePitchAlignmentBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCirclePitchScaleManagerId:(NSString *)managerId circlePitchScale:(FLTCirclePitchScale)circlePitchScale completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getCirclePitchScaleManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getCirclePitchScaleManagerId:(NSString *)managerId completion:(void (^)(FLTCirclePitchScaleBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCircleTranslateManagerId:(NSString *)managerId circleTranslate:(NSArray<NSNumber *> *)circleTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getCircleTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setCircleTranslateAnchorManagerId:(NSString *)managerId circleTranslateAnchor:(FLTCircleTranslateAnchor)circleTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getCircleTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getCircleTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTCircleTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_CircleAnnotationMessager> *_Nullable api);

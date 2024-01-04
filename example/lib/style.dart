@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class StylePage extends ExamplePage {
@@ -28,7 +27,7 @@ class StylePageBodyState extends State<StylePageBody> {
   StylePageBodyState();
 
   MapboxMap? mapboxMap;
-  var mapProject = 'globe';
+  var mapProject = StyleProjectionName.globe;
   var locale = 'en';
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -354,8 +353,19 @@ class StylePageBodyState extends State<StylePageBody> {
     return TextButton(
       child: Text('setStyleLightProperty'),
       onPressed: () {
-        mapboxMap?.style.setStyleLightProperty('color', 'white');
-        mapboxMap?.style.setStyleLightProperty('intensity', 0.4);
+        DirectionalLight directionalLight =
+            DirectionalLight(id: "directional-light");
+        directionalLight.intensity = 0.5;
+        directionalLight.direction = [210, 30];
+        directionalLight.directionTransition =
+            TransitionOptions(duration: 0, delay: 0);
+        directionalLight.castShadows = true;
+        directionalLight.shadowIntensity = 1;
+
+        AmbientLight ambientLight = AmbientLight(id: "ambient-light");
+        ambientLight.color = Colors.white.value;
+        ambientLight.intensity = 0.5;
+        mapboxMap?.style.setLights(ambientLight, directionalLight);
       },
     );
   }
@@ -363,13 +373,13 @@ class StylePageBodyState extends State<StylePageBody> {
   Widget _getStyleLightProperty() {
     return TextButton(
       child: Text('getStyleLightProperty'),
-      onPressed: () {
-        mapboxMap?.style.getStyleLightProperty("intensity").then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("value: ${value.value}, kind: ${value.kind}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 3),
-                )));
+      onPressed: () async {
+        var lights = await mapboxMap?.style.getStyleLights();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("lights: ${lights}"),
+          backgroundColor: Theme.of(context).primaryColor,
+          duration: Duration(seconds: 3),
+        ));
       },
     );
   }
@@ -437,11 +447,11 @@ class StylePageBodyState extends State<StylePageBody> {
     return TextButton(
       child: Text('setProjection'),
       onPressed: () {
-        mapboxMap?.style.setProjection(mapProject);
-        if (mapProject == 'globe') {
-          mapProject = 'mercator';
+        mapboxMap?.style.setProjection(StyleProjection(name: mapProject));
+        if (mapProject == StyleProjectionName.globe) {
+          mapProject = StyleProjectionName.mercator;
         } else {
-          mapProject = 'globe';
+          mapProject = StyleProjectionName.globe;
         }
       },
     );
@@ -465,7 +475,6 @@ class StylePageBodyState extends State<StylePageBody> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
         key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: _onStyleLoaded);
 

@@ -402,6 +402,45 @@ void FLT_PolygonAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMesseng
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolygonAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setFillEmissiveStrengthManagerId:fillEmissiveStrength:completion:)], @"FLT_PolygonAnnotationMessager api (%@) doesn't respond to @selector(setFillEmissiveStrengthManagerId:fillEmissiveStrength:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_fillEmissiveStrength = GetNullableObjectAtIndex(args, 1);
+        [api setFillEmissiveStrengthManagerId:arg_managerId fillEmissiveStrength:arg_fillEmissiveStrength completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PolygonAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getFillEmissiveStrengthManagerId:completion:)], @"FLT_PolygonAnnotationMessager api (%@) doesn't respond to @selector(getFillEmissiveStrengthManagerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        [api getFillEmissiveStrengthManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslate"
         binaryMessenger:binaryMessenger
         codec:FLT_PolygonAnnotationMessagerGetCodec()];
@@ -469,7 +508,8 @@ void FLT_PolygonAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMesseng
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getFillTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getFillTranslateAnchorManagerId:arg_managerId completion:^(FLTFillTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];

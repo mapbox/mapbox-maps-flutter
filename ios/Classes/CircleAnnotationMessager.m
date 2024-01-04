@@ -409,6 +409,45 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_CircleAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setCircleEmissiveStrengthManagerId:circleEmissiveStrength:completion:)], @"FLT_CircleAnnotationMessager api (%@) doesn't respond to @selector(setCircleEmissiveStrengthManagerId:circleEmissiveStrength:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_circleEmissiveStrength = GetNullableObjectAtIndex(args, 1);
+        [api setCircleEmissiveStrengthManagerId:arg_managerId circleEmissiveStrength:arg_circleEmissiveStrength completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength"
+        binaryMessenger:binaryMessenger
+        codec:FLT_CircleAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getCircleEmissiveStrengthManagerId:completion:)], @"FLT_CircleAnnotationMessager api (%@) doesn't respond to @selector(getCircleEmissiveStrengthManagerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        [api getCircleEmissiveStrengthManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment"
         binaryMessenger:binaryMessenger
         codec:FLT_CircleAnnotationMessagerGetCodec()];
@@ -437,7 +476,8 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getCirclePitchAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getCirclePitchAlignmentManagerId:arg_managerId completion:^(FLTCirclePitchAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -476,7 +516,8 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getCirclePitchScaleManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getCirclePitchScaleManagerId:arg_managerId completion:^(FLTCirclePitchScaleBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -554,7 +595,8 @@ void FLT_CircleAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenge
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getCircleTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getCircleTranslateAnchorManagerId:arg_managerId completion:^(FLTCircleTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];

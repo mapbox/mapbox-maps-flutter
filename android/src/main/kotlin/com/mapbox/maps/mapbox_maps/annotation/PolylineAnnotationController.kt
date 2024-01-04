@@ -9,6 +9,12 @@ import com.mapbox.maps.pigeons.FLTPolylineAnnotationMessager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
+import toFLTLineCap
+import toFLTLineJoin
+import toFLTLineTranslateAnchor
+import toLineCap
+import toLineJoin
+import toLineTranslateAnchor
 
 class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   FLTPolylineAnnotationMessager._PolylineAnnotationMessager {
@@ -23,11 +29,11 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     try {
       val manager = delegate.getManager(managerId) as PolylineAnnotationManager
       val annotation = manager.create(annotationOption.toPolylineAnnotationOptions())
-      annotationMap[annotation.id.toString()] = annotation
+      annotationMap[annotation.id] = annotation
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id.toString())
+        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id)
       } else {
-        managerCreateAnnotationMap[managerId]!!.add(annotation.id.toString())
+        managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
       result.success(annotation.toFLTPolylineAnnotation())
     } catch (e: Exception) {
@@ -44,13 +50,13 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
       val manager = delegate.getManager(managerId) as PolylineAnnotationManager
       val annotations = manager.create(annotationOptions.map { it.toPolylineAnnotationOptions() })
       annotations.forEach {
-        annotationMap[it.id.toString()] = it
+        annotationMap[it.id] = it
       }
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
+        managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
         managerCreateAnnotationMap[managerId]!!.addAll(
-          annotations.map { it.id.toString() }
+          annotations.map { it.id }
             .toList()
         )
       }
@@ -126,13 +132,19 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
       originalAnnotation.geometry = it.toLineString()
     }
     annotation.lineJoin?.let {
-      originalAnnotation.lineJoin = LineJoin.values()[it.ordinal]
+      originalAnnotation.lineJoin = it.toLineJoin()
     }
     annotation.lineSortKey?.let {
       originalAnnotation.lineSortKey = it
     }
     annotation.lineBlur?.let {
       originalAnnotation.lineBlur = it
+    }
+    annotation.lineBorderColor?.let {
+      originalAnnotation.lineBorderColorInt = it.toInt()
+    }
+    annotation.lineBorderWidth?.let {
+      originalAnnotation.lineBorderWidth = it
     }
     annotation.lineColor?.let {
       originalAnnotation.lineColorInt = it.toInt()
@@ -161,17 +173,17 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPolylineAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineCap = LineCap.values()[lineCap.ordinal]
+    manager.lineCap = lineCap.toLineCap()
     result.success(null)
   }
 
   override fun getLineCap(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Long>
+    result: FLTPolylineAnnotationMessager.Result<FLTPolylineAnnotationMessager.LineCap>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineCap != null) {
-      result.success(manager.lineCap!!.ordinal.toLong())
+      result.success(manager.lineCap!!.toFLTLineCap())
     } else {
       result.success(null)
     }
@@ -243,6 +255,50 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     }
   }
 
+  override fun setLineDepthOcclusionFactor(
+    managerId: String,
+    lineDepthOcclusionFactor: Double,
+    result: FLTPolylineAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor
+    result.success(null)
+  }
+
+  override fun getLineDepthOcclusionFactor(
+    managerId: String,
+    result: FLTPolylineAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    if (manager.lineDepthOcclusionFactor != null) {
+      result.success(manager.lineDepthOcclusionFactor!!)
+    } else {
+      result.success(null)
+    }
+  }
+
+  override fun setLineEmissiveStrength(
+    managerId: String,
+    lineEmissiveStrength: Double,
+    result: FLTPolylineAnnotationMessager.Result<Void>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineEmissiveStrength = lineEmissiveStrength
+    result.success(null)
+  }
+
+  override fun getLineEmissiveStrength(
+    managerId: String,
+    result: FLTPolylineAnnotationMessager.Result<Double>
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    if (manager.lineEmissiveStrength != null) {
+      result.success(manager.lineEmissiveStrength!!)
+    } else {
+      result.success(null)
+    }
+  }
+
   override fun setLineTranslate(
     managerId: String,
     lineTranslate: List<Double>,
@@ -271,17 +327,17 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
     result: FLTPolylineAnnotationMessager.Result<Void>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineTranslateAnchor = LineTranslateAnchor.values()[lineTranslateAnchor.ordinal]
+    manager.lineTranslateAnchor = lineTranslateAnchor.toLineTranslateAnchor()
     result.success(null)
   }
 
   override fun getLineTranslateAnchor(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Long>
+    result: FLTPolylineAnnotationMessager.Result<FLTPolylineAnnotationMessager.LineTranslateAnchor>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineTranslateAnchor != null) {
-      result.success(manager.lineTranslateAnchor!!.ordinal.toLong())
+      result.success(manager.lineTranslateAnchor!!.toFLTLineTranslateAnchor())
     } else {
       result.success(null)
     }
@@ -318,13 +374,20 @@ fun PolylineAnnotation.toFLTPolylineAnnotation(): FLTPolylineAnnotationMessager.
     builder.setGeometry(it.toMap())
   }
   this.lineJoin?.let {
-    builder.setLineJoin(FLTPolylineAnnotationMessager.LineJoin.values()[it.ordinal])
+    builder.setLineJoin(it.toFLTLineJoin())
   }
   this.lineSortKey?.let {
     builder.setLineSortKey(it)
   }
   this.lineBlur?.let {
     builder.setLineBlur(it)
+  }
+  this.lineBorderColorInt?.let {
+    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
+    builder.setLineBorderColor(it.toUInt().toLong())
+  }
+  this.lineBorderWidth?.let {
+    builder.setLineBorderWidth(it)
   }
   this.lineColorInt?.let {
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
@@ -355,13 +418,19 @@ fun FLTPolylineAnnotationMessager.PolylineAnnotationOptions.toPolylineAnnotation
     options.withPoints(it.toPoints())
   }
   this.lineJoin?.let {
-    options.withLineJoin(LineJoin.values()[it.ordinal])
+    options.withLineJoin(it.toLineJoin())
   }
   this.lineSortKey?.let {
     options.withLineSortKey(it)
   }
   this.lineBlur?.let {
     options.withLineBlur(it)
+  }
+  this.lineBorderColor?.let {
+    options.withLineBorderColor(it.toInt())
+  }
+  this.lineBorderWidth?.let {
+    options.withLineBorderWidth(it)
   }
   this.lineColor?.let {
     options.withLineColor(it.toInt())

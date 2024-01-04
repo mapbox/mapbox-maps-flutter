@@ -24,6 +24,10 @@ void main() {
     var fillAntialias = await manager.getFillAntialias();
     expect(true, fillAntialias);
 
+    await manager.setFillEmissiveStrength(1.0);
+    var fillEmissiveStrength = await manager.getFillEmissiveStrength();
+    expect(1.0, fillEmissiveStrength);
+
     await manager.setFillTranslate([0.0, 1.0]);
     var fillTranslate = await manager.getFillTranslate();
     expect([0.0, 1.0], fillTranslate);

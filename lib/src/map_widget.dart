@@ -13,13 +13,12 @@ part of mapbox_maps_flutter;
 class MapWidget extends StatefulWidget {
   MapWidget({
     Key? key,
-    required this.resourceOptions,
     this.mapOptions,
     this.cameraOptions,
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
     this.textureView = true,
-    this.styleUri = MapboxStyles.MAPBOX_STREETS,
+    this.styleUri = MapboxStyles.STANDARD,
     this.gestureRecognizers,
     this.onMapCreated,
     this.onStyleLoadedListener,
@@ -40,48 +39,45 @@ class MapWidget extends StatefulWidget {
     this.onScrollListener,
   }) : super(key: key) {
     if (onStyleLoadedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_LOADED);
+      _eventTypes.add(_MapEvent.styleLoaded);
     }
     if (onCameraChangeListener != null) {
-      _eventTypes.add(MapEvents.CAMERA_CHANGED);
+      _eventTypes.add(_MapEvent.cameraChanged);
     }
     if (onMapIdleListener != null) {
-      _eventTypes.add(MapEvents.MAP_IDLE);
+      _eventTypes.add(_MapEvent.mapIdle);
     }
     if (onMapLoadedListener != null) {
-      _eventTypes.add(MapEvents.MAP_LOADED);
+      _eventTypes.add(_MapEvent.mapLoaded);
     }
     if (onMapLoadErrorListener != null) {
-      _eventTypes.add(MapEvents.MAP_LOADING_ERROR);
+      _eventTypes.add(_MapEvent.mapLoadingError);
     }
     if (onRenderFrameFinishedListener != null) {
-      _eventTypes.add(MapEvents.RENDER_FRAME_FINISHED);
+      _eventTypes.add(_MapEvent.renderFrameFinished);
     }
     if (onRenderFrameStartedListener != null) {
-      _eventTypes.add(MapEvents.RENDER_FRAME_STARTED);
+      _eventTypes.add(_MapEvent.renderFrameStarted);
     }
     if (onSourceAddedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_ADDED);
+      _eventTypes.add(_MapEvent.sourceAdded);
     }
     if (onSourceDataLoadedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_DATA_LOADED);
+      _eventTypes.add(_MapEvent.sourceDataLoaded);
     }
     if (onSourceRemovedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_REMOVED);
+      _eventTypes.add(_MapEvent.sourceRemoved);
     }
     if (onStyleDataLoadedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_DATA_LOADED);
+      _eventTypes.add(_MapEvent.styleDataLoaded);
     }
     if (onStyleImageMissingListener != null) {
-      _eventTypes.add(MapEvents.STYLE_IMAGE_MISSING);
+      _eventTypes.add(_MapEvent.styleImageMissing);
     }
     if (onStyleImageUnusedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_IMAGE_REMOVE_UNUSED);
+      _eventTypes.add(_MapEvent.styleImageRemoveUnused);
     }
   }
-
-  /// Resource options when using a MapWidget. Access token required when using a Mapbox service. Please see [https://www.mapbox.com/help/create-api-access-token/](https://www.mapbox.com/help/create-api-access-token/) to learn how to create one.More information in this guide [https://www.mapbox.com/help/first-steps-android-sdk/#access-tokens](https://www.mapbox.com/help/first-steps-android-sdk/#access-tokens).
-  final ResourceOptions resourceOptions;
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -158,7 +154,7 @@ class MapWidget extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   final _mapWidgetState = _MapWidgetState();
-  final _eventTypes = [];
+  final List<_MapEvent> _eventTypes = [];
 
   final OnMapTapListener? onTapListener;
   final OnMapLongTapListener? onLongTapListener;
@@ -182,12 +178,11 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = <String, dynamic>{
-      'resourceOptions': widget.resourceOptions.encode(),
       'mapOptions': widget.mapOptions?.encode(),
       'cameraOptions': widget.cameraOptions?.encode(),
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
-      'eventTypes': widget._eventTypes,
+      'eventTypes': widget._eventTypes.map((e) => e.index).toList(),
       'mapboxPluginVersion': '0.5.1'
     };
 

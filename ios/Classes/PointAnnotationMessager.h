@@ -242,11 +242,11 @@ typedef NS_ENUM(NSUInteger, FLTTextVariableAnchor) {
 - (instancetype)initWithValue:(FLTTextVariableAnchor)value;
 @end
 
-/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
 typedef NS_ENUM(NSUInteger, FLTTextWritingMode) {
-  /// If a text's language supports horizontal writing mode, symbols with point placement would be laid out horizontally.
+  /// If a text's language supports horizontal writing mode, symbols would be laid out horizontally.
   FLTTextWritingModeHORIZONTAL = 0,
-  /// If a text's language supports vertical writing mode, symbols with point placement would be laid out vertically.
+  /// If a text's language supports vertical writing mode, symbols would be laid out vertically.
   FLTTextWritingModeVERTICAL = 1,
 };
 
@@ -298,11 +298,14 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     iconOffset:(nullable NSArray<NSNumber *> *)iconOffset
     iconRotate:(nullable NSNumber *)iconRotate
     iconSize:(nullable NSNumber *)iconSize
+    iconTextFit:(nullable FLTIconTextFitBox *)iconTextFit
+    iconTextFitPadding:(nullable NSArray<NSNumber *> *)iconTextFitPadding
     symbolSortKey:(nullable NSNumber *)symbolSortKey
     textAnchor:(nullable FLTTextAnchorBox *)textAnchor
     textField:(nullable NSString *)textField
     textJustify:(nullable FLTTextJustifyBox *)textJustify
     textLetterSpacing:(nullable NSNumber *)textLetterSpacing
+    textLineHeight:(nullable NSNumber *)textLineHeight
     textMaxWidth:(nullable NSNumber *)textMaxWidth
     textOffset:(nullable NSArray<NSNumber *> *)textOffset
     textRadialOffset:(nullable NSNumber *)textRadialOffset
@@ -310,11 +313,14 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     textSize:(nullable NSNumber *)textSize
     textTransform:(nullable FLTTextTransformBox *)textTransform
     iconColor:(nullable NSNumber *)iconColor
+    iconEmissiveStrength:(nullable NSNumber *)iconEmissiveStrength
     iconHaloBlur:(nullable NSNumber *)iconHaloBlur
     iconHaloColor:(nullable NSNumber *)iconHaloColor
     iconHaloWidth:(nullable NSNumber *)iconHaloWidth
+    iconImageCrossFade:(nullable NSNumber *)iconImageCrossFade
     iconOpacity:(nullable NSNumber *)iconOpacity
     textColor:(nullable NSNumber *)textColor
+    textEmissiveStrength:(nullable NSNumber *)textEmissiveStrength
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
@@ -336,16 +342,22 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * iconRotate;
 /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
 @property(nonatomic, strong, nullable) NSNumber * iconSize;
-/// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
+/// Scales the icon to fit around the associated text.
+@property(nonatomic, strong, nullable) FLTIconTextFitBox * iconTextFit;
+/// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * iconTextFitPadding;
+/// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
 @property(nonatomic, strong, nullable) NSNumber * symbolSortKey;
 /// Part of the text placed closest to the anchor.
 @property(nonatomic, strong, nullable) FLTTextAnchorBox * textAnchor;
-/// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+/// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
 @property(nonatomic, copy, nullable) NSString * textField;
 /// Text justification options.
 @property(nonatomic, strong, nullable) FLTTextJustifyBox * textJustify;
 /// Text tracking amount.
 @property(nonatomic, strong, nullable) NSNumber * textLetterSpacing;
+/// Text leading value for multi-line text.
+@property(nonatomic, strong, nullable) NSNumber * textLineHeight;
 /// The maximum line width for text wrapping.
 @property(nonatomic, strong, nullable) NSNumber * textMaxWidth;
 /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
@@ -358,18 +370,24 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * textSize;
 /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
 @property(nonatomic, strong, nullable) FLTTextTransformBox * textTransform;
-/// The color of the icon. This can only be used with sdf icons.
+/// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 @property(nonatomic, strong, nullable) NSNumber * iconColor;
+/// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+@property(nonatomic, strong, nullable) NSNumber * iconEmissiveStrength;
 /// Fade out the halo towards the outside.
 @property(nonatomic, strong, nullable) NSNumber * iconHaloBlur;
-/// The color of the icon's halo. Icon halos can only be used with SDF icons.
+/// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 @property(nonatomic, strong, nullable) NSNumber * iconHaloColor;
 /// Distance of halo to the icon outline.
 @property(nonatomic, strong, nullable) NSNumber * iconHaloWidth;
+/// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+@property(nonatomic, strong, nullable) NSNumber * iconImageCrossFade;
 /// The opacity at which the icon will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * iconOpacity;
 /// The color with which the text will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * textColor;
+/// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+@property(nonatomic, strong, nullable) NSNumber * textEmissiveStrength;
 /// The halo's fadeout distance towards the outside.
 @property(nonatomic, strong, nullable) NSNumber * textHaloBlur;
 /// The color of the text's halo, which helps it stand out from backgrounds.
@@ -388,11 +406,14 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     iconOffset:(nullable NSArray<NSNumber *> *)iconOffset
     iconRotate:(nullable NSNumber *)iconRotate
     iconSize:(nullable NSNumber *)iconSize
+    iconTextFit:(nullable FLTIconTextFitBox *)iconTextFit
+    iconTextFitPadding:(nullable NSArray<NSNumber *> *)iconTextFitPadding
     symbolSortKey:(nullable NSNumber *)symbolSortKey
     textAnchor:(nullable FLTTextAnchorBox *)textAnchor
     textField:(nullable NSString *)textField
     textJustify:(nullable FLTTextJustifyBox *)textJustify
     textLetterSpacing:(nullable NSNumber *)textLetterSpacing
+    textLineHeight:(nullable NSNumber *)textLineHeight
     textMaxWidth:(nullable NSNumber *)textMaxWidth
     textOffset:(nullable NSArray<NSNumber *> *)textOffset
     textRadialOffset:(nullable NSNumber *)textRadialOffset
@@ -400,11 +421,14 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
     textSize:(nullable NSNumber *)textSize
     textTransform:(nullable FLTTextTransformBox *)textTransform
     iconColor:(nullable NSNumber *)iconColor
+    iconEmissiveStrength:(nullable NSNumber *)iconEmissiveStrength
     iconHaloBlur:(nullable NSNumber *)iconHaloBlur
     iconHaloColor:(nullable NSNumber *)iconHaloColor
     iconHaloWidth:(nullable NSNumber *)iconHaloWidth
+    iconImageCrossFade:(nullable NSNumber *)iconImageCrossFade
     iconOpacity:(nullable NSNumber *)iconOpacity
     textColor:(nullable NSNumber *)textColor
+    textEmissiveStrength:(nullable NSNumber *)textEmissiveStrength
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
@@ -424,16 +448,22 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * iconRotate;
 /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
 @property(nonatomic, strong, nullable) NSNumber * iconSize;
-/// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
+/// Scales the icon to fit around the associated text.
+@property(nonatomic, strong, nullable) FLTIconTextFitBox * iconTextFit;
+/// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> * iconTextFitPadding;
+/// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
 @property(nonatomic, strong, nullable) NSNumber * symbolSortKey;
 /// Part of the text placed closest to the anchor.
 @property(nonatomic, strong, nullable) FLTTextAnchorBox * textAnchor;
-/// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+/// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
 @property(nonatomic, copy, nullable) NSString * textField;
 /// Text justification options.
 @property(nonatomic, strong, nullable) FLTTextJustifyBox * textJustify;
 /// Text tracking amount.
 @property(nonatomic, strong, nullable) NSNumber * textLetterSpacing;
+/// Text leading value for multi-line text.
+@property(nonatomic, strong, nullable) NSNumber * textLineHeight;
 /// The maximum line width for text wrapping.
 @property(nonatomic, strong, nullable) NSNumber * textMaxWidth;
 /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
@@ -446,18 +476,24 @@ typedef NS_ENUM(NSUInteger, FLTTextTranslateAnchor) {
 @property(nonatomic, strong, nullable) NSNumber * textSize;
 /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
 @property(nonatomic, strong, nullable) FLTTextTransformBox * textTransform;
-/// The color of the icon. This can only be used with sdf icons.
+/// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 @property(nonatomic, strong, nullable) NSNumber * iconColor;
+/// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+@property(nonatomic, strong, nullable) NSNumber * iconEmissiveStrength;
 /// Fade out the halo towards the outside.
 @property(nonatomic, strong, nullable) NSNumber * iconHaloBlur;
-/// The color of the icon's halo. Icon halos can only be used with SDF icons.
+/// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
 @property(nonatomic, strong, nullable) NSNumber * iconHaloColor;
 /// Distance of halo to the icon outline.
 @property(nonatomic, strong, nullable) NSNumber * iconHaloWidth;
+/// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+@property(nonatomic, strong, nullable) NSNumber * iconImageCrossFade;
 /// The opacity at which the icon will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * iconOpacity;
 /// The color with which the text will be drawn.
 @property(nonatomic, strong, nullable) NSNumber * textColor;
+/// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+@property(nonatomic, strong, nullable) NSNumber * textEmissiveStrength;
 /// The halo's fadeout distance towards the outside.
 @property(nonatomic, strong, nullable) NSNumber * textHaloBlur;
 /// The color of the text's halo, which helps it stand out from backgrounds.
@@ -496,21 +532,19 @@ NSObject<FlutterMessageCodec> *FLT_PointAnnotationMessagerGetCodec(void);
 - (void)setIconPaddingManagerId:(NSString *)managerId iconPadding:(NSNumber *)iconPadding completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getIconPaddingManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconPitchAlignmentManagerId:(NSString *)managerId iconPitchAlignment:(FLTIconPitchAlignment)iconPitchAlignment completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getIconPitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getIconPitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(FLTIconPitchAlignmentBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconRotationAlignmentManagerId:(NSString *)managerId iconRotationAlignment:(FLTIconRotationAlignment)iconRotationAlignment completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getIconRotationAlignmentManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
-- (void)setIconTextFitManagerId:(NSString *)managerId iconTextFit:(FLTIconTextFit)iconTextFit completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getIconTextFitManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
-- (void)setIconTextFitPaddingManagerId:(NSString *)managerId iconTextFitPadding:(NSArray<NSNumber *> *)iconTextFitPadding completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getIconTextFitPaddingManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)getIconRotationAlignmentManagerId:(NSString *)managerId completion:(void (^)(FLTIconRotationAlignmentBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setSymbolAvoidEdgesManagerId:(NSString *)managerId symbolAvoidEdges:(NSNumber *)symbolAvoidEdges completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getSymbolAvoidEdgesManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setSymbolPlacementManagerId:(NSString *)managerId symbolPlacement:(FLTSymbolPlacement)symbolPlacement completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getSymbolPlacementManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getSymbolPlacementManagerId:(NSString *)managerId completion:(void (^)(FLTSymbolPlacementBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setSymbolSpacingManagerId:(NSString *)managerId symbolSpacing:(NSNumber *)symbolSpacing completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getSymbolSpacingManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)setSymbolZElevateManagerId:(NSString *)managerId symbolZElevate:(NSNumber *)symbolZElevate completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)getSymbolZElevateManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setSymbolZOrderManagerId:(NSString *)managerId symbolZOrder:(FLTSymbolZOrder)symbolZOrder completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getSymbolZOrderManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getSymbolZOrderManagerId:(NSString *)managerId completion:(void (^)(FLTSymbolZOrderBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextAllowOverlapManagerId:(NSString *)managerId textAllowOverlap:(NSNumber *)textAllowOverlap completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getTextAllowOverlapManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextFontManagerId:(NSString *)managerId textFont:(NSArray<NSString *> *)textFont completion:(void (^)(FlutterError *_Nullable))completion;
@@ -519,8 +553,6 @@ NSObject<FlutterMessageCodec> *FLT_PointAnnotationMessagerGetCodec(void);
 - (void)getTextIgnorePlacementManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextKeepUprightManagerId:(NSString *)managerId textKeepUpright:(NSNumber *)textKeepUpright completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getTextKeepUprightManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
-- (void)setTextLineHeightManagerId:(NSString *)managerId textLineHeight:(NSNumber *)textLineHeight completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getTextLineHeightManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextMaxAngleManagerId:(NSString *)managerId textMaxAngle:(NSNumber *)textMaxAngle completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getTextMaxAngleManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextOptionalManagerId:(NSString *)managerId textOptional:(NSNumber *)textOptional completion:(void (^)(FlutterError *_Nullable))completion;
@@ -528,17 +560,17 @@ NSObject<FlutterMessageCodec> *FLT_PointAnnotationMessagerGetCodec(void);
 - (void)setTextPaddingManagerId:(NSString *)managerId textPadding:(NSNumber *)textPadding completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getTextPaddingManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextPitchAlignmentManagerId:(NSString *)managerId textPitchAlignment:(FLTTextPitchAlignment)textPitchAlignment completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getTextPitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getTextPitchAlignmentManagerId:(NSString *)managerId completion:(void (^)(FLTTextPitchAlignmentBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextRotationAlignmentManagerId:(NSString *)managerId textRotationAlignment:(FLTTextRotationAlignment)textRotationAlignment completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getTextRotationAlignmentManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getTextRotationAlignmentManagerId:(NSString *)managerId completion:(void (^)(FLTTextRotationAlignmentBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconTranslateManagerId:(NSString *)managerId iconTranslate:(NSArray<NSNumber *> *)iconTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getIconTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setIconTranslateAnchorManagerId:(NSString *)managerId iconTranslateAnchor:(FLTIconTranslateAnchor)iconTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getIconTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getIconTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTIconTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextTranslateManagerId:(NSString *)managerId textTranslate:(NSArray<NSNumber *> *)textTranslate completion:(void (^)(FlutterError *_Nullable))completion;
 - (void)getTextTranslateManagerId:(NSString *)managerId completion:(void (^)(NSArray<NSNumber *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)setTextTranslateAnchorManagerId:(NSString *)managerId textTranslateAnchor:(FLTTextTranslateAnchor)textTranslateAnchor completion:(void (^)(FlutterError *_Nullable))completion;
-- (void)getTextTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)getTextTranslateAnchorManagerId:(NSString *)managerId completion:(void (^)(FLTTextTranslateAnchorBox *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_PointAnnotationMessager> *_Nullable api);

@@ -1,11 +1,15 @@
 // This file is generated.
-import Foundation
 import MapboxMaps
 import UIKit
 
-class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessager {
+final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessager {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
+
+    private typealias AnnotationManager = PolylineAnnotationManager
+    private enum `Error`: Swift.Error {
+        case managerNotFound(String)
+    }
 
     init(withDelegate delegate: ControllerDelegate) {
         self.delegate = delegate
@@ -100,329 +104,348 @@ class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessager {
         completion(nil)
     }
 
-func setLineCapManagerId(_ managerId: String, lineCap: FLTLineCap, completion: @escaping (FlutterError?) -> Void) {
-        do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineCap = LineCap.allCases[Int(lineCap.rawValue)]
+    private func getManager(id: String) throws -> AnnotationManager {
+        if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
+            return manager
+        } else {
+            throw Error.managerNotFound(id)
+        }
+    }
 
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+    // MARK: Properties
+
+    func setLineCapManagerId(_ managerId: String, lineCap: FLTLineCap, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineCap = LineCap(lineCap)
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineCapManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getLineCapManagerId(_ managerId: String, completion: @escaping (FLTLineCapBox?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineCap = manager.lineCap {
-                let index = LineCap.allCases.firstIndex(of: lineCap)!
-                completion(NSNumber(value: index), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineCap = manager.lineCap else {
+                completion(nil, nil)
+                return
             }
+
+            completion(lineCap.toFLTLineCapBox(), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineMiterLimitManagerId(_ managerId: String, lineMiterLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineMiterLimitManagerId(_ managerId: String, lineMiterLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineMiterLimit = lineMiterLimit.doubleValue
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.lineMiterLimit = lineMiterLimit.doubleValue
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineMiterLimitManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getLineMiterLimitManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineMiterLimit = manager.lineMiterLimit {
-                completion(NSNumber(value: lineMiterLimit), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineMiterLimit = manager.lineMiterLimit else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: lineMiterLimit), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineRoundLimitManagerId(_ managerId: String, lineRoundLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineRoundLimitManagerId(_ managerId: String, lineRoundLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineRoundLimit = lineRoundLimit.doubleValue
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.lineRoundLimit = lineRoundLimit.doubleValue
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineRoundLimitManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getLineRoundLimitManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineRoundLimit = manager.lineRoundLimit {
-                completion(NSNumber(value: lineRoundLimit), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineRoundLimit = manager.lineRoundLimit else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: lineRoundLimit), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineDasharrayManagerId(_ managerId: String, lineDasharray: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setLineDasharrayManagerId(_ managerId: String, lineDasharray: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineDasharray = lineDasharray.map({$0.doubleValue})
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.lineDasharray = lineDasharray.map {$0.doubleValue}
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineDasharrayManagerId(_ managerId: String, completion: @escaping ( [NSNumber]?, FlutterError?) -> Void) {
+    func getLineDasharrayManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineDasharray = manager.lineDasharray {
-                completion(lineDasharray.map {NSNumber(value: $0)}, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineDasharray = manager.lineDasharray else {
+                completion(nil, nil)
+                return
             }
+
+            completion(lineDasharray.map(NSNumber.init(value:)), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineTranslateManagerId(_ managerId: String, lineTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setLineDepthOcclusionFactorManagerId(_ managerId: String, lineDepthOcclusionFactor: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineTranslate = lineTranslate.map({$0.doubleValue})
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor.doubleValue
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineTranslateManagerId(_ managerId: String, completion: @escaping ( [NSNumber]?, FlutterError?) -> Void) {
+    func getLineDepthOcclusionFactorManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineTranslate = manager.lineTranslate {
-                completion(lineTranslate.map {NSNumber(value: $0)}, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineDepthOcclusionFactor = manager.lineDepthOcclusionFactor else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: lineDepthOcclusionFactor), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineTranslateAnchorManagerId(_ managerId: String, lineTranslateAnchor: FLTLineTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+    func setLineEmissiveStrengthManagerId(_ managerId: String, lineEmissiveStrength: NSNumber, completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineTranslateAnchor = LineTranslateAnchor.allCases[Int(lineTranslateAnchor.rawValue)]
+            let manager = try getManager(id: managerId)
+            manager.lineEmissiveStrength = lineEmissiveStrength.doubleValue
 
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineTranslateAnchorManagerId(_ managerId: String, completion: @escaping ( NSNumber?, FlutterError?) -> Void) {
+    func getLineEmissiveStrengthManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineTranslateAnchor = manager.lineTranslateAnchor {
-                let index = LineTranslateAnchor.allCases.firstIndex(of: lineTranslateAnchor)!
-                completion(NSNumber(value: index), nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineEmissiveStrength = manager.lineEmissiveStrength else {
+                completion(nil, nil)
+                return
             }
+
+            completion(NSNumber(value: lineEmissiveStrength), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func setLineTrimOffsetManagerId(_ managerId: String, lineTrimOffset: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setLineTranslateManagerId(_ managerId: String, lineTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-                manager.lineTrimOffset = lineTrimOffset.map({$0.doubleValue})
-                completion(nil)
-            } else {
-                completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-            }
+            let manager = try getManager(id: managerId)
+            manager.lineTranslate = lineTranslate.map {$0.doubleValue}
+
+            completion(nil)
         } catch {
             completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
 
-func getLineTrimOffsetManagerId(_ managerId: String, completion: @escaping ( [NSNumber]?, FlutterError?) -> Void) {
+    func getLineTranslateManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolylineAnnotationManager {
-               if let lineTrimOffset = manager.lineTrimOffset {
-                completion(lineTrimOffset.map {NSNumber(value: $0)}, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            let manager = try getManager(id: managerId)
+            guard let lineTranslate = manager.lineTranslate else {
+                completion(nil, nil)
+                return
             }
+
+            completion(lineTranslate.map(NSNumber.init(value:)), nil)
         } catch {
-              completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
         }
-  }
+    }
+
+    func setLineTranslateAnchorManagerId(_ managerId: String, lineTranslateAnchor: FLTLineTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineTranslateAnchor = LineTranslateAnchor(lineTranslateAnchor)
+
+            completion(nil)
+        } catch {
+            completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func getLineTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTLineTranslateAnchorBox?, FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            guard let lineTranslateAnchor = manager.lineTranslateAnchor else {
+                completion(nil, nil)
+                return
+            }
+
+            completion(lineTranslateAnchor.toFLTLineTranslateAnchorBox(), nil)
+        } catch {
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func setLineTrimOffsetManagerId(_ managerId: String, lineTrimOffset: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineTrimOffset = lineTrimOffset.map {$0.doubleValue}
+
+            completion(nil)
+        } catch {
+            completion(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
+
+    func getLineTrimOffsetManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            guard let lineTrimOffset = manager.lineTrimOffset else {
+                completion(nil, nil)
+                return
+            }
+
+            completion(lineTrimOffset.map(NSNumber.init(value:)), nil)
+        } catch {
+            completion(nil, FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+        }
+    }
 }
 
 extension FLTPolylineAnnotationOptions {
+
     func toPolylineAnnotation() -> PolylineAnnotation {
-    var annotation = PolylineAnnotation(lineString: convertDictionaryToPolyline(dict: self.geometry!))
-        annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin?.value.rawValue ?? 0)]
-        if let lineSortKey = self.lineSortKey {
-           annotation.lineSortKey = lineSortKey.doubleValue
+        var annotation = PolylineAnnotation(lineString: convertDictionaryToPolyline(dict: self.geometry!))
+        annotation.lineJoin = lineJoin.flatMap(LineJoin.init)
+        if let lineSortKey {
+            annotation.lineSortKey = lineSortKey.doubleValue
         }
-        if let lineBlur = self.lineBlur {
-           annotation.lineBlur = lineBlur.doubleValue
+        if let lineBlur {
+            annotation.lineBlur = lineBlur.doubleValue
         }
-        if let lineColor = self.lineColor {
-           annotation.lineColor = StyleColor.init(uiColorFromHex(rgbValue: lineColor.intValue))
+        if let lineBorderColor {
+            annotation.lineBorderColor = StyleColor.init(uiColorFromHex(rgbValue: lineBorderColor.intValue))
         }
-        if let lineGapWidth = self.lineGapWidth {
-           annotation.lineGapWidth = lineGapWidth.doubleValue
+        if let lineBorderWidth {
+            annotation.lineBorderWidth = lineBorderWidth.doubleValue
         }
-        if let lineOffset = self.lineOffset {
-           annotation.lineOffset = lineOffset.doubleValue
+        if let lineColor {
+            annotation.lineColor = StyleColor.init(uiColorFromHex(rgbValue: lineColor.intValue))
         }
-        if let lineOpacity = self.lineOpacity {
-           annotation.lineOpacity = lineOpacity.doubleValue
+        if let lineGapWidth {
+            annotation.lineGapWidth = lineGapWidth.doubleValue
         }
-        if let linePattern = self.linePattern {
-           annotation.linePattern = linePattern
+        if let lineOffset {
+            annotation.lineOffset = lineOffset.doubleValue
         }
-        if let lineWidth = self.lineWidth {
-           annotation.lineWidth = lineWidth.doubleValue
+        if let lineOpacity {
+            annotation.lineOpacity = lineOpacity.doubleValue
+        }
+        if let linePattern {
+            annotation.linePattern = linePattern
+        }
+        if let lineWidth {
+            annotation.lineWidth = lineWidth.doubleValue
         }
         return annotation
     }
 }
 
 extension FLTPolylineAnnotation {
+
     func toPolylineAnnotation() -> PolylineAnnotation {
-    var annotation = PolylineAnnotation(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
-    annotation.lineJoin = LineJoin.allCases[Int(self.lineJoin?.value.rawValue ?? 0)]
-    if let lineSortKey = self.lineSortKey {
-       annotation.lineSortKey = lineSortKey.doubleValue
-    }
-    if let lineBlur = self.lineBlur {
-       annotation.lineBlur = lineBlur.doubleValue
-    }
-    if let lineColor = self.lineColor {
-       annotation.lineColor = StyleColor.init(uiColorFromHex(rgbValue: lineColor.intValue))
-    }
-    if let lineGapWidth = self.lineGapWidth {
-       annotation.lineGapWidth = lineGapWidth.doubleValue
-    }
-    if let lineOffset = self.lineOffset {
-       annotation.lineOffset = lineOffset.doubleValue
-    }
-    if let lineOpacity = self.lineOpacity {
-       annotation.lineOpacity = lineOpacity.doubleValue
-    }
-    if let linePattern = self.linePattern {
-       annotation.linePattern = linePattern
-    }
-    if let lineWidth = self.lineWidth {
-       annotation.lineWidth = lineWidth.doubleValue
-    }
+                var annotation = PolylineAnnotation(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
+                annotation.lineJoin = lineJoin.flatMap(LineJoin.init)
+        if let lineSortKey {
+            annotation.lineSortKey = lineSortKey.doubleValue
+        }
+        if let lineBlur {
+            annotation.lineBlur = lineBlur.doubleValue
+        }
+        if let lineBorderColor {
+            annotation.lineBorderColor = StyleColor.init(uiColorFromHex(rgbValue: lineBorderColor.intValue))
+        }
+        if let lineBorderWidth {
+            annotation.lineBorderWidth = lineBorderWidth.doubleValue
+        }
+        if let lineColor {
+            annotation.lineColor = StyleColor.init(uiColorFromHex(rgbValue: lineColor.intValue))
+        }
+        if let lineGapWidth {
+            annotation.lineGapWidth = lineGapWidth.doubleValue
+        }
+        if let lineOffset {
+            annotation.lineOffset = lineOffset.doubleValue
+        }
+        if let lineOpacity {
+            annotation.lineOpacity = lineOpacity.doubleValue
+        }
+        if let linePattern {
+            annotation.linePattern = linePattern
+        }
+        if let lineWidth {
+            annotation.lineWidth = lineWidth.doubleValue
+        }
         return annotation
     }
 }
 extension PolylineAnnotation {
     func toFLTPolylineAnnotation() -> FLTPolylineAnnotation {
-        var lineJoin: FLTLineJoin?
-        if self.lineJoin != nil {
-            lineJoin = FLTLineJoin.init(rawValue: UInt(LineJoin.allCases.firstIndex(of: self.lineJoin!)!))
-        }
-        var lineSortKey: NSNumber?
-        if self.lineSortKey != nil {
-            lineSortKey = NSNumber(value: self.lineSortKey!)
-        }
-        var lineBlur: NSNumber?
-        if self.lineBlur != nil {
-            lineBlur = NSNumber(value: self.lineBlur!)
-        }
-        var lineColor: NSNumber?
-        if self.lineColor != nil {
-            lineColor = NSNumber(value: self.lineColor!.rgb())
-        }
-        var lineGapWidth: NSNumber?
-        if self.lineGapWidth != nil {
-            lineGapWidth = NSNumber(value: self.lineGapWidth!)
-        }
-        var lineOffset: NSNumber?
-        if self.lineOffset != nil {
-            lineOffset = NSNumber(value: self.lineOffset!)
-        }
-        var lineOpacity: NSNumber?
-        if self.lineOpacity != nil {
-            lineOpacity = NSNumber(value: self.lineOpacity!)
-        }
-        var linePattern: String?
-        if self.linePattern != nil {
-            linePattern =  self.linePattern!
-        }
-        var lineWidth: NSNumber?
-        if self.lineWidth != nil {
-            lineWidth = NSNumber(value: self.lineWidth!)
-        }
+        let lineJoin = lineJoin?.toFLTLineJoinBox()
+        let lineSortKey = lineSortKey.map(NSNumber.init(value:))
+        let lineBlur = lineBlur.map(NSNumber.init(value:))
+        let lineBorderColor = lineBorderColor?.nsNumberValue
+        let lineBorderWidth = lineBorderWidth.map(NSNumber.init(value:))
+        let lineColor = lineColor?.nsNumberValue
+        let lineGapWidth = lineGapWidth.map(NSNumber.init(value:))
+        let lineOffset = lineOffset.map(NSNumber.init(value:))
+        let lineOpacity = lineOpacity.map(NSNumber.init(value:))
+        let linePattern = linePattern
+        let lineWidth = lineWidth.map(NSNumber.init(value:))
 
-    return FLTPolylineAnnotation.make(
-        withId: self.id,
-        geometry: self.lineString.toMap(),
-        lineJoin: .init(value: lineJoin!),
-        lineSortKey: lineSortKey,
-        lineBlur: lineBlur,
-        lineColor: lineColor,
-        lineGapWidth: lineGapWidth,
-        lineOffset: lineOffset,
-        lineOpacity: lineOpacity,
-        linePattern: linePattern,
-        lineWidth: lineWidth
-    )
+        return FLTPolylineAnnotation.make(
+            withId: id,
+            geometry: geometry.toMap(),
+            lineJoin: lineJoin,
+            lineSortKey: lineSortKey,
+            lineBlur: lineBlur,
+            lineBorderColor: lineBorderColor,
+            lineBorderWidth: lineBorderWidth,
+            lineColor: lineColor,
+            lineGapWidth: lineGapWidth,
+            lineOffset: lineOffset,
+            lineOpacity: lineOpacity,
+            linePattern: linePattern,
+            lineWidth: lineWidth
+        )
     }
 }
 // End of generated file.

@@ -204,12 +204,12 @@ enum TextVariableAnchor {
   BOTTOM_RIGHT,
 }
 
-/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
 enum TextWritingMode {
-  /// If a text's language supports horizontal writing mode, symbols with point placement would be laid out horizontally.
+  /// If a text's language supports horizontal writing mode, symbols would be laid out horizontally.
   HORIZONTAL,
 
-  /// If a text's language supports vertical writing mode, symbols with point placement would be laid out vertically.
+  /// If a text's language supports vertical writing mode, symbols would be laid out vertically.
   VERTICAL,
 }
 
@@ -241,11 +241,14 @@ class PointAnnotation {
     this.iconOffset,
     this.iconRotate,
     this.iconSize,
+    this.iconTextFit,
+    this.iconTextFitPadding,
     this.symbolSortKey,
     this.textAnchor,
     this.textField,
     this.textJustify,
     this.textLetterSpacing,
+    this.textLineHeight,
     this.textMaxWidth,
     this.textOffset,
     this.textRadialOffset,
@@ -253,11 +256,14 @@ class PointAnnotation {
     this.textSize,
     this.textTransform,
     this.iconColor,
+    this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
+    this.iconImageCrossFade,
     this.iconOpacity,
     this.textColor,
+    this.textEmissiveStrength,
     this.textHaloBlur,
     this.textHaloColor,
     this.textHaloWidth,
@@ -289,13 +295,19 @@ class PointAnnotation {
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   double? iconSize;
 
-  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
+  /// Scales the icon to fit around the associated text.
+  IconTextFit? iconTextFit;
+
+  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  List<double?>? iconTextFitPadding;
+
+  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
 
   /// Part of the text placed closest to the anchor.
   TextAnchor? textAnchor;
 
-  /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+  /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   String? textField;
 
   /// Text justification options.
@@ -303,6 +315,9 @@ class PointAnnotation {
 
   /// Text tracking amount.
   double? textLetterSpacing;
+
+  /// Text leading value for multi-line text.
+  double? textLineHeight;
 
   /// The maximum line width for text wrapping.
   double? textMaxWidth;
@@ -322,23 +337,32 @@ class PointAnnotation {
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   TextTransform? textTransform;
 
-  /// The color of the icon. This can only be used with sdf icons.
+  /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
   double? iconHaloBlur;
 
-  /// The color of the icon's halo. Icon halos can only be used with SDF icons.
+  /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconHaloColor;
 
   /// Distance of halo to the icon outline.
   double? iconHaloWidth;
+
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn.
   double? iconOpacity;
 
   /// The color with which the text will be drawn.
   int? textColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
   double? textHaloBlur;
@@ -362,11 +386,14 @@ class PointAnnotation {
       iconOffset,
       iconRotate,
       iconSize,
+      iconTextFit?.index,
+      iconTextFitPadding,
       symbolSortKey,
       textAnchor?.index,
       textField,
       textJustify?.index,
       textLetterSpacing,
+      textLineHeight,
       textMaxWidth,
       textOffset,
       textRadialOffset,
@@ -374,11 +401,14 @@ class PointAnnotation {
       textSize,
       textTransform?.index,
       iconColor,
+      iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
+      iconImageCrossFade,
       iconOpacity,
       textColor,
+      textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
@@ -398,30 +428,37 @@ class PointAnnotation {
       iconOffset: (result[5] as List<Object?>?)?.cast<double?>(),
       iconRotate: result[6] as double?,
       iconSize: result[7] as double?,
-      symbolSortKey: result[8] as double?,
+      iconTextFit:
+          result[8] != null ? IconTextFit.values[result[8]! as int] : null,
+      iconTextFitPadding: (result[9] as List<Object?>?)?.cast<double?>(),
+      symbolSortKey: result[10] as double?,
       textAnchor:
-          result[9] != null ? TextAnchor.values[result[9]! as int] : null,
-      textField: result[10] as String?,
+          result[11] != null ? TextAnchor.values[result[11]! as int] : null,
+      textField: result[12] as String?,
       textJustify:
-          result[11] != null ? TextJustify.values[result[11]! as int] : null,
-      textLetterSpacing: result[12] as double?,
-      textMaxWidth: result[13] as double?,
-      textOffset: (result[14] as List<Object?>?)?.cast<double?>(),
-      textRadialOffset: result[15] as double?,
-      textRotate: result[16] as double?,
-      textSize: result[17] as double?,
+          result[13] != null ? TextJustify.values[result[13]! as int] : null,
+      textLetterSpacing: result[14] as double?,
+      textLineHeight: result[15] as double?,
+      textMaxWidth: result[16] as double?,
+      textOffset: (result[17] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[18] as double?,
+      textRotate: result[19] as double?,
+      textSize: result[20] as double?,
       textTransform:
-          result[18] != null ? TextTransform.values[result[18]! as int] : null,
-      iconColor: result[19] as int?,
-      iconHaloBlur: result[20] as double?,
-      iconHaloColor: result[21] as int?,
-      iconHaloWidth: result[22] as double?,
-      iconOpacity: result[23] as double?,
-      textColor: result[24] as int?,
-      textHaloBlur: result[25] as double?,
-      textHaloColor: result[26] as int?,
-      textHaloWidth: result[27] as double?,
-      textOpacity: result[28] as double?,
+          result[21] != null ? TextTransform.values[result[21]! as int] : null,
+      iconColor: result[22] as int?,
+      iconEmissiveStrength: result[23] as double?,
+      iconHaloBlur: result[24] as double?,
+      iconHaloColor: result[25] as int?,
+      iconHaloWidth: result[26] as double?,
+      iconImageCrossFade: result[27] as double?,
+      iconOpacity: result[28] as double?,
+      textColor: result[29] as int?,
+      textEmissiveStrength: result[30] as double?,
+      textHaloBlur: result[31] as double?,
+      textHaloColor: result[32] as int?,
+      textHaloWidth: result[33] as double?,
+      textOpacity: result[34] as double?,
     );
   }
 }
@@ -435,11 +472,14 @@ class PointAnnotationOptions {
     this.iconOffset,
     this.iconRotate,
     this.iconSize,
+    this.iconTextFit,
+    this.iconTextFitPadding,
     this.symbolSortKey,
     this.textAnchor,
     this.textField,
     this.textJustify,
     this.textLetterSpacing,
+    this.textLineHeight,
     this.textMaxWidth,
     this.textOffset,
     this.textRadialOffset,
@@ -447,11 +487,14 @@ class PointAnnotationOptions {
     this.textSize,
     this.textTransform,
     this.iconColor,
+    this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
+    this.iconImageCrossFade,
     this.iconOpacity,
     this.textColor,
+    this.textEmissiveStrength,
     this.textHaloBlur,
     this.textHaloColor,
     this.textHaloWidth,
@@ -480,13 +523,19 @@ class PointAnnotationOptions {
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   double? iconSize;
 
-  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
+  /// Scales the icon to fit around the associated text.
+  IconTextFit? iconTextFit;
+
+  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  List<double?>? iconTextFitPadding;
+
+  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
 
   /// Part of the text placed closest to the anchor.
   TextAnchor? textAnchor;
 
-  /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options.
+  /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   String? textField;
 
   /// Text justification options.
@@ -494,6 +543,9 @@ class PointAnnotationOptions {
 
   /// Text tracking amount.
   double? textLetterSpacing;
+
+  /// Text leading value for multi-line text.
+  double? textLineHeight;
 
   /// The maximum line width for text wrapping.
   double? textMaxWidth;
@@ -513,23 +565,32 @@ class PointAnnotationOptions {
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   TextTransform? textTransform;
 
-  /// The color of the icon. This can only be used with sdf icons.
+  /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
   double? iconHaloBlur;
 
-  /// The color of the icon's halo. Icon halos can only be used with SDF icons.
+  /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconHaloColor;
 
   /// Distance of halo to the icon outline.
   double? iconHaloWidth;
+
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn.
   double? iconOpacity;
 
   /// The color with which the text will be drawn.
   int? textColor;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
   double? textHaloBlur;
@@ -552,11 +613,14 @@ class PointAnnotationOptions {
       iconOffset,
       iconRotate,
       iconSize,
+      iconTextFit?.index,
+      iconTextFitPadding,
       symbolSortKey,
       textAnchor?.index,
       textField,
       textJustify?.index,
       textLetterSpacing,
+      textLineHeight,
       textMaxWidth,
       textOffset,
       textRadialOffset,
@@ -564,11 +628,14 @@ class PointAnnotationOptions {
       textSize,
       textTransform?.index,
       iconColor,
+      iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
       iconHaloWidth,
+      iconImageCrossFade,
       iconOpacity,
       textColor,
+      textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
@@ -587,30 +654,37 @@ class PointAnnotationOptions {
       iconOffset: (result[4] as List<Object?>?)?.cast<double?>(),
       iconRotate: result[5] as double?,
       iconSize: result[6] as double?,
-      symbolSortKey: result[7] as double?,
+      iconTextFit:
+          result[7] != null ? IconTextFit.values[result[7]! as int] : null,
+      iconTextFitPadding: (result[8] as List<Object?>?)?.cast<double?>(),
+      symbolSortKey: result[9] as double?,
       textAnchor:
-          result[8] != null ? TextAnchor.values[result[8]! as int] : null,
-      textField: result[9] as String?,
+          result[10] != null ? TextAnchor.values[result[10]! as int] : null,
+      textField: result[11] as String?,
       textJustify:
-          result[10] != null ? TextJustify.values[result[10]! as int] : null,
-      textLetterSpacing: result[11] as double?,
-      textMaxWidth: result[12] as double?,
-      textOffset: (result[13] as List<Object?>?)?.cast<double?>(),
-      textRadialOffset: result[14] as double?,
-      textRotate: result[15] as double?,
-      textSize: result[16] as double?,
+          result[12] != null ? TextJustify.values[result[12]! as int] : null,
+      textLetterSpacing: result[13] as double?,
+      textLineHeight: result[14] as double?,
+      textMaxWidth: result[15] as double?,
+      textOffset: (result[16] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[17] as double?,
+      textRotate: result[18] as double?,
+      textSize: result[19] as double?,
       textTransform:
-          result[17] != null ? TextTransform.values[result[17]! as int] : null,
-      iconColor: result[18] as int?,
-      iconHaloBlur: result[19] as double?,
-      iconHaloColor: result[20] as int?,
-      iconHaloWidth: result[21] as double?,
-      iconOpacity: result[22] as double?,
-      textColor: result[23] as int?,
-      textHaloBlur: result[24] as double?,
-      textHaloColor: result[25] as int?,
-      textHaloWidth: result[26] as double?,
-      textOpacity: result[27] as double?,
+          result[20] != null ? TextTransform.values[result[20]! as int] : null,
+      iconColor: result[21] as int?,
+      iconEmissiveStrength: result[22] as double?,
+      iconHaloBlur: result[23] as double?,
+      iconHaloColor: result[24] as int?,
+      iconHaloWidth: result[25] as double?,
+      iconImageCrossFade: result[26] as double?,
+      iconOpacity: result[27] as double?,
+      textColor: result[28] as int?,
+      textEmissiveStrength: result[29] as double?,
+      textHaloBlur: result[30] as double?,
+      textHaloColor: result[31] as int?,
+      textHaloWidth: result[32] as double?,
+      textOpacity: result[33] as double?,
     );
   }
 }
@@ -1098,7 +1172,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconPitchAlignment(String arg_managerId) async {
+  Future<IconPitchAlignment?> getIconPitchAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPitchAlignment',
         codec,
@@ -1117,7 +1192,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconPitchAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1146,7 +1223,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconRotationAlignment(String arg_managerId) async {
+  Future<IconRotationAlignment?> getIconRotationAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconRotationAlignment',
         codec,
@@ -1165,103 +1243,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
-    }
-  }
-
-  Future<void> setIconTextFit(
-      String arg_managerId, IconTextFit arg_iconTextFit) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFit',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId, arg_iconTextFit.index])
-            as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<int?> getIconTextFit(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFit',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return (replyList[0] as int?);
-    }
-  }
-
-  Future<void> setIconTextFitPadding(
-      String arg_managerId, List<double?> arg_iconTextFitPadding) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFitPadding',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId, arg_iconTextFitPadding])
-            as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<List<double?>?> getIconTextFitPadding(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFitPadding',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return (replyList[0] as List<Object?>?)?.cast<double?>();
+      return (replyList[0] as int?) == null
+          ? null
+          : IconRotationAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1337,7 +1321,7 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getSymbolPlacement(String arg_managerId) async {
+  Future<SymbolPlacement?> getSymbolPlacement(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolPlacement',
         codec,
@@ -1356,7 +1340,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : SymbolPlacement.values[replyList[0]! as int];
     }
   }
 
@@ -1407,6 +1393,53 @@ class _PointAnnotationMessager {
     }
   }
 
+  Future<void> setSymbolZElevate(
+      String arg_managerId, bool arg_symbolZElevate) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZElevate',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel
+        .send(<Object?>[arg_managerId, arg_symbolZElevate]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool?> getSymbolZElevate(String arg_managerId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZElevate',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return (replyList[0] as bool?);
+    }
+  }
+
   Future<void> setSymbolZOrder(
       String arg_managerId, SymbolZOrder arg_symbolZOrder) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -1432,7 +1465,7 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getSymbolZOrder(String arg_managerId) async {
+  Future<SymbolZOrder?> getSymbolZOrder(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZOrder',
         codec,
@@ -1451,7 +1484,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : SymbolZOrder.values[replyList[0]! as int];
     }
   }
 
@@ -1644,53 +1679,6 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<void> setTextLineHeight(
-      String arg_managerId, double arg_textLineHeight) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextLineHeight',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_managerId, arg_textLineHeight]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<double?> getTextLineHeight(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextLineHeight',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else {
-      return (replyList[0] as double?);
-    }
-  }
-
   Future<void> setTextMaxAngle(
       String arg_managerId, double arg_textMaxAngle) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -1857,7 +1845,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextPitchAlignment(String arg_managerId) async {
+  Future<TextPitchAlignment?> getTextPitchAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPitchAlignment',
         codec,
@@ -1876,7 +1865,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextPitchAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -1905,7 +1896,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextRotationAlignment(String arg_managerId) async {
+  Future<TextRotationAlignment?> getTextRotationAlignment(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextRotationAlignment',
         codec,
@@ -1924,7 +1916,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextRotationAlignment.values[replyList[0]! as int];
     }
   }
 
@@ -2000,7 +1994,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getIconTranslateAnchor(String arg_managerId) async {
+  Future<IconTranslateAnchor?> getIconTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslateAnchor',
         codec,
@@ -2019,7 +2014,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : IconTranslateAnchor.values[replyList[0]! as int];
     }
   }
 
@@ -2095,7 +2092,8 @@ class _PointAnnotationMessager {
     }
   }
 
-  Future<int?> getTextTranslateAnchor(String arg_managerId) async {
+  Future<TextTranslateAnchor?> getTextTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslateAnchor',
         codec,
@@ -2114,7 +2112,9 @@ class _PointAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : TextTranslateAnchor.values[replyList[0]! as int];
     }
   }
 }

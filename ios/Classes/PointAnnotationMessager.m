@@ -145,7 +145,7 @@
 }
 @end
 
-/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+/// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
 @implementation FLTTextWritingModeBox
 - (instancetype)initWithValue:(FLTTextWritingMode)value {
   self = [super init];
@@ -212,11 +212,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     iconOffset:(nullable NSArray<NSNumber *> *)iconOffset
     iconRotate:(nullable NSNumber *)iconRotate
     iconSize:(nullable NSNumber *)iconSize
+    iconTextFit:(nullable FLTIconTextFitBox *)iconTextFit
+    iconTextFitPadding:(nullable NSArray<NSNumber *> *)iconTextFitPadding
     symbolSortKey:(nullable NSNumber *)symbolSortKey
     textAnchor:(nullable FLTTextAnchorBox *)textAnchor
     textField:(nullable NSString *)textField
     textJustify:(nullable FLTTextJustifyBox *)textJustify
     textLetterSpacing:(nullable NSNumber *)textLetterSpacing
+    textLineHeight:(nullable NSNumber *)textLineHeight
     textMaxWidth:(nullable NSNumber *)textMaxWidth
     textOffset:(nullable NSArray<NSNumber *> *)textOffset
     textRadialOffset:(nullable NSNumber *)textRadialOffset
@@ -224,11 +227,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     textSize:(nullable NSNumber *)textSize
     textTransform:(nullable FLTTextTransformBox *)textTransform
     iconColor:(nullable NSNumber *)iconColor
+    iconEmissiveStrength:(nullable NSNumber *)iconEmissiveStrength
     iconHaloBlur:(nullable NSNumber *)iconHaloBlur
     iconHaloColor:(nullable NSNumber *)iconHaloColor
     iconHaloWidth:(nullable NSNumber *)iconHaloWidth
+    iconImageCrossFade:(nullable NSNumber *)iconImageCrossFade
     iconOpacity:(nullable NSNumber *)iconOpacity
     textColor:(nullable NSNumber *)textColor
+    textEmissiveStrength:(nullable NSNumber *)textEmissiveStrength
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
@@ -242,11 +248,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.iconOffset = iconOffset;
   pigeonResult.iconRotate = iconRotate;
   pigeonResult.iconSize = iconSize;
+  pigeonResult.iconTextFit = iconTextFit;
+  pigeonResult.iconTextFitPadding = iconTextFitPadding;
   pigeonResult.symbolSortKey = symbolSortKey;
   pigeonResult.textAnchor = textAnchor;
   pigeonResult.textField = textField;
   pigeonResult.textJustify = textJustify;
   pigeonResult.textLetterSpacing = textLetterSpacing;
+  pigeonResult.textLineHeight = textLineHeight;
   pigeonResult.textMaxWidth = textMaxWidth;
   pigeonResult.textOffset = textOffset;
   pigeonResult.textRadialOffset = textRadialOffset;
@@ -254,11 +263,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.textSize = textSize;
   pigeonResult.textTransform = textTransform;
   pigeonResult.iconColor = iconColor;
+  pigeonResult.iconEmissiveStrength = iconEmissiveStrength;
   pigeonResult.iconHaloBlur = iconHaloBlur;
   pigeonResult.iconHaloColor = iconHaloColor;
   pigeonResult.iconHaloWidth = iconHaloWidth;
+  pigeonResult.iconImageCrossFade = iconImageCrossFade;
   pigeonResult.iconOpacity = iconOpacity;
   pigeonResult.textColor = textColor;
+  pigeonResult.textEmissiveStrength = textEmissiveStrength;
   pigeonResult.textHaloBlur = textHaloBlur;
   pigeonResult.textHaloColor = textHaloColor;
   pigeonResult.textHaloWidth = textHaloWidth;
@@ -278,33 +290,41 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.iconOffset = GetNullableObjectAtIndex(list, 5);
   pigeonResult.iconRotate = GetNullableObjectAtIndex(list, 6);
   pigeonResult.iconSize = GetNullableObjectAtIndex(list, 7);
-  pigeonResult.symbolSortKey = GetNullableObjectAtIndex(list, 8);
-  NSNumber *textAnchorAsNumber = GetNullableObjectAtIndex(list, 9);
+  NSNumber *iconTextFitAsNumber = GetNullableObjectAtIndex(list, 8);
+  FLTIconTextFitBox *iconTextFit = iconTextFitAsNumber == nil ? nil : [[FLTIconTextFitBox alloc] initWithValue: [iconTextFitAsNumber integerValue]];
+  pigeonResult.iconTextFit = iconTextFit;
+  pigeonResult.iconTextFitPadding = GetNullableObjectAtIndex(list, 9);
+  pigeonResult.symbolSortKey = GetNullableObjectAtIndex(list, 10);
+  NSNumber *textAnchorAsNumber = GetNullableObjectAtIndex(list, 11);
   FLTTextAnchorBox *textAnchor = textAnchorAsNumber == nil ? nil : [[FLTTextAnchorBox alloc] initWithValue: [textAnchorAsNumber integerValue]];
   pigeonResult.textAnchor = textAnchor;
-  pigeonResult.textField = GetNullableObjectAtIndex(list, 10);
-  NSNumber *textJustifyAsNumber = GetNullableObjectAtIndex(list, 11);
+  pigeonResult.textField = GetNullableObjectAtIndex(list, 12);
+  NSNumber *textJustifyAsNumber = GetNullableObjectAtIndex(list, 13);
   FLTTextJustifyBox *textJustify = textJustifyAsNumber == nil ? nil : [[FLTTextJustifyBox alloc] initWithValue: [textJustifyAsNumber integerValue]];
   pigeonResult.textJustify = textJustify;
-  pigeonResult.textLetterSpacing = GetNullableObjectAtIndex(list, 12);
-  pigeonResult.textMaxWidth = GetNullableObjectAtIndex(list, 13);
-  pigeonResult.textOffset = GetNullableObjectAtIndex(list, 14);
-  pigeonResult.textRadialOffset = GetNullableObjectAtIndex(list, 15);
-  pigeonResult.textRotate = GetNullableObjectAtIndex(list, 16);
-  pigeonResult.textSize = GetNullableObjectAtIndex(list, 17);
-  NSNumber *textTransformAsNumber = GetNullableObjectAtIndex(list, 18);
+  pigeonResult.textLetterSpacing = GetNullableObjectAtIndex(list, 14);
+  pigeonResult.textLineHeight = GetNullableObjectAtIndex(list, 15);
+  pigeonResult.textMaxWidth = GetNullableObjectAtIndex(list, 16);
+  pigeonResult.textOffset = GetNullableObjectAtIndex(list, 17);
+  pigeonResult.textRadialOffset = GetNullableObjectAtIndex(list, 18);
+  pigeonResult.textRotate = GetNullableObjectAtIndex(list, 19);
+  pigeonResult.textSize = GetNullableObjectAtIndex(list, 20);
+  NSNumber *textTransformAsNumber = GetNullableObjectAtIndex(list, 21);
   FLTTextTransformBox *textTransform = textTransformAsNumber == nil ? nil : [[FLTTextTransformBox alloc] initWithValue: [textTransformAsNumber integerValue]];
   pigeonResult.textTransform = textTransform;
-  pigeonResult.iconColor = GetNullableObjectAtIndex(list, 19);
-  pigeonResult.iconHaloBlur = GetNullableObjectAtIndex(list, 20);
-  pigeonResult.iconHaloColor = GetNullableObjectAtIndex(list, 21);
-  pigeonResult.iconHaloWidth = GetNullableObjectAtIndex(list, 22);
-  pigeonResult.iconOpacity = GetNullableObjectAtIndex(list, 23);
-  pigeonResult.textColor = GetNullableObjectAtIndex(list, 24);
-  pigeonResult.textHaloBlur = GetNullableObjectAtIndex(list, 25);
-  pigeonResult.textHaloColor = GetNullableObjectAtIndex(list, 26);
-  pigeonResult.textHaloWidth = GetNullableObjectAtIndex(list, 27);
-  pigeonResult.textOpacity = GetNullableObjectAtIndex(list, 28);
+  pigeonResult.iconColor = GetNullableObjectAtIndex(list, 22);
+  pigeonResult.iconEmissiveStrength = GetNullableObjectAtIndex(list, 23);
+  pigeonResult.iconHaloBlur = GetNullableObjectAtIndex(list, 24);
+  pigeonResult.iconHaloColor = GetNullableObjectAtIndex(list, 25);
+  pigeonResult.iconHaloWidth = GetNullableObjectAtIndex(list, 26);
+  pigeonResult.iconImageCrossFade = GetNullableObjectAtIndex(list, 27);
+  pigeonResult.iconOpacity = GetNullableObjectAtIndex(list, 28);
+  pigeonResult.textColor = GetNullableObjectAtIndex(list, 29);
+  pigeonResult.textEmissiveStrength = GetNullableObjectAtIndex(list, 30);
+  pigeonResult.textHaloBlur = GetNullableObjectAtIndex(list, 31);
+  pigeonResult.textHaloColor = GetNullableObjectAtIndex(list, 32);
+  pigeonResult.textHaloWidth = GetNullableObjectAtIndex(list, 33);
+  pigeonResult.textOpacity = GetNullableObjectAtIndex(list, 34);
   return pigeonResult;
 }
 + (nullable FLTPointAnnotation *)nullableFromList:(NSArray *)list {
@@ -320,11 +340,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.iconOffset ?: [NSNull null]),
     (self.iconRotate ?: [NSNull null]),
     (self.iconSize ?: [NSNull null]),
+    (self.iconTextFit == nil ? [NSNull null] : [NSNumber numberWithInteger:self.iconTextFit.value]),
+    (self.iconTextFitPadding ?: [NSNull null]),
     (self.symbolSortKey ?: [NSNull null]),
     (self.textAnchor == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textAnchor.value]),
     (self.textField ?: [NSNull null]),
     (self.textJustify == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textJustify.value]),
     (self.textLetterSpacing ?: [NSNull null]),
+    (self.textLineHeight ?: [NSNull null]),
     (self.textMaxWidth ?: [NSNull null]),
     (self.textOffset ?: [NSNull null]),
     (self.textRadialOffset ?: [NSNull null]),
@@ -332,11 +355,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.textSize ?: [NSNull null]),
     (self.textTransform == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textTransform.value]),
     (self.iconColor ?: [NSNull null]),
+    (self.iconEmissiveStrength ?: [NSNull null]),
     (self.iconHaloBlur ?: [NSNull null]),
     (self.iconHaloColor ?: [NSNull null]),
     (self.iconHaloWidth ?: [NSNull null]),
+    (self.iconImageCrossFade ?: [NSNull null]),
     (self.iconOpacity ?: [NSNull null]),
     (self.textColor ?: [NSNull null]),
+    (self.textEmissiveStrength ?: [NSNull null]),
     (self.textHaloBlur ?: [NSNull null]),
     (self.textHaloColor ?: [NSNull null]),
     (self.textHaloWidth ?: [NSNull null]),
@@ -353,11 +379,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     iconOffset:(nullable NSArray<NSNumber *> *)iconOffset
     iconRotate:(nullable NSNumber *)iconRotate
     iconSize:(nullable NSNumber *)iconSize
+    iconTextFit:(nullable FLTIconTextFitBox *)iconTextFit
+    iconTextFitPadding:(nullable NSArray<NSNumber *> *)iconTextFitPadding
     symbolSortKey:(nullable NSNumber *)symbolSortKey
     textAnchor:(nullable FLTTextAnchorBox *)textAnchor
     textField:(nullable NSString *)textField
     textJustify:(nullable FLTTextJustifyBox *)textJustify
     textLetterSpacing:(nullable NSNumber *)textLetterSpacing
+    textLineHeight:(nullable NSNumber *)textLineHeight
     textMaxWidth:(nullable NSNumber *)textMaxWidth
     textOffset:(nullable NSArray<NSNumber *> *)textOffset
     textRadialOffset:(nullable NSNumber *)textRadialOffset
@@ -365,11 +394,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     textSize:(nullable NSNumber *)textSize
     textTransform:(nullable FLTTextTransformBox *)textTransform
     iconColor:(nullable NSNumber *)iconColor
+    iconEmissiveStrength:(nullable NSNumber *)iconEmissiveStrength
     iconHaloBlur:(nullable NSNumber *)iconHaloBlur
     iconHaloColor:(nullable NSNumber *)iconHaloColor
     iconHaloWidth:(nullable NSNumber *)iconHaloWidth
+    iconImageCrossFade:(nullable NSNumber *)iconImageCrossFade
     iconOpacity:(nullable NSNumber *)iconOpacity
     textColor:(nullable NSNumber *)textColor
+    textEmissiveStrength:(nullable NSNumber *)textEmissiveStrength
     textHaloBlur:(nullable NSNumber *)textHaloBlur
     textHaloColor:(nullable NSNumber *)textHaloColor
     textHaloWidth:(nullable NSNumber *)textHaloWidth
@@ -382,11 +414,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.iconOffset = iconOffset;
   pigeonResult.iconRotate = iconRotate;
   pigeonResult.iconSize = iconSize;
+  pigeonResult.iconTextFit = iconTextFit;
+  pigeonResult.iconTextFitPadding = iconTextFitPadding;
   pigeonResult.symbolSortKey = symbolSortKey;
   pigeonResult.textAnchor = textAnchor;
   pigeonResult.textField = textField;
   pigeonResult.textJustify = textJustify;
   pigeonResult.textLetterSpacing = textLetterSpacing;
+  pigeonResult.textLineHeight = textLineHeight;
   pigeonResult.textMaxWidth = textMaxWidth;
   pigeonResult.textOffset = textOffset;
   pigeonResult.textRadialOffset = textRadialOffset;
@@ -394,11 +429,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.textSize = textSize;
   pigeonResult.textTransform = textTransform;
   pigeonResult.iconColor = iconColor;
+  pigeonResult.iconEmissiveStrength = iconEmissiveStrength;
   pigeonResult.iconHaloBlur = iconHaloBlur;
   pigeonResult.iconHaloColor = iconHaloColor;
   pigeonResult.iconHaloWidth = iconHaloWidth;
+  pigeonResult.iconImageCrossFade = iconImageCrossFade;
   pigeonResult.iconOpacity = iconOpacity;
   pigeonResult.textColor = textColor;
+  pigeonResult.textEmissiveStrength = textEmissiveStrength;
   pigeonResult.textHaloBlur = textHaloBlur;
   pigeonResult.textHaloColor = textHaloColor;
   pigeonResult.textHaloWidth = textHaloWidth;
@@ -416,33 +454,41 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.iconOffset = GetNullableObjectAtIndex(list, 4);
   pigeonResult.iconRotate = GetNullableObjectAtIndex(list, 5);
   pigeonResult.iconSize = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.symbolSortKey = GetNullableObjectAtIndex(list, 7);
-  NSNumber *textAnchorAsNumber = GetNullableObjectAtIndex(list, 8);
+  NSNumber *iconTextFitAsNumber = GetNullableObjectAtIndex(list, 7);
+  FLTIconTextFitBox *iconTextFit = iconTextFitAsNumber == nil ? nil : [[FLTIconTextFitBox alloc] initWithValue: [iconTextFitAsNumber integerValue]];
+  pigeonResult.iconTextFit = iconTextFit;
+  pigeonResult.iconTextFitPadding = GetNullableObjectAtIndex(list, 8);
+  pigeonResult.symbolSortKey = GetNullableObjectAtIndex(list, 9);
+  NSNumber *textAnchorAsNumber = GetNullableObjectAtIndex(list, 10);
   FLTTextAnchorBox *textAnchor = textAnchorAsNumber == nil ? nil : [[FLTTextAnchorBox alloc] initWithValue: [textAnchorAsNumber integerValue]];
   pigeonResult.textAnchor = textAnchor;
-  pigeonResult.textField = GetNullableObjectAtIndex(list, 9);
-  NSNumber *textJustifyAsNumber = GetNullableObjectAtIndex(list, 10);
+  pigeonResult.textField = GetNullableObjectAtIndex(list, 11);
+  NSNumber *textJustifyAsNumber = GetNullableObjectAtIndex(list, 12);
   FLTTextJustifyBox *textJustify = textJustifyAsNumber == nil ? nil : [[FLTTextJustifyBox alloc] initWithValue: [textJustifyAsNumber integerValue]];
   pigeonResult.textJustify = textJustify;
-  pigeonResult.textLetterSpacing = GetNullableObjectAtIndex(list, 11);
-  pigeonResult.textMaxWidth = GetNullableObjectAtIndex(list, 12);
-  pigeonResult.textOffset = GetNullableObjectAtIndex(list, 13);
-  pigeonResult.textRadialOffset = GetNullableObjectAtIndex(list, 14);
-  pigeonResult.textRotate = GetNullableObjectAtIndex(list, 15);
-  pigeonResult.textSize = GetNullableObjectAtIndex(list, 16);
-  NSNumber *textTransformAsNumber = GetNullableObjectAtIndex(list, 17);
+  pigeonResult.textLetterSpacing = GetNullableObjectAtIndex(list, 13);
+  pigeonResult.textLineHeight = GetNullableObjectAtIndex(list, 14);
+  pigeonResult.textMaxWidth = GetNullableObjectAtIndex(list, 15);
+  pigeonResult.textOffset = GetNullableObjectAtIndex(list, 16);
+  pigeonResult.textRadialOffset = GetNullableObjectAtIndex(list, 17);
+  pigeonResult.textRotate = GetNullableObjectAtIndex(list, 18);
+  pigeonResult.textSize = GetNullableObjectAtIndex(list, 19);
+  NSNumber *textTransformAsNumber = GetNullableObjectAtIndex(list, 20);
   FLTTextTransformBox *textTransform = textTransformAsNumber == nil ? nil : [[FLTTextTransformBox alloc] initWithValue: [textTransformAsNumber integerValue]];
   pigeonResult.textTransform = textTransform;
-  pigeonResult.iconColor = GetNullableObjectAtIndex(list, 18);
-  pigeonResult.iconHaloBlur = GetNullableObjectAtIndex(list, 19);
-  pigeonResult.iconHaloColor = GetNullableObjectAtIndex(list, 20);
-  pigeonResult.iconHaloWidth = GetNullableObjectAtIndex(list, 21);
-  pigeonResult.iconOpacity = GetNullableObjectAtIndex(list, 22);
-  pigeonResult.textColor = GetNullableObjectAtIndex(list, 23);
-  pigeonResult.textHaloBlur = GetNullableObjectAtIndex(list, 24);
-  pigeonResult.textHaloColor = GetNullableObjectAtIndex(list, 25);
-  pigeonResult.textHaloWidth = GetNullableObjectAtIndex(list, 26);
-  pigeonResult.textOpacity = GetNullableObjectAtIndex(list, 27);
+  pigeonResult.iconColor = GetNullableObjectAtIndex(list, 21);
+  pigeonResult.iconEmissiveStrength = GetNullableObjectAtIndex(list, 22);
+  pigeonResult.iconHaloBlur = GetNullableObjectAtIndex(list, 23);
+  pigeonResult.iconHaloColor = GetNullableObjectAtIndex(list, 24);
+  pigeonResult.iconHaloWidth = GetNullableObjectAtIndex(list, 25);
+  pigeonResult.iconImageCrossFade = GetNullableObjectAtIndex(list, 26);
+  pigeonResult.iconOpacity = GetNullableObjectAtIndex(list, 27);
+  pigeonResult.textColor = GetNullableObjectAtIndex(list, 28);
+  pigeonResult.textEmissiveStrength = GetNullableObjectAtIndex(list, 29);
+  pigeonResult.textHaloBlur = GetNullableObjectAtIndex(list, 30);
+  pigeonResult.textHaloColor = GetNullableObjectAtIndex(list, 31);
+  pigeonResult.textHaloWidth = GetNullableObjectAtIndex(list, 32);
+  pigeonResult.textOpacity = GetNullableObjectAtIndex(list, 33);
   return pigeonResult;
 }
 + (nullable FLTPointAnnotationOptions *)nullableFromList:(NSArray *)list {
@@ -457,11 +503,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.iconOffset ?: [NSNull null]),
     (self.iconRotate ?: [NSNull null]),
     (self.iconSize ?: [NSNull null]),
+    (self.iconTextFit == nil ? [NSNull null] : [NSNumber numberWithInteger:self.iconTextFit.value]),
+    (self.iconTextFitPadding ?: [NSNull null]),
     (self.symbolSortKey ?: [NSNull null]),
     (self.textAnchor == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textAnchor.value]),
     (self.textField ?: [NSNull null]),
     (self.textJustify == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textJustify.value]),
     (self.textLetterSpacing ?: [NSNull null]),
+    (self.textLineHeight ?: [NSNull null]),
     (self.textMaxWidth ?: [NSNull null]),
     (self.textOffset ?: [NSNull null]),
     (self.textRadialOffset ?: [NSNull null]),
@@ -469,11 +518,14 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.textSize ?: [NSNull null]),
     (self.textTransform == nil ? [NSNull null] : [NSNumber numberWithInteger:self.textTransform.value]),
     (self.iconColor ?: [NSNull null]),
+    (self.iconEmissiveStrength ?: [NSNull null]),
     (self.iconHaloBlur ?: [NSNull null]),
     (self.iconHaloColor ?: [NSNull null]),
     (self.iconHaloWidth ?: [NSNull null]),
+    (self.iconImageCrossFade ?: [NSNull null]),
     (self.iconOpacity ?: [NSNull null]),
     (self.textColor ?: [NSNull null]),
+    (self.textEmissiveStrength ?: [NSNull null]),
     (self.textHaloBlur ?: [NSNull null]),
     (self.textHaloColor ?: [NSNull null]),
     (self.textHaloWidth ?: [NSNull null]),
@@ -932,7 +984,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconPitchAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconPitchAlignmentManagerId:arg_managerId completion:^(FLTIconPitchAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -971,85 +1024,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconRotationAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
-          callback(wrapResult(output, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFit"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(setIconTextFitManagerId:iconTextFit:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(setIconTextFitManagerId:iconTextFit:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        FLTIconTextFit arg_iconTextFit = [GetNullableObjectAtIndex(args, 1) integerValue];
-        [api setIconTextFitManagerId:arg_managerId iconTextFit:arg_iconTextFit completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFit"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(getIconTextFitManagerId:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(getIconTextFitManagerId:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconTextFitManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
-          callback(wrapResult(output, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTextFitPadding"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(setIconTextFitPaddingManagerId:iconTextFitPadding:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(setIconTextFitPaddingManagerId:iconTextFitPadding:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        NSArray<NSNumber *> *arg_iconTextFitPadding = GetNullableObjectAtIndex(args, 1);
-        [api setIconTextFitPaddingManagerId:arg_managerId iconTextFitPadding:arg_iconTextFitPadding completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTextFitPadding"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(getIconTextFitPaddingManagerId:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(getIconTextFitPaddingManagerId:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconTextFitPaddingManagerId:arg_managerId completion:^(NSArray<NSNumber *> *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconRotationAlignmentManagerId:arg_managerId completion:^(FLTIconRotationAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1127,7 +1103,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getSymbolPlacementManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getSymbolPlacementManagerId:arg_managerId completion:^(FLTSymbolPlacementBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1177,6 +1154,45 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZElevate"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PointAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setSymbolZElevateManagerId:symbolZElevate:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(setSymbolZElevateManagerId:symbolZElevate:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        NSNumber *arg_symbolZElevate = GetNullableObjectAtIndex(args, 1);
+        [api setSymbolZElevateManagerId:arg_managerId symbolZElevate:arg_symbolZElevate completion:^(FlutterError *_Nullable error) {
+          callback(wrapResult(nil, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZElevate"
+        binaryMessenger:binaryMessenger
+        codec:FLT_PointAnnotationMessagerGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getSymbolZElevateManagerId:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(getSymbolZElevateManagerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
+        [api getSymbolZElevateManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZOrder"
         binaryMessenger:binaryMessenger
         codec:FLT_PointAnnotationMessagerGetCodec()];
@@ -1205,7 +1221,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getSymbolZOrderManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getSymbolZOrderManagerId:arg_managerId completion:^(FLTSymbolZOrderBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1372,45 +1389,6 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextLineHeight"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(setTextLineHeightManagerId:textLineHeight:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(setTextLineHeightManagerId:textLineHeight:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        NSNumber *arg_textLineHeight = GetNullableObjectAtIndex(args, 1);
-        [api setTextLineHeightManagerId:arg_managerId textLineHeight:arg_textLineHeight completion:^(FlutterError *_Nullable error) {
-          callback(wrapResult(nil, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextLineHeight"
-        binaryMessenger:binaryMessenger
-        codec:FLT_PointAnnotationMessagerGetCodec()];
-    if (api) {
-      NSCAssert([api respondsToSelector:@selector(getTextLineHeightManagerId:completion:)], @"FLT_PointAnnotationMessager api (%@) doesn't respond to @selector(getTextLineHeightManagerId:completion:)", api);
-      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        NSArray *args = message;
-        NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextLineHeightManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
-          callback(wrapResult(output, error));
-        }];
-      }];
-    } else {
-      [channel setMessageHandler:nil];
-    }
-  }
-  {
-    FlutterBasicMessageChannel *channel =
-      [[FlutterBasicMessageChannel alloc]
         initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextMaxAngle"
         binaryMessenger:binaryMessenger
         codec:FLT_PointAnnotationMessagerGetCodec()];
@@ -1556,7 +1534,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextPitchAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextPitchAlignmentManagerId:arg_managerId completion:^(FLTTextPitchAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1595,7 +1574,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextRotationAlignmentManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextRotationAlignmentManagerId:arg_managerId completion:^(FLTTextRotationAlignmentBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1673,7 +1653,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getIconTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getIconTranslateAnchorManagerId:arg_managerId completion:^(FLTIconTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];
@@ -1751,7 +1732,8 @@ void FLT_PointAnnotationMessagerSetup(id<FlutterBinaryMessenger> binaryMessenger
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         NSString *arg_managerId = GetNullableObjectAtIndex(args, 0);
-        [api getTextTranslateAnchorManagerId:arg_managerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+        [api getTextTranslateAnchorManagerId:arg_managerId completion:^(FLTTextTranslateAnchorBox *_Nullable enumValue, FlutterError *_Nullable error) {
+          NSNumber *output = enumValue == nil ? nil : [NSNumber numberWithInteger:enumValue.value];
           callback(wrapResult(output, error));
         }];
       }];

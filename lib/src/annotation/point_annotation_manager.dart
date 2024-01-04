@@ -76,9 +76,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
       messager.setIconPitchAlignment(id, iconPitchAlignment);
 
   /// Orientation of icon when map is pitched.
-  Future<IconPitchAlignment?> getIconPitchAlignment() => messager
-      .getIconPitchAlignment(id)
-      .then((value) => value != null ? IconPitchAlignment.values[value] : null);
+  Future<IconPitchAlignment?> getIconPitchAlignment() =>
+      messager.getIconPitchAlignment(id);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons.
   Future<void> setIconRotationAlignment(
@@ -87,25 +86,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons.
   Future<IconRotationAlignment?> getIconRotationAlignment() =>
-      messager.getIconRotationAlignment(id).then((value) =>
-          value != null ? IconRotationAlignment.values[value] : null);
-
-  /// Scales the icon to fit around the associated text.
-  Future<void> setIconTextFit(IconTextFit iconTextFit) =>
-      messager.setIconTextFit(id, iconTextFit);
-
-  /// Scales the icon to fit around the associated text.
-  Future<IconTextFit?> getIconTextFit() => messager
-      .getIconTextFit(id)
-      .then((value) => value != null ? IconTextFit.values[value] : null);
-
-  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  Future<void> setIconTextFitPadding(List<double?> iconTextFitPadding) =>
-      messager.setIconTextFitPadding(id, iconTextFitPadding);
-
-  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  Future<List<double?>?> getIconTextFitPadding() =>
-      messager.getIconTextFitPadding(id);
+      messager.getIconRotationAlignment(id);
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
   Future<void> setSymbolAvoidEdges(bool symbolAvoidEdges) =>
@@ -119,9 +100,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
       messager.setSymbolPlacement(id, symbolPlacement);
 
   /// Label placement relative to its geometry.
-  Future<SymbolPlacement?> getSymbolPlacement() => messager
-      .getSymbolPlacement(id)
-      .then((value) => value != null ? SymbolPlacement.values[value] : null);
+  Future<SymbolPlacement?> getSymbolPlacement() =>
+      messager.getSymbolPlacement(id);
 
   /// Distance between two symbol anchors.
   Future<void> setSymbolSpacing(double symbolSpacing) =>
@@ -130,14 +110,19 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Distance between two symbol anchors.
   Future<double?> getSymbolSpacing() => messager.getSymbolSpacing(id);
 
+  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  Future<void> setSymbolZElevate(bool symbolZElevate) =>
+      messager.setSymbolZElevate(id, symbolZElevate);
+
+  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  Future<bool?> getSymbolZElevate() => messager.getSymbolZElevate(id);
+
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
   Future<void> setSymbolZOrder(SymbolZOrder symbolZOrder) =>
       messager.setSymbolZOrder(id, symbolZOrder);
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-  Future<SymbolZOrder?> getSymbolZOrder() => messager
-      .getSymbolZOrder(id)
-      .then((value) => value != null ? SymbolZOrder.values[value] : null);
+  Future<SymbolZOrder?> getSymbolZOrder() => messager.getSymbolZOrder(id);
 
   /// If true, the text will be visible even if it collides with other previously drawn symbols.
   Future<void> setTextAllowOverlap(bool textAllowOverlap) =>
@@ -167,13 +152,6 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
   Future<bool?> getTextKeepUpright() => messager.getTextKeepUpright(id);
 
-  /// Text leading value for multi-line text.
-  Future<void> setTextLineHeight(double textLineHeight) =>
-      messager.setTextLineHeight(id, textLineHeight);
-
-  /// Text leading value for multi-line text.
-  Future<double?> getTextLineHeight() => messager.getTextLineHeight(id);
-
   /// Maximum angle change between adjacent characters.
   Future<void> setTextMaxAngle(double textMaxAngle) =>
       messager.setTextMaxAngle(id, textMaxAngle);
@@ -200,9 +178,8 @@ class PointAnnotationManager extends BaseAnnotationManager {
       messager.setTextPitchAlignment(id, textPitchAlignment);
 
   /// Orientation of text when map is pitched.
-  Future<TextPitchAlignment?> getTextPitchAlignment() => messager
-      .getTextPitchAlignment(id)
-      .then((value) => value != null ? TextPitchAlignment.values[value] : null);
+  Future<TextPitchAlignment?> getTextPitchAlignment() =>
+      messager.getTextPitchAlignment(id);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
   Future<void> setTextRotationAlignment(
@@ -211,8 +188,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
   Future<TextRotationAlignment?> getTextRotationAlignment() =>
-      messager.getTextRotationAlignment(id).then((value) =>
-          value != null ? TextRotationAlignment.values[value] : null);
+      messager.getTextRotationAlignment(id);
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   Future<void> setIconTranslate(List<double?> iconTranslate) =>
@@ -228,8 +204,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `icon-translate`.
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
-      messager.getIconTranslateAnchor(id).then(
-          (value) => value != null ? IconTranslateAnchor.values[value] : null);
+      messager.getIconTranslateAnchor(id);
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   Future<void> setTextTranslate(List<double?> textTranslate) =>
@@ -245,7 +220,6 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Controls the frame of reference for `text-translate`.
   Future<TextTranslateAnchor?> getTextTranslateAnchor() =>
-      messager.getTextTranslateAnchor(id).then(
-          (value) => value != null ? TextTranslateAnchor.values[value] : null);
+      messager.getTextTranslateAnchor(id);
 }
 // End of generated file.

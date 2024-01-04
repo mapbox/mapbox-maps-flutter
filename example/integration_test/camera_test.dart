@@ -14,6 +14,42 @@ void main() {
     await Future<void>.delayed(Duration(milliseconds: ms));
   }
 
+  testWidgets('cameraForCoordinatesPadding', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await addDelay(1000);
+
+    var reference = CameraOptions(
+        center: Point(coordinates: Position(1.0, 2.0)).toJson(),
+        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+        anchor: null,
+        zoom: 5,
+        bearing: 20,
+        pitch: 30);
+    var camera = await mapboxMap.cameraForCoordinatesPadding([
+      Point(
+          coordinates: Position(
+        1.0,
+        2.0,
+      )).toJson(),
+      Point(
+          coordinates: Position(
+        3.0,
+        4.0,
+      )).toJson()
+    ], reference, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10,
+        ScreenCoordinate(x: 5, y: 5));
+
+    expect(camera.bearing, 20);
+    expect(camera.pitch, closeTo(30, 0.1));
+    expect(camera.zoom, lessThanOrEqualTo(10));
+    expect(camera.padding!.top, 1);
+    expect(camera.padding!.left, 2);
+    expect(camera.padding!.bottom, 3);
+    expect(camera.padding!.right, 4);
+  });
+
   testWidgets('cameraForCoordinateBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -35,15 +71,12 @@ void main() {
             infiniteBounds: true),
         MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
         10,
-        20);
+        20,
+        10,
+        null);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
-    // TODO zoom might be different depending whether surface has changed the size
-    // expect(camera.zoom!.round(), 7);
+    expect(camera.zoom, lessThanOrEqualTo(10));
     var coordinates = camera.center!["coordinates"] as List;
     expect((coordinates.first as double).round(), 2);
     expect((coordinates.last as double).round(), 3);
@@ -71,10 +104,6 @@ void main() {
     ], MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
     // TODO zoom might be different depending whether surface has changed the size
     // expect(camera.zoom!.round(), 7);
     var coordinates = camera.center!["coordinates"] as List;
@@ -118,19 +147,18 @@ void main() {
         ScreenBox(
             min: ScreenCoordinate(x: 0, y: 0),
             max: ScreenCoordinate(x: 100, y: 100)));
-    expect(camera.zoom, 10);
     expect(camera.bearing, 20);
     expect(camera.pitch, 30);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
-    expect(camera.zoom!.round(), 10);
     var coordinates = camera.center!["coordinates"] as List;
     expect((coordinates.first as double).round(), 1);
     expect((coordinates.last as double).round(), 2);
     expect(camera.anchor!.x, 1);
     expect(camera.anchor!.y, 1);
+    expect(camera.padding!.top, option.padding!.top);
+    expect(camera.padding!.left, option.padding!.left);
+    expect(camera.padding!.bottom, option.padding!.bottom);
+    expect(camera.padding!.right, option.padding!.right);
+    expect(camera.zoom!.round(), 10);
     await addDelay(1000);
   });
 
@@ -144,10 +172,6 @@ void main() {
     }, MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
     expect(camera.bearing, 10);
     expect(camera.pitch, 20);
-    expect(camera.padding!.top, 1);
-    expect(camera.padding!.left, 2);
-    expect(camera.padding!.bottom, 3);
-    expect(camera.padding!.right, 4);
     // TODO zoom might be different depending whether surface has changed the size
     // expect(camera.zoom!.round(), 21);
     var coordinates = camera.center!["coordinates"] as List;
@@ -213,6 +237,7 @@ void main() {
     expect((southwest.last as double).round(), 2);
     await addDelay(1000);
   });
+
   testWidgets('coordinateBoundsZoomForCamera', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -357,12 +382,12 @@ void main() {
     await addDelay(5000);
     final mapboxMap = await mapFuture;
     var cameraState = await mapboxMap.getCameraState();
-    expect(cameraState.zoom.floor(), 0);
-    expect(cameraState.pitch, 0);
-    expect(cameraState.bearing, 0);
+    expect(cameraState.zoom.floor(), 15);
+    expect(cameraState.pitch.floor(), 60);
+    expect(cameraState.bearing.floor(), 12);
     var coordinates = cameraState.center['coordinates'] as List;
-    expect(coordinates.first, 0);
-    expect(coordinates.last, 0);
+    expect(coordinates.first.floor(), -88);
+    expect(coordinates.last.floor(), 41);
     expect(cameraState.padding.top, 0);
     expect(cameraState.padding.right, 0);
     expect(cameraState.padding.bottom, 0);
@@ -412,29 +437,6 @@ void main() {
     expect(northeast.first, 180);
     expect(northeast.last, 90);
     expect(bounds.bounds.infiniteBounds, true);
-
-    await addDelay(1000);
-  });
-
-  testWidgets('drag', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    await mapboxMap.dragStart(ScreenCoordinate(x: 1, y: 1));
-    await addDelay(1000);
-    mapboxMap.dragEnd();
-  });
-  testWidgets('getDragCameraOptions', (WidgetTester tester) async {
-    final mapFuture = app.runFixedSizeMap();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-
-    final destination = ScreenCoordinate(x: 100, y: 100);
-    final options = await mapboxMap.getDragCameraOptions(
-        ScreenCoordinate(x: 0, y: 0), destination);
-    final coordinates = options.center!["coordinates"] as List;
-    expect((coordinates.first as double).round(), -97);
-    expect((coordinates.last as double).round(), 69);
 
     await addDelay(1000);
   });

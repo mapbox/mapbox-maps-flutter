@@ -40,6 +40,8 @@ class PolylineAnnotation {
     this.lineJoin,
     this.lineSortKey,
     this.lineBlur,
+    this.lineBorderColor,
+    this.lineBorderWidth,
     this.lineColor,
     this.lineGapWidth,
     this.lineOffset,
@@ -62,6 +64,12 @@ class PolylineAnnotation {
 
   /// Blur applied to the line, in pixels.
   double? lineBlur;
+
+  /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  int? lineBorderColor;
+
+  /// The width of the line border. A value of zero means no border.
+  double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
   int? lineColor;
@@ -88,6 +96,8 @@ class PolylineAnnotation {
       lineJoin?.index,
       lineSortKey,
       lineBlur,
+      lineBorderColor,
+      lineBorderWidth,
       lineColor,
       lineGapWidth,
       lineOffset,
@@ -105,12 +115,14 @@ class PolylineAnnotation {
       lineJoin: result[2] != null ? LineJoin.values[result[2]! as int] : null,
       lineSortKey: result[3] as double?,
       lineBlur: result[4] as double?,
-      lineColor: result[5] as int?,
-      lineGapWidth: result[6] as double?,
-      lineOffset: result[7] as double?,
-      lineOpacity: result[8] as double?,
-      linePattern: result[9] as String?,
-      lineWidth: result[10] as double?,
+      lineBorderColor: result[5] as int?,
+      lineBorderWidth: result[6] as double?,
+      lineColor: result[7] as int?,
+      lineGapWidth: result[8] as double?,
+      lineOffset: result[9] as double?,
+      lineOpacity: result[10] as double?,
+      linePattern: result[11] as String?,
+      lineWidth: result[12] as double?,
     );
   }
 }
@@ -121,6 +133,8 @@ class PolylineAnnotationOptions {
     this.lineJoin,
     this.lineSortKey,
     this.lineBlur,
+    this.lineBorderColor,
+    this.lineBorderWidth,
     this.lineColor,
     this.lineGapWidth,
     this.lineOffset,
@@ -140,6 +154,12 @@ class PolylineAnnotationOptions {
 
   /// Blur applied to the line, in pixels.
   double? lineBlur;
+
+  /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  int? lineBorderColor;
+
+  /// The width of the line border. A value of zero means no border.
+  double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
   int? lineColor;
@@ -165,6 +185,8 @@ class PolylineAnnotationOptions {
       lineJoin?.index,
       lineSortKey,
       lineBlur,
+      lineBorderColor,
+      lineBorderWidth,
       lineColor,
       lineGapWidth,
       lineOffset,
@@ -181,12 +203,14 @@ class PolylineAnnotationOptions {
       lineJoin: result[1] != null ? LineJoin.values[result[1]! as int] : null,
       lineSortKey: result[2] as double?,
       lineBlur: result[3] as double?,
-      lineColor: result[4] as int?,
-      lineGapWidth: result[5] as double?,
-      lineOffset: result[6] as double?,
-      lineOpacity: result[7] as double?,
-      linePattern: result[8] as String?,
-      lineWidth: result[9] as double?,
+      lineBorderColor: result[4] as int?,
+      lineBorderWidth: result[5] as double?,
+      lineColor: result[6] as int?,
+      lineGapWidth: result[7] as double?,
+      lineOffset: result[8] as double?,
+      lineOpacity: result[9] as double?,
+      linePattern: result[10] as String?,
+      lineWidth: result[11] as double?,
     );
   }
 }
@@ -438,7 +462,7 @@ class _PolylineAnnotationMessager {
     }
   }
 
-  Future<int?> getLineCap(String arg_managerId) async {
+  Future<LineCap?> getLineCap(String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineCap',
         codec,
@@ -457,7 +481,9 @@ class _PolylineAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : LineCap.values[replyList[0]! as int];
     }
   }
 
@@ -602,6 +628,102 @@ class _PolylineAnnotationMessager {
     }
   }
 
+  Future<void> setLineDepthOcclusionFactor(
+      String arg_managerId, double arg_lineDepthOcclusionFactor) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDepthOcclusionFactor',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList = await channel
+            .send(<Object?>[arg_managerId, arg_lineDepthOcclusionFactor])
+        as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineDepthOcclusionFactor(String arg_managerId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDepthOcclusionFactor',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return (replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineEmissiveStrength(
+      String arg_managerId, double arg_lineEmissiveStrength) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineEmissiveStrength',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId, arg_lineEmissiveStrength])
+            as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineEmissiveStrength(String arg_managerId) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineEmissiveStrength',
+        codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else {
+      return (replyList[0] as double?);
+    }
+  }
+
   Future<void> setLineTranslate(
       String arg_managerId, List<double?> arg_lineTranslate) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -674,7 +796,8 @@ class _PolylineAnnotationMessager {
     }
   }
 
-  Future<int?> getLineTranslateAnchor(String arg_managerId) async {
+  Future<LineTranslateAnchor?> getLineTranslateAnchor(
+      String arg_managerId) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslateAnchor',
         codec,
@@ -693,7 +816,9 @@ class _PolylineAnnotationMessager {
         details: replyList[2],
       );
     } else {
-      return (replyList[0] as int?);
+      return (replyList[0] as int?) == null
+          ? null
+          : LineTranslateAnchor.values[replyList[0]! as int];
     }
   }
 

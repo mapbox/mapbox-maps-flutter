@@ -47,14 +47,6 @@ void main() {
     var iconRotationAlignment = await manager.getIconRotationAlignment();
     expect(IconRotationAlignment.MAP, iconRotationAlignment);
 
-    await manager.setIconTextFit(IconTextFit.NONE);
-    var iconTextFit = await manager.getIconTextFit();
-    expect(IconTextFit.NONE, iconTextFit);
-
-    await manager.setIconTextFitPadding([0.0, 1.0, 2.0, 3.0]);
-    var iconTextFitPadding = await manager.getIconTextFitPadding();
-    expect([0.0, 1.0, 2.0, 3.0], iconTextFitPadding);
-
     await manager.setSymbolAvoidEdges(true);
     var symbolAvoidEdges = await manager.getSymbolAvoidEdges();
     expect(true, symbolAvoidEdges);
@@ -66,6 +58,10 @@ void main() {
     await manager.setSymbolSpacing(1.0);
     var symbolSpacing = await manager.getSymbolSpacing();
     expect(1.0, symbolSpacing);
+
+    await manager.setSymbolZElevate(true);
+    var symbolZElevate = await manager.getSymbolZElevate();
+    expect(true, symbolZElevate);
 
     await manager.setSymbolZOrder(SymbolZOrder.AUTO);
     var symbolZOrder = await manager.getSymbolZOrder();
@@ -86,10 +82,6 @@ void main() {
     await manager.setTextKeepUpright(true);
     var textKeepUpright = await manager.getTextKeepUpright();
     expect(true, textKeepUpright);
-
-    await manager.setTextLineHeight(1.0);
-    var textLineHeight = await manager.getTextLineHeight();
-    expect(1.0, textLineHeight);
 
     await manager.setTextMaxAngle(1.0);
     var textMaxAngle = await manager.getTextMaxAngle();

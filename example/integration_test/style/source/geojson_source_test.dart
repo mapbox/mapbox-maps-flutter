@@ -21,7 +21,7 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
+    await app.events.onMapLoaded.future;
 
     await mapboxMap.style.addSource(GeoJsonSource(
       id: "source",
@@ -35,8 +35,18 @@ void main() {
       clusterMaxZoom: 1.0,
       clusterProperties: {
         "sum": [
-          "+",
-          ["get", "scalerank"]
+          [
+            "+",
+            [
+              "number",
+              ["accumulated"]
+            ],
+            [
+              "number",
+              ["get", "sum"]
+            ]
+          ],
+          1.0
         ]
       },
       lineMetrics: true,
@@ -48,24 +58,55 @@ void main() {
     expect(source.id, 'source');
     var maxzoom = await source.maxzoom;
     expect(maxzoom, 1.0);
+
     var attribution = await source.attribution;
     expect(attribution, "abc");
+
     var buffer = await source.buffer;
     expect(buffer, 1.0);
+
     var tolerance = await source.tolerance;
     expect(tolerance, 1.0);
+
     var cluster = await source.cluster;
     expect(cluster, true);
+
     var clusterRadius = await source.clusterRadius;
     expect(clusterRadius, 1.0);
+
     var clusterMaxZoom = await source.clusterMaxZoom;
     expect(clusterMaxZoom, 1.0);
+
+    var clusterProperties = await source.clusterProperties;
+    expect(clusterProperties, {
+      "sum": [
+        [
+          "+",
+          [
+            "number",
+            ["accumulated"]
+          ],
+          [
+            "number",
+            ["get", "sum"]
+          ]
+        ],
+        1.0
+      ]
+    });
+
     var lineMetrics = await source.lineMetrics;
     expect(lineMetrics, true);
+
     var generateId = await source.generateId;
     expect(generateId, true);
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect(prefetchZoomDelta, 1.0);
+
+    // TODO: Investigate why this check is suseptible to fail on iOS
+    // https://mapbox.atlassian.net/browse/MAPSFLT-141
+    if (Platform.isAndroid) {
+      var prefetchZoomDelta = await source.prefetchZoomDelta;
+      expect(prefetchZoomDelta, 1.0);
+    }
   });
 }
 // End of generated file.

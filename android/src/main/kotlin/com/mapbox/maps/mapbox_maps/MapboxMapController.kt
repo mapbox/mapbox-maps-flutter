@@ -4,6 +4,17 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import com.google.gson.TypeAdapter
+import com.google.gson.TypeAdapterFactory
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import com.mapbox.common.*
 import com.mapbox.maps.*
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
@@ -13,12 +24,14 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import java.lang.reflect.Type
+import java.util.Date
 
 class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
-  eventTypes: List<String>,
+  eventTypes: List<Int>,
   messenger: BinaryMessenger,
   channelSuffix: Int,
   pluginVersion: String
@@ -27,7 +40,7 @@ class MapboxMapController(
   MethodChannel.MethodCallHandler {
 
   private val mapView: MapView = MapView(context, mapInitOptions)
-  private val mapboxMap: MapboxMap = mapView.getMapboxMap()
+  private val mapboxMap: MapboxMap = mapView.mapboxMap
   private val methodChannel: MethodChannel
   private val styleController: StyleController = StyleController(mapboxMap, context)
   private val cameraController: CameraController = CameraController(mapboxMap, context)
@@ -35,7 +48,7 @@ class MapboxMapController(
   private val mapInterfaceController: MapInterfaceController = MapInterfaceController(mapboxMap, context)
   private val animationController: AnimationController = AnimationController(mapboxMap, context)
   private val annotationController: AnnotationController = AnnotationController(mapView, mapboxMap)
-  private val locationComponentController = LocationComponentController(mapView)
+  private val locationComponentController = LocationComponentController(mapView, context)
   private val gestureController = GestureController(mapView)
   private val logoController = LogoController(mapView)
   private val attributionController = AttributionController(mapView)
@@ -43,7 +56,10 @@ class MapboxMapController(
   private val compassController = CompassController(mapView)
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
-
+  private val gson = GsonBuilder()
+    .registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter)
+    .registerTypeAdapterFactory(EnumOrdinalTypeAdapterFactory)
+    .create()
   init {
     changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
@@ -59,14 +75,61 @@ class MapboxMapController(
     FLTSettings.AttributionSettingsInterface.setup(proxyBinaryMessenger, attributionController)
     FLTSettings.ScaleBarSettingsInterface.setup(proxyBinaryMessenger, scaleBarController)
     FLTSettings.CompassSettingsInterface.setup(proxyBinaryMessenger, compassController)
+
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
-    mapboxMap.subscribe(
-      { event ->
-        methodChannel.invokeMethod(getEventMethodName(event.type), event.data.toJson())
-      },
-      eventTypes
-    )
+
+    // TODO: check if state-triggered subscription change does not lead to multiple subscriptions/not unsubscribing when listener becomes null
+    for (event in eventTypes) {
+      subscribeToEvent(FLTMapInterfaces._MapEvent.values()[event])
+    }
+  }
+
+  private fun subscribeToEvent(event: FLTMapInterfaces._MapEvent) {
+    when (event) {
+      FLTMapInterfaces._MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.MAP_LOADING_ERROR -> mapboxMap.subscribeMapLoadingError {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.STYLE_LOADED -> mapboxMap.subscribeStyleLoaded {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.STYLE_DATA_LOADED -> mapboxMap.subscribeStyleDataLoaded {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.CAMERA_CHANGED -> mapboxMap.subscribeCameraChanged {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.MAP_IDLE -> mapboxMap.subscribeMapIdle {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.SOURCE_ADDED -> mapboxMap.subscribeSourceAdded {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.SOURCE_REMOVED -> mapboxMap.subscribeSourceRemoved {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.SOURCE_DATA_LOADED -> mapboxMap.subscribeSourceDataLoaded {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.STYLE_IMAGE_MISSING -> mapboxMap.subscribeStyleImageMissing {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> mapboxMap.subscribeStyleImageRemoveUnused {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.RENDER_FRAME_STARTED -> mapboxMap.subscribeRenderFrameStarted {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.RENDER_FRAME_FINISHED -> mapboxMap.subscribeRenderFrameFinished {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+      FLTMapInterfaces._MapEvent.RESOURCE_REQUEST -> mapboxMap.subscribeResourceRequest {
+        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
+      }
+    }
   }
 
   override fun getView(): View {
@@ -104,16 +167,6 @@ class MapboxMapController(
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
     when (call.method) {
-      "map#subscribe" -> {
-        val eventType = call.argument<String>("event")!!
-        mapboxMap.subscribe(
-          { event ->
-            methodChannel.invokeMethod(getEventMethodName(eventType), event.data.toJson())
-          },
-          listOf(eventType)
-        )
-        result.success(null)
-      }
       "annotation#create_manager" -> {
         annotationController.handleCreateManager(call, result)
       }
@@ -135,23 +188,55 @@ class MapboxMapController(
   }
 
   private fun changeUserAgent(version: String) {
-    HttpServiceFactory.getInstance().setInterceptor(
+    HttpServiceFactory.setHttpServiceInterceptor(
       object : HttpServiceInterceptorInterface {
-        override fun onRequest(request: HttpRequest): HttpRequest {
-          request.headers[HttpHeaders.USER_AGENT] = "${request.headers[HttpHeaders.USER_AGENT]} Flutter Plugin/$version"
-          return request
+        override fun onRequest(
+          request: HttpRequest,
+          continuation: HttpServiceInterceptorRequestContinuation
+        ) {
+          request.headers["user-agent"] = "${request.headers["user-agent"]} Flutter Plugin/$version"
+          continuation.run(HttpRequestOrResponse(request))
         }
 
-        override fun onDownload(download: DownloadOptions): DownloadOptions {
-          return download
-        }
-
-        override fun onResponse(response: HttpResponse): HttpResponse {
-          return response
+        override fun onResponse(
+          response: HttpResponse,
+          continuation: HttpServiceInterceptorResponseContinuation
+        ) {
+          continuation.run(response)
         }
       }
     )
   }
+}
 
-  private fun getEventMethodName(eventType: String) = "event#$eventType"
+private val FLTMapInterfaces._MapEvent.methodName: String
+  get() = "event#$ordinal"
+
+object MicrosecondsDateTypeAdapter : JsonSerializer<Date> {
+  override fun serialize(
+    src: Date,
+    typeOfSrc: Type?,
+    context: JsonSerializationContext?
+  ): JsonElement {
+    return JsonPrimitive(src.time * 1000)
+  }
+}
+
+class EnumOrdinalTypeAdapter<T>() : TypeAdapter<T>() {
+  override fun write(out: JsonWriter?, value: T) {
+    out?.value((value as Enum<*>).ordinal)
+  }
+  override fun read(`in`: JsonReader?): T {
+    throw NotImplementedError("Not supported")
+  }
+}
+
+object EnumOrdinalTypeAdapterFactory : TypeAdapterFactory {
+  override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
+    if (type == null || !type.rawType.isEnum) {
+      return null
+    }
+
+    return EnumOrdinalTypeAdapter()
+  }
 }

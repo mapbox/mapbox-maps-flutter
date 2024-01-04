@@ -40,17 +40,31 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSScrollMode) {
 @end
 
 /// The enum controls how the puck is oriented
-typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
+typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearing) {
   /// Orients the puck to match the direction in which the device is facing.
-  FLT_SETTINGSPuckBearingSourceHEADING = 0,
+  FLT_SETTINGSPuckBearingHEADING = 0,
   /// Orients the puck to match the direction in which the device is moving.
-  FLT_SETTINGSPuckBearingSourceCOURSE = 1,
+  FLT_SETTINGSPuckBearingCOURSE = 1,
 };
 
-/// Wrapper for FLT_SETTINGSPuckBearingSource to allow for nullability.
-@interface FLT_SETTINGSPuckBearingSourceBox : NSObject
-@property(nonatomic, assign) FLT_SETTINGSPuckBearingSource value;
-- (instancetype)initWithValue:(FLT_SETTINGSPuckBearingSource)value;
+/// Wrapper for FLT_SETTINGSPuckBearing to allow for nullability.
+@interface FLT_SETTINGSPuckBearingBox : NSObject
+@property(nonatomic, assign) FLT_SETTINGSPuckBearing value;
+- (instancetype)initWithValue:(FLT_SETTINGSPuckBearing)value;
+@end
+
+/// Defines scaling mode. Only applies to location-indicator type layers.
+typedef NS_ENUM(NSUInteger, FLT_SETTINGSModelScaleMode) {
+  /// Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover.
+  FLT_SETTINGSModelScaleModeMAP = 0,
+  /// Model is scaled so that it's always the same size on the screen. The property model-scale specifies how many pixels each unit in model file should cover.
+  FLT_SETTINGSModelScaleModeVIEWPORT = 1,
+};
+
+/// Wrapper for FLT_SETTINGSModelScaleMode to allow for nullability.
+@interface FLT_SETTINGSModelScaleModeBox : NSObject
+@property(nonatomic, assign) FLT_SETTINGSModelScaleMode value;
+- (instancetype)initWithValue:(FLT_SETTINGSModelScaleMode)value;
 @end
 
 @class FLT_SETTINGSScreenCoordinate;
@@ -136,7 +150,8 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 + (instancetype)makeWithTopImage:(nullable FlutterStandardTypedData *)topImage
     bearingImage:(nullable FlutterStandardTypedData *)bearingImage
     shadowImage:(nullable FlutterStandardTypedData *)shadowImage
-    scaleExpression:(nullable NSString *)scaleExpression;
+    scaleExpression:(nullable NSString *)scaleExpression
+    opacity:(nullable NSNumber *)opacity;
 /// Name of image in sprite to use as the top of the location indicator.
 @property(nonatomic, strong, nullable) FlutterStandardTypedData * topImage;
 /// Name of image in sprite to use as the middle of the location indicator.
@@ -145,6 +160,8 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @property(nonatomic, strong, nullable) FlutterStandardTypedData * shadowImage;
 /// The scale expression of the images. If defined, it will be applied to all the three images.
 @property(nonatomic, copy, nullable) NSString * scaleExpression;
+/// The opacity of the entire location puck
+@property(nonatomic, strong, nullable) NSNumber * opacity;
 @end
 
 @interface FLT_SETTINGSLocationPuck3D : NSObject
@@ -154,7 +171,12 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
     modelScale:(nullable NSArray<NSNumber *> *)modelScale
     modelScaleExpression:(nullable NSString *)modelScaleExpression
     modelTranslation:(nullable NSArray<NSNumber *> *)modelTranslation
-    modelRotation:(nullable NSArray<NSNumber *> *)modelRotation;
+    modelRotation:(nullable NSArray<NSNumber *> *)modelRotation
+    modelCastShadows:(nullable NSNumber *)modelCastShadows
+    modelReceiveShadows:(nullable NSNumber *)modelReceiveShadows
+    modelScaleMode:(nullable FLT_SETTINGSModelScaleModeBox *)modelScaleMode
+    modelEmissiveStrength:(nullable NSNumber *)modelEmissiveStrength
+    modelEmissiveStrengthExpression:(nullable NSString *)modelEmissiveStrengthExpression;
 /// An URL for the model file in gltf format.
 @property(nonatomic, copy, nullable) NSString * modelUri;
 /// The position of the model.
@@ -169,9 +191,19 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @property(nonatomic, strong, nullable) NSArray<NSNumber *> * modelTranslation;
 /// The rotation of the model.
 @property(nonatomic, strong, nullable) NSArray<NSNumber *> * modelRotation;
+/// Enable/Disable shadow casting for the 3D location puck.
+@property(nonatomic, strong, nullable) NSNumber * modelCastShadows;
+/// Enable/Disable shadow receiving for the 3D location puck.
+@property(nonatomic, strong, nullable) NSNumber * modelReceiveShadows;
+/// Defines scaling mode. Only applies to location-indicator type layers.
+@property(nonatomic, strong, nullable) FLT_SETTINGSModelScaleModeBox * modelScaleMode;
+/// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+@property(nonatomic, strong, nullable) NSNumber * modelEmissiveStrength;
+/// Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+@property(nonatomic, copy, nullable) NSString * modelEmissiveStrengthExpression;
 @end
 
-/// Defines what the customised look of the location puck.
+/// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
 @interface FLT_SETTINGSLocationPuck : NSObject
 + (instancetype)makeWithLocationPuck2D:(nullable FLT_SETTINGSLocationPuck2D *)locationPuck2D
     locationPuck3D:(nullable FLT_SETTINGSLocationPuck3D *)locationPuck3D;
@@ -191,7 +223,7 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
     layerAbove:(nullable NSString *)layerAbove
     layerBelow:(nullable NSString *)layerBelow
     puckBearingEnabled:(nullable NSNumber *)puckBearingEnabled
-    puckBearingSource:(nullable FLT_SETTINGSPuckBearingSourceBox *)puckBearingSource
+    puckBearing:(nullable FLT_SETTINGSPuckBearingBox *)puckBearing
     locationPuck:(nullable FLT_SETTINGSLocationPuck *)locationPuck;
 /// Whether the user location is visible on the map.
 @property(nonatomic, strong, nullable) NSNumber * enabled;
@@ -199,7 +231,7 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 @property(nonatomic, strong, nullable) NSNumber * pulsingEnabled;
 /// The color of the pulsing circle. Works for 2D location puck only.
 @property(nonatomic, strong, nullable) NSNumber * pulsingColor;
-/// The maximum radius of the pulsing circle. Works for 2D location puck only. This property is specified in pixels.
+/// The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle. This property is specified in pixels.
 @property(nonatomic, strong, nullable) NSNumber * pulsingMaxRadius;
 /// Whether show accuracy ring with location puck. Works for 2D location puck only.
 @property(nonatomic, strong, nullable) NSNumber * showAccuracyRing;
@@ -214,8 +246,8 @@ typedef NS_ENUM(NSUInteger, FLT_SETTINGSPuckBearingSource) {
 /// Whether the puck rotates to track the bearing source.
 @property(nonatomic, strong, nullable) NSNumber * puckBearingEnabled;
 /// The enum controls how the puck is oriented
-@property(nonatomic, strong, nullable) FLT_SETTINGSPuckBearingSourceBox * puckBearingSource;
-/// Defines what the customised look of the location puck.
+@property(nonatomic, strong, nullable) FLT_SETTINGSPuckBearingBox * puckBearing;
+/// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
 @property(nonatomic, strong, nullable) FLT_SETTINGSLocationPuck * locationPuck;
 @end
 
