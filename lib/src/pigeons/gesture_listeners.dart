@@ -26,11 +26,9 @@ class _GestureListenerCodec extends StandardMessageCodec {
 abstract class GestureListener {
   static const MessageCodec<Object?> codec = _GestureListenerCodec();
 
-  void onTap(ScreenCoordinate coordinate);
-
-  void onLongTap(ScreenCoordinate coordinate);
-
-  void onScroll(ScreenCoordinate coordinate);
+  void onTap(ScreenCoordinate coordinate, Map<String?, Object?> point);
+  void onLongTap(ScreenCoordinate coordinate, Map<String?, Object?> point);
+  void onScroll(ScreenCoordinate coordinate, Map<String?, Object?> point);
 
   static void setup(GestureListener? api, {BinaryMessenger? binaryMessenger}) {
     {
@@ -46,9 +44,11 @@ abstract class GestureListener {
           final List<Object?> args = (message as List<Object?>?)!;
           final ScreenCoordinate? arg_coordinate =
               (args[0] as ScreenCoordinate?);
-          assert(arg_coordinate != null,
+          final Map<String?, Object?>? arg_point =
+              (args[1] as Map<Object?, Object?>?)?.cast<String?, Object?>();
+          assert(arg_coordinate != null || arg_point != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap was null, expected non-null ScreenCoordinate.');
-          api.onTap(arg_coordinate!);
+          api.onTap(arg_coordinate!, arg_point!);
           return;
         });
       }
@@ -67,9 +67,11 @@ abstract class GestureListener {
           final List<Object?> args = (message as List<Object?>?)!;
           final ScreenCoordinate? arg_coordinate =
               (args[0] as ScreenCoordinate?);
-          assert(arg_coordinate != null,
+          final Map<String?, Object?>? arg_point =
+              (args[1] as Map<Object?, Object?>?)?.cast<String?, Object?>();
+          assert(arg_coordinate != null || arg_point != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap was null, expected non-null ScreenCoordinate.');
-          api.onLongTap(arg_coordinate!);
+          api.onLongTap(arg_coordinate!, arg_point!);
           return;
         });
       }
@@ -88,9 +90,11 @@ abstract class GestureListener {
           final List<Object?> args = (message as List<Object?>?)!;
           final ScreenCoordinate? arg_coordinate =
               (args[0] as ScreenCoordinate?);
-          assert(arg_coordinate != null,
+          final Map<String?, Object?>? arg_point =
+              (args[1] as Map<Object?, Object?>?)?.cast<String?, Object?>();
+          assert(arg_coordinate != null || arg_point != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll was null, expected non-null ScreenCoordinate.');
-          api.onScroll(arg_coordinate!);
+          api.onScroll(arg_coordinate!, arg_point!);
           return;
         });
       }

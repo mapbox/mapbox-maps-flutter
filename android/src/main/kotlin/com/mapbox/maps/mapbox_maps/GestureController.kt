@@ -33,22 +33,29 @@ class GestureController(private val mapView: MapView) :
 
     removeListeners()
 
-    onClickListener = OnMapClickListener { point ->
-      fltGestureListener.onTap(point.toFLTScreenCoordinate()) {}
+    onClickListener = OnMapClickListener { 
+      fltGestureListener.onTap(
+        it.toFLTScreenCoordinate(),
+        it.toMap()
+      ) {}
       false
     }.also { mapView.gestures.addOnMapClickListener(it) }
 
     onLongClickListener = OnMapLongClickListener {
-      fltGestureListener.onLongTap(it.toFLTScreenCoordinate()) {}
+      fltGestureListener.onLongTap(
+        it.toFLTScreenCoordinate(),
+        it.toMap()
+      ) {}
       false
     }.also { mapView.gestures.addOnMapLongClickListener(it) }
 
     onMoveListener = object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
+        var screenCoordinate = 
+          ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble());
         fltGestureListener.onScroll(
-          mapView.getMapboxMap().coordinateForPixel(
-            ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
-          ).toFLTScreenCoordinate()
+          screenCoordinate.toFLTScreenCoordinate(),
+          screenCoordinate.toPointMap()
         ) {}
         return false
       }
@@ -64,11 +71,19 @@ class GestureController(private val mapView: MapView) :
     onLongClickListener?.let { mapView.gestures.removeOnMapLongClickListener(it) }
     onMoveListener?.let { mapView.gestures.removeOnMoveListener(it) }
   }
-}
 
-private fun Point.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
-  return FLTGestureListeners.ScreenCoordinate.Builder()
-    .setX(this.latitude())
-    .setY(this.longitude())
-    .build()
+  private fun Point.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
+    return mapView.getMapboxMap().pixelForCoordinate(this).toFLTScreenCoordinate();
+  }
+
+  private fun ScreenCoordinate.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate {
+    return FLTGestureListeners.ScreenCoordinate.Builder()
+      .setX(this.x)
+      .setY(this.y)
+      .build()
+  }
+
+  private fun ScreenCoordinate.toPointMap(): Map<String, Any> {
+    return  mapView.getMapboxMap().coordinateForPixel(this).toMap();
+  }
 }

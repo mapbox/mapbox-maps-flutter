@@ -180,28 +180,28 @@ public class FLTGestureListeners {
     static @NonNull MessageCodec<Object> getCodec() {
       return GestureListenerCodec.INSTANCE;
     }
-    public void onTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Reply<Void> callback) {
+    public void onTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap", getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg)),
           channelReply -> callback.reply(null));
     }
-    public void onLongTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Reply<Void> callback) {
+    public void onLongTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap", getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg))
           channelReply -> callback.reply(null));
     }
-    public void onScroll(@NonNull ScreenCoordinate coordinateArg, @NonNull Reply<Void> callback) {
+    public void onScroll(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull Reply<Void> callback) {
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll", getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg)),
           channelReply -> callback.reply(null));
     }
   }

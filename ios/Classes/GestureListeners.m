@@ -111,33 +111,33 @@ NSObject<FlutterMessageCodec> *FLT_GESTURESGestureListenerGetCodec(void) {
   }
   return self;
 }
-- (void)onTapCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate completion:(void (^)(FlutterError *_Nullable))completion {
+- (void)onTapCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap"
       binaryMessenger:self.binaryMessenger
       codec:FLT_GESTURESGestureListenerGetCodec()];
-  [channel sendMessage:@[arg_coordinate ?: [NSNull null]] reply:^(id reply) {
+  [channel sendMessage:@[arg_coordinate ?: [NSNull null], point] reply:^(id reply) {
     completion(nil);
   }];
 }
-- (void)onLongTapCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate completion:(void (^)(FlutterError *_Nullable))completion {
+- (void)onLongTapCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap"
       binaryMessenger:self.binaryMessenger
       codec:FLT_GESTURESGestureListenerGetCodec()];
-  [channel sendMessage:@[arg_coordinate ?: [NSNull null]] reply:^(id reply) {
+  [channel sendMessage:@[arg_coordinate ?: [NSNull null], point] reply:^(id reply) {
     completion(nil);
   }];
 }
-- (void)onScrollCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate completion:(void (^)(FlutterError *_Nullable))completion {
+- (void)onScrollCoordinate:(FLT_GESTURESScreenCoordinate *)arg_coordinate point:(NSDictionary<NSString *, id> *)point completion:(void (^)(FlutterError *_Nullable))completion {
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll"
       binaryMessenger:self.binaryMessenger
       codec:FLT_GESTURESGestureListenerGetCodec()];
-  [channel sendMessage:@[arg_coordinate ?: [NSNull null]] reply:^(id reply) {
+  [channel sendMessage:@[arg_coordinate ?: [NSNull null], point] reply:^(id reply) {
     completion(nil);
   }];
 }
