@@ -1,5 +1,6 @@
 // This file is generated.
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -18,9 +19,13 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
     var geometry = Point(coordinates: Position(1.0, 2.0));
+    final ByteData bytes =
+        await rootBundle.load('assets/symbols/custom-icon.png');
+    final Uint8List imageData = bytes.buffer.asUint8List();
 
     var pointAnnotationOptions = PointAnnotationOptions(
       geometry: geometry.toJson(),
+      image: imageData,
       iconAnchor: IconAnchor.CENTER,
       iconImage: "abc",
       iconOffset: [0.0, 1.0],
@@ -58,6 +63,7 @@ void main() {
     var point = Point.fromJson((annotation.geometry)!.cast());
     expect(1.0, point.coordinates.lng);
     expect(2.0, point.coordinates.lat);
+    expect(annotation.image, isNotNull);
     expect(IconAnchor.CENTER, annotation.iconAnchor);
     expect("abc", annotation.iconImage);
     expect([0.0, 1.0], annotation.iconOffset);
