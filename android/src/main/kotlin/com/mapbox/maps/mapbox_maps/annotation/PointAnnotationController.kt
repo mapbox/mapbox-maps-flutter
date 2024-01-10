@@ -1,6 +1,7 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.mapbox.maps.extension.style.layers.properties.generated.*
 import com.mapbox.maps.mapbox_maps.toMap
@@ -35,6 +36,7 @@ import toTextPitchAlignment
 import toTextRotationAlignment
 import toTextTransform
 import toTextTranslateAnchor
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class PointAnnotationController(private val delegate: ControllerDelegate) :
@@ -811,6 +813,13 @@ fun PointAnnotation.toFLTPointAnnotation(): FLTPointAnnotationMessager.PointAnno
 
   this.geometry.let {
     builder.setGeometry(it.toMap())
+  }
+  this.iconImageBitmap?.let {
+    builder.setImage(
+      ByteArrayOutputStream().also { stream ->
+        it.compress(Bitmap.CompressFormat.PNG, 100, stream)
+      }.toByteArray()
+    )
   }
   this.iconAnchor?.let {
     builder.setIconAnchor(it.toFLTIconAnchor())
