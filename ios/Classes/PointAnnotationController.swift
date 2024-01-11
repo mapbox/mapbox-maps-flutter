@@ -114,10 +114,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
 
     // MARK: Properties
 
-    func setIconAllowOverlapManagerId(_ managerId: String, iconAllowOverlap: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setIconAllowOverlapManagerId(_ managerId: String, iconAllowOverlap: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconAllowOverlap = iconAllowOverlap.boolValue
+            manager.iconAllowOverlap = iconAllowOverlap
 
             completion(nil)
         } catch {
@@ -139,10 +139,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setIconIgnorePlacementManagerId(_ managerId: String, iconIgnorePlacement: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setIconIgnorePlacementManagerId(_ managerId: String, iconIgnorePlacement: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconIgnorePlacement = iconIgnorePlacement.boolValue
+            manager.iconIgnorePlacement = iconIgnorePlacement
 
             completion(nil)
         } catch {
@@ -164,10 +164,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setIconKeepUprightManagerId(_ managerId: String, iconKeepUpright: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setIconKeepUprightManagerId(_ managerId: String, iconKeepUpright: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconKeepUpright = iconKeepUpright.boolValue
+            manager.iconKeepUpright = iconKeepUpright
 
             completion(nil)
         } catch {
@@ -189,10 +189,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setIconOptionalManagerId(_ managerId: String, iconOptional: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setIconOptionalManagerId(_ managerId: String, iconOptional: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconOptional = iconOptional.boolValue
+            manager.iconOptional = iconOptional
 
             completion(nil)
         } catch {
@@ -214,10 +214,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setIconPaddingManagerId(_ managerId: String, iconPadding: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setIconPaddingManagerId(_ managerId: String, iconPadding: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconPadding = iconPadding.doubleValue
+            manager.iconPadding = iconPadding
 
             completion(nil)
         } catch {
@@ -289,10 +289,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setSymbolAvoidEdgesManagerId(_ managerId: String, symbolAvoidEdges: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolAvoidEdgesManagerId(_ managerId: String, symbolAvoidEdges: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.symbolAvoidEdges = symbolAvoidEdges.boolValue
+            manager.symbolAvoidEdges = symbolAvoidEdges
 
             completion(nil)
         } catch {
@@ -339,10 +339,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setSymbolSpacingManagerId(_ managerId: String, symbolSpacing: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolSpacingManagerId(_ managerId: String, symbolSpacing: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.symbolSpacing = symbolSpacing.doubleValue
+            manager.symbolSpacing = symbolSpacing
 
             completion(nil)
         } catch {
@@ -364,10 +364,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setSymbolZElevateManagerId(_ managerId: String, symbolZElevate: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolZElevateManagerId(_ managerId: String, symbolZElevate: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.symbolZElevate = symbolZElevate.boolValue
+            manager.symbolZElevate = symbolZElevate
 
             completion(nil)
         } catch {
@@ -414,10 +414,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextAllowOverlapManagerId(_ managerId: String, textAllowOverlap: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextAllowOverlapManagerId(_ managerId: String, textAllowOverlap: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textAllowOverlap = textAllowOverlap.boolValue
+            manager.textAllowOverlap = textAllowOverlap
 
             completion(nil)
         } catch {
@@ -464,10 +464,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextIgnorePlacementManagerId(_ managerId: String, textIgnorePlacement: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextIgnorePlacementManagerId(_ managerId: String, textIgnorePlacement: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textIgnorePlacement = textIgnorePlacement.boolValue
+            manager.textIgnorePlacement = textIgnorePlacement
 
             completion(nil)
         } catch {
@@ -489,10 +489,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextKeepUprightManagerId(_ managerId: String, textKeepUpright: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextKeepUprightManagerId(_ managerId: String, textKeepUpright: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textKeepUpright = textKeepUpright.boolValue
+            manager.textKeepUpright = textKeepUpright
 
             completion(nil)
         } catch {
@@ -514,10 +514,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextMaxAngleManagerId(_ managerId: String, textMaxAngle: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextMaxAngleManagerId(_ managerId: String, textMaxAngle: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textMaxAngle = textMaxAngle.doubleValue
+            manager.textMaxAngle = textMaxAngle
 
             completion(nil)
         } catch {
@@ -539,10 +539,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextOptionalManagerId(_ managerId: String, textOptional: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextOptionalManagerId(_ managerId: String, textOptional: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textOptional = textOptional.boolValue
+            manager.textOptional = textOptional
 
             completion(nil)
         } catch {
@@ -564,10 +564,10 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         }
     }
 
-    func setTextPaddingManagerId(_ managerId: String, textPadding: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setTextPaddingManagerId(_ managerId: String, textPadding: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textPadding = textPadding.doubleValue
+            manager.textPadding = textPadding
 
             completion(nil)
         } catch {

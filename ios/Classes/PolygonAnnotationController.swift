@@ -114,10 +114,10 @@ final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager
 
     // MARK: Properties
 
-    func setFillAntialiasManagerId(_ managerId: String, fillAntialias: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setFillAntialiasManagerId(_ managerId: String, fillAntialias: Bool, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.fillAntialias = fillAntialias.boolValue
+            manager.fillAntialias = fillAntialias
 
             completion(nil)
         } catch {
@@ -139,10 +139,10 @@ final class PolygonAnnotationController: NSObject, FLT_PolygonAnnotationMessager
         }
     }
 
-    func setFillEmissiveStrengthManagerId(_ managerId: String, fillEmissiveStrength: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setFillEmissiveStrengthManagerId(_ managerId: String, fillEmissiveStrength: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.fillEmissiveStrength = fillEmissiveStrength.doubleValue
+            manager.fillEmissiveStrength = fillEmissiveStrength
 
             completion(nil)
         } catch {
