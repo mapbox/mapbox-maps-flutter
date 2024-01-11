@@ -29,8 +29,8 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
-    FLTMapInterfaces._MapboxMapsOptions.setup(flutterPluginBinding.binaryMessenger, optionsController)
-    FLTMapInterfaces._MapboxOptions.setup(flutterPluginBinding.binaryMessenger, optionsController)
+    FLTMapInterfaces._MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
+    FLTMapInterfaces._MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
 
     flutterPluginBinding
       .platformViewRegistry
