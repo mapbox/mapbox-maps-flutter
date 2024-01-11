@@ -135,7 +135,18 @@ class CameraController: NSObject, FLT_CameraManager {
 
     func getCameraStateWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTCameraState? {
         let camera = self.mapboxMap.cameraState
-        return FLTCameraState.make(withCenter: ["coordinates": [camera.center.longitude, camera.center.latitude]], padding: FLTMbxEdgeInsets.make(withTop: NSNumber(value: camera.padding.top), left: NSNumber(value: camera.padding.left), bottom: NSNumber(value: camera.padding.bottom), right: NSNumber(value: camera.padding.right)), zoom: NSNumber(value: camera.zoom), bearing: NSNumber(value: camera.bearing), pitch: NSNumber(value: camera.pitch))
+        return FLTCameraState.make(
+            withCenter: ["coordinates": [camera.center.longitude, camera.center.latitude]],
+            padding: FLTMbxEdgeInsets.make(
+                withTop: camera.padding.top,
+                left: camera.padding.left,
+                bottom: camera.padding.bottom,
+                right: camera.padding.right
+            ),
+            zoom: camera.zoom,
+            bearing: camera.bearing,
+            pitch: camera.pitch
+        )
     }
 
     func setBoundsOptions(_ options: FLTCameraBoundsOptions, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {

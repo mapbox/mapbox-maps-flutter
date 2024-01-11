@@ -71,37 +71,37 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
 
         let styleController = StyleController(styleManager: mapboxMap)
-        FLTStyleManagerSetup(proxyBinaryMessenger, styleController)
+        SetUpFLTStyleManager(proxyBinaryMessenger, styleController)
 
         let cameraController = CameraController(withMapboxMap: mapboxMap)
-        FLT_CameraManagerSetup(proxyBinaryMessenger, cameraController)
+        SetUpFLT_CameraManager(proxyBinaryMessenger, cameraController)
 
         let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap)
-        FLT_MapInterfaceSetup(proxyBinaryMessenger, mapInterfaceController)
+        SetUpFLT_MapInterface(proxyBinaryMessenger, mapInterfaceController)
 
         let mapProjectionController = MapProjectionController()
-        FLTProjectionSetup(proxyBinaryMessenger, mapProjectionController)
+        SetUpFLTProjection(proxyBinaryMessenger, mapProjectionController)
 
         let animationController = AnimationController(withMapView: mapView)
-        FLT_AnimationManagerSetup(proxyBinaryMessenger, animationController)
+        SetUpFLT_AnimationManager(proxyBinaryMessenger, animationController)
 
         let locationController = LocationController(withMapView: mapView)
-        FLT_SETTINGSLocationComponentSettingsInterfaceSetup(proxyBinaryMessenger, locationController)
+        SetUpFLT_SETTINGSLocationComponentSettingsInterface(proxyBinaryMessenger, locationController)
 
         gesturesController = GesturesController(withMapView: mapView)
-        FLT_SETTINGSGesturesSettingsInterfaceSetup(proxyBinaryMessenger, gesturesController)
+        SetUpFLT_SETTINGSGesturesSettingsInterface(proxyBinaryMessenger, gesturesController)
 
         let logoController = LogoController(withMapView: mapView)
-        FLT_SETTINGSLogoSettingsInterfaceSetup(proxyBinaryMessenger, logoController)
+        SetUpFLT_SETTINGSLogoSettingsInterface(proxyBinaryMessenger, logoController)
 
         let attributionController = AttributionController(withMapView: mapView)
-        FLT_SETTINGSAttributionSettingsInterfaceSetup(proxyBinaryMessenger, attributionController)
+        SetUpFLT_SETTINGSAttributionSettingsInterface(proxyBinaryMessenger, attributionController)
 
         let compassController = CompassController(withMapView: mapView)
-        FLT_SETTINGSCompassSettingsInterfaceSetup(proxyBinaryMessenger, compassController)
+        SetUpFLT_SETTINGSCompassSettingsInterface(proxyBinaryMessenger, compassController)
 
         let scaleBarController = ScaleBarController(withMapView: mapView)
-        FLT_SETTINGSScaleBarSettingsInterfaceSetup(proxyBinaryMessenger, scaleBarController)
+        SetUpFLT_SETTINGSScaleBarSettingsInterface(proxyBinaryMessenger, scaleBarController)
 
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)

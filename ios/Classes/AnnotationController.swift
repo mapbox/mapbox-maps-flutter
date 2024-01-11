@@ -8,7 +8,7 @@ public enum AnnotationControllerError: Error {
     case wrongManagerType
 }
 
-public protocol ControllerDelegate: class {
+public protocol ControllerDelegate: AnyObject {
     func getManager(managerId: String) throws -> AnnotationManager
 }
 
@@ -25,7 +25,7 @@ extension AnnotationController: AnnotationInteractionDelegate {
         case let annotation as PolylineAnnotation:
             self.onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation(), completion: {_ in })
         default:
-            print("Can't detemine the type of annotation: \(annotation)")
+            print("Can't detemine the type of annotation: \(String(describing: annotation))")
         }
     }
 }
@@ -92,10 +92,10 @@ class AnnotationController: ControllerDelegate {
     }
 
     func setup(messenger: FlutterBinaryMessenger) {
-        FLT_CircleAnnotationMessagerSetup(messenger, circleAnnotationController)
-        FLT_PointAnnotationMessagerSetup(messenger, pointAnnotationController)
-        FLT_PolygonAnnotationMessagerSetup(messenger, polygonAnnotationController)
-        FLT_PolylineAnnotationMessagerSetup(messenger, polylineAnnotationController)
+        SetUpFLT_CircleAnnotationMessager(messenger, circleAnnotationController)
+        SetUpFLT_PointAnnotationMessager(messenger, pointAnnotationController)
+        SetUpFLT_PolygonAnnotationMessager(messenger, polygonAnnotationController)
+        SetUpFLT_PolylineAnnotationMessager(messenger, polylineAnnotationController)
         onPointAnnotationClickListener = FLTOnPointAnnotationClickListener.init(binaryMessenger: messenger)
         onCircleAnnotationClickListener = FLTOnCircleAnnotationClickListener.init(binaryMessenger: messenger)
         onPolygonAnnotationClickListener = FLTOnPolygonAnnotationClickListener.init(binaryMessenger: messenger)

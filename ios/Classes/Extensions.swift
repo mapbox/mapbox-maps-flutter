@@ -6,13 +6,13 @@ let COORDINATES = "coordinates"
 // FLT to Mapbox
 extension FLTTileCacheBudgetInMegabytes {
     func toTileCacheBudgetInMegabytes() -> TileCacheBudgetInMegabytes {
-        return .init(size: size.uint64Value)
+        return .init(size: UInt64(size))
     }
 }
 
 extension FLTTileCacheBudgetInTiles {
     func toTileCacheBudgetInTiles() -> TileCacheBudgetInTiles {
-        return .init(size: size.uint64Value)
+        return .init(size: UInt64(size))
     }
 }
 
@@ -34,12 +34,12 @@ extension FLTRenderedQueryOptions {
 }
 extension FLTMercatorCoordinate {
     func toMercatorCoordinate() -> MercatorCoordinate {
-        return MercatorCoordinate(x: x.doubleValue, y: y.doubleValue)
+        return MercatorCoordinate(x: x, y: y)
     }
 }
 extension FLTProjectedMeters {
     func toProjectedMeters() -> ProjectedMeters {
-        return ProjectedMeters(northing: northing.doubleValue, easting: easting.doubleValue)
+        return ProjectedMeters(northing: northing, easting: easting)
     }
 }
 extension FLTMapDebugOptions {
@@ -74,11 +74,11 @@ extension ScreenBox {
 }
 extension FLTScreenCoordinate {
     func toScreenCoordinate() -> ScreenCoordinate {
-        return ScreenCoordinate(x: self.x.doubleValue, y: self.y.doubleValue)
+        return ScreenCoordinate(x: self.x, y: self.y)
     }
 
     func toCGPoint() -> CGPoint {
-        return CGPoint(x: self.x.doubleValue, y: self.y.doubleValue)
+        return CGPoint(x: self.x, y: self.y)
     }
 }
 extension FLTCoordinateBounds {
@@ -91,7 +91,7 @@ extension FLTCoordinateBounds {
 
 extension FLTCanonicalTileID {
     func toCanonicalTileID() -> CanonicalTileID {
-        return CanonicalTileID(z: UInt8(truncating: self.z), x: UInt32(truncating: self.x), y: UInt32(truncating: self.y))
+        return CanonicalTileID(z: UInt8(z), x: UInt32(x), y: UInt32(y))
     }
 }
 
@@ -121,10 +121,10 @@ extension FLTTransitionOptions {
 extension FLTMbxEdgeInsets {
     func toUIEdgeInsets() -> UIEdgeInsets {
         return UIEdgeInsets(
-            top: self.top.doubleValue,
-            left: self.left.doubleValue,
-            bottom: self.bottom.doubleValue,
-            right: self.right.doubleValue)
+            top: self.top,
+            left: self.left,
+            bottom: self.bottom,
+            right: self.right)
     }
 }
 
@@ -163,7 +163,7 @@ extension QueriedFeature {
 }
 extension MercatorCoordinate {
     func toFLTMercatorCoordinate() -> FLTMercatorCoordinate {
-        return FLTMercatorCoordinate.makeWith(x: NSNumber(value: x), y: NSNumber(value: y))
+        return FLTMercatorCoordinate.makeWith(x: x, y: y)
     }
 }
 extension MapDebugOptions {
@@ -175,7 +175,7 @@ extension MapDebugOptions {
 
 extension CGSize {
     func toFLTSize() -> FLTSize {
-        return FLTSize.make(withWidth: NSNumber(value: self.width), height: NSNumber(value: self.height))
+        return FLTSize.make(withWidth: width, height: height)
     }
 }
 extension GlyphsRasterizationOptions {
@@ -193,24 +193,29 @@ extension MapOptions {
             orientation: .init(value: .UPWARDS),
             crossSourceCollisions: NSNumber(value: self.crossSourceCollisions),
             size: self.size?.toFLTSize(),
-            pixelRatio: NSNumber(value: self.pixelRatio),
+            pixelRatio: Double(pixelRatio),
             glyphsRasterizationOptions: self.glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions()
         )
     }
 }
 extension MapboxMaps.CameraBounds {
     func toFLTCameraBounds() -> FLTCameraBounds {
-        return FLTCameraBounds.make(with: self.bounds.toFLTCoordinateBounds(), maxZoom: NSNumber(value: self.maxZoom), minZoom: NSNumber(value: self.minZoom), maxPitch: NSNumber(value: self.maxPitch), minPitch: NSNumber(value: self.minPitch))
+        return FLTCameraBounds.make(
+            with: self.bounds.toFLTCoordinateBounds(),
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            maxPitch: maxPitch,
+            minPitch: minPitch)
     }
 }
 extension CGPoint {
     func toFLTScreenCoordinate() -> FLTScreenCoordinate {
-        return FLTScreenCoordinate.makeWith(x: NSNumber(value: self.x), y: NSNumber(value: self.y))
+        return FLTScreenCoordinate.makeWith(x: x, y: y)
     }
 }
 extension CoordinateBoundsZoom {
     func toFLTCoordinateBoundsZoom() -> FLTCoordinateBoundsZoom {
-        return FLTCoordinateBoundsZoom.make(with: self.bounds.toFLTCoordinateBounds(), zoom: NSNumber(value: self.zoom))
+        return FLTCoordinateBoundsZoom.make(with: self.bounds.toFLTCoordinateBounds(), zoom: zoom)
     }
 }
 extension CoordinateBounds {
@@ -218,19 +223,19 @@ extension CoordinateBounds {
         FLTCoordinateBounds.make(
             withSouthwest: southwest.toDict(),
             northeast: northeast.toDict(),
-            infiniteBounds: NSNumber(value: infiniteBounds))
+            infiniteBounds: infiniteBounds)
     }
 }
 extension MapboxMaps.CameraOptions {
     func toFLTCameraOptions() -> FLTCameraOptions {
         let center = self.center != nil ? self.center?.toDict(): nil
         let padding = self.padding != nil ? FLTMbxEdgeInsets.make(
-            withTop: NSNumber(value: self.padding!.top),
-            left: NSNumber(value: self.padding!.left),
-            bottom: NSNumber(value: self.padding!.bottom),
-            right: NSNumber(value: self.padding!.right)) : nil
+            withTop: padding!.top,
+            left: padding!.left,
+            bottom: padding!.bottom,
+            right: padding!.right) : nil
 
-        let anchor = self.anchor != nil ? FLTScreenCoordinate.makeWith(x: self.anchor!.x as NSNumber, y: self.anchor!.y as NSNumber) : nil
+        let anchor = self.anchor != nil ? FLTScreenCoordinate.makeWith(x: self.anchor!.x, y: self.anchor!.y) : nil
         let zoom = self.zoom != nil ? NSNumber(value: self.zoom!) : nil
         let bearing = self.bearing != nil ? NSNumber(value: self.bearing!) : nil
         let pitch = self.pitch != nil ? NSNumber(value: self.pitch!) : nil
@@ -311,7 +316,7 @@ extension CLLocationCoordinate2D {
     }
 
     func toFLTScreenCoordinate() -> FLTScreenCoordinate {
-        return FLTScreenCoordinate.makeWith(x: NSNumber(value: self.longitude), y: NSNumber(value: self.latitude))
+        return FLTScreenCoordinate.makeWith(x: longitude, y: latitude)
     }
 }
 

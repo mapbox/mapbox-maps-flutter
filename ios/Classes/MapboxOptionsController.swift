@@ -40,8 +40,8 @@ final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMaps
         MapboxMapsOptions.assetPath = url
     }
 
-    func getTileStoreUsageModeWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTTileStoreUsageMode {
-        FLTTileStoreUsageMode(rawValue: UInt(MapboxMapsOptions.tileStoreUsageMode.rawValue))!
+    func getTileStoreUsageModeWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTTileStoreUsageModeBox? {
+        FLTTileStoreUsageModeBox(value: FLTTileStoreUsageMode(rawValue: UInt(MapboxMapsOptions.tileStoreUsageMode.rawValue))!)
     }
 
     func setTileStoreUsageModeMode(_ mode: FLTTileStoreUsageMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
