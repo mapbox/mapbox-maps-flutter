@@ -842,7 +842,7 @@ extension FLTPointAnnotation {
     func toPointAnnotation() -> PointAnnotation {
                 var annotation = PointAnnotation(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
         if let image = self.image {
-            annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
+            annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
         }
                 annotation.iconAnchor = iconAnchor.flatMap(IconAnchor.init)
         if let iconImage {
@@ -971,7 +971,7 @@ extension PointAnnotation {
         return FLTPointAnnotation.make(
             withId: id,
             geometry: geometry.toMap(),
-            image: nil,
+            image: image?.image.pngData().map(FlutterStandardTypedData.init(bytes:)),
             iconAnchor: iconAnchor,
             iconImage: iconImage,
             iconOffset: iconOffset,
