@@ -77,11 +77,3 @@ private fun Point.toFLTScreenCoordinate(): FLTGestureListeners.ScreenCoordinate 
     .setY(this.longitude())
     .build()
 }
-
-private class GestureResult : VoidResult {
-  override fun success() {
-  }
-
-  override fun error(error: Throwable) {
-  }
-}
