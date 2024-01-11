@@ -1,5 +1,16 @@
 part of mapbox_maps_flutter;
 
+List<Object?> wrapResponse(
+    {Object? result, PlatformException? error, bool empty = false}) {
+  if (empty) {
+    return <Object?>[];
+  }
+  if (error == null) {
+    return <Object?>[result];
+  }
+  return <Object?>[error.code, error.message, error.details];
+}
+
 class _GestureListenerCodec extends StandardMessageCodec {
   const _GestureListenerCodec();
   @override
@@ -24,7 +35,8 @@ class _GestureListenerCodec extends StandardMessageCodec {
 }
 
 abstract class GestureListener {
-  static const MessageCodec<Object?> codec = _GestureListenerCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      _GestureListenerCodec();
 
   void onTap(ScreenCoordinate coordinate);
 
@@ -34,13 +46,15 @@ abstract class GestureListener {
 
   static void setup(GestureListener? api, {BinaryMessenger? binaryMessenger}) {
     {
-      final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap', codec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?> __pigeon_channel =
+          BasicMessageChannel<Object?>(
+              'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap',
+              pigeonChannelCodec,
+              binaryMessenger: binaryMessenger);
       if (api == null) {
-        channel.setMessageHandler(null);
+        __pigeon_channel.setMessageHandler(null);
       } else {
-        channel.setMessageHandler((Object? message) async {
+        __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap was null.');
           final List<Object?> args = (message as List<Object?>?)!;
@@ -48,20 +62,28 @@ abstract class GestureListener {
               (args[0] as ScreenCoordinate?);
           assert(arg_coordinate != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap was null, expected non-null ScreenCoordinate.');
-          api.onTap(arg_coordinate!);
-          return;
+          try {
+            api.onTap(arg_coordinate!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
           'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap',
-          codec,
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        channel.setMessageHandler(null);
+        __pigeon_channel.setMessageHandler(null);
       } else {
-        channel.setMessageHandler((Object? message) async {
+        __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap was null.');
           final List<Object?> args = (message as List<Object?>?)!;
@@ -69,20 +91,28 @@ abstract class GestureListener {
               (args[0] as ScreenCoordinate?);
           assert(arg_coordinate != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap was null, expected non-null ScreenCoordinate.');
-          api.onLongTap(arg_coordinate!);
-          return;
+          try {
+            api.onLongTap(arg_coordinate!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
         });
       }
     }
     {
-      final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll',
-          codec,
-          binaryMessenger: binaryMessenger);
+      final BasicMessageChannel<Object?> __pigeon_channel =
+          BasicMessageChannel<Object?>(
+              'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll',
+              pigeonChannelCodec,
+              binaryMessenger: binaryMessenger);
       if (api == null) {
-        channel.setMessageHandler(null);
+        __pigeon_channel.setMessageHandler(null);
       } else {
-        channel.setMessageHandler((Object? message) async {
+        __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll was null.');
           final List<Object?> args = (message as List<Object?>?)!;
@@ -90,8 +120,15 @@ abstract class GestureListener {
               (args[0] as ScreenCoordinate?);
           assert(arg_coordinate != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll was null, expected non-null ScreenCoordinate.');
-          api.onScroll(arg_coordinate!);
-          return;
+          try {
+            api.onScroll(arg_coordinate!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
         });
       }
     }
