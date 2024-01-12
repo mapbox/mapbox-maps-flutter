@@ -2421,7 +2421,7 @@ class _CameraManager {
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinateBounds(
       CoordinateBounds bounds,
-      MbxEdgeInsets padding,
+      MbxEdgeInsets? padding,
       double? bearing,
       double? pitch,
       double? maxZoom,
@@ -2465,7 +2465,7 @@ class _CameraManager {
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinates(
       List<Map<String?, Object?>?> coordinates,
-      MbxEdgeInsets padding,
+      MbxEdgeInsets? padding,
       double? bearing,
       double? pitch) async {
     const String __pigeon_channelName =

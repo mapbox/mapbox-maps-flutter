@@ -5429,7 +5429,7 @@ public class FLTMapInterfaces {
      * @return The `camera options` object representing the provided parameters.
      */
     @NonNull 
-    CameraOptions cameraForCoordinateBounds(@NonNull CoordinateBounds bounds, @NonNull MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch, @Nullable Double maxZoom, @Nullable ScreenCoordinate offset);
+    CameraOptions cameraForCoordinateBounds(@NonNull CoordinateBounds bounds, @Nullable MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch, @Nullable Double maxZoom, @Nullable ScreenCoordinate offset);
     /**
      * Convenience method that returns the `camera options` object for given parameters.
      *
@@ -5441,7 +5441,7 @@ public class FLTMapInterfaces {
      * @return The `camera options` object representing the provided parameters.
      */
     @NonNull 
-    CameraOptions cameraForCoordinates(@NonNull List<Map<String, Object>> coordinates, @NonNull MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch);
+    CameraOptions cameraForCoordinates(@NonNull List<Map<String, Object>> coordinates, @Nullable MbxEdgeInsets padding, @Nullable Double bearing, @Nullable Double pitch);
     /**
      * Convenience method that adjusts the provided `camera options` object for given parameters.
      *

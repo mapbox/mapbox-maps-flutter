@@ -1207,7 +1207,7 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// @return The `camera options` object representing the provided parameters.
 ///
 /// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable FLTCameraOptions *)cameraForCoordinateBoundsBounds:(FLTCoordinateBounds *)bounds padding:(nullable FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch maxZoom:(nullable NSNumber *)maxZoom offset:(nullable FLTScreenCoordinate *)offset error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that returns the `camera options` object for given parameters.
 ///
 /// @param coordinates The `coordinates` representing the bounds of the camera.
@@ -1218,7 +1218,7 @@ NSObject<FlutterMessageCodec> *FLT_CameraManagerGetCodec(void);
 /// @return The `camera options` object representing the provided parameters.
 ///
 /// @return `nil` only when `error != nil`.
-- (nullable FLTCameraOptions *)cameraForCoordinatesCoordinates:(NSArray<NSDictionary<NSString *, id> *> *)coordinates padding:(FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable FLTCameraOptions *)cameraForCoordinatesCoordinates:(NSArray<NSDictionary<NSString *, id> *> *)coordinates padding:(nullable FLTMbxEdgeInsets *)padding bearing:(nullable NSNumber *)bearing pitch:(nullable NSNumber *)pitch error:(FlutterError *_Nullable *_Nonnull)error;
 /// Convenience method that adjusts the provided `camera options` object for given parameters.
 ///
 /// Returns the provided `camera` options with zoom adjusted to fit `coordinates` into the `box`, so that `coordinates` on the left,
