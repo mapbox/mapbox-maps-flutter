@@ -372,7 +372,6 @@ void main() {
     expect(cameraState.padding.right, 0);
     expect(cameraState.padding.bottom, 0);
     expect(cameraState.padding.left, 0);
-
   });
   testWidgets('setBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -395,7 +394,6 @@ void main() {
         minZoom: 0,
         maxPitch: 10,
         minPitch: 0));
-
   });
   testWidgets('getBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -414,6 +412,5 @@ void main() {
     expect(northeast.first, 180);
     expect(northeast.last, 90);
     expect(bounds.bounds.infiniteBounds, true);
-
   });
 }

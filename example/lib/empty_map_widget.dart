@@ -13,8 +13,8 @@ class Events {
 
   void resetOnMapLoaded() => onMapLoaded = Completer();
   void resetOnStyleLoaded() => onStyleLoaded = Completer();
-  void resetOnStyleDataLoaded()  => onStyleDataLoaded = Completer();
-  void resetOnSourceDataLoaded()  => onSourceDataLoaded = Completer();
+  void resetOnStyleDataLoaded() => onStyleDataLoaded = Completer();
+  void resetOnSourceDataLoaded() => onSourceDataLoaded = Completer();
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
 }
@@ -44,7 +44,7 @@ Future<MapboxMap> main() {
         events.onStyleLoaded.complete();
       }
     },
-  onStyleDataLoadedListener: (StyleDataLoadedEventData data) {
+    onStyleDataLoadedListener: (StyleDataLoadedEventData data) {
       if (!events.onStyleDataLoaded.isCompleted) {
         events.onStyleDataLoaded.complete();
       }

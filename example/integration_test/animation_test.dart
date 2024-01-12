@@ -8,7 +8,6 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-
   testWidgets('easeTo', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

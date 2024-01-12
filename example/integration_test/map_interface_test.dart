@@ -56,7 +56,7 @@ void main() {
       var size = await mapboxMap.getSize();
       expect(size.width, tester.binding.renderView.size.width);
       expect(size.height, tester.binding.renderView.size.height);
-      });
+    });
 
     testWidgets('reduceMemoryUse', (WidgetTester tester) async {
       final mapFuture = app.main();
@@ -64,7 +64,7 @@ void main() {
       final mapboxMap = await mapFuture;
 
       await mapboxMap.reduceMemoryUse();
-      });
+    });
   }
 
   testWidgets('triggerRepaint', (WidgetTester tester) async {
@@ -275,7 +275,7 @@ void main() {
     style.addStyleLayer(layer, null);
     await app.events.onSourceDataLoaded.future;
     await app.events.onMapIdle.future;
-    
+
     var query = await mapboxMap.querySourceFeatures(
         'source', SourceQueryOptions(filter: ''));
     expect(query.length, greaterThan(0));
