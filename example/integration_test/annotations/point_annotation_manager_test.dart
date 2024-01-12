@@ -8,16 +8,11 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('create PointAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
-    await addDelay(1000);
 
     await manager.setIconAllowOverlap(true);
     var iconAllowOverlap = await manager.getIconAllowOverlap();
@@ -118,7 +113,6 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
-    await addDelay(1000);
   });
 }
 // End of generated file.

@@ -10,15 +10,10 @@ import 'package:turf/helpers.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('cameraForCoordinatesPadding', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     var reference = CameraOptions(
         center: Point(coordinates: Position(1.0, 2.0)).toJson(),
@@ -54,7 +49,6 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     var camera = await mapboxMap.cameraForCoordinateBounds(
         CoordinateBounds(
@@ -81,14 +75,12 @@ void main() {
     expect((coordinates.first as double).round(), 2);
     expect((coordinates.last as double).round(), 3);
     expect(camera.anchor, isNull);
-    await addDelay(1000);
   });
 
   testWidgets('cameraForCoordinates', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     var camera = await mapboxMap.cameraForCoordinates([
       Point(
@@ -110,14 +102,14 @@ void main() {
     expect((coordinates.first as double).round(), 2);
     expect((coordinates.last as double).round(), 3);
     expect(camera.anchor, isNull);
-    await addDelay(1000);
   });
 
   testWidgets('cameraForCoordinatesCameraOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(3000);
+
+    await app.events.onMapLoaded.future;
 
     var option = CameraOptions(
         center: Point(
@@ -159,7 +151,6 @@ void main() {
     expect(camera.padding!.bottom, option.padding!.bottom);
     expect(camera.padding!.right, option.padding!.right);
     expect(camera.zoom!.round(), 10);
-    await addDelay(1000);
   });
 
   testWidgets('cameraForGeometry', (WidgetTester tester) async {
@@ -178,7 +169,6 @@ void main() {
     expect((coordinates.first as double).round(), 1);
     expect((coordinates.last as double).round(), 2);
     expect(camera.anchor, isNull);
-    await addDelay(1000);
   });
 
   testWidgets('coordinateBoundsForCamera', (WidgetTester tester) async {
@@ -206,7 +196,6 @@ void main() {
     expect((northeast.last as double).round(), 2);
     expect((southwest.first as double).round(), 1);
     expect((southwest.last as double).round(), 2);
-    await addDelay(1000);
   });
 
   testWidgets('coordinateBoundsForCameraUnwrapped',
@@ -235,7 +224,6 @@ void main() {
     expect((northeast.last as double).round(), 2);
     expect((southwest.first as double).round(), 1);
     expect((southwest.last as double).round(), 2);
-    await addDelay(1000);
   });
 
   testWidgets('coordinateBoundsZoomForCamera', (WidgetTester tester) async {
@@ -262,7 +250,6 @@ void main() {
     expect((northeast.last as double).round(), 2);
     expect((southwest.first as double).round(), 1);
     expect((southwest.last as double).round(), 2);
-    await addDelay(1000);
   });
   testWidgets('coordinateBoundsZoomForCameraUnwrapped',
       (WidgetTester tester) async {
@@ -290,7 +277,6 @@ void main() {
     expect((northeast.last as double).round(), 2);
     expect((southwest.first as double).round(), 1);
     expect((southwest.last as double).round(), 2);
-    await addDelay(1000);
   });
   testWidgets('pixelForCoordinate', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -304,7 +290,6 @@ void main() {
     )).toJson());
     expect(pixel.x, isNotNull);
     expect(pixel.y, isNotNull);
-    await addDelay(1000);
   });
   testWidgets('pixelsForCoordinates', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -328,7 +313,6 @@ void main() {
     expect(pixels.first!.y, isNotNull);
     expect(pixels.last!.x, isNotNull);
     expect(pixels.last!.y, isNotNull);
-    await addDelay(1000);
   });
 
   testWidgets('coordinateForPixel', (WidgetTester tester) async {
@@ -340,7 +324,6 @@ void main() {
         await mapboxMap.coordinateForPixel(ScreenCoordinate(x: 100, y: 100));
     var coordinates = point['coordinates'] as List;
     expect(coordinates.length, 2);
-    await addDelay(1000);
   });
   testWidgets('coordinatesForPixels', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -353,13 +336,11 @@ void main() {
       ScreenCoordinate(x: 200, y: 300)
     ]);
     expect(coordinates.length, 2);
-    await addDelay(1000);
   });
 
   testWidgets('setCamera', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
-    await addDelay(1000);
     final mapboxMap = await mapFuture;
     var option = CameraOptions(
         center: Point(
@@ -373,13 +354,12 @@ void main() {
         bearing: 20,
         pitch: 30);
     await mapboxMap.setCamera(option);
-    await addDelay(1000);
   });
 
   testWidgets('getCameraState', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
-    await addDelay(5000);
+
     final mapboxMap = await mapFuture;
     var cameraState = await mapboxMap.getCameraState();
     expect(cameraState.zoom.floor(), 15);
@@ -393,7 +373,6 @@ void main() {
     expect(cameraState.padding.bottom, 0);
     expect(cameraState.padding.left, 0);
 
-    await addDelay(1000);
   });
   testWidgets('setBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -417,12 +396,10 @@ void main() {
         maxPitch: 10,
         minPitch: 0));
 
-    await addDelay(1000);
   });
   testWidgets('getBounds', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
-    await addDelay(1000);
     final mapboxMap = await mapFuture;
     var bounds = await mapboxMap.getBounds();
     expect(bounds.maxPitch, 85);
@@ -438,6 +415,5 @@ void main() {
     expect(northeast.last, 90);
     expect(bounds.bounds.infiniteBounds, true);
 
-    await addDelay(1000);
   });
 }
