@@ -69,8 +69,8 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         self.mapboxMap.triggerRepaint()
     }
 
-    func setGestureInProgressInProgress(_ inProgress: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        if inProgress.boolValue {
+    func setGestureInProgressInProgress(_ inProgress: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        if inProgress {
             self.mapboxMap.beginGesture()
         } else {
             self.mapboxMap.endGesture()
@@ -82,8 +82,8 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         return false
     }
 
-    func setUserAnimationInProgressInProgress(_ inProgress: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        if inProgress.boolValue {
+    func setUserAnimationInProgressInProgress(_ inProgress: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        if inProgress {
             self.mapboxMap.beginAnimation()
         } else {
             self.mapboxMap.endAnimation()
@@ -95,8 +95,8 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         return false
     }
 
-    func setPrefetchZoomDeltaDelta(_ delta: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        self.mapboxMap.prefetchZoomDelta = delta.uint8Value
+    func setPrefetchZoomDeltaDelta(_ delta: Int, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+        self.mapboxMap.prefetchZoomDelta = UInt8(delta)
     }
 
     func getPrefetchZoomDeltaWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
@@ -123,7 +123,7 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         return self.mapboxMap.debugOptions.map {$0.toFLTMapDebugOptions()}
     }
 
-    func setDebugDebugOptions(_ debugOptions: [FLTMapDebugOptions], value: NSNumber, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setDebugDebugOptions(_ debugOptions: [FLTMapDebugOptions], value: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         self.mapboxMap.debugOptions = debugOptions.map {$0.toMapDebugOptions()}
     }
 

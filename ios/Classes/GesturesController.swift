@@ -12,10 +12,10 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         switch gestureType {
         case .pan:
             let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.panGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+            self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
         case .singleTap:
             let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+            self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
         default: break
         }
     }
@@ -25,7 +25,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
         let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onLongTap(FLT_GESTURESScreenCoordinate.makeWith(x: NSNumber(value: point.coordinates.latitude), y: NSNumber(value: point.coordinates.longitude)), completion: {_ in })
+        self.onGestureListener?.onLongTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     func updateSettingsSettings(_ settings: FLT_SETTINGSGesturesSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
@@ -67,7 +67,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
             break
         }
         if let focalPoint = settings.focalPoint {
-            mapView.gestures.options.focalPoint = CGPoint(x: focalPoint.x.doubleValue, y: focalPoint.y.doubleValue)
+            mapView.gestures.options.focalPoint = CGPoint(x: focalPoint.x, y: focalPoint.y)
         }
     }
 
@@ -84,7 +84,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         }
         var focalPoint: FLT_SETTINGSScreenCoordinate?
         if let focalPointSet = options.focalPoint {
-            focalPoint = FLT_SETTINGSScreenCoordinate.makeWith(x: NSNumber(value: focalPointSet.x), y: NSNumber(value: focalPointSet.y))
+            focalPoint = FLT_SETTINGSScreenCoordinate.makeWith(x: focalPointSet.x, y: focalPointSet.y)
         }
 
         let settings = FLT_SETTINGSGesturesSettings.make(

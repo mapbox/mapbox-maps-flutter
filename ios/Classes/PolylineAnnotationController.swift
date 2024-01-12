@@ -139,10 +139,10 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func setLineMiterLimitManagerId(_ managerId: String, lineMiterLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineMiterLimitManagerId(_ managerId: String, lineMiterLimit: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineMiterLimit = lineMiterLimit.doubleValue
+            manager.lineMiterLimit = lineMiterLimit
 
             completion(nil)
         } catch {
@@ -164,10 +164,10 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func setLineRoundLimitManagerId(_ managerId: String, lineRoundLimit: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineRoundLimitManagerId(_ managerId: String, lineRoundLimit: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineRoundLimit = lineRoundLimit.doubleValue
+            manager.lineRoundLimit = lineRoundLimit
 
             completion(nil)
         } catch {
@@ -214,10 +214,10 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func setLineDepthOcclusionFactorManagerId(_ managerId: String, lineDepthOcclusionFactor: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineDepthOcclusionFactorManagerId(_ managerId: String, lineDepthOcclusionFactor: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor.doubleValue
+            manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor
 
             completion(nil)
         } catch {
@@ -239,10 +239,10 @@ final class PolylineAnnotationController: NSObject, FLT_PolylineAnnotationMessag
         }
     }
 
-    func setLineEmissiveStrengthManagerId(_ managerId: String, lineEmissiveStrength: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setLineEmissiveStrengthManagerId(_ managerId: String, lineEmissiveStrength: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineEmissiveStrength = lineEmissiveStrength.doubleValue
+            manager.lineEmissiveStrength = lineEmissiveStrength
 
             completion(nil)
         } catch {

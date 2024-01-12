@@ -65,20 +65,20 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun update(
     managerId: String,
     annotation: FLTPolygonAnnotationMessager.PolygonAnnotation,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     try {
       val manager = delegate.getManager(managerId) as PolygonAnnotationManager
 
       if (!annotationMap.containsKey(annotation.id)) {
-        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        result.error(Throwable("Annotation has not been added on the map: $annotation."))
         return
       }
       val originalAnnotation = updateAnnotation(annotation)
 
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
@@ -87,7 +87,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun delete(
     managerId: String,
     annotation: FLTPolygonAnnotationMessager.PolygonAnnotation,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     try {
       val manager = delegate.getManager(managerId) as PolygonAnnotationManager
@@ -102,13 +102,13 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
       )
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
   }
 
-  override fun deleteAll(managerId: String, result: FLTPolygonAnnotationMessager.Result<Void>) {
+  override fun deleteAll(managerId: String, result: FLTPolygonAnnotationMessager.VoidResult) {
     try {
       val manager = delegate.getManager(managerId) as PolygonAnnotationManager
       managerCreateAnnotationMap[managerId]?.apply {
@@ -116,7 +116,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
         clear()
       }
       manager.deleteAll()
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
@@ -148,16 +148,16 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun setFillAntialias(
     managerId: String,
     fillAntialias: Boolean,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     manager.fillAntialias = fillAntialias
-    result.success(null)
+    result.success()
   }
 
   override fun getFillAntialias(
     managerId: String,
-    result: FLTPolygonAnnotationMessager.Result<Boolean>
+    result: FLTPolygonAnnotationMessager.NullableResult<Boolean>
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     if (manager.fillAntialias != null) {
@@ -170,16 +170,16 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun setFillEmissiveStrength(
     managerId: String,
     fillEmissiveStrength: Double,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     manager.fillEmissiveStrength = fillEmissiveStrength
-    result.success(null)
+    result.success()
   }
 
   override fun getFillEmissiveStrength(
     managerId: String,
-    result: FLTPolygonAnnotationMessager.Result<Double>
+    result: FLTPolygonAnnotationMessager.NullableResult<Double>
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     if (manager.fillEmissiveStrength != null) {
@@ -192,16 +192,16 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun setFillTranslate(
     managerId: String,
     fillTranslate: List<Double>,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     manager.fillTranslate = fillTranslate
-    result.success(null)
+    result.success()
   }
 
   override fun getFillTranslate(
     managerId: String,
-    result: FLTPolygonAnnotationMessager.Result<List<Double>>
+    result: FLTPolygonAnnotationMessager.NullableResult<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     if (manager.fillTranslate != null) {
@@ -214,16 +214,16 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) :
   override fun setFillTranslateAnchor(
     managerId: String,
     fillTranslateAnchor: FLTPolygonAnnotationMessager.FillTranslateAnchor,
-    result: FLTPolygonAnnotationMessager.Result<Void>
+    result: FLTPolygonAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     manager.fillTranslateAnchor = fillTranslateAnchor.toFillTranslateAnchor()
-    result.success(null)
+    result.success()
   }
 
   override fun getFillTranslateAnchor(
     managerId: String,
-    result: FLTPolygonAnnotationMessager.Result<FLTPolygonAnnotationMessager.FillTranslateAnchor>
+    result: FLTPolygonAnnotationMessager.NullableResult<FLTPolygonAnnotationMessager.FillTranslateAnchor>
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
     if (manager.fillTranslateAnchor != null) {

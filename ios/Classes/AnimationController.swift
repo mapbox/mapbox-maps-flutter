@@ -20,11 +20,11 @@ class AnimationController: NSObject, FLT_AnimationManager {
         cancelable = self.mapView.camera.fly(to: cameraOptions.toCameraOptions(), duration: cameraDuration)
     }
 
-    func pitch(byPitch pitch: NSNumber, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func pitch(byPitch pitch: Double, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 
-    func scale(byAmount amount: NSNumber, screenCoordinate: FLTScreenCoordinate?, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func scale(byAmount amount: Double, screenCoordinate: FLTScreenCoordinate?, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 

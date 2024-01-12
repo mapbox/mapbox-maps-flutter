@@ -197,7 +197,7 @@ class _OnCircleAnnotationClickListenerCodec extends StandardMessageCodec {
 }
 
 abstract class OnCircleAnnotationClickListener {
-  static const MessageCodec<Object?> codec =
+  static const MessageCodec<Object?> pigeonChannelCodec =
       _OnCircleAnnotationClickListenerCodec();
 
   void onCircleAnnotationClick(CircleAnnotation annotation);
@@ -205,14 +205,15 @@ abstract class OnCircleAnnotationClickListener {
   static void setup(OnCircleAnnotationClickListener? api,
       {BinaryMessenger? binaryMessenger}) {
     {
-      final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
+              Object?>(
           'dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick',
-          codec,
+          pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
-        channel.setMessageHandler(null);
+        __pigeon_channel.setMessageHandler(null);
       } else {
-        channel.setMessageHandler((Object? message) async {
+        __pigeon_channel.setMessageHandler((Object? message) async {
           assert(message != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null.');
           final List<Object?> args = (message as List<Object?>?)!;
@@ -220,8 +221,15 @@ abstract class OnCircleAnnotationClickListener {
               (args[0] as CircleAnnotation?);
           assert(arg_annotation != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnCircleAnnotationClickListener.onCircleAnnotationClick was null, expected non-null CircleAnnotation.');
-          api.onCircleAnnotationClick(arg_annotation!);
-          return;
+          try {
+            api.onCircleAnnotationClick(arg_annotation!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
         });
       }
     }
@@ -235,8 +243,14 @@ class __CircleAnnotationMessagerCodec extends StandardMessageCodec {
     if (value is CircleAnnotation) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotationOptions) {
+    } else if (value is CircleAnnotation) {
       buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationOptions) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationOptions) {
+      buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -249,6 +263,10 @@ class __CircleAnnotationMessagerCodec extends StandardMessageCodec {
       case 128:
         return CircleAnnotation.decode(readValue(buffer)!);
       case 129:
+        return CircleAnnotation.decode(readValue(buffer)!);
+      case 130:
+        return CircleAnnotationOptions.decode(readValue(buffer)!);
+      case 131:
         return CircleAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -261,135 +279,139 @@ class _CircleAnnotationMessager {
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
   _CircleAnnotationMessager({BinaryMessenger? binaryMessenger})
-      : _binaryMessenger = binaryMessenger;
-  final BinaryMessenger? _binaryMessenger;
+      : __pigeon_binaryMessenger = binaryMessenger;
+  final BinaryMessenger? __pigeon_binaryMessenger;
 
-  static const MessageCodec<Object?> codec = __CircleAnnotationMessagerCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      __CircleAnnotationMessagerCodec();
 
-  Future<CircleAnnotation> create(String arg_managerId,
-      CircleAnnotationOptions arg_annotationOption) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.create',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_managerId, arg_annotationOption]) as List<Object?>?;
-    if (replyList == null) {
+  Future<CircleAnnotation> create(
+      String managerId, CircleAnnotationOptions annotationOption) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.create';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, annotationOption]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else if (replyList[0] == null) {
+    } else if (__pigeon_replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyList[0] as CircleAnnotation?)!;
+      return (__pigeon_replyList[0] as CircleAnnotation?)!;
     }
   }
 
-  Future<List<CircleAnnotation?>> createMulti(String arg_managerId,
-      List<CircleAnnotationOptions?> arg_annotationOptions) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.createMulti',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId, arg_annotationOptions])
-            as List<Object?>?;
-    if (replyList == null) {
+  Future<List<CircleAnnotation?>> createMulti(String managerId,
+      List<CircleAnnotationOptions?> annotationOptions) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.createMulti';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, annotationOptions]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
-      );
-    } else if (replyList[0] == null) {
+    } else if (__pigeon_replyList[0] == null) {
       throw PlatformException(
         code: 'null-error',
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (replyList[0] as List<Object?>?)!.cast<CircleAnnotation?>();
+      return (__pigeon_replyList[0] as List<Object?>?)!
+          .cast<CircleAnnotation?>();
     }
   }
 
-  Future<void> update(
-      String arg_managerId, CircleAnnotation arg_annotation) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.update',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
-    if (replyList == null) {
+  Future<void> update(String managerId, CircleAnnotation annotation) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.update';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, annotation]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
     }
   }
 
-  Future<void> delete(
-      String arg_managerId, CircleAnnotation arg_annotation) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.delete',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_managerId, arg_annotation]) as List<Object?>?;
-    if (replyList == null) {
+  Future<void> delete(String managerId, CircleAnnotation annotation) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.delete';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, annotation]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
     }
   }
 
-  Future<void> deleteAll(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.deleteAll',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+  Future<void> deleteAll(String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.deleteAll';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
@@ -397,72 +419,74 @@ class _CircleAnnotationMessager {
   }
 
   Future<void> setCircleEmissiveStrength(
-      String arg_managerId, double arg_circleEmissiveStrength) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId, arg_circleEmissiveStrength])
-            as List<Object?>?;
-    if (replyList == null) {
+      String managerId, double circleEmissiveStrength) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleEmissiveStrength]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
     }
   }
 
-  Future<double?> getCircleEmissiveStrength(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+  Future<double?> getCircleEmissiveStrength(String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
-      return (replyList[0] as double?);
+      return (__pigeon_replyList[0] as double?);
     }
   }
 
-  Future<void> setCirclePitchAlignment(String arg_managerId,
-      CirclePitchAlignment arg_circlePitchAlignment) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-            .send(<Object?>[arg_managerId, arg_circlePitchAlignment.index])
+  Future<void> setCirclePitchAlignment(
+      String managerId, CirclePitchAlignment circlePitchAlignment) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+            .send(<Object?>[managerId, circlePitchAlignment.index])
         as List<Object?>?;
-    if (replyList == null) {
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
@@ -470,147 +494,152 @@ class _CircleAnnotationMessager {
   }
 
   Future<CirclePitchAlignment?> getCirclePitchAlignment(
-      String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchAlignment',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+      String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchAlignment';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
-      return (replyList[0] as int?) == null
+      return (__pigeon_replyList[0] as int?) == null
           ? null
-          : CirclePitchAlignment.values[replyList[0]! as int];
+          : CirclePitchAlignment.values[__pigeon_replyList[0]! as int];
     }
   }
 
   Future<void> setCirclePitchScale(
-      String arg_managerId, CirclePitchScale arg_circlePitchScale) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchScale',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId, arg_circlePitchScale.index])
-            as List<Object?>?;
-    if (replyList == null) {
+      String managerId, CirclePitchScale circlePitchScale) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchScale';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circlePitchScale.index]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
     }
   }
 
-  Future<CirclePitchScale?> getCirclePitchScale(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchScale',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+  Future<CirclePitchScale?> getCirclePitchScale(String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchScale';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
-      return (replyList[0] as int?) == null
+      return (__pigeon_replyList[0] as int?) == null
           ? null
-          : CirclePitchScale.values[replyList[0]! as int];
+          : CirclePitchScale.values[__pigeon_replyList[0]! as int];
     }
   }
 
   Future<void> setCircleTranslate(
-      String arg_managerId, List<double?> arg_circleTranslate) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslate',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-        .send(<Object?>[arg_managerId, arg_circleTranslate]) as List<Object?>?;
-    if (replyList == null) {
+      String managerId, List<double?> circleTranslate) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslate';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleTranslate]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
     }
   }
 
-  Future<List<double?>?> getCircleTranslate(String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslate',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+  Future<List<double?>?> getCircleTranslate(String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslate';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
-      return (replyList[0] as List<Object?>?)?.cast<double?>();
+      return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
-  Future<void> setCircleTranslateAnchor(String arg_managerId,
-      CircleTranslateAnchor arg_circleTranslateAnchor) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslateAnchor',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel
-            .send(<Object?>[arg_managerId, arg_circleTranslateAnchor.index])
+  Future<void> setCircleTranslateAnchor(
+      String managerId, CircleTranslateAnchor circleTranslateAnchor) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslateAnchor';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+            .send(<Object?>[managerId, circleTranslateAnchor.index])
         as List<Object?>?;
-    if (replyList == null) {
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
       return;
@@ -618,28 +647,29 @@ class _CircleAnnotationMessager {
   }
 
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor(
-      String arg_managerId) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslateAnchor',
-        codec,
-        binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList =
-        await channel.send(<Object?>[arg_managerId]) as List<Object?>?;
-    if (replyList == null) {
+      String managerId) async {
+    const String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslateAnchor';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
       throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyList.length > 1) {
-      throw PlatformException(
-        code: replyList[0]! as String,
-        message: replyList[1] as String?,
-        details: replyList[2],
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
       );
     } else {
-      return (replyList[0] as int?) == null
+      return (__pigeon_replyList[0] as int?) == null
           ? null
-          : CircleTranslateAnchor.values[replyList[0]! as int];
+          : CircleTranslateAnchor.values[__pigeon_replyList[0]! as int];
     }
   }
 }

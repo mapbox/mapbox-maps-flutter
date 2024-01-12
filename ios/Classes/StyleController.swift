@@ -284,35 +284,35 @@ final class StyleController: NSObject, FLTStyleManager {
 
         let data = FlutterStandardTypedData(bytes: image.pngData()!)
 
-        completion(FLTMbxImage.make(withWidth: NSNumber(value: Int(image.size.width * image.scale)),
-                                    height: NSNumber(value: Int(image.size.height * image.scale)),
+        completion(FLTMbxImage.make(withWidth: Int(image.size.width * image.scale),
+                                    height: Int(image.size.height * image.scale),
                                     data: data), nil)
     }
 
-    func addStyleImageImageId(_ imageId: String, scale: NSNumber,
-                              image: FLTMbxImage, sdf: NSNumber,
+    func addStyleImageImageId(_ imageId: String, scale: Double,
+                              image: FLTMbxImage, sdf: Bool,
                               stretchX: [FLTImageStretches],
                               stretchY: [FLTImageStretches],
                               content: FLTImageContent?,
                               completion: @escaping (FlutterError?) -> Void) {
 
-        guard let image = UIImage(data: image.data.data, scale: CGFloat(truncating: scale)) else { return }
+        guard let image = UIImage(data: image.data.data, scale: scale) else { return }
         var imageContent: ImageContent?
-        if content != nil {
-            imageContent = ImageContent(left: Float(truncating: content!.left),
-                                        top: Float(truncating: content!.top),
-                                        right: Float(truncating: content!.right),
-                                        bottom: Float(truncating: content!.bottom))
+        if let content {
+            imageContent = ImageContent(left: Float(content.left),
+                                        top: Float(content.top),
+                                        right: Float(content.right),
+                                        bottom: Float(content.bottom))
         }
         do {
             try styleManager.addImage(image,
                                          id: imageId,
-                                         sdf: sdf as? Bool ?? false,
+                                         sdf: sdf,
                                          stretchX: stretchX.map {
-                ImageStretches(first: Float(truncating: $0.first), second: Float(truncating: $0.second))
+                ImageStretches(first: Float($0.first), second: Float($0.second))
 
             }, stretchY: stretchY.map {
-                ImageStretches(first: Float(truncating: $0.first), second: Float(truncating: $0.second))},
+                ImageStretches(first: Float($0.first), second: Float($0.second))},
                                          content: imageContent)
             completion(nil)
         } catch {

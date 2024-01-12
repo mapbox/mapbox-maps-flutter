@@ -22,9 +22,9 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     result.success(mapboxMap.style?.styleURI ?: "")
   }
 
-  override fun setStyleURI(uri: String, result: FLTMapInterfaces.Result<Void>) {
+  override fun setStyleURI(uri: String, result: FLTMapInterfaces.VoidResult) {
     mapboxMap.loadStyle(uri) {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -32,9 +32,9 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     result.success(mapboxMap.style?.styleJSON ?: "")
   }
 
-  override fun setStyleJSON(json: String, result: FLTMapInterfaces.Result<Void>) {
+  override fun setStyleJSON(json: String, result: FLTMapInterfaces.VoidResult) {
     mapboxMap.loadStyle(json) {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -97,20 +97,20 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
 
   override fun setStyleTransition(
     transitionOptions: FLTMapInterfaces.TransitionOptions,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     mapboxMap.setStyleTransition(
       TransitionOptions.Builder().delay(transitionOptions.delay)
         .duration(transitionOptions.duration)
         .enablePlacementTransitions(transitionOptions.enablePlacementTransitions).build()
     )
-    result.success(null)
+    result.success()
   }
 
   override fun addStyleLayer(
     properties: String,
     layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     properties.toValue().let { parameters ->
       val expected = mapboxMap.addStyleLayer(
@@ -124,7 +124,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
       if (expected.isError) {
         result.error(Throwable(expected.error))
       } else {
-        result.success(null)
+        result.success()
       }
     }
   }
@@ -132,7 +132,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   override fun addPersistentStyleLayer(
     properties: String,
     layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     properties.toValue().let { parameters ->
       val expected = mapboxMap.addPersistentStyleLayer(
@@ -146,7 +146,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
       if (expected.isError) {
         result.error(Throwable(expected.error))
       } else {
-        result.success(null)
+        result.success()
       }
     }
   }
@@ -156,23 +156,23 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(expected.value)
+      result.success(expected.value!!)
     }
   }
 
-  override fun removeStyleLayer(layerId: String, result: FLTMapInterfaces.Result<Void>) {
+  override fun removeStyleLayer(layerId: String, result: FLTMapInterfaces.VoidResult) {
     val expected = mapboxMap.removeStyleLayer(layerId)
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
   override fun moveStyleLayer(
     layerId: String,
     layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.moveStyleLayer(
       layerId,
@@ -185,7 +185,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -219,14 +219,14 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     layerId: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected =
       mapboxMap.setStyleLayerProperty(layerId, property, value.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -238,33 +238,33 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(expected.value?.toJson())
+      result.success(expected.value!!.toJson())
     }
   }
 
   override fun setStyleLayerProperties(
     layerId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.setStyleLayerProperties(layerId, properties.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
   override fun addStyleSource(
     sourceId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.addStyleSource(sourceId, properties.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -288,14 +288,14 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     sourceId: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected =
       mapboxMap.setStyleSourceProperty(sourceId, property, value.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -314,20 +314,20 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   override fun setStyleSourceProperties(
     sourceId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.setStyleSourceProperties(sourceId, properties.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
   override fun updateStyleImageSourceImage(
     sourceId: String,
     image: FLTMapInterfaces.MbxImage,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     var bitmap = BitmapFactory.decodeByteArray(
       image.data,
@@ -351,16 +351,16 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
-  override fun removeStyleSource(sourceId: String, result: FLTMapInterfaces.Result<Void>) {
+  override fun removeStyleSource(sourceId: String, result: FLTMapInterfaces.VoidResult) {
     val expected = mapboxMap.removeStyleSource(sourceId)
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -391,12 +391,12 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     mapboxMap.style?.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
   }
 
-  fun setStyleLight(properties: String, result: FLTMapInterfaces.Result<Void>) {
+  fun setStyleLight(properties: String, result: FLTMapInterfaces.VoidResult) {
     val expected = mapboxMap.style?.setStyleLights(properties.toValue())
     if (expected?.isError == true) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -424,22 +424,22 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     id: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.style?.setStyleLightProperty(id, property, value.toValue())
     if (expected?.isError == true) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
-  override fun setStyleTerrain(properties: String, result: FLTMapInterfaces.Result<Void>) {
+  override fun setStyleTerrain(properties: String, result: FLTMapInterfaces.VoidResult) {
     val expected = mapboxMap.setStyleTerrain(properties.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -459,19 +459,19 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   override fun setStyleTerrainProperty(
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.setStyleTerrainProperty(property, value.toValue())
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
   override fun getStyleImage(
     imageId: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.MbxImage>
+    result: FLTMapInterfaces.NullableResult<FLTMapInterfaces.MbxImage>
   ) {
     mapboxMap.getStyleImage(imageId)?.let { image ->
       val byteArray = ByteArray(image.data.buffer.capacity())
@@ -487,12 +487,12 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     result.success(null)
   }
 
-  override fun removeStyleImage(imageId: String, result: FLTMapInterfaces.Result<Void?>) {
+  override fun removeStyleImage(imageId: String, result: FLTMapInterfaces.VoidResult) {
     val expected = mapboxMap.removeStyleImage(imageId)
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
@@ -503,7 +503,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   override fun invalidateStyleCustomGeometrySourceTile(
     sourceId: String,
     tileId: FLTMapInterfaces.CanonicalTileID,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     val expected = mapboxMap.invalidateStyleCustomGeometrySourceTile(
       sourceId,
@@ -514,20 +514,20 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 
   override fun invalidateStyleCustomGeometrySourceRegion(
     sourceId: String,
     bounds: FLTMapInterfaces.CoordinateBounds,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     mapboxMap.invalidateStyleCustomGeometrySourceRegion(
       sourceId,
       bounds.toCoordinateBounds()
     )
-    result.success(null)
+    result.success()
   }
 
   override fun isStyleLoaded(result: FLTMapInterfaces.Result<Boolean>) {
@@ -545,10 +545,10 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   override fun localizeLabels(
     locale: String,
     layerIds: MutableList<String>?,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     mapboxMap.style?.localizeLabels(Locale(locale), layerIds)
-    result.success(null)
+    result.success()
   }
 
   override fun addStyleImage(
@@ -559,7 +559,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     stretchX: MutableList<FLTMapInterfaces.ImageStretches>,
     stretchY: MutableList<FLTMapInterfaces.ImageStretches>,
     content: FLTMapInterfaces.ImageContent?,
-    result: FLTMapInterfaces.Result<Void>
+    result: FLTMapInterfaces.VoidResult
   ) {
     var bitmap = BitmapFactory.decodeByteArray(
       image.data,
@@ -594,7 +594,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     if (expected.isError) {
       result.error(Throwable(expected.error))
     } else {
-      result.success(null)
+      result.success()
     }
   }
 }

@@ -7,6 +7,7 @@ import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.mapbox_maps.mapping.applyFromFLT
 import com.mapbox.maps.mapbox_maps.mapping.toFLT
 import com.mapbox.maps.pigeons.FLTGestureListeners
+import com.mapbox.maps.pigeons.FLTGestureListeners.VoidResult
 import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
@@ -32,24 +33,28 @@ class GestureController(private val mapView: MapView) :
     fltGestureListener = FLTGestureListeners.GestureListener(messenger)
 
     removeListeners()
-
+    val result = object : VoidResult {
+      override fun success() { }
+      override fun error(error: Throwable) { }
+    }
     onClickListener = OnMapClickListener { point ->
-      fltGestureListener.onTap(point.toFLTScreenCoordinate()) {}
+      fltGestureListener.onTap(point.toFLTScreenCoordinate(), result)
       false
     }.also { mapView.gestures.addOnMapClickListener(it) }
 
     onLongClickListener = OnMapLongClickListener {
-      fltGestureListener.onLongTap(it.toFLTScreenCoordinate()) {}
+      fltGestureListener.onLongTap(it.toFLTScreenCoordinate(), result)
       false
     }.also { mapView.gestures.addOnMapLongClickListener(it) }
 
     onMoveListener = object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
         fltGestureListener.onScroll(
-          mapView.getMapboxMap().coordinateForPixel(
+          mapView.mapboxMap.coordinateForPixel(
             ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
-          ).toFLTScreenCoordinate()
-        ) {}
+          ).toFLTScreenCoordinate(),
+          result
+        )
         return false
       }
 

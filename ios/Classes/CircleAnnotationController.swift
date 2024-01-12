@@ -114,10 +114,10 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
 
     // MARK: Properties
 
-    func setCircleEmissiveStrengthManagerId(_ managerId: String, circleEmissiveStrength: NSNumber, completion: @escaping (FlutterError?) -> Void) {
+    func setCircleEmissiveStrengthManagerId(_ managerId: String, circleEmissiveStrength: Double, completion: @escaping (FlutterError?) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circleEmissiveStrength = circleEmissiveStrength.doubleValue
+            manager.circleEmissiveStrength = circleEmissiveStrength
 
             completion(nil)
         } catch {

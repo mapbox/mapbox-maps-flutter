@@ -69,20 +69,20 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun update(
     managerId: String,
     annotation: FLTPolylineAnnotationMessager.PolylineAnnotation,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     try {
       val manager = delegate.getManager(managerId) as PolylineAnnotationManager
 
       if (!annotationMap.containsKey(annotation.id)) {
-        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        result.error(Throwable("Annotation has not been added on the map: $annotation."))
         return
       }
       val originalAnnotation = updateAnnotation(annotation)
 
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
@@ -91,7 +91,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun delete(
     managerId: String,
     annotation: FLTPolylineAnnotationMessager.PolylineAnnotation,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     try {
       val manager = delegate.getManager(managerId) as PolylineAnnotationManager
@@ -106,13 +106,13 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
       )
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
   }
 
-  override fun deleteAll(managerId: String, result: FLTPolylineAnnotationMessager.Result<Void>) {
+  override fun deleteAll(managerId: String, result: FLTPolylineAnnotationMessager.VoidResult) {
     try {
       val manager = delegate.getManager(managerId) as PolylineAnnotationManager
       managerCreateAnnotationMap[managerId]?.apply {
@@ -120,7 +120,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
         clear()
       }
       manager.deleteAll()
-      result.success(null)
+      result.success()
     } catch (e: Exception) {
       result.error(e)
     }
@@ -170,16 +170,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineCap(
     managerId: String,
     lineCap: FLTPolylineAnnotationMessager.LineCap,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineCap = lineCap.toLineCap()
-    result.success(null)
+    result.success()
   }
 
   override fun getLineCap(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<FLTPolylineAnnotationMessager.LineCap>
+    result: FLTPolylineAnnotationMessager.NullableResult<FLTPolylineAnnotationMessager.LineCap>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineCap != null) {
@@ -192,16 +192,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineMiterLimit(
     managerId: String,
     lineMiterLimit: Double,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineMiterLimit = lineMiterLimit
-    result.success(null)
+    result.success()
   }
 
   override fun getLineMiterLimit(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Double>
+    result: FLTPolylineAnnotationMessager.NullableResult<Double>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineMiterLimit != null) {
@@ -214,16 +214,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineRoundLimit(
     managerId: String,
     lineRoundLimit: Double,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineRoundLimit = lineRoundLimit
-    result.success(null)
+    result.success()
   }
 
   override fun getLineRoundLimit(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Double>
+    result: FLTPolylineAnnotationMessager.NullableResult<Double>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineRoundLimit != null) {
@@ -236,16 +236,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineDasharray(
     managerId: String,
     lineDasharray: List<Double>,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineDasharray = lineDasharray
-    result.success(null)
+    result.success()
   }
 
   override fun getLineDasharray(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<List<Double>>
+    result: FLTPolylineAnnotationMessager.NullableResult<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineDasharray != null) {
@@ -258,16 +258,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineDepthOcclusionFactor(
     managerId: String,
     lineDepthOcclusionFactor: Double,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineDepthOcclusionFactor = lineDepthOcclusionFactor
-    result.success(null)
+    result.success()
   }
 
   override fun getLineDepthOcclusionFactor(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Double>
+    result: FLTPolylineAnnotationMessager.NullableResult<Double>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineDepthOcclusionFactor != null) {
@@ -280,16 +280,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineEmissiveStrength(
     managerId: String,
     lineEmissiveStrength: Double,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineEmissiveStrength = lineEmissiveStrength
-    result.success(null)
+    result.success()
   }
 
   override fun getLineEmissiveStrength(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<Double>
+    result: FLTPolylineAnnotationMessager.NullableResult<Double>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineEmissiveStrength != null) {
@@ -302,16 +302,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineTranslate(
     managerId: String,
     lineTranslate: List<Double>,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineTranslate = lineTranslate
-    result.success(null)
+    result.success()
   }
 
   override fun getLineTranslate(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<List<Double>>
+    result: FLTPolylineAnnotationMessager.NullableResult<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineTranslate != null) {
@@ -324,16 +324,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineTranslateAnchor(
     managerId: String,
     lineTranslateAnchor: FLTPolylineAnnotationMessager.LineTranslateAnchor,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineTranslateAnchor = lineTranslateAnchor.toLineTranslateAnchor()
-    result.success(null)
+    result.success()
   }
 
   override fun getLineTranslateAnchor(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<FLTPolylineAnnotationMessager.LineTranslateAnchor>
+    result: FLTPolylineAnnotationMessager.NullableResult<FLTPolylineAnnotationMessager.LineTranslateAnchor>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineTranslateAnchor != null) {
@@ -346,16 +346,16 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) :
   override fun setLineTrimOffset(
     managerId: String,
     lineTrimOffset: List<Double>,
-    result: FLTPolylineAnnotationMessager.Result<Void>
+    result: FLTPolylineAnnotationMessager.VoidResult
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     manager.lineTrimOffset = lineTrimOffset
-    result.success(null)
+    result.success()
   }
 
   override fun getLineTrimOffset(
     managerId: String,
-    result: FLTPolylineAnnotationMessager.Result<List<Double>>
+    result: FLTPolylineAnnotationMessager.NullableResult<List<Double>>
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
     if (manager.lineTrimOffset != null) {
