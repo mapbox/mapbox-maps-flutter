@@ -11,15 +11,10 @@ import 'package:turf/helpers.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('Add LineLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     var line =
         LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);

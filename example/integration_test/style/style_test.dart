@@ -15,10 +15,6 @@ import '../utils/list_close_to_matcher.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('Style uri', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -50,7 +46,6 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
-    await addDelay(1000);
     var styleLoaded = await style.isStyleLoaded();
     expect(styleLoaded, true);
   });
@@ -419,7 +414,6 @@ void main() {
     style.addStyleSource('source', source);
     await style.invalidateStyleCustomGeometrySourceTile(
         'source', CanonicalTileID(z: 0, x: 1, y: 2));
-    await addDelay(1000);
   });
 
   testWidgets('invalidateStyleCustomGeometrySourceRegion',
@@ -444,7 +438,6 @@ void main() {
               4.0,
             )).toJson(),
             infiniteBounds: true));
-    await addDelay(1000);
   });
 
   testWidgets('handleImage', (WidgetTester tester) async {
@@ -484,7 +477,6 @@ void main() {
     );
     var projection = await mapboxMap.style.getProjection();
     expect(projection?.name, StyleProjectionName.mercator);
-    await addDelay(1000);
   });
 }
 
