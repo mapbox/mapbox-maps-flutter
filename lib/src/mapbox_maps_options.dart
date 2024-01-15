@@ -1,7 +1,7 @@
 part of mapbox_maps_flutter;
 
 /// Class for Mapbox SDK settings management
-class MapboxOptions {
+final class MapboxOptions {
   static _MapboxOptions _options = _MapboxOptions();
 
   MapboxOptions._() {}
@@ -29,7 +29,7 @@ class MapboxOptions {
 /// If the default resource options need to be overridden, it is recommended to do it once at the application start and
 /// before any of the Maps API objects are constructed. Although it is technically possible to run Maps API objects that use different
 /// resource options, such a setup might cause performance implications.
-class MapboxMapsOptions {
+final class MapboxMapsOptions {
   static _MapboxMapsOptions _options = _MapboxMapsOptions();
 
   MapboxMapsOptions._() {}
