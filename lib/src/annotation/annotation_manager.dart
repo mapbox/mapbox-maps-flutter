@@ -46,6 +46,11 @@ class _AnnotationManager {
   Future<void> removeAnnotationManager(BaseAnnotationManager manager) async {
     _mapboxMapsPlatform.removeAnnotationManager(manager.id);
   }
+
+  /// Remove an [AnnotationManager] with the specified [id] and all the annotation created by it.
+  Future<void> removeAnnotationManagerById(String id) async {
+    _mapboxMapsPlatform.removeAnnotationManager(id);
+  }
 }
 
 /// The super class for all AnnotationManagers.
