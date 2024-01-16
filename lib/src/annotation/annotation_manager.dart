@@ -7,30 +7,38 @@ class _AnnotationManager {
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
   /// Create a PointAnnotationManager to add/remove/update PointAnnotations on the map.
-  Future<PointAnnotationManager> createPointAnnotationManager() async {
-    return _mapboxMapsPlatform.createAnnotationManager('point').then((value) =>
-        PointAnnotationManager(
+  Future<PointAnnotationManager> createPointAnnotationManager(
+      {String? id, String? belowLayerId}) async {
+    return _mapboxMapsPlatform
+        .createAnnotationManager('point', id: id, belowLayerId: belowLayerId)
+        .then((value) => PointAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a CircleAnnotationManager to add/remove/update CircleAnnotations on the map.
-  Future<CircleAnnotationManager> createCircleAnnotationManager() async {
-    return _mapboxMapsPlatform.createAnnotationManager('circle').then((value) =>
-        CircleAnnotationManager(
+  Future<CircleAnnotationManager> createCircleAnnotationManager(
+      {String? id, String? belowLayerId}) async {
+    return _mapboxMapsPlatform
+        .createAnnotationManager('circle', id: id, belowLayerId: belowLayerId)
+        .then((value) => CircleAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a PolylineAnnotationManager to add/remove/update PolylineAnnotations on the map.
-  Future<PolylineAnnotationManager> createPolylineAnnotationManager() async {
-    return _mapboxMapsPlatform.createAnnotationManager('polyline').then(
-        (value) => PolylineAnnotationManager(
+  Future<PolylineAnnotationManager> createPolylineAnnotationManager(
+      {String? id, String? belowLayerId}) async {
+    return _mapboxMapsPlatform
+        .createAnnotationManager('polyline', id: id, belowLayerId: belowLayerId)
+        .then((value) => PolylineAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a PolygonAnnotationManager to add/remove/update PolygonAnnotations on the map.
-  Future<PolygonAnnotationManager> createPolygonAnnotationManager() async {
-    return _mapboxMapsPlatform.createAnnotationManager('polygon').then(
-        (value) => PolygonAnnotationManager(
+  Future<PolygonAnnotationManager> createPolygonAnnotationManager(
+      {String? id, String? belowLayerId}) async {
+    return _mapboxMapsPlatform
+        .createAnnotationManager('polygon', id: id, belowLayerId: belowLayerId)
+        .then((value) => PolygonAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 

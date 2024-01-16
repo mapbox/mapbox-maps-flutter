@@ -151,10 +151,15 @@ class _MapboxMapsPlatform {
     }
   }
 
-  Future<dynamic> createAnnotationManager(String type) async {
+  Future<dynamic> createAnnotationManager(String type,
+      {String? id, String? belowLayerId}) async {
     try {
-      return _channel.invokeMethod(
-          'annotation#create_manager', <String, dynamic>{'type': type});
+      return _channel
+          .invokeMethod('annotation#create_manager', <String, dynamic>{
+        'type': type,
+        'id': id,
+        'belowLayerId': belowLayerId,
+      });
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
