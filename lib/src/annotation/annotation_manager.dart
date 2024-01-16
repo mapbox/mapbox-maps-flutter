@@ -6,7 +6,10 @@ class _AnnotationManager {
   _AnnotationManager({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
-  /// Create a PointAnnotationManager to add/remove/update PointAnnotations on the map.
+  /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
+  ///
+  /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
+  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
   Future<PointAnnotationManager> createPointAnnotationManager(
       {String? id, String? belowLayerId}) async {
     return _mapboxMapsPlatform
@@ -15,7 +18,10 @@ class _AnnotationManager {
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
-  /// Create a CircleAnnotationManager to add/remove/update CircleAnnotations on the map.
+  /// Create a [CircleAnnotationManager] to add/remove/update [CircleAnnotation]s on the map.
+  ///
+  /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
+  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
   Future<CircleAnnotationManager> createCircleAnnotationManager(
       {String? id, String? belowLayerId}) async {
     return _mapboxMapsPlatform
@@ -24,7 +30,10 @@ class _AnnotationManager {
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
-  /// Create a PolylineAnnotationManager to add/remove/update PolylineAnnotations on the map.
+  /// Create a [PolylineAnnotationManager] to add/remove/update [PolylineAnnotation]s on the map.
+  ///
+  /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
+  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
   Future<PolylineAnnotationManager> createPolylineAnnotationManager(
       {String? id, String? belowLayerId}) async {
     return _mapboxMapsPlatform
@@ -33,7 +42,10 @@ class _AnnotationManager {
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
-  /// Create a PolygonAnnotationManager to add/remove/update PolygonAnnotations on the map.
+  /// Create a [PolygonAnnotationManager] to add/remove/update [PolygonAnnotation]s on the map.
+  ///
+  /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
+  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
   Future<PolygonAnnotationManager> createPolygonAnnotationManager(
       {String? id, String? belowLayerId}) async {
     return _mapboxMapsPlatform
@@ -42,7 +54,7 @@ class _AnnotationManager {
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
-  /// Remove an AnnotationManager and all the annotations created by it.
+  /// Remove an [AnnotationManager] and all the annotations created by it.
   Future<void> removeAnnotationManager(BaseAnnotationManager manager) async {
     _mapboxMapsPlatform.removeAnnotationManager(manager.id);
   }
