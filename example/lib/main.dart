@@ -10,6 +10,7 @@ import 'package:mapbox_maps_example/image_source.dart';
 import 'package:mapbox_maps_example/map_interface.dart';
 import 'package:mapbox_maps_example/polygon_annotations.dart';
 import 'package:mapbox_maps_example/polyline_annotations.dart';
+import 'package:mapbox_maps_example/route_line.dart';
 import 'package:mapbox_maps_example/tile_json.dart';
 import 'package:mapbox_maps_example/vector_tile_source.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -23,6 +24,7 @@ import 'style.dart';
 import 'gestures.dart';
 
 final List<ExamplePage> _allPages = <ExamplePage>[
+  RouteLinePage(),
   FullMapPage(),
   StylePage(),
   CameraPage(),
