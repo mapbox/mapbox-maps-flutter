@@ -408,17 +408,17 @@ NSObject<FlutterMessageCodec> *FLT_SETTINGSGesturesSettingsInterfaceGetCodec(voi
 
 extern void SetUpFLT_SETTINGSGesturesSettingsInterface(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_SETTINGSGesturesSettingsInterface> *_Nullable api);
 
-/// The codec used by FLT_SETTINGSLocationComponentSettingsInterface.
-NSObject<FlutterMessageCodec> *FLT_SETTINGSLocationComponentSettingsInterfaceGetCodec(void);
+/// The codec used by FLT_SETTINGS_LocationComponentSettingsInterface.
+NSObject<FlutterMessageCodec> *FLT_SETTINGS_LocationComponentSettingsInterfaceGetCodec(void);
 
 /// Shows a location puck on the map.
-@protocol FLT_SETTINGSLocationComponentSettingsInterface
+@protocol FLT_SETTINGS_LocationComponentSettingsInterface
 /// @return `nil` only when `error != nil`.
 - (nullable FLT_SETTINGSLocationComponentSettings *)getSettingsWithError:(FlutterError *_Nullable *_Nonnull)error;
-- (void)updateSettingsSettings:(FLT_SETTINGSLocationComponentSettings *)settings error:(FlutterError *_Nullable *_Nonnull)error;
+- (void)updateSettingsSettings:(FLT_SETTINGSLocationComponentSettings *)settings useDefaultPuck2DIfNeeded:(BOOL)useDefaultPuck2DIfNeeded error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
-extern void SetUpFLT_SETTINGSLocationComponentSettingsInterface(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_SETTINGSLocationComponentSettingsInterface> *_Nullable api);
+extern void SetUpFLT_SETTINGS_LocationComponentSettingsInterface(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_SETTINGS_LocationComponentSettingsInterface> *_Nullable api);
 
 /// The codec used by FLT_SETTINGSScaleBarSettingsInterface.
 NSObject<FlutterMessageCodec> *FLT_SETTINGSScaleBarSettingsInterfaceGetCodec(void);

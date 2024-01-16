@@ -606,3 +606,14 @@ extension StyleProjection {
         name.toFLTStyleProjectionName().map(FLTStyleProjection.make(with:))
     }
 }
+
+// MARK: Foundation
+
+infix operator ?=
+extension Optional {
+
+    static func ?=(lhs: inout Self, rhs: Self) {
+        guard lhs == nil else { return }
+        lhs = rhs
+    }
+}
