@@ -612,7 +612,7 @@ extension StyleProjection {
 infix operator ?=
 extension Optional {
 
-    static func ?=(lhs: inout Self, rhs: Self) {
+    static func ?= (lhs: inout Self, rhs: Self) {
         guard lhs == nil else { return }
         lhs = rhs
     }

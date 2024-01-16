@@ -5,9 +5,9 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.mapping.applyFromFLT
 import com.mapbox.maps.mapbox_maps.mapping.toFLT
 import com.mapbox.maps.pigeons.FLTSettings
+import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.LocationPuck2D
 
 class LocationComponentController(private val mapView: MapView, private val context: Context) :
   FLTSettings._LocationComponentSettingsInterface {
