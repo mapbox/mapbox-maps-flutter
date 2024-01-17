@@ -1,5 +1,4 @@
 // This file is generated.
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -8,16 +7,30 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
+  testWidgets('PointAnnotationManager custom id and position',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final dummyLayer = SymbolLayer(id: "dummyLayer", sourceId: 'sourceId');
+    await mapboxMap.style.addLayer(dummyLayer);
+    final id = "PointAnnotationManagerId";
+    final manager = await mapboxMap.annotations
+        .createPointAnnotationManager(id: id, below: 'dummyLayer');
+
+    expect(await mapboxMap.style.styleLayerExists(id), isTrue);
+    expect(await mapboxMap.style.styleSourceExists(id), isTrue);
+    expect(manager.id, id);
+    final layers = await mapboxMap.style.getStyleLayers();
+    expect(layers.first?.id, id);
+    expect(layers.last?.id, dummyLayer.id);
+  });
 
   testWidgets('create PointAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
-    await addDelay(1000);
 
     await manager.setIconAllowOverlap(true);
     var iconAllowOverlap = await manager.getIconAllowOverlap();
@@ -118,7 +131,6 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
-    await addDelay(1000);
   });
 }
 // End of generated file.

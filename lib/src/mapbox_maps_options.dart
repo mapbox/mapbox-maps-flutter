@@ -1,8 +1,10 @@
 part of mapbox_maps_flutter;
 
 /// Class for Mapbox SDK settings management
-class MapboxOptions {
+final class MapboxOptions {
   static _MapboxOptions _options = _MapboxOptions();
+
+  MapboxOptions._() {}
 
   /// The access token that is used to access resources provided by Mapbox services.
   static Future<String> getAccessToken() {
@@ -27,8 +29,10 @@ class MapboxOptions {
 /// If the default resource options need to be overridden, it is recommended to do it once at the application start and
 /// before any of the Maps API objects are constructed. Although it is technically possible to run Maps API objects that use different
 /// resource options, such a setup might cause performance implications.
-class MapboxMapsOptions {
+final class MapboxMapsOptions {
   static _MapboxMapsOptions _options = _MapboxMapsOptions();
+
+  MapboxMapsOptions._() {}
 
   /// The base URL that would be used by the Maps engine to make HTTP requests.
   /// By default the engine uses the base URL `https://api.mapbox.com`
@@ -37,7 +41,7 @@ class MapboxMapsOptions {
   }
 
   /// The base URL that would be used by the Maps engine to make HTTP requests.
-  void setBaseUrl(String url) {
+  static void setBaseUrl(String url) {
     _options.setBaseUrl(url);
   }
 
@@ -45,7 +49,7 @@ class MapboxMapsOptions {
   ///
   /// The engine will use this folder for storing offline style packages and temporary data.
   /// The application must have sufficient permissions to create files within the provided directory. If a data path is not provided, the default location will be used.
-  Future<String> getDataPath() {
+  static Future<String> getDataPath() {
     return _options.getDataPath();
   }
 
@@ -53,7 +57,7 @@ class MapboxMapsOptions {
   ///
   /// The engine will use this folder for storing offline style packages and temporary data.
   /// The application must have sufficient permissions to create files within the provided directory. If a data path is not provided, the default location will be used.
-  void setDataPath(String path) {
+  static void setDataPath(String path) {
     _options.setDataPath(path);
   }
 
@@ -63,7 +67,7 @@ class MapboxMapsOptions {
   ///
   /// The path to the folder where application assets are located. Resources whose protocol is `asset://`
   /// will be fetched from an asset folder or asset management system provided by respective platform.
-  Future<String> getAssetPath() {
+  static Future<String> getAssetPath() {
     return _options.getAssetPath();
   }
 
@@ -73,17 +77,17 @@ class MapboxMapsOptions {
   ///
   /// The path to the folder where application assets are located. Resources whose protocol is `asset://`
   /// will be fetched from an asset folder or asset management system provided by respective platform.
-  void setAssetPath(String path) {
+  static void setAssetPath(String path) {
     _options.setAssetPath(path);
   }
 
   /// The tile store usage mode for the Maps API objects. Default is `readOnly`.
-  Future<TileStoreUsageMode> getTileStoreUsageMode() {
+  static Future<TileStoreUsageMode> getTileStoreUsageMode() {
     return _options.getTileStoreUsageMode();
   }
 
   /// The tile store usage mode for the Maps API objects.
-  void setTileStoreUsageMode(TileStoreUsageMode mode) {
+  static void setTileStoreUsageMode(TileStoreUsageMode mode) {
     _options.setTileStoreUsageMode(mode);
   }
 }

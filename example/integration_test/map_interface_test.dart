@@ -10,10 +10,6 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('loadStyleURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -21,7 +17,6 @@ void main() {
     await mapboxMap.loadStyleURI(MapboxStyles.DARK);
     var style = await mapboxMap.style.getStyleURI();
     expect(MapboxStyles.DARK, style);
-    await addDelay(1000);
   });
 
   testWidgets('loadStyleJson', (WidgetTester tester) async {
@@ -29,13 +24,13 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var styleJson = await rootBundle.loadString('assets/style.json');
+    app.events.resetOnStyleLoaded();
     mapboxMap.loadStyleJson(styleJson);
 
-    await app.events.onMapLoaded.future;
+    await app.events.onStyleLoaded.future;
 
     var getStyleJson = await mapboxMap.style.getStyleJSON();
     expect(styleJson, getStyleJson);
-    await addDelay(1000);
   });
 
   testWidgets('clearData', (WidgetTester tester) async {
@@ -43,7 +38,6 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     mapboxMap.clearData();
-    await addDelay(1000);
   });
 
   testWidgets('setTileCacheBudget', (WidgetTester tester) async {
@@ -52,7 +46,6 @@ void main() {
     final mapboxMap = await mapFuture;
     mapboxMap.setTileCacheBudget(TileCacheBudgetInMegabytes(size: 100), null);
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
-    await addDelay(1000);
   });
 
   if (Platform.isAndroid) {
@@ -63,7 +56,6 @@ void main() {
       var size = await mapboxMap.getSize();
       expect(size.width, tester.binding.renderView.size.width);
       expect(size.height, tester.binding.renderView.size.height);
-      await addDelay(1000);
     });
 
     testWidgets('reduceMemoryUse', (WidgetTester tester) async {
@@ -72,7 +64,6 @@ void main() {
       final mapboxMap = await mapFuture;
 
       await mapboxMap.reduceMemoryUse();
-      await addDelay(1000);
     });
   }
 
@@ -81,7 +72,6 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await mapboxMap.triggerRepaint();
-    await addDelay(1000);
   });
 
   testWidgets('PrefetchZoomDelta', (WidgetTester tester) async {
@@ -91,7 +81,6 @@ void main() {
     await mapboxMap.setPrefetchZoomDelta(10);
     var prefetchZoomDelta = await mapboxMap.getPrefetchZoomDelta();
     expect(prefetchZoomDelta, 10);
-    await addDelay(1000);
   });
 
   testWidgets('MapOptions', (WidgetTester tester) async {
@@ -120,7 +109,6 @@ void main() {
       expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
       expect(options.viewportMode, ViewportMode.FLIPPED_Y);
     }
-    await addDelay(1000);
   });
 
   testWidgets('isGestureInProgress', (WidgetTester tester) async {
@@ -136,7 +124,6 @@ void main() {
       var isGestureInProgress = await mapboxMap.isGestureInProgress();
       expect(isGestureInProgress, true);
     }
-    await addDelay(1000);
   });
 
   testWidgets('isUserAnimationInProgress', (WidgetTester tester) async {
@@ -154,7 +141,6 @@ void main() {
           await mapboxMap.isUserAnimationInProgress();
       expect(isUserAnimationInProgress, true);
     }
-    await addDelay(1000);
   });
 
   testWidgets('debugOptions', (WidgetTester tester) async {
@@ -166,7 +152,6 @@ void main() {
     var debugOptions = await mapboxMap.getDebug();
     expect(debugOptions.length, 1);
     expect(debugOptions.first!.data, MapDebugOptionsData.TILE_BORDERS);
-    await addDelay(1000);
   });
 
   testWidgets('featureState', (WidgetTester tester) async {
@@ -177,11 +162,13 @@ void main() {
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
 
-    await app.events.onMapLoaded.future;
-
+    app.events.resetOnStyleDataLoaded();
+    app.events.resetOnMapIdle();
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
-    await addDelay(1000);
+
+    await app.events.onSourceDataLoaded.future;
+    await app.events.onMapIdle.future;
 
     await mapboxMap.setFeatureState(
         'source', 'custom', 'point', json.encode({'choose': true}));
@@ -195,18 +182,16 @@ void main() {
     featureState = await mapboxMap.getFeatureState('source', 'custom', 'point');
     stateMap = json.decode(featureState);
     expect(stateMap.length, 0);
-    await addDelay(1000);
   });
 
-  testWidgets('getResourceOptions', (WidgetTester tester) async {
-    final mapFuture = app.main();
+  testWidgets('MapboxMapsOptions', (WidgetTester tester) async {
+    final _ = app.main();
     await tester.pumpAndSettle();
 
     var baseUrl = await MapboxMapsOptions.getBaseUrl();
     expect(baseUrl, 'https://api.mapbox.com');
     var accessToken = await MapboxOptions.getAccessToken();
     expect(accessToken, isNotNull);
-    await addDelay(1000);
   });
 
   testWidgets('queryRenderedFeatures', (WidgetTester tester) async {
@@ -217,7 +202,11 @@ void main() {
     var options = CameraOptions(
         center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
         zoom: 10);
+
+    app.events.resetOnCameraChanged();
     mapboxMap.setCamera(options);
+    await app.events.onCameraChanged.future;
+
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
     final ByteData bytes =
@@ -225,9 +214,13 @@ void main() {
     final Uint8List list = bytes.buffer.asUint8List();
     await style.addStyleImage('icon', 1.0,
         MbxImage(width: 40, height: 40, data: list), true, [], [], null);
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
-    await addDelay(1000);
+    await app.events.onSourceDataLoaded.future;
+    await app.events.onMapIdle.future;
 
     var screenBox = ScreenBox(
         min: ScreenCoordinate(x: 0.0, y: 0.0),
@@ -255,7 +248,6 @@ void main() {
             type: Type.LIST),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 0);
-    await addDelay(1000);
   });
 
   testWidgets('querySourceFeatures', (WidgetTester tester) async {
@@ -267,12 +259,23 @@ void main() {
         center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
         zoom: 10,
         pitch: 0);
+
+    await app.events.onMapLoaded.future;
+
+    app.events.resetOnCameraChanged();
     mapboxMap.setCamera(options);
+    await app.events.onCameraChanged.future;
+
     var source = await rootBundle.loadString('assets/source.json');
     var layer = await rootBundle.loadString('assets/point_layer.json');
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
     style.addStyleSource('source', source);
     style.addStyleLayer(layer, null);
-    await addDelay(1000);
+    await app.events.onSourceDataLoaded.future;
+    await app.events.onMapIdle.future;
+
     var query = await mapboxMap.querySourceFeatures(
         'source', SourceQueryOptions(filter: ''));
     expect(query.length, greaterThan(0));
@@ -287,19 +290,22 @@ void main() {
     var style = mapboxMap.style;
     var source =
         await rootBundle.loadString('assets/cluster/cluster_source.json');
-    style.addStyleSource("earthquakes", source);
     var layer =
         await rootBundle.loadString('assets/cluster/cluster_layer.json');
-    style.addStyleLayer(layer, null);
-
     var clusterCountLayer =
         await rootBundle.loadString('assets/cluster/cluster_count_layer.json');
-    style.addStyleLayer(clusterCountLayer, null);
-
     var unclusteredLayer = await rootBundle
         .loadString('assets/cluster/unclustered_point_layer.json');
+
+    app.events.resetOnSourceDataLoaded();
+    app.events.resetOnMapIdle();
+    style.addStyleSource("earthquakes", source);
+    style.addStyleLayer(layer, null);
+    style.addStyleLayer(clusterCountLayer, null);
     style.addStyleLayer(unclusteredLayer, null);
-    await addDelay(5000);
+    await app.events.onSourceDataLoaded.future;
+    await app.events.onMapIdle.future;
+
     var feature = {
       "id": 1249,
       "properties": {
