@@ -1,3 +1,8 @@
+### main
+
+* Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
+* Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
+
 ### 1.0.0-beta.1
 
 Bump platform Maps SDK dependencies to 11.0.0.
