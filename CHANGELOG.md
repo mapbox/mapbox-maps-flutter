@@ -1,3 +1,7 @@
+### main
+
+* Fix 2D puck's opacity not being respected on iOS.
+
 ### 1.0.0-beta.1
 
 Bump platform Maps SDK dependencies to 11.0.0.
