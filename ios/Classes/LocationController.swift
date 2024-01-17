@@ -95,7 +95,9 @@ extension LocationOptions {
                     }
                     configuration.pulsing = pulsing
                 }
-
+                if let opacity = settings.locationPuck?.locationPuck2D?.opacity?.doubleValue {
+                    configuration.opacity = opacity
+                }
                 options.puckType = .puck2D(configuration)
             }
         }
@@ -136,6 +138,7 @@ extension LocationOptions {
                 let encoded = try! JSONEncoder().encode(scaleData)
                 locationPuck2D.scaleExpression = String(data: encoded, encoding: .utf8)
             }
+            locationPuck2D.opacity = NSNumber(value: oldConfiguration.opacity)
             if let pulsing = oldConfiguration.pulsing {
                 pulsingEnabled = NSNumber(value: true)
                 switch pulsing.radius {
