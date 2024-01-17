@@ -8,16 +8,11 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('create CircleAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
-    await addDelay(1000);
 
     await manager.setCircleEmissiveStrength(1.0);
     var circleEmissiveStrength = await manager.getCircleEmissiveStrength();
@@ -38,7 +33,6 @@ void main() {
     await manager.setCircleTranslateAnchor(CircleTranslateAnchor.MAP);
     var circleTranslateAnchor = await manager.getCircleTranslateAnchor();
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
-    await addDelay(1000);
   });
 }
 // End of generated file.

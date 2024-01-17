@@ -8,17 +8,12 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('create PolygonAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager =
         await mapboxMap.annotations.createPolygonAnnotationManager();
-    await addDelay(1000);
 
     await manager.setFillAntialias(true);
     var fillAntialias = await manager.getFillAntialias();
@@ -35,7 +30,6 @@ void main() {
     await manager.setFillTranslateAnchor(FillTranslateAnchor.MAP);
     var fillTranslateAnchor = await manager.getFillTranslateAnchor();
     expect(FillTranslateAnchor.MAP, fillTranslateAnchor);
-    await addDelay(1000);
   });
 }
 // End of generated file.

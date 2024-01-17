@@ -8,10 +8,6 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('create PolylineAnnotation_manager ',
       (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -19,7 +15,6 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager =
         await mapboxMap.annotations.createPolylineAnnotationManager();
-    await addDelay(1000);
 
     await manager.setLineCap(LineCap.BUTT);
     var lineCap = await manager.getLineCap();
@@ -56,7 +51,6 @@ void main() {
     await manager.setLineTrimOffset([0.0, 1.0]);
     var lineTrimOffset = await manager.getLineTrimOffset();
     expect([0.0, 1.0], lineTrimOffset);
-    await addDelay(1000);
   });
 }
 // End of generated file.

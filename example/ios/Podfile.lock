@@ -12,7 +12,7 @@ PODS:
     - MapboxCommon (= 24.0.0)
     - MapboxCoreMaps (= 11.0.0)
     - Turf (= 2.7.0)
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
   - Turf (2.7.0)
 
@@ -46,7 +46,7 @@ SPEC CHECKSUMS:
   MapboxCommon: 0cca816960ad2d21c86e1d32435fcb412cfdcf4f
   MapboxCoreMaps: 633f5ecd7580a6d1342ff20cc8732170b2cd7ba3
   MapboxMaps: 1c219108691a2000cb842b02e64d82158d74e6cd
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
 
 PODFILE CHECKSUM: e9395e37b54f3250ebce302f8de7800b2ba2b828

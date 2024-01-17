@@ -13,10 +13,6 @@ import 'package:turf/helpers.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('Add VectorSource', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
