@@ -29,7 +29,13 @@ class AnnotationController(private val mapView: MapView) :
       override fun error(error: Throwable) { }
     }
     val id = call.argument<String>("id") ?: (index++).toString()
-    val belowLayerId = call.argument<String>("belowLayerId")
+    val layerId = call.argument<String>("belowLayerId")
+
+    val belowLayerId = if (layerId != null && mapView.mapboxMap.style?.styleLayerExists(layerId) == true) {
+      layerId
+    } else {
+      null
+    }
     val manager = when (val type = call.argument<String>("type")!!) {
       "circle" -> {
         mapView.annotations.createCircleAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {

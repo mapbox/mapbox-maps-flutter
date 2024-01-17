@@ -54,7 +54,12 @@ class AnnotationController: ControllerDelegate {
         guard let arguments = methodCall.arguments as? [String: Any] else { return }
         guard let type = arguments["type"] as? String else { return }
         let id = (arguments["id"] as? String) ?? String(UUID().uuidString.prefix(5))
-        let belowLayerId = arguments["belowLayerId"] as? String
+        let belowLayerId: String?
+        if let layerId = arguments["belowLayerId"] as? String, mapView.mapboxMap.layerExists(withId: layerId) {
+            belowLayerId = layerId
+        } else {
+            belowLayerId = nil
+        }
 
         if let manager = { () -> AnnotationManager? in
             switch type {

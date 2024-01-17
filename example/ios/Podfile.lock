@@ -40,7 +40,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 13825b8a9334a850581300559b8839134b124670
   mapbox_maps_flutter: 826a6fda4a08984e997af720bf9d8310cde1e00f
   MapboxCommon: 0cca816960ad2d21c86e1d32435fcb412cfdcf4f

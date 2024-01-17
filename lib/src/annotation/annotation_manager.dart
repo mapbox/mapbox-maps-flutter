@@ -9,11 +9,11 @@ class _AnnotationManager {
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
-  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
+  /// Use [below] to specify the id of the layer above the annotation layer.
   Future<PointAnnotationManager> createPointAnnotationManager(
-      {String? id, String? belowLayerId}) async {
+      {String? id, String? below}) async {
     return _mapboxMapsPlatform
-        .createAnnotationManager('point', id: id, belowLayerId: belowLayerId)
+        .createAnnotationManager('point', id: id, belowLayerId: below)
         .then((value) => PointAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
@@ -21,11 +21,11 @@ class _AnnotationManager {
   /// Create a [CircleAnnotationManager] to add/remove/update [CircleAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
-  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
+  /// Use [below] to specify the id of the layer above the annotation layer.
   Future<CircleAnnotationManager> createCircleAnnotationManager(
-      {String? id, String? belowLayerId}) async {
+      {String? id, String? below}) async {
     return _mapboxMapsPlatform
-        .createAnnotationManager('circle', id: id, belowLayerId: belowLayerId)
+        .createAnnotationManager('circle', id: id, belowLayerId: below)
         .then((value) => CircleAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
@@ -33,11 +33,11 @@ class _AnnotationManager {
   /// Create a [PolylineAnnotationManager] to add/remove/update [PolylineAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
-  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
+  /// Use [below] to specify the id of the layer above the annotation layer.
   Future<PolylineAnnotationManager> createPolylineAnnotationManager(
-      {String? id, String? belowLayerId}) async {
+      {String? id, String? below}) async {
     return _mapboxMapsPlatform
-        .createAnnotationManager('polyline', id: id, belowLayerId: belowLayerId)
+        .createAnnotationManager('polyline', id: id, belowLayerId: below)
         .then((value) => PolylineAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
@@ -45,23 +45,23 @@ class _AnnotationManager {
   /// Create a [PolygonAnnotationManager] to add/remove/update [PolygonAnnotation]s on the map.
   ///
   /// If [id] is specified, the string is used as an identifier for a layer and a source backing the create manager.
-  /// Use [belowLayerid] to specify the id of the layer above the annotation layer.
+  /// Use [below] to specify the id of the layer above the annotation layer.
   Future<PolygonAnnotationManager> createPolygonAnnotationManager(
-      {String? id, String? belowLayerId}) async {
+      {String? id, String? below}) async {
     return _mapboxMapsPlatform
-        .createAnnotationManager('polygon', id: id, belowLayerId: belowLayerId)
+        .createAnnotationManager('polygon', id: id, belowLayerId: below)
         .then((value) => PolygonAnnotationManager(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Remove an [AnnotationManager] and all the annotations created by it.
   Future<void> removeAnnotationManager(BaseAnnotationManager manager) async {
-    _mapboxMapsPlatform.removeAnnotationManager(manager.id);
+    return _mapboxMapsPlatform.removeAnnotationManager(manager.id);
   }
 
   /// Remove an [AnnotationManager] with the specified [id] and all the annotation created by it.
   Future<void> removeAnnotationManagerById(String id) async {
-    _mapboxMapsPlatform.removeAnnotationManager(id);
+    return _mapboxMapsPlatform.removeAnnotationManager(id);
   }
 }
 
