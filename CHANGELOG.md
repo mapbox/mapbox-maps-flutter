@@ -4,6 +4,7 @@
 * Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
 * Add `DefaultLocationPuck2D` type interchangeable with `LocationPuck2D` that allows customization of the default location indicator appearance.
 * Fix 2D puck's opacity not being respected on iOS.
+* Bump platform Maps SDK dependencies to 11.1 .0.
 
 ### 1.0.0-beta.1
 
