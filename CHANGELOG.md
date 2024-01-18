@@ -13,6 +13,7 @@
 * Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
 * Fix 2D puck's opacity not being respected on iOS.
 * Make `padding` parameter optional in `MapboxMap.cameraForCoordinateBounds()` and `MapboxMap.cameraForCoordinates()`.
+* Fix initial camera options passed to `MapWidget` not being applied on Android.
 * Bump platform Maps SDK dependencies to 11.1.0.
 
 ### 1.0.0-beta.1
