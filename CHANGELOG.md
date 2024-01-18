@@ -9,6 +9,7 @@
 * Updater minimum Flutter SDK version to 3.10.0 and above.
 * Update minumum Dart SDK version to 3.0.0 and above.
 * Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
+* Fix 2D puck's opacity not being respected on iOS.
 
 ### 1.0.0-beta.1
 
