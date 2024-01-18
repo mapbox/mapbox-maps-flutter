@@ -25,7 +25,7 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
 
   override fun cameraForCoordinateBounds(
     bounds: FLTMapInterfaces.CoordinateBounds,
-    padding: FLTMapInterfaces.MbxEdgeInsets,
+    padding: FLTMapInterfaces.MbxEdgeInsets?,
     bearing: Double?,
     pitch: Double?,
     maxZoom: Double?,
@@ -33,7 +33,7 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinateBounds(
       bounds.toCoordinateBounds(),
-      padding.toEdgeInsets(context),
+      padding?.toEdgeInsets(context),
       bearing,
       pitch,
       maxZoom,
@@ -44,13 +44,13 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
 
   override fun cameraForCoordinates(
     coordinates: MutableList<MutableMap<String, Any>>,
-    padding: FLTMapInterfaces.MbxEdgeInsets,
+    padding: FLTMapInterfaces.MbxEdgeInsets?,
     bearing: Double?,
     pitch: Double?
   ): FLTMapInterfaces.CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
       coordinates.map { it.toPoint() },
-      padding.toEdgeInsets(context),
+      padding?.toEdgeInsets(context),
       bearing,
       pitch
     )
