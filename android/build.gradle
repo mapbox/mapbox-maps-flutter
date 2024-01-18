@@ -64,7 +64,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation ("com.mapbox.maps:android:11.0.0") {
+    implementation ("com.mapbox.maps:android:11.1.0") {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 
