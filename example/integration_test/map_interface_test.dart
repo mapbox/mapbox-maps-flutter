@@ -185,7 +185,7 @@ void main() {
   });
 
   testWidgets('MapboxMapsOptions', (WidgetTester tester) async {
-    final mapFuture = app.main();
+    final _ = app.main();
     await tester.pumpAndSettle();
 
     var baseUrl = await MapboxMapsOptions.getBaseUrl();

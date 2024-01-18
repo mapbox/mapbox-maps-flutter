@@ -776,9 +776,9 @@ void SetUpFLT_SETTINGSGesturesSettingsInterface(id<FlutterBinaryMessenger> binar
     }
   }
 }
-@interface FLT_SETTINGSLocationComponentSettingsInterfaceCodecReader : FlutterStandardReader
+@interface FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReader : FlutterStandardReader
 @end
-@implementation FLT_SETTINGSLocationComponentSettingsInterfaceCodecReader
+@implementation FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReader
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 128: 
@@ -795,9 +795,9 @@ void SetUpFLT_SETTINGSGesturesSettingsInterface(id<FlutterBinaryMessenger> binar
 }
 @end
 
-@interface FLT_SETTINGSLocationComponentSettingsInterfaceCodecWriter : FlutterStandardWriter
+@interface FLT_SETTINGS_LocationComponentSettingsInterfaceCodecWriter : FlutterStandardWriter
 @end
-@implementation FLT_SETTINGSLocationComponentSettingsInterfaceCodecWriter
+@implementation FLT_SETTINGS_LocationComponentSettingsInterfaceCodecWriter
 - (void)writeValue:(id)value {
   if ([value isKindOfClass:[FLT_SETTINGSLocationComponentSettings class]]) {
     [self writeByte:128];
@@ -817,36 +817,36 @@ void SetUpFLT_SETTINGSGesturesSettingsInterface(id<FlutterBinaryMessenger> binar
 }
 @end
 
-@interface FLT_SETTINGSLocationComponentSettingsInterfaceCodecReaderWriter : FlutterStandardReaderWriter
+@interface FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReaderWriter : FlutterStandardReaderWriter
 @end
-@implementation FLT_SETTINGSLocationComponentSettingsInterfaceCodecReaderWriter
+@implementation FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReaderWriter
 - (FlutterStandardWriter *)writerWithData:(NSMutableData *)data {
-  return [[FLT_SETTINGSLocationComponentSettingsInterfaceCodecWriter alloc] initWithData:data];
+  return [[FLT_SETTINGS_LocationComponentSettingsInterfaceCodecWriter alloc] initWithData:data];
 }
 - (FlutterStandardReader *)readerWithData:(NSData *)data {
-  return [[FLT_SETTINGSLocationComponentSettingsInterfaceCodecReader alloc] initWithData:data];
+  return [[FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReader alloc] initWithData:data];
 }
 @end
 
-NSObject<FlutterMessageCodec> *FLT_SETTINGSLocationComponentSettingsInterfaceGetCodec(void) {
+NSObject<FlutterMessageCodec> *FLT_SETTINGS_LocationComponentSettingsInterfaceGetCodec(void) {
   static FlutterStandardMessageCodec *sSharedObject = nil;
   static dispatch_once_t sPred = 0;
   dispatch_once(&sPred, ^{
-    FLT_SETTINGSLocationComponentSettingsInterfaceCodecReaderWriter *readerWriter = [[FLT_SETTINGSLocationComponentSettingsInterfaceCodecReaderWriter alloc] init];
+    FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReaderWriter *readerWriter = [[FLT_SETTINGS_LocationComponentSettingsInterfaceCodecReaderWriter alloc] init];
     sSharedObject = [FlutterStandardMessageCodec codecWithReaderWriter:readerWriter];
   });
   return sSharedObject;
 }
 
-void SetUpFLT_SETTINGSLocationComponentSettingsInterface(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_SETTINGSLocationComponentSettingsInterface> *api) {
+void SetUpFLT_SETTINGS_LocationComponentSettingsInterface(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_SETTINGS_LocationComponentSettingsInterface> *api) {
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.getSettings"
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings"
         binaryMessenger:binaryMessenger
-        codec:FLT_SETTINGSLocationComponentSettingsInterfaceGetCodec()];
+        codec:FLT_SETTINGS_LocationComponentSettingsInterfaceGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(getSettingsWithError:)], @"FLT_SETTINGSLocationComponentSettingsInterface api (%@) doesn't respond to @selector(getSettingsWithError:)", api);
+      NSCAssert([api respondsToSelector:@selector(getSettingsWithError:)], @"FLT_SETTINGS_LocationComponentSettingsInterface api (%@) doesn't respond to @selector(getSettingsWithError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         FlutterError *error;
         FLT_SETTINGSLocationComponentSettings *output = [api getSettingsWithError:&error];
@@ -859,16 +859,17 @@ void SetUpFLT_SETTINGSLocationComponentSettingsInterface(id<FlutterBinaryMesseng
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
-        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.updateSettings"
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.updateSettings"
         binaryMessenger:binaryMessenger
-        codec:FLT_SETTINGSLocationComponentSettingsInterfaceGetCodec()];
+        codec:FLT_SETTINGS_LocationComponentSettingsInterfaceGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(updateSettingsSettings:error:)], @"FLT_SETTINGSLocationComponentSettingsInterface api (%@) doesn't respond to @selector(updateSettingsSettings:error:)", api);
+      NSCAssert([api respondsToSelector:@selector(updateSettingsSettings:useDefaultPuck2DIfNeeded:error:)], @"FLT_SETTINGS_LocationComponentSettingsInterface api (%@) doesn't respond to @selector(updateSettingsSettings:useDefaultPuck2DIfNeeded:error:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray *args = message;
         FLT_SETTINGSLocationComponentSettings *arg_settings = GetNullableObjectAtIndex(args, 0);
+        BOOL arg_useDefaultPuck2DIfNeeded = [GetNullableObjectAtIndex(args, 1) boolValue];
         FlutterError *error;
-        [api updateSettingsSettings:arg_settings error:&error];
+        [api updateSettingsSettings:arg_settings useDefaultPuck2DIfNeeded:arg_useDefaultPuck2DIfNeeded error:&error];
         callback(wrapResult(nil, error));
       }];
     } else {

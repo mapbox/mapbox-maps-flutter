@@ -1,9 +1,25 @@
 @_spi(Experimental) import MapboxMaps
 import UIKit
 
-class LocationController: NSObject, FLT_SETTINGSLocationComponentSettingsInterface {
-    func updateSettingsSettings(_ settings: FLT_SETTINGSLocationComponentSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        mapView.location.options = mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(settings: settings)
+class LocationController: NSObject, FLT_SETTINGS_LocationComponentSettingsInterface {
+    func updateSettingsSettings(
+        _ settings: FLT_SETTINGSLocationComponentSettings,
+        useDefaultPuck2DIfNeeded: Bool,
+        error: AutoreleasingUnsafeMutablePointer<FlutterError?>
+    ) {
+        do {
+            var locationOptions = try mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(settings: settings)
+            if useDefaultPuck2DIfNeeded, case .puck2D(var config) = locationOptions.puckType {
+                let defaultPuck2DConfig = Puck2DConfiguration.makeDefault(showBearing: locationOptions.puckBearingEnabled)
+                config.topImage ?= defaultPuck2DConfig.topImage
+                config.bearingImage ?= defaultPuck2DConfig.bearingImage
+                config.shadowImage ?= defaultPuck2DConfig.shadowImage
+                locationOptions.puckType = .puck2D(config)
+            }
+            mapView.location.options = locationOptions
+        } catch let settingsError {
+            error.pointee = FlutterError(code: "0", message: settingsError.localizedDescription, details: settingsError)
+        }
     }
 
     func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSLocationComponentSettings? {
@@ -18,7 +34,7 @@ class LocationController: NSObject, FLT_SETTINGSLocationComponentSettingsInterfa
 }
 
 extension LocationOptions {
-    func fromFLT_SETTINGSLocationComponentSettings(settings: FLT_SETTINGSLocationComponentSettings) -> LocationOptions {
+    func fromFLT_SETTINGSLocationComponentSettings(settings: FLT_SETTINGSLocationComponentSettings) throws -> LocationOptions {
         var options = LocationOptions()
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled.boolValue
@@ -30,8 +46,7 @@ extension LocationOptions {
 
         if settings.enabled == false {
             options.puckType = nil
-        } else {
-            if let puck3D = settings.locationPuck?.locationPuck3D {
+        } else if let puck3D = settings.locationPuck?.locationPuck3D {
                 var model = Model(uri: URL(string: puck3D.modelUri!))
                 if let position = puck3D.position {
                     model.position = position.map({$0.doubleValue})
@@ -53,53 +68,45 @@ extension LocationOptions {
                     configuration.modelRotation = .constant(rotation.map({$0.doubleValue}))
                 }
                 options.puckType = .puck3D(configuration)
-            } else {
-                var configuration: Puck2DConfiguration = { () -> Puck2DConfiguration in
-                    if case .puck2D(let configuration) = self.puckType {
-                        return configuration
-                    } else {
-                        return Puck2DConfiguration.makeDefault(showBearing: settings.puckBearingEnabled?.boolValue ?? false)
-                    }
-                }()
-                if let bearingImage = settings.locationPuck?.locationPuck2D?.bearingImage {
-                    configuration.bearingImage = UIImage(data: bearingImage.data, scale: UIScreen.main.scale)
-                }
-                if let shadowImage = settings.locationPuck?.locationPuck2D?.shadowImage {
-                    configuration.shadowImage = UIImage(data: shadowImage.data, scale: UIScreen.main.scale)
-                }
-                if let topImage = settings.locationPuck?.locationPuck2D?.topImage {
-                    configuration.topImage = UIImage(data: topImage.data, scale: UIScreen.main.scale)
-                }
-                if let scaleExpressionData = settings.locationPuck?.locationPuck2D?.scaleExpression?.data(using: .utf8) {
-                    let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
-                    configuration.scale = .expression(decodedExpression)
-                }
-                if let color = settings.accuracyRingColor {
-                    configuration.accuracyRingColor = uiColorFromHex(rgbValue: color.intValue)
-                }
-                if let color = settings.accuracyRingBorderColor {
-                    configuration.accuracyRingBorderColor = uiColorFromHex(rgbValue: color.intValue)
-                }
-                if let showAccuracyRing = settings.showAccuracyRing {
-                    configuration.showsAccuracyRing = showAccuracyRing.boolValue
-                }
-                if settings.pulsingEnabled?.boolValue ?? false {
-                    var pulsing = Puck2DConfiguration.Pulsing()
+        } else if let puck2D = settings.locationPuck?.locationPuck2D {
+            var configuration: Puck2DConfiguration = {
+                if case .puck2D(let config) = puckType { return config }
+                return Puck2DConfiguration()
+            }()
+            configuration.topImage = puck2D.topImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
+            configuration.bearingImage = puck2D.bearingImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
+            configuration.shadowImage = puck2D.shadowImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
 
-                    if let radius = settings.pulsingMaxRadius?.intValue {
-                        // -1 indicates "accuracy" mode(from Android)
-                        pulsing.radius = radius == -1 ? .accuracy : .constant(Double(radius))
-                    }
-                    if let color = settings.pulsingColor?.intValue {
-                        pulsing.color = uiColorFromHex(rgbValue: color)
-                    }
-                    configuration.pulsing = pulsing
-                }
-                if let opacity = settings.locationPuck?.locationPuck2D?.opacity?.doubleValue {
-                    configuration.opacity = opacity
-                }
-                options.puckType = .puck2D(configuration)
+            if let scaleData = puck2D.scaleExpression?.data(using: .utf8) {
+                configuration.scale = try JSONDecoder().decode(Value<Double>.self, from: scaleData)
             }
+            if let color = settings.accuracyRingColor {
+                configuration.accuracyRingColor = uiColorFromHex(rgbValue: color.intValue)
+            }
+            if let color = settings.accuracyRingBorderColor {
+                configuration.accuracyRingBorderColor = uiColorFromHex(rgbValue: color.intValue)
+            }
+            if let showAccuracyRing = settings.showAccuracyRing {
+                configuration.showsAccuracyRing = showAccuracyRing.boolValue
+            }
+            if settings.pulsingEnabled?.boolValue ?? false {
+                var pulsing = Puck2DConfiguration.Pulsing()
+
+                if let radius = settings.pulsingMaxRadius?.intValue {
+                    // -1 indicates "accuracy" mode(from Android)
+                    pulsing.radius = radius == -1 ? .accuracy : .constant(Double(radius))
+                }
+                if let color = settings.pulsingColor?.intValue {
+                    pulsing.color = uiColorFromHex(rgbValue: color)
+                }
+                configuration.pulsing = pulsing
+            }
+
+            if let opacity = puck2D.opacity?.doubleValue {
+                configuration.opacity = opacity
+            }
+
+            options.puckType = .puck2D(configuration)
         }
         return options
     }

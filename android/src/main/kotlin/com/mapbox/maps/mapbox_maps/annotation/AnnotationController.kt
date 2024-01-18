@@ -1,8 +1,8 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.MapView
-import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.pigeons.*
+import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.AnnotationManager
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.*
@@ -10,7 +10,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class AnnotationController(private val mapView: MapView, private val mapboxMap: MapboxMap) :
+class AnnotationController(private val mapView: MapView) :
   ControllerDelegate {
   private val managerMap = mutableMapOf<String, AnnotationManager<*, *, *, *, *, *, *>>()
   private val pointAnnotationController = PointAnnotationController(this)
@@ -27,9 +27,17 @@ class AnnotationController(private val mapView: MapView, private val mapboxMap: 
       override fun success() { }
       override fun error(error: Throwable) { }
     }
+    val id = call.argument<String>("id") ?: (index++).toString()
+    val layerId = call.argument<String>("belowLayerId")
+
+    val belowLayerId = if (layerId != null && mapView.mapboxMap.style?.styleLayerExists(layerId) == true) {
+      layerId
+    } else {
+      null
+    }
     val manager = when (val type = call.argument<String>("type")!!) {
       "circle" -> {
-        mapView.annotations.createCircleAnnotationManager().apply {
+        mapView.annotations.createCircleAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             OnCircleAnnotationClickListener { annotation ->
               onCircleAnnotationClickListener.onCircleAnnotationClick(annotation.toFLTCircleAnnotation(), voidResult)
@@ -39,7 +47,7 @@ class AnnotationController(private val mapView: MapView, private val mapboxMap: 
         }
       }
       "point" -> {
-        mapView.annotations.createPointAnnotationManager().apply {
+        mapView.annotations.createPointAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             OnPointAnnotationClickListener { annotation ->
               onPointAnnotationClickListener.onPointAnnotationClick(annotation.toFLTPointAnnotation(), voidResult)
@@ -49,7 +57,7 @@ class AnnotationController(private val mapView: MapView, private val mapboxMap: 
         }
       }
       "polygon" -> {
-        mapView.annotations.createPolygonAnnotationManager().apply {
+        mapView.annotations.createPolygonAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             OnPolygonAnnotationClickListener { annotation ->
               onPolygonAnnotationClickListener.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation(), voidResult)
@@ -59,7 +67,7 @@ class AnnotationController(private val mapView: MapView, private val mapboxMap: 
         }
       }
       "polyline" -> {
-        mapView.annotations.createPolylineAnnotationManager().apply {
+        mapView.annotations.createPolylineAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             OnPolylineAnnotationClickListener { annotation ->
               onPolylineAnnotationController.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation(), voidResult)
@@ -73,7 +81,6 @@ class AnnotationController(private val mapView: MapView, private val mapboxMap: 
         return
       }
     }
-    val id = (index++).toString()
     managerMap[id] = manager
     result.success(id)
   }

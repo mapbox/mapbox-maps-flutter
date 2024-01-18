@@ -2620,10 +2620,10 @@ public class FLTSettings {
     }
   }
 
-  private static class LocationComponentSettingsInterfaceCodec extends StandardMessageCodec {
-    public static final LocationComponentSettingsInterfaceCodec INSTANCE = new LocationComponentSettingsInterfaceCodec();
+  private static class _LocationComponentSettingsInterfaceCodec extends StandardMessageCodec {
+    public static final _LocationComponentSettingsInterfaceCodec INSTANCE = new _LocationComponentSettingsInterfaceCodec();
 
-    private LocationComponentSettingsInterfaceCodec() {}
+    private _LocationComponentSettingsInterfaceCodec() {}
 
     @Override
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
@@ -2666,23 +2666,23 @@ public class FLTSettings {
    *
    * Generated interface from Pigeon that represents a handler of messages from Flutter.
    */
-  public interface LocationComponentSettingsInterface {
+  public interface _LocationComponentSettingsInterface {
 
     @NonNull 
     LocationComponentSettings getSettings();
 
-    void updateSettings(@NonNull LocationComponentSettings settings);
+    void updateSettings(@NonNull LocationComponentSettings settings, @NonNull Boolean useDefaultPuck2DIfNeeded);
 
-    /** The codec used by LocationComponentSettingsInterface. */
+    /** The codec used by _LocationComponentSettingsInterface. */
     static @NonNull MessageCodec<Object> getCodec() {
-      return LocationComponentSettingsInterfaceCodec.INSTANCE;
+      return _LocationComponentSettingsInterfaceCodec.INSTANCE;
     }
-    /**Sets up an instance of `LocationComponentSettingsInterface` to handle messages through the `binaryMessenger`. */
-    static void setUp(@NonNull BinaryMessenger binaryMessenger, @Nullable LocationComponentSettingsInterface api) {
+    /**Sets up an instance of `_LocationComponentSettingsInterface` to handle messages through the `binaryMessenger`. */
+    static void setUp(@NonNull BinaryMessenger binaryMessenger, @Nullable _LocationComponentSettingsInterface api) {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.getSettings", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
@@ -2704,15 +2704,16 @@ public class FLTSettings {
       {
         BasicMessageChannel<Object> channel =
             new BasicMessageChannel<>(
-                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.LocationComponentSettingsInterface.updateSettings", getCodec());
+                binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.updateSettings", getCodec());
         if (api != null) {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
                 ArrayList<Object> args = (ArrayList<Object>) message;
                 LocationComponentSettings settingsArg = (LocationComponentSettings) args.get(0);
+                Boolean useDefaultPuck2DIfNeededArg = (Boolean) args.get(1);
                 try {
-                  api.updateSettings(settingsArg);
+                  api.updateSettings(settingsArg, useDefaultPuck2DIfNeededArg);
                   wrapped.add(0, null);
                 }
  catch (Throwable exception) {

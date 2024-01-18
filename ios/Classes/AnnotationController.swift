@@ -53,23 +53,42 @@ class AnnotationController: ControllerDelegate {
     func handleCreateManager(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = methodCall.arguments as? [String: Any] else { return }
         guard let type = arguments["type"] as? String else { return }
+        let id = (arguments["id"] as? String) ?? String(UUID().uuidString.prefix(5))
+        let belowLayerId: String?
+        if let layerId = arguments["belowLayerId"] as? String, mapView.mapboxMap.layerExists(withId: layerId) {
+            belowLayerId = layerId
+        } else {
+            belowLayerId = nil
+        }
 
         if let manager = { () -> AnnotationManager? in
             switch type {
             case "circle":
-                let circleManager = mapView.annotations.makeCircleAnnotationManager()
+                let circleManager = mapView.annotations.makeCircleAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(LayerPosition.below)
+                )
                 circleManager.delegate = self
                 return circleManager
             case "point":
-                let pointManager = mapView.annotations.makePointAnnotationManager()
+                let pointManager = mapView.annotations.makePointAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(LayerPosition.below)
+                )
                 pointManager.delegate = self
                 return pointManager
             case "polygon":
-                let polygonManager: PolygonAnnotationManager = mapView.annotations.makePolygonAnnotationManager()
+                let polygonManager: PolygonAnnotationManager = mapView.annotations.makePolygonAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(LayerPosition.below)
+                )
                 polygonManager.delegate = self
                 return polygonManager
             case "polyline":
-                let polylineManager: PolylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager()
+                let polylineManager: PolylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(LayerPosition.below)
+                )
                 polylineManager.delegate = self
                 return polylineManager
             default:

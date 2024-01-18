@@ -86,7 +86,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         SetUpFLT_AnimationManager(proxyBinaryMessenger, animationController)
 
         let locationController = LocationController(withMapView: mapView)
-        SetUpFLT_SETTINGSLocationComponentSettingsInterface(proxyBinaryMessenger, locationController)
+        SetUpFLT_SETTINGS_LocationComponentSettingsInterface(proxyBinaryMessenger, locationController)
 
         gesturesController = GesturesController(withMapView: mapView)
         SetUpFLT_SETTINGSGesturesSettingsInterface(proxyBinaryMessenger, gesturesController)

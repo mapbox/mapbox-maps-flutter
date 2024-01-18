@@ -1,5 +1,4 @@
 // This file is generated.
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -7,6 +6,25 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('CircleAnnotationManager custom id and position',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final dummyLayer = CircleLayer(id: "dummyLayer", sourceId: 'sourceId');
+    await mapboxMap.style.addLayer(dummyLayer);
+    final id = "CircleAnnotationManagerId";
+    final manager = await mapboxMap.annotations
+        .createCircleAnnotationManager(id: id, below: 'dummyLayer');
+
+    expect(await mapboxMap.style.styleLayerExists(id), isTrue);
+    expect(await mapboxMap.style.styleSourceExists(id), isTrue);
+    expect(manager.id, id);
+    final layers = await mapboxMap.style.getStyleLayers();
+    expect(layers.first?.id, id);
+    expect(layers.last?.id, dummyLayer.id);
+  });
 
   testWidgets('create CircleAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
