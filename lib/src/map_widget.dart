@@ -183,7 +183,7 @@ class _MapWidgetState extends State<MapWidget> {
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'eventTypes': widget._eventTypes.map((e) => e.index).toList(),
-      'mapboxPluginVersion': '1.0.0-beta.1'
+      'mapboxPluginVersion': '1.0.0-beta.2'
     };
 
     return _mapboxMapsPlatform.buildView(
