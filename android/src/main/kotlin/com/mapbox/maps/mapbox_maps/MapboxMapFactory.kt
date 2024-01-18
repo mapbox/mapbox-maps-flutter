@@ -95,8 +95,8 @@ class MapboxMapFactory(
             it[1].toDevicePixels(context).toDouble()
           )
         )
-        cameraOptionsBuilder.build()
       }
+      cameraOptionsBuilder.build()
     }
 
     val channelSuffix = params["channelSuffix"] as Int
