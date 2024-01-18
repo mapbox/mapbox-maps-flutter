@@ -281,18 +281,17 @@ void main() {
         positionTransition: TransitionOptions(duration: 10, delay: 5));
     await style.setLight(flatLight);
 
-    // TODO: use the correct light identifier once Maps SDK v11.1.0 is adopted
-    expect((await style.getStyleLightProperty("", "color")).value,
+    expect((await style.getStyleLightProperty("flat-light-id", "color")).value,
         listCloseTo(Colors.red.toRGBAList(), 0.0001));
-    expect((await style.getStyleLightProperty("", "color-transition")).value,
+    expect((await style.getStyleLightProperty("flat-light-id", "color-transition")).value,
         flatLight.colorTransition?.toJSON());
-    expect((await style.getStyleLightProperty("", "intensity")).value, 3);
+    expect((await style.getStyleLightProperty("flat-light-id", "intensity")).value, 3);
     expect(
-        (await style.getStyleLightProperty("", "intensity-transition")).value,
+        (await style.getStyleLightProperty("flat-light-id", "intensity-transition")).value,
         flatLight.intensityTransition?.toJSON());
     expect(
-        (await style.getStyleLightProperty("", "position")).value, [1, 2, 3]);
-    expect((await style.getStyleLightProperty("", "position-transition")).value,
+        (await style.getStyleLightProperty("flat-light-id", "position")).value, [1, 2, 3]);
+    expect((await style.getStyleLightProperty("flat-light-id", "position-transition")).value,
         flatLight.positionTransition?.toJSON());
   });
 
