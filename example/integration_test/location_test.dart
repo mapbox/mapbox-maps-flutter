@@ -48,7 +48,8 @@ void main() {
                 bearingImage: list,
                 topImage: list,
                 shadowImage: list,
-                scaleExpression: expression)));
+                scaleExpression: expression,
+                opacity: 0.5)));
 
     location.updateSettings(settings);
 
@@ -76,6 +77,8 @@ void main() {
     //     settings.locationPuck?.locationPuck2D?.bearingImage);
     expect(updatedSettings.locationPuck?.locationPuck2D?.scaleExpression,
         settings.locationPuck?.locationPuck2D?.scaleExpression);
+    expect(updatedSettings.locationPuck?.locationPuck2D?.opacity,
+        settings.locationPuck?.locationPuck2D?.opacity);
   });
 
   testWidgets('Location is updated puck 3d', (WidgetTester tester) async {
