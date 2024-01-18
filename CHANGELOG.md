@@ -3,6 +3,12 @@
 * Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
 * Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
 * Add `DefaultLocationPuck2D` type interchangeable with `LocationPuck2D` that allows customization of the default location indicator appearance.
+* Add `_AnnotationManager.removeAnnotationManagerById()` allowing to remove annotation manager by its id, without having to store a reference to the manager.
+* Fix point annotation image disappearing after update on iOS.
+* Bump Pigeon to v16.0.0.
+* Updater minimum Flutter SDK version to 3.10.0 and above.
+* Update minumum Dart SDK version to 3.0.0 and above.
+* Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
 * Fix 2D puck's opacity not being respected on iOS.
 * Make `padding` parameter optional in `MapboxMap.cameraForCoordinateBounds()` and `MapboxMap.cameraForCoordinates()`.
 * Bump platform Maps SDK dependencies to 11.1.0.
