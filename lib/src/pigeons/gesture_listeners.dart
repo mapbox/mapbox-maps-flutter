@@ -10,6 +10,7 @@ List<Object?> wrapResponse(
   }
   return <Object?>[error.code, error.message, error.details];
 }
+
 class _GestureListenerCodec extends StandardMessageCodec {
   const _GestureListenerCodec();
   @override

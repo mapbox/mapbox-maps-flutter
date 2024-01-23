@@ -33,6 +33,7 @@ class SymbolLayer extends Layer {
     this.symbolZOrder,
     this.textAllowOverlap,
     this.textAnchor,
+    this.textField,
     this.textFont,
     this.textIgnorePlacement,
     this.textJustify,
@@ -150,6 +151,9 @@ class SymbolLayer extends Layer {
 
   /// Part of the text placed closest to the anchor.
   TextAnchor? textAnchor;
+
+  /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+  String? textField;
 
   /// Font stack to use for displaying text.
   List<String?>? textFont;
@@ -338,6 +342,9 @@ class SymbolLayer extends Layer {
     if (textAnchor != null) {
       layout["text-anchor"] =
           textAnchor?.toString().split('.').last.toLowerCase();
+    }
+    if (textField != null) {
+      layout["text-field"] = textField;
     }
     if (textFont != null) {
       layout["text-font"] = textFont;
@@ -601,6 +608,7 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-anchor"])),
+      textField: map["layout"]["text-field"],
       textFont: (map["layout"]["text-font"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),

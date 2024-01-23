@@ -144,8 +144,8 @@ class MapboxMap extends ChangeNotifier {
       StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  late LocationSettings location =
-      LocationSettings(_LocationComponentSettingsInterface(
+  late LocationSettings location = LocationSettings(
+      _LocationComponentSettingsInterface(
           binaryMessenger: _proxyBinaryMessenger));
 
   late BinaryMessenger _proxyBinaryMessenger;
