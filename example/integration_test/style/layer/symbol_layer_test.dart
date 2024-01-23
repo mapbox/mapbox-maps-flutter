@@ -49,6 +49,7 @@ void main() {
       symbolZOrder: SymbolZOrder.AUTO,
       textAllowOverlap: true,
       textAnchor: TextAnchor.CENTER,
+      textField: "abc",
       textFont: ["a", "b", "c"],
       textIgnorePlacement: true,
       textJustify: TextJustify.AUTO,
@@ -114,6 +115,7 @@ void main() {
     expect(layer.symbolZOrder, SymbolZOrder.AUTO);
     expect(layer.textAllowOverlap, true);
     expect(layer.textAnchor, TextAnchor.CENTER);
+    expect(layer.textField, "abc");
     expect(layer.textFont, ["a", "b", "c"]);
     expect(layer.textIgnorePlacement, true);
     expect(layer.textJustify, TextJustify.AUTO);
