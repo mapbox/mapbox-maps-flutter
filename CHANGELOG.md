@@ -1,5 +1,7 @@
 ### main
 
+* Expose `StyleLayer.textField`. Use this field to assign a value that will be displayed as a text label for features associated with the layer.
+
 ### 1.0.0-beta.2
 
 * Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
