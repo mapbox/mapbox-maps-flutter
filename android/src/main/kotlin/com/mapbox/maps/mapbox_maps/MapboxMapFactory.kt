@@ -37,7 +37,7 @@ class MapboxMapFactory(
       mapOptions[4]?.let {
         mapOptionsBuilder.crossSourceCollisions(it as Boolean)
       }
-      mapOptions[6]?.let {
+      mapOptions[5]?.let {
         (it as ArrayList<Double>).let { size ->
           mapOptionsBuilder.size(
             Size(
@@ -47,10 +47,10 @@ class MapboxMapFactory(
           )
         }
       }
-      mapOptions[7]?.let {
+      mapOptions[6]?.let {
         mapOptionsBuilder.pixelRatio((it as Double).toFloat())
       }
-      mapOptions[8]?.let {
+      mapOptions[7]?.let {
         (it as ArrayList<Any?>).let { glyphs ->
           val builder = GlyphsRasterizationOptions.Builder()
           glyphs[1]?.let { fontFamily ->
