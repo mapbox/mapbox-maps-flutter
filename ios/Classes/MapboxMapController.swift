@@ -44,6 +44,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     }
 
     deinit {
+        channel.setMethodCallHandler(nil)
         SetUpFLTStyleManager(proxyBinaryMessenger, nil)
         SetUpFLT_CameraManager(proxyBinaryMessenger, nil)
         SetUpFLT_MapInterface(proxyBinaryMessenger, nil)
@@ -82,7 +83,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         )
 
         super.init()
-
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
 
         let styleController = StyleController(styleManager: mapboxMap)
