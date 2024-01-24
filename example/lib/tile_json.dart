@@ -48,8 +48,7 @@ class TileJsonWidgetState extends State<TileJsonWidget> {
         body: MapWidget(
       key: ValueKey("mapWidget"),
       cameraOptions: CameraOptions(
-          center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
-          zoom: 12.0),
+          center: Point(coordinates: Position(-80.1263, 25.7845)), zoom: 12.0),
       onMapCreated: _onMapCreated,
       onStyleLoadedListener: _onStyleLoaded,
     ));

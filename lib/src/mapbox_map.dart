@@ -17,6 +17,7 @@ class MapboxMap extends ChangeNotifier {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
+    this.onResourceRequestListener,
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
@@ -89,6 +90,11 @@ class MapboxMap extends ChangeNotifier {
         onStyleImageUnusedListener?.call(argument);
       });
     }
+    if (onResourceRequestListener != null) {
+      _mapboxMapsPlatform.onResourceRequestPlatform.add((argument) {
+        onResourceRequestListener?.call(argument);
+      });
+    }
     _setupGestures();
   }
 
@@ -139,13 +145,16 @@ class MapboxMap extends ChangeNotifier {
   /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
   final OnStyleImageUnusedListener? onStyleImageUnusedListener;
 
+  /// Invoked when map makes a request to load required resources.
+  final OnResourceRequestListener? onResourceRequestListener;
+
   /// The currently loaded Style]object.
   late StyleManager style =
       StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  late LocationSettings location =
-      LocationSettings(_LocationComponentSettingsInterface(
+  late LocationSettings location = LocationSettings(
+      _LocationComponentSettingsInterface(
           binaryMessenger: _proxyBinaryMessenger));
 
   late BinaryMessenger _proxyBinaryMessenger;
@@ -198,7 +207,7 @@ class MapboxMap extends ChangeNotifier {
 
   /// Convenience method that returns the `camera options` object for given parameters.
   Future<CameraOptions> cameraForCoordinatesPadding(
-    List<Map<String?, Object?>?> coordinates,
+    List<Point> coordinates,
     CameraOptions camera,
     MbxEdgeInsets? coordinatesPadding,
     double? maxZoom,
@@ -224,11 +233,9 @@ class MapboxMap extends ChangeNotifier {
           bounds, padding, bearing, pitch, maxZoom, offset);
 
   /// Convenience method that returns the `camera options` object for given parameters.
-  Future<CameraOptions> cameraForCoordinates(
-          List<Map<String?, Object?>?> coordinates,
-          MbxEdgeInsets padding,
-          double? bearing,
-          double? pitch) =>
+  @Deprecated('Use [cameraForCoordinatesPadding] instead')
+  Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
+          MbxEdgeInsets padding, double? bearing, double? pitch) =>
       _cameraManager.cameraForCoordinates(coordinates, padding, bearing, pitch);
 
   /// Convenience method that adjusts the provided `camera options` object for given parameters.
@@ -239,9 +246,7 @@ class MapboxMap extends ChangeNotifier {
   /// Note that this method may fail if the principal point of the projection is not inside the `box` or
   /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
-          List<Map<String?, Object?>?> coordinates,
-          CameraOptions camera,
-          ScreenBox box) =>
+          List<Point> coordinates, CameraOptions camera, ScreenBox box) =>
       _cameraManager.cameraForCoordinatesCameraOptions(
           coordinates, camera, box);
 
@@ -279,8 +284,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// The `screen coordinate` is in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<ScreenCoordinate> pixelForCoordinate(
-          Map<String?, Object?> coordinate) =>
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) =>
       _cameraManager.pixelForCoordinate(coordinate);
 
   /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
@@ -288,7 +292,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// The screen coordinate is in `logical pixels`relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<Map<String?, Object?>> coordinateForPixel(ScreenCoordinate pixel) =>
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) =>
       _cameraManager.coordinateForPixel(pixel);
 
   /// Calculates `screen coordinates` that correspond to geographical `coordinates`
@@ -297,7 +301,7 @@ class MapboxMap extends ChangeNotifier {
   /// The `screen coordinates` are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
-          List<Map<String?, Object?>?> coordinates) =>
+          List<Point> coordinates) =>
       _cameraManager.pixelsForCoordinates(coordinates);
 
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
@@ -305,8 +309,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<List<Map<String?, Object?>?>> coordinatesForPixels(
-          List<ScreenCoordinate?> pixels) =>
+  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
       _cameraManager.coordinatesForPixels(pixels);
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
@@ -459,7 +462,7 @@ class MapboxMap extends ChangeNotifier {
 
   /// Gets elevation for the given coordinate.
   /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
-  Future<double?> getElevation(Map<String?, Object?> coordinate) =>
+  Future<double?> getElevation(Point coordinate) =>
       _mapInterface.getElevation(coordinate);
 
   /// Will load a new map style asynchronous from the specified URI.

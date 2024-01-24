@@ -28,6 +28,14 @@ class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
+    mapboxMap.setCamera(CameraOptions(
+        center: Point(
+            coordinates: Position(
+          -103.94925008414447,
+          10.867890040082585,
+        )),
+        zoom: 1,
+        pitch: 0));
     _addLayerAndSource();
   }
 

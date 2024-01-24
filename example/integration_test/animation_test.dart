@@ -20,7 +20,7 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),
@@ -39,7 +39,7 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),
@@ -92,7 +92,7 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),

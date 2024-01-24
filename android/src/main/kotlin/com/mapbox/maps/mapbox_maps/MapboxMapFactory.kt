@@ -1,13 +1,25 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
-import com.mapbox.common.*
-import com.mapbox.maps.*
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.ConstrainMode
+import com.mapbox.maps.ContextMode
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.GlyphsRasterizationMode
+import com.mapbox.maps.GlyphsRasterizationOptions
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapOptions
+import com.mapbox.maps.NorthOrientation
+import com.mapbox.maps.ScreenCoordinate
+import com.mapbox.maps.Size
+import com.mapbox.maps.Style
+import com.mapbox.maps.ViewportMode
+import com.mapbox.maps.applyDefaultParams
+import com.mapbox.maps.mapbox_maps.mapping.turf.PointDecoder
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
-import java.lang.RuntimeException
 
 class MapboxMapFactory(
   private val messenger: BinaryMessenger,
@@ -37,7 +49,7 @@ class MapboxMapFactory(
       mapOptions[4]?.let {
         mapOptionsBuilder.crossSourceCollisions(it as Boolean)
       }
-      mapOptions[6]?.let {
+      mapOptions[5]?.let {
         (it as ArrayList<Double>).let { size ->
           mapOptionsBuilder.size(
             Size(
@@ -47,10 +59,10 @@ class MapboxMapFactory(
           )
         }
       }
-      mapOptions[7]?.let {
+      mapOptions[6]?.let {
         mapOptionsBuilder.pixelRatio((it as Double).toFloat())
       }
-      mapOptions[8]?.let {
+      mapOptions[7]?.let {
         (it as ArrayList<Any?>).let { glyphs ->
           val builder = GlyphsRasterizationOptions.Builder()
           glyphs[1]?.let { fontFamily ->
@@ -71,8 +83,8 @@ class MapboxMapFactory(
       cameraOptions[4]?.let {
         cameraOptionsBuilder.bearing(it as Double)
       }
-      (cameraOptions[0] as? Map<String, Any>?)?.let {
-        cameraOptionsBuilder.center(it.toPoint())
+      (cameraOptions[0] as? List<Any?>?)?.let {
+        cameraOptionsBuilder.center(PointDecoder.fromList(it))
       }
       cameraOptions[5]?.let {
         cameraOptionsBuilder.pitch(it as Double)

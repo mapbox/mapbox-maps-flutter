@@ -36,6 +36,8 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
+    mapboxMap.setCamera(CameraOptions(
+        center: Point(coordinates: Position(0, 0)), zoom: 1, pitch: 0));
     mapboxMap.annotations.createCircleAnnotationManager().then((value) {
       circleAnnotationManager = value;
       createOneAnnotation();

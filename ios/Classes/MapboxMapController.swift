@@ -86,47 +86,47 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
 
         let styleController = StyleController(styleManager: mapboxMap)
-        SetUpFLTStyleManager(proxyBinaryMessenger, styleController)
+        StyleManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: styleController)
 
         let cameraController = CameraController(withMapboxMap: mapboxMap)
-        SetUpFLT_CameraManager(proxyBinaryMessenger, cameraController)
+        _CameraManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: cameraController)
 
         let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap)
-        SetUpFLT_MapInterface(proxyBinaryMessenger, mapInterfaceController)
+        _MapInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: mapInterfaceController)
 
         let mapProjectionController = MapProjectionController()
-        SetUpFLTProjection(proxyBinaryMessenger, mapProjectionController)
+        ProjectionSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: mapProjectionController)
 
         let animationController = AnimationController(withMapView: mapView)
-        SetUpFLT_AnimationManager(proxyBinaryMessenger, animationController)
+        _AnimationManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: animationController)
 
         let locationController = LocationController(withMapView: mapView)
-        SetUpFLT_SETTINGS_LocationComponentSettingsInterface(proxyBinaryMessenger, locationController)
+        _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: locationController)
 
         gesturesController = GesturesController(withMapView: mapView)
-        SetUpFLT_SETTINGSGesturesSettingsInterface(proxyBinaryMessenger, gesturesController)
+        GesturesSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: gesturesController)
 
         let logoController = LogoController(withMapView: mapView)
-        SetUpFLT_SETTINGSLogoSettingsInterface(proxyBinaryMessenger, logoController)
+        LogoSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: logoController)
 
         let attributionController = AttributionController(withMapView: mapView)
-        SetUpFLT_SETTINGSAttributionSettingsInterface(proxyBinaryMessenger, attributionController)
+        AttributionSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: attributionController)
 
         let compassController = CompassController(withMapView: mapView)
-        SetUpFLT_SETTINGSCompassSettingsInterface(proxyBinaryMessenger, compassController)
+        CompassSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: compassController)
 
         let scaleBarController = ScaleBarController(withMapView: mapView)
-        SetUpFLT_SETTINGSScaleBarSettingsInterface(proxyBinaryMessenger, scaleBarController)
+        ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: scaleBarController)
 
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)
 
-        for eventType in eventTypes.compactMap({ FLT_MapEvent(rawValue: UInt($0)) }) {
+        for eventType in eventTypes.compactMap({ _MapEvent(rawValue: $0) }) {
             subscribeToEvent(eventType)
         }
     }
 
-    private func subscribeToEvent(_ event: FLT_MapEvent) {
+    private func subscribeToEvent(_ event: _MapEvent) {
         switch event {
         case .mapLoaded:
             mapboxMap.onMapLoaded.observe { [weak self] payload in
@@ -184,8 +184,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
             mapboxMap.onResourceRequest.observe { [weak self] payload in
                 self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
             }.store(in: &cancelables)
-        @unknown default:
-            fatalError("Event \(event) is not supported.")
         }
     }
 
@@ -228,6 +226,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     }
 }
 
-private extension FLT_MapEvent {
+private extension _MapEvent {
     var methodName: String { "event#\(rawValue)" }
 }

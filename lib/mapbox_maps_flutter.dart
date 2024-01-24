@@ -8,7 +8,10 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
+import 'package:turf/turf.dart' as turf;
 
 import 'src/proxy_binary_messenger.dart' show ProxyBinaryMessenger;
 
@@ -32,6 +35,7 @@ part 'src/pigeons/polyline_annotation_messager.dart';
 part 'src/pigeons/map_interfaces.dart';
 part 'src/pigeons/settings.dart';
 part 'src/pigeons/gesture_listeners.dart';
+part 'src/pigeons/log_backend.dart';
 part 'src/style/layer/background_layer.dart';
 part 'src/style/layer/circle_layer.dart';
 part 'src/style/layer/fill_extrusion_layer.dart';
@@ -51,3 +55,5 @@ part 'src/style/source/rasterdem_source.dart';
 part 'src/style/source/vector_source.dart';
 part 'src/style/style.dart';
 part 'src/location_settings.dart';
+part 'src/log_configuration.dart';
+part 'src/turf_adapters.dart';

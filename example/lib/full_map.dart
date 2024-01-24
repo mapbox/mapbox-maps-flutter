@@ -39,6 +39,10 @@ class FullMapState extends State<FullMap> {
     print("CameraChangedEventData: timestamp: ${data.timestamp}");
   }
 
+  _onResourceRequestListener(ResourceEventData data) {
+    print("ResourceEventData: time: ${data.timeInterval}");
+  }
+
   _onMapIdleListener(MapIdleEventData data) {
     print("MapIdleEventData: timestamp: ${data.timestamp}");
   }
@@ -115,7 +119,7 @@ class FullMapState extends State<FullMap> {
                   coordinates: Position(
                 6.0033416748046875,
                 43.70908256335716,
-              )).toJson(),
+              )),
               zoom: 3.0),
           styleUri: MapboxStyles.LIGHT,
           textureView: true,
@@ -133,6 +137,8 @@ class FullMapState extends State<FullMap> {
           onStyleDataLoadedListener: _onStyleDataLoadedListener,
           onStyleImageMissingListener: _onStyleImageMissingListener,
           onStyleImageUnusedListener: _onStyleImageUnusedListener,
+          onResourceRequestListener: _onResourceRequestListener,
+          onLongTapListener: (coordinate) {},
         ));
   }
 }
