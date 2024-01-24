@@ -1,5 +1,7 @@
 ### main
 
+* [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
+
 ### 1.0.0-beta.2
 
 * Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
