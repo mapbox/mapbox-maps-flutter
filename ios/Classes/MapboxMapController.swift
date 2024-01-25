@@ -43,22 +43,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         return mapView
     }
 
-    deinit {
-        channel.setMethodCallHandler(nil)
-        SetUpFLTStyleManager(proxyBinaryMessenger, nil)
-        SetUpFLT_CameraManager(proxyBinaryMessenger, nil)
-        SetUpFLT_MapInterface(proxyBinaryMessenger, nil)
-        SetUpFLTProjection(proxyBinaryMessenger, nil)
-        SetUpFLT_AnimationManager(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGS_LocationComponentSettingsInterface(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGSGesturesSettingsInterface(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGSLogoSettingsInterface(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGSAttributionSettingsInterface(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGSCompassSettingsInterface(proxyBinaryMessenger, nil)
-        SetUpFLT_SETTINGSScaleBarSettingsInterface(proxyBinaryMessenger, nil)
-        annotationController?.tearDown(messenger: proxyBinaryMessenger)
-    }
-
     init(
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
@@ -199,9 +183,28 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
             result(nil)
+        case "platform#releaseMethodChannels":
+            releaseMethodChannels()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+
+    private func releaseMethodChannels() {
+        channel.setMethodCallHandler(nil)
+        SetUpFLTStyleManager(proxyBinaryMessenger, nil)
+        SetUpFLT_CameraManager(proxyBinaryMessenger, nil)
+        SetUpFLT_MapInterface(proxyBinaryMessenger, nil)
+        SetUpFLTProjection(proxyBinaryMessenger, nil)
+        SetUpFLT_AnimationManager(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGS_LocationComponentSettingsInterface(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGSGesturesSettingsInterface(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGSLogoSettingsInterface(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGSAttributionSettingsInterface(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGSCompassSettingsInterface(proxyBinaryMessenger, nil)
+        SetUpFLT_SETTINGSScaleBarSettingsInterface(proxyBinaryMessenger, nil)
+        annotationController?.tearDown(messenger: proxyBinaryMessenger)
     }
 
     final class HttpUseragentInterceptor: HttpServiceInterceptorInterface {
