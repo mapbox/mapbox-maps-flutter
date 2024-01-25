@@ -139,7 +139,7 @@ class MapboxMapController(
 
   override fun dispose() { }
 
-   private fun releaseMethodChannels() {
+  private fun releaseMethodChannels() {
     lifecycleProvider.getLifecycle()?.removeObserver(this)
     mapView.onStop()
     mapView.onDestroy()
