@@ -121,6 +121,17 @@ class AnnotationController: ControllerDelegate {
         onPolylineAnnotationClickListener = FLTOnPolylineAnnotationClickListener.init(binaryMessenger: messenger)
     }
 
+    func tearDown(messenger: FlutterBinaryMessenger) {
+        SetUpFLT_CircleAnnotationMessager(messenger, nil)
+        SetUpFLT_PointAnnotationMessager(messenger, nil)
+        SetUpFLT_PolygonAnnotationMessager(messenger, nil)
+        SetUpFLT_PolylineAnnotationMessager(messenger, nil)
+        onPointAnnotationClickListener = nil
+        onCircleAnnotationClickListener = nil
+        onPolygonAnnotationClickListener = nil
+        onPolylineAnnotationClickListener = nil
+    }
+
     func getManager(managerId: String) throws -> AnnotationManager {
         if annotationManagers[managerId] == nil {
             throw AnnotationControllerError.noManagerFound

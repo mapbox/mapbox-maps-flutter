@@ -1,5 +1,6 @@
 ### main
 
+* [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
 
 ### 1.0.0-beta.2

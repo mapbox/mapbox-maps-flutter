@@ -137,18 +137,10 @@ class _MapboxMapsPlatform {
         '$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
-  void dispose() {
+  void dispose() async {
+    await _channel.invokeMethod('platform#releaseMethodChannels');
     _suffixesRegistry.releaseSuffix(_channelSuffix);
     _channel.setMethodCallHandler(null);
-  }
-
-  Future<void> addEventListener(_MapEvent event) async {
-    try {
-      await _channel
-          .invokeMethod('map#subscribe', <String, dynamic>{'event': event});
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
   }
 
   Future<dynamic> createAnnotationManager(String type,
