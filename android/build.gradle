@@ -34,6 +34,20 @@ rootProject.allprojects {
             }
         }
     }
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = token
+            }
+        }
+    }
 }
 
 apply plugin: 'com.android.library'
@@ -64,7 +78,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation ("com.mapbox.maps:android:11.1.0") {
+    implementation ("com.mapbox.maps:android:11.1.0-SNAPSHOT.0126T1121Z.kdz-snapshot-branch.d5839b2") {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 
