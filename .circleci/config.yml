@@ -29,7 +29,7 @@ commands:
 
 jobs:
   dummy:
-    executor: helsinki-google_pixel_6
+    executor: helsinki-google_pixel_4_xl
     steps:
       - run:
           name: "Dummy"
@@ -183,6 +183,60 @@ executors:
     resource_class: small
     docker:
       - image: cimg/python:3.7
+  helsinki-iphone_7:
+      resource_class: mapbox/helsinki-iphone_7
+      machine: true
+  helsinki-iphone_12:
+      resource_class: mapbox/helsinki-iphone_12
+      machine: true
+  helsinki-google_pixel_4_xl:
+      resource_class: mapbox/helsinki-google_pixel_4_xl
+      machine: true
+  helsinki-google_pixel_5:
+      resource_class: mapbox/helsinki-google_pixel_5
+      machine: true
   helsinki-google_pixel_6:
       resource_class: mapbox/helsinki-google_pixel_6
+      machine: true
+  helsinki-motorola_moto_g22:
+      resource_class: mapbox/helsinki-motorola_moto_g22
+      machine: true
+  helsinki-samsung_s22:
+      resource_class: mapbox/helsinki-samsung_s22
+      machine: true
+  helsinki-samsung_galaxy_a12:
+      resource_class: mapbox/helsinki-samsung_galaxy_a12
+      machine: true
+  helsinki-bmw_bench:
+      resource_class: mapbox/helsinki-bmw_bench
+      machine: true
+  helsinki-linux_x86_64_small:
+      resource_class: mapbox/helsinki-linux_x86_64_small
+      machine: true
+  helsinki-21mm_pana_t_entry_8inch:
+      resource_class: mapbox/helsinki-21mm_pana_t_entry_8inch
+      machine: true
+  helsinki-24mm_pana_t_prem_105inch_na:
+      resource_class: mapbox/helsinki-24mm_pana_t_prem_105inch_na
+      machine: true
+  helsinki-24mm_pana_t_prem_123inch_na:
+      resource_class: mapbox/helsinki-24mm_pana_t_prem_123inch_na
+      machine: true
+  helsinki-24mm_pana_t_prem_8inch_na:
+      resource_class: mapbox/helsinki-24mm_pana_t_entry_8inch_na
+      machine: true
+  helsinki-24mm_pana_t_entry_105inch_na:
+      resource_class: mapbox/helsinki-24mm_pana_t_entry_105inch_na
+      machine: true
+  helsinki-24mm_pana_l_entry_105inch_na:
+      resource_class: mapbox/helsinki-24mm_pana_l_entry_105inch_na
+      machine: true
+  helsinki-24mm_dten_t_entry_8inch_na:
+      resource_class: mapbox/helsinki-24mm_dten_t_entry_8inch_na
+      machine: true
+  helsinki-24mm_dten_t_entry_105inch_na:
+      resource_class: mapbox/helsinki-24mm_dten_t_entry_105inch_na
+      machine: true
+  helsinki-24mm_dten_t_prem_105inch_na:
+      resource_class: mapbox/helsinki-24mm_dten_t_prem_105inch_na
       machine: true
