@@ -29,7 +29,7 @@ commands:
 
 jobs:
   dummy:
-    executor: helsinki-google_pixel_4_xl
+    executor: helsinki-google_pixel_5
     steps:
       - run:
           name: "Dummy"
