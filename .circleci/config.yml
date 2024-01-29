@@ -164,6 +164,7 @@ jobs:
 workflows:
   build:
     jobs:
+      - dummy
       - build-android
       - run-android-tests-firebase:
           requires:
