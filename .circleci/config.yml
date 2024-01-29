@@ -183,3 +183,6 @@ executors:
     resource_class: small
     docker:
       - image: cimg/python:3.7
+  helsinki-google_pixel_6:
+      resource_class: mapbox/helsinki-google_pixel_6
+      machine: true
