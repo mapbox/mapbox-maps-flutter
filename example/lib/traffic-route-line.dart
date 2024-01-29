@@ -38,6 +38,9 @@ class RouteLineState extends State<RouteLine> {
       sourceId: "line",
       lineBorderColor: Colors.black.value,
     ));
+    // Defines a line-width, line-border-width and line-color at different zoom extents
+    // by interpolating exponentially between stops.
+    // Doc: https://docs.mapbox.com/style-spec/reference/expressions/
     await mapboxMap.style.setStyleLayerProperty(
         "line-layer",
         "line-width",
