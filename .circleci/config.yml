@@ -28,7 +28,12 @@ commands:
             - "9d:db:07:0b:62:81:11:c3:46:21:8e:fa:51:99:80:2d"
 
 jobs:
-
+  dummy:
+    executor: helsinki-google_pixel_6
+    steps:
+      - run:
+          name: "Dummy"
+          command: echo "Hello world"
   build-android:
     parameters:
       workspace-path:
