@@ -1,7 +1,9 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.google.gson.Gson
+import com.mapbox.bindgen.DataRef
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.layers.properties.generated.Anchor
@@ -16,6 +18,7 @@ import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
 import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.pigeons.FLTMapInterfaces.MbxImage
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjectionName
 import com.mapbox.maps.pigeons.FLTSettings
@@ -23,6 +26,7 @@ import com.mapbox.maps.plugin.ModelScaleMode
 import com.mapbox.maps.plugin.animation.MapAnimationOptions
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 // FLT to Android
 
@@ -30,7 +34,9 @@ fun FLTSettings.ModelScaleMode.toModelScaleMode(): ModelScaleMode {
   return when (this) {
     FLTSettings.ModelScaleMode.VIEWPORT -> ModelScaleMode.VIEWPORT
     FLTSettings.ModelScaleMode.MAP -> ModelScaleMode.MAP
-    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+    else -> {
+      throw java.lang.RuntimeException("Scale mode not supported: $this")
+    }
   }
 }
 
@@ -41,15 +47,18 @@ fun FLTMapInterfaces.TileStoreUsageMode.toTileStoreUsageMode(): TileStoreUsageMo
     FLTMapInterfaces.TileStoreUsageMode.READ_ONLY -> TileStoreUsageMode.READ_ONLY
   }
 }
+
 fun StyleProjectionName.toProjectionName(): ProjectionName {
   return when (this) {
     StyleProjectionName.GLOBE -> ProjectionName.GLOBE
     StyleProjectionName.MERCATOR -> ProjectionName.MERCATOR
   }
 }
+
 fun StyleProjection.toProjection(): com.mapbox.maps.extension.style.projection.generated.Projection {
   return Projection(name.toProjectionName())
 }
+
 fun FLTMapInterfaces.TransitionOptions.toStyleTransition(): StyleTransition {
   val builder = StyleTransition.Builder()
   duration?.let {
@@ -61,12 +70,14 @@ fun FLTMapInterfaces.TransitionOptions.toStyleTransition(): StyleTransition {
 
   return builder.build()
 }
+
 fun FLTMapInterfaces.Anchor.toAnchor(): Anchor {
   return when (this) {
     FLTMapInterfaces.Anchor.MAP -> Anchor.MAP
     FLTMapInterfaces.Anchor.VIEWPORT -> Anchor.VIEWPORT
   }
 }
+
 fun FLTMapInterfaces.FlatLight.toFlatLight(): FlatLight {
   return flatLight(id) {
     anchor?.let {
@@ -189,15 +200,20 @@ fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(context: Cont
         )
       )
     }
+
     FLTMapInterfaces.Type.LIST -> {
       val array: Array<Array<Double>> =
         Gson().fromJson(value, Array<Array<Double>>::class.java)
       RenderedQueryGeometry.valueOf(
         array.map {
-          ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
+          ScreenCoordinate(
+            it[0].toDevicePixels(context).toDouble(),
+            it[1].toDevicePixels(context).toDouble()
+          )
         }.toList()
       )
     }
+
     FLTMapInterfaces.Type.SCREEN_COORDINATE -> {
       val pointArray = Gson().fromJson(
         value,
@@ -295,17 +311,21 @@ fun FLTMapInterfaces.MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
 }
 
 fun FLTMapInterfaces.ScreenCoordinate.toScreenCoordinate(context: Context): ScreenCoordinate {
-  return ScreenCoordinate(x.toDevicePixels(context).toDouble(), y.toDevicePixels(context).toDouble())
+  return ScreenCoordinate(
+    x.toDevicePixels(context).toDouble(),
+    y.toDevicePixels(context).toDouble()
+  )
 }
 
-fun FLTMapInterfaces.CameraOptions.toCameraOptions(context: Context): CameraOptions = CameraOptions.Builder()
-  .anchor(anchor?.toScreenCoordinate(context))
-  .bearing(bearing)
-  .center(center?.toPoint())
-  .padding(padding?.toEdgeInsets(context))
-  .zoom(zoom)
-  .pitch(pitch)
-  .build()
+fun FLTMapInterfaces.CameraOptions.toCameraOptions(context: Context): CameraOptions =
+  CameraOptions.Builder()
+    .anchor(anchor?.toScreenCoordinate(context))
+    .bearing(bearing)
+    .center(center?.toPoint())
+    .padding(padding?.toEdgeInsets(context))
+    .zoom(zoom)
+    .pitch(pitch)
+    .build()
 
 fun FLTMapInterfaces.ScreenBox.toScreenBox(context: Context): ScreenBox =
   ScreenBox(min.toScreenCoordinate(context), max.toScreenCoordinate(context))
@@ -324,25 +344,32 @@ fun Map<String, Any>.toGeometry(): Geometry {
     this["type"] == "Point" -> {
       return Point.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "Polygon" -> {
       return Polygon.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiPolygon" -> {
       return MultiPolygon.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiPoint" -> {
       return MultiPoint.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiLineString" -> {
       return MultiLineString.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "LineString" -> {
       return LineString.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "GeometryCollection" -> {
       return GeometryCollection.fromJson(Gson().toJson(this))
     }
-    else -> throw(RuntimeException("Unsupported Geometry: ${Gson().toJson(this)}"))
+
+    else -> throw (RuntimeException("Unsupported Geometry: ${Gson().toJson(this)}"))
   }
 }
 
@@ -358,13 +385,17 @@ fun StyleTransition.toFLTTransitionOptions(): FLTMapInterfaces.TransitionOptions
     .setDuration(duration)
     .build()
 }
+
 fun ModelScaleMode.toFLTModelScaleMode(): FLTSettings.ModelScaleMode {
   return when (this) {
     ModelScaleMode.VIEWPORT -> FLTSettings.ModelScaleMode.VIEWPORT
     ModelScaleMode.MAP -> FLTSettings.ModelScaleMode.MAP
-    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+    else -> {
+      throw java.lang.RuntimeException("Scale mode not supported: $this")
+    }
   }
 }
+
 fun StylePropertyValue.toFLTStylePropertyValue(): FLTMapInterfaces.StylePropertyValue {
   return FLTMapInterfaces.StylePropertyValue.Builder()
     .setValue(value.toJson())
@@ -376,14 +407,18 @@ fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
   return when (this) {
     ProjectionName.GLOBE -> StyleProjectionName.GLOBE
     ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
-    else -> { throw java.lang.RuntimeException("Projection $this is not supported.") }
+    else -> {
+      throw java.lang.RuntimeException("Projection $this is not supported.")
+    }
   }
 }
+
 fun Projection.toFLTProjection(): StyleProjection {
   return StyleProjection.Builder()
     .setName(name.toFLTProjectionName())
     .build()
 }
+
 fun StyleObjectInfo.toFLTStyleObjectInfo(): FLTMapInterfaces.StyleObjectInfo {
   return FLTMapInterfaces.StyleObjectInfo.Builder()
     .setId(id)
@@ -428,6 +463,7 @@ fun QueriedRenderedFeature.toFLTQueriedRenderedFeature(): FLTMapInterfaces.Queri
     .setLayers(this.layers)
     .build()
 }
+
 fun QueriedSourceFeature.toFLTQueriedSourceFeature(): FLTMapInterfaces.QueriedSourceFeature {
   return FLTMapInterfaces.QueriedSourceFeature.Builder()
     .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
@@ -530,20 +566,22 @@ fun ScreenCoordinate.toFLTScreenCoordinate(context: Context): FLTMapInterfaces.S
     .build()
 }
 
-fun EdgeInsets.toFLTEdgeInsets(context: Context): FLTMapInterfaces.MbxEdgeInsets = FLTMapInterfaces.MbxEdgeInsets.Builder()
-  .setLeft(left.toLogicalPixels(context))
-  .setTop(top.toLogicalPixels(context))
-  .setBottom(bottom.toLogicalPixels(context))
-  .setRight(right.toLogicalPixels(context))
-  .build()
+fun EdgeInsets.toFLTEdgeInsets(context: Context): FLTMapInterfaces.MbxEdgeInsets =
+  FLTMapInterfaces.MbxEdgeInsets.Builder()
+    .setLeft(left.toLogicalPixels(context))
+    .setTop(top.toLogicalPixels(context))
+    .setBottom(bottom.toLogicalPixels(context))
+    .setRight(right.toLogicalPixels(context))
+    .build()
 
-fun CameraState.toCameraState(context: Context): FLTMapInterfaces.CameraState = FLTMapInterfaces.CameraState.Builder()
-  .setBearing(bearing)
-  .setPadding(padding.toFLTEdgeInsets(context))
-  .setPitch(pitch)
-  .setZoom(zoom)
-  .setCenter(center.toMap())
-  .build()
+fun CameraState.toCameraState(context: Context): FLTMapInterfaces.CameraState =
+  FLTMapInterfaces.CameraState.Builder()
+    .setBearing(bearing)
+    .setPadding(padding.toFLTEdgeInsets(context))
+    .setPitch(pitch)
+    .setZoom(zoom)
+    .setCenter(center.toMap())
+    .build()
 
 fun CoordinateBounds.toFLTCoordinateBounds(): FLTMapInterfaces.CoordinateBounds =
   FLTMapInterfaces.CoordinateBounds.Builder()
@@ -597,6 +635,7 @@ fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
       val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
       JSONObject(map).toMap().values.toList()
     }
+
     is JSONObject -> value.toMap()
     JSONObject.NULL -> null
     else -> value
@@ -605,4 +644,11 @@ fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
 
 fun Number.toLogicalPixels(context: Context): Double {
   return this.toDouble() / context.resources.displayMetrics.density
+}
+
+fun Bitmap.toMbxImage(): MbxImage {
+  val outputStream = ByteArrayOutputStream(byteCount)
+  compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+  return MbxImage.Builder().setWidth(width.toLong()).setHeight(height.toLong())
+    .setData(outputStream.toByteArray()).build()
 }
