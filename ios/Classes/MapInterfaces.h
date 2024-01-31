@@ -509,6 +509,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @property(nonatomic, assign) double  bottom;
 /// Padding from the right.
 @property(nonatomic, assign) double  right;
++ (FLTMbxEdgeInsets *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Various options for describing the viewpoint of a camera. All fields are
@@ -538,6 +540,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @property(nonatomic, strong, nullable) NSNumber * bearing;
 /// Pitch toward the horizon measured in degrees.
 @property(nonatomic, strong, nullable) NSNumber * pitch;
++ (FLTCameraOptions *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Describes the viewpoint of a camera.
@@ -561,6 +565,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @property(nonatomic, assign) double  bearing;
 /// Pitch toward the horizon measured in degrees.
 @property(nonatomic, assign) double  pitch;
++ (FLTCameraState *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Holds options to be used for setting `camera bounds`.
@@ -630,6 +636,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
 /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
 @property(nonatomic, assign) BOOL  infiniteBounds;
++ (FLTCoordinateBounds *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Options for enabling debugging features in a map.
@@ -729,6 +737,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @property(nonatomic, assign) double  x;
 /// A value representing the y position of this coordinate.
 @property(nonatomic, assign) double  y;
++ (FLTScreenCoordinate *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Describes the coordinate box on the screen, measured in `logical pixels`
@@ -766,6 +776,9 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 @property(nonatomic, assign) double  width;
 /// Height of the size.
 @property(nonatomic, assign) double  height;
++ (FLTSize *)fromList:(NSArray *)list;
+- (NSArray *)toList;
++ (nullable FLTSize *)nullableFromList:(NSArray *)list;
 @end
 
 /// Options for querying rendered features.
@@ -1084,6 +1097,8 @@ typedef NS_ENUM(NSUInteger, FLT_MapEvent) {
 /// alpha channel. This field should contain exactly `4 * width * height` bytes. It
 /// should consist of a sequence of scanlines.
 @property(nonatomic, strong) FlutterStandardTypedData * data;
++ (FLTMbxImage *)fromList:(NSArray *)list;
+- (NSArray *)toList;
 @end
 
 /// Describes the image stretch areas.
