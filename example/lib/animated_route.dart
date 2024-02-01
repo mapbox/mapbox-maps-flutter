@@ -186,7 +186,7 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
     final end = Point.fromJson((annotation.geometry)!.cast());
 
     final coordinates = await fetchRouteCoordinates(
-        start, end.coordinates, MapsDemo.ACCESS_TOKEN);
+        start, end.coordinates, MapsDemoState.ACCESS_TOKEN);
 
     drawRouteLowLevel(coordinates);
   }

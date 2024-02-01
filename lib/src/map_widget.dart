@@ -1,5 +1,33 @@
 part of mapbox_maps_flutter;
 
+/// A mode for platform MapView to be hosted in Flutter on Android platform.
+///
+/// As per https://github.com/flutter/flutter/wiki/Android-Platform-Views#selecting-a-mode
+@experimental
+enum AndroidPlatformViewHostingMode {
+  /// Texture Layer Hybrid Composition with fallback to Virtual Display,
+  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
+  TLHC_VD,
+
+  /// Use Texture Layer Hybrid Composition hosting mode with fallback to Hybrid Composition,
+  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
+  TLHC_HC,
+
+  /// Always use Hybrid Composition hosting mode.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Hybrid-Composition
+  HC,
+
+  /// Always use Virtual Display hosting mode.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Virtual-Display
+  VD,
+}
+
 /// A MapWidget provides an embeddable map interface.
 /// You use this class to display map information and to manipulate the map contents from your application.
 /// You can center the map on a given coordinate, specify the size of the area you want to display,
@@ -18,6 +46,7 @@ class MapWidget extends StatefulWidget {
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
     this.textureView = true,
+    this.androidHostingMode = AndroidPlatformViewHostingMode.HC,
     this.styleUri = MapboxStyles.STANDARD,
     this.gestureRecognizers,
     this.onMapCreated,
@@ -90,6 +119,11 @@ class MapWidget extends StatefulWidget {
   /// FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
   /// As a workaround default is true.
   final bool? textureView;
+
+  /// Controls the way the underlaying MapView is being hosted by Flutter on Android.
+  /// This setting has no effect on iOS.
+  @experimental
+  final AndroidPlatformViewHostingMode androidHostingMode;
 
   /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [Style.MAPBOX_STREETS].
   final String styleUri;
@@ -186,8 +220,8 @@ class _MapWidgetState extends State<MapWidget> {
       'mapboxPluginVersion': '1.0.0-beta.2'
     };
 
-    return _mapboxMapsPlatform.buildView(
-        creationParams, onPlatformViewCreated, widget.gestureRecognizers);
+    return (_mapboxMapsPlatform.buildView(widget.androidHostingMode,
+        creationParams, onPlatformViewCreated, widget.gestureRecognizers) as PlatformViewLink).createState().;
   }
 
   @override
