@@ -2,7 +2,7 @@ version: 2.1
 
 orbs: 
   flutter: circleci/flutter@2.0.2
-  macos: circleci/macos@2.4.0
+  macos: circleci/macos@2.4.1
   gcp-cli: circleci/gcp-cli@3.1.1
 
 commands:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.16.9
           app-dir: example
       - run:
           name: ktlint
@@ -96,17 +96,8 @@ jobs:
       - inject-netrc-credentials
       - add-mapbox-submodules-key
       - macos/install-rosetta
-      - run:
-          name: Use activesupport 7.0.8 so that Cocoapods works
-          command: |
-            # activesupport was pinned because of Cocoapods being incompatible with active support 7.0.10,
-            # more details here - https://github.com/CocoaPods/CocoaPods/issues/12081
-            # allegedly, this issue is resolved in https://github.com/CocoaPods/CocoaPods/pull/12082,
-            # pinning can be removed after the above fix is released
-            gem uninstall activesupport --version '>= 7.0.8' --ignore-dependencies
-            gem install activesupport --version '7.0.8'
       - flutter/install_sdk_and_pub:
-          version: 3.13.6
+          version: 3.16.9
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
@@ -172,7 +163,7 @@ executors:
   macos-xcode-latest:
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 15.0.0
+      xcode: 15.2.0
   firebase-test-runner:
     resource_class: small
     docker:
