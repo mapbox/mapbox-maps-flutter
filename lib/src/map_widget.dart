@@ -220,8 +220,8 @@ class _MapWidgetState extends State<MapWidget> {
       'mapboxPluginVersion': '1.0.0-beta.2'
     };
 
-    return (_mapboxMapsPlatform.buildView(widget.androidHostingMode,
-        creationParams, onPlatformViewCreated, widget.gestureRecognizers) as PlatformViewLink).createState().;
+    return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
+        creationParams, onPlatformViewCreated, widget.gestureRecognizers);
   }
 
   @override
