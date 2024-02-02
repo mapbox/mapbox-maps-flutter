@@ -57,15 +57,15 @@ void main() {
       expect(size.width, tester.binding.renderView.size.width);
       expect(size.height, tester.binding.renderView.size.height);
     });
-
-    testWidgets('reduceMemoryUse', (WidgetTester tester) async {
-      final mapFuture = app.main();
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
-
-      await mapboxMap.reduceMemoryUse();
-    });
   }
+
+  testWidgets('reduceMemoryUse', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+
+    await mapboxMap.reduceMemoryUse();
+  });
 
   testWidgets('triggerRepaint', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -88,59 +88,47 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var options = await mapboxMap.getMapOptions();
-    if (Platform.isAndroid) {
-      expect(options.orientation, NorthOrientation.UPWARDS);
-      expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
-      expect(options.contextMode, isNull);
-      expect(options.viewportMode, ViewportMode.DEFAULT);
-    }
+    expect(options.orientation, NorthOrientation.UPWARDS);
+    expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
+    expect(options.contextMode, isNull);
+    expect(options.viewportMode, ViewportMode.DEFAULT);
+
     expect(options.crossSourceCollisions, true);
     expect(options.pixelRatio, tester.binding.window.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, isNotNull);
     expect(options.size!.height, isNotNull);
-    if (Platform.isAndroid) {
-      await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
-      await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
-      await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
 
-      options = await mapboxMap.getMapOptions();
-      expect(options.orientation, NorthOrientation.DOWNWARDS);
-      expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
-      expect(options.viewportMode, ViewportMode.FLIPPED_Y);
-    }
+    await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
+    await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
+    await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
+
+    options = await mapboxMap.getMapOptions();
+    expect(options.orientation, NorthOrientation.DOWNWARDS);
+    expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
+    expect(options.viewportMode, ViewportMode.FLIPPED_Y);
   });
 
   testWidgets('isGestureInProgress', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    if (Platform.isAndroid) {
-      var isGestureInProgress = await mapboxMap.isGestureInProgress();
-      expect(isGestureInProgress, false);
-    }
+
+    expect(await mapboxMap.isGestureInProgress(), false);
+
     await mapboxMap.setGestureInProgress(true);
-    if (Platform.isAndroid) {
-      var isGestureInProgress = await mapboxMap.isGestureInProgress();
-      expect(isGestureInProgress, true);
-    }
+    expect(await mapboxMap.isGestureInProgress(), true);
   });
 
   testWidgets('isUserAnimationInProgress', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    if (Platform.isAndroid) {
-      var isUserAnimationInProgress =
-          await mapboxMap.isUserAnimationInProgress();
-      expect(isUserAnimationInProgress, false);
-    }
+
+    expect(await mapboxMap.isUserAnimationInProgress(), false);
+
     await mapboxMap.setUserAnimationInProgress(true);
-    if (Platform.isAndroid) {
-      var isUserAnimationInProgress =
-          await mapboxMap.isUserAnimationInProgress();
-      expect(isUserAnimationInProgress, true);
-    }
+    expect(await mapboxMap.isUserAnimationInProgress(), true);
   });
 
   testWidgets('debugOptions', (WidgetTester tester) async {

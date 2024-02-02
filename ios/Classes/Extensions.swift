@@ -3,7 +3,42 @@ import MapboxMaps
 import MapboxCoreMaps_Private
 
 let COORDINATES = "coordinates"
+
 // FLT to Mapbox
+
+extension FLTViewportMode {
+    func toViewportMode() -> ViewportMode {
+        switch self {
+        case .DEFAULT: return .default
+        case .FLIPPED_Y: return .flippedY
+        @unknown default: return .default
+        }
+    }
+}
+
+extension FLTConstrainMode {
+    func toConstrainMode() -> ConstrainMode {
+        switch self {
+        case .NONE: return .none
+        case .HEIGHT_ONLY: return .heightOnly
+        case .WIDTH_AND_HEIGHT: return .widthAndHeight
+        @unknown default: return .none
+        }
+    }
+}
+
+extension FLTNorthOrientation {
+    func toNorthOrientation() -> NorthOrientation {
+        switch self {
+        case .UPWARDS: return .upwards
+        case .RIGHTWARDS: return .rightwards
+        case .DOWNWARDS: return .downwards
+        case .LEFTWARDS: return .leftwards
+        @unknown default: return .upwards
+        }
+    }
+}
+
 extension FLTTileCacheBudgetInMegabytes {
     func toTileCacheBudgetInMegabytes() -> TileCacheBudgetInMegabytes {
         return .init(size: UInt64(size))
@@ -129,6 +164,40 @@ extension FLTMbxEdgeInsets {
 }
 
 // Mapbox to FLT
+
+extension ConstrainMode {
+    func toFLTConstrainMode() -> FLTConstrainMode {
+        switch self {
+        case .heightOnly: return .HEIGHT_ONLY
+        case .widthAndHeight: return .WIDTH_AND_HEIGHT
+        case .none: return .NONE
+        @unknown default: return .NONE
+        }
+    }
+}
+
+extension ViewportMode {
+    func toFLTViewportMode() -> FLTViewportMode {
+        switch self {
+        case .default: return .DEFAULT
+        case .flippedY: return .FLIPPED_Y
+        @unknown default: return .DEFAULT
+        }
+    }
+}
+
+extension NorthOrientation {
+    func toFLTNorthOrientation() -> FLTNorthOrientation {
+        switch self {
+        case .upwards: return .UPWARDS
+        case .leftwards: return .LEFTWARDS
+        case .rightwards: return .RIGHTWARDS
+        case .downwards: return .DOWNWARDS
+        @unknown default: return .UPWARDS
+        }
+    }
+}
+
 extension Feature {
     func toMap() -> [String: Any] {
         let jsonData = try! JSONEncoder().encode(geoJSONObject)
@@ -187,10 +256,10 @@ extension GlyphsRasterizationOptions {
 extension MapOptions {
     func toFLTMapOptions() -> FLTMapOptions {
         return FLTMapOptions.make(
-            withContextMode: .init(value: .SHARED),
-            constrainMode: .init(value: .NONE),
-            viewportMode: .init(value: .DEFAULT),
-            orientation: .init(value: .UPWARDS),
+            withContextMode: nil,
+            constrainMode: .init(value: __constrainMode.map { ConstrainMode(rawValue: $0.intValue) }??.toFLTConstrainMode() ?? .NONE),
+            viewportMode: .init(value: __viewportMode.map { ViewportMode(rawValue: $0.intValue) }??.toFLTViewportMode() ?? .DEFAULT),
+            orientation: .init(value: __orientation.map { NorthOrientation(rawValue: $0.intValue) }??.toFLTNorthOrientation() ?? .UPWARDS),
             crossSourceCollisions: NSNumber(value: self.crossSourceCollisions),
             size: self.size?.toFLTSize(),
             pixelRatio: Double(pixelRatio),

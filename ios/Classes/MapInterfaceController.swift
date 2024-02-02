@@ -78,8 +78,7 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     }
 
     func isGestureInProgressWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
-        return false
+        return NSNumber(value: mapboxMap.isGestureInProgress)
     }
 
     func setUserAnimationInProgressInProgress(_ inProgress: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
@@ -91,8 +90,7 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     }
 
     func isUserAnimationInProgressWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
-        return false
+        return NSNumber(value: mapboxMap.isAnimationInProgress)
     }
 
     func setPrefetchZoomDeltaDelta(_ delta: Int, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
@@ -104,15 +102,15 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     }
 
     func setNorthOrientationOrientation(_ orientation: FLTNorthOrientation, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
+        mapboxMap.setNorthOrientation(orientation.toNorthOrientation())
     }
 
     func setConstrainModeMode(_ mode: FLTConstrainMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
+        mapboxMap.setConstrainMode(mode.toConstrainMode())
     }
 
     func setViewportModeMode(_ mode: FLTViewportMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
+        mapboxMap.setViewportMode(mode.toViewportMode())
     }
 
     func getMapOptionsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTMapOptions? {
@@ -270,7 +268,7 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     }
 
     func reduceMemoryUseWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
+        mapboxMap.reduceMemoryUse()
     }
 
     func getElevationCoordinate(_ coordinate: [String: Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
