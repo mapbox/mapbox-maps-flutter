@@ -2,6 +2,7 @@
 
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
 * [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
+* Bump platform Maps SDK dependencies to 11.2.0-beta.1.
 
 ### 1.0.0-beta.2
 
