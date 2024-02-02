@@ -123,16 +123,10 @@ jobs:
             pushd example
 
             # required to init configs that pass environment variables to fastlane later
-            flutter build ios --config-only integration_test/all_test.dart \
-              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+            flutter test integration_test/all_test.dart \
+              --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
             popd # to repo root
-
-            bundle exec fastlane build_examples_tests
-      - persist_to_workspace:
-          root: << parameters.workspace-path >>
-          paths:
-            - build_products.zip
 
   run-ios-tests-firebase:
     parameters:
