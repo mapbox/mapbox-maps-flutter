@@ -15,9 +15,18 @@ import com.google.gson.TypeAdapterFactory
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.mapbox.common.*
-import com.mapbox.maps.*
+import com.mapbox.common.HttpRequest
+import com.mapbox.common.HttpRequestOrResponse
+import com.mapbox.common.HttpResponse
+import com.mapbox.common.HttpServiceFactory
+import com.mapbox.common.HttpServiceInterceptorInterface
+import com.mapbox.common.HttpServiceInterceptorRequestContinuation
+import com.mapbox.common.HttpServiceInterceptorResponseContinuation
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
+import com.mapbox.maps.mapbox_maps.snapshot.SnapshotController
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTSettings
 import io.flutter.plugin.common.BinaryMessenger
@@ -54,6 +63,7 @@ class MapboxMapController(
   private val attributionController = AttributionController(mapView)
   private val scaleBarController = ScaleBarController(mapView)
   private val compassController = CompassController(mapView)
+  private val snapshotController = SnapshotController(mapView,context)
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
   private val gson = GsonBuilder()
@@ -75,6 +85,7 @@ class MapboxMapController(
     FLTSettings.AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController)
     FLTSettings.ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController)
     FLTSettings.CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController)
+    snapshotController.setup(proxyBinaryMessenger)
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
@@ -153,6 +164,7 @@ class MapboxMapController(
     FLTSettings.CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
     FLTSettings.ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
     FLTSettings.AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
+    snapshotController.dispose(proxyBinaryMessenger)
   }
 
   override fun onStart(owner: LifecycleOwner) {

@@ -686,3 +686,28 @@ extension Optional {
         lhs = rhs
     }
 }
+
+extension UIImage {
+    
+    func toFLTMbxImage() -> FLTMbxImage {
+        let data = FlutterStandardTypedData(bytes: pngData()!)
+        return FLTMbxImage.make(withWidth: Int(size.width * scale), height: Int(size.height * scale), data: data)
+    }
+}
+
+extension MapboxMaps.CameraState {
+    func toFLTCameraState() -> FLTCameraState {
+        return FLTCameraState.make(
+            withCenter: ["coordinates": [center.longitude, center.latitude]],
+            padding: FLTMbxEdgeInsets.make(
+                withTop: padding.top,
+                left: padding.left,
+                bottom: padding.bottom,
+                right: padding.right
+            ),
+            zoom: zoom,
+            bearing: bearing,
+            pitch: pitch
+        )
+    }
+}

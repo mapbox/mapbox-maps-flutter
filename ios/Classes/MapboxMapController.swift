@@ -38,6 +38,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     private var gesturesController: GesturesController?
     private var proxyBinaryMessenger: ProxyBinaryMessenger
     private var cancelables = Set<AnyCancelable>()
+    private var snapshotController: SnapshotController?
 
     func view() -> UIView {
         return mapView
@@ -105,6 +106,9 @@ class MapboxMapController: NSObject, FlutterPlatformView {
 
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)
+        
+        snapshotController = SnapshotController(mapView: mapView)
+        snapshotController!.setup(messager: proxyBinaryMessenger)
 
         for eventType in eventTypes.compactMap({ FLT_MapEvent(rawValue: UInt($0)) }) {
             subscribeToEvent(eventType)
