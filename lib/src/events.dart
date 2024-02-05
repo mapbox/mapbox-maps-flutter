@@ -175,7 +175,7 @@ enum RenderMode {
   /// from the network or being parsed.
   PARTIAL,
 
-  /// The map is fully rendered.  */
+  /// The map is fully rendered.
   FULL
 }
 
@@ -295,7 +295,7 @@ class SourceRemovedEventData {
 
 /// The class for style-data-loaded event in Observer
 class StyleDataLoadedEventData {
-  /// The `timeInterval.begin` is when style data begins loading, and the `timeInterval.end` is when style data is loaded. */
+  /// The `timeInterval.begin` is when style data begins loading, and the `timeInterval.end` is when style data is loaded.
   final EventTimeInterval timeInterval;
 
   /// The 'type' property defines what kind of style has been loaded.
@@ -334,7 +334,7 @@ class StyleImageUnusedEventData {
 
 /// The class for style-loaded event in Observer
 class StyleLoadedEventData {
-  /// The `timeInterval.begin` is when the style begins loading, and the `timeInterval.end` is when the style is loaded. */
+  /// The `timeInterval.begin` is when the style begins loading, and the `timeInterval.end` is when the style is loaded.
   final EventTimeInterval timeInterval;
 
   StyleLoadedEventData.fromJson(Map<String, dynamic> json)
@@ -427,7 +427,7 @@ class Response {
   final bool noContent;
 
   /// "modified" property
-  final String? modified;
+  final DateTime? modified;
 
   /// "source" property
   final ResponseSourceType source;
@@ -436,7 +436,7 @@ class Response {
   final bool notModified;
 
   /// "expires" property
-  final String? expires;
+  final DateTime? expires;
 
   /// "size" property
   final int size;
@@ -448,10 +448,14 @@ class Response {
       : eTag = json['etag'],
         mustRevalidate = json['mustRevalidate'],
         noContent = json['noContent'],
-        modified = json['modified'],
+        modified = json['modified'] != null
+            ? DateTime.fromMicrosecondsSinceEpoch(json['modified'])
+            : null,
         source = ResponseSourceType.values[json['source']],
         notModified = json['notModified'],
-        expires = json['expires'],
+        expires = json['expires'] != null
+            ? DateTime.fromMicrosecondsSinceEpoch(json['expires'])
+            : null,
         size = json['size'],
         error = json['error'] != null ? Error.fromJson(json['error']) : null;
 }
@@ -496,9 +500,11 @@ class Request {
   final RequestPriority priority;
 
   Request.fromJson(Map<String, dynamic> json)
-      : loadingMethod = (json['loading-method'] as List<int>)
+      : loadingMethod = json['loadingMethod']
+            .cast<int>()
             .map((e) => RequestLoadingMethodType.values[e])
-            .toList(),
+            .toList()
+            .cast<RequestLoadingMethodType>(),
         url = json['url'],
         kind = RequestType.values[json['resource']],
         priority = RequestPriority.values[json['priority']];
@@ -538,9 +544,9 @@ enum RequestType {
 /// Describes priority for request object.
 /// @param value String value of this enum
 enum RequestPriority {
-  /// Regular priority. */
+  /// Regular priority.
   REGULAR,
 
-  /// low priority. */
+  /// low priority.
   LOW
 }

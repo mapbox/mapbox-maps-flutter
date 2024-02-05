@@ -174,8 +174,8 @@ extension ResponseInfo {
         result["mustRevalidate"] = mustRevalidate
         result["source"] = source.rawValue
         result["size"] = size
-        result["modified"] = modified
-        result["expires"] = expires
+        result["modified"] = modified?.microsecondsSince1970
+        result["expires"] = expires?.microsecondsSince1970
         result["etag"] = etag
         result["error"] = error?.toJSON
         return result
