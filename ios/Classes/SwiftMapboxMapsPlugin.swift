@@ -13,5 +13,16 @@ public class SwiftMapboxMapsPlugin: MapboxMapsPlugin {
                 result(FlutterMethodNotImplemented)
             }
         }
+
+        setupStaticChannels(with: registrar.messenger())
+    }
+
+    private static func setupStaticChannels(with binaryMessanger: FlutterBinaryMessenger) {
+        // Register MapboxMapsOptions and MapboxOptions
+        let mapboxOptionsController = MapboxOptionsController()
+        SetUpFLT_MapboxOptions(binaryMessanger, mapboxOptionsController)
+        SetUpFLT_MapboxMapsOptions(binaryMessanger, mapboxOptionsController)
+
+        LoggingController.setup(binaryMessanger)
     }
 }

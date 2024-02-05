@@ -32,6 +32,8 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     FLTMapInterfaces._MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
     FLTMapInterfaces._MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
 
+    LoggingController.setup(flutterPluginBinding.binaryMessenger)
+
     flutterPluginBinding
       .platformViewRegistry
       .registerViewFactory(

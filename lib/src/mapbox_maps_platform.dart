@@ -118,7 +118,6 @@ class _MapboxMapsPlatform {
     creationParams['channelSuffix'] = _channelSuffix;
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-
       switch (androidHostingMode) {
         case AndroidPlatformViewHostingMode.TLHC_VD:
         case AndroidPlatformViewHostingMode.TLHC_HC:

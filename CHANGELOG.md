@@ -1,3 +1,7 @@
+### main
+
+* Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
+
 ### 1.0.0-beta.3
 
 * Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
