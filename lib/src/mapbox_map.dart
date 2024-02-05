@@ -17,6 +17,7 @@ class MapboxMap extends ChangeNotifier {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
+    this.onResourceRequestListener,
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
@@ -89,6 +90,11 @@ class MapboxMap extends ChangeNotifier {
         onStyleImageUnusedListener?.call(argument);
       });
     }
+    if (onResourceRequestListener != null) {
+      _mapboxMapsPlatform.onResourceRequestPlatform.add((argument) {
+        onResourceRequestListener?.call(argument);
+      });
+    }
     _setupGestures();
   }
 
@@ -138,6 +144,9 @@ class MapboxMap extends ChangeNotifier {
 
   /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
   final OnStyleImageUnusedListener? onStyleImageUnusedListener;
+
+  /// Invoked when map makes a request to load required resources.
+  final OnResourceRequestListener? onResourceRequestListener;
 
   /// The currently loaded Style]object.
   late StyleManager style =

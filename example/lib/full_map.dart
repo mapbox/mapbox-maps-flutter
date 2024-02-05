@@ -39,6 +39,10 @@ class FullMapState extends State<FullMap> {
     print("CameraChangedEventData: timestamp: ${data.timestamp}");
   }
 
+  _onResourceRequestListener(ResourceEventData data) {
+    print("ResourceEventData: time: ${data.timeInterval}");
+  }
+
   _onMapIdleListener(MapIdleEventData data) {
     print("MapIdleEventData: timestamp: ${data.timestamp}");
   }
@@ -133,6 +137,7 @@ class FullMapState extends State<FullMap> {
           onStyleDataLoadedListener: _onStyleDataLoadedListener,
           onStyleImageMissingListener: _onStyleImageMissingListener,
           onStyleImageUnusedListener: _onStyleImageUnusedListener,
+          onResourceRequestListener: _onResourceRequestListener,
         ));
   }
 }

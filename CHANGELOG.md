@@ -1,6 +1,7 @@
 ### main
 
 * Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
+* Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
 
 ### 1.0.0-beta.3
 
