@@ -283,15 +283,25 @@ void main() {
 
     expect((await style.getStyleLightProperty("flat-light-id", "color")).value,
         listCloseTo(Colors.red.toRGBAList(), 0.0001));
-    expect((await style.getStyleLightProperty("flat-light-id", "color-transition")).value,
-        flatLight.colorTransition?.toJSON());
-    expect((await style.getStyleLightProperty("flat-light-id", "intensity")).value, 3);
     expect(
-        (await style.getStyleLightProperty("flat-light-id", "intensity-transition")).value,
+        (await style.getStyleLightProperty("flat-light-id", "color-transition"))
+            .value,
+        flatLight.colorTransition?.toJSON());
+    expect(
+        (await style.getStyleLightProperty("flat-light-id", "intensity")).value,
+        3);
+    expect(
+        (await style.getStyleLightProperty(
+                "flat-light-id", "intensity-transition"))
+            .value,
         flatLight.intensityTransition?.toJSON());
     expect(
-        (await style.getStyleLightProperty("flat-light-id", "position")).value, [1, 2, 3]);
-    expect((await style.getStyleLightProperty("flat-light-id", "position-transition")).value,
+        (await style.getStyleLightProperty("flat-light-id", "position")).value,
+        [1, 2, 3]);
+    expect(
+        (await style.getStyleLightProperty(
+                "flat-light-id", "position-transition"))
+            .value,
         flatLight.positionTransition?.toJSON());
   });
 

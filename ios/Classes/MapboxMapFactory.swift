@@ -7,11 +7,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
 
     init(withRegistrar registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
-
-        // Register MapboxMapsOptions and MapboxOptions
-        let mapboxOptionsController = MapboxOptionsController()
-        SetUpFLT_MapboxOptions(registrar.messenger(), mapboxOptionsController)
-        SetUpFLT_MapboxMapsOptions(registrar.messenger(), mapboxOptionsController)
     }
 
     func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {

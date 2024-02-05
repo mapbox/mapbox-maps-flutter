@@ -165,6 +165,18 @@ extension FLTMbxEdgeInsets {
 
 // Mapbox to FLT
 
+extension LoggingLevel {
+    func toFLTLoggingLevel() -> FLT_LOGGINGLoggingLevel {
+        switch self {
+        case .debug: return .debug
+        case .info: return .info
+        case .warning: return .warning
+        case .error: return .error
+        @unknown default: return .error
+        }
+    }
+}
+
 extension ConstrainMode {
     func toFLTConstrainMode() -> FLTConstrainMode {
         switch self {

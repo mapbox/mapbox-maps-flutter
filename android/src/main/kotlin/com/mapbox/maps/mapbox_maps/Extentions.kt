@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
+import com.mapbox.common.LoggingLevel
 import com.mapbox.geojson.*
 import com.mapbox.maps.*
 import com.mapbox.maps.extension.style.layers.properties.generated.Anchor
@@ -15,6 +16,7 @@ import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
+import com.mapbox.maps.pigeons.FLTLogBackend
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjection
 import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjectionName
@@ -352,6 +354,14 @@ fun Number.toDevicePixels(context: Context): Float {
 
 // Android to FLT
 
+fun LoggingLevel.toFLTLoggingLevel(): FLTLogBackend.LoggingLevel {
+  return when (this) {
+    LoggingLevel.DEBUG -> FLTLogBackend.LoggingLevel.DEBUG
+    LoggingLevel.INFO -> FLTLogBackend.LoggingLevel.INFO
+    LoggingLevel.WARNING -> FLTLogBackend.LoggingLevel.WARNING
+    LoggingLevel.ERROR -> FLTLogBackend.LoggingLevel.ERROR
+  }
+}
 fun StyleTransition.toFLTTransitionOptions(): FLTMapInterfaces.TransitionOptions {
   return FLTMapInterfaces.TransitionOptions.Builder()
     .setDelay(delay)

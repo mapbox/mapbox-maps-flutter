@@ -19,16 +19,22 @@ class LocationSettings {
   Future<void> updateSettings(LocationComponentSettings settings) async {
     if (settings.locationPuck == null) {
       // If locationPuck is not set, fallback to use DefaultLocationPuck2D.
-      settings.locationPuck = LocationPuck(locationPuck2D: DefaultLocationPuck2D());
+      settings.locationPuck =
+          LocationPuck(locationPuck2D: DefaultLocationPuck2D());
     }
-    _api.updateSettings(settings, settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D);
+    _api.updateSettings(settings,
+        settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D);
   }
 }
 
 /// Default 2D location indicator appearance.
 class DefaultLocationPuck2D extends LocationPuck2D {
-
   /// Creates an instance of the default 2D location indicator,
   /// allowing to customize apects of it([topImage], [bearingImage], [opacity] etc.).
-  DefaultLocationPuck2D({super.topImage, super.bearingImage, super.shadowImage, super.scaleExpression, super.opacity});
+  DefaultLocationPuck2D(
+      {super.topImage,
+      super.bearingImage,
+      super.shadowImage,
+      super.scaleExpression,
+      super.opacity});
 }
