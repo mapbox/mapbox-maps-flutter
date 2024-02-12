@@ -2,29 +2,26 @@ import Foundation
 import MapboxMaps
 import UIKit
 
-class MapProjectionController: NSObject, FLTProjection {
-    func getMetersPerPixel(atLatitudeLatitude latitude: Double, zoom: Double, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        let meters = Projection.metersPerPoint(for: latitude, zoom: zoom)
-        return NSNumber(value: meters)
+class MapProjectionController: Projection {
+    func getMetersPerPixelAtLatitude(latitude: Double, zoom: Double) throws -> Double {
+        return MapboxMaps.Projection.metersPerPoint(for: latitude, zoom: zoom)
     }
 
-    func projectedMeters(forCoordinateCoordinate coordinate: [String: Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTProjectedMeters? {
-        let projectedMeters = Projection.projectedMeters(for: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
-        return FLTProjectedMeters.make(withNorthing: projectedMeters.northing, easting: projectedMeters.easting)
+    func projectedMetersForCoordinate(coordinate: [String?: Any?]) throws -> ProjectedMeters {
+        let projectedMeters = MapboxMaps.Projection.projectedMeters(for: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
+        return ProjectedMeters(northing: projectedMeters.northing, easting: projectedMeters.easting)
     }
 
-    func coordinate(forProjectedMetersProjectedMeters projectedMeters: FLTProjectedMeters, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [String: Any]? {
-        let coordinate = Projection.coordinate(for: projectedMeters.toProjectedMeters())
-        return coordinate.toDict()
+    func coordinateForProjectedMeters(projectedMeters: ProjectedMeters) throws -> [String?: Any?] {
+        return MapboxMaps.Projection.coordinate(for: projectedMeters.toProjectedMeters()).toDict()
     }
 
-    func projectCoordinate(_ coordinate: [String: Any], zoomScale: Double, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTMercatorCoordinate? {
-        let coordinate = Projection.project(convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!, zoomScale: zoomScale)
+    func project(coordinate: [String?: Any?], zoomScale: Double) throws -> MercatorCoordinate {
+        let coordinate = MapboxMaps.Projection.project(convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!, zoomScale: zoomScale)
         return coordinate.toFLTMercatorCoordinate()
     }
 
-    func unprojectCoordinate(_ coordinate: FLTMercatorCoordinate, zoomScale: Double, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [String: Any]? {
-        let point = Projection.unproject(coordinate.toMercatorCoordinate(), zoomScale: zoomScale)
-        return point.toDict()
+    func unproject(coordinate: MercatorCoordinate, zoomScale: Double) throws -> [String?: Any?] {
+        return MapboxMaps.Projection.unproject(coordinate.toMercatorCoordinate(), zoomScale: zoomScale).toDict()
     }
 }

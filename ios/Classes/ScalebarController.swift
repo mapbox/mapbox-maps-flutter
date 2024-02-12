@@ -1,45 +1,45 @@
 import Foundation
 @_spi(Experimental) import MapboxMaps
-import UIKit
-class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
 
-    func updateSettingsSettings(_ settings: FLT_SETTINGSScaleBarSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        var scaleBar = mapView.ornaments.options.scaleBar
-        switch settings.position?.value {
-        case .BOTTOM_LEFT:
+final class ScaleBarController: ScaleBarSettingsInterface {
+
+    func updateSettings(settings: ScaleBarSettings) throws {
+        var scaleBar = ornaments.options.scaleBar
+        switch settings.position {
+        case .bOTTOMLEFT:
             scaleBar.position = .bottomLeading
-            scaleBar.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
-        case .BOTTOM_RIGHT:
+            scaleBar.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginBottom ?? 0)
+        case .bOTTOMRIGHT:
             scaleBar.position = .bottomTrailing
-            scaleBar.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginBottom?.CGFloat ?? 0.0)
-        case .TOP_LEFT, .none:
+            scaleBar.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginBottom ?? 0)
+        case .tOPLEFT, .none:
             scaleBar.position = .topLeading
-            scaleBar.margins = CGPoint(x: settings.marginLeft?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
-        case .TOP_RIGHT:
+            scaleBar.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginTop ?? 0)
+        case .tOPRIGHT:
             scaleBar.position = .topTrailing
-            scaleBar.margins = CGPoint(x: settings.marginRight?.CGFloat ?? 0.0, y: settings.marginTop?.CGFloat ?? 0.0)
+            scaleBar.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-        if let isMetric = settings.isMetricUnits?.boolValue {
+        if let isMetric = settings.isMetricUnits {
             scaleBar.useMetricUnits = isMetric
         }
         if let visible = settings.enabled {
-            scaleBar.visibility = visible.boolValue ? .adaptive : .hidden
+            scaleBar.visibility = visible ? .adaptive : .hidden
         }
 
-        mapView.ornaments.options.scaleBar = scaleBar
+        ornaments.options.scaleBar = scaleBar
     }
 
-    func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSScaleBarSettings? {
-        let options = mapView.ornaments.options.scaleBar
+    func getSettings() throws -> ScaleBarSettings {
+        let options = ornaments.options.scaleBar
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
 
-        let settings = FLT_SETTINGSScaleBarSettings.make(
-            withEnabled: NSNumber(value: mapView.ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden),
-            position: .init(value: position),
-            marginLeft: NSNumber(value: options.margins.x),
-            marginTop: NSNumber(value: options.margins.y),
-            marginRight: NSNumber(value: options.margins.x),
-            marginBottom: NSNumber(value: options.margins.y),
+        return ScaleBarSettings(
+            enabled: ornaments.options.scaleBar.visibility != OrnamentVisibility.hidden,
+            position: position,
+            marginLeft: options.margins.x,
+            marginTop: options.margins.y,
+            marginRight: options.margins.x,
+            marginBottom: options.margins.y,
             textColor: nil,
             primaryColor: nil,
             secondaryColor: nil,
@@ -48,32 +48,30 @@ class ScaleBarController: NSObject, FLT_SETTINGSScaleBarSettingsInterface {
             textBarMargin: nil,
             textBorderWidth: nil,
             textSize: nil,
-            isMetricUnits: NSNumber(value: mapView.ornaments.options.scaleBar.useMetricUnits),
+            isMetricUnits: ornaments.options.scaleBar.useMetricUnits,
             refreshInterval: nil,
             showTextBorder: nil,
             ratio: nil,
             useContinuousRendering: nil)
-
-        return settings
     }
 
-    func getFLT_SETTINGSOrnamentPosition(position: OrnamentPosition) -> FLT_SETTINGSOrnamentPosition {
+    func getFLT_SETTINGSOrnamentPosition(position: MapboxMaps.OrnamentPosition) -> OrnamentPosition {
         switch position {
         case .bottomLeading:
-            return .BOTTOM_LEFT
+            return .bOTTOMLEFT
         case  .bottomTrailing:
-            return .BOTTOM_RIGHT
+            return .bOTTOMRIGHT
         case .topLeading:
-            return .TOP_LEFT
+            return .tOPLEFT
         default:
-            return.TOP_RIGHT
+            return.tOPRIGHT
         }
     }
 
-    private var mapView: MapView
+    private var ornaments: OrnamentsManager
     private var cancelable: Cancelable?
 
     init(withMapView mapView: MapView) {
-        self.mapView = mapView
+        self.ornaments = mapView.ornaments
     }
 }

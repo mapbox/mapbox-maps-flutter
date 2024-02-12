@@ -1,113 +1,119 @@
 import Foundation
 import MapboxMaps
 import MapboxCoreMaps_Private
+import Flutter
 
 let COORDINATES = "coordinates"
 
+extension FlutterError: Error { }
+
 // FLT to Mapbox
 
-extension FLTViewportMode {
-    func toViewportMode() -> ViewportMode {
+extension ViewportMode {
+    func toViewportMode() -> MapboxCoreMaps.ViewportMode {
         switch self {
-        case .DEFAULT: return .default
-        case .FLIPPED_Y: return .flippedY
-        @unknown default: return .default
+        case .dEFAULT: return .default
+        case .fLIPPEDY: return .flippedY
         }
     }
 }
 
-extension FLTConstrainMode {
-    func toConstrainMode() -> ConstrainMode {
+extension ConstrainMode {
+    func toConstrainMode() -> MapboxCoreMaps.ConstrainMode {
         switch self {
-        case .NONE: return .none
-        case .HEIGHT_ONLY: return .heightOnly
-        case .WIDTH_AND_HEIGHT: return .widthAndHeight
-        @unknown default: return .none
+        case .nONE: return .none
+        case .hEIGHTONLY: return .heightOnly
+        case .wIDTHANDHEIGHT: return .widthAndHeight
         }
     }
 }
 
-extension FLTNorthOrientation {
-    func toNorthOrientation() -> NorthOrientation {
+extension NorthOrientation {
+    func toNorthOrientation() -> MapboxCoreMaps.NorthOrientation {
         switch self {
-        case .UPWARDS: return .upwards
-        case .RIGHTWARDS: return .rightwards
-        case .DOWNWARDS: return .downwards
-        case .LEFTWARDS: return .leftwards
-        @unknown default: return .upwards
+        case .uPWARDS: return .upwards
+        case .rIGHTWARDS: return .rightwards
+        case .dOWNWARDS: return .downwards
+        case .lEFTWARDS: return .leftwards
         }
     }
 }
 
-extension FLTTileCacheBudgetInMegabytes {
-    func toTileCacheBudgetInMegabytes() -> TileCacheBudgetInMegabytes {
+extension TileCacheBudgetInMegabytes {
+    func toTileCacheBudgetInMegabytes() -> MapboxMaps.TileCacheBudgetInMegabytes {
         return .init(size: UInt64(size))
     }
 }
 
-extension FLTTileCacheBudgetInTiles {
-    func toTileCacheBudgetInTiles() -> TileCacheBudgetInTiles {
+extension TileCacheBudgetInTiles {
+    func toTileCacheBudgetInTiles() -> MapboxMaps.TileCacheBudgetInTiles {
         return .init(size: UInt64(size))
     }
 }
 
-extension FLTSourceQueryOptions {
-    func toSourceQueryOptions() throws -> SourceQueryOptions {
-        //        let filterExp =  try JSONDecoder().decode(Expression.self, from: filter.data(using: .utf8)!)
-        return SourceQueryOptions(sourceLayerIds: sourceLayerIds, filter: filter)
+extension SourceQueryOptions {
+    func toSourceQueryOptions() throws -> MapboxMaps.SourceQueryOptions {
+        return MapboxMaps.SourceQueryOptions(sourceLayerIds: sourceLayerIds?.compactMap { $0 }, filter: filter)
     }
 }
-extension FLTRenderedQueryOptions {
-    func toRenderedQueryOptions() throws -> RenderedQueryOptions {
+extension RenderedQueryOptions {
+    func toRenderedQueryOptions() throws -> MapboxCoreMaps.RenderedQueryOptions {
         var filterExp: Exp?
         if filter != nil {
             // FIXME - WARNING HERE
             filterExp =  try JSONDecoder().decode(Expression.self, from: filter!.data(using: .utf8)!)
         }
-        return RenderedQueryOptions(layerIds: layerIds, filter: filterExp)
+        return MapboxCoreMaps.RenderedQueryOptions(layerIds: layerIds?.compactMap { $0 }, filter: filterExp)
     }
 }
-extension FLTMercatorCoordinate {
-    func toMercatorCoordinate() -> MercatorCoordinate {
-        return MercatorCoordinate(x: x, y: y)
+extension MercatorCoordinate {
+    func toMercatorCoordinate() -> MapboxMaps.MercatorCoordinate {
+        return MapboxMaps.MercatorCoordinate(x: x, y: y)
     }
 }
-extension FLTProjectedMeters {
-    func toProjectedMeters() -> ProjectedMeters {
-        return ProjectedMeters(northing: northing, easting: easting)
+extension ProjectedMeters {
+    func toProjectedMeters() -> MapboxMaps.ProjectedMeters {
+        return MapboxMaps.ProjectedMeters(northing: northing, easting: easting)
     }
 }
-extension FLTMapDebugOptions {
-    func toMapDebugOptions() -> MapDebugOptions {
-        return MapDebugOptions(rawValue: Int(self.data.rawValue))!
+extension MapDebugOptions {
+    func toMapDebugOptions() -> MapboxCoreMaps.MapDebugOptions {
+        return MapboxCoreMaps.MapDebugOptions(rawValue: Int(self.data.rawValue))!
     }
 }
-extension FLTCameraOptions {
+extension CameraOptions {
     func toCameraOptions() -> MapboxMaps.CameraOptions {
-        return CameraOptions(center: convertDictionaryToCLLocationCoordinate2D(dict: self.center), padding: self.padding?.toUIEdgeInsets(), anchor: self.anchor?.toCGPoint(), zoom: self.zoom?.CGFloat, bearing: self.bearing?.CLLocationDirection, pitch: self.pitch?.CGFloat)
+        return MapboxMaps.CameraOptions(
+            center: convertDictionaryToCLLocationCoordinate2D(dict: self.center),
+            padding: self.padding?.toUIEdgeInsets(),
+            anchor: self.anchor?.toCGPoint(),
+            zoom: self.zoom?.CGFloat,
+            bearing: self.bearing?.CLLocationDirection,
+            pitch: self.pitch?.CGFloat
+        )
     }
 }
 
-extension FLTCameraBoundsOptions {
+extension CameraBoundsOptions {
     func toCameraBoundsOptions() -> MapboxMaps.CameraBoundsOptions {
-        return CameraBoundsOptions(bounds: self.bounds?.toCoordinateBounds(), maxZoom: self.maxZoom?.CGFloat, minZoom: self.minZoom?.CGFloat, maxPitch: self.maxPitch?.CGFloat, minPitch: self.minPitch?.CGFloat)
-    }
-}
-extension FLTScreenBox {
-    func toScreenBox() -> ScreenBox {
-        return ScreenBox(min: self.min.toScreenCoordinate(), max: self.max.toScreenCoordinate())
-    }
-
-    func toCGRect() -> CGRect {
-        return toScreenBox().toCGRect()
+        return MapboxMaps.CameraBoundsOptions(
+            bounds: self.bounds?.toCoordinateBounds(),
+            maxZoom: maxZoom.map { CGFloat($0) },
+            minZoom: self.minZoom.map { CGFloat($0) },
+            maxPitch: self.maxPitch.map { CGFloat($0) },
+            minPitch: self.minPitch.map { CGFloat($0) }
+        )
     }
 }
 extension ScreenBox {
+    func toScreenBox() -> ScreenBox {
+        return ScreenBox(min: self.min.toScreenCoordinate(), max: self.max.toScreenCoordinate())
+    }
     func toCGRect() -> CGRect {
         return CGRect(x: min.x, y: min.y, width: max.x - min.x, height: max.y - min.y)
     }
 }
-extension FLTScreenCoordinate {
+extension ScreenCoordinate {
     func toScreenCoordinate() -> ScreenCoordinate {
         return ScreenCoordinate(x: self.x, y: self.y)
     }
@@ -116,44 +122,50 @@ extension FLTScreenCoordinate {
         return CGPoint(x: self.x, y: self.y)
     }
 }
-extension FLTCoordinateBounds {
-    func toCoordinateBounds() -> CoordinateBounds {
+extension CoordinateBounds {
+    func toCoordinateBounds() -> MapboxMaps.CoordinateBounds {
         let southwest = convertDictionaryToCLLocationCoordinate2D(dict: self.southwest)
         let northeast = convertDictionaryToCLLocationCoordinate2D(dict: self.northeast)
-        return CoordinateBounds(southwest: southwest!, northeast: northeast!)
+        return MapboxMaps.CoordinateBounds(southwest: southwest!, northeast: northeast!)
     }
 }
 
-extension FLTCanonicalTileID {
-    func toCanonicalTileID() -> CanonicalTileID {
-        return CanonicalTileID(z: UInt8(z), x: UInt32(x), y: UInt32(y))
+extension CanonicalTileID {
+    func toCanonicalTileID() -> MapboxMaps.CanonicalTileID {
+        return MapboxMaps.CanonicalTileID(z: UInt8(z), x: UInt32(x), y: UInt32(y))
     }
 }
 
-extension FLTLayerPosition {
+extension LayerPosition {
     func toLayerPosition() -> MapboxMaps.LayerPosition {
-        var position = LayerPosition.default
-        if self.above != nil {position = LayerPosition.above(self.above!)} else if self.below != nil {position = LayerPosition.below(self.below!)} else if self.at != nil {position = LayerPosition.at(Int(truncating: (self.at)!))}
+        var position = MapboxMaps.LayerPosition.default
+        if self.above != nil {
+            position = MapboxMaps.LayerPosition.above(self.above!)
+        } else if self.below != nil {
+            position = MapboxMaps.LayerPosition.below(self.below!)
+        } else if self.at != nil {
+            position = MapboxMaps.LayerPosition.at(Int(at!))
+        }
         return position
     }
 }
 
-extension FLTTransitionOptions {
-    func toTransitionOptions() -> TransitionOptions {
-        return TransitionOptions(
-            duration: self.duration?.doubleValue,
-            delay: self.delay?.doubleValue,
-            enablePlacementTransitions: self.enablePlacementTransitions?.boolValue)
+extension TransitionOptions {
+    func toTransitionOptions() -> MapboxMaps.TransitionOptions {
+        return MapboxMaps.TransitionOptions(
+            duration: self.duration.map(TimeInterval.init),
+            delay: self.delay.map(TimeInterval.init),
+            enablePlacementTransitions: self.enablePlacementTransitions)
     }
 
     func toStyleTransition() -> StyleTransition {
         return StyleTransition(
-            duration: self.duration.map { $0.doubleValue / 1000.0 } ?? 0,
-            delay: self.delay.map { $0.doubleValue / 1000.0 } ?? 0)
+            duration: self.duration.map { Double($0) / 1000.0 } ?? 0,
+            delay: self.delay.map { Double($0) / 1000.0 } ?? 0)
     }
 }
 
-extension FLTMbxEdgeInsets {
+extension MbxEdgeInsets {
     func toUIEdgeInsets() -> UIEdgeInsets {
         return UIEdgeInsets(
             top: self.top,
@@ -165,8 +177,8 @@ extension FLTMbxEdgeInsets {
 
 // Mapbox to FLT
 
-extension LoggingLevel {
-    func toFLTLoggingLevel() -> FLT_LOGGINGLoggingLevel {
+extension MapboxMaps.LoggingLevel {
+    func toFLTLoggingLevel() -> LoggingLevel {
         switch self {
         case .debug: return .debug
         case .info: return .info
@@ -177,35 +189,35 @@ extension LoggingLevel {
     }
 }
 
-extension ConstrainMode {
-    func toFLTConstrainMode() -> FLTConstrainMode {
+extension MapboxCoreMaps.ConstrainMode {
+    func toFLTConstrainMode() -> ConstrainMode {
         switch self {
-        case .heightOnly: return .HEIGHT_ONLY
-        case .widthAndHeight: return .WIDTH_AND_HEIGHT
-        case .none: return .NONE
-        @unknown default: return .NONE
+        case .heightOnly: return .hEIGHTONLY
+        case .widthAndHeight: return .wIDTHANDHEIGHT
+        case .none: return .nONE
+        @unknown default: return .nONE
         }
     }
 }
 
-extension ViewportMode {
-    func toFLTViewportMode() -> FLTViewportMode {
+extension MapboxCoreMaps.ViewportMode {
+    func toFLTViewportMode() -> ViewportMode {
         switch self {
-        case .default: return .DEFAULT
-        case .flippedY: return .FLIPPED_Y
-        @unknown default: return .DEFAULT
+        case .default: return .dEFAULT
+        case .flippedY: return .fLIPPEDY
+        @unknown default: return .dEFAULT
         }
     }
 }
 
-extension NorthOrientation {
-    func toFLTNorthOrientation() -> FLTNorthOrientation {
+extension MapboxCoreMaps.NorthOrientation {
+    func toFLTNorthOrientation() -> NorthOrientation {
         switch self {
-        case .upwards: return .UPWARDS
-        case .leftwards: return .LEFTWARDS
-        case .rightwards: return .RIGHTWARDS
-        case .downwards: return .DOWNWARDS
-        @unknown default: return .UPWARDS
+        case .upwards: return .uPWARDS
+        case .leftwards: return .lEFTWARDS
+        case .rightwards: return .rIGHTWARDS
+        case .downwards: return .dOWNWARDS
+        @unknown default: return .uPWARDS
         }
     }
 }
@@ -218,61 +230,61 @@ extension Feature {
         return convertStringToDictionary(properties: json!)
     }
 }
-extension FeatureExtensionValue {
-    func toFLTFeatureExtensionValue() -> FLTFeatureExtensionValue {
+extension MapboxCoreMaps.FeatureExtensionValue {
+    func toFLTFeatureExtensionValue() -> FeatureExtensionValue {
         let featureCollection = features?.map({$0.toMap()})
         var resultValue: String?
         if value != nil {resultValue = String(describing: value!)}
-        return FLTFeatureExtensionValue.make(withValue: resultValue, featureCollection: featureCollection)
+        return FeatureExtensionValue(value: resultValue, featureCollection: featureCollection)
     }
 }
-extension QueriedSourceFeature {
-    func toFLTQueriedSourceFeature() -> FLTQueriedSourceFeature {
-        return FLTQueriedSourceFeature.make(with: queriedFeature.toFLTQueriedFeature())
+extension MapboxMaps.QueriedSourceFeature {
+    func toFLTQueriedSourceFeature() -> QueriedSourceFeature {
+        return QueriedSourceFeature(queriedFeature: queriedFeature.toFLTQueriedFeature())
     }
 }
-extension QueriedRenderedFeature {
-    func toFLTQueriedRenderedFeature() -> FLTQueriedRenderedFeature {
-        return FLTQueriedRenderedFeature.make(with: queriedFeature.toFLTQueriedFeature(), layers: layers)
+extension MapboxMaps.QueriedRenderedFeature {
+    func toFLTQueriedRenderedFeature() -> QueriedRenderedFeature {
+        return QueriedRenderedFeature(queriedFeature: queriedFeature.toFLTQueriedFeature(), layers: layers)
     }
 }
-extension QueriedFeature {
-    func toFLTQueriedFeature() -> FLTQueriedFeature {
+extension MapboxMaps.QueriedFeature {
+    func toFLTQueriedFeature() -> QueriedFeature {
         let stateString = convertDictionaryToString(dict: state as? [String: Any])
-        return FLTQueriedFeature.make(withFeature: feature.toMap(), source: source, sourceLayer: sourceLayer, state: stateString)
+        return QueriedFeature(feature: feature.toMap(), source: source, sourceLayer: sourceLayer, state: stateString)
     }
 }
-extension MercatorCoordinate {
-    func toFLTMercatorCoordinate() -> FLTMercatorCoordinate {
-        return FLTMercatorCoordinate.makeWith(x: x, y: y)
+extension MapboxMaps.MercatorCoordinate {
+    func toFLTMercatorCoordinate() -> MercatorCoordinate {
+        return MercatorCoordinate(x: x, y: y)
     }
 }
-extension MapDebugOptions {
-    func toFLTMapDebugOptions() -> FLTMapDebugOptions {
-        let data = FLTMapDebugOptionsData(rawValue: UInt(self.rawValue))!
-        return FLTMapDebugOptions.make(with: data)
+extension MapboxMaps.MapDebugOptions {
+    func toFLTMapDebugOptions() -> MapDebugOptions {
+        let data = MapDebugOptionsData(rawValue: rawValue)!
+        return MapDebugOptions(data: data)
     }
 }
 
 extension CGSize {
-    func toFLTSize() -> FLTSize {
-        return FLTSize.make(withWidth: width, height: height)
+    func toFLTSize() -> Size {
+        return Size(width: width, height: height)
     }
 }
-extension GlyphsRasterizationOptions {
-    func toFLTGlyphsRasterizationOptions() -> FLTGlyphsRasterizationOptions {
-        let mode = FLTGlyphsRasterizationMode(rawValue: UInt(self.rasterizationMode.rawValue))
-        return FLTGlyphsRasterizationOptions.make(with: mode!, fontFamily: self.fontFamily)
+extension MapboxMaps.GlyphsRasterizationOptions {
+    func toFLTGlyphsRasterizationOptions() -> GlyphsRasterizationOptions {
+        let mode = GlyphsRasterizationMode(rawValue: rasterizationMode.rawValue)
+        return GlyphsRasterizationOptions(rasterizationMode: mode!, fontFamily: self.fontFamily)
     }
 }
-extension MapOptions {
-    func toFLTMapOptions() -> FLTMapOptions {
-        return FLTMapOptions.make(
-            withContextMode: nil,
-            constrainMode: .init(value: __constrainMode.map { ConstrainMode(rawValue: $0.intValue) }??.toFLTConstrainMode() ?? .NONE),
-            viewportMode: .init(value: __viewportMode.map { ViewportMode(rawValue: $0.intValue) }??.toFLTViewportMode() ?? .DEFAULT),
-            orientation: .init(value: __orientation.map { NorthOrientation(rawValue: $0.intValue) }??.toFLTNorthOrientation() ?? .UPWARDS),
-            crossSourceCollisions: NSNumber(value: self.crossSourceCollisions),
+extension MapboxMaps.MapOptions {
+    func toFLTMapOptions() -> MapOptions {
+        return MapOptions(
+            contextMode: nil,
+            constrainMode: __constrainMode.map { MapboxMaps.ConstrainMode(rawValue: $0.intValue) }??.toFLTConstrainMode() ?? .nONE,
+            viewportMode: __viewportMode.map { MapboxMaps.ViewportMode(rawValue: $0.intValue) }??.toFLTViewportMode() ?? .dEFAULT,
+            orientation: __orientation.map { MapboxMaps.NorthOrientation(rawValue: $0.intValue) }??.toFLTNorthOrientation() ?? .uPWARDS,
+            crossSourceCollisions: crossSourceCollisions,
             size: self.size?.toFLTSize(),
             pixelRatio: Double(pixelRatio),
             glyphsRasterizationOptions: self.glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions()
@@ -280,9 +292,9 @@ extension MapOptions {
     }
 }
 extension MapboxMaps.CameraBounds {
-    func toFLTCameraBounds() -> FLTCameraBounds {
-        return FLTCameraBounds.make(
-            with: self.bounds.toFLTCoordinateBounds(),
+    func toFLTCameraBounds() -> CameraBounds {
+        return CameraBounds(
+            bounds: self.bounds.toFLTCoordinateBounds(),
             maxZoom: maxZoom,
             minZoom: minZoom,
             maxPitch: maxPitch,
@@ -290,63 +302,67 @@ extension MapboxMaps.CameraBounds {
     }
 }
 extension CGPoint {
-    func toFLTScreenCoordinate() -> FLTScreenCoordinate {
-        return FLTScreenCoordinate.makeWith(x: x, y: y)
+    func toFLTScreenCoordinate() -> ScreenCoordinate {
+        return ScreenCoordinate(x: x, y: y)
     }
 }
-extension CoordinateBoundsZoom {
-    func toFLTCoordinateBoundsZoom() -> FLTCoordinateBoundsZoom {
-        return FLTCoordinateBoundsZoom.make(with: self.bounds.toFLTCoordinateBounds(), zoom: zoom)
+extension MapboxMaps.CoordinateBoundsZoom {
+    func toFLTCoordinateBoundsZoom() -> CoordinateBoundsZoom {
+        return CoordinateBoundsZoom(bounds: self.bounds.toFLTCoordinateBounds(), zoom: zoom)
     }
 }
-extension CoordinateBounds {
-    func toFLTCoordinateBounds() -> FLTCoordinateBounds {
-        FLTCoordinateBounds.make(
-            withSouthwest: southwest.toDict(),
+extension MapboxMaps.CoordinateBounds {
+    func toFLTCoordinateBounds() -> CoordinateBounds {
+        CoordinateBounds(
+            southwest: southwest.toDict(),
             northeast: northeast.toDict(),
             infiniteBounds: infiniteBounds)
     }
 }
 extension MapboxMaps.CameraOptions {
-    func toFLTCameraOptions() -> FLTCameraOptions {
+    func toFLTCameraOptions() -> CameraOptions {
         let center = self.center != nil ? self.center?.toDict(): nil
-        let padding = self.padding != nil ? FLTMbxEdgeInsets.make(
-            withTop: padding!.top,
+        let padding = self.padding != nil ? MbxEdgeInsets(
+            top: padding!.top,
             left: padding!.left,
             bottom: padding!.bottom,
             right: padding!.right) : nil
 
-        let anchor = self.anchor != nil ? FLTScreenCoordinate.makeWith(x: self.anchor!.x, y: self.anchor!.y) : nil
-        let zoom = self.zoom != nil ? NSNumber(value: self.zoom!) : nil
-        let bearing = self.bearing != nil ? NSNumber(value: self.bearing!) : nil
-        let pitch = self.pitch != nil ? NSNumber(value: self.pitch!) : nil
+        let anchor = self.anchor != nil ? ScreenCoordinate(x: self.anchor!.x, y: self.anchor!.y) : nil
 
-        return FLTCameraOptions.make(withCenter: center, padding: padding, anchor: anchor, zoom: zoom, bearing: bearing, pitch: pitch)
+        return CameraOptions(
+            center: center,
+            padding: padding,
+            anchor: anchor,
+            zoom: zoom.map(Double.init),
+            bearing: bearing,
+            pitch: pitch.map(Double.init)
+        )
     }
 }
-extension TransitionOptions {
-    func toFLTTransitionOptions() -> FLTTransitionOptions {
-        let duration = self.duration != nil ? NSNumber(value: Int(self.duration!)) : nil
-        let delay = self.delay != nil ? NSNumber(value: Int(self.delay!)) : nil
-        let enablePlacementTransitions = self.enablePlacementTransitions != nil ? NSNumber(value: self.enablePlacementTransitions!) : nil
-
-        return FLTTransitionOptions.make(withDuration: duration, delay: delay, enablePlacementTransitions: enablePlacementTransitions)
+extension MapboxMaps.TransitionOptions {
+    func toFLTTransitionOptions() -> TransitionOptions {
+        return TransitionOptions(
+            duration: duration.map(Int64.init),
+            delay: delay.map(Int64.init),
+            enablePlacementTransitions: enablePlacementTransitions
+        )
     }
 }
 
-extension StyleTransition {
-    func toFLTTransitionOptions() -> FLTTransitionOptions {
-        return FLTTransitionOptions.make(
-            withDuration: NSNumber(value: duration),
-            delay: NSNumber(value: delay),
+extension MapboxMaps.StyleTransition {
+    func toFLTTransitionOptions() -> TransitionOptions {
+        return TransitionOptions(
+            duration: Int64(duration),
+            delay: Int64(delay),
             enablePlacementTransitions: nil
         )
     }
 }
 
-extension StylePropertyValue {
-    func toFLTStylePropertyValue(property: String) -> FLTStylePropertyValue {
-        let data = FLTStylePropertyValueKind(rawValue: UInt(self.kind.rawValue))!
+extension MapboxMaps.StylePropertyValue {
+    func toFLTStylePropertyValue(property: String) -> StylePropertyValue {
+        let data = StylePropertyValueKind(rawValue: kind.rawValue)!
         let convertedValue: Any?
         switch value {
         case is [AnyHashable: Any], is [Any], is NSNumber:
@@ -356,11 +372,11 @@ extension StylePropertyValue {
         default:
             convertedValue = String(describing: value)
         }
-        return FLTStylePropertyValue.make(withValue: convertedValue, kind: data)
+        return StylePropertyValue(value: convertedValue, kind: data)
     }
 }
 
-extension Geometry {
+extension MapboxMaps.Geometry {
 
     func toMap() -> [String: Any] {
         switch self {
@@ -396,33 +412,33 @@ extension CLLocationCoordinate2D {
         return [COORDINATES: [self.longitude, self.latitude]]
     }
 
-    func toFLTScreenCoordinate() -> FLTScreenCoordinate {
-        return FLTScreenCoordinate.makeWith(x: longitude, y: latitude)
+    func toFLTScreenCoordinate() -> ScreenCoordinate {
+        return ScreenCoordinate(x: longitude, y: latitude)
     }
 }
 
-func convertDictionaryToCLLocationCoordinate2D(dict: [String: Any]?) -> CLLocationCoordinate2D? {
+func convertDictionaryToCLLocationCoordinate2D(dict: [String?: Any?]?) -> CLLocationCoordinate2D? {
     if dict == nil { return nil}
     let coordinates = dict![COORDINATES] as? [Any]
 
     return CLLocationCoordinate2D(latitude: coordinates?.last as? CLLocationDegrees ?? 0, longitude: coordinates?.first as? CLLocationDegrees ?? 0)
 }
 
-func convertDictionaryToPolygon(dict: [String: Any]) -> Polygon {
+func convertDictionaryToPolygon(dict: [String?: Any?]) -> Polygon {
     let coordinates = dict[COORDINATES] as? [[[CLLocationDegrees]]]
     let coordinatesList = coordinates.map({$0.map({$0.map({CLLocationCoordinate2D(latitude: $0.last!, longitude: $0.first!)})})})!
 
     return Polygon(coordinatesList)
 }
 
-func convertDictionaryToPolyline(dict: [String: Any]) -> LineString {
+func convertDictionaryToPolyline(dict: [String?: Any?]) -> LineString {
     let coordinates = dict[COORDINATES] as? [[CLLocationDegrees]]
 
     let coordinatesList = coordinates.map({$0.map({CLLocationCoordinate2D(latitude: $0.last!, longitude: $0.first!)})})!
     return LineString(coordinatesList)
 }
 
-func convertDictionaryToCGPoint(dict: [String: Any]?) -> CGPoint? {
+func convertDictionaryToCGPoint(dict: [String?: Any?]?) -> CGPoint? {
     if dict == nil { return nil}
     let coordinates = dict![COORDINATES] as? [Any]
     return CGPoint(x: coordinates![0] as? CGFloat ?? 0, y: coordinates![1] as? CGFloat ?? 0)
@@ -444,7 +460,7 @@ func convertStringToArray(properties: String) -> [Any] {
     return result
 }
 
-func convertDictionaryToString(dict: [String: Any]?) -> String {
+func convertDictionaryToString(dict: [String?: Any?]?) -> String {
     var result: String = ""
     if dict == nil { return result }
     do {
@@ -459,7 +475,7 @@ func convertDictionaryToString(dict: [String: Any]?) -> String {
     return result
 }
 
-func convertDictionaryToGeometry(dict: [String: Any]?) -> Geometry? {
+func convertDictionaryToGeometry(dict: [String?: Any?]?) -> Geometry? {
     do {
         let jsonData = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let geometry = try JSONDecoder().decode(Geometry.self, from: jsonData)
@@ -469,7 +485,7 @@ func convertDictionaryToGeometry(dict: [String: Any]?) -> Geometry? {
     }
 }
 
-func convertDictionaryToFeature(dict: [String: Any]) -> Feature? {
+func convertDictionaryToFeature(dict: [String?: Any?]) -> Feature? {
     do {
         let jsonData = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let feature = try JSONDecoder().decode(Feature.self, from: jsonData)
@@ -479,7 +495,7 @@ func convertDictionaryToFeature(dict: [String: Any]) -> Feature? {
     }
 }
 
-func uiColorFromHex(rgbValue: Int) -> UIColor {
+func uiColorFromHex(rgbValue: Int64) -> UIColor {
 
     // &  binary AND operator to zero out other color values
     // >>  bitwise right shift operator
@@ -525,13 +541,13 @@ extension RawRepresentable where RawValue == UInt {
     }
 }
 
-extension NSNumber {
+extension Double {
     internal var CGFloat: CGFloat {
-        CoreGraphics.CGFloat(doubleValue)
+        CoreGraphics.CGFloat(self)
     }
 
     internal var CLLocationDirection: CLLocationDirection {
-        CoreLocation.CLLocationDirection(doubleValue)
+        CoreLocation.CLLocationDirection(self)
     }
 }
 
@@ -546,19 +562,25 @@ extension String {
 // MARK: StyleColor
 
 extension StyleColor {
-
-    var nsNumberValue: NSNumber? {
+    var intValue: Int64? {
         do {
             let color = try SupportedStyleColor(styleColor: self)
-            return NSNumber(value: color.intValue)
+            return Int64(color.intValue)
         } catch {
             return nil
         }
     }
 
-    init(rgb: Int) {
+    init?(rgb: Int64?) {
+        guard let rgb else { return nil }
+
         self.init(uiColorFromHex(rgbValue: rgb))
     }
+
+    init(rgb: Int64) {
+        self.init(uiColorFromHex(rgbValue: rgb))
+    }
+
 }
 
 /// - Note: Current supports HSL(A) and RGB(A) color values.
@@ -662,17 +684,16 @@ struct SupportedStyleColor: Encodable {
 
 // MARK: Style Projection
 
-extension StyleProjectionName {
+extension MapboxMaps.StyleProjectionName {
 
-    init(_ fltValue: FLTStyleProjectionName) {
+    init(_ fltValue: StyleProjectionName) {
         switch fltValue {
         case .mercator: self = .mercator
         case .globe: self = .globe
-        @unknown default: self.init(rawValue: "undefined")
         }
     }
 
-    func toFLTStyleProjectionName() -> FLTStyleProjectionName? {
+    func toFLTStyleProjectionName() -> StyleProjectionName? {
         switch self {
         case .globe: return .globe
         case .mercator: return .mercator
@@ -681,10 +702,10 @@ extension StyleProjectionName {
     }
 }
 
-extension StyleProjection {
+extension MapboxMaps.StyleProjection {
 
-    func toFLTStyleProjection() -> FLTStyleProjection? {
-        name.toFLTStyleProjectionName().map(FLTStyleProjection.make(with:))
+    func toFLTStyleProjection() -> StyleProjection? {
+        name.toFLTStyleProjectionName().map(StyleProjection.init(name:))
     }
 }
 

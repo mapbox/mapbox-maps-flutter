@@ -1,5 +1,5 @@
 import Foundation
-import MapboxCoreMaps
+import MapboxMaps
 
 protocol MapEventEncodable {
     var toJSON: [String: Any?] { get }
@@ -15,7 +15,7 @@ extension EventTimeInterval {
     }
 }
 
-extension CanonicalTileID {
+extension MapboxMaps.CanonicalTileID {
     var toJSON: [String: Any] {
         [
             "x": x,

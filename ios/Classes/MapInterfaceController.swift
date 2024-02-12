@@ -1,58 +1,58 @@
 import Foundation
 @_spi(Experimental) import MapboxMaps
 import MapboxCoreMaps_Private
-import UIKit
+import Flutter
 
-class MapInterfaceController: NSObject, FLT_MapInterface {
+final class MapInterfaceController: _MapInterface {
     private static let errorCode = "0"
     private var mapboxMap: MapboxMap
     init(withMapboxMap mapboxMap: MapboxMap) {
         self.mapboxMap = mapboxMap
     }
 
-    func loadStyleURIStyleURI(_ styleURI: String, completion: @escaping (FlutterError?) -> Void) {
+    func loadStyleURI(styleURI: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.mapboxMap.loadStyle(StyleURI(rawValue: styleURI)!) { error in
             if let error {
-                completion(FlutterError(
+                completion(.failure(FlutterError(
                     code: "loadStyleUriError",
                     message: error.localizedDescription,
                     details: nil
-                ))
+                )))
             } else {
-                completion(nil)
+                completion(.success(()))
             }
         }
     }
 
-    func loadStyleJsonStyleJson(_ styleJson: String, completion: @escaping (FlutterError?) -> Void) {
+    func loadStyleJson(styleJson: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.mapboxMap.loadStyle(styleJson) { error in
             if let error {
-                completion(FlutterError(
+                completion(.failure(FlutterError(
                     code: "loadStyleUriError",
                     message: error.localizedDescription,
                     details: nil
-                ))
+                )))
             } else {
-                completion(nil)
+                completion(.success(()))
             }
         }
     }
 
-    func clearData(completion: @escaping (FlutterError?) -> Void) {
+    func clearData(completion: @escaping (Result<Void, Error>) -> Void) {
         MapboxMap.clearData { error in
             if let error {
-                completion(FlutterError(
+                completion(.failure(FlutterError(
                     code: "clearDataError",
                     message: error.localizedDescription,
                     details: nil
-                ))
+                )))
             } else {
-                completion(nil)
+                completion(.success(()))
             }
         }
     }
 
-    func setTileCacheBudgetTileCacheBudgetInMegabytes(_ tileCacheBudgetInMegabytes: FLTTileCacheBudgetInMegabytes?, tileCacheBudgetInTiles: FLTTileCacheBudgetInTiles?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setTileCacheBudget(tileCacheBudgetInMegabytes: TileCacheBudgetInMegabytes?, tileCacheBudgetInTiles: TileCacheBudgetInTiles?) throws {
         if let tileCacheBudgetInMegabytes {
             self.mapboxMap.setTileCacheBudget(TileCacheBudget.fromTileCacheBudget(tileCacheBudgetInMegabytes.toTileCacheBudgetInMegabytes()))
         } else if let tileCacheBudgetInTiles {
@@ -60,16 +60,15 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         }
     }
 
-    func getSizeWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTSize? {
-        error.pointee = FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
-        return nil
+    func getSize() throws -> Size {
+        throw FlutterError(code: MapInterfaceController.errorCode, message: "Not available.", details: nil)
     }
 
-    func triggerRepaintWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func triggerRepaint() throws {
         self.mapboxMap.triggerRepaint()
     }
 
-    func setGestureInProgressInProgress(_ inProgress: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setGestureInProgress(inProgress: Bool) throws {
         if inProgress {
             self.mapboxMap.beginGesture()
         } else {
@@ -77,11 +76,11 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         }
     }
 
-    func isGestureInProgressWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        return NSNumber(value: mapboxMap.isGestureInProgress)
+    func isGestureInProgress() throws -> Bool {
+        return mapboxMap.isGestureInProgress
     }
 
-    func setUserAnimationInProgressInProgress(_ inProgress: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setUserAnimationInProgress(inProgress: Bool) throws {
         if inProgress {
             self.mapboxMap.beginAnimation()
         } else {
@@ -89,45 +88,45 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
         }
     }
 
-    func isUserAnimationInProgressWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        return NSNumber(value: mapboxMap.isAnimationInProgress)
+    func isUserAnimationInProgress() throws -> Bool {
+        return mapboxMap.isAnimationInProgress
     }
 
-    func setPrefetchZoomDeltaDelta(_ delta: Int, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setPrefetchZoomDelta(delta: Int64) throws {
         self.mapboxMap.prefetchZoomDelta = UInt8(delta)
     }
 
-    func getPrefetchZoomDeltaWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        return NSNumber(value: self.mapboxMap.prefetchZoomDelta)
+    func getPrefetchZoomDelta() throws -> Int64 {
+        return Int64(self.mapboxMap.prefetchZoomDelta)
     }
 
-    func setNorthOrientationOrientation(_ orientation: FLTNorthOrientation, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setNorthOrientation(orientation: NorthOrientation) throws {
         mapboxMap.setNorthOrientation(orientation.toNorthOrientation())
     }
 
-    func setConstrainModeMode(_ mode: FLTConstrainMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setConstrainMode(mode: ConstrainMode) throws {
         mapboxMap.setConstrainMode(mode.toConstrainMode())
     }
 
-    func setViewportModeMode(_ mode: FLTViewportMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setViewportMode(mode: ViewportMode) throws {
         mapboxMap.setViewportMode(mode.toViewportMode())
     }
 
-    func getMapOptionsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTMapOptions? {
+    func getMapOptions() throws -> MapOptions {
         return self.mapboxMap.options.toFLTMapOptions()
     }
 
-    func getDebugWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> [FLTMapDebugOptions]? {
+    func getDebug() throws -> [MapDebugOptions?] {
         return self.mapboxMap.debugOptions.map {$0.toFLTMapDebugOptions()}
     }
 
-    func setDebugDebugOptions(_ debugOptions: [FLTMapDebugOptions], value: Bool, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        self.mapboxMap.debugOptions = debugOptions.map {$0.toMapDebugOptions()}
+    func setDebug(debugOptions: [MapDebugOptions?], value: Bool) throws {
+        self.mapboxMap.debugOptions = debugOptions.compactMap {$0?.toMapDebugOptions()}
     }
 
-    func queryRenderedFeaturesGeometry(_ geometry: FLTRenderedQueryGeometry, options: FLTRenderedQueryOptions, completion: @escaping ([FLTQueriedRenderedFeature]?, FlutterError?) -> Void) {
+    func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {
         do {
-            if geometry.type == FLTType.SCREEN_BOX {
+            if geometry.type == .sCREENBOX {
                 let screenBoxArray = convertStringToArray(properties: geometry.value)
                 guard let minCoord = screenBoxArray[0] as? [Double] else {return}
                 guard let maxCoord = screenBoxArray[1] as? [Double] else {return}
@@ -139,21 +138,21 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
                 self.mapboxMap.queryRenderedFeatures(with: cgRect, options: queryOptions) { result in
                     switch result {
                     case .success(let features):
-                        completion(features.map({$0.toFLTQueriedRenderedFeature()}), nil)
+                        completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))
                     case .failure(let error):
-                        completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                        completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                     }
                 }
-            } else if geometry.type == FLTType.SCREEN_COORDINATE {
+            } else if geometry.type == .sCREENCOORDINATE {
                 guard let pointArray = convertStringToArray(properties: geometry.value) as? [Double] else {return}
                 let cgPoint = CGPoint(x: pointArray[0], y: pointArray[1])
 
                 try self.mapboxMap.queryRenderedFeatures(with: cgPoint, options: options.toRenderedQueryOptions()) { result in
                     switch result {
                     case .success(let features):
-                        completion(features.map({$0.toFLTQueriedRenderedFeature()}), nil)
+                        completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))
                     case .failure(let error):
-                        completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                        completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                     }
                 }
             } else {
@@ -162,117 +161,115 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
                 try self.mapboxMap.queryRenderedFeatures(with: cgPoints.map({CGPoint(x: $0[0], y: $0[1])}), options: options.toRenderedQueryOptions()) { result in
                     switch result {
                     case .success(let features):
-                        completion(features.map({$0.toFLTQueriedRenderedFeature()}), nil)
+                        completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))
                     case .failure(let error):
-                        completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                        completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                     }
                 }
             }
         } catch {
-            completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
         }
     }
 
-    func querySourceFeaturesSourceId(_ sourceId: String, options: FLTSourceQueryOptions, completion: @escaping ([FLTQueriedSourceFeature]?, FlutterError?) -> Void) {
+    func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void) {
         do {
             try self.mapboxMap.querySourceFeatures(for: sourceId, options: options.toSourceQueryOptions()) { result in
                 switch result {
                 case .success(let features):
-                    completion(features.map({$0.toFLTQueriedSourceFeature()}), nil)
+                    completion(.success(features.map({$0.toFLTQueriedSourceFeature()})))
                 case .failure(let error):
-                    completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                    completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                 }
             }
         } catch {
-            completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
         }
     }
 
-    func getGeoJsonClusterLeavesSourceIdentifier(_ sourceIdentifier: String, cluster: [String: Any], limit: NSNumber?, offset: NSNumber?, completion: @escaping (FLTFeatureExtensionValue?, FlutterError?) -> Void) {
-
+    func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String?: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
-            completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster)))
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return
         }
-        self.mapboxMap.getGeoJsonClusterLeaves(forSourceId: sourceIdentifier, feature: feature, limit: limit as? UInt64 ?? 10, offset: offset as? UInt64 ?? 0) { result in
+        self.mapboxMap.getGeoJsonClusterLeaves(forSourceId: sourceIdentifier, feature: feature, limit: UInt64(limit ?? 10), offset: UInt64(offset ?? 0)) { result in
             switch result {
             case .success(let feature):
-                completion(feature.toFLTFeatureExtensionValue(), nil)
+                completion(.success(feature.toFLTFeatureExtensionValue()))
             case .failure(let error):
-                completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
         }
     }
 
-    func getGeoJsonClusterChildrenSourceIdentifier(_ sourceIdentifier: String, cluster: [String: Any], completion: @escaping (FLTFeatureExtensionValue?, FlutterError?) -> Void) {
+    func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
-            completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster)))
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return
         }
         self.mapboxMap.getGeoJsonClusterChildren(forSourceId: sourceIdentifier, feature: feature) { result in
             switch result {
             case .success(let feature):
-                completion(feature.toFLTFeatureExtensionValue(), nil)
+                completion(.success(feature.toFLTFeatureExtensionValue()))
             case .failure(let error):
-                completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
         }
     }
 
-    func getGeoJsonClusterExpansionZoomSourceIdentifier(_ sourceIdentifier: String, cluster: [String: Any], completion: @escaping (FLTFeatureExtensionValue?, FlutterError?) -> Void) {
+    func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
-            completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster)))
+            completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return
         }
         self.mapboxMap.getGeoJsonClusterExpansionZoom(forSourceId: sourceIdentifier, feature: feature) { result in
             switch result {
             case .success(let feature):
-                completion(feature.toFLTFeatureExtensionValue(), nil)
+                completion(.success(feature.toFLTFeatureExtensionValue()))
             case .failure(let error):
-                completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
         }
     }
 
-    func setFeatureStateSourceId(_ sourceId: String, sourceLayerId: String?, featureId: String, state: String, completion: @escaping (FlutterError?) -> Void) {
+    func setFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, state: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.mapboxMap.setFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId, state: convertStringToDictionary(properties: state)) { result in
             switch result {
             case .success:
-                completion(nil)
+                completion(.success(()))
             case .failure(let error):
-                completion(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil)))
             }
         }
     }
 
-    func getFeatureStateSourceId(_ sourceId: String, sourceLayerId: String?, featureId: String, completion: @escaping (String?, FlutterError?) -> Void) {
+    func getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, completion: @escaping (Result<String, Error>) -> Void) {
         self.mapboxMap.getFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId) { result in
             switch result {
             case .success(let map):
-                completion(convertDictionaryToString(dict: map), nil)
+                completion(.success(convertDictionaryToString(dict: map)))
             case .failure(let error):
-                completion(nil, FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
         }
     }
 
-    func removeFeatureStateSourceId(_ sourceId: String, sourceLayerId: String?, featureId: String, stateKey: String?, completion: @escaping (FlutterError?) -> Void) {
+    func removeFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void) {
         self.mapboxMap.removeFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId, stateKey: stateKey) { result in
             switch result {
             case .success:
-                completion(nil)
+                completion(.success(()))
             case .failure(let error):
-                completion(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil))
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil)))
             }
         }
     }
 
-    func reduceMemoryUseWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func reduceMemoryUse() throws {
         mapboxMap.reduceMemoryUse()
     }
 
-    func getElevationCoordinate(_ coordinate: [String: Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        let number = self.mapboxMap.elevation(at: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
-        return NSNumber(value: number!)
+    func getElevation(coordinate: [String?: Any?]) throws -> Double? {
+        return mapboxMap.elevation(at: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
     }
 }
