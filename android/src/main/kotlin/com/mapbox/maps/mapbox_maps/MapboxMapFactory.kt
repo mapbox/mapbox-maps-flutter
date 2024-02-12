@@ -1,17 +1,18 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
-import com.mapbox.common.*
 import com.mapbox.maps.*
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
+import io.flutter.plugin.platform.PlatformViewsController
 import java.lang.RuntimeException
 
 class MapboxMapFactory(
   private val messenger: BinaryMessenger,
-  private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider
+  private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
+  private val platformViewsController: PlatformViewsController
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
@@ -121,6 +122,8 @@ class MapboxMapFactory(
       messenger,
       channelSuffix,
       pluginVersion,
+      platformViewsController,
+      viewId,
     )
   }
 

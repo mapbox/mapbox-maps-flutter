@@ -44,7 +44,8 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             override fun getLifecycle(): Lifecycle? {
               return lifecycle
             }
-          }
+          },
+          flutterPluginBinding.flutterEngine.platformViewsController
         )
       )
   }

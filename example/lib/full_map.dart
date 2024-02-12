@@ -122,7 +122,7 @@ class FullMapState extends State<FullMap> {
               )).toJson(),
               zoom: 3.0),
           styleUri: MapboxStyles.LIGHT,
-          textureView: true,
+          textureView: false,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoadedCallback,
           onCameraChangeListener: _onCameraChangeListener,

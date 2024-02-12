@@ -26,6 +26,9 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import java.lang.reflect.Type
 import java.util.Date
+import io.flutter.plugin.platform.PlatformViewsController
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 
 class MapboxMapController(
   context: Context,
@@ -34,7 +37,9 @@ class MapboxMapController(
   eventTypes: List<Int>,
   messenger: BinaryMessenger,
   channelSuffix: Int,
-  pluginVersion: String
+  pluginVersion: String,
+  val platformViewsController: PlatformViewsController,
+  val viewId: Int
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
@@ -153,6 +158,22 @@ class MapboxMapController(
     FLTSettings.CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
     FLTSettings.ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
     FLTSettings.AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
+
+    disposeParentVirtualDisplay()
+  }
+
+  private fun disposeParentVirtualDisplay() {
+    val field = PlatformViewsController::class.memberProperties.find { it.name == "vdControllers" }
+    field!!.isAccessible = true
+    val map = field.get(platformViewsController) as Map<Int, Object>
+
+    val virtualDisplayController = map[viewId]
+    val method = virtualDisplayController!!.`class`.methods.find { it.name == "dispose" }
+    method!!.isAccessible = true
+    method.invoke(virtualDisplayController)
+    // TODO
+    // - get map using reflection
+    // - dispose virtual display
   }
 
   override fun onStart(owner: LifecycleOwner) {
