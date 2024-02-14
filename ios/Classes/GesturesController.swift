@@ -9,18 +9,24 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didBegin gestureType: MapboxMaps.GestureType) {}
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEnd gestureType: MapboxMaps.GestureType, willAnimate: Bool) {
-        switch gestureType {
-        case .pan:
-            let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.panGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
-        case .singleTap:
-            let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-            self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
-        default: break
+        guard gestureType == .singleTap else {
+            return
         }
+
+        let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
+        self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEndAnimatingFor gestureType: MapboxMaps.GestureType) {}
+
+    @objc private func onMapPan(_ sender: UIPanGestureRecognizer) {
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
+            return
+        }
+
+        let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
+        self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+    }
 
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
@@ -113,6 +119,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onMapLongTap))
         mapView.addGestureRecognizer(gestureRecognizer!)
         mapView.gestures.delegate = self
+        mapView.gestures.panGestureRecognizer.addTarget(self, action: #selector(onMapPan))
         onGestureListener = FLT_GESTURESGestureListener(binaryMessenger: messenger)
     }
 
@@ -124,7 +131,6 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
 
     private var mapView: MapView
     private var gestureRecognizer: UIGestureRecognizer?
-    private var cancelable: Cancelable?
 
     init(withMapView mapView: MapView) {
         self.mapView = mapView
