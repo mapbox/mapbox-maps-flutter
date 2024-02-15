@@ -110,6 +110,8 @@ class MapWidget extends StatefulWidget {
     if (onResourceRequestListener != null) {
       _eventTypes.add(_MapEvent.resourceRequest);
     }
+
+    LogConfiguration._setupDebugLoggingIfNeeded();
   }
 
   /// Describes the map options value when using a MapWidget.
