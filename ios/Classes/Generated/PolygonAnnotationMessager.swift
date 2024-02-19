@@ -56,17 +56,17 @@ struct PolygonAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
 
   static func fromList(_ list: [Any?]) -> PolygonAnnotation? {
     let id = list[0] as! String
@@ -103,17 +103,17 @@ struct PolygonAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolygonAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
 
   static func fromList(_ list: [Any?]) -> PolygonAnnotationOptions? {
     let geometry: [String?: Any?]? = nilOrValue(list[0])

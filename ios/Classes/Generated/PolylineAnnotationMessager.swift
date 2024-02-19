@@ -76,34 +76,34 @@ struct PolylineAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// The display of lines when joining.
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
+  var lineSortKey: Double? = nil
   /// Blur applied to the line, in pixels.
-  var lineBlur: Double?
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  var lineGapWidth: Double?
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  var lineOffset: Double?
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
-  var lineWidth: Double?
+  var lineWidth: Double? = nil
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotation? {
     let id = list[0] as! String
     let geometry: [String?: Any?]? = nilOrValue(list[1])
-    var lineJoin: LineJoin?
+    var lineJoin: LineJoin? = nil
     let lineJoinEnumVal: Int? = nilOrValue(list[2])
     if let lineJoinRawValue = lineJoinEnumVal {
       lineJoin = LineJoin(rawValue: lineJoinRawValue)!
@@ -157,33 +157,33 @@ struct PolylineAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// The display of lines when joining.
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
+  var lineSortKey: Double? = nil
   /// Blur applied to the line, in pixels.
-  var lineBlur: Double?
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  var lineGapWidth: Double?
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  var lineOffset: Double?
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
-  var lineWidth: Double?
+  var lineWidth: Double? = nil
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotationOptions? {
     let geometry: [String?: Any?]? = nilOrValue(list[0])
-    var lineJoin: LineJoin?
+    var lineJoin: LineJoin? = nil
     let lineJoinEnumVal: Int? = nilOrValue(list[1])
     if let lineJoinRawValue = lineJoinEnumVal {
       lineJoin = LineJoin(rawValue: lineJoinRawValue)!

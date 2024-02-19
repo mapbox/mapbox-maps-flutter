@@ -232,80 +232,80 @@ struct PointAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
-  var image: FlutterStandardTypedData?
+  var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
-  var iconAnchor: IconAnchor?
+  var iconAnchor: IconAnchor? = nil
   /// Name of image in sprite to use for drawing an image background.
-  var iconImage: String?
+  var iconImage: String? = nil
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
-  var iconOffset: [Double?]?
+  var iconOffset: [Double?]? = nil
   /// Rotates the icon clockwise.
-  var iconRotate: Double?
+  var iconRotate: Double? = nil
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  var iconSize: Double?
+  var iconSize: Double? = nil
   /// Scales the icon to fit around the associated text.
-  var iconTextFit: IconTextFit?
+  var iconTextFit: IconTextFit? = nil
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  var iconTextFitPadding: [Double?]?
+  var iconTextFitPadding: [Double?]? = nil
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  var symbolSortKey: Double?
+  var symbolSortKey: Double? = nil
   /// Part of the text placed closest to the anchor.
-  var textAnchor: TextAnchor?
+  var textAnchor: TextAnchor? = nil
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
-  var textField: String?
+  var textField: String? = nil
   /// Text justification options.
-  var textJustify: TextJustify?
+  var textJustify: TextJustify? = nil
   /// Text tracking amount.
-  var textLetterSpacing: Double?
+  var textLetterSpacing: Double? = nil
   /// Text leading value for multi-line text.
-  var textLineHeight: Double?
+  var textLineHeight: Double? = nil
   /// The maximum line width for text wrapping.
-  var textMaxWidth: Double?
+  var textMaxWidth: Double? = nil
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  var textOffset: [Double?]?
+  var textOffset: [Double?]? = nil
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  var textRadialOffset: Double?
+  var textRadialOffset: Double? = nil
   /// Rotates the text clockwise.
-  var textRotate: Double?
+  var textRotate: Double? = nil
   /// Font size.
-  var textSize: Double?
+  var textSize: Double? = nil
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
-  var textTransform: TextTransform?
+  var textTransform: TextTransform? = nil
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
-  var iconColor: Int64?
+  var iconColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
-  var iconEmissiveStrength: Double?
+  var iconEmissiveStrength: Double? = nil
   /// Fade out the halo towards the outside.
-  var iconHaloBlur: Double?
+  var iconHaloBlur: Double? = nil
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
-  var iconHaloColor: Int64?
+  var iconHaloColor: Int64? = nil
   /// Distance of halo to the icon outline.
-  var iconHaloWidth: Double?
+  var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
-  var iconImageCrossFade: Double?
+  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn.
-  var iconOpacity: Double?
+  var iconOpacity: Double? = nil
   /// The color with which the text will be drawn.
-  var textColor: Int64?
+  var textColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
-  var textEmissiveStrength: Double?
+  var textEmissiveStrength: Double? = nil
   /// The halo's fadeout distance towards the outside.
-  var textHaloBlur: Double?
+  var textHaloBlur: Double? = nil
   /// The color of the text's halo, which helps it stand out from backgrounds.
-  var textHaloColor: Int64?
+  var textHaloColor: Int64? = nil
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  var textHaloWidth: Double?
+  var textHaloWidth: Double? = nil
   /// The opacity at which the text will be drawn.
-  var textOpacity: Double?
+  var textOpacity: Double? = nil
 
   static func fromList(_ list: [Any?]) -> PointAnnotation? {
     let id = list[0] as! String
     let geometry: [String?: Any?]? = nilOrValue(list[1])
     let image: FlutterStandardTypedData? = nilOrValue(list[2])
-    var iconAnchor: IconAnchor?
+    var iconAnchor: IconAnchor? = nil
     let iconAnchorEnumVal: Int? = nilOrValue(list[3])
     if let iconAnchorRawValue = iconAnchorEnumVal {
       iconAnchor = IconAnchor(rawValue: iconAnchorRawValue)!
@@ -314,20 +314,20 @@ struct PointAnnotation {
     let iconOffset: [Double?]? = nilOrValue(list[5])
     let iconRotate: Double? = nilOrValue(list[6])
     let iconSize: Double? = nilOrValue(list[7])
-    var iconTextFit: IconTextFit?
+    var iconTextFit: IconTextFit? = nil
     let iconTextFitEnumVal: Int? = nilOrValue(list[8])
     if let iconTextFitRawValue = iconTextFitEnumVal {
       iconTextFit = IconTextFit(rawValue: iconTextFitRawValue)!
     }
     let iconTextFitPadding: [Double?]? = nilOrValue(list[9])
     let symbolSortKey: Double? = nilOrValue(list[10])
-    var textAnchor: TextAnchor?
+    var textAnchor: TextAnchor? = nil
     let textAnchorEnumVal: Int? = nilOrValue(list[11])
     if let textAnchorRawValue = textAnchorEnumVal {
       textAnchor = TextAnchor(rawValue: textAnchorRawValue)!
     }
     let textField: String? = nilOrValue(list[12])
-    var textJustify: TextJustify?
+    var textJustify: TextJustify? = nil
     let textJustifyEnumVal: Int? = nilOrValue(list[13])
     if let textJustifyRawValue = textJustifyEnumVal {
       textJustify = TextJustify(rawValue: textJustifyRawValue)!
@@ -339,7 +339,7 @@ struct PointAnnotation {
     let textRadialOffset: Double? = nilOrValue(list[18])
     let textRotate: Double? = nilOrValue(list[19])
     let textSize: Double? = nilOrValue(list[20])
-    var textTransform: TextTransform?
+    var textTransform: TextTransform? = nil
     let textTransformEnumVal: Int? = nilOrValue(list[21])
     if let textTransformRawValue = textTransformEnumVal {
       textTransform = TextTransform(rawValue: textTransformRawValue)!
@@ -440,79 +440,79 @@ struct PointAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PointAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
-  var image: FlutterStandardTypedData?
+  var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
-  var iconAnchor: IconAnchor?
+  var iconAnchor: IconAnchor? = nil
   /// Name of image in sprite to use for drawing an image background.
-  var iconImage: String?
+  var iconImage: String? = nil
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
-  var iconOffset: [Double?]?
+  var iconOffset: [Double?]? = nil
   /// Rotates the icon clockwise.
-  var iconRotate: Double?
+  var iconRotate: Double? = nil
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  var iconSize: Double?
+  var iconSize: Double? = nil
   /// Scales the icon to fit around the associated text.
-  var iconTextFit: IconTextFit?
+  var iconTextFit: IconTextFit? = nil
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  var iconTextFitPadding: [Double?]?
+  var iconTextFitPadding: [Double?]? = nil
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  var symbolSortKey: Double?
+  var symbolSortKey: Double? = nil
   /// Part of the text placed closest to the anchor.
-  var textAnchor: TextAnchor?
+  var textAnchor: TextAnchor? = nil
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
-  var textField: String?
+  var textField: String? = nil
   /// Text justification options.
-  var textJustify: TextJustify?
+  var textJustify: TextJustify? = nil
   /// Text tracking amount.
-  var textLetterSpacing: Double?
+  var textLetterSpacing: Double? = nil
   /// Text leading value for multi-line text.
-  var textLineHeight: Double?
+  var textLineHeight: Double? = nil
   /// The maximum line width for text wrapping.
-  var textMaxWidth: Double?
+  var textMaxWidth: Double? = nil
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  var textOffset: [Double?]?
+  var textOffset: [Double?]? = nil
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  var textRadialOffset: Double?
+  var textRadialOffset: Double? = nil
   /// Rotates the text clockwise.
-  var textRotate: Double?
+  var textRotate: Double? = nil
   /// Font size.
-  var textSize: Double?
+  var textSize: Double? = nil
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
-  var textTransform: TextTransform?
+  var textTransform: TextTransform? = nil
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
-  var iconColor: Int64?
+  var iconColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
-  var iconEmissiveStrength: Double?
+  var iconEmissiveStrength: Double? = nil
   /// Fade out the halo towards the outside.
-  var iconHaloBlur: Double?
+  var iconHaloBlur: Double? = nil
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
-  var iconHaloColor: Int64?
+  var iconHaloColor: Int64? = nil
   /// Distance of halo to the icon outline.
-  var iconHaloWidth: Double?
+  var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
-  var iconImageCrossFade: Double?
+  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn.
-  var iconOpacity: Double?
+  var iconOpacity: Double? = nil
   /// The color with which the text will be drawn.
-  var textColor: Int64?
+  var textColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
-  var textEmissiveStrength: Double?
+  var textEmissiveStrength: Double? = nil
   /// The halo's fadeout distance towards the outside.
-  var textHaloBlur: Double?
+  var textHaloBlur: Double? = nil
   /// The color of the text's halo, which helps it stand out from backgrounds.
-  var textHaloColor: Int64?
+  var textHaloColor: Int64? = nil
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  var textHaloWidth: Double?
+  var textHaloWidth: Double? = nil
   /// The opacity at which the text will be drawn.
-  var textOpacity: Double?
+  var textOpacity: Double? = nil
 
   static func fromList(_ list: [Any?]) -> PointAnnotationOptions? {
     let geometry: [String?: Any?]? = nilOrValue(list[0])
     let image: FlutterStandardTypedData? = nilOrValue(list[1])
-    var iconAnchor: IconAnchor?
+    var iconAnchor: IconAnchor? = nil
     let iconAnchorEnumVal: Int? = nilOrValue(list[2])
     if let iconAnchorRawValue = iconAnchorEnumVal {
       iconAnchor = IconAnchor(rawValue: iconAnchorRawValue)!
@@ -521,20 +521,20 @@ struct PointAnnotationOptions {
     let iconOffset: [Double?]? = nilOrValue(list[4])
     let iconRotate: Double? = nilOrValue(list[5])
     let iconSize: Double? = nilOrValue(list[6])
-    var iconTextFit: IconTextFit?
+    var iconTextFit: IconTextFit? = nil
     let iconTextFitEnumVal: Int? = nilOrValue(list[7])
     if let iconTextFitRawValue = iconTextFitEnumVal {
       iconTextFit = IconTextFit(rawValue: iconTextFitRawValue)!
     }
     let iconTextFitPadding: [Double?]? = nilOrValue(list[8])
     let symbolSortKey: Double? = nilOrValue(list[9])
-    var textAnchor: TextAnchor?
+    var textAnchor: TextAnchor? = nil
     let textAnchorEnumVal: Int? = nilOrValue(list[10])
     if let textAnchorRawValue = textAnchorEnumVal {
       textAnchor = TextAnchor(rawValue: textAnchorRawValue)!
     }
     let textField: String? = nilOrValue(list[11])
-    var textJustify: TextJustify?
+    var textJustify: TextJustify? = nil
     let textJustifyEnumVal: Int? = nilOrValue(list[12])
     if let textJustifyRawValue = textJustifyEnumVal {
       textJustify = TextJustify(rawValue: textJustifyRawValue)!
@@ -546,7 +546,7 @@ struct PointAnnotationOptions {
     let textRadialOffset: Double? = nilOrValue(list[17])
     let textRotate: Double? = nilOrValue(list[18])
     let textSize: Double? = nilOrValue(list[19])
-    var textTransform: TextTransform?
+    var textTransform: TextTransform? = nil
     let textTransformEnumVal: Int? = nilOrValue(list[20])
     if let textTransformRawValue = textTransformEnumVal {
       textTransform = TextTransform(rawValue: textTransformRawValue)!
