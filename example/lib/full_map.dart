@@ -96,17 +96,11 @@ class FullMapState extends State<FullMap> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
+                  child: Text("Crash"),
                   heroTag: null,
                   onPressed: () {
-                    setState(
-                      () => isLight = !isLight,
-                    );
-                    if (isLight) {
-                      mapboxMap?.loadStyleURI(MapboxStyles.LIGHT);
-                    } else {
-                      mapboxMap?.loadStyleURI(MapboxStyles.DARK);
-                    }
+                    print("foo");
+                    mapboxMap?.reduceMemoryUse();
                   }),
               SizedBox(height: 10),
             ],

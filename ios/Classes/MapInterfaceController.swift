@@ -259,7 +259,7 @@ class MapInterfaceController: NSObject, FLT_MapInterface {
     }
 
     func reduceMemoryUseWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-
+        fatalError("Test crash")
     }
 
     func getElevationCoordinate(_ coordinate: [String: Any], error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
