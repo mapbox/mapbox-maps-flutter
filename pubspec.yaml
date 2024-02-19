@@ -25,7 +25,7 @@ dev_dependencies:
   pigeon:
     git:
       url: https://github.com/evil159/packages.git
-      ref: 8d4eeadaacf83d40d7504c20a512c0e6715f561a
+      ref: cc713e558de9bbfd037620c83b001e10a8af2119
       path: packages/pigeon
 
 

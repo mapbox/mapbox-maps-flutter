@@ -4,7 +4,8 @@ import 'package:mapbox_maps_example/page.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class TrafficRouteLinePage extends ExamplePage {
-  TrafficRouteLinePage() : super(const Icon(Icons.map), 'Style a route showing traffic');
+  TrafficRouteLinePage()
+      : super(const Icon(Icons.map), 'Style a route showing traffic');
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,12 @@ class RouteLine extends StatefulWidget {
 
 class RouteLineState extends State<RouteLine> {
   late MapboxMap mapboxMap;
-  final _sfAirport = Point(
-      coordinates: Position(-122.39470445734368, 37.7080221537549));
+  final _sfAirport =
+      Point(coordinates: Position(-122.39470445734368, 37.7080221537549));
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    final data = await rootBundle
-        .loadString('assets/sf_airport_route.geojson');
+    final data = await rootBundle.loadString('assets/sf_airport_route.geojson');
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
     await _addRouteLine();
   }
@@ -53,7 +53,9 @@ class RouteLineState extends State<RouteLine> {
         19.0, ["*", 17.0, 1.0],
         22.0, ["*", 21.0, 1.0]
         ]
-        '''.trim().replaceAll("\n", ""));
+        '''
+            .trim()
+            .replaceAll("\n", ""));
     await mapboxMap.style.setStyleLayerProperty(
         "line-layer",
         "line-border-width",
@@ -62,7 +64,9 @@ class RouteLineState extends State<RouteLine> {
         9.0, ["*", 1.0, 1.0],
         16.0, ["*", 3.0, 1.0]
         ]
-        '''.trim().replaceAll("\n", ""));
+        '''
+            .trim()
+            .replaceAll("\n", ""));
     await mapboxMap.style.setStyleLayerProperty(
         "line-layer",
         "line-color",
@@ -71,7 +75,9 @@ class RouteLineState extends State<RouteLine> {
         8.0, "rgb(51, 102, 255)",
         11.0, ["coalesce", ["get", "route-color"], "rgb(51, 102, 255)"]
         ]
-        '''.trim().replaceAll("\n", ""));
+        '''
+            .trim()
+            .replaceAll("\n", ""));
   }
 
   @override
