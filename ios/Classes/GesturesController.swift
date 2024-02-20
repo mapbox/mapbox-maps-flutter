@@ -14,7 +14,7 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         }
 
         let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-        self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        self.onGestureListener?.onTap(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEndAnimatingFor gestureType: MapboxMaps.GestureType) {}
@@ -25,7 +25,7 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         }
 
         let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        self.onGestureListener?.onScroll(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
