@@ -72,23 +72,23 @@ struct CircleAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]? = nil
+  var geometry: [String?: Any?]?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double? = nil
+  var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
-  var circleBlur: Double? = nil
+  var circleBlur: Double?
   /// The fill color of the circle.
-  var circleColor: Int64? = nil
+  var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
-  var circleOpacity: Double? = nil
+  var circleOpacity: Double?
   /// Circle radius.
-  var circleRadius: Double? = nil
+  var circleRadius: Double?
   /// The stroke color of the circle.
-  var circleStrokeColor: Int64? = nil
+  var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
-  var circleStrokeOpacity: Double? = nil
+  var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  var circleStrokeWidth: Double? = nil
+  var circleStrokeWidth: Double?
 
   static func fromList(_ list: [Any?]) -> CircleAnnotation? {
     let id = list[0] as! String
@@ -134,23 +134,23 @@ struct CircleAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CircleAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]? = nil
+  var geometry: [String?: Any?]?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double? = nil
+  var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
-  var circleBlur: Double? = nil
+  var circleBlur: Double?
   /// The fill color of the circle.
-  var circleColor: Int64? = nil
+  var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
-  var circleOpacity: Double? = nil
+  var circleOpacity: Double?
   /// Circle radius.
-  var circleRadius: Double? = nil
+  var circleRadius: Double?
   /// The stroke color of the circle.
-  var circleStrokeColor: Int64? = nil
+  var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
-  var circleStrokeOpacity: Double? = nil
+  var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  var circleStrokeWidth: Double? = nil
+  var circleStrokeWidth: Double?
 
   static func fromList(_ list: [Any?]) -> CircleAnnotationOptions? {
     let geometry: [String?: Any?]? = nilOrValue(list[0])

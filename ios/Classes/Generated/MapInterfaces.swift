@@ -389,28 +389,28 @@ struct MbxEdgeInsets {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraOptions {
   /// Coordinate at the center of the camera.
-  var center: [String?: Any?]? = nil
+  var center: [String?: Any?]?
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
-  var padding: MbxEdgeInsets? = nil
+  var padding: MbxEdgeInsets?
   /// Point of reference for `zoom` and `angle`, assuming an origin at the
   /// top-left corner of the view.
-  var anchor: ScreenCoordinate? = nil
+  var anchor: ScreenCoordinate?
   /// Zero-based zoom level. Constrained to the minimum and maximum zoom
   /// levels.
-  var zoom: Double? = nil
+  var zoom: Double?
   /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  var bearing: Double? = nil
+  var bearing: Double?
   /// Pitch toward the horizon measured in degrees.
-  var pitch: Double? = nil
+  var pitch: Double?
 
   static func fromList(_ list: [Any?]) -> CameraOptions? {
     let center: [String?: Any?]? = nilOrValue(list[0])
-    var padding: MbxEdgeInsets? = nil
+    var padding: MbxEdgeInsets?
     if let paddingList: [Any?] = nilOrValue(list[1]) {
       padding = MbxEdgeInsets.fromList(paddingList)
     }
-    var anchor: ScreenCoordinate? = nil
+    var anchor: ScreenCoordinate?
     if let anchorList: [Any?] = nilOrValue(list[2]) {
       anchor = ScreenCoordinate.fromList(anchorList)
     }
@@ -487,18 +487,18 @@ struct CameraState {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraBoundsOptions {
   /// The latitude and longitude bounds to which the camera center are constrained.
-  var bounds: CoordinateBounds? = nil
+  var bounds: CoordinateBounds?
   /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  var maxZoom: Double? = nil
+  var maxZoom: Double?
   /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  var minZoom: Double? = nil
+  var minZoom: Double?
   /// The maximum allowed pitch value in degrees.
-  var maxPitch: Double? = nil
+  var maxPitch: Double?
   /// The minimum allowed pitch value in degrees.
-  var minPitch: Double? = nil
+  var minPitch: Double?
 
   static func fromList(_ list: [Any?]) -> CameraBoundsOptions? {
-    var bounds: CoordinateBounds? = nil
+    var bounds: CoordinateBounds?
     if let boundsList: [Any?] = nilOrValue(list[0]) {
       bounds = CoordinateBounds.fromList(boundsList)
     }
@@ -571,10 +571,10 @@ struct CameraBounds {
 struct MapAnimationOptions {
   /// The duration of the animation in milliseconds.
   /// If not set explicitly default duration will be taken 300ms
-  var duration: Int64? = nil
+  var duration: Int64?
   /// The amount of time, in milliseconds, to delay starting the animation after animation start.
   /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
-  var startDelay: Int64? = nil
+  var startDelay: Int64?
 
   static func fromList(_ list: [Any?]) -> MapAnimationOptions? {
     let duration: Int64? = isNullish(list[0]) ? nil : (list[0] is Int64? ? list[0] as! Int64? : Int64(list[0] as! Int32))
@@ -665,7 +665,7 @@ struct GlyphsRasterizationOptions {
   ///
   /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
   ///
-  var fontFamily: String? = nil
+  var fontFamily: String?
 
   static func fromList(_ list: [Any?]) -> GlyphsRasterizationOptions? {
     let rasterizationMode = GlyphsRasterizationMode(rawValue: list[0] as! Int)!
@@ -730,58 +730,58 @@ struct TileCacheBudgetInTiles {
 struct MapOptions {
   /// The map context mode. This can be used to optimizations
   /// if we know that the drawing context is not shared with other code.
-  var contextMode: ContextMode? = nil
+  var contextMode: ContextMode?
   /// The map constrain mode. This can be used to limit the map
   /// to wrap around the globe horizontally. By default, it is set to
   /// `HeightOnly`.
-  var constrainMode: ConstrainMode? = nil
+  var constrainMode: ConstrainMode?
   /// The viewport mode. This can be used to flip the vertical
   /// orientation of the map as some devices may use inverted orientation.
-  var viewportMode: ViewportMode? = nil
+  var viewportMode: ViewportMode?
   /// The orientation of the Map. By default, it is set to
   /// `Upwards`.
-  var orientation: NorthOrientation? = nil
+  var orientation: NorthOrientation?
   /// Specify whether to enable cross-source symbol collision detection
   /// or not. By default, it is set to `true`.
-  var crossSourceCollisions: Bool? = nil
+  var crossSourceCollisions: Bool?
   /// The size to resize the map object and renderer backend.
   /// The size is given in `logical pixel` units. macOS and iOS platforms use
   /// device-independent pixel units, while other platforms, such as Android,
   /// use screen pixel units.
-  var size: Size? = nil
+  var size: Size?
   /// The custom pixel ratio. By default, it is set to 1.0
   var pixelRatio: Double
   /// Glyphs rasterization options to use for client-side text rendering.
-  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
+  var glyphsRasterizationOptions: GlyphsRasterizationOptions?
 
   static func fromList(_ list: [Any?]) -> MapOptions? {
-    var contextMode: ContextMode? = nil
+    var contextMode: ContextMode?
     let contextModeEnumVal: Int? = nilOrValue(list[0])
     if let contextModeRawValue = contextModeEnumVal {
       contextMode = ContextMode(rawValue: contextModeRawValue)!
     }
-    var constrainMode: ConstrainMode? = nil
+    var constrainMode: ConstrainMode?
     let constrainModeEnumVal: Int? = nilOrValue(list[1])
     if let constrainModeRawValue = constrainModeEnumVal {
       constrainMode = ConstrainMode(rawValue: constrainModeRawValue)!
     }
-    var viewportMode: ViewportMode? = nil
+    var viewportMode: ViewportMode?
     let viewportModeEnumVal: Int? = nilOrValue(list[2])
     if let viewportModeRawValue = viewportModeEnumVal {
       viewportMode = ViewportMode(rawValue: viewportModeRawValue)!
     }
-    var orientation: NorthOrientation? = nil
+    var orientation: NorthOrientation?
     let orientationEnumVal: Int? = nilOrValue(list[3])
     if let orientationRawValue = orientationEnumVal {
       orientation = NorthOrientation(rawValue: orientationRawValue)!
     }
     let crossSourceCollisions: Bool? = nilOrValue(list[4])
-    var size: Size? = nil
+    var size: Size?
     if let sizeList: [Any?] = nilOrValue(list[5]) {
       size = Size.fromList(sizeList)
     }
     let pixelRatio = list[6] as! Double
-    var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
+    var glyphsRasterizationOptions: GlyphsRasterizationOptions?
     if let glyphsRasterizationOptionsList: [Any?] = nilOrValue(list[7]) {
       glyphsRasterizationOptions = GlyphsRasterizationOptions.fromList(glyphsRasterizationOptionsList)
     }
@@ -922,9 +922,9 @@ struct Size {
 /// Generated class from Pigeon that represents data sent in messages.
 struct RenderedQueryOptions {
   /// Layer IDs to include in the query.
-  var layerIds: [String?]? = nil
+  var layerIds: [String?]?
   /// Filters the returned features with an expression
-  var filter: String? = nil
+  var filter: String?
 
   static func fromList(_ list: [Any?]) -> RenderedQueryOptions? {
     let layerIds: [String?]? = nilOrValue(list[0])
@@ -948,7 +948,7 @@ struct RenderedQueryOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct SourceQueryOptions {
   /// Source layer IDs to include in the query.
-  var sourceLayerIds: [String?]? = nil
+  var sourceLayerIds: [String?]?
   /// Filters the returned features with an expression
   var filter: String
 
@@ -974,9 +974,9 @@ struct SourceQueryOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct FeatureExtensionValue {
   /// An optional value of a feature extension
-  var value: String? = nil
+  var value: String?
   /// An optional array of features from a feature extension.
-  var featureCollection: [[String?: Any?]?]? = nil
+  var featureCollection: [[String?: Any?]?]?
 
   static func fromList(_ list: [Any?]) -> FeatureExtensionValue? {
     let value: String? = nilOrValue(list[0])
@@ -1000,11 +1000,11 @@ struct FeatureExtensionValue {
 /// Generated class from Pigeon that represents data sent in messages.
 struct LayerPosition {
   /// Layer should be positioned above specified layer id.
-  var above: String? = nil
+  var above: String?
   /// Layer should be positioned below specified layer id.
-  var below: String? = nil
+  var below: String?
   /// Layer should be positioned at specified index in a layers stack.
-  var at: Int64? = nil
+  var at: Int64?
 
   static func fromList(_ list: [Any?]) -> LayerPosition? {
     let above: String? = nilOrValue(list[0])
@@ -1088,7 +1088,7 @@ struct QueriedFeature {
   var source: String
   /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
   /// or when data provided by the source is not layered.
-  var sourceLayer: String? = nil
+  var sourceLayer: String?
   /// Feature state for a queried feature. Type of the value is an Object.
   /// @see `setFeatureState` and `getFeatureState`
   var state: String
@@ -1351,39 +1351,39 @@ struct FlatLight {
   /// Unique light name
   var id: String
   /// Whether extruded geometries are lit relative to the map or viewport.
-  var anchor: Anchor? = nil
+  var anchor: Anchor?
   /// Color tint for lighting extruded geometries.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
+  var intensityTransition: TransitionOptions?
   /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var position: [Double?]? = nil
+  var position: [Double?]?
   /// Transition property for `position`
-  var positionTransition: TransitionOptions? = nil
+  var positionTransition: TransitionOptions?
 
   static func fromList(_ list: [Any?]) -> FlatLight? {
     let id = list[0] as! String
-    var anchor: Anchor? = nil
+    var anchor: Anchor?
     let anchorEnumVal: Int? = nilOrValue(list[1])
     if let anchorRawValue = anchorEnumVal {
       anchor = Anchor(rawValue: anchorRawValue)!
     }
     let color: Int64? = isNullish(list[2]) ? nil : (list[2] is Int64? ? list[2] as! Int64? : Int64(list[2] as! Int32))
-    var colorTransition: TransitionOptions? = nil
+    var colorTransition: TransitionOptions?
     if let colorTransitionList: [Any?] = nilOrValue(list[3]) {
       colorTransition = TransitionOptions.fromList(colorTransitionList)
     }
     let intensity: Double? = nilOrValue(list[4])
-    var intensityTransition: TransitionOptions? = nil
+    var intensityTransition: TransitionOptions?
     if let intensityTransitionList: [Any?] = nilOrValue(list[5]) {
       intensityTransition = TransitionOptions.fromList(intensityTransitionList)
     }
     let position: [Double?]? = nilOrValue(list[6])
-    var positionTransition: TransitionOptions? = nil
+    var positionTransition: TransitionOptions?
     if let positionTransitionList: [Any?] = nilOrValue(list[7]) {
       positionTransition = TransitionOptions.fromList(positionTransitionList)
     }
@@ -1422,44 +1422,44 @@ struct DirectionalLight {
   /// Unique light name
   var id: String
   /// Enable/Disable shadow casting for this light
-  var castShadows: Bool? = nil
+  var castShadows: Bool?
   /// Color of the directional light.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var direction: [Double?]? = nil
+  var direction: [Double?]?
   /// Transition property for `direction`
-  var directionTransition: TransitionOptions? = nil
+  var directionTransition: TransitionOptions?
   /// A multiplier for the color of the directional light.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
+  var intensityTransition: TransitionOptions?
   /// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
-  var shadowIntensity: Double? = nil
+  var shadowIntensity: Double?
   /// Transition property for `shadowIntensity`
-  var shadowIntensityTransition: TransitionOptions? = nil
+  var shadowIntensityTransition: TransitionOptions?
 
   static func fromList(_ list: [Any?]) -> DirectionalLight? {
     let id = list[0] as! String
     let castShadows: Bool? = nilOrValue(list[1])
     let color: Int64? = isNullish(list[2]) ? nil : (list[2] is Int64? ? list[2] as! Int64? : Int64(list[2] as! Int32))
-    var colorTransition: TransitionOptions? = nil
+    var colorTransition: TransitionOptions?
     if let colorTransitionList: [Any?] = nilOrValue(list[3]) {
       colorTransition = TransitionOptions.fromList(colorTransitionList)
     }
     let direction: [Double?]? = nilOrValue(list[4])
-    var directionTransition: TransitionOptions? = nil
+    var directionTransition: TransitionOptions?
     if let directionTransitionList: [Any?] = nilOrValue(list[5]) {
       directionTransition = TransitionOptions.fromList(directionTransitionList)
     }
     let intensity: Double? = nilOrValue(list[6])
-    var intensityTransition: TransitionOptions? = nil
+    var intensityTransition: TransitionOptions?
     if let intensityTransitionList: [Any?] = nilOrValue(list[7]) {
       intensityTransition = TransitionOptions.fromList(intensityTransitionList)
     }
     let shadowIntensity: Double? = nilOrValue(list[8])
-    var shadowIntensityTransition: TransitionOptions? = nil
+    var shadowIntensityTransition: TransitionOptions?
     if let shadowIntensityTransitionList: [Any?] = nilOrValue(list[9]) {
       shadowIntensityTransition = TransitionOptions.fromList(shadowIntensityTransitionList)
     }
@@ -1502,23 +1502,23 @@ struct AmbientLight {
   /// Unique light name
   var id: String
   /// Color of the ambient light.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// A multiplier for the color of the ambient light.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
+  var intensityTransition: TransitionOptions?
 
   static func fromList(_ list: [Any?]) -> AmbientLight? {
     let id = list[0] as! String
     let color: Int64? = isNullish(list[1]) ? nil : (list[1] is Int64? ? list[1] as! Int64? : Int64(list[1] as! Int32))
-    var colorTransition: TransitionOptions? = nil
+    var colorTransition: TransitionOptions?
     if let colorTransitionList: [Any?] = nilOrValue(list[2]) {
       colorTransition = TransitionOptions.fromList(colorTransitionList)
     }
     let intensity: Double? = nilOrValue(list[3])
-    var intensityTransition: TransitionOptions? = nil
+    var intensityTransition: TransitionOptions?
     if let intensityTransitionList: [Any?] = nilOrValue(list[4]) {
       intensityTransition = TransitionOptions.fromList(intensityTransitionList)
     }
@@ -1650,11 +1650,11 @@ struct ImageContent {
 /// Generated class from Pigeon that represents data sent in messages.
 struct TransitionOptions {
   /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
-  var duration: Int64? = nil
+  var duration: Int64?
   /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
-  var delay: Int64? = nil
+  var delay: Int64?
   /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
-  var enablePlacementTransitions: Bool? = nil
+  var enablePlacementTransitions: Bool?
 
   static func fromList(_ list: [Any?]) -> TransitionOptions? {
     let duration: Int64? = isNullish(list[0]) ? nil : (list[0] is Int64? ? list[0] as! Int64? : Int64(list[0] as! Int32))
@@ -1712,7 +1712,7 @@ struct CanonicalTileID {
 /// Generated class from Pigeon that represents data sent in messages.
 struct StylePropertyValue {
   /// The property value.
-  var value: Any? = nil
+  var value: Any?
   /// The kind of the property value.
   var kind: StylePropertyValueKind
 
