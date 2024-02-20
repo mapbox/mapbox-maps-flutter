@@ -3,6 +3,7 @@ allow_zero_lintable_files: true
 excluded:
   - Carthage
   - Pods
+  - Classes/Generated
 disabled_rules:
   - comment_spacing
   - computed_accessors_order

@@ -1,10 +1,10 @@
 import Foundation
 @_spi(Experimental) import MapboxMaps
-import UIKit
+import Flutter
 
-class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGestureRecognizerDelegate, GestureManagerDelegate {
+final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRecognizerDelegate, GestureManagerDelegate {
 
-    private var onGestureListener: FLT_GESTURESGestureListener?
+    private var onGestureListener: GestureListener?
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didBegin gestureType: MapboxMaps.GestureType) {}
 
@@ -14,7 +14,7 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         }
 
         let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-        self.onGestureListener?.onTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        self.onGestureListener?.onTap(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEndAnimatingFor gestureType: MapboxMaps.GestureType) {}
@@ -25,93 +25,91 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         }
 
         let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onScroll(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        self.onGestureListener?.onScroll(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
         let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onLongTap(FLT_GESTURESScreenCoordinate.makeWith(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        self.onGestureListener?.onLongTap(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
     }
 
-    func updateSettingsSettings(_ settings: FLT_SETTINGSGesturesSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func updateSettings(settings: GesturesSettings) throws {
         if let panEnabled = settings.scrollEnabled {
-            mapView.gestures.options.panEnabled = panEnabled.boolValue
+            mapView.gestures.options.panEnabled = panEnabled
         }
         if let rotateEnabled = settings.rotateEnabled {
-            mapView.gestures.options.rotateEnabled = rotateEnabled.boolValue
+            mapView.gestures.options.rotateEnabled = rotateEnabled
         }
         if let simultaneousRotateAndPinchZoomEnabled = settings.simultaneousRotateAndPinchToZoomEnabled {
-            mapView.gestures.options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled.boolValue
+            mapView.gestures.options.simultaneousRotateAndPinchZoomEnabled = simultaneousRotateAndPinchZoomEnabled
         }
         if let pinchPanEnabled = settings.pinchPanEnabled {
-            mapView.gestures.options.pinchPanEnabled = pinchPanEnabled.boolValue
+            mapView.gestures.options.pinchPanEnabled = pinchPanEnabled
         }
         if let pitchEnabled = settings.pitchEnabled {
-            mapView.gestures.options.pitchEnabled = pitchEnabled.boolValue
+            mapView.gestures.options.pitchEnabled = pitchEnabled
         }
         if let doubleTapToZoomInEnabled = settings.doubleTapToZoomInEnabled {
-            mapView.gestures.options.doubleTapToZoomInEnabled = doubleTapToZoomInEnabled.boolValue
+            mapView.gestures.options.doubleTapToZoomInEnabled = doubleTapToZoomInEnabled
         }
         if let doubleTouchToZoomOutEnabled = settings.doubleTouchToZoomOutEnabled {
-            mapView.gestures.options.doubleTouchToZoomOutEnabled = doubleTouchToZoomOutEnabled.boolValue
+            mapView.gestures.options.doubleTouchToZoomOutEnabled = doubleTouchToZoomOutEnabled
         }
         if let quickZoomEnabled = settings.quickZoomEnabled {
-            mapView.gestures.options.quickZoomEnabled = quickZoomEnabled.boolValue
+            mapView.gestures.options.quickZoomEnabled = quickZoomEnabled
         }
         if let pinchZoomEnabled = settings.pinchToZoomEnabled {
-            mapView.gestures.options.pinchZoomEnabled = pinchZoomEnabled.boolValue
+            mapView.gestures.options.pinchZoomEnabled = pinchZoomEnabled
         }
-        switch settings.scrollMode?.value {
-        case .HORIZONTAL:
+        switch settings.scrollMode {
+        case .hORIZONTAL:
             mapView.gestures.options.panMode = PanMode.horizontal
-        case .VERTICAL:
+        case .vERTICAL:
             mapView.gestures.options.panMode = PanMode.vertical
-        case .HORIZONTAL_AND_VERTICAL, .none:
+        case .hORIZONTALANDVERTICAL, .none:
             mapView.gestures.options.panMode = PanMode.horizontalAndVertical
-        @unknown default:
-            break
         }
         if let focalPoint = settings.focalPoint {
             mapView.gestures.options.focalPoint = CGPoint(x: focalPoint.x, y: focalPoint.y)
         }
     }
 
-    func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSGesturesSettings? {
+    func getSettings() throws -> GesturesSettings {
         let options = mapView.gestures.options
-        let scrollMode: FLT_SETTINGSScrollMode
+        let scrollMode: ScrollMode
         switch options.panMode {
         case .horizontal:
-            scrollMode = FLT_SETTINGSScrollMode.HORIZONTAL
+            scrollMode = .hORIZONTAL
         case .vertical:
-            scrollMode = FLT_SETTINGSScrollMode.VERTICAL
+            scrollMode = .vERTICAL
         case .horizontalAndVertical:
-            scrollMode = FLT_SETTINGSScrollMode.HORIZONTAL_AND_VERTICAL
+            scrollMode = .hORIZONTALANDVERTICAL
         }
-        var focalPoint: FLT_SETTINGSScreenCoordinate?
+        var focalPoint: ScreenCoordinate?
         if let focalPointSet = options.focalPoint {
-            focalPoint = FLT_SETTINGSScreenCoordinate.makeWith(x: focalPointSet.x, y: focalPointSet.y)
+            focalPoint = ScreenCoordinate(x: focalPointSet.x, y: focalPointSet.y)
         }
 
-        let settings = FLT_SETTINGSGesturesSettings.make(
-            withRotateEnabled: NSNumber(value: options.rotateEnabled),
-            pinchToZoomEnabled: NSNumber(value: options.pinchZoomEnabled),
-            scrollEnabled: NSNumber(value: options.panEnabled),
-            simultaneousRotateAndPinchToZoomEnabled: NSNumber(value: options.rotateEnabled),
-            pitchEnabled: NSNumber(value: options.pitchEnabled),
-            scrollMode: .init(value: scrollMode),
-            doubleTapToZoomInEnabled: NSNumber(value: options.doubleTapToZoomInEnabled),
-            doubleTouchToZoomOutEnabled: NSNumber(value: options.doubleTouchToZoomOutEnabled),
-            quickZoomEnabled: NSNumber(value: options.quickZoomEnabled),
+        return GesturesSettings(
+            rotateEnabled: options.rotateEnabled,
+            pinchToZoomEnabled: options.pinchZoomEnabled,
+            scrollEnabled: options.panEnabled,
+            simultaneousRotateAndPinchToZoomEnabled: options.rotateEnabled,
+            pitchEnabled: options.pitchEnabled,
+            scrollMode: scrollMode,
+            doubleTapToZoomInEnabled: options.doubleTapToZoomInEnabled,
+            doubleTouchToZoomOutEnabled: options.doubleTouchToZoomOutEnabled,
+            quickZoomEnabled: options.quickZoomEnabled,
             focalPoint: focalPoint,
-            pinchToZoomDecelerationEnabled: NSNumber(false),
-            rotateDecelerationEnabled: NSNumber(false),
-            scrollDecelerationEnabled: NSNumber(false),
-            increaseRotateThresholdWhenPinchingToZoom: NSNumber(false),
-            increasePinchToZoomThresholdWhenRotating: NSNumber(false),
-            zoomAnimationAmount: NSNumber(value: 0.0),
-            pinchPanEnabled: NSNumber(value: options.pinchPanEnabled))
-        return settings
+            pinchToZoomDecelerationEnabled: false,
+            rotateDecelerationEnabled: false,
+            scrollDecelerationEnabled: false,
+            increaseRotateThresholdWhenPinchingToZoom: false,
+            increasePinchToZoomThresholdWhenRotating: false,
+            zoomAnimationAmount: 0,
+            pinchPanEnabled: options.pinchPanEnabled
+        )
     }
 
     func addListeners(messenger: FlutterBinaryMessenger) {
@@ -119,8 +117,8 @@ class GesturesController: NSObject, FLT_SETTINGSGesturesSettingsInterface, UIGes
         gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(onMapLongTap))
         mapView.addGestureRecognizer(gestureRecognizer!)
         mapView.gestures.delegate = self
+        onGestureListener = GestureListener(binaryMessenger: messenger)
         mapView.gestures.panGestureRecognizer.addTarget(self, action: #selector(onMapPan))
-        onGestureListener = FLT_GESTURESGestureListener(binaryMessenger: messenger)
     }
 
     func removeListeners() {

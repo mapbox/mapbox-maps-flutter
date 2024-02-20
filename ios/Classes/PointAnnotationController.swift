@@ -1,13 +1,14 @@
 // This file is generated.
 import MapboxMaps
-import UIKit
+import Foundation
+import Flutter
 
-final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
+final class PointAnnotationController: _PointAnnotationMessager {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
 
     private typealias AnnotationManager = PointAnnotationManager
-    private enum `Error`: Swift.Error {
+    private enum PointAnnotationControllerError: Swift.Error {
         case managerNotFound(String)
     }
 
@@ -15,21 +16,21 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
         self.delegate = delegate
     }
 
-    func createManagerId(_ managerId: String, annotationOption: FLTPointAnnotationOptions, completion: @escaping (FLTPointAnnotation?, FlutterError?) -> Void) {
+    func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                 let createdAnnotation = annotationOption.toPointAnnotation()
                 manager.annotations.append(createdAnnotation)
-                completion(createdAnnotation.toFLTPointAnnotation(), nil)
+                completion(.success(createdAnnotation.toFLTPointAnnotation()))
             } else {
-                completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func createMultiManagerId(_ managerId: String, annotationOptions: [FLTPointAnnotationOptions], completion: @escaping ([FLTPointAnnotation]?, FlutterError?) -> Void) {
+    func createMulti(managerId: String, annotationOptions: [PointAnnotationOptions], completion: @escaping (Result<[PointAnnotation], Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                 let annotations = annotationOptions.map({ options in
@@ -39,16 +40,16 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 let createdAnnotations = annotations.map { annotation in
                     annotation.toFLTPointAnnotation()
                 }
-                completion(createdAnnotations, nil)
+                completion(.success(createdAnnotations))
             } else {
-                completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func updateManagerId(_ managerId: String, annotation: FLTPointAnnotation, completion: @escaping (FlutterError?) -> Void) {
+    func update(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                 let index = manager.annotations.firstIndex(where: { pointAnnotation in
@@ -62,16 +63,16 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                 let updatedAnnotation = annotation.toPointAnnotation()
 
                 manager.annotations[index!] = updatedAnnotation
-                completion(nil)
+                completion(.success(()))
             } else {
-                completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
         }
     }
 
-    func deleteManagerId(_ managerId: String, annotation: FLTPointAnnotation, completion: @escaping (FlutterError?) -> Void) {
+    func delete(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                 let index = manager.annotations.firstIndex(where: { pointAnnotation in
@@ -82,907 +83,642 @@ final class PointAnnotationController: NSObject, FLT_PointAnnotationMessager {
                     throw AnnotationControllerError.noAnnotationFound
                 }
                 manager.annotations.remove(at: index!)
-                completion(nil)
+                completion(.success(()))
             } else {
-                completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
         }
     }
 
-    func deleteAllManagerId(_ managerId: String, completion: @escaping (FlutterError?) -> Void) {
+    func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? PointAnnotationManager {
                 manager.annotations = []
             } else {
-                completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil)))
         }
-        completion(nil)
+        completion(.success(()))
     }
 
     private func getManager(id: String) throws -> AnnotationManager {
         if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
             return manager
         } else {
-            throw Error.managerNotFound(id)
+            throw PointAnnotationControllerError.managerNotFound(id)
         }
     }
 
     // MARK: Properties
 
-    func setIconAllowOverlapManagerId(_ managerId: String, iconAllowOverlap: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func getIconAllowOverlap(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.iconAllowOverlap))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconAllowOverlap(managerId: String, iconAllowOverlap: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconAllowOverlap = iconAllowOverlap
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconAllowOverlapManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconIgnorePlacement(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconAllowOverlap = manager.iconAllowOverlap else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: iconAllowOverlap), nil)
+            completion(.success(manager.iconIgnorePlacement))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconIgnorePlacementManagerId(_ managerId: String, iconIgnorePlacement: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setIconIgnorePlacement(managerId: String, iconIgnorePlacement: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconIgnorePlacement = iconIgnorePlacement
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconIgnorePlacementManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconKeepUpright(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconIgnorePlacement = manager.iconIgnorePlacement else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: iconIgnorePlacement), nil)
+            completion(.success(manager.iconKeepUpright))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconKeepUprightManagerId(_ managerId: String, iconKeepUpright: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setIconKeepUpright(managerId: String, iconKeepUpright: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconKeepUpright = iconKeepUpright
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconKeepUprightManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconKeepUpright = manager.iconKeepUpright else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: iconKeepUpright), nil)
+            completion(.success(manager.iconOptional))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconOptionalManagerId(_ managerId: String, iconOptional: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setIconOptional(managerId: String, iconOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconOptional = iconOptional
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconOptionalManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconPadding(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconOptional = manager.iconOptional else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: iconOptional), nil)
+            completion(.success(manager.iconPadding))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconPaddingManagerId(_ managerId: String, iconPadding: Double, completion: @escaping (FlutterError?) -> Void) {
+    func setIconPadding(managerId: String, iconPadding: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconPadding = iconPadding
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconPaddingManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getIconPitchAlignment(managerId: String, completion: @escaping (Result<IconPitchAlignment?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconPadding = manager.iconPadding else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: iconPadding), nil)
+            completion(.success(manager.iconPitchAlignment?.toFLTIconPitchAlignment()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconPitchAlignmentManagerId(_ managerId: String, iconPitchAlignment: FLTIconPitchAlignment, completion: @escaping (FlutterError?) -> Void) {
+    func setIconPitchAlignment(managerId: String, iconPitchAlignment: IconPitchAlignment, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconPitchAlignment = IconPitchAlignment(iconPitchAlignment)
+            manager.iconPitchAlignment = MapboxMaps.IconPitchAlignment(iconPitchAlignment)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconPitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTIconPitchAlignmentBox?, FlutterError?) -> Void) {
+    func getIconRotationAlignment(managerId: String, completion: @escaping (Result<IconRotationAlignment?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconPitchAlignment = manager.iconPitchAlignment else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(iconPitchAlignment.toFLTIconPitchAlignmentBox(), nil)
+            completion(.success(manager.iconRotationAlignment?.toFLTIconRotationAlignment()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconRotationAlignmentManagerId(_ managerId: String, iconRotationAlignment: FLTIconRotationAlignment, completion: @escaping (FlutterError?) -> Void) {
+    func setIconRotationAlignment(managerId: String, iconRotationAlignment: IconRotationAlignment, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconRotationAlignment = IconRotationAlignment(iconRotationAlignment)
+            manager.iconRotationAlignment = MapboxMaps.IconRotationAlignment(iconRotationAlignment)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconRotationAlignmentManagerId(_ managerId: String, completion: @escaping (FLTIconRotationAlignmentBox?, FlutterError?) -> Void) {
+    func getSymbolAvoidEdges(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconRotationAlignment = manager.iconRotationAlignment else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(iconRotationAlignment.toFLTIconRotationAlignmentBox(), nil)
+            completion(.success(manager.symbolAvoidEdges))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setSymbolAvoidEdgesManagerId(_ managerId: String, symbolAvoidEdges: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.symbolAvoidEdges = symbolAvoidEdges
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getSymbolAvoidEdgesManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getSymbolPlacement(managerId: String, completion: @escaping (Result<SymbolPlacement?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let symbolAvoidEdges = manager.symbolAvoidEdges else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: symbolAvoidEdges), nil)
+            completion(.success(manager.symbolPlacement?.toFLTSymbolPlacement()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setSymbolPlacementManagerId(_ managerId: String, symbolPlacement: FLTSymbolPlacement, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.symbolPlacement = SymbolPlacement(symbolPlacement)
+            manager.symbolPlacement = MapboxMaps.SymbolPlacement(symbolPlacement)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getSymbolPlacementManagerId(_ managerId: String, completion: @escaping (FLTSymbolPlacementBox?, FlutterError?) -> Void) {
+    func getSymbolSpacing(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let symbolPlacement = manager.symbolPlacement else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(symbolPlacement.toFLTSymbolPlacementBox(), nil)
+            completion(.success(manager.symbolSpacing))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setSymbolSpacingManagerId(_ managerId: String, symbolSpacing: Double, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolSpacing(managerId: String, symbolSpacing: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.symbolSpacing = symbolSpacing
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getSymbolSpacingManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getSymbolZElevate(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let symbolSpacing = manager.symbolSpacing else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: symbolSpacing), nil)
+            completion(.success(manager.symbolZElevate))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setSymbolZElevateManagerId(_ managerId: String, symbolZElevate: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolZElevate(managerId: String, symbolZElevate: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.symbolZElevate = symbolZElevate
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getSymbolZElevateManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getSymbolZOrder(managerId: String, completion: @escaping (Result<SymbolZOrder?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let symbolZElevate = manager.symbolZElevate else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: symbolZElevate), nil)
+            completion(.success(manager.symbolZOrder?.toFLTSymbolZOrder()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setSymbolZOrderManagerId(_ managerId: String, symbolZOrder: FLTSymbolZOrder, completion: @escaping (FlutterError?) -> Void) {
+    func setSymbolZOrder(managerId: String, symbolZOrder: SymbolZOrder, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.symbolZOrder = SymbolZOrder(symbolZOrder)
+            manager.symbolZOrder = MapboxMaps.SymbolZOrder(symbolZOrder)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getSymbolZOrderManagerId(_ managerId: String, completion: @escaping (FLTSymbolZOrderBox?, FlutterError?) -> Void) {
+    func getTextAllowOverlap(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let symbolZOrder = manager.symbolZOrder else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(symbolZOrder.toFLTSymbolZOrderBox(), nil)
+            completion(.success(manager.textAllowOverlap))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextAllowOverlapManagerId(_ managerId: String, textAllowOverlap: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setTextAllowOverlap(managerId: String, textAllowOverlap: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textAllowOverlap = textAllowOverlap
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextAllowOverlapManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextFont(managerId: String, completion: @escaping (Result<[String?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textAllowOverlap = manager.textAllowOverlap else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textAllowOverlap), nil)
+            completion(.success(manager.textFont))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextFontManagerId(_ managerId: String, textFont: [String], completion: @escaping (FlutterError?) -> Void) {
+    func setTextFont(managerId: String, textFont: [String?], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textFont = textFont.map {$0}
+            manager.textFont = textFont.compactMap { $0 }
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextFontManagerId(_ managerId: String, completion: @escaping ([String]?, FlutterError?) -> Void) {
+    func getTextIgnorePlacement(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textFont = manager.textFont else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(textFont, nil)
+            completion(.success(manager.textIgnorePlacement))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextIgnorePlacementManagerId(_ managerId: String, textIgnorePlacement: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setTextIgnorePlacement(managerId: String, textIgnorePlacement: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textIgnorePlacement = textIgnorePlacement
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextIgnorePlacementManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextKeepUpright(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textIgnorePlacement = manager.textIgnorePlacement else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textIgnorePlacement), nil)
+            completion(.success(manager.textKeepUpright))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextKeepUprightManagerId(_ managerId: String, textKeepUpright: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setTextKeepUpright(managerId: String, textKeepUpright: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textKeepUpright = textKeepUpright
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextKeepUprightManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextMaxAngle(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textKeepUpright = manager.textKeepUpright else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textKeepUpright), nil)
+            completion(.success(manager.textMaxAngle))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextMaxAngleManagerId(_ managerId: String, textMaxAngle: Double, completion: @escaping (FlutterError?) -> Void) {
+    func setTextMaxAngle(managerId: String, textMaxAngle: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textMaxAngle = textMaxAngle
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextMaxAngleManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textMaxAngle = manager.textMaxAngle else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textMaxAngle), nil)
+            completion(.success(manager.textOptional))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextOptionalManagerId(_ managerId: String, textOptional: Bool, completion: @escaping (FlutterError?) -> Void) {
+    func setTextOptional(managerId: String, textOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textOptional = textOptional
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextOptionalManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextPadding(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textOptional = manager.textOptional else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textOptional), nil)
+            completion(.success(manager.textPadding))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextPaddingManagerId(_ managerId: String, textPadding: Double, completion: @escaping (FlutterError?) -> Void) {
+    func setTextPadding(managerId: String, textPadding: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textPadding = textPadding
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextPaddingManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getTextPitchAlignment(managerId: String, completion: @escaping (Result<TextPitchAlignment?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textPadding = manager.textPadding else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: textPadding), nil)
+            completion(.success(manager.textPitchAlignment?.toFLTTextPitchAlignment()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextPitchAlignmentManagerId(_ managerId: String, textPitchAlignment: FLTTextPitchAlignment, completion: @escaping (FlutterError?) -> Void) {
+    func setTextPitchAlignment(managerId: String, textPitchAlignment: TextPitchAlignment, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textPitchAlignment = TextPitchAlignment(textPitchAlignment)
+            manager.textPitchAlignment = MapboxMaps.TextPitchAlignment(textPitchAlignment)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextPitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTTextPitchAlignmentBox?, FlutterError?) -> Void) {
+    func getTextRotationAlignment(managerId: String, completion: @escaping (Result<TextRotationAlignment?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textPitchAlignment = manager.textPitchAlignment else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(textPitchAlignment.toFLTTextPitchAlignmentBox(), nil)
+            completion(.success(manager.textRotationAlignment?.toFLTTextRotationAlignment()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextRotationAlignmentManagerId(_ managerId: String, textRotationAlignment: FLTTextRotationAlignment, completion: @escaping (FlutterError?) -> Void) {
+    func setTextRotationAlignment(managerId: String, textRotationAlignment: TextRotationAlignment, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textRotationAlignment = TextRotationAlignment(textRotationAlignment)
+            manager.textRotationAlignment = MapboxMaps.TextRotationAlignment(textRotationAlignment)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextRotationAlignmentManagerId(_ managerId: String, completion: @escaping (FLTTextRotationAlignmentBox?, FlutterError?) -> Void) {
+    func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textRotationAlignment = manager.textRotationAlignment else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(textRotationAlignment.toFLTTextRotationAlignmentBox(), nil)
+            completion(.success(manager.iconTranslate))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconTranslateManagerId(_ managerId: String, iconTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconTranslate = iconTranslate.map {$0.doubleValue}
+            manager.iconTranslate = iconTranslate.compactMap { $0 }
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconTranslateManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
+    func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconTranslate = manager.iconTranslate else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(iconTranslate.map(NSNumber.init(value:)), nil)
+            completion(.success(manager.iconTranslateAnchor?.toFLTIconTranslateAnchor()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconTranslateAnchorManagerId(_ managerId: String, iconTranslateAnchor: FLTIconTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+    func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconTranslateAnchor = IconTranslateAnchor(iconTranslateAnchor)
+            manager.iconTranslateAnchor = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getIconTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTIconTranslateAnchorBox?, FlutterError?) -> Void) {
+    func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let iconTranslateAnchor = manager.iconTranslateAnchor else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(iconTranslateAnchor.toFLTIconTranslateAnchorBox(), nil)
+            completion(.success(manager.textTranslate))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextTranslateManagerId(_ managerId: String, textTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setTextTranslate(managerId: String, textTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textTranslate = textTranslate.map {$0.doubleValue}
+            manager.textTranslate = textTranslate.compactMap { $0 }
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getTextTranslateManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
+    func getTextTranslateAnchor(managerId: String, completion: @escaping (Result<TextTranslateAnchor?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let textTranslate = manager.textTranslate else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(textTranslate.map(NSNumber.init(value:)), nil)
+            completion(.success(manager.textTranslateAnchor?.toFLTTextTranslateAnchor()))
         } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextTranslateAnchorManagerId(_ managerId: String, textTranslateAnchor: FLTTextTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+    func setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textTranslateAnchor = TextTranslateAnchor(textTranslateAnchor)
+            manager.textTranslateAnchor = MapboxMaps.TextTranslateAnchor(textTranslateAnchor)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-        }
-    }
-
-    func getTextTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTTextTranslateAnchorBox?, FlutterError?) -> Void) {
-        do {
-            let manager = try getManager(id: managerId)
-            guard let textTranslateAnchor = manager.textTranslateAnchor else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(textTranslateAnchor.toFLTTextTranslateAnchorBox(), nil)
-        } catch {
-            completion(nil, FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 }
 
-extension FLTPointAnnotationOptions {
+extension PointAnnotationOptions {
 
-    func toPointAnnotation() -> PointAnnotation {
-        var annotation = PointAnnotation(coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+    func toPointAnnotation() -> MapboxMaps.PointAnnotation {
+        var annotation = MapboxMaps.PointAnnotation(coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
         if let image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
         }
-        annotation.iconAnchor = iconAnchor.flatMap(IconAnchor.init)
-        if let iconImage {
-            annotation.iconImage = iconImage
-        }
-        if let iconOffset {
-            annotation.iconOffset = iconOffset.map {$0.doubleValue}
-        }
-        if let iconRotate {
-            annotation.iconRotate = iconRotate.doubleValue
-        }
-        if let iconSize {
-            annotation.iconSize = iconSize.doubleValue
-        }
-        annotation.iconTextFit = iconTextFit.flatMap(IconTextFit.init)
-        if let iconTextFitPadding {
-            annotation.iconTextFitPadding = iconTextFitPadding.map {$0.doubleValue}
-        }
-        if let symbolSortKey {
-            annotation.symbolSortKey = symbolSortKey.doubleValue
-        }
-        annotation.textAnchor = textAnchor.flatMap(TextAnchor.init)
-        if let textField {
-            annotation.textField = textField
-        }
-        annotation.textJustify = textJustify.flatMap(TextJustify.init)
-        if let textLetterSpacing {
-            annotation.textLetterSpacing = textLetterSpacing.doubleValue
-        }
-        if let textLineHeight {
-            annotation.textLineHeight = textLineHeight.doubleValue
-        }
-        if let textMaxWidth {
-            annotation.textMaxWidth = textMaxWidth.doubleValue
-        }
-        if let textOffset {
-            annotation.textOffset = textOffset.map {$0.doubleValue}
-        }
-        if let textRadialOffset {
-            annotation.textRadialOffset = textRadialOffset.doubleValue
-        }
-        if let textRotate {
-            annotation.textRotate = textRotate.doubleValue
-        }
-        if let textSize {
-            annotation.textSize = textSize.doubleValue
-        }
-        annotation.textTransform = textTransform.flatMap(TextTransform.init)
-        if let iconColor {
-            annotation.iconColor = StyleColor.init(uiColorFromHex(rgbValue: iconColor.intValue))
-        }
-        if let iconEmissiveStrength {
-            annotation.iconEmissiveStrength = iconEmissiveStrength.doubleValue
-        }
-        if let iconHaloBlur {
-            annotation.iconHaloBlur = iconHaloBlur.doubleValue
-        }
-        if let iconHaloColor {
-            annotation.iconHaloColor = StyleColor.init(uiColorFromHex(rgbValue: iconHaloColor.intValue))
-        }
-        if let iconHaloWidth {
-            annotation.iconHaloWidth = iconHaloWidth.doubleValue
-        }
-        if let iconImageCrossFade {
-            annotation.iconImageCrossFade = iconImageCrossFade.doubleValue
-        }
-        if let iconOpacity {
-            annotation.iconOpacity = iconOpacity.doubleValue
-        }
-        if let textColor {
-            annotation.textColor = StyleColor.init(uiColorFromHex(rgbValue: textColor.intValue))
-        }
-        if let textEmissiveStrength {
-            annotation.textEmissiveStrength = textEmissiveStrength.doubleValue
-        }
-        if let textHaloBlur {
-            annotation.textHaloBlur = textHaloBlur.doubleValue
-        }
-        if let textHaloColor {
-            annotation.textHaloColor = StyleColor.init(uiColorFromHex(rgbValue: textHaloColor.intValue))
-        }
-        if let textHaloWidth {
-            annotation.textHaloWidth = textHaloWidth.doubleValue
-        }
-        if let textOpacity {
-            annotation.textOpacity = textOpacity.doubleValue
-        }
+        annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
+        annotation.iconImage = iconImage
+        annotation.iconOffset = iconOffset?.compactMap { $0 }
+        annotation.iconRotate = iconRotate
+        annotation.iconSize = iconSize
+        annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
+        annotation.iconTextFitPadding = iconTextFitPadding?.compactMap { $0 }
+        annotation.symbolSortKey = symbolSortKey
+        annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
+        annotation.textField = textField
+        annotation.textJustify = MapboxMaps.TextJustify(textJustify)
+        annotation.textLetterSpacing = textLetterSpacing
+        annotation.textLineHeight = textLineHeight
+        annotation.textMaxWidth = textMaxWidth
+        annotation.textOffset = textOffset?.compactMap { $0 }
+        annotation.textRadialOffset = textRadialOffset
+        annotation.textRotate = textRotate
+        annotation.textSize = textSize
+        annotation.textTransform = MapboxMaps.TextTransform(textTransform)
+        annotation.iconColor = StyleColor(rgb: iconColor)
+        annotation.iconEmissiveStrength = iconEmissiveStrength
+        annotation.iconHaloBlur = iconHaloBlur
+        annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
+        annotation.iconHaloWidth = iconHaloWidth
+        annotation.iconImageCrossFade = iconImageCrossFade
+        annotation.iconOpacity = iconOpacity
+        annotation.textColor = StyleColor(rgb: textColor)
+        annotation.textEmissiveStrength = textEmissiveStrength
+        annotation.textHaloBlur = textHaloBlur
+        annotation.textHaloColor = StyleColor(rgb: textHaloColor)
+        annotation.textHaloWidth = textHaloWidth
+        annotation.textOpacity = textOpacity
         return annotation
     }
 }
 
-extension FLTPointAnnotation {
+extension PointAnnotation {
 
-    func toPointAnnotation() -> PointAnnotation {
-                var annotation = PointAnnotation(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+    func toPointAnnotation() -> MapboxMaps.PointAnnotation {
+                var annotation = MapboxMaps.PointAnnotation(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
         if let image = self.image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
         }
-                annotation.iconAnchor = iconAnchor.flatMap(IconAnchor.init)
-        if let iconImage {
-            annotation.iconImage = iconImage
-        }
-        if let iconOffset {
-            annotation.iconOffset = iconOffset.map {$0.doubleValue}
-        }
-        if let iconRotate {
-            annotation.iconRotate = iconRotate.doubleValue
-        }
-        if let iconSize {
-            annotation.iconSize = iconSize.doubleValue
-        }
-        annotation.iconTextFit = iconTextFit.flatMap(IconTextFit.init)
-        if let iconTextFitPadding {
-            annotation.iconTextFitPadding = iconTextFitPadding.map {$0.doubleValue}
-        }
-        if let symbolSortKey {
-            annotation.symbolSortKey = symbolSortKey.doubleValue
-        }
-        annotation.textAnchor = textAnchor.flatMap(TextAnchor.init)
-        if let textField {
-            annotation.textField = textField
-        }
-        annotation.textJustify = textJustify.flatMap(TextJustify.init)
-        if let textLetterSpacing {
-            annotation.textLetterSpacing = textLetterSpacing.doubleValue
-        }
-        if let textLineHeight {
-            annotation.textLineHeight = textLineHeight.doubleValue
-        }
-        if let textMaxWidth {
-            annotation.textMaxWidth = textMaxWidth.doubleValue
-        }
-        if let textOffset {
-            annotation.textOffset = textOffset.map {$0.doubleValue}
-        }
-        if let textRadialOffset {
-            annotation.textRadialOffset = textRadialOffset.doubleValue
-        }
-        if let textRotate {
-            annotation.textRotate = textRotate.doubleValue
-        }
-        if let textSize {
-            annotation.textSize = textSize.doubleValue
-        }
-        annotation.textTransform = textTransform.flatMap(TextTransform.init)
-        if let iconColor {
-            annotation.iconColor = StyleColor.init(uiColorFromHex(rgbValue: iconColor.intValue))
-        }
-        if let iconEmissiveStrength {
-            annotation.iconEmissiveStrength = iconEmissiveStrength.doubleValue
-        }
-        if let iconHaloBlur {
-            annotation.iconHaloBlur = iconHaloBlur.doubleValue
-        }
-        if let iconHaloColor {
-            annotation.iconHaloColor = StyleColor.init(uiColorFromHex(rgbValue: iconHaloColor.intValue))
-        }
-        if let iconHaloWidth {
-            annotation.iconHaloWidth = iconHaloWidth.doubleValue
-        }
-        if let iconImageCrossFade {
-            annotation.iconImageCrossFade = iconImageCrossFade.doubleValue
-        }
-        if let iconOpacity {
-            annotation.iconOpacity = iconOpacity.doubleValue
-        }
-        if let textColor {
-            annotation.textColor = StyleColor.init(uiColorFromHex(rgbValue: textColor.intValue))
-        }
-        if let textEmissiveStrength {
-            annotation.textEmissiveStrength = textEmissiveStrength.doubleValue
-        }
-        if let textHaloBlur {
-            annotation.textHaloBlur = textHaloBlur.doubleValue
-        }
-        if let textHaloColor {
-            annotation.textHaloColor = StyleColor.init(uiColorFromHex(rgbValue: textHaloColor.intValue))
-        }
-        if let textHaloWidth {
-            annotation.textHaloWidth = textHaloWidth.doubleValue
-        }
-        if let textOpacity {
-            annotation.textOpacity = textOpacity.doubleValue
-        }
+                annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
+        annotation.iconImage = iconImage
+        annotation.iconOffset = iconOffset?.compactMap { $0 }
+        annotation.iconRotate = iconRotate
+        annotation.iconSize = iconSize
+        annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
+        annotation.iconTextFitPadding = iconTextFitPadding?.compactMap { $0 }
+        annotation.symbolSortKey = symbolSortKey
+        annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
+        annotation.textField = textField
+        annotation.textJustify = MapboxMaps.TextJustify(textJustify)
+        annotation.textLetterSpacing = textLetterSpacing
+        annotation.textLineHeight = textLineHeight
+        annotation.textMaxWidth = textMaxWidth
+        annotation.textOffset = textOffset?.compactMap { $0 }
+        annotation.textRadialOffset = textRadialOffset
+        annotation.textRotate = textRotate
+        annotation.textSize = textSize
+        annotation.textTransform = MapboxMaps.TextTransform(textTransform)
+        annotation.iconColor = StyleColor(rgb: iconColor)
+        annotation.iconEmissiveStrength = iconEmissiveStrength
+        annotation.iconHaloBlur = iconHaloBlur
+        annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
+        annotation.iconHaloWidth = iconHaloWidth
+        annotation.iconImageCrossFade = iconImageCrossFade
+        annotation.iconOpacity = iconOpacity
+        annotation.textColor = StyleColor(rgb: textColor)
+        annotation.textEmissiveStrength = textEmissiveStrength
+        annotation.textHaloBlur = textHaloBlur
+        annotation.textHaloColor = StyleColor(rgb: textHaloColor)
+        annotation.textHaloWidth = textHaloWidth
+        annotation.textOpacity = textOpacity
         return annotation
     }
 }
-extension PointAnnotation {
-    func toFLTPointAnnotation() -> FLTPointAnnotation {
-        let iconAnchor = iconAnchor?.toFLTIconAnchorBox()
-        let iconImage = iconImage
-        let iconOffset = iconOffset?.map(NSNumber.init(value:))
-        let iconRotate = iconRotate.map(NSNumber.init(value:))
-        let iconSize = iconSize.map(NSNumber.init(value:))
-        let iconTextFit = iconTextFit?.toFLTIconTextFitBox()
-        let iconTextFitPadding = iconTextFitPadding?.map(NSNumber.init(value:))
-        let symbolSortKey = symbolSortKey.map(NSNumber.init(value:))
-        let textAnchor = textAnchor?.toFLTTextAnchorBox()
-        let textField = textField
-        let textJustify = textJustify?.toFLTTextJustifyBox()
-        let textLetterSpacing = textLetterSpacing.map(NSNumber.init(value:))
-        let textLineHeight = textLineHeight.map(NSNumber.init(value:))
-        let textMaxWidth = textMaxWidth.map(NSNumber.init(value:))
-        let textOffset = textOffset?.map(NSNumber.init(value:))
-        let textRadialOffset = textRadialOffset.map(NSNumber.init(value:))
-        let textRotate = textRotate.map(NSNumber.init(value:))
-        let textSize = textSize.map(NSNumber.init(value:))
-        let textTransform = textTransform?.toFLTTextTransformBox()
-        let iconColor = iconColor?.nsNumberValue
-        let iconEmissiveStrength = iconEmissiveStrength.map(NSNumber.init(value:))
-        let iconHaloBlur = iconHaloBlur.map(NSNumber.init(value:))
-        let iconHaloColor = iconHaloColor?.nsNumberValue
-        let iconHaloWidth = iconHaloWidth.map(NSNumber.init(value:))
-        let iconImageCrossFade = iconImageCrossFade.map(NSNumber.init(value:))
-        let iconOpacity = iconOpacity.map(NSNumber.init(value:))
-        let textColor = textColor?.nsNumberValue
-        let textEmissiveStrength = textEmissiveStrength.map(NSNumber.init(value:))
-        let textHaloBlur = textHaloBlur.map(NSNumber.init(value:))
-        let textHaloColor = textHaloColor?.nsNumberValue
-        let textHaloWidth = textHaloWidth.map(NSNumber.init(value:))
-        let textOpacity = textOpacity.map(NSNumber.init(value:))
 
-        return FLTPointAnnotation.make(
-            withId: id,
+extension MapboxMaps.PointAnnotation {
+    func toFLTPointAnnotation() -> PointAnnotation {
+        return PointAnnotation(
+            id: id,
             geometry: geometry.toMap(),
             image: image?.image.pngData().map(FlutterStandardTypedData.init(bytes:)),
-            iconAnchor: iconAnchor,
+            iconAnchor: iconAnchor?.toFLTIconAnchor(),
             iconImage: iconImage,
             iconOffset: iconOffset,
             iconRotate: iconRotate,
             iconSize: iconSize,
-            iconTextFit: iconTextFit,
+            iconTextFit: iconTextFit?.toFLTIconTextFit(),
             iconTextFitPadding: iconTextFitPadding,
             symbolSortKey: symbolSortKey,
-            textAnchor: textAnchor,
+            textAnchor: textAnchor?.toFLTTextAnchor(),
             textField: textField,
-            textJustify: textJustify,
+            textJustify: textJustify?.toFLTTextJustify(),
             textLetterSpacing: textLetterSpacing,
             textLineHeight: textLineHeight,
             textMaxWidth: textMaxWidth,
@@ -990,18 +726,18 @@ extension PointAnnotation {
             textRadialOffset: textRadialOffset,
             textRotate: textRotate,
             textSize: textSize,
-            textTransform: textTransform,
-            iconColor: iconColor,
+            textTransform: textTransform?.toFLTTextTransform(),
+            iconColor: iconColor?.intValue,
             iconEmissiveStrength: iconEmissiveStrength,
             iconHaloBlur: iconHaloBlur,
-            iconHaloColor: iconHaloColor,
+            iconHaloColor: iconHaloColor?.intValue,
             iconHaloWidth: iconHaloWidth,
             iconImageCrossFade: iconImageCrossFade,
             iconOpacity: iconOpacity,
-            textColor: textColor,
+            textColor: textColor?.intValue,
             textEmissiveStrength: textEmissiveStrength,
             textHaloBlur: textHaloBlur,
-            textHaloColor: textHaloColor,
+            textHaloColor: textHaloColor?.intValue,
             textHaloWidth: textHaloWidth,
             textOpacity: textOpacity
         )

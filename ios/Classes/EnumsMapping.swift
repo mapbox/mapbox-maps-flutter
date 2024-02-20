@@ -1,603 +1,456 @@
 // This file is generated
 import MapboxMaps
 
-extension FillTranslateAnchor {
+extension MapboxMaps.FillTranslateAnchor {
 
-    init?(_ fltValue: FLTFillTranslateAnchor) {
+    init?(_ fltValue: FillTranslateAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTFillTranslateAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTFillTranslateAnchor() -> FLTFillTranslateAnchor? {
+    func toFLTFillTranslateAnchor() -> FillTranslateAnchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTFillTranslateAnchorBox() -> FLTFillTranslateAnchorBox? {
-        toFLTFillTranslateAnchor().map(FLTFillTranslateAnchorBox.init(value:))
     }
 }
-extension LineCap {
+extension MapboxMaps.LineCap {
 
-    init?(_ fltValue: FLTLineCap) {
+    init?(_ fltValue: LineCap?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .BUTT: self = .butt
-        case .ROUND: self = .round
-        case .SQUARE: self = .square
-        @unknown default: return nil
+        case .bUTT: self = .butt
+        case .rOUND: self = .round
+        case .sQUARE: self = .square
         }
     }
 
-    init?(_ fltValueBox: FLTLineCapBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTLineCap() -> FLTLineCap? {
+    func toFLTLineCap() -> LineCap? {
         switch self {
-        case .butt: return .BUTT
-        case .round: return .ROUND
-        case .square: return .SQUARE
+        case .butt: return .bUTT
+        case .round: return .rOUND
+        case .square: return .sQUARE
         default: return nil
         }
-    }
-
-    func toFLTLineCapBox() -> FLTLineCapBox? {
-        toFLTLineCap().map(FLTLineCapBox.init(value:))
     }
 }
-extension LineJoin {
+extension MapboxMaps.LineJoin {
 
-    init?(_ fltValue: FLTLineJoin) {
+    init?(_ fltValue: LineJoin?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .BEVEL: self = .bevel
-        case .ROUND: self = .round
-        case .MITER: self = .miter
-        @unknown default: return nil
+        case .bEVEL: self = .bevel
+        case .rOUND: self = .round
+        case .mITER: self = .miter
         }
     }
 
-    init?(_ fltValueBox: FLTLineJoinBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTLineJoin() -> FLTLineJoin? {
+    func toFLTLineJoin() -> LineJoin? {
         switch self {
-        case .bevel: return .BEVEL
-        case .round: return .ROUND
-        case .miter: return .MITER
+        case .bevel: return .bEVEL
+        case .round: return .rOUND
+        case .miter: return .mITER
         default: return nil
         }
-    }
-
-    func toFLTLineJoinBox() -> FLTLineJoinBox? {
-        toFLTLineJoin().map(FLTLineJoinBox.init(value:))
     }
 }
-extension LineTranslateAnchor {
+extension MapboxMaps.LineTranslateAnchor {
 
-    init?(_ fltValue: FLTLineTranslateAnchor) {
+    init?(_ fltValue: LineTranslateAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTLineTranslateAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTLineTranslateAnchor() -> FLTLineTranslateAnchor? {
+    func toFLTLineTranslateAnchor() -> LineTranslateAnchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTLineTranslateAnchorBox() -> FLTLineTranslateAnchorBox? {
-        toFLTLineTranslateAnchor().map(FLTLineTranslateAnchorBox.init(value:))
     }
 }
-extension IconAnchor {
+extension MapboxMaps.IconAnchor {
 
-    init?(_ fltValue: FLTIconAnchor) {
+    init?(_ fltValue: IconAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .CENTER: self = .center
-        case .LEFT: self = .left
-        case .RIGHT: self = .right
-        case .TOP: self = .top
-        case .BOTTOM: self = .bottom
-        case .TOP_LEFT: self = .topLeft
-        case .TOP_RIGHT: self = .topRight
-        case .BOTTOM_LEFT: self = .bottomLeft
-        case .BOTTOM_RIGHT: self = .bottomRight
-        @unknown default: return nil
+        case .cENTER: self = .center
+        case .lEFT: self = .left
+        case .rIGHT: self = .right
+        case .tOP: self = .top
+        case .bOTTOM: self = .bottom
+        case .tOPLEFT: self = .topLeft
+        case .tOPRIGHT: self = .topRight
+        case .bOTTOMLEFT: self = .bottomLeft
+        case .bOTTOMRIGHT: self = .bottomRight
         }
     }
 
-    init?(_ fltValueBox: FLTIconAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTIconAnchor() -> FLTIconAnchor? {
+    func toFLTIconAnchor() -> IconAnchor? {
         switch self {
-        case .center: return .CENTER
-        case .left: return .LEFT
-        case .right: return .RIGHT
-        case .top: return .TOP
-        case .bottom: return .BOTTOM
-        case .topLeft: return .TOP_LEFT
-        case .topRight: return .TOP_RIGHT
-        case .bottomLeft: return .BOTTOM_LEFT
-        case .bottomRight: return .BOTTOM_RIGHT
+        case .center: return .cENTER
+        case .left: return .lEFT
+        case .right: return .rIGHT
+        case .top: return .tOP
+        case .bottom: return .bOTTOM
+        case .topLeft: return .tOPLEFT
+        case .topRight: return .tOPRIGHT
+        case .bottomLeft: return .bOTTOMLEFT
+        case .bottomRight: return .bOTTOMRIGHT
         default: return nil
         }
-    }
-
-    func toFLTIconAnchorBox() -> FLTIconAnchorBox? {
-        toFLTIconAnchor().map(FLTIconAnchorBox.init(value:))
     }
 }
-extension IconPitchAlignment {
+extension MapboxMaps.IconPitchAlignment {
 
-    init?(_ fltValue: FLTIconPitchAlignment) {
+    init?(_ fltValue: IconPitchAlignment?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        case .AUTO: self = .auto
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
+        case .aUTO: self = .auto
         }
     }
 
-    init?(_ fltValueBox: FLTIconPitchAlignmentBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTIconPitchAlignment() -> FLTIconPitchAlignment? {
+    func toFLTIconPitchAlignment() -> IconPitchAlignment? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
-        case .auto: return .AUTO
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
+        case .auto: return .aUTO
         default: return nil
         }
-    }
-
-    func toFLTIconPitchAlignmentBox() -> FLTIconPitchAlignmentBox? {
-        toFLTIconPitchAlignment().map(FLTIconPitchAlignmentBox.init(value:))
     }
 }
-extension IconRotationAlignment {
+extension MapboxMaps.IconRotationAlignment {
 
-    init?(_ fltValue: FLTIconRotationAlignment) {
+    init?(_ fltValue: IconRotationAlignment?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        case .AUTO: self = .auto
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
+        case .aUTO: self = .auto
         }
     }
 
-    init?(_ fltValueBox: FLTIconRotationAlignmentBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTIconRotationAlignment() -> FLTIconRotationAlignment? {
+    func toFLTIconRotationAlignment() -> IconRotationAlignment? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
-        case .auto: return .AUTO
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
+        case .auto: return .aUTO
         default: return nil
         }
-    }
-
-    func toFLTIconRotationAlignmentBox() -> FLTIconRotationAlignmentBox? {
-        toFLTIconRotationAlignment().map(FLTIconRotationAlignmentBox.init(value:))
     }
 }
-extension IconTextFit {
+extension MapboxMaps.IconTextFit {
 
-    init?(_ fltValue: FLTIconTextFit) {
+    init?(_ fltValue: IconTextFit?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .NONE: self = .none
-        case .WIDTH: self = .width
-        case .HEIGHT: self = .height
-        case .BOTH: self = .both
-        @unknown default: return nil
+        case .nONE: self = .none
+        case .wIDTH: self = .width
+        case .hEIGHT: self = .height
+        case .bOTH: self = .both
         }
     }
 
-    init?(_ fltValueBox: FLTIconTextFitBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTIconTextFit() -> FLTIconTextFit? {
+    func toFLTIconTextFit() -> IconTextFit? {
         switch self {
-        case .none: return .NONE
-        case .width: return .WIDTH
-        case .height: return .HEIGHT
-        case .both: return .BOTH
+        case .none: return .nONE
+        case .width: return .wIDTH
+        case .height: return .hEIGHT
+        case .both: return .bOTH
         default: return nil
         }
-    }
-
-    func toFLTIconTextFitBox() -> FLTIconTextFitBox? {
-        toFLTIconTextFit().map(FLTIconTextFitBox.init(value:))
     }
 }
-extension SymbolPlacement {
+extension MapboxMaps.SymbolPlacement {
 
-    init?(_ fltValue: FLTSymbolPlacement) {
+    init?(_ fltValue: SymbolPlacement?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .POINT: self = .point
-        case .LINE: self = .line
-        case .LINE_CENTER: self = .lineCenter
-        @unknown default: return nil
+        case .pOINT: self = .point
+        case .lINE: self = .line
+        case .lINECENTER: self = .lineCenter
         }
     }
 
-    init?(_ fltValueBox: FLTSymbolPlacementBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTSymbolPlacement() -> FLTSymbolPlacement? {
+    func toFLTSymbolPlacement() -> SymbolPlacement? {
         switch self {
-        case .point: return .POINT
-        case .line: return .LINE
-        case .lineCenter: return .LINE_CENTER
+        case .point: return .pOINT
+        case .line: return .lINE
+        case .lineCenter: return .lINECENTER
         default: return nil
         }
-    }
-
-    func toFLTSymbolPlacementBox() -> FLTSymbolPlacementBox? {
-        toFLTSymbolPlacement().map(FLTSymbolPlacementBox.init(value:))
     }
 }
-extension SymbolZOrder {
+extension MapboxMaps.SymbolZOrder {
 
-    init?(_ fltValue: FLTSymbolZOrder) {
+    init?(_ fltValue: SymbolZOrder?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .AUTO: self = .auto
-        case .VIEWPORT_Y: self = .viewportY
-        case .SOURCE: self = .source
-        @unknown default: return nil
+        case .aUTO: self = .auto
+        case .vIEWPORTY: self = .viewportY
+        case .sOURCE: self = .source
         }
     }
 
-    init?(_ fltValueBox: FLTSymbolZOrderBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTSymbolZOrder() -> FLTSymbolZOrder? {
+    func toFLTSymbolZOrder() -> SymbolZOrder? {
         switch self {
-        case .auto: return .AUTO
-        case .viewportY: return .VIEWPORT_Y
-        case .source: return .SOURCE
+        case .auto: return .aUTO
+        case .viewportY: return .vIEWPORTY
+        case .source: return .sOURCE
         default: return nil
         }
-    }
-
-    func toFLTSymbolZOrderBox() -> FLTSymbolZOrderBox? {
-        toFLTSymbolZOrder().map(FLTSymbolZOrderBox.init(value:))
     }
 }
-extension TextAnchor {
+extension MapboxMaps.TextAnchor {
 
-    init?(_ fltValue: FLTTextAnchor) {
+    init?(_ fltValue: TextAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .CENTER: self = .center
-        case .LEFT: self = .left
-        case .RIGHT: self = .right
-        case .TOP: self = .top
-        case .BOTTOM: self = .bottom
-        case .TOP_LEFT: self = .topLeft
-        case .TOP_RIGHT: self = .topRight
-        case .BOTTOM_LEFT: self = .bottomLeft
-        case .BOTTOM_RIGHT: self = .bottomRight
-        @unknown default: return nil
+        case .cENTER: self = .center
+        case .lEFT: self = .left
+        case .rIGHT: self = .right
+        case .tOP: self = .top
+        case .bOTTOM: self = .bottom
+        case .tOPLEFT: self = .topLeft
+        case .tOPRIGHT: self = .topRight
+        case .bOTTOMLEFT: self = .bottomLeft
+        case .bOTTOMRIGHT: self = .bottomRight
         }
     }
 
-    init?(_ fltValueBox: FLTTextAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextAnchor() -> FLTTextAnchor? {
+    func toFLTTextAnchor() -> TextAnchor? {
         switch self {
-        case .center: return .CENTER
-        case .left: return .LEFT
-        case .right: return .RIGHT
-        case .top: return .TOP
-        case .bottom: return .BOTTOM
-        case .topLeft: return .TOP_LEFT
-        case .topRight: return .TOP_RIGHT
-        case .bottomLeft: return .BOTTOM_LEFT
-        case .bottomRight: return .BOTTOM_RIGHT
+        case .center: return .cENTER
+        case .left: return .lEFT
+        case .right: return .rIGHT
+        case .top: return .tOP
+        case .bottom: return .bOTTOM
+        case .topLeft: return .tOPLEFT
+        case .topRight: return .tOPRIGHT
+        case .bottomLeft: return .bOTTOMLEFT
+        case .bottomRight: return .bOTTOMRIGHT
         default: return nil
         }
-    }
-
-    func toFLTTextAnchorBox() -> FLTTextAnchorBox? {
-        toFLTTextAnchor().map(FLTTextAnchorBox.init(value:))
     }
 }
-extension TextJustify {
+extension MapboxMaps.TextJustify {
 
-    init?(_ fltValue: FLTTextJustify) {
+    init?(_ fltValue: TextJustify?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .AUTO: self = .auto
-        case .LEFT: self = .left
-        case .CENTER: self = .center
-        case .RIGHT: self = .right
-        @unknown default: return nil
+        case .aUTO: self = .auto
+        case .lEFT: self = .left
+        case .cENTER: self = .center
+        case .rIGHT: self = .right
         }
     }
 
-    init?(_ fltValueBox: FLTTextJustifyBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextJustify() -> FLTTextJustify? {
+    func toFLTTextJustify() -> TextJustify? {
         switch self {
-        case .auto: return .AUTO
-        case .left: return .LEFT
-        case .center: return .CENTER
-        case .right: return .RIGHT
+        case .auto: return .aUTO
+        case .left: return .lEFT
+        case .center: return .cENTER
+        case .right: return .rIGHT
         default: return nil
         }
-    }
-
-    func toFLTTextJustifyBox() -> FLTTextJustifyBox? {
-        toFLTTextJustify().map(FLTTextJustifyBox.init(value:))
     }
 }
-extension TextPitchAlignment {
+extension MapboxMaps.TextPitchAlignment {
 
-    init?(_ fltValue: FLTTextPitchAlignment) {
+    init?(_ fltValue: TextPitchAlignment?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        case .AUTO: self = .auto
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
+        case .aUTO: self = .auto
         }
     }
 
-    init?(_ fltValueBox: FLTTextPitchAlignmentBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextPitchAlignment() -> FLTTextPitchAlignment? {
+    func toFLTTextPitchAlignment() -> TextPitchAlignment? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
-        case .auto: return .AUTO
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
+        case .auto: return .aUTO
         default: return nil
         }
-    }
-
-    func toFLTTextPitchAlignmentBox() -> FLTTextPitchAlignmentBox? {
-        toFLTTextPitchAlignment().map(FLTTextPitchAlignmentBox.init(value:))
     }
 }
-extension TextRotationAlignment {
+extension MapboxMaps.TextRotationAlignment {
 
-    init?(_ fltValue: FLTTextRotationAlignment) {
+    init?(_ fltValue: TextRotationAlignment?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        case .AUTO: self = .auto
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
+        case .aUTO: self = .auto
         }
     }
 
-    init?(_ fltValueBox: FLTTextRotationAlignmentBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextRotationAlignment() -> FLTTextRotationAlignment? {
+    func toFLTTextRotationAlignment() -> TextRotationAlignment? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
-        case .auto: return .AUTO
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
+        case .auto: return .aUTO
         default: return nil
         }
-    }
-
-    func toFLTTextRotationAlignmentBox() -> FLTTextRotationAlignmentBox? {
-        toFLTTextRotationAlignment().map(FLTTextRotationAlignmentBox.init(value:))
     }
 }
-extension TextTransform {
+extension MapboxMaps.TextTransform {
 
-    init?(_ fltValue: FLTTextTransform) {
+    init?(_ fltValue: TextTransform?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .NONE: self = .none
-        case .UPPERCASE: self = .uppercase
-        case .LOWERCASE: self = .lowercase
-        @unknown default: return nil
+        case .nONE: self = .none
+        case .uPPERCASE: self = .uppercase
+        case .lOWERCASE: self = .lowercase
         }
     }
 
-    init?(_ fltValueBox: FLTTextTransformBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextTransform() -> FLTTextTransform? {
+    func toFLTTextTransform() -> TextTransform? {
         switch self {
-        case .none: return .NONE
-        case .uppercase: return .UPPERCASE
-        case .lowercase: return .LOWERCASE
+        case .none: return .nONE
+        case .uppercase: return .uPPERCASE
+        case .lowercase: return .lOWERCASE
         default: return nil
         }
-    }
-
-    func toFLTTextTransformBox() -> FLTTextTransformBox? {
-        toFLTTextTransform().map(FLTTextTransformBox.init(value:))
     }
 }
-extension IconTranslateAnchor {
+extension MapboxMaps.IconTranslateAnchor {
 
-    init?(_ fltValue: FLTIconTranslateAnchor) {
+    init?(_ fltValue: IconTranslateAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTIconTranslateAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTIconTranslateAnchor() -> FLTIconTranslateAnchor? {
+    func toFLTIconTranslateAnchor() -> IconTranslateAnchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTIconTranslateAnchorBox() -> FLTIconTranslateAnchorBox? {
-        toFLTIconTranslateAnchor().map(FLTIconTranslateAnchorBox.init(value:))
     }
 }
-extension TextTranslateAnchor {
+extension MapboxMaps.TextTranslateAnchor {
 
-    init?(_ fltValue: FLTTextTranslateAnchor) {
+    init?(_ fltValue: TextTranslateAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTTextTranslateAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTTextTranslateAnchor() -> FLTTextTranslateAnchor? {
+    func toFLTTextTranslateAnchor() -> TextTranslateAnchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTTextTranslateAnchorBox() -> FLTTextTranslateAnchorBox? {
-        toFLTTextTranslateAnchor().map(FLTTextTranslateAnchorBox.init(value:))
     }
 }
-extension CirclePitchAlignment {
+extension MapboxMaps.CirclePitchAlignment {
 
-    init?(_ fltValue: FLTCirclePitchAlignment) {
+    init?(_ fltValue: CirclePitchAlignment?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTCirclePitchAlignmentBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTCirclePitchAlignment() -> FLTCirclePitchAlignment? {
+    func toFLTCirclePitchAlignment() -> CirclePitchAlignment? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTCirclePitchAlignmentBox() -> FLTCirclePitchAlignmentBox? {
-        toFLTCirclePitchAlignment().map(FLTCirclePitchAlignmentBox.init(value:))
     }
 }
-extension CirclePitchScale {
+extension MapboxMaps.CirclePitchScale {
 
-    init?(_ fltValue: FLTCirclePitchScale) {
+    init?(_ fltValue: CirclePitchScale?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTCirclePitchScaleBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTCirclePitchScale() -> FLTCirclePitchScale? {
+    func toFLTCirclePitchScale() -> CirclePitchScale? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTCirclePitchScaleBox() -> FLTCirclePitchScaleBox? {
-        toFLTCirclePitchScale().map(FLTCirclePitchScaleBox.init(value:))
     }
 }
-extension CircleTranslateAnchor {
+extension MapboxMaps.CircleTranslateAnchor {
 
-    init?(_ fltValue: FLTCircleTranslateAnchor) {
+    init?(_ fltValue: CircleTranslateAnchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTCircleTranslateAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTCircleTranslateAnchor() -> FLTCircleTranslateAnchor? {
+    func toFLTCircleTranslateAnchor() -> CircleTranslateAnchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTCircleTranslateAnchorBox() -> FLTCircleTranslateAnchorBox? {
-        toFLTCircleTranslateAnchor().map(FLTCircleTranslateAnchorBox.init(value:))
     }
 }
-extension Anchor {
+extension MapboxMaps.Anchor {
 
-    init?(_ fltValue: FLTAnchor) {
+    init?(_ fltValue: Anchor?) {
+        guard let fltValue else { return nil }
+
         switch fltValue {
-        case .MAP: self = .map
-        case .VIEWPORT: self = .viewport
-        @unknown default: return nil
+        case .mAP: self = .map
+        case .vIEWPORT: self = .viewport
         }
     }
 
-    init?(_ fltValueBox: FLTAnchorBox) {
-        self.init(fltValueBox.value)
-    }
-
-    func toFLTAnchor() -> FLTAnchor? {
+    func toFLTAnchor() -> Anchor? {
         switch self {
-        case .map: return .MAP
-        case .viewport: return .VIEWPORT
+        case .map: return .mAP
+        case .viewport: return .vIEWPORT
         default: return nil
         }
-    }
-
-    func toFLTAnchorBox() -> FLTAnchorBox? {
-        toFLTAnchor().map(FLTAnchorBox.init(value:))
     }
 }

@@ -1,8 +1,8 @@
 import Flutter
 import UIKit
 
-public class SwiftMapboxMapsPlugin: MapboxMapsPlugin {
-    override public static func register(with registrar: FlutterPluginRegistrar) {
+public class MapboxMapsPlugin: NSObject, FlutterPlugin {
+    public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = MapboxMapFactory(withRegistrar: registrar)
         registrar.register(instance, withId: "plugins.flutter.io/mapbox_maps")
 
@@ -20,8 +20,8 @@ public class SwiftMapboxMapsPlugin: MapboxMapsPlugin {
     private static func setupStaticChannels(with binaryMessanger: FlutterBinaryMessenger) {
         // Register MapboxMapsOptions and MapboxOptions
         let mapboxOptionsController = MapboxOptionsController()
-        SetUpFLT_MapboxOptions(binaryMessanger, mapboxOptionsController)
-        SetUpFLT_MapboxMapsOptions(binaryMessanger, mapboxOptionsController)
+        _MapboxOptionsSetup.setUp(binaryMessenger: binaryMessanger, api: mapboxOptionsController)
+        _MapboxMapsOptionsSetup.setUp(binaryMessenger: binaryMessanger, api: mapboxOptionsController)
 
         LoggingController.setup(binaryMessanger)
     }

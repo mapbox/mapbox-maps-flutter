@@ -1,50 +1,51 @@
 import Foundation
 @_spi(Experimental) import MapboxMaps
-import UIKit
-class AnimationController: NSObject, FLT_AnimationManager {
+import Flutter
+
+final class AnimationController: _AnimationManager {
     private static let errorCode = "0"
 
-    func ease(to cameraOptions: FLTCameraOptions, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func easeTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?) throws {
         var cameraDuration = 1.0
         if mapAnimationOptions != nil && mapAnimationOptions!.duration != nil {
-            cameraDuration = mapAnimationOptions!.duration!.doubleValue / 1000
+            cameraDuration = Double(mapAnimationOptions!.duration!) / 1000.0
         }
-        cancelable = self.mapView.camera.ease(to: cameraOptions.toCameraOptions(), duration: cameraDuration)
+        cancelable = camera.ease(to: cameraOptions.toCameraOptions(), duration: cameraDuration)
     }
 
-    func fly(to cameraOptions: FLTCameraOptions, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func flyTo(cameraOptions: CameraOptions, mapAnimationOptions: MapAnimationOptions?) throws {
         var cameraDuration = 1.0
         if mapAnimationOptions != nil && mapAnimationOptions!.duration != nil {
-            cameraDuration = mapAnimationOptions!.duration!.doubleValue / 1000
+            cameraDuration = Double(mapAnimationOptions!.duration!) / 1000.0
         }
-        cancelable = self.mapView.camera.fly(to: cameraOptions.toCameraOptions(), duration: cameraDuration)
+        cancelable = camera.fly(to: cameraOptions.toCameraOptions(), duration: cameraDuration)
     }
 
-    func pitch(byPitch pitch: Double, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+    func pitchBy(pitch: Double, mapAnimationOptions: MapAnimationOptions?) throws {
+        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 
-    func scale(byAmount amount: Double, screenCoordinate: FLTScreenCoordinate?, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+    func scaleBy(amount: Double, screenCoordinate: ScreenCoordinate?, mapAnimationOptions: MapAnimationOptions?) throws {
+        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 
-    func move(by screenCoordinate: FLTScreenCoordinate, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+    func moveBy(screenCoordinate: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws {
+        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 
-    func rotate(byFirst first: FLTScreenCoordinate, second: FLTScreenCoordinate, mapAnimationOptions: FLTMapAnimationOptions?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        error.pointee = FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
+    func rotateBy(first: ScreenCoordinate, second: ScreenCoordinate, mapAnimationOptions: MapAnimationOptions?) throws {
+        throw FlutterError(code: AnimationController.errorCode, message: "Not available.", details: nil)
     }
 
-    func cancelCameraAnimationWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func cancelCameraAnimation() throws {
         if cancelable != nil {
             cancelable?.cancel()
         }
     }
 
-    private var mapView: MapView
-    private var cancelable: Cancelable?
+    private var camera: CameraAnimationsManager
+    private var cancelable: MapboxMaps.Cancelable?
     init(withMapView mapView: MapView) {
-        self.mapView = mapView
+        self.camera = mapView.camera
     }
 }

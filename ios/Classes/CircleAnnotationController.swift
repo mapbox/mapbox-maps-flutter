@@ -1,13 +1,14 @@
 // This file is generated.
 import MapboxMaps
-import UIKit
+import Foundation
+import Flutter
 
-final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
+final class CircleAnnotationController: _CircleAnnotationMessager {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
 
     private typealias AnnotationManager = CircleAnnotationManager
-    private enum `Error`: Swift.Error {
+    private enum CircleAnnotationControllerError: Swift.Error {
         case managerNotFound(String)
     }
 
@@ -15,21 +16,21 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
         self.delegate = delegate
     }
 
-    func createManagerId(_ managerId: String, annotationOption: FLTCircleAnnotationOptions, completion: @escaping (FLTCircleAnnotation?, FlutterError?) -> Void) {
+    func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                 let createdAnnotation = annotationOption.toCircleAnnotation()
                 manager.annotations.append(createdAnnotation)
-                completion(createdAnnotation.toFLTCircleAnnotation(), nil)
+                completion(.success(createdAnnotation.toFLTCircleAnnotation()))
             } else {
-                completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func createMultiManagerId(_ managerId: String, annotationOptions: [FLTCircleAnnotationOptions], completion: @escaping ([FLTCircleAnnotation]?, FlutterError?) -> Void) {
+    func createMulti(managerId: String, annotationOptions: [CircleAnnotationOptions], completion: @escaping (Result<[CircleAnnotation], Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                 let annotations = annotationOptions.map({ options in
@@ -39,16 +40,16 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                 let createdAnnotations = annotations.map { annotation in
                     annotation.toFLTCircleAnnotation()
                 }
-                completion(createdAnnotations, nil)
+                completion(.success(createdAnnotations))
             } else {
-                completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func updateManagerId(_ managerId: String, annotation: FLTCircleAnnotation, completion: @escaping (FlutterError?) -> Void) {
+    func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                 let index = manager.annotations.firstIndex(where: { circleAnnotation in
@@ -62,16 +63,16 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                 let updatedAnnotation = annotation.toCircleAnnotation()
 
                 manager.annotations[index!] = updatedAnnotation
-                completion(nil)
+                completion(.success(()))
             } else {
-                completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
         }
     }
 
-    func deleteManagerId(_ managerId: String, annotation: FLTCircleAnnotation, completion: @escaping (FlutterError?) -> Void) {
+    func delete(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                 let index = manager.annotations.firstIndex(where: { circleAnnotation in
@@ -82,247 +83,182 @@ final class CircleAnnotationController: NSObject, FLT_CircleAnnotationMessager {
                     throw AnnotationControllerError.noAnnotationFound
                 }
                 manager.annotations.remove(at: index!)
-                completion(nil)
+                completion(.success(()))
             } else {
-                completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
         }
     }
 
-    func deleteAllManagerId(_ managerId: String, completion: @escaping (FlutterError?) -> Void) {
+    func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if let manager = try delegate?.getManager(managerId: managerId) as? CircleAnnotationManager {
                 manager.annotations = []
             } else {
-                completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+                completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
             }
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil)))
         }
-        completion(nil)
+        completion(.success(()))
     }
 
     private func getManager(id: String) throws -> AnnotationManager {
         if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
             return manager
         } else {
-            throw Error.managerNotFound(id)
+            throw CircleAnnotationControllerError.managerNotFound(id)
         }
     }
 
     // MARK: Properties
 
-    func setCircleEmissiveStrengthManagerId(_ managerId: String, circleEmissiveStrength: Double, completion: @escaping (FlutterError?) -> Void) {
+    func getCircleEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleEmissiveStrength))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleEmissiveStrength(managerId: String, circleEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.circleEmissiveStrength = circleEmissiveStrength
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getCircleEmissiveStrengthManagerId(_ managerId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func getCirclePitchAlignment(managerId: String, completion: @escaping (Result<CirclePitchAlignment?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let circleEmissiveStrength = manager.circleEmissiveStrength else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(NSNumber(value: circleEmissiveStrength), nil)
+            completion(.success(manager.circlePitchAlignment?.toFLTCirclePitchAlignment()))
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCirclePitchAlignmentManagerId(_ managerId: String, circlePitchAlignment: FLTCirclePitchAlignment, completion: @escaping (FlutterError?) -> Void) {
+    func setCirclePitchAlignment(managerId: String, circlePitchAlignment: CirclePitchAlignment, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circlePitchAlignment = CirclePitchAlignment(circlePitchAlignment)
+            manager.circlePitchAlignment = MapboxMaps.CirclePitchAlignment(circlePitchAlignment)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getCirclePitchAlignmentManagerId(_ managerId: String, completion: @escaping (FLTCirclePitchAlignmentBox?, FlutterError?) -> Void) {
+    func getCirclePitchScale(managerId: String, completion: @escaping (Result<CirclePitchScale?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let circlePitchAlignment = manager.circlePitchAlignment else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(circlePitchAlignment.toFLTCirclePitchAlignmentBox(), nil)
+            completion(.success(manager.circlePitchScale?.toFLTCirclePitchScale()))
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCirclePitchScaleManagerId(_ managerId: String, circlePitchScale: FLTCirclePitchScale, completion: @escaping (FlutterError?) -> Void) {
+    func setCirclePitchScale(managerId: String, circlePitchScale: CirclePitchScale, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circlePitchScale = CirclePitchScale(circlePitchScale)
+            manager.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getCirclePitchScaleManagerId(_ managerId: String, completion: @escaping (FLTCirclePitchScaleBox?, FlutterError?) -> Void) {
+    func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let circlePitchScale = manager.circlePitchScale else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(circlePitchScale.toFLTCirclePitchScaleBox(), nil)
+            completion(.success(manager.circleTranslate))
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCircleTranslateManagerId(_ managerId: String, circleTranslate: [NSNumber], completion: @escaping (FlutterError?) -> Void) {
+    func setCircleTranslate(managerId: String, circleTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circleTranslate = circleTranslate.map {$0.doubleValue}
+            manager.circleTranslate = circleTranslate.compactMap { $0 }
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func getCircleTranslateManagerId(_ managerId: String, completion: @escaping ([NSNumber]?, FlutterError?) -> Void) {
+    func getCircleTranslateAnchor(managerId: String, completion: @escaping (Result<CircleTranslateAnchor?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            guard let circleTranslate = manager.circleTranslate else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(circleTranslate.map(NSNumber.init(value:)), nil)
+            completion(.success(manager.circleTranslateAnchor?.toFLTCircleTranslateAnchor()))
         } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCircleTranslateAnchorManagerId(_ managerId: String, circleTranslateAnchor: FLTCircleTranslateAnchor, completion: @escaping (FlutterError?) -> Void) {
+    func setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circleTranslateAnchor = CircleTranslateAnchor(circleTranslateAnchor)
+            manager.circleTranslateAnchor = MapboxMaps.CircleTranslateAnchor(circleTranslateAnchor)
 
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
-        }
-    }
-
-    func getCircleTranslateAnchorManagerId(_ managerId: String, completion: @escaping (FLTCircleTranslateAnchorBox?, FlutterError?) -> Void) {
-        do {
-            let manager = try getManager(id: managerId)
-            guard let circleTranslateAnchor = manager.circleTranslateAnchor else {
-                completion(nil, nil)
-                return
-            }
-
-            completion(circleTranslateAnchor.toFLTCircleTranslateAnchorBox(), nil)
-        } catch {
-            completion(nil, FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil))
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 }
 
-extension FLTCircleAnnotationOptions {
+extension CircleAnnotationOptions {
 
-    func toCircleAnnotation() -> CircleAnnotation {
-        var annotation = CircleAnnotation(centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: geometry)!)
-        if let circleSortKey {
-            annotation.circleSortKey = circleSortKey.doubleValue
-        }
-        if let circleBlur {
-            annotation.circleBlur = circleBlur.doubleValue
-        }
-        if let circleColor {
-            annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
-        }
-        if let circleOpacity {
-            annotation.circleOpacity = circleOpacity.doubleValue
-        }
-        if let circleRadius {
-            annotation.circleRadius = circleRadius.doubleValue
-        }
-        if let circleStrokeColor {
-            annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
-        }
-        if let circleStrokeOpacity {
-            annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
-        }
-        if let circleStrokeWidth {
-            annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
-        }
+    func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
+        var annotation = MapboxMaps.CircleAnnotation(centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: geometry)!)
+        annotation.circleSortKey = circleSortKey
+        annotation.circleBlur = circleBlur
+        annotation.circleColor = StyleColor(rgb: circleColor)
+        annotation.circleOpacity = circleOpacity
+        annotation.circleRadius = circleRadius
+        annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
+        annotation.circleStrokeOpacity = circleStrokeOpacity
+        annotation.circleStrokeWidth = circleStrokeWidth
         return annotation
     }
 }
 
-extension FLTCircleAnnotation {
-
-    func toCircleAnnotation() -> CircleAnnotation {
-                var annotation = CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
-                if let circleSortKey {
-            annotation.circleSortKey = circleSortKey.doubleValue
-        }
-        if let circleBlur {
-            annotation.circleBlur = circleBlur.doubleValue
-        }
-        if let circleColor {
-            annotation.circleColor = StyleColor.init(uiColorFromHex(rgbValue: circleColor.intValue))
-        }
-        if let circleOpacity {
-            annotation.circleOpacity = circleOpacity.doubleValue
-        }
-        if let circleRadius {
-            annotation.circleRadius = circleRadius.doubleValue
-        }
-        if let circleStrokeColor {
-            annotation.circleStrokeColor = StyleColor.init(uiColorFromHex(rgbValue: circleStrokeColor.intValue))
-        }
-        if let circleStrokeOpacity {
-            annotation.circleStrokeOpacity = circleStrokeOpacity.doubleValue
-        }
-        if let circleStrokeWidth {
-            annotation.circleStrokeWidth = circleStrokeWidth.doubleValue
-        }
-        return annotation
-    }
-}
 extension CircleAnnotation {
-    func toFLTCircleAnnotation() -> FLTCircleAnnotation {
-        let circleSortKey = circleSortKey.map(NSNumber.init(value:))
-        let circleBlur = circleBlur.map(NSNumber.init(value:))
-        let circleColor = circleColor?.nsNumberValue
-        let circleOpacity = circleOpacity.map(NSNumber.init(value:))
-        let circleRadius = circleRadius.map(NSNumber.init(value:))
-        let circleStrokeColor = circleStrokeColor?.nsNumberValue
-        let circleStrokeOpacity = circleStrokeOpacity.map(NSNumber.init(value:))
-        let circleStrokeWidth = circleStrokeWidth.map(NSNumber.init(value:))
 
-        return FLTCircleAnnotation.make(
-            withId: id,
+    func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
+                var annotation = MapboxMaps.CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+                annotation.circleSortKey = circleSortKey
+        annotation.circleBlur = circleBlur
+        annotation.circleColor = StyleColor(rgb: circleColor)
+        annotation.circleOpacity = circleOpacity
+        annotation.circleRadius = circleRadius
+        annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
+        annotation.circleStrokeOpacity = circleStrokeOpacity
+        annotation.circleStrokeWidth = circleStrokeWidth
+        return annotation
+    }
+}
+
+extension MapboxMaps.CircleAnnotation {
+    func toFLTCircleAnnotation() -> CircleAnnotation {
+        return CircleAnnotation(
+            id: id,
             geometry: geometry.toMap(),
             circleSortKey: circleSortKey,
             circleBlur: circleBlur,
-            circleColor: circleColor,
+            circleColor: circleColor?.intValue,
             circleOpacity: circleOpacity,
             circleRadius: circleRadius,
-            circleStrokeColor: circleStrokeColor,
+            circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
             circleStrokeWidth: circleStrokeWidth
         )

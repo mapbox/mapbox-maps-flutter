@@ -1,62 +1,59 @@
 import MapboxMaps
 import MapboxCommon
+import Flutter
 
-final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMapsOptions {
+final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
     private static let errorCode = "0"
 
-    func getBaseUrlWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
+    func getBaseUrl() throws -> String {
         MapboxMapsOptions.baseURL.absoluteString
     }
 
-    func setBaseUrlUrl(_ url: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setBaseUrl(url: String) throws {
         guard let url = URL(string: url) else {
-            error.pointee = FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
-            return
+            throw FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
         }
         MapboxMapsOptions.baseURL = url
     }
 
-    func getDataPathWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
+    func getDataPath() throws -> String {
         MapboxMapsOptions.dataPath.absoluteString
     }
 
-    func setDataPathPath(_ path: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setDataPath(path: String) throws {
         guard let url = URL(string: path) else {
-            error.pointee = FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
-            return
+            throw FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
         }
         MapboxMapsOptions.dataPath = url
     }
 
-    func getAssetPathWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
+    func getAssetPath() throws -> String {
         MapboxMapsOptions.assetPath.absoluteString
     }
 
-    func setAssetPathPath(_ path: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setAssetPath(path: String) throws {
         guard let url = URL(string: path) else {
-            error.pointee = FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
-            return
+            throw FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
         }
         MapboxMapsOptions.assetPath = url
     }
 
-    func getTileStoreUsageModeWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLTTileStoreUsageModeBox? {
-        FLTTileStoreUsageModeBox(value: FLTTileStoreUsageMode(rawValue: UInt(MapboxMapsOptions.tileStoreUsageMode.rawValue))!)
+    func getTileStoreUsageMode() throws -> TileStoreUsageMode {
+        TileStoreUsageMode(rawValue: MapboxMapsOptions.tileStoreUsageMode.rawValue)!
     }
 
-    func setTileStoreUsageModeMode(_ mode: FLTTileStoreUsageMode, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        guard let mode = TileStoreUsageMode(rawValue: Int(mode.rawValue)) else {
-            error.pointee = FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid tile store usage mode", details: nil)
-            return
+    func setTileStoreUsageMode(mode: TileStoreUsageMode) throws {
+        guard let mode = MapboxMaps.TileStoreUsageMode(rawValue: mode.rawValue) else {
+            throw FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid tile store usage mode", details: nil)
         }
         MapboxMapsOptions.tileStoreUsageMode = mode
     }
 
-    func getAccessTokenWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
+    func getAccessToken() throws -> String {
         MapboxOptions.accessToken
     }
 
-    func setAccessTokenToken(_ token: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+    func setAccessToken(token: String) throws {
         MapboxOptions.accessToken = token
     }
 }

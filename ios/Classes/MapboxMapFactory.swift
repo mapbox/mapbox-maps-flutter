@@ -13,16 +13,16 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         return FlutterStandardMessageCodec.sharedInstance()
     }
 
-    private func createGlyphsRasterizationOptions(args: [Any]) -> GlyphsRasterizationOptions {
-        var glyphsRasterizationOptions: GlyphsRasterizationOptions = GlyphsRasterizationOptions(fontFamilies: [])
+    private func createGlyphsRasterizationOptions(args: [Any]) -> MapboxMaps.GlyphsRasterizationOptions {
+        var glyphsRasterizationOptions = MapboxMaps.GlyphsRasterizationOptions(fontFamilies: [])
         if let glyphsRasterizationOptionsList = args[7] as? [Any] {
             if let rasterizationModeValue = glyphsRasterizationOptionsList[0] as? Int {
-                let rasterizationMode = GlyphsRasterizationMode(rawValue: rasterizationModeValue)
+                let rasterizationMode = MapboxMaps.GlyphsRasterizationMode(rawValue: rasterizationModeValue)
                 var fontFamilies: [String] = []
                 if let fontFamiliesString = glyphsRasterizationOptionsList[1] as? String {
                     fontFamilies.append(fontFamiliesString)
                 }
-                glyphsRasterizationOptions = GlyphsRasterizationOptions(
+                glyphsRasterizationOptions = MapboxMaps.GlyphsRasterizationOptions(
                     rasterizationMode: rasterizationMode!,
                     fontFamilies: fontFamilies
                 )
@@ -30,23 +30,24 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         }
         return glyphsRasterizationOptions
     }
-    private func createMapOptions(args: [String: Any]) -> MapOptions {
-        var mapOptions = MapOptions()
+
+    private func createMapOptions(args: [String: Any]) -> MapboxMaps.MapOptions {
+        var mapOptions = MapboxMaps.MapOptions()
         if let mapOptionsMap = args["mapOptions"] as? [Any] {
-            var constrainMode: ConstrainMode = .heightOnly
-            var viewportMode: ViewportMode = .default
-            var orientation: NorthOrientation = .upwards
+            var constrainMode: MapboxMaps.ConstrainMode = .heightOnly
+            var viewportMode: MapboxMaps.ViewportMode = .default
+            var orientation: MapboxMaps.NorthOrientation = .upwards
             var crossSourceCollisions: Bool = true
             var size: CGSize?
             var pixelRatio: CGFloat = UIScreen.main.nativeScale
             if let constrainModeInt = mapOptionsMap[1] as? Int {
-                constrainMode = ConstrainMode(rawValue: constrainModeInt)!
+                constrainMode = MapboxMaps.ConstrainMode(rawValue: constrainModeInt)!
             }
             if let viewportModeInt = mapOptionsMap[2] as? Int {
-                viewportMode = ViewportMode(rawValue: viewportModeInt)!
+                viewportMode = MapboxMaps.ViewportMode(rawValue: viewportModeInt)!
             }
             if let orientationInt = mapOptionsMap[3] as? Int {
-                orientation = NorthOrientation(rawValue: orientationInt)!
+                orientation = MapboxMaps.NorthOrientation(rawValue: orientationInt)!
             }
             if let crossSourceCollisionsBool = mapOptionsMap[4] as? Bool {
                 crossSourceCollisions = crossSourceCollisionsBool
@@ -58,7 +59,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 pixelRatio = pixelRatioFloat
             }
 
-            mapOptions = MapOptions(
+            mapOptions = MapboxMaps.MapOptions(
                 constrainMode: constrainMode,
                 viewportMode: viewportMode,
                 orientation: orientation,
@@ -71,7 +72,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         return mapOptions
     }
 
-    private func createCameraOptions(args: [String: Any]) -> CameraOptions? {
+    private func createCameraOptions(args: [String: Any]) -> MapboxMaps.CameraOptions? {
         guard let cameraOptionsMap = args["cameraOptions"] as? [Any] else {
             return nil
         }
@@ -100,12 +101,12 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             anchor = CGPoint(x: anchorMap[0], y: anchorMap[1])
         }
 
-        return CameraOptions(center: center,
-                             padding: padding,
-                             anchor: anchor,
-                             zoom: zoom,
-                             bearing: bearing,
-                             pitch: pitch)
+        return MapboxMaps.CameraOptions(center: center,
+                                        padding: padding,
+                                        anchor: anchor,
+                                        zoom: zoom,
+                                        bearing: bearing,
+                                        pitch: pitch)
     }
 
     func create(

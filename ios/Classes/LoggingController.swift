@@ -1,8 +1,9 @@
 import MapboxMaps
 import Foundation
+import Flutter
 
 final class LoggingController {
-    static private var backend: FLT_LOGGINGLogWriterBackend?
+    static private var backend: LogWriterBackend?
     static private let instance = LoggingController()
 
     static func setup(_ binaryMessanger: FlutterBinaryMessenger) {
@@ -11,11 +12,11 @@ final class LoggingController {
     }
 }
 
-extension LoggingController: LogWriterBackend {
-    func writeLog(for level: LoggingLevel, message: String) {
+extension LoggingController: MapboxCommon.LogWriterBackend {
+    func writeLog(for level: MapboxCommon.LoggingLevel, message: String) {
         DispatchQueue.main.async {
-            LoggingController.backend?.writeLogLevel(
-                level.toFLTLoggingLevel(),
+            LoggingController.backend?.writeLog(
+                level: level.toFLTLoggingLevel(),
                 message: message,
                 completion: { _ in }
             )
