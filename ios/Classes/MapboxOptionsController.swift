@@ -58,5 +58,6 @@ final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMaps
 
     func setAccessTokenToken(_ token: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         MapboxOptions.accessToken = token
+        TileStore.default.setOptionForKey("log-tile-loading", value: NSNumber(value: true))
     }
 }
