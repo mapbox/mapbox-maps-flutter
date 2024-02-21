@@ -389,7 +389,7 @@ struct MbxEdgeInsets {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraOptions {
   /// Coordinate at the center of the camera.
-  var center: [String?: Any?]?
+  var center: Point?
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
   var padding: MbxEdgeInsets?
@@ -405,7 +405,10 @@ struct CameraOptions {
   var pitch: Double?
 
   static func fromList(_ list: [Any?]) -> CameraOptions? {
-    let center: [String?: Any?]? = nilOrValue(list[0])
+    var center: Point?
+    if let centerList: [Any?] = nilOrValue(list[0]) {
+      center = Point.fromList(centerList)
+    }
     var padding: MbxEdgeInsets?
     if let paddingList: [Any?] = nilOrValue(list[1]) {
       padding = MbxEdgeInsets.fromList(paddingList)
@@ -429,7 +432,7 @@ struct CameraOptions {
   }
   func toList() -> [Any?] {
     return [
-      center,
+      center?.toList(),
       padding?.toList(),
       anchor?.toList(),
       zoom,
@@ -1743,8 +1746,10 @@ private class _AnimationManagerCodecReader: FlutterStandardReader {
     case 130:
       return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 131:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 132:
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+    case 133:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -1763,11 +1768,14 @@ private class _AnimationManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MbxEdgeInsets {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? Point {
       super.writeByte(131)
       super.writeValue(value.toList())
     } else if let value = value as? ScreenCoordinate {
       super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? ScreenCoordinate {
+      super.writeByte(133)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -1971,36 +1979,38 @@ private class _CameraManagerCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2079,53 +2089,56 @@ private class _CameraManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2770,36 +2783,38 @@ private class _MapInterfaceCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2878,53 +2893,56 @@ private class _MapInterfaceCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4027,36 +4045,38 @@ private class ProjectionCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -4135,53 +4155,56 @@ private class ProjectionCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4720,36 +4743,38 @@ private class MapSnapshotCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -4828,53 +4853,56 @@ private class MapSnapshotCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5048,36 +5076,38 @@ private class MapSnapshotterCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -5156,53 +5186,56 @@ private class MapSnapshotterCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5426,36 +5459,38 @@ private class StyleManagerCodecReader: FlutterStandardReader {
     case 150:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
     case 151:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 159:
-      return Size.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 160:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 161:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 163:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
     case 165:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 166:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 167:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -5534,53 +5569,56 @@ private class StyleManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? Point {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? StyleProjection {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

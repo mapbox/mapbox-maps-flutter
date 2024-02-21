@@ -84,7 +84,7 @@ extension MapDebugOptions {
 extension CameraOptions {
     func toCameraOptions() -> MapboxMaps.CameraOptions {
         return MapboxMaps.CameraOptions(
-            center: convertDictionaryToCLLocationCoordinate2D(dict: self.center),
+            center: self.center?.coordinates,
             padding: self.padding?.toUIEdgeInsets(),
             anchor: self.anchor?.toCGPoint(),
             zoom: self.zoom?.CGFloat,
@@ -321,7 +321,6 @@ extension MapboxMaps.CoordinateBounds {
 }
 extension MapboxMaps.CameraOptions {
     func toFLTCameraOptions() -> CameraOptions {
-        let center = self.center != nil ? self.center?.toDict(): nil
         let padding = self.padding != nil ? MbxEdgeInsets(
             top: padding!.top,
             left: padding!.left,
@@ -331,7 +330,7 @@ extension MapboxMaps.CameraOptions {
         let anchor = self.anchor != nil ? ScreenCoordinate(x: self.anchor!.x, y: self.anchor!.y) : nil
 
         return CameraOptions(
-            center: center,
+            center: center.map(Point.init),
             padding: padding,
             anchor: anchor,
             zoom: zoom.map(Double.init),

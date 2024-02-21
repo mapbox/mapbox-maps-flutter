@@ -447,7 +447,7 @@ class CameraOptions {
   });
 
   /// Coordinate at the center of the camera.
-  Map<String?, Object?>? center;
+  Point? center;
 
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
@@ -469,7 +469,7 @@ class CameraOptions {
 
   Object encode() {
     return <Object?>[
-      center,
+      center?.encode(),
       padding?.encode(),
       anchor?.encode(),
       zoom,
@@ -481,7 +481,8 @@ class CameraOptions {
   static CameraOptions decode(Object result) {
     result as List<Object?>;
     return CameraOptions(
-      center: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      center:
+          result[0] != null ? Point.decode(result[0]! as List<Object?>) : null,
       padding: result[1] != null
           ? MbxEdgeInsets.decode(result[1]! as List<Object?>)
           : null,
@@ -1936,11 +1937,14 @@ class __AnimationManagerCodec extends StandardMessageCodec {
     } else if (value is MbxEdgeInsets) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is Point) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else if (value is ScreenCoordinate) {
       buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else if (value is ScreenCoordinate) {
+      buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -1957,8 +1961,10 @@ class __AnimationManagerCodec extends StandardMessageCodec {
       case 130:
         return MbxEdgeInsets.decode(readValue(buffer)!);
       case 131:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 132:
+        return ScreenCoordinate.decode(readValue(buffer)!);
+      case 133:
         return ScreenCoordinate.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -2228,53 +2234,56 @@ class __CameraManagerCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2331,36 +2340,38 @@ class __CameraManagerCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3109,53 +3120,56 @@ class __MapInterfaceCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3212,36 +3226,38 @@ class __MapInterfaceCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4538,53 +4554,56 @@ class _ProjectionCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4641,36 +4660,38 @@ class _ProjectionCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5412,53 +5433,56 @@ class _MapSnapshotCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5515,36 +5539,38 @@ class _MapSnapshotCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -5770,53 +5796,56 @@ class _MapSnapshotterCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5873,36 +5902,38 @@ class _MapSnapshotterCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -6174,53 +6205,56 @@ class _StyleManagerCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is Point) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(167);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -6277,36 +6311,38 @@ class _StyleManagerCodec extends StandardMessageCodec {
       case 150:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
       case 151:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 152:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 153:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 156:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return ScreenBox.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 158:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 159:
-        return Size.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 160:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 161:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 162:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 163:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 165:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 166:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 167:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

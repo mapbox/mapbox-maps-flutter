@@ -158,7 +158,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
   setCameraPosition(Position position) {
     mapboxMap.flyTo(
         CameraOptions(
-          center: Point(coordinates: position).toJson(),
+          center: Point(coordinates: position),
           padding: defaultEdgeInsets,
           zoom: 10,
         ),

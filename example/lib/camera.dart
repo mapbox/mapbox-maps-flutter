@@ -119,7 +119,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -173,7 +173,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -200,7 +200,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -226,7 +226,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -252,7 +252,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -360,7 +360,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                 coordinates: Position(
               0.381457,
               6.687337,
-            )).toJson(),
+            )),
             padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
             anchor: ScreenCoordinate(x: 1, y: 1),
             zoom: 3,
