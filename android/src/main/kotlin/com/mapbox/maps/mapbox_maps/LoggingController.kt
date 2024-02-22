@@ -4,16 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import com.mapbox.common.LogConfiguration
 import com.mapbox.common.LoggingLevel
-import com.mapbox.maps.pigeons.FLTLogBackend.LogWriterBackend
-import com.mapbox.maps.pigeons.FLTLogBackend.VoidResult
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import io.flutter.plugin.common.BinaryMessenger
 
 class LoggingController : com.mapbox.common.LogWriterBackend {
   private val handler = Handler(Looper.getMainLooper())
-  private val result = object : VoidResult {
-    override fun success() { }
-    override fun error(error: Throwable) { }
-  }
+
   companion object {
     private var backend: LogWriterBackend? = null
     private val instance = LoggingController()
@@ -26,7 +22,7 @@ class LoggingController : com.mapbox.common.LogWriterBackend {
 
   override fun writeLog(level: LoggingLevel, message: String) {
     handler.post {
-      backend?.writeLog(level.toFLTLoggingLevel(), message, result)
+      backend?.writeLog(level.toFLTLoggingLevel(), message) { }
     }
   }
 }

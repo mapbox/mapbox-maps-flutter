@@ -16,10 +16,11 @@ import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import com.mapbox.common.*
-import com.mapbox.maps.*
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
-import com.mapbox.maps.pigeons.FLTMapInterfaces
-import com.mapbox.maps.pigeons.FLTSettings
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -63,70 +64,70 @@ class MapboxMapController(
   init {
     changeUserAgent(pluginVersion)
     lifecycleProvider.getLifecycle()?.addObserver(this)
-    FLTMapInterfaces.StyleManager.setUp(proxyBinaryMessenger, styleController)
-    FLTMapInterfaces._CameraManager.setUp(proxyBinaryMessenger, cameraController)
-    FLTMapInterfaces.Projection.setUp(proxyBinaryMessenger, projectionController)
-    FLTMapInterfaces._MapInterface.setUp(proxyBinaryMessenger, mapInterfaceController)
-    FLTMapInterfaces._AnimationManager.setUp(proxyBinaryMessenger, animationController)
+    StyleManager.setUp(proxyBinaryMessenger, styleController)
+    _CameraManager.setUp(proxyBinaryMessenger, cameraController)
+    Projection.setUp(proxyBinaryMessenger, projectionController)
+    _MapInterface.setUp(proxyBinaryMessenger, mapInterfaceController)
+    _AnimationManager.setUp(proxyBinaryMessenger, animationController)
     annotationController.setup(proxyBinaryMessenger)
-    FLTSettings._LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, locationComponentController)
-    FLTSettings.LogoSettingsInterface.setUp(proxyBinaryMessenger, logoController)
-    FLTSettings.GesturesSettingsInterface.setUp(proxyBinaryMessenger, gestureController)
-    FLTSettings.AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController)
-    FLTSettings.ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController)
-    FLTSettings.CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController)
+    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, locationComponentController)
+    LogoSettingsInterface.setUp(proxyBinaryMessenger, logoController)
+    GesturesSettingsInterface.setUp(proxyBinaryMessenger, gestureController)
+    AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController)
+    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController)
+    CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController)
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
 
     // TODO: check if state-triggered subscription change does not lead to multiple subscriptions/not unsubscribing when listener becomes null
     for (event in eventTypes) {
-      subscribeToEvent(FLTMapInterfaces._MapEvent.values()[event])
+      subscribeToEvent(_MapEvent.values()[event])
     }
   }
 
-  private fun subscribeToEvent(event: FLTMapInterfaces._MapEvent) {
+  private fun subscribeToEvent(event: _MapEvent) {
     when (event) {
-      FLTMapInterfaces._MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
+      _MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.MAP_LOADING_ERROR -> mapboxMap.subscribeMapLoadingError {
+      _MapEvent.MAP_LOADING_ERROR -> mapboxMap.subscribeMapLoadingError {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.STYLE_LOADED -> mapboxMap.subscribeStyleLoaded {
+      _MapEvent.STYLE_LOADED -> mapboxMap.subscribeStyleLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.STYLE_DATA_LOADED -> mapboxMap.subscribeStyleDataLoaded {
+      _MapEvent.STYLE_DATA_LOADED -> mapboxMap.subscribeStyleDataLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.CAMERA_CHANGED -> mapboxMap.subscribeCameraChanged {
+      _MapEvent.CAMERA_CHANGED -> mapboxMap.subscribeCameraChanged {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.MAP_IDLE -> mapboxMap.subscribeMapIdle {
+      _MapEvent.MAP_IDLE -> mapboxMap.subscribeMapIdle {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.SOURCE_ADDED -> mapboxMap.subscribeSourceAdded {
+      _MapEvent.SOURCE_ADDED -> mapboxMap.subscribeSourceAdded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.SOURCE_REMOVED -> mapboxMap.subscribeSourceRemoved {
+      _MapEvent.SOURCE_REMOVED -> mapboxMap.subscribeSourceRemoved {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.SOURCE_DATA_LOADED -> mapboxMap.subscribeSourceDataLoaded {
+      _MapEvent.SOURCE_DATA_LOADED -> mapboxMap.subscribeSourceDataLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.STYLE_IMAGE_MISSING -> mapboxMap.subscribeStyleImageMissing {
+      _MapEvent.STYLE_IMAGE_MISSING -> mapboxMap.subscribeStyleImageMissing {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> mapboxMap.subscribeStyleImageRemoveUnused {
+      _MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> mapboxMap.subscribeStyleImageRemoveUnused {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.RENDER_FRAME_STARTED -> mapboxMap.subscribeRenderFrameStarted {
+      _MapEvent.RENDER_FRAME_STARTED -> mapboxMap.subscribeRenderFrameStarted {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.RENDER_FRAME_FINISHED -> mapboxMap.subscribeRenderFrameFinished {
+      _MapEvent.RENDER_FRAME_FINISHED -> mapboxMap.subscribeRenderFrameFinished {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      FLTMapInterfaces._MapEvent.RESOURCE_REQUEST -> mapboxMap.subscribeResourceRequest {
+      _MapEvent.RESOURCE_REQUEST -> mapboxMap.subscribeResourceRequest {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
     }
@@ -141,18 +142,18 @@ class MapboxMapController(
     mapView.onStop()
     mapView.onDestroy()
     methodChannel.setMethodCallHandler(null)
-    FLTMapInterfaces.StyleManager.setUp(proxyBinaryMessenger, null)
-    FLTMapInterfaces._CameraManager.setUp(proxyBinaryMessenger, null)
-    FLTMapInterfaces.Projection.setUp(proxyBinaryMessenger, null)
-    FLTMapInterfaces._MapInterface.setUp(proxyBinaryMessenger, null)
-    FLTMapInterfaces._AnimationManager.setUp(proxyBinaryMessenger, null)
+    StyleManager.setUp(proxyBinaryMessenger, null)
+    _CameraManager.setUp(proxyBinaryMessenger, null)
+    Projection.setUp(proxyBinaryMessenger, null)
+    _MapInterface.setUp(proxyBinaryMessenger, null)
+    _AnimationManager.setUp(proxyBinaryMessenger, null)
     annotationController.dispose(proxyBinaryMessenger)
-    FLTSettings._LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, null)
-    FLTSettings.LogoSettingsInterface.setUp(proxyBinaryMessenger, null)
-    FLTSettings.GesturesSettingsInterface.setUp(proxyBinaryMessenger, null)
-    FLTSettings.CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
-    FLTSettings.ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
-    FLTSettings.AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
+    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, null)
+    LogoSettingsInterface.setUp(proxyBinaryMessenger, null)
+    GesturesSettingsInterface.setUp(proxyBinaryMessenger, null)
+    CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
+    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
+    AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
   }
 
   override fun onStart(owner: LifecycleOwner) {
@@ -209,7 +210,7 @@ class MapboxMapController(
   }
 }
 
-private val FLTMapInterfaces._MapEvent.methodName: String
+private val _MapEvent.methodName: String
   get() = "event#$ordinal"
 
 object MicrosecondsDateTypeAdapter : JsonSerializer<Date> {

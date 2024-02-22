@@ -2,12 +2,12 @@
 package com.mapbox.maps.mapbox_maps.mapping
 
 import android.content.Context
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
-import com.mapbox.maps.pigeons.FLTSettings
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettingsInterface
 
-fun ScaleBarSettingsInterface.applyFromFLT(settings: FLTSettings.ScaleBarSettings, context: Context) {
+fun ScaleBarSettingsInterface.applyFromFLT(settings: ScaleBarSettings, context: Context) {
   settings.enabled?.let { enabled = it }
   settings.position?.let { position = it.toPosition() }
   settings.marginLeft?.let { marginLeft = it.toDevicePixels(context) }
@@ -29,27 +29,26 @@ fun ScaleBarSettingsInterface.applyFromFLT(settings: FLTSettings.ScaleBarSetting
   settings.useContinuousRendering?.let { useContinuousRendering = it }
 }
 
-fun ScaleBarSettingsInterface.toFLT(context: Context) = FLTSettings.ScaleBarSettings.Builder().let { settings ->
-  settings.setEnabled(enabled)
-  settings.setPosition(position.toOrnamentPosition())
-  settings.setMarginLeft(marginLeft.toLogicalPixels(context))
-  settings.setMarginTop(marginTop.toLogicalPixels(context))
-  settings.setMarginRight(marginRight.toLogicalPixels(context))
-  settings.setMarginBottom(marginBottom.toLogicalPixels(context))
-  settings.setTextColor(textColor.toUInt().toLong())
-  settings.setPrimaryColor(primaryColor.toUInt().toLong())
-  settings.setSecondaryColor(secondaryColor.toUInt().toLong())
-  settings.setBorderWidth(borderWidth.toLogicalPixels(context))
-  settings.setHeight(height.toLogicalPixels(context))
-  settings.setTextBarMargin(textBarMargin.toLogicalPixels(context))
-  settings.setTextBorderWidth(textBorderWidth.toLogicalPixels(context))
-  settings.setTextSize(textSize.toDouble())
-  settings.setIsMetricUnits(isMetricUnits)
-  settings.setRefreshInterval(refreshInterval)
-  settings.setShowTextBorder(showTextBorder)
-  settings.setRatio(ratio.toDouble())
-  settings.setUseContinuousRendering(useContinuousRendering)
-  settings.build()
-}
+fun ScaleBarSettingsInterface.toFLT(context: Context) = ScaleBarSettings(
+  enabled = enabled,
+  position = position.toOrnamentPosition(),
+  marginLeft = marginLeft.toLogicalPixels(context),
+  marginTop = marginTop.toLogicalPixels(context),
+  marginRight = marginRight.toLogicalPixels(context),
+  marginBottom = marginBottom.toLogicalPixels(context),
+  textColor = textColor.toUInt().toLong(),
+  primaryColor = primaryColor.toUInt().toLong(),
+  secondaryColor = secondaryColor.toUInt().toLong(),
+  borderWidth = borderWidth.toLogicalPixels(context),
+  height = height.toLogicalPixels(context),
+  textBarMargin = textBarMargin.toLogicalPixels(context),
+  textBorderWidth = textBorderWidth.toLogicalPixels(context),
+  textSize = textSize.toDouble(),
+  isMetricUnits = isMetricUnits,
+  refreshInterval = refreshInterval,
+  showTextBorder = showTextBorder,
+  ratio = ratio.toDouble(),
+  useContinuousRendering = useContinuousRendering,
+)
 
 // End of generated file.

@@ -1,51 +1,51 @@
 // This file is generated.
 
-import com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment
-import com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale
-import com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor
-import com.mapbox.maps.pigeons.FLTCircleAnnotationMessager
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
 // FLT to Android
 
-fun FLTCircleAnnotationMessager.CirclePitchAlignment.toCirclePitchAlignment(): CirclePitchAlignment {
+fun CirclePitchAlignment.toCirclePitchAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment {
   return when (this) {
-    FLTCircleAnnotationMessager.CirclePitchAlignment.MAP -> CirclePitchAlignment.MAP
-    FLTCircleAnnotationMessager.CirclePitchAlignment.VIEWPORT -> CirclePitchAlignment.VIEWPORT
+    CirclePitchAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.MAP
+    CirclePitchAlignment.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.VIEWPORT
+    else -> throw(RuntimeException("Unsupported CirclePitchAlignment: $this"))
   }
 }
-fun FLTCircleAnnotationMessager.CirclePitchScale.toCirclePitchScale(): CirclePitchScale {
+fun CirclePitchScale.toCirclePitchScale(): com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale {
   return when (this) {
-    FLTCircleAnnotationMessager.CirclePitchScale.MAP -> CirclePitchScale.MAP
-    FLTCircleAnnotationMessager.CirclePitchScale.VIEWPORT -> CirclePitchScale.VIEWPORT
+    CirclePitchScale.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale.MAP
+    CirclePitchScale.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale.VIEWPORT
+    else -> throw(RuntimeException("Unsupported CirclePitchScale: $this"))
   }
 }
-fun FLTCircleAnnotationMessager.CircleTranslateAnchor.toCircleTranslateAnchor(): CircleTranslateAnchor {
+fun CircleTranslateAnchor.toCircleTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor {
   return when (this) {
-    FLTCircleAnnotationMessager.CircleTranslateAnchor.MAP -> CircleTranslateAnchor.MAP
-    FLTCircleAnnotationMessager.CircleTranslateAnchor.VIEWPORT -> CircleTranslateAnchor.VIEWPORT
+    CircleTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor.MAP
+    CircleTranslateAnchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor.VIEWPORT
+    else -> throw(RuntimeException("Unsupported CircleTranslateAnchor: $this"))
   }
 }
 
 // Android to FLT
 
-fun CirclePitchAlignment.toFLTCirclePitchAlignment(): FLTCircleAnnotationMessager.CirclePitchAlignment {
+fun com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.toFLTCirclePitchAlignment(): CirclePitchAlignment {
   return when (this) {
-    CirclePitchAlignment.MAP -> FLTCircleAnnotationMessager.CirclePitchAlignment.MAP
-    CirclePitchAlignment.VIEWPORT -> FLTCircleAnnotationMessager.CirclePitchAlignment.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.MAP -> CirclePitchAlignment.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchAlignment.VIEWPORT -> CirclePitchAlignment.VIEWPORT
     else -> throw(RuntimeException("Unsupported CirclePitchAlignment: $this"))
   }
 }
-fun CirclePitchScale.toFLTCirclePitchScale(): FLTCircleAnnotationMessager.CirclePitchScale {
+fun com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale.toFLTCirclePitchScale(): CirclePitchScale {
   return when (this) {
-    CirclePitchScale.MAP -> FLTCircleAnnotationMessager.CirclePitchScale.MAP
-    CirclePitchScale.VIEWPORT -> FLTCircleAnnotationMessager.CirclePitchScale.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale.MAP -> CirclePitchScale.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.CirclePitchScale.VIEWPORT -> CirclePitchScale.VIEWPORT
     else -> throw(RuntimeException("Unsupported CirclePitchScale: $this"))
   }
 }
-fun CircleTranslateAnchor.toFLTCircleTranslateAnchor(): FLTCircleAnnotationMessager.CircleTranslateAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor.toFLTCircleTranslateAnchor(): CircleTranslateAnchor {
   return when (this) {
-    CircleTranslateAnchor.MAP -> FLTCircleAnnotationMessager.CircleTranslateAnchor.MAP
-    CircleTranslateAnchor.VIEWPORT -> FLTCircleAnnotationMessager.CircleTranslateAnchor.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor.MAP -> CircleTranslateAnchor.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.CircleTranslateAnchor.VIEWPORT -> CircleTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported CircleTranslateAnchor: $this"))
   }
 }
