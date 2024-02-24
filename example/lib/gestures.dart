@@ -26,16 +26,16 @@ class GesturesPageBodyState extends State<GesturesPageBody> {
 
   MapboxMap? mapboxMap;
 
-  _onTap(ScreenCoordinate coordinate) {
-    print("OnTap ${coordinate.x} - ${coordinate.y}");
+  _onTap(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    print("OnTap ${coordinate.x} - ${coordinate.y}, $point");
   }
 
-  _onLongTap(ScreenCoordinate coordinate) {
-    print("OnLongTap ${coordinate.x} - ${coordinate.y}");
+  _onLongTap(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    print("OnLongTap ${coordinate.x} - ${coordinate.y}, $point");
   }
 
-  _onMove(ScreenCoordinate coordinate) {
-    print("OnMove ${coordinate.x} - ${coordinate.y}");
+  _onMove(ScreenCoordinate coordinate, Map<String?, Object?> point) {
+    print("OnMove ${coordinate.x} - ${coordinate.y}, $point");
   }
 
   _onMapCreated(MapboxMap mapboxMap) {

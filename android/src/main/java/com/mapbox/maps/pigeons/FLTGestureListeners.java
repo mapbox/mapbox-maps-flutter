@@ -200,13 +200,13 @@ public class FLTGestureListeners {
     static @NonNull MessageCodec<Object> getCodec() {
       return GestureListenerCodec.INSTANCE;
     }
-    public void onTap(@NonNull ScreenCoordinate coordinateArg, @NonNull VoidResult result) {
+    public void onTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull VoidResult result) {
       final String channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap";
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, channelName, getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg)),
           channelReply -> {
             if (channelReply instanceof List) {
               List<Object> listReply = (List<Object>) channelReply;
@@ -220,13 +220,13 @@ public class FLTGestureListeners {
             } 
           });
     }
-    public void onLongTap(@NonNull ScreenCoordinate coordinateArg, @NonNull VoidResult result) {
+    public void onLongTap(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull VoidResult result) {
       final String channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap";
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, channelName, getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg)),
           channelReply -> {
             if (channelReply instanceof List) {
               List<Object> listReply = (List<Object>) channelReply;
@@ -240,13 +240,13 @@ public class FLTGestureListeners {
             } 
           });
     }
-    public void onScroll(@NonNull ScreenCoordinate coordinateArg, @NonNull VoidResult result) {
+    public void onScroll(@NonNull ScreenCoordinate coordinateArg, @NonNull Map<String, Object> pointArg, @NonNull VoidResult result) {
       final String channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll";
       BasicMessageChannel<Object> channel =
           new BasicMessageChannel<>(
               binaryMessenger, channelName, getCodec());
       channel.send(
-          new ArrayList<Object>(Collections.singletonList(coordinateArg)),
+          new ArrayList<Object>(Arrays.asList(coordinateArg, pointArg)),
           channelReply -> {
             if (channelReply instanceof List) {
               List<Object> listReply = (List<Object>) channelReply;
