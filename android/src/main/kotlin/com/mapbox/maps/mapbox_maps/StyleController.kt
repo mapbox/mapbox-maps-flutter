@@ -454,15 +454,20 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleImage(imageId: String, callback: (Result<MbxImage?>) -> Unit) {
-    mapboxMap.getStyleImage(imageId)?.let { image ->
-      val byteArray = ByteArray(image.data.buffer.capacity())
-      image.data.buffer.get(byteArray)
-      callback(
-        Result.success(
-          MbxImage(width = image.width.toLong(), height = image.height.toLong(), data = byteArray)
-        )
-      )
+    val image = mapboxMap.getStyleImage(imageId)
+
+    if (image == null) {
+      callback(Result.success(null))
+      return
     }
+
+    val byteArray = ByteArray(image.data.buffer.capacity())
+    image.data.buffer.get(byteArray)
+    callback(
+      Result.success(
+        MbxImage(width = image.width.toLong(), height = image.height.toLong(), data = byteArray)
+      )
+    )
   }
 
   override fun removeStyleImage(imageId: String, callback: (Result<Unit>) -> Unit) {
