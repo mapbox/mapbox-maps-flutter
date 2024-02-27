@@ -71,7 +71,7 @@ class MapboxMapFactory(
       cameraOptions[4]?.let {
         cameraOptionsBuilder.bearing(it as Double)
       }
-      (cameraOptions[0] as? Map<String, Any>?)?.let {
+      (cameraOptions[0] as? Map<String?, Any?>?)?.let {
         cameraOptionsBuilder.center(it.toPoint())
       }
       cameraOptions[5]?.let {

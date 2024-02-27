@@ -1,7 +1,8 @@
 package com.mapbox.maps.mapbox_maps
 
 import androidx.lifecycle.Lifecycle
-import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
+import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -29,8 +30,8 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
-    FLTMapInterfaces._MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
-    FLTMapInterfaces._MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
+    _MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
+    _MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
 
     LoggingController.setup(flutterPluginBinding.binaryMessenger)
 

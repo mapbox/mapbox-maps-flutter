@@ -48,16 +48,22 @@ void main() {
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
   });
 
-  if (Platform.isAndroid) {
-    testWidgets('getSize', (WidgetTester tester) async {
-      final mapFuture = app.main();
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
+  testWidgets('getSize', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+
+    await app.events.onMapLoaded.future;
+
+    if (Platform.isIOS) {
+      final throwsPlatformException = throwsA(predicate((p) => p is PlatformException && p.message == 'Not available.'));
+      expect(() async => await mapboxMap.getSize(), throwsPlatformException);
+    } else {
       var size = await mapboxMap.getSize();
       expect(size.width, closeTo(tester.binding.renderView.size.width, 1));
       expect(size.height, closeTo(tester.binding.renderView.size.height, 1));
-    });
-  }
+    }
+  });
 
   testWidgets('reduceMemoryUse', (WidgetTester tester) async {
     final mapFuture = app.main();

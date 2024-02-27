@@ -2,45 +2,33 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
-import com.mapbox.common.LoggingLevel
 import com.mapbox.geojson.*
-import com.mapbox.maps.*
-import com.mapbox.maps.extension.style.layers.properties.generated.Anchor
+import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
-import com.mapbox.maps.extension.style.light.generated.AmbientLight
-import com.mapbox.maps.extension.style.light.generated.DirectionalLight
-import com.mapbox.maps.extension.style.light.generated.FlatLight
 import com.mapbox.maps.extension.style.light.generated.ambientLight
 import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
-import com.mapbox.maps.pigeons.FLTLogBackend
-import com.mapbox.maps.pigeons.FLTMapInterfaces
-import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjection
-import com.mapbox.maps.pigeons.FLTMapInterfaces.StyleProjectionName
-import com.mapbox.maps.pigeons.FLTSettings
-import com.mapbox.maps.plugin.ModelScaleMode
-import com.mapbox.maps.plugin.animation.MapAnimationOptions
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
 import org.json.JSONObject
 
 // FLT to Android
 
-fun FLTSettings.ModelScaleMode.toModelScaleMode(): ModelScaleMode {
+fun ModelScaleMode.toModelScaleMode(): com.mapbox.maps.plugin.ModelScaleMode {
   return when (this) {
-    FLTSettings.ModelScaleMode.VIEWPORT -> ModelScaleMode.VIEWPORT
-    FLTSettings.ModelScaleMode.MAP -> ModelScaleMode.MAP
-    else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
+    ModelScaleMode.VIEWPORT -> com.mapbox.maps.plugin.ModelScaleMode.VIEWPORT
+    ModelScaleMode.MAP -> com.mapbox.maps.plugin.ModelScaleMode.MAP
   }
 }
 
-fun FLTMapInterfaces.TileStoreUsageMode.toTileStoreUsageMode(): TileStoreUsageMode {
+fun TileStoreUsageMode.toTileStoreUsageMode(): com.mapbox.maps.TileStoreUsageMode {
   return when (this) {
-    FLTMapInterfaces.TileStoreUsageMode.DISABLED -> TileStoreUsageMode.DISABLED
-    FLTMapInterfaces.TileStoreUsageMode.READ_AND_UPDATE -> TileStoreUsageMode.READ_AND_UPDATE
-    FLTMapInterfaces.TileStoreUsageMode.READ_ONLY -> TileStoreUsageMode.READ_ONLY
+    TileStoreUsageMode.DISABLED -> com.mapbox.maps.TileStoreUsageMode.DISABLED
+    TileStoreUsageMode.READ_AND_UPDATE -> com.mapbox.maps.TileStoreUsageMode.READ_AND_UPDATE
+    TileStoreUsageMode.READ_ONLY -> com.mapbox.maps.TileStoreUsageMode.READ_ONLY
   }
 }
 fun StyleProjectionName.toProjectionName(): ProjectionName {
@@ -50,9 +38,9 @@ fun StyleProjectionName.toProjectionName(): ProjectionName {
   }
 }
 fun StyleProjection.toProjection(): com.mapbox.maps.extension.style.projection.generated.Projection {
-  return Projection(name.toProjectionName())
+  return com.mapbox.maps.extension.style.projection.generated.Projection(name.toProjectionName())
 }
-fun FLTMapInterfaces.TransitionOptions.toStyleTransition(): StyleTransition {
+fun TransitionOptions.toStyleTransition(): StyleTransition {
   val builder = StyleTransition.Builder()
   duration?.let {
     builder.duration(it)
@@ -63,13 +51,13 @@ fun FLTMapInterfaces.TransitionOptions.toStyleTransition(): StyleTransition {
 
   return builder.build()
 }
-fun FLTMapInterfaces.Anchor.toAnchor(): Anchor {
+fun Anchor.toAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.Anchor {
   return when (this) {
-    FLTMapInterfaces.Anchor.MAP -> Anchor.MAP
-    FLTMapInterfaces.Anchor.VIEWPORT -> Anchor.VIEWPORT
+    Anchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.Anchor.MAP
+    Anchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.Anchor.VIEWPORT
   }
 }
-fun FLTMapInterfaces.FlatLight.toFlatLight(): FlatLight {
+fun FlatLight.toFlatLight(): com.mapbox.maps.extension.style.light.generated.FlatLight {
   return flatLight(id) {
     anchor?.let {
       anchor(it.toAnchor())
@@ -88,7 +76,7 @@ fun FLTMapInterfaces.FlatLight.toFlatLight(): FlatLight {
     }
     position?.let {
       if (it.size == 3) {
-        position(LightPosition(it[0], it[1], it[2]))
+        position(LightPosition(it[0]!!, it[1]!!, it[2]!!))
       }
     }
     positionTransition?.let {
@@ -97,7 +85,7 @@ fun FLTMapInterfaces.FlatLight.toFlatLight(): FlatLight {
   }
 }
 
-fun FLTMapInterfaces.AmbientLight.toAmbientLight(): AmbientLight {
+fun AmbientLight.toAmbientLight(): com.mapbox.maps.extension.style.light.generated.AmbientLight {
   return ambientLight(id) {
     color?.let {
       color(it.toInt())
@@ -114,7 +102,7 @@ fun FLTMapInterfaces.AmbientLight.toAmbientLight(): AmbientLight {
   }
 }
 
-fun FLTMapInterfaces.DirectionalLight.toDirectionalLight(): DirectionalLight {
+fun DirectionalLight.toDirectionalLight(): com.mapbox.maps.extension.style.light.generated.DirectionalLight {
   return directionalLight(id) {
     castShadows?.let {
       castShadows(it)
@@ -126,7 +114,7 @@ fun FLTMapInterfaces.DirectionalLight.toDirectionalLight(): DirectionalLight {
       colorTransition(it.toStyleTransition())
     }
     direction?.let {
-      direction(it)
+      direction(it as List<Double>)
     }
     directionTransition?.let {
       directionTransition(it.toStyleTransition())
@@ -146,8 +134,8 @@ fun FLTMapInterfaces.DirectionalLight.toDirectionalLight(): DirectionalLight {
   }
 }
 
-fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOptions {
-  val builder = MapAnimationOptions.Builder()
+fun MapAnimationOptions.toMapAnimationOptions(): com.mapbox.maps.plugin.animation.MapAnimationOptions {
+  val builder = com.mapbox.maps.plugin.animation.MapAnimationOptions.Builder()
   duration?.let {
     builder.duration(it)
   }
@@ -157,57 +145,57 @@ fun FLTMapInterfaces.MapAnimationOptions.toMapAnimationOptions(): MapAnimationOp
   return builder.build()
 }
 
-fun FLTMapInterfaces.TileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): TileCacheBudgetInMegabytes {
-  return TileCacheBudgetInMegabytes(size)
+fun TileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes(): com.mapbox.maps.TileCacheBudgetInMegabytes {
+  return com.mapbox.maps.TileCacheBudgetInMegabytes(size)
 }
 
-fun FLTMapInterfaces.TileCacheBudgetInTiles.toMapMemoryBudgetInTiles(): TileCacheBudgetInTiles {
-  return TileCacheBudgetInTiles(size)
+fun TileCacheBudgetInTiles.toMapMemoryBudgetInTiles(): com.mapbox.maps.TileCacheBudgetInTiles {
+  return com.mapbox.maps.TileCacheBudgetInTiles(size)
 }
 
-fun FLTMapInterfaces.SourceQueryOptions.toSourceQueryOptions(): SourceQueryOptions {
-  return SourceQueryOptions(sourceLayerIds, filter.toValue())
+fun SourceQueryOptions.toSourceQueryOptions(): com.mapbox.maps.SourceQueryOptions {
+  return com.mapbox.maps.SourceQueryOptions(sourceLayerIds, filter.toValue())
 }
 
-fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): RenderedQueryGeometry {
+fun RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): com.mapbox.maps.RenderedQueryGeometry {
   return when (type) {
-    FLTMapInterfaces.Type.SCREEN_BOX -> {
+    Type.SCREEN_BOX -> {
       val screenBoxArray = Gson().fromJson(
         value,
         Array<Array<Double>>::class.java
       )
       val minCoord = screenBoxArray[0]
       val maxCoord = screenBoxArray[1]
-      RenderedQueryGeometry.valueOf(
-        ScreenBox(
-          ScreenCoordinate(
+      com.mapbox.maps.RenderedQueryGeometry.valueOf(
+        com.mapbox.maps.ScreenBox(
+          com.mapbox.maps.ScreenCoordinate(
             minCoord[0].toDevicePixels(context).toDouble(),
             minCoord[1].toDevicePixels(context).toDouble()
           ),
-          ScreenCoordinate(
+          com.mapbox.maps.ScreenCoordinate(
             maxCoord[0].toDevicePixels(context).toDouble(),
             maxCoord[1].toDevicePixels(context).toDouble()
           )
         )
       )
     }
-    FLTMapInterfaces.Type.LIST -> {
+    Type.LIST -> {
       val array: Array<Array<Double>> =
         Gson().fromJson(value, Array<Array<Double>>::class.java)
-      RenderedQueryGeometry.valueOf(
+      com.mapbox.maps.RenderedQueryGeometry.valueOf(
         array.map {
-          ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
+          com.mapbox.maps.ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
         }.toList()
       )
     }
-    FLTMapInterfaces.Type.SCREEN_COORDINATE -> {
+    Type.SCREEN_COORDINATE -> {
       val pointArray = Gson().fromJson(
         value,
         Array<Double>::class.java
       )
 
-      RenderedQueryGeometry.valueOf(
-        ScreenCoordinate(
+      com.mapbox.maps.RenderedQueryGeometry.valueOf(
+        com.mapbox.maps.ScreenCoordinate(
           pointArray[0].toDevicePixels(context).toDouble(),
           pointArray[1].toDevicePixels(context).toDouble()
         )
@@ -216,23 +204,23 @@ fun FLTMapInterfaces.RenderedQueryGeometry.toRenderedQueryGeometry(context: Cont
   }
 }
 
-fun FLTMapInterfaces.RenderedQueryOptions.toRenderedQueryOptions(): RenderedQueryOptions {
-  return RenderedQueryOptions(layerIds, filter?.toValue())
+fun RenderedQueryOptions.toRenderedQueryOptions(): com.mapbox.maps.RenderedQueryOptions {
+  return com.mapbox.maps.RenderedQueryOptions(layerIds, filter?.toValue())
 }
 
-fun FLTMapInterfaces.MapDebugOptions.toMapDebugOptions(): MapDebugOptions {
-  return MapDebugOptions.values()[data.ordinal]
+fun MapDebugOptions.toMapDebugOptions(): com.mapbox.maps.MapDebugOptions {
+  return com.mapbox.maps.MapDebugOptions.values()[data.ordinal]
 }
 
-fun FLTMapInterfaces.MercatorCoordinate.toMercatorCoordinate(): MercatorCoordinate {
-  return MercatorCoordinate(x, y)
+fun MercatorCoordinate.toMercatorCoordinate(): com.mapbox.maps.MercatorCoordinate {
+  return com.mapbox.maps.MercatorCoordinate(x, y)
 }
 
-fun FLTMapInterfaces.ProjectedMeters.toProjectedMeters(): ProjectedMeters {
-  return ProjectedMeters(northing, easting)
+fun ProjectedMeters.toProjectedMeters(): com.mapbox.maps.ProjectedMeters {
+  return com.mapbox.maps.ProjectedMeters(northing, easting)
 }
 
-fun Map<String, Any>.toPoint(): Point {
+fun Map<String?, Any?>.toPoint(): Point {
   var longitude: Double
   var latitude: Double
   (this["coordinates"] as List<Double>).let { coordinates ->
@@ -254,13 +242,13 @@ fun Map<String, Any>.toPoint(): Point {
   return Point.fromLngLat(longitude, latitude, boundingBox)
 }
 
-fun Map<String, Any>.toPoints(): List<Point> {
+fun Map<String?, Any?>.toPoints(): List<Point> {
   return (this["coordinates"] as List<List<Double>>).map {
     Point.fromLngLat(it.first(), it.last())
   }
 }
 
-fun Map<String, Any>.toPointsList(): List<List<Point>> {
+fun Map<String?, Any?>.toPointsList(): List<List<Point>> {
   return (this["coordinates"] as List<List<List<Double>>>).map {
     it.map {
       Point.fromLngLat(it.first(), it.last())
@@ -268,7 +256,7 @@ fun Map<String, Any>.toPointsList(): List<List<Point>> {
   }
 }
 
-fun Map<String, Any>.toLineString(): LineString {
+fun Map<String?, Any?>.toLineString(): LineString {
   return LineString.fromLngLats(
     (this["coordinates"] as List<List<Double>>).map {
       Point.fromLngLat(it.first(), it.last())
@@ -276,7 +264,7 @@ fun Map<String, Any>.toLineString(): LineString {
   )
 }
 
-fun Map<String, Any>.toPolygon(): Polygon {
+fun Map<String?, Any?>.toPolygon(): Polygon {
   return Polygon.fromLngLats(
     (this["coordinates"] as List<List<List<Double>>>).map {
       it.map { Point.fromLngLat(it.first(), it.last()) }
@@ -284,10 +272,10 @@ fun Map<String, Any>.toPolygon(): Polygon {
   )
 }
 
-fun FLTMapInterfaces.CoordinateBounds.toCoordinateBounds() =
-  CoordinateBounds(southwest.toPoint(), northeast.toPoint(), infiniteBounds)
+fun CoordinateBounds.toCoordinateBounds() =
+  com.mapbox.maps.CoordinateBounds(southwest.toPoint(), northeast.toPoint(), infiniteBounds)
 
-fun FLTMapInterfaces.MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
+fun MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
   return EdgeInsets(
     top.toDevicePixels(context).toDouble(),
     left.toDevicePixels(context).toDouble(),
@@ -296,11 +284,11 @@ fun FLTMapInterfaces.MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
   )
 }
 
-fun FLTMapInterfaces.ScreenCoordinate.toScreenCoordinate(context: Context): ScreenCoordinate {
-  return ScreenCoordinate(x.toDevicePixels(context).toDouble(), y.toDevicePixels(context).toDouble())
+fun ScreenCoordinate.toScreenCoordinate(context: Context): com.mapbox.maps.ScreenCoordinate {
+  return com.mapbox.maps.ScreenCoordinate(x.toDevicePixels(context).toDouble(), y.toDevicePixels(context).toDouble())
 }
 
-fun FLTMapInterfaces.CameraOptions.toCameraOptions(context: Context): CameraOptions = CameraOptions.Builder()
+fun CameraOptions.toCameraOptions(context: Context): com.mapbox.maps.CameraOptions = com.mapbox.maps.CameraOptions.Builder()
   .anchor(anchor?.toScreenCoordinate(context))
   .bearing(bearing)
   .center(center?.toPoint())
@@ -309,11 +297,11 @@ fun FLTMapInterfaces.CameraOptions.toCameraOptions(context: Context): CameraOpti
   .pitch(pitch)
   .build()
 
-fun FLTMapInterfaces.ScreenBox.toScreenBox(context: Context): ScreenBox =
-  ScreenBox(min.toScreenCoordinate(context), max.toScreenCoordinate(context))
+fun ScreenBox.toScreenBox(context: Context): com.mapbox.maps.ScreenBox =
+  com.mapbox.maps.ScreenBox(min.toScreenCoordinate(context), max.toScreenCoordinate(context))
 
-fun FLTMapInterfaces.CameraBoundsOptions.toCameraBoundsOptions(): CameraBoundsOptions =
-  CameraBoundsOptions.Builder()
+fun CameraBoundsOptions.toCameraBoundsOptions(): com.mapbox.maps.CameraBoundsOptions =
+  com.mapbox.maps.CameraBoundsOptions.Builder()
     .maxPitch(maxPitch)
     .bounds(bounds?.toCoordinateBounds())
     .maxZoom(maxZoom)
@@ -321,7 +309,7 @@ fun FLTMapInterfaces.CameraBoundsOptions.toCameraBoundsOptions(): CameraBoundsOp
     .minZoom(minZoom)
     .build()
 
-fun Map<String, Any>.toGeometry(): Geometry {
+fun Map<String?, Any?>.toGeometry(): Geometry {
   when {
     this["type"] == "Point" -> {
       return Point.fromJson(Gson().toJson(this))
@@ -354,35 +342,29 @@ fun Number.toDevicePixels(context: Context): Float {
 
 // Android to FLT
 
-fun LoggingLevel.toFLTLoggingLevel(): FLTLogBackend.LoggingLevel {
+fun com.mapbox.common.LoggingLevel.toFLTLoggingLevel(): LoggingLevel {
   return when (this) {
-    LoggingLevel.DEBUG -> FLTLogBackend.LoggingLevel.DEBUG
-    LoggingLevel.INFO -> FLTLogBackend.LoggingLevel.INFO
-    LoggingLevel.WARNING -> FLTLogBackend.LoggingLevel.WARNING
-    LoggingLevel.ERROR -> FLTLogBackend.LoggingLevel.ERROR
+    com.mapbox.common.LoggingLevel.DEBUG -> LoggingLevel.DEBUG
+    com.mapbox.common.LoggingLevel.INFO -> LoggingLevel.INFO
+    com.mapbox.common.LoggingLevel.WARNING -> LoggingLevel.WARNING
+    com.mapbox.common.LoggingLevel.ERROR -> LoggingLevel.ERROR
   }
 }
-fun StyleTransition.toFLTTransitionOptions(): FLTMapInterfaces.TransitionOptions {
-  return FLTMapInterfaces.TransitionOptions.Builder()
-    .setDelay(delay)
-    .setDuration(duration)
-    .build()
+fun StyleTransition.toFLTTransitionOptions(): TransitionOptions {
+  return TransitionOptions(delay, duration)
 }
-fun ModelScaleMode.toFLTModelScaleMode(): FLTSettings.ModelScaleMode {
+fun com.mapbox.maps.plugin.ModelScaleMode.toFLTModelScaleMode(): ModelScaleMode {
   return when (this) {
-    ModelScaleMode.VIEWPORT -> FLTSettings.ModelScaleMode.VIEWPORT
-    ModelScaleMode.MAP -> FLTSettings.ModelScaleMode.MAP
+    com.mapbox.maps.plugin.ModelScaleMode.VIEWPORT -> ModelScaleMode.VIEWPORT
+    com.mapbox.maps.plugin.ModelScaleMode.MAP -> ModelScaleMode.MAP
     else -> { throw java.lang.RuntimeException("Scale mode not supported: $this") }
   }
 }
-fun StylePropertyValue.toFLTStylePropertyValue(): FLTMapInterfaces.StylePropertyValue {
-  return FLTMapInterfaces.StylePropertyValue.Builder()
-    .setValue(value.toJson())
-    .setKind(FLTMapInterfaces.StylePropertyValueKind.values()[kind.ordinal])
-    .build()
+fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
+  return StylePropertyValue(value.toJson(), StylePropertyValueKind.values()[kind.ordinal])
 }
 
-fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
+fun ProjectionName.toFLTProjectionName(): StyleProjectionName {
   return when (this) {
     ProjectionName.GLOBE -> StyleProjectionName.GLOBE
     ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
@@ -390,124 +372,67 @@ fun ProjectionName.toFLTProjectionName(): FLTMapInterfaces.StyleProjectionName {
   }
 }
 fun Projection.toFLTProjection(): StyleProjection {
-  return StyleProjection.Builder()
-    .setName(name.toFLTProjectionName())
-    .build()
+  return StyleProjection(name.toFLTProjectionName())
 }
-fun StyleObjectInfo.toFLTStyleObjectInfo(): FLTMapInterfaces.StyleObjectInfo {
-  return FLTMapInterfaces.StyleObjectInfo.Builder()
-    .setId(id)
-    .setType(type)
-    .build()
+fun com.mapbox.maps.StyleObjectInfo.toFLTStyleObjectInfo(): StyleObjectInfo {
+  return StyleObjectInfo(id, type)
 }
 
-fun MercatorCoordinate.toFLTMercatorCoordinate(): FLTMapInterfaces.MercatorCoordinate {
-  return FLTMapInterfaces.MercatorCoordinate.Builder()
-    .setX(x)
-    .setY(y)
-    .build()
+fun com.mapbox.maps.MercatorCoordinate.toFLTMercatorCoordinate(): MercatorCoordinate {
+  return MercatorCoordinate(x, y)
 }
 
-fun ProjectedMeters.toFLTProjectedMeters(): FLTMapInterfaces.ProjectedMeters {
-  return FLTMapInterfaces.ProjectedMeters.Builder()
-    .setEasting(easting)
-    .setNorthing(northing)
-    .build()
+fun com.mapbox.maps.ProjectedMeters.toFLTProjectedMeters(): ProjectedMeters {
+  return ProjectedMeters(northing, easting)
 }
 
-fun FeatureExtensionValue.toFLTFeatureExtensionValue(): FLTMapInterfaces.FeatureExtensionValue {
+fun com.mapbox.maps.FeatureExtensionValue.toFLTFeatureExtensionValue(): FeatureExtensionValue {
   val map = featureCollection?.map { JSONObject(it.toJson()).toMap() }
-  return FLTMapInterfaces.FeatureExtensionValue.Builder()
-    .setFeatureCollection(map)
-    .setValue(value?.toJson())
-    .build()
+  return FeatureExtensionValue(value?.toJson(), map)
 }
 
-fun QueriedFeature.toFLTQueriedFeature(): FLTMapInterfaces.QueriedFeature {
-  return FLTMapInterfaces.QueriedFeature.Builder()
-    .setFeature(JSONObject(this.feature.toJson()).toMap())
-    .setSource(this.source)
-    .setSourceLayer(this.sourceLayer)
-    .setState(this.state.toJson())
-    .build()
+fun com.mapbox.maps.QueriedFeature.toFLTQueriedFeature(): QueriedFeature {
+  return QueriedFeature(JSONObject(this.feature.toJson()).toMap(), source, sourceLayer, state.toJson())
 }
 
-fun QueriedRenderedFeature.toFLTQueriedRenderedFeature(): FLTMapInterfaces.QueriedRenderedFeature {
-  return FLTMapInterfaces.QueriedRenderedFeature.Builder()
-    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
-    .setLayers(this.layers)
-    .build()
+fun com.mapbox.maps.QueriedRenderedFeature.toFLTQueriedRenderedFeature(): QueriedRenderedFeature {
+  return QueriedRenderedFeature(queriedFeature.toFLTQueriedFeature(), layers)
 }
-fun QueriedSourceFeature.toFLTQueriedSourceFeature(): FLTMapInterfaces.QueriedSourceFeature {
-  return FLTMapInterfaces.QueriedSourceFeature.Builder()
-    .setQueriedFeature(this.queriedFeature.toFLTQueriedFeature())
-    .build()
+fun com.mapbox.maps.QueriedSourceFeature.toFLTQueriedSourceFeature(): QueriedSourceFeature {
+  return QueriedSourceFeature(queriedFeature.toFLTQueriedFeature())
 }
 
-fun TileStoreUsageMode.toFLTTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
-  return FLTMapInterfaces.TileStoreUsageMode.values()[ordinal]
+fun com.mapbox.maps.TileStoreUsageMode.toFLTTileStoreUsageMode(): TileStoreUsageMode {
+  return TileStoreUsageMode.values()[ordinal]
 }
 
-fun MapDebugOptions.toFLTMapDebugOptions(): FLTMapInterfaces.MapDebugOptions {
-  return FLTMapInterfaces.MapDebugOptions.Builder()
-    .setData(FLTMapInterfaces.MapDebugOptionsData.values()[ordinal]).build()
+fun com.mapbox.maps.MapDebugOptions.toFLTMapDebugOptions(): MapDebugOptions {
+  return MapDebugOptions(MapDebugOptionsData.values()[ordinal])
 }
 
-fun GlyphsRasterizationOptions.toFLTGlyphsRasterizationOptions(): FLTMapInterfaces.GlyphsRasterizationOptions {
-  return FLTMapInterfaces.GlyphsRasterizationOptions.Builder()
-    .setFontFamily(fontFamily)
-    .setRasterizationMode(
-      FLTMapInterfaces.GlyphsRasterizationMode.values()[rasterizationMode.ordinal]
-    )
-    .build()
+fun com.mapbox.maps.GlyphsRasterizationOptions.toFLTGlyphsRasterizationOptions(): GlyphsRasterizationOptions {
+  return GlyphsRasterizationOptions(GlyphsRasterizationMode.values()[rasterizationMode.ordinal], fontFamily)
 }
 
-fun MapOptions.toFLTMapOptions(context: Context): FLTMapInterfaces.MapOptions {
-  val builder = FLTMapInterfaces.MapOptions.Builder()
-  constrainMode?.let {
-    val values = FLTMapInterfaces.ConstrainMode.values()
-    builder.setConstrainMode(
-      values[it.ordinal]
-    )
-  }
-  contextMode?.let {
-    builder.setContextMode(
-      FLTMapInterfaces.ContextMode.values()[it.ordinal]
-    )
-  }
-  viewportMode?.let {
-    builder.setViewportMode(
-      FLTMapInterfaces.ViewportMode.values()[it.ordinal]
-    )
-  }
-  orientation?.let {
-    builder.setOrientation(
-      FLTMapInterfaces.NorthOrientation.values()[it.ordinal]
-    )
-  }
-  crossSourceCollisions?.let {
-    builder.setCrossSourceCollisions(it)
-  }
-  size?.let {
-    builder.setSize(it.toFLTSize(context))
-  }
-  glyphsRasterizationOptions?.let {
-    builder.setGlyphsRasterizationOptions(it.toFLTGlyphsRasterizationOptions())
-  }
-  return builder
-    .setPixelRatio(pixelRatio.toDouble())
-    .build()
+fun com.mapbox.maps.MapOptions.toFLTMapOptions(context: Context): MapOptions {
+  return MapOptions(
+    contextMode = contextMode?.let { ContextMode.values()[it.ordinal] },
+    constrainMode = constrainMode?.let { ConstrainMode.values()[it.ordinal] },
+    viewportMode = viewportMode?.let { ViewportMode.values()[it.ordinal] },
+    orientation = orientation?.let { NorthOrientation.values()[it.ordinal] },
+    crossSourceCollisions = crossSourceCollisions,
+    size = size?.toFLTSize(context),
+    pixelRatio = pixelRatio.toDouble(),
+    glyphsRasterizationOptions = glyphsRasterizationOptions?.toFLTGlyphsRasterizationOptions()
+  )
 }
 
-fun Size.toFLTSize(context: Context): FLTMapInterfaces.Size {
-  return FLTMapInterfaces.Size.Builder()
-    .setHeight(height.toLogicalPixels(context))
-    .setWidth(width.toLogicalPixels(context))
-    .build()
+fun com.mapbox.maps.Size.toFLTSize(context: Context): Size {
+  return Size(width.toLogicalPixels(context), height.toLogicalPixels(context))
 }
 
-fun Point.toMap(): Map<String, Any> {
-  val map = mutableMapOf<String, Any>()
+fun Point.toMap(): Map<String?, Any> {
+  val map = mutableMapOf<String?, Any>()
   map["coordinates"] = coordinates()
   bbox()?.let {
     map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
@@ -515,8 +440,8 @@ fun Point.toMap(): Map<String, Any> {
   return map
 }
 
-fun Polygon.toMap(): Map<String, Any> {
-  val map = mutableMapOf<String, Any>()
+fun Polygon.toMap(): Map<String?, Any> {
+  val map = mutableMapOf<String?, Any>()
   map["coordinates"] = coordinates().map { it.map { it.coordinates() } }
   bbox()?.let {
     map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
@@ -524,8 +449,8 @@ fun Polygon.toMap(): Map<String, Any> {
   return map
 }
 
-fun LineString.toMap(): Map<String, Any> {
-  val map = mutableMapOf<String, Any>()
+fun LineString.toMap(): Map<String?, Any> {
+  val map = mutableMapOf<String?, Any>()
   map["coordinates"] = coordinates().map { it.coordinates() }
   bbox()?.let {
     map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
@@ -533,75 +458,51 @@ fun LineString.toMap(): Map<String, Any> {
   return map
 }
 
-fun ScreenCoordinate.toFLTScreenCoordinate(context: Context): FLTMapInterfaces.ScreenCoordinate {
-  return FLTMapInterfaces.ScreenCoordinate.Builder()
-    .setX(x.toLogicalPixels(context))
-    .setY(y.toLogicalPixels(context))
-    .build()
+fun com.mapbox.maps.ScreenCoordinate.toFLTScreenCoordinate(context: Context): ScreenCoordinate {
+  return ScreenCoordinate(x.toLogicalPixels(context), y.toLogicalPixels(context))
 }
 
-fun EdgeInsets.toFLTEdgeInsets(context: Context): FLTMapInterfaces.MbxEdgeInsets = FLTMapInterfaces.MbxEdgeInsets.Builder()
-  .setLeft(left.toLogicalPixels(context))
-  .setTop(top.toLogicalPixels(context))
-  .setBottom(bottom.toLogicalPixels(context))
-  .setRight(right.toLogicalPixels(context))
-  .build()
+fun com.mapbox.maps.EdgeInsets.toFLTEdgeInsets(context: Context): MbxEdgeInsets = MbxEdgeInsets(
+  left = left.toLogicalPixels(context),
+  top = top.toLogicalPixels(context),
+  bottom = bottom.toLogicalPixels(context),
+  right = right.toLogicalPixels(context)
+)
 
-fun CameraState.toCameraState(context: Context): FLTMapInterfaces.CameraState = FLTMapInterfaces.CameraState.Builder()
-  .setBearing(bearing)
-  .setPadding(padding.toFLTEdgeInsets(context))
-  .setPitch(pitch)
-  .setZoom(zoom)
-  .setCenter(center.toMap())
-  .build()
+fun com.mapbox.maps.CameraState.toCameraState(context: Context): CameraState = CameraState(
+  bearing = bearing,
+  padding = padding.toFLTEdgeInsets(context),
+  pitch = pitch,
+  zoom = zoom,
+  center = center.toMap()
+)
 
-fun CoordinateBounds.toFLTCoordinateBounds(): FLTMapInterfaces.CoordinateBounds =
-  FLTMapInterfaces.CoordinateBounds.Builder()
-    .setNortheast(northeast.toMap())
-    .setSouthwest(southwest.toMap())
-    .setInfiniteBounds(infiniteBounds)
-    .build()
+fun com.mapbox.maps.CoordinateBounds.toFLTCoordinateBounds(): CoordinateBounds =
+  CoordinateBounds(southwest.toMap(), northeast.toMap(), infiniteBounds)
 
-fun CoordinateBoundsZoom.toFLTCoordinateBoundsZoom(): FLTMapInterfaces.CoordinateBoundsZoom =
-  FLTMapInterfaces.CoordinateBoundsZoom.Builder()
-    .setBounds(bounds.toFLTCoordinateBounds())
-    .setZoom(zoom)
-    .build()
+fun com.mapbox.maps.CoordinateBoundsZoom.toFLTCoordinateBoundsZoom(): CoordinateBoundsZoom =
+  CoordinateBoundsZoom(bounds.toFLTCoordinateBounds(), zoom)
 
-fun CameraBounds.toFLTCameraBounds() = FLTMapInterfaces.CameraBounds.Builder().setMaxPitch(maxPitch)
-  .setMinPitch(minPitch)
-  .setMaxZoom(maxZoom)
-  .setMinZoom(minZoom)
-  .setBounds(bounds.toFLTCoordinateBounds())
-  .build()
+fun com.mapbox.maps.CameraBounds.toFLTCameraBounds() = CameraBounds(
+  maxPitch = maxPitch,
+  minPitch = minPitch,
+  maxZoom = maxZoom,
+  minZoom = minZoom,
+  bounds = bounds.toFLTCoordinateBounds()
+)
 
-fun CameraOptions.toFLTCameraOptions(context: Context): FLTMapInterfaces.CameraOptions {
-  val builder = FLTMapInterfaces.CameraOptions.Builder()
-  anchor?.let { anchor ->
-    builder.setAnchor(anchor.toFLTScreenCoordinate(context))
-  }
-  center?.let { center ->
-    val centerMap = mutableMapOf<String, Any>()
-    centerMap["coordinates"] = listOf(center.longitude(), center.latitude())
-    builder.setCenter(centerMap)
-  }
-  padding?.let { padding ->
-    val fLTPadding = FLTMapInterfaces.MbxEdgeInsets.Builder()
-      .setBottom(padding.bottom.toLogicalPixels(context))
-      .setLeft(padding.left.toLogicalPixels(context))
-      .setRight(padding.right.toLogicalPixels(context))
-      .setTop(padding.top.toLogicalPixels(context))
-      .build()
-    builder.setPadding(fLTPadding)
-  }
-  return builder
-    .setZoom(zoom)
-    .setPitch(pitch)
-    .setBearing(bearing)
-    .build()
+fun com.mapbox.maps.CameraOptions.toFLTCameraOptions(context: Context): CameraOptions {
+  return CameraOptions(
+    center = center?.let { mapOf("coordinates" to listOf(it.longitude(), it.latitude())) },
+    anchor = anchor?.toFLTScreenCoordinate(context),
+    padding = padding?.toFLTEdgeInsets(context),
+    zoom = zoom,
+    pitch = pitch,
+    bearing = bearing
+  )
 }
 
-fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
+fun JSONObject.toMap(): Map<String?, Any?> = keys().asSequence().associateWith {
   when (val value = this[it]) {
     is JSONArray -> {
       val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }

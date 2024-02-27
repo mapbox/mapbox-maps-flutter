@@ -1,32 +1,32 @@
 package com.mapbox.maps.mapbox_maps
 
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
-class MapProjectionController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.Projection {
+class MapProjectionController(private val mapboxMap: MapboxMap) : Projection {
   override fun getMetersPerPixelAtLatitude(latitude: Double, zoom: Double): Double {
     return mapboxMap.getMetersPerPixelAtLatitude(latitude, zoom)
   }
 
-  override fun projectedMetersForCoordinate(coordinate: MutableMap<String, Any>): FLTMapInterfaces.ProjectedMeters {
+  override fun projectedMetersForCoordinate(coordinate: Map<String?, Any?>): ProjectedMeters {
     return mapboxMap.projectedMetersForCoordinate(coordinate.toPoint()).toFLTProjectedMeters()
   }
 
-  override fun coordinateForProjectedMeters(projectedMeters: FLTMapInterfaces.ProjectedMeters): MutableMap<String, Any> {
-    return mapboxMap.coordinateForProjectedMeters(projectedMeters.toProjectedMeters()).toMap().toMutableMap()
+  override fun coordinateForProjectedMeters(projectedMeters: ProjectedMeters): Map<String?, Any?> {
+    return mapboxMap.coordinateForProjectedMeters(projectedMeters.toProjectedMeters()).toMap()
   }
 
   override fun unproject(
-    coordinate: FLTMapInterfaces.MercatorCoordinate,
+    coordinate: MercatorCoordinate,
     zoomScale: Double
-  ): MutableMap<String, Any> {
-    return mapboxMap.unproject(coordinate.toMercatorCoordinate(), zoomScale).toMap().toMutableMap()
+  ): Map<String?, Any?> {
+    return mapboxMap.unproject(coordinate.toMercatorCoordinate(), zoomScale).toMap()
   }
 
   override fun project(
-    coordinate: MutableMap<String, Any>,
+    coordinate: Map<String?, Any?>,
     zoomScale: Double
-  ): FLTMapInterfaces.MercatorCoordinate {
+  ): MercatorCoordinate {
     return mapboxMap.project(coordinate.toPoint(), zoomScale).toFLTMercatorCoordinate()
   }
 }

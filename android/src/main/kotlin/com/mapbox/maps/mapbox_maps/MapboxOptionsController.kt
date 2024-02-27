@@ -2,9 +2,9 @@ package com.mapbox.maps.mapbox_maps
 
 import com.mapbox.common.MapboxOptions
 import com.mapbox.maps.MapboxMapsOptions
-import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
-class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInterfaces._MapboxOptions {
+class MapboxOptionsController : _MapboxMapsOptions, _MapboxOptions {
   override fun getAccessToken(): String {
     return MapboxOptions.accessToken
   }
@@ -37,11 +37,11 @@ class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInter
     // ignored on Android
   }
 
-  override fun getTileStoreUsageMode(): FLTMapInterfaces.TileStoreUsageMode {
+  override fun getTileStoreUsageMode(): TileStoreUsageMode {
     return MapboxMapsOptions.tileStoreUsageMode.toFLTTileStoreUsageMode()
   }
 
-  override fun setTileStoreUsageMode(mode: FLTMapInterfaces.TileStoreUsageMode) {
+  override fun setTileStoreUsageMode(mode: TileStoreUsageMode) {
     MapboxMapsOptions.tileStoreUsageMode = mode.toTileStoreUsageMode()
   }
 }

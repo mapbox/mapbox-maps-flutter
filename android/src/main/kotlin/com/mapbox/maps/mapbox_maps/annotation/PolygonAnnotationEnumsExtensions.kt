@@ -1,23 +1,23 @@
 // This file is generated.
 
-import com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor
-import com.mapbox.maps.pigeons.FLTPolygonAnnotationMessager
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
 // FLT to Android
 
-fun FLTPolygonAnnotationMessager.FillTranslateAnchor.toFillTranslateAnchor(): FillTranslateAnchor {
+fun FillTranslateAnchor.toFillTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor {
   return when (this) {
-    FLTPolygonAnnotationMessager.FillTranslateAnchor.MAP -> FillTranslateAnchor.MAP
-    FLTPolygonAnnotationMessager.FillTranslateAnchor.VIEWPORT -> FillTranslateAnchor.VIEWPORT
+    FillTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor.MAP
+    FillTranslateAnchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor.VIEWPORT
+    else -> throw(RuntimeException("Unsupported FillTranslateAnchor: $this"))
   }
 }
 
 // Android to FLT
 
-fun FillTranslateAnchor.toFLTFillTranslateAnchor(): FLTPolygonAnnotationMessager.FillTranslateAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor.toFLTFillTranslateAnchor(): FillTranslateAnchor {
   return when (this) {
-    FillTranslateAnchor.MAP -> FLTPolygonAnnotationMessager.FillTranslateAnchor.MAP
-    FillTranslateAnchor.VIEWPORT -> FLTPolygonAnnotationMessager.FillTranslateAnchor.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor.MAP -> FillTranslateAnchor.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.FillTranslateAnchor.VIEWPORT -> FillTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported FillTranslateAnchor: $this"))
   }
 }

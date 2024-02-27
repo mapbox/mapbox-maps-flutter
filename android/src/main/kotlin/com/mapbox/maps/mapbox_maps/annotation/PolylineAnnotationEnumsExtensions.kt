@@ -1,55 +1,55 @@
 // This file is generated.
 
-import com.mapbox.maps.extension.style.layers.properties.generated.LineCap
-import com.mapbox.maps.extension.style.layers.properties.generated.LineJoin
-import com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor
-import com.mapbox.maps.pigeons.FLTPolylineAnnotationMessager
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
 // FLT to Android
 
-fun FLTPolylineAnnotationMessager.LineCap.toLineCap(): LineCap {
+fun LineCap.toLineCap(): com.mapbox.maps.extension.style.layers.properties.generated.LineCap {
   return when (this) {
-    FLTPolylineAnnotationMessager.LineCap.BUTT -> LineCap.BUTT
-    FLTPolylineAnnotationMessager.LineCap.ROUND -> LineCap.ROUND
-    FLTPolylineAnnotationMessager.LineCap.SQUARE -> LineCap.SQUARE
+    LineCap.BUTT -> com.mapbox.maps.extension.style.layers.properties.generated.LineCap.BUTT
+    LineCap.ROUND -> com.mapbox.maps.extension.style.layers.properties.generated.LineCap.ROUND
+    LineCap.SQUARE -> com.mapbox.maps.extension.style.layers.properties.generated.LineCap.SQUARE
+    else -> throw(RuntimeException("Unsupported LineCap: $this"))
   }
 }
-fun FLTPolylineAnnotationMessager.LineJoin.toLineJoin(): LineJoin {
+fun LineJoin.toLineJoin(): com.mapbox.maps.extension.style.layers.properties.generated.LineJoin {
   return when (this) {
-    FLTPolylineAnnotationMessager.LineJoin.BEVEL -> LineJoin.BEVEL
-    FLTPolylineAnnotationMessager.LineJoin.ROUND -> LineJoin.ROUND
-    FLTPolylineAnnotationMessager.LineJoin.MITER -> LineJoin.MITER
+    LineJoin.BEVEL -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.BEVEL
+    LineJoin.ROUND -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.ROUND
+    LineJoin.MITER -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.MITER
+    else -> throw(RuntimeException("Unsupported LineJoin: $this"))
   }
 }
-fun FLTPolylineAnnotationMessager.LineTranslateAnchor.toLineTranslateAnchor(): LineTranslateAnchor {
+fun LineTranslateAnchor.toLineTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor {
   return when (this) {
-    FLTPolylineAnnotationMessager.LineTranslateAnchor.MAP -> LineTranslateAnchor.MAP
-    FLTPolylineAnnotationMessager.LineTranslateAnchor.VIEWPORT -> LineTranslateAnchor.VIEWPORT
+    LineTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor.MAP
+    LineTranslateAnchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor.VIEWPORT
+    else -> throw(RuntimeException("Unsupported LineTranslateAnchor: $this"))
   }
 }
 
 // Android to FLT
 
-fun LineCap.toFLTLineCap(): FLTPolylineAnnotationMessager.LineCap {
+fun com.mapbox.maps.extension.style.layers.properties.generated.LineCap.toFLTLineCap(): LineCap {
   return when (this) {
-    LineCap.BUTT -> FLTPolylineAnnotationMessager.LineCap.BUTT
-    LineCap.ROUND -> FLTPolylineAnnotationMessager.LineCap.ROUND
-    LineCap.SQUARE -> FLTPolylineAnnotationMessager.LineCap.SQUARE
+    com.mapbox.maps.extension.style.layers.properties.generated.LineCap.BUTT -> LineCap.BUTT
+    com.mapbox.maps.extension.style.layers.properties.generated.LineCap.ROUND -> LineCap.ROUND
+    com.mapbox.maps.extension.style.layers.properties.generated.LineCap.SQUARE -> LineCap.SQUARE
     else -> throw(RuntimeException("Unsupported LineCap: $this"))
   }
 }
-fun LineJoin.toFLTLineJoin(): FLTPolylineAnnotationMessager.LineJoin {
+fun com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.toFLTLineJoin(): LineJoin {
   return when (this) {
-    LineJoin.BEVEL -> FLTPolylineAnnotationMessager.LineJoin.BEVEL
-    LineJoin.ROUND -> FLTPolylineAnnotationMessager.LineJoin.ROUND
-    LineJoin.MITER -> FLTPolylineAnnotationMessager.LineJoin.MITER
+    com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.BEVEL -> LineJoin.BEVEL
+    com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.ROUND -> LineJoin.ROUND
+    com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.MITER -> LineJoin.MITER
     else -> throw(RuntimeException("Unsupported LineJoin: $this"))
   }
 }
-fun LineTranslateAnchor.toFLTLineTranslateAnchor(): FLTPolylineAnnotationMessager.LineTranslateAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor.toFLTLineTranslateAnchor(): LineTranslateAnchor {
   return when (this) {
-    LineTranslateAnchor.MAP -> FLTPolylineAnnotationMessager.LineTranslateAnchor.MAP
-    LineTranslateAnchor.VIEWPORT -> FLTPolylineAnnotationMessager.LineTranslateAnchor.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor.MAP -> LineTranslateAnchor.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.LineTranslateAnchor.VIEWPORT -> LineTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported LineTranslateAnchor: $this"))
   }
 }
