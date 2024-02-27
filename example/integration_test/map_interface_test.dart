@@ -56,7 +56,8 @@ void main() {
     await app.events.onMapLoaded.future;
 
     if (Platform.isIOS) {
-      final throwsPlatformException = throwsA(predicate((p) => p is PlatformException && p.message == 'Not available.'));
+      final throwsPlatformException = throwsA(predicate(
+          (p) => p is PlatformException && p.message == 'Not available.'));
       expect(() async => await mapboxMap.getSize(), throwsPlatformException);
     } else {
       var size = await mapboxMap.getSize();

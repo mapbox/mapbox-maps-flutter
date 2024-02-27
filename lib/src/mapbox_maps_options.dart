@@ -90,4 +90,20 @@ final class MapboxMapsOptions {
   static void setTileStoreUsageMode(TileStoreUsageMode mode) {
     _options.setTileStoreUsageMode(mode);
   }
+
+  static Future<String?> getWorldview() {
+    return _options.getWorldview();
+  }
+
+  static void setWorldview(String? worldview) {
+    _options.setWorldview(worldview);
+  }
+
+  static Future<String?> getLanguage() {
+    return _options.getLanguage();
+  }
+
+  static void setLanguage(String? language) {
+    _options.setLanguage(language);
+  }
 }

@@ -5046,6 +5046,10 @@ interface _MapboxMapsOptions {
   fun setAssetPath(path: String)
   fun getTileStoreUsageMode(): TileStoreUsageMode
   fun setTileStoreUsageMode(mode: TileStoreUsageMode)
+  fun getWorldview(): String?
+  fun setWorldview(worldview: String?)
+  fun getLanguage(): String?
+  fun setLanguage(language: String?)
 
   companion object {
     /** The codec used by _MapboxMapsOptions. */
@@ -5185,6 +5189,76 @@ interface _MapboxMapsOptions {
             var wrapped: List<Any?>
             try {
               api.setTileStoreUsageMode(modeArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getWorldview())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val worldviewArg = args[0] as String?
+            var wrapped: List<Any?>
+            try {
+              api.setWorldview(worldviewArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getLanguage())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val languageArg = args[0] as String?
+            var wrapped: List<Any?>
+            try {
+              api.setLanguage(languageArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
