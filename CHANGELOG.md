@@ -1,3 +1,7 @@
+### main
+
+* Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
+
 ### 1.0.0-rc.1
 
 * Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
