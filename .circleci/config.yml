@@ -37,7 +37,7 @@ jobs:
   run-android-integration-tests-emulator:
     executor:
       name: android/android-machine
-      tag: 2024.01
+      tag: "2024.01"
     resource_class: xlarge
     steps:
       - android/create-avd:
