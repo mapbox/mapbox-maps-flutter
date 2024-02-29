@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Integration test
           working_directory: example
-          command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+          command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN} -v
 
   run-ios-integration-tests-emulator:
     executor: macos-xcode-latest
