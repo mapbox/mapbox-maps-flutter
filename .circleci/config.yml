@@ -38,7 +38,7 @@ jobs:
     executor:
       name: android/android-machine
       tag: "2024.01"
-      resource_class: xlarge
+      resource-class: xlarge
     steps:
       - android/create-avd:
           avd-name: flutter
