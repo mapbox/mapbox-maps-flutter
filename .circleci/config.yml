@@ -3,6 +3,7 @@ version: 2.1
 orbs: 
   flutter: circleci/flutter@2.0.2
   macos: circleci/macos@2.4.1
+  android: circleci/android@2.5.0
   gcp-cli: circleci/gcp-cli@3.1.1
 
 commands:
@@ -26,8 +27,49 @@ commands:
       - add_ssh_keys:
           fingerprints:
             - "9d:db:07:0b:62:81:11:c3:46:21:8e:fa:51:99:80:2d"
+  install-flutter:
+    steps:
+      - flutter/install_sdk_and_pub:
+          version: 3.19.2
+          app-dir: example
 
 jobs:
+  run-android-integration-tests-emulator:
+    executor:
+      name: android/android-machine
+      tag: 2024.01.1
+    steps:
+      - android/create-avd:
+          avd-name: flutter
+          install: true
+          system-image: system-images;android-33;default;x86_64
+      - android/start-emulator:
+          avd-name: flutter
+      - checkout
+      - install-flutter
+      - flutter/install_android_gradle_dependencies:
+          app-dir: example
+      - android/run-tests:
+          working_directory: example
+          test-command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+
+  run-ios-integration-tests-emulator:
+    executor: macos-xcode-latest
+    steps:
+      - macos/preboot-simulator:
+          device: iPhone 15 Pro
+          version: "17.4"
+      - checkout
+      - inject-netrc-credentials
+      - add-mapbox-submodules-key
+      - macos/install-rosetta
+      - install-flutter
+      - flutter/install_ios_pod:
+          app-dir: example
+      - run:
+          name: Integration test
+          working_directory: example
+          command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
   build-android:
     parameters:
@@ -39,9 +81,7 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout
-      - flutter/install_sdk_and_pub:
-          version: 3.16.9
-          app-dir: example
+      - install-flutter
       - run:
           name: ktlint
           working_directory: example/android
@@ -96,9 +136,7 @@ jobs:
       - inject-netrc-credentials
       - add-mapbox-submodules-key
       - macos/install-rosetta
-      - flutter/install_sdk_and_pub:
-          version: 3.16.9
-          app-dir: example
+      - install-flutter
       - flutter/install_ios_pod:
           app-dir: example
       - run:
@@ -149,6 +187,10 @@ jobs:
 
 workflows:
   build:
+    when:
+      or:
+        - equal: [main, << pipeline.git.branch >>]
+        - << pipeline.git.tag >>
     jobs:
       - build-android
       - run-android-tests-firebase:
@@ -158,12 +200,16 @@ workflows:
       - run-ios-tests-firebase:
           requires:
             - build-ios
+  pr:
+    jobs:
+      - run-android-integration-tests-emulator
+      - run-ios-integration-tests-emulator
 
 executors:
   macos-xcode-latest:
     resource_class: macos.m1.medium.gen1
     macos:
-      xcode: 15.2.0
+      xcode: 15.3.0
   firebase-test-runner:
     resource_class: small
     docker:
