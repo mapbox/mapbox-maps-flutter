@@ -64,7 +64,7 @@ void main() {
       expect(size.width, closeTo(tester.binding.renderView.size.width, 1));
       expect(size.height, closeTo(tester.binding.renderView.size.height, 1));
     }
-});
+  });
 
   testWidgets('reduceMemoryUse', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -187,7 +187,8 @@ void main() {
     expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
     expect(await MapboxMapsOptions.getDataPath(), isNotNull);
     expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
-    expect(await MapboxMapsOptions.getTileStoreUsageMode(), TileStoreUsageMode.READ_ONLY);
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(),
+        TileStoreUsageMode.READ_ONLY);
   });
 
   testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
@@ -197,7 +198,8 @@ void main() {
     final originalBaseURL = await MapboxMapsOptions.getBaseUrl();
     final originalDataPath = await MapboxMapsOptions.getDataPath();
     final originalAssetPath = await MapboxMapsOptions.getAssetPath();
-    final originalTileStoreUsageMode = await MapboxMapsOptions.getTileStoreUsageMode();
+    final originalTileStoreUsageMode =
+        await MapboxMapsOptions.getTileStoreUsageMode();
 
     // given
     final token = 'test token';
@@ -221,7 +223,8 @@ void main() {
     expect(await MapboxOptions.getAccessToken(), token);
     expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
     expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
-    expect(await MapboxMapsOptions.getAssetPath(), Platform.isAndroid ? "" : endsWith(assetPath));
+    expect(await MapboxMapsOptions.getAssetPath(),
+        Platform.isAndroid ? "" : endsWith(assetPath));
     expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
     expect(await MapboxMapsOptions.getLanguage(), language);
     expect(await MapboxMapsOptions.getWorldview(), worldview);

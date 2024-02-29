@@ -62,25 +62,27 @@ final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMaps
         MapboxOptions.accessToken = token
     }
 
-    func getWorldview() throws -> String? {
+    func getWorldviewWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
         return try? settingsService.get(
             key: MapboxCommonSettings.worldview,
             type: String.self)
         .get()
+
     }
 
-    func setWorldview(worldview: String?) throws {
+    func setWorldviewWorldview(_ worldview: String?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         _ = settingsService.set(key: MapboxCommonSettings.worldview, value: worldview)
     }
 
-    func getLanguage() throws -> String? {
+    func getLanguageWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
+
         return try? settingsService.get(
             key: MapboxCommonSettings.language,
             type: String.self)
         .get()
     }
 
-    func setLanguage(language: String?) throws {
+    func setLanguageLanguage(_ language: String?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         _ = settingsService.set(key: MapboxCommonSettings.language, value: language)
     }
 }
