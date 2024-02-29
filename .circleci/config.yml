@@ -35,7 +35,10 @@ commands:
 
 jobs:
   run-android-integration-tests-emulator:
-    executor: macos-xcode-latest
+    executor:
+      name: android/android-machine
+      tag: 2024.01
+      resource_class: xlarge
     steps:
       - android/create-avd:
           avd-name: flutter
