@@ -45,14 +45,17 @@ jobs:
           system-image: system-images;android-33;default;x86_64
       - android/start-emulator:
           avd-name: flutter
+          post-emulator-launch-assemble-command: ''
       - checkout
       - install-flutter
       - flutter/install_android_gradle_dependencies:
           app-dir: example
-      - run:
-          name: Integration test
-          working_directory: example
-          command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+      - android/run-tests:
+          test-command: flutter test example/integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+      # - run:
+      #     name: Integration test
+      #     working_directory: example
+      #     command: flutter test integration_test/all_test.dart --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
   run-ios-integration-tests-emulator:
     executor: macos-xcode-latest
