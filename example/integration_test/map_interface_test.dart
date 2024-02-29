@@ -56,7 +56,8 @@ void main() {
     await app.events.onMapLoaded.future;
 
     if (Platform.isIOS) {
-      final throwsPlatformException = throwsA(predicate((p) => p is PlatformException && p.message == 'Not available.'));
+      final throwsPlatformException = throwsA(predicate(
+          (p) => p is PlatformException && p.message == 'Not available.'));
       expect(() async => await mapboxMap.getSize(), throwsPlatformException);
     } else {
       var size = await mapboxMap.getSize();
@@ -178,14 +179,60 @@ void main() {
     expect(stateMap.length, 0);
   });
 
-  testWidgets('MapboxMapsOptions', (WidgetTester tester) async {
+  testWidgets('MapboxMapsOptions default values', (WidgetTester tester) async {
     final _ = app.main();
     await tester.pumpAndSettle();
 
-    var baseUrl = await MapboxMapsOptions.getBaseUrl();
-    expect(baseUrl, 'https://api.mapbox.com');
-    var accessToken = await MapboxOptions.getAccessToken();
-    expect(accessToken, isNotNull);
+    expect(await MapboxOptions.getAccessToken(), isNotNull);
+    expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
+    expect(await MapboxMapsOptions.getDataPath(), isNotNull);
+    expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(), TileStoreUsageMode.READ_ONLY);
+  });
+
+  testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
+    final _ = app.main();
+    await tester.pumpAndSettle();
+
+    final originalBaseURL = await MapboxMapsOptions.getBaseUrl();
+    final originalDataPath = await MapboxMapsOptions.getDataPath();
+    final originalAssetPath = await MapboxMapsOptions.getAssetPath();
+    final originalTileStoreUsageMode = await MapboxMapsOptions.getTileStoreUsageMode();
+
+    // given
+    final token = 'test token';
+    final baseUrl = 'https://test.mapbox.com/maps-flutter-test';
+    final dataPath = 'data/path';
+    final assetPath = 'asset/path';
+    final tileStoreUsageMode = TileStoreUsageMode.DISABLED;
+    final language = "ua";
+    final worldview = "MA";
+
+    // when
+    MapboxOptions.setAccessToken(token);
+    MapboxMapsOptions.setBaseUrl(baseUrl);
+    MapboxMapsOptions.setDataPath(dataPath);
+    MapboxMapsOptions.setAssetPath(assetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(tileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(language);
+    MapboxMapsOptions.setWorldview(worldview);
+
+    // then
+    expect(await MapboxOptions.getAccessToken(), token);
+    expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
+    expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
+    expect(await MapboxMapsOptions.getAssetPath(), Platform.isAndroid ? "" : endsWith(assetPath));
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+
+    // restore original values
+    MapboxMapsOptions.setBaseUrl(originalBaseURL);
+    MapboxMapsOptions.setDataPath(originalDataPath);
+    MapboxMapsOptions.setAssetPath(originalAssetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(originalTileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(null);
+    MapboxMapsOptions.setWorldview(null);
   });
 
   testWidgets('queryRenderedFeatures', (WidgetTester tester) async {

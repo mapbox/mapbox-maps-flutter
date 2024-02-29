@@ -4425,6 +4425,10 @@ protocol _MapboxMapsOptions {
   func setAssetPath(path: String) throws
   func getTileStoreUsageMode() throws -> TileStoreUsageMode
   func setTileStoreUsageMode(mode: TileStoreUsageMode) throws
+  func getWorldview() throws -> String?
+  func setWorldview(worldview: String?) throws
+  func getLanguage() throws -> String?
+  func setLanguage(language: String?) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4543,6 +4547,62 @@ class _MapboxMapsOptionsSetup {
       }
     } else {
       setTileStoreUsageModeChannel.setMessageHandler(nil)
+    }
+    let getWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview", binaryMessenger: binaryMessenger)
+    if let api = api {
+      getWorldviewChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getWorldview()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getWorldviewChannel.setMessageHandler(nil)
+    }
+    let setWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview", binaryMessenger: binaryMessenger)
+    if let api = api {
+      setWorldviewChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let worldviewArg: String? = nilOrValue(args[0])
+        do {
+          try api.setWorldview(worldview: worldviewArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setWorldviewChannel.setMessageHandler(nil)
+    }
+    let getLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage", binaryMessenger: binaryMessenger)
+    if let api = api {
+      getLanguageChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getLanguage()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getLanguageChannel.setMessageHandler(nil)
+    }
+    let setLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage", binaryMessenger: binaryMessenger)
+    if let api = api {
+      setLanguageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let languageArg: String? = nilOrValue(args[0])
+        do {
+          try api.setLanguage(language: languageArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setLanguageChannel.setMessageHandler(nil)
     }
   }
 }
