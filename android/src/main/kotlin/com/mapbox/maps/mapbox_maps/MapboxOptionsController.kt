@@ -9,6 +9,8 @@ import com.mapbox.maps.MapboxMapsOptions
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 
 class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInterfaces._MapboxOptions {
+  private val settingsService = SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT)
+
   override fun getAccessToken(): String {
     return MapboxOptions.accessToken
   }
@@ -74,3 +76,4 @@ class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInter
       settingsService.erase(MapboxCommonSettings.LANGUAGE)
     }
   }
+}

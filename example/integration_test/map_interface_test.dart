@@ -63,8 +63,8 @@ void main() {
       var size = await mapboxMap.getSize();
       expect(size.width, closeTo(tester.binding.renderView.size.width, 1));
       expect(size.height, closeTo(tester.binding.renderView.size.height, 1));
-    });
-  }
+    }
+});
 
   testWidgets('reduceMemoryUse', (WidgetTester tester) async {
     final mapFuture = app.main();
