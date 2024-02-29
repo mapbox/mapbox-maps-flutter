@@ -1,6 +1,10 @@
 package com.mapbox.maps.mapbox_maps
 
+import com.mapbox.bindgen.Value
+import com.mapbox.common.MapboxCommonSettings
 import com.mapbox.common.MapboxOptions
+import com.mapbox.common.SettingsServiceFactory
+import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.MapboxMapsOptions
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 
@@ -44,4 +48,29 @@ class MapboxOptionsController : FLTMapInterfaces._MapboxMapsOptions, FLTMapInter
   override fun setTileStoreUsageMode(mode: FLTMapInterfaces.TileStoreUsageMode) {
     MapboxMapsOptions.tileStoreUsageMode = mode.toTileStoreUsageMode()
   }
-}
+
+  override fun getWorldview(): String? {
+    val result = settingsService.get(MapboxCommonSettings.WORLDVIEW)
+    return result.value?.contents as? String
+  }
+
+  override fun setWorldview(worldview: String?) {
+    if (worldview != null) {
+      settingsService.set(MapboxCommonSettings.WORLDVIEW, Value.valueOf(worldview))
+    } else {
+      settingsService.erase(MapboxCommonSettings.WORLDVIEW)
+    }
+  }
+
+  override fun getLanguage(): String? {
+    val result = settingsService.get(MapboxCommonSettings.LANGUAGE)
+    return result.value?.contents as? String
+  }
+
+  override fun setLanguage(language: String?) {
+    if (language != null) {
+      settingsService.set(MapboxCommonSettings.LANGUAGE, Value.valueOf(language))
+    } else {
+      settingsService.erase(MapboxCommonSettings.LANGUAGE)
+    }
+  }

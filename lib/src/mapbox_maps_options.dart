@@ -90,4 +90,30 @@ final class MapboxMapsOptions {
   static void setTileStoreUsageMode(TileStoreUsageMode mode) {
     _options.setTileStoreUsageMode(mode);
   }
+
+  /// Current worldview preference for Mapbox products.
+  ///
+  /// Represented as a ISO 3166-1 alpha-2 country code.
+  static Future<String?> getWorldview() {
+    return _options.getWorldview();
+  }
+
+  /// Set preferred worldview for Mapbox products as a ISO 3166-1 alpha-2 country code.
+  ///
+  /// Learn more about Mapbox worldviews at https://docs.mapbox.com/help/glossary/worldview/#available-worldviews.
+  static void setWorldview(String? worldview) {
+    _options.setWorldview(worldview);
+  }
+
+  /// Current language preference for Mapbox products.
+  ///
+  /// Represented as a bcp-47 tag.
+  static Future<String?> getLanguage() {
+    return _options.getLanguage();
+  }
+
+  /// Set preferred language for Mapbox products with a bcp-47 tag.
+  static void setLanguage(String? language) {
+    _options.setLanguage(language);
+  }
 }

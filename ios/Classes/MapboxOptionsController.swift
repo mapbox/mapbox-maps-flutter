@@ -4,6 +4,8 @@ import MapboxCommon
 final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMapsOptions {
     private static let errorCode = "0"
 
+    private let settingsService = SettingsServiceFactory.getInstanceFor(.persistent)
+
     func getBaseUrlWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> String? {
         MapboxMapsOptions.baseURL.absoluteString
     }
@@ -58,5 +60,27 @@ final class MapboxOptionsController: NSObject, FLT_MapboxOptions, FLT_MapboxMaps
 
     func setAccessTokenToken(_ token: String, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         MapboxOptions.accessToken = token
+    }
+
+    func getWorldview() throws -> String? {
+        return try? settingsService.get(
+            key: MapboxCommonSettings.worldview,
+            type: String.self)
+        .get()
+    }
+
+    func setWorldview(worldview: String?) throws {
+        _ = settingsService.set(key: MapboxCommonSettings.worldview, value: worldview)
+    }
+
+    func getLanguage() throws -> String? {
+        return try? settingsService.get(
+            key: MapboxCommonSettings.language,
+            type: String.self)
+        .get()
+    }
+
+    func setLanguage(language: String?) throws {
+        _ = settingsService.set(key: MapboxCommonSettings.language, value: language)
     }
 }
