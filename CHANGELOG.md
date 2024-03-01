@@ -1,6 +1,6 @@
 ### 1.0.0
 
-* Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
+* Add `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
 Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldview/) and [language support](https://docs.mapbox.com/help/troubleshooting/change-language/).
 * Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
 * Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
