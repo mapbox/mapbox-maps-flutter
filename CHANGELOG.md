@@ -1,6 +1,6 @@
 ### main
 
-* Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
+* Add `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
 Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldview/) and [language support](https://docs.mapbox.com/help/troubleshooting/change-language/).
 
 ### 1.0.0-rc.1
