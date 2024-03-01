@@ -18,7 +18,7 @@ commands:
   setup-gcloud:
     steps:
       - gcp-cli/setup:
-          version: 449.0.0
+          version: 466.0.0
           gcloud_service_key: GCLOUD_SERVICE_ACCOUNT_JSON
 
   add-mapbox-submodules-key:
@@ -36,7 +36,7 @@ jobs:
         default: example/build/app/outputs/apk
     docker:
       - image: cimg/android:2022.09
-    resource_class: xlarge
+    resource_class: 2xlarge
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
@@ -80,10 +80,12 @@ jobs:
               --app << parameters.workspace-path >>/debug/app-debug.apk \
               --test << parameters.workspace-path >>/androidTest/debug/app-debug-androidTest.apk \
               --timeout 5m \
-              --device model=oriole,version=33,locale=en,orientation=portrait \
+              --device model=shiba,version=34,locale=en,orientation=portrait \
               --results-dir=result_dir \
               --use-orchestrator \
-              --num-flaky-test-attempts 3     
+              --num-flaky-test-attempts 3 \
+              --no-record-video \
+              --no-performance-metrics
                          
   build-ios:
     parameters:

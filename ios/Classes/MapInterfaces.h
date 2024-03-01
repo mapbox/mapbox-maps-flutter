@@ -1709,6 +1709,10 @@ NSObject<FlutterMessageCodec> *FLT_MapboxMapsOptionsGetCodec(void);
 /// @return `nil` only when `error != nil`.
 - (FLTTileStoreUsageModeBox *_Nullable)getTileStoreUsageModeWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)setTileStoreUsageModeMode:(FLTTileStoreUsageMode)mode error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable NSString *)getWorldviewWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setWorldviewWorldview:(nullable NSString *)worldview error:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable NSString *)getLanguageWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (void)setLanguageLanguage:(nullable NSString *)language error:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void SetUpFLT_MapboxMapsOptions(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLT_MapboxMapsOptions> *_Nullable api);

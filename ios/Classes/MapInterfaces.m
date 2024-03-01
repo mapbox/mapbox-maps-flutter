@@ -4351,6 +4351,78 @@ void SetUpFLT_MapboxMapsOptions(id<FlutterBinaryMessenger> binaryMessenger, NSOb
       [channel setMessageHandler:nil];
     }
   }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getWorldviewWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getWorldviewWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getWorldviewWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setWorldviewWorldview:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setWorldviewWorldview:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_worldview = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setWorldviewWorldview:arg_worldview error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getLanguageWithError:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(getLanguageWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSString *output = [api getLanguageWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage"
+        binaryMessenger:binaryMessenger
+        codec:FLT_MapboxMapsOptionsGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setLanguageLanguage:error:)], @"FLT_MapboxMapsOptions api (%@) doesn't respond to @selector(setLanguageLanguage:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        NSString *arg_language = GetNullableObjectAtIndex(args, 0);
+        FlutterError *error;
+        [api setLanguageLanguage:arg_language error:&error];
+        callback(wrapResult(nil, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
 }
 NSObject<FlutterMessageCodec> *FLTSettingsGetCodec(void) {
   static FlutterStandardMessageCodec *sSharedObject = nil;
