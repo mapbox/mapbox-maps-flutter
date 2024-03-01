@@ -1,5 +1,5 @@
 group 'com.mapbox.maps.mapbox_maps'
-version '1.0-SNAPSHOT'
+version '1.0.0'
 
 buildscript {
     ext.kotlin_version = '1.8.22'
@@ -63,7 +63,7 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 }
 
 dependencies {
-    implementation ("com.mapbox.maps:android:11.2.0-rc.1") {
+    implementation ("com.mapbox.maps:android:11.2.0") {
         exclude group: 'com.mapbox.plugin', module: 'maps-lifecycle'
     }
 

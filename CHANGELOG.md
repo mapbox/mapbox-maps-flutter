@@ -1,7 +1,29 @@
-### main
+### 1.0.0
 
 * Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
 Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldview/) and [language support](https://docs.mapbox.com/help/troubleshooting/change-language/).
+* Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
+* Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
+* Add `DefaultLocationPuck2D` type interchangeable with `LocationPuck2D` that allows customization of the default location indicator appearance.
+* Add `_AnnotationManager.removeAnnotationManagerById()` allowing to remove annotation manager by its id, without having to store a reference to the manager.
+* Fix point annotation image disappearing after update on iOS.
+* Bump Pigeon to v16.0.0.
+* Updater minimum Flutter SDK version to 3.10.0 and above.
+* Update minumum Dart SDK version to 3.0.0 and above.
+* Convert `MapboxMapsOptions.setBaseUrl()`, `MapboxMapsOptions.getDataPath()`, `MapboxMapsOptions.setDataPath()`, `MapboxMapsOptions.getAssetPath()`, `MapboxMapsOptions.setAssetPath()`, `MapboxMapsOptions.getTileStoreUsageMode()` and `MapboxMapsOptions.setTileStoreUsageMode()` to static methods.
+* Fix 2D puck's opacity not being respected on iOS.
+* Make `padding` parameter optional in `MapboxMap.cameraForCoordinateBounds()` and `MapboxMap.cameraForCoordinates()`.
+* Fix initial camera options passed to `MapWidget` not being applied on Android.
+* Add an example representing a traffic route with color based on traffic volumes using LineLayer and Expression.
+* [Android] Fix MapOptions incorrect index access at map creation, leading to map not being created(blank view).
+* [Android] Use hybrid composition(HC) as the default platform view hosting mode on Android.
+* [Android] Add experimental `androidHostingMode` constructor parameter to `MapWidget`. Use this to change the way platform MapView is being hosted by Flutter on Android. This changes the way map view is composited with Flutter UI, read more on this in [Android Platform Views](https://github.com/flutter/flutter/wiki/Android-Platform-Views) guide from the Flutter team.
+* [iOS] `MapboxMap`: `isGestureInProgress()`, `isUserAnimationInProgress()`, `setConstrainMode()`, `setNorthOrientation()`, `setViewportMode()` and `reduceMemoryUse()` are now available on iOS.
+* Add `LogConfiguration` allowing to intercept logs produced by the plugin. Pass your custom `LogWriterBackend` to `LogConfiguration.registerLogWriterBackend()` to redirect logs produced by the mapping engine to your desired destination.
+* Add `MapWidget.onResourceRequestListener` that can be used to subscribe to resource requests made by the map.
+* [iOS] Re-wire `MapWidget`'s `onScroll` event to be triggered whenever map is being panned instead of triggering it only after pan ends.
+* [iOS] Address crashes on iOS happening when user location is being shown.
+* Bump platform Maps SDK dependencies to 11.1.0.
 
 ### 1.0.0-rc.1
 
