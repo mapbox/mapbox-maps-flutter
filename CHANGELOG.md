@@ -1,3 +1,7 @@
+### main
+
+* [iOS] Fix crash in `onStyleImageMissingListener`.
+
 ### 1.0.0
 
 * Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
