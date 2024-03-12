@@ -1,5 +1,6 @@
-package com.mapbox.maps.mapbox_maps.mapping
+package com.mapbox.maps.mapbox_maps.mapping.turf
 
+import com.google.gson.Gson
 import com.mapbox.geojson.Point
 
 fun Point.toList(): List<Any?> {
@@ -8,6 +9,6 @@ fun Point.toList(): List<Any?> {
 
 object PointDecoder {
   fun fromList(list: List<Any?>): Point {
-    return Point.fromJson(list.toString()).let { it }
+    return Point.fromJson(Gson().toJson(list.first()))
   }
 }

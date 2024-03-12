@@ -291,7 +291,7 @@ fun ScreenCoordinate.toScreenCoordinate(context: Context): com.mapbox.maps.Scree
 fun CameraOptions.toCameraOptions(context: Context): com.mapbox.maps.CameraOptions = com.mapbox.maps.CameraOptions.Builder()
   .anchor(anchor?.toScreenCoordinate(context))
   .bearing(bearing)
-  .center(center?.toPoint())
+  .center(center)
   .padding(padding?.toEdgeInsets(context))
   .zoom(zoom)
   .pitch(pitch)
@@ -493,7 +493,7 @@ fun com.mapbox.maps.CameraBounds.toFLTCameraBounds() = CameraBounds(
 
 fun com.mapbox.maps.CameraOptions.toFLTCameraOptions(context: Context): CameraOptions {
   return CameraOptions(
-    center = center?.let { mapOf("coordinates" to listOf(it.longitude(), it.latitude())) },
+    center = center,
     anchor = anchor?.toFLTScreenCoordinate(context),
     padding = padding?.toFLTEdgeInsets(context),
     zoom = zoom,

@@ -138,6 +138,7 @@ class FullMapState extends State<FullMap> {
           onStyleImageMissingListener: _onStyleImageMissingListener,
           onStyleImageUnusedListener: _onStyleImageUnusedListener,
           onResourceRequestListener: _onResourceRequestListener,
+          onLongTapListener: (coordinate) {},
         ));
   }
 }
