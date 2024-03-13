@@ -10,7 +10,7 @@ final class Point extends turf.Point {
 
   static Point decode(Object result) {
     result as List<Object?>;
-    return Point.fromJson(result.first as Map<String, dynamic>);
+    return Point.fromJson((result.first as Map).cast<String, dynamic>());
   }
 
   Object encode() {
