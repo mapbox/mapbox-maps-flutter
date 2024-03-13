@@ -273,7 +273,7 @@ fun Map<String?, Any?>.toPolygon(): Polygon {
 }
 
 fun CoordinateBounds.toCoordinateBounds() =
-  com.mapbox.maps.CoordinateBounds(southwest.toPoint(), northeast.toPoint(), infiniteBounds)
+  com.mapbox.maps.CoordinateBounds(southwest, northeast, infiniteBounds)
 
 fun MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
   return EdgeInsets(
@@ -474,11 +474,11 @@ fun com.mapbox.maps.CameraState.toCameraState(context: Context): CameraState = C
   padding = padding.toFLTEdgeInsets(context),
   pitch = pitch,
   zoom = zoom,
-  center = center.toMap()
+  center = center
 )
 
 fun com.mapbox.maps.CoordinateBounds.toFLTCoordinateBounds(): CoordinateBounds =
-  CoordinateBounds(southwest.toMap(), northeast.toMap(), infiniteBounds)
+  CoordinateBounds(southwest, northeast, infiniteBounds)
 
 fun com.mapbox.maps.CoordinateBoundsZoom.toFLTCoordinateBoundsZoom(): CoordinateBoundsZoom =
   CoordinateBoundsZoom(bounds.toFLTCoordinateBounds(), zoom)
