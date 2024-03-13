@@ -124,9 +124,7 @@ extension ScreenCoordinate {
 }
 extension CoordinateBounds {
     func toCoordinateBounds() -> MapboxMaps.CoordinateBounds {
-        let southwest = convertDictionaryToCLLocationCoordinate2D(dict: self.southwest)
-        let northeast = convertDictionaryToCLLocationCoordinate2D(dict: self.northeast)
-        return MapboxMaps.CoordinateBounds(southwest: southwest!, northeast: northeast!)
+        return MapboxMaps.CoordinateBounds(southwest: southwest.coordinates, northeast: northeast.coordinates)
     }
 }
 
@@ -314,8 +312,8 @@ extension MapboxMaps.CoordinateBoundsZoom {
 extension MapboxMaps.CoordinateBounds {
     func toFLTCoordinateBounds() -> CoordinateBounds {
         CoordinateBounds(
-            southwest: southwest.toDict(),
-            northeast: northeast.toDict(),
+            southwest: Point(southwest),
+            northeast: Point(northeast),
             infiniteBounds: infiniteBounds)
     }
 }

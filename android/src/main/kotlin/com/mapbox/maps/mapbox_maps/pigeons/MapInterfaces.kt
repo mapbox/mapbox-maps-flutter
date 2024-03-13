@@ -614,7 +614,7 @@ data class CameraOptions(
  */
 data class CameraState(
   /** Coordinate at the center of the camera. */
-  val center: Map<String?, Any?>,
+  val center: Point,
   /**
    * Padding around the interior of the view that affects the frame of
    * reference for `center`.
@@ -634,7 +634,7 @@ data class CameraState(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): CameraState {
-      val center = list[0] as Map<String?, Any?>
+      val center = PointDecoder.fromList(list[0] as List<Any?>)
       val padding = MbxEdgeInsets.fromList(list[1] as List<Any?>)
       val zoom = list[2] as Double
       val bearing = list[3] as Double
@@ -644,7 +644,7 @@ data class CameraState(
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      center,
+      center.toList(),
       padding.toList(),
       zoom,
       bearing,
@@ -775,12 +775,12 @@ data class CoordinateBounds(
    * Coordinate at the southwest corner.
    * Note: setting this field with invalid values (infinite, NaN) will crash the application.
    */
-  val southwest: Map<String?, Any?>,
+  val southwest: Point,
   /**
    * Coordinate at the northeast corner.
    * Note: setting this field with invalid values (infinite, NaN) will crash the application.
    */
-  val northeast: Map<String?, Any?>,
+  val northeast: Point,
   /**
    * If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
    * Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
@@ -791,16 +791,16 @@ data class CoordinateBounds(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): CoordinateBounds {
-      val southwest = list[0] as Map<String?, Any?>
-      val northeast = list[1] as Map<String?, Any?>
+      val southwest = PointDecoder.fromList(list[0] as List<Any?>)
+      val northeast = PointDecoder.fromList(list[1] as List<Any?>)
       val infiniteBounds = list[2] as Boolean
       return CoordinateBounds(southwest, northeast, infiniteBounds)
     }
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      southwest,
-      northeast,
+      southwest.toList(),
+      northeast.toList(),
       infiniteBounds,
     )
   }
@@ -2564,7 +2564,7 @@ interface _CameraManager {
    * @param offset The center of the given bounds relative to map center in screen points.
    * @return The `camera options` object representing the provided parameters.
    */
-  fun cameraForCoordinatesPadding(coordinates: List<Map<String?, Any?>?>, camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?): CameraOptions
+  fun cameraForCoordinatesPadding(coordinates: List<Point>, camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?): CameraOptions
   /**
    * Convenience method that returns the `camera options` object for given parameters.
    *
@@ -2587,7 +2587,7 @@ interface _CameraManager {
    *
    * @return The `camera options` object representing the provided parameters.
    */
-  fun cameraForCoordinates(coordinates: List<Map<String?, Any?>?>, padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?): CameraOptions
+  fun cameraForCoordinates(coordinates: List<Point>, padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?): CameraOptions
   /**
    * Convenience method that adjusts the provided `camera options` object for given parameters.
    *
@@ -2603,7 +2603,7 @@ interface _CameraManager {
    *
    * @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
    */
-  fun cameraForCoordinatesCameraOptions(coordinates: List<Map<String?, Any?>?>, camera: CameraOptions, box: ScreenBox): CameraOptions
+  fun cameraForCoordinatesCameraOptions(coordinates: List<Point>, camera: CameraOptions, box: ScreenBox): CameraOptions
   /**
    * Convenience method that returns the `camera options` object for given parameters.
    *
@@ -2672,7 +2672,7 @@ interface _CameraManager {
    *
    * @return A `screen coordinate` on the screen in `logical pixels`.
    */
-  fun pixelForCoordinate(coordinate: Map<String?, Any?>): ScreenCoordinate
+  fun pixelForCoordinate(coordinate: Point): ScreenCoordinate
   /**
    * Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
    * to a `screen coordinate`.
@@ -2684,7 +2684,7 @@ interface _CameraManager {
    *
    * @return A geographical `coordinate` corresponding to a given `screen coordinate`.
    */
-  fun coordinateForPixel(pixel: ScreenCoordinate): Map<String?, Any?>
+  fun coordinateForPixel(pixel: ScreenCoordinate): Point
   /**
    * Calculates `screen coordinates` that correspond to geographical `coordinates`
    * (i.e., longitude-latitude pairs).
@@ -2696,7 +2696,7 @@ interface _CameraManager {
    *
    * @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
    */
-  fun pixelsForCoordinates(coordinates: List<Map<String?, Any?>?>): List<ScreenCoordinate?>
+  fun pixelsForCoordinates(coordinates: List<Point>): List<ScreenCoordinate?>
   /**
    * Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
    * to `screen coordinates`.
@@ -2708,7 +2708,7 @@ interface _CameraManager {
    *
    * @return A `geographical coordinates` that correspond to a given `screen coordinates`.
    */
-  fun coordinatesForPixels(pixels: List<ScreenCoordinate?>): List<Map<String?, Any?>?>
+  fun coordinatesForPixels(pixels: List<ScreenCoordinate?>): List<Point>
   /**
    * Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
    * The map will retain its current values for any details not passed via the camera options argument.
@@ -2754,7 +2754,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinatesArg = args[0] as List<Map<String?, Any?>?>
+            val coordinatesArg = args[0] as List<Point>
             val cameraArg = args[1] as CameraOptions
             val coordinatesPaddingArg = args[2] as MbxEdgeInsets?
             val maxZoomArg = args[3] as Double?
@@ -2799,7 +2799,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinatesArg = args[0] as List<Map<String?, Any?>?>
+            val coordinatesArg = args[0] as List<Point>
             val paddingArg = args[1] as MbxEdgeInsets?
             val bearingArg = args[2] as Double?
             val pitchArg = args[3] as Double?
@@ -2820,7 +2820,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinatesArg = args[0] as List<Map<String?, Any?>?>
+            val coordinatesArg = args[0] as List<Point>
             val cameraArg = args[1] as CameraOptions
             val boxArg = args[2] as ScreenBox
             var wrapped: List<Any?>
@@ -2933,7 +2933,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.pixelForCoordinate(coordinateArg))
@@ -2969,7 +2969,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinatesArg = args[0] as List<Map<String?, Any?>?>
+            val coordinatesArg = args[0] as List<Point>
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.pixelsForCoordinates(coordinatesArg))
@@ -3641,7 +3641,7 @@ interface _MapInterface {
    * @param coordinate The `coordinate` defined as longitude-latitude pair.
    * @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
    */
-  fun getElevation(coordinate: Map<String?, Any?>): Double?
+  fun getElevation(coordinate: Point): Double?
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -4168,7 +4168,7 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.getElevation(coordinateArg))
@@ -4203,6 +4203,11 @@ private object OfflineRegionCodec : StandardMessageCodec() {
           OfflineRegionTilePyramidDefinition.fromList(it)
         }
       }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -4218,6 +4223,10 @@ private object OfflineRegionCodec : StandardMessageCodec() {
       }
       is OfflineRegionTilePyramidDefinition -> {
         stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is Point -> {
+        stream.write(131)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -4494,202 +4503,17 @@ private object ProjectionCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
-        }
-      }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
-        }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
-        }
-      }
-      134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
-        }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
-        }
-      }
-      137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
-        }
-      }
-      138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
-        }
-      }
-      139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
-        }
-      }
-      140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
-        }
-      }
-      141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
-        }
-      }
-      142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
-        }
-      }
-      143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
-        }
-      }
-      144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
-        }
-      }
-      145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
-        }
-      }
-      146.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
-        }
-      }
-      147.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
-        }
-      }
-      148.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
-        }
-      }
-      149.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
-        }
-      }
-      150.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
-        }
-      }
-      151.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      152.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           ProjectedMeters.fromList(it)
-        }
-      }
-      153.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
-        }
-      }
-      154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
-        }
-      }
-      155.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
-        }
-      }
-      156.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
-        }
-      }
-      157.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
-        }
-      }
-      158.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
-        }
-      }
-      159.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
-        }
-      }
-      160.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
-        }
-      }
-      161.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
-        }
-      }
-      162.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
-        }
-      }
-      163.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
-        }
-      }
-      164.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
-        }
-      }
-      165.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -4697,164 +4521,16 @@ private object ProjectionCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is AmbientLight -> {
+      is MercatorCoordinate -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is Point -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is CameraOptions -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is CameraState -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is CanonicalTileID -> {
-        stream.write(133)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBounds -> {
-        stream.write(134)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBoundsZoom -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
-      is DirectionalLight -> {
-        stream.write(136)
-        writeValue(stream, value.toList())
-      }
-      is FeatureExtensionValue -> {
-        stream.write(137)
-        writeValue(stream, value.toList())
-      }
-      is FlatLight -> {
-        stream.write(138)
-        writeValue(stream, value.toList())
-      }
-      is GlyphsRasterizationOptions -> {
-        stream.write(139)
-        writeValue(stream, value.toList())
-      }
-      is ImageContent -> {
-        stream.write(140)
-        writeValue(stream, value.toList())
-      }
-      is ImageStretches -> {
-        stream.write(141)
-        writeValue(stream, value.toList())
-      }
-      is LayerPosition -> {
-        stream.write(142)
-        writeValue(stream, value.toList())
-      }
-      is MapAnimationOptions -> {
-        stream.write(143)
-        writeValue(stream, value.toList())
-      }
-      is MapDebugOptions -> {
-        stream.write(144)
-        writeValue(stream, value.toList())
-      }
-      is MapOptions -> {
-        stream.write(145)
-        writeValue(stream, value.toList())
-      }
-      is MbxEdgeInsets -> {
-        stream.write(146)
-        writeValue(stream, value.toList())
-      }
-      is MbxImage -> {
-        stream.write(147)
-        writeValue(stream, value.toList())
-      }
-      is MercatorCoordinate -> {
-        stream.write(148)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionGeometryDefinition -> {
-        stream.write(149)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionTilePyramidDefinition -> {
-        stream.write(150)
-        writeValue(stream, value.toList())
-      }
-      is Point -> {
-        stream.write(151)
-        writeValue(stream, value.toList())
-      }
       is ProjectedMeters -> {
-        stream.write(152)
-        writeValue(stream, value.toList())
-      }
-      is QueriedFeature -> {
-        stream.write(153)
-        writeValue(stream, value.toList())
-      }
-      is QueriedRenderedFeature -> {
-        stream.write(154)
-        writeValue(stream, value.toList())
-      }
-      is QueriedSourceFeature -> {
-        stream.write(155)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryGeometry -> {
-        stream.write(156)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryOptions -> {
-        stream.write(157)
-        writeValue(stream, value.toList())
-      }
-      is ScreenBox -> {
-        stream.write(158)
-        writeValue(stream, value.toList())
-      }
-      is ScreenCoordinate -> {
-        stream.write(159)
-        writeValue(stream, value.toList())
-      }
-      is Size -> {
-        stream.write(160)
-        writeValue(stream, value.toList())
-      }
-      is SourceQueryOptions -> {
-        stream.write(161)
-        writeValue(stream, value.toList())
-      }
-      is StyleObjectInfo -> {
-        stream.write(162)
-        writeValue(stream, value.toList())
-      }
-      is StyleProjection -> {
-        stream.write(163)
-        writeValue(stream, value.toList())
-      }
-      is StylePropertyValue -> {
-        stream.write(164)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInMegabytes -> {
-        stream.write(165)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TransitionOptions -> {
-        stream.write(167)
+        stream.write(130)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -4886,7 +4562,7 @@ interface Projection {
    *
    * @return Returns Spherical Mercator ProjectedMeters coordinates.
    */
-  fun projectedMetersForCoordinate(coordinate: Map<String?, Any?>): ProjectedMeters
+  fun projectedMetersForCoordinate(coordinate: Point): ProjectedMeters
   /**
    * Calculate a longitude-latitude pair for a Spherical Mercator projected
    * meters.
@@ -4896,7 +4572,7 @@ interface Projection {
    *
    * @return Returns a longitude-latitude pair.
    */
-  fun coordinateForProjectedMeters(projectedMeters: ProjectedMeters): Map<String?, Any?>
+  fun coordinateForProjectedMeters(projectedMeters: ProjectedMeters): Point
   /**
    * Calculate a point on the map in Mercator Projection for a given
    * coordinate at the specified zoom scale.
@@ -4908,7 +4584,7 @@ interface Projection {
    *
    * @return Returns a point on the map in Mercator projection.
    */
-  fun project(coordinate: Map<String?, Any?>, zoomScale: Double): MercatorCoordinate
+  fun project(coordinate: Point, zoomScale: Double): MercatorCoordinate
   /**
    * Calculate a coordinate for a given point on the map in Mercator Projection.
    *
@@ -4919,7 +4595,7 @@ interface Projection {
    *
    * @return Returns a coordinate.
    */
-  fun unproject(coordinate: MercatorCoordinate, zoomScale: Double): Map<String?, Any?>
+  fun unproject(coordinate: MercatorCoordinate, zoomScale: Double): Point
 
   companion object {
     /** The codec used by Projection. */
@@ -4953,7 +4629,7 @@ interface Projection {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.projectedMetersForCoordinate(coordinateArg))
@@ -4989,7 +4665,7 @@ interface Projection {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             val zoomScaleArg = args[1] as Double
             var wrapped: List<Any?>
             try {
@@ -5389,202 +5065,17 @@ private object MapSnapshotCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
-        }
-      }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
-        }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
-        }
-      }
-      134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
-        }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
-        }
-      }
-      137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
-        }
-      }
-      138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
-        }
-      }
-      139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
-        }
-      }
-      140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
-        }
-      }
-      141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
-        }
-      }
-      142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
-        }
-      }
-      143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
-        }
-      }
-      144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
-        }
-      }
-      145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
-        }
-      }
-      146.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
-        }
-      }
-      147.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
-        }
-      }
-      148.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
-        }
-      }
-      149.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
-        }
-      }
-      150.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
-        }
-      }
-      151.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      152.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
-        }
-      }
-      153.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
-        }
-      }
-      154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
-        }
-      }
-      155.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
-        }
-      }
-      156.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
-        }
-      }
-      157.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
-        }
-      }
-      158.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
-        }
-      }
-      159.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           ScreenCoordinate.fromList(it)
-        }
-      }
-      160.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
-        }
-      }
-      161.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
-        }
-      }
-      162.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
-        }
-      }
-      163.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
-        }
-      }
-      164.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
-        }
-      }
-      165.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -5592,164 +5083,16 @@ private object MapSnapshotCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is AmbientLight -> {
+      is MbxImage -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is Point -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is CameraOptions -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is CameraState -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is CanonicalTileID -> {
-        stream.write(133)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBounds -> {
-        stream.write(134)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBoundsZoom -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
-      is DirectionalLight -> {
-        stream.write(136)
-        writeValue(stream, value.toList())
-      }
-      is FeatureExtensionValue -> {
-        stream.write(137)
-        writeValue(stream, value.toList())
-      }
-      is FlatLight -> {
-        stream.write(138)
-        writeValue(stream, value.toList())
-      }
-      is GlyphsRasterizationOptions -> {
-        stream.write(139)
-        writeValue(stream, value.toList())
-      }
-      is ImageContent -> {
-        stream.write(140)
-        writeValue(stream, value.toList())
-      }
-      is ImageStretches -> {
-        stream.write(141)
-        writeValue(stream, value.toList())
-      }
-      is LayerPosition -> {
-        stream.write(142)
-        writeValue(stream, value.toList())
-      }
-      is MapAnimationOptions -> {
-        stream.write(143)
-        writeValue(stream, value.toList())
-      }
-      is MapDebugOptions -> {
-        stream.write(144)
-        writeValue(stream, value.toList())
-      }
-      is MapOptions -> {
-        stream.write(145)
-        writeValue(stream, value.toList())
-      }
-      is MbxEdgeInsets -> {
-        stream.write(146)
-        writeValue(stream, value.toList())
-      }
-      is MbxImage -> {
-        stream.write(147)
-        writeValue(stream, value.toList())
-      }
-      is MercatorCoordinate -> {
-        stream.write(148)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionGeometryDefinition -> {
-        stream.write(149)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionTilePyramidDefinition -> {
-        stream.write(150)
-        writeValue(stream, value.toList())
-      }
-      is Point -> {
-        stream.write(151)
-        writeValue(stream, value.toList())
-      }
-      is ProjectedMeters -> {
-        stream.write(152)
-        writeValue(stream, value.toList())
-      }
-      is QueriedFeature -> {
-        stream.write(153)
-        writeValue(stream, value.toList())
-      }
-      is QueriedRenderedFeature -> {
-        stream.write(154)
-        writeValue(stream, value.toList())
-      }
-      is QueriedSourceFeature -> {
-        stream.write(155)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryGeometry -> {
-        stream.write(156)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryOptions -> {
-        stream.write(157)
-        writeValue(stream, value.toList())
-      }
-      is ScreenBox -> {
-        stream.write(158)
-        writeValue(stream, value.toList())
-      }
       is ScreenCoordinate -> {
-        stream.write(159)
-        writeValue(stream, value.toList())
-      }
-      is Size -> {
-        stream.write(160)
-        writeValue(stream, value.toList())
-      }
-      is SourceQueryOptions -> {
-        stream.write(161)
-        writeValue(stream, value.toList())
-      }
-      is StyleObjectInfo -> {
-        stream.write(162)
-        writeValue(stream, value.toList())
-      }
-      is StyleProjection -> {
-        stream.write(163)
-        writeValue(stream, value.toList())
-      }
-      is StylePropertyValue -> {
-        stream.write(164)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInMegabytes -> {
-        stream.write(165)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TransitionOptions -> {
-        stream.write(167)
+        stream.write(130)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -5769,14 +5112,14 @@ interface MapSnapshot {
    * @param coordinate A geographical `coordinate`.
    * @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
    */
-  fun screenCoordinate(coordinate: Map<String?, Any?>): ScreenCoordinate
+  fun screenCoordinate(coordinate: Point): ScreenCoordinate
   /**
    * Calculate geographical coordinates from a point on the snapshot.
    *
    * @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
    * @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
    */
-  fun coordinate(screenCoordinate: ScreenCoordinate): Map<String?, Any?>
+  fun coordinate(screenCoordinate: ScreenCoordinate): Point
   /**
    * Get list of attributions for the sources in this snapshot.
    *
@@ -5803,7 +5146,7 @@ interface MapSnapshot {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.screenCoordinate(coordinateArg))
@@ -5875,202 +5218,12 @@ private object MapSnapshotterCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
-        }
-      }
-      130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
-        }
-      }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
-        }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
-        }
-      }
-      134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
-        }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
-        }
-      }
-      137.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
-        }
-      }
-      138.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
-        }
-      }
-      139.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
-        }
-      }
-      140.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
-        }
-      }
-      141.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
-        }
-      }
-      142.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
-        }
-      }
-      143.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
-        }
-      }
-      144.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
-        }
-      }
-      145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
-        }
-      }
-      146.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
-        }
-      }
-      147.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
-        }
-      }
-      148.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
-        }
-      }
-      149.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
-        }
-      }
-      150.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
-        }
-      }
-      151.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      152.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
-        }
-      }
-      153.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
-        }
-      }
-      154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
-        }
-      }
-      155.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
-        }
-      }
-      156.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
-        }
-      }
-      157.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
-        }
-      }
-      158.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
-        }
-      }
-      159.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
-        }
-      }
-      160.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           Size.fromList(it)
-        }
-      }
-      161.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
-        }
-      }
-      162.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
-        }
-      }
-      163.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
-        }
-      }
-      164.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
-        }
-      }
-      165.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -6078,164 +5231,12 @@ private object MapSnapshotterCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is AmbientLight -> {
+      is Point -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      is CameraBoundsOptions -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is CameraOptions -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is CameraState -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is CanonicalTileID -> {
-        stream.write(133)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBounds -> {
-        stream.write(134)
-        writeValue(stream, value.toList())
-      }
-      is CoordinateBoundsZoom -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
-      is DirectionalLight -> {
-        stream.write(136)
-        writeValue(stream, value.toList())
-      }
-      is FeatureExtensionValue -> {
-        stream.write(137)
-        writeValue(stream, value.toList())
-      }
-      is FlatLight -> {
-        stream.write(138)
-        writeValue(stream, value.toList())
-      }
-      is GlyphsRasterizationOptions -> {
-        stream.write(139)
-        writeValue(stream, value.toList())
-      }
-      is ImageContent -> {
-        stream.write(140)
-        writeValue(stream, value.toList())
-      }
-      is ImageStretches -> {
-        stream.write(141)
-        writeValue(stream, value.toList())
-      }
-      is LayerPosition -> {
-        stream.write(142)
-        writeValue(stream, value.toList())
-      }
-      is MapAnimationOptions -> {
-        stream.write(143)
-        writeValue(stream, value.toList())
-      }
-      is MapDebugOptions -> {
-        stream.write(144)
-        writeValue(stream, value.toList())
-      }
-      is MapOptions -> {
-        stream.write(145)
-        writeValue(stream, value.toList())
-      }
-      is MbxEdgeInsets -> {
-        stream.write(146)
-        writeValue(stream, value.toList())
-      }
-      is MbxImage -> {
-        stream.write(147)
-        writeValue(stream, value.toList())
-      }
-      is MercatorCoordinate -> {
-        stream.write(148)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionGeometryDefinition -> {
-        stream.write(149)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionTilePyramidDefinition -> {
-        stream.write(150)
-        writeValue(stream, value.toList())
-      }
-      is Point -> {
-        stream.write(151)
-        writeValue(stream, value.toList())
-      }
-      is ProjectedMeters -> {
-        stream.write(152)
-        writeValue(stream, value.toList())
-      }
-      is QueriedFeature -> {
-        stream.write(153)
-        writeValue(stream, value.toList())
-      }
-      is QueriedRenderedFeature -> {
-        stream.write(154)
-        writeValue(stream, value.toList())
-      }
-      is QueriedSourceFeature -> {
-        stream.write(155)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryGeometry -> {
-        stream.write(156)
-        writeValue(stream, value.toList())
-      }
-      is RenderedQueryOptions -> {
-        stream.write(157)
-        writeValue(stream, value.toList())
-      }
-      is ScreenBox -> {
-        stream.write(158)
-        writeValue(stream, value.toList())
-      }
-      is ScreenCoordinate -> {
-        stream.write(159)
-        writeValue(stream, value.toList())
-      }
       is Size -> {
-        stream.write(160)
-        writeValue(stream, value.toList())
-      }
-      is SourceQueryOptions -> {
-        stream.write(161)
-        writeValue(stream, value.toList())
-      }
-      is StyleObjectInfo -> {
-        stream.write(162)
-        writeValue(stream, value.toList())
-      }
-      is StyleProjection -> {
-        stream.write(163)
-        writeValue(stream, value.toList())
-      }
-      is StylePropertyValue -> {
-        stream.write(164)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInMegabytes -> {
-        stream.write(165)
-        writeValue(stream, value.toList())
-      }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TransitionOptions -> {
-        stream.write(167)
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -6290,7 +5291,7 @@ interface MapSnapshotter {
    *
    * @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
    */
-  fun getElevation(coordinate: Map<String?, Any?>): Double?
+  fun getElevation(coordinate: Point): Double?
 
   companion object {
     /** The codec used by MapSnapshotter. */
@@ -6392,7 +5393,7 @@ interface MapSnapshotter {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val coordinateArg = args[0] as Map<String?, Any?>
+            val coordinateArg = args[0] as Point
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.getElevation(coordinateArg))

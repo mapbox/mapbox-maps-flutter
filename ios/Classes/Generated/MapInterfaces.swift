@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -447,7 +448,7 @@ struct CameraOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraState {
   /// Coordinate at the center of the camera.
-  var center: [String?: Any?]
+  var center: Point
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
   var padding: MbxEdgeInsets
@@ -460,7 +461,7 @@ struct CameraState {
   var pitch: Double
 
   static func fromList(_ list: [Any?]) -> CameraState? {
-    let center = list[0] as! [String?: Any?]
+    let center = Point.fromList(list[0] as! [Any?])!
     let padding = MbxEdgeInsets.fromList(list[1] as! [Any?])!
     let zoom = list[2] as! Double
     let bearing = list[3] as! Double
@@ -476,7 +477,7 @@ struct CameraState {
   }
   func toList() -> [Any?] {
     return [
-      center,
+      center.toList(),
       padding.toList(),
       zoom,
       bearing,
@@ -602,17 +603,17 @@ struct MapAnimationOptions {
 struct CoordinateBounds {
   /// Coordinate at the southwest corner.
   /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  var southwest: [String?: Any?]
+  var southwest: Point
   /// Coordinate at the northeast corner.
   /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  var northeast: [String?: Any?]
+  var northeast: Point
   /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
   /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
   var infiniteBounds: Bool
 
   static func fromList(_ list: [Any?]) -> CoordinateBounds? {
-    let southwest = list[0] as! [String?: Any?]
-    let northeast = list[1] as! [String?: Any?]
+    let southwest = Point.fromList(list[0] as! [Any?])!
+    let northeast = Point.fromList(list[1] as! [Any?])!
     let infiniteBounds = list[2] as! Bool
 
     return CoordinateBounds(
@@ -623,8 +624,8 @@ struct CoordinateBounds {
   }
   func toList() -> [Any?] {
     return [
-      southwest,
-      northeast,
+      southwest.toList(),
+      northeast.toList(),
       infiniteBounds,
     ]
   }
@@ -2173,7 +2174,7 @@ protocol _CameraManager {
   /// @param maxZoom The maximum zoom level allowed in the returned camera options.
   /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
-  func cameraForCoordinatesPadding(coordinates: [[String?: Any?]?], camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?) throws -> CameraOptions
+  func cameraForCoordinatesPadding(coordinates: [Point], camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?) throws -> CameraOptions
   /// Convenience method that returns the `camera options` object for given parameters.
   ///
   /// @param bounds The `coordinate bounds` of the camera.
@@ -2192,7 +2193,7 @@ protocol _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  func cameraForCoordinates(coordinates: [[String?: Any?]?], padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?) throws -> CameraOptions
+  func cameraForCoordinates(coordinates: [Point], padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?) throws -> CameraOptions
   /// Convenience method that adjusts the provided `camera options` object for given parameters.
   ///
   /// Returns the provided `camera` options with zoom adjusted to fit `coordinates` into the `box`, so that `coordinates` on the left,
@@ -2206,7 +2207,7 @@ protocol _CameraManager {
   /// @param box The `screen box` into which `coordinates` should fit.
   ///
   /// @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
-  func cameraForCoordinatesCameraOptions(coordinates: [[String?: Any?]?], camera: CameraOptions, box: ScreenBox) throws -> CameraOptions
+  func cameraForCoordinatesCameraOptions(coordinates: [Point], camera: CameraOptions, box: ScreenBox) throws -> CameraOptions
   /// Convenience method that returns the `camera options` object for given parameters.
   ///
   /// @param geometry The `geometry` representing the bounds of the camera.
@@ -2263,7 +2264,7 @@ protocol _CameraManager {
   /// @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
   ///
   /// @return A `screen coordinate` on the screen in `logical pixels`.
-  func pixelForCoordinate(coordinate: [String?: Any?]) throws -> ScreenCoordinate
+  func pixelForCoordinate(coordinate: Point) throws -> ScreenCoordinate
   /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
   /// to a `screen coordinate`.
   ///
@@ -2273,7 +2274,7 @@ protocol _CameraManager {
   /// @param pixel A `screen coordinate` on the screen in `logical pixels`.
   ///
   /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
-  func coordinateForPixel(pixel: ScreenCoordinate) throws -> [String?: Any?]
+  func coordinateForPixel(pixel: ScreenCoordinate) throws -> Point
   /// Calculates `screen coordinates` that correspond to geographical `coordinates`
   /// (i.e., longitude-latitude pairs).
   ///
@@ -2283,7 +2284,7 @@ protocol _CameraManager {
   /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
   ///
   /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
-  func pixelsForCoordinates(coordinates: [[String?: Any?]?]) throws -> [ScreenCoordinate?]
+  func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate?]
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
   /// to `screen coordinates`.
   ///
@@ -2293,7 +2294,7 @@ protocol _CameraManager {
   /// @param pixels A `screen coordinates` in `logical pixels`.
   ///
   /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
-  func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [[String?: Any?]?]
+  func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [Point]
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
   /// The map will retain its current values for any details not passed via the camera options argument.
   /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
@@ -2339,7 +2340,7 @@ class _CameraManagerSetup {
     if let api = api {
       cameraForCoordinatesPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinatesArg = args[0] as! [[String?: Any?]?]
+        let coordinatesArg = args[0] as! [Point]
         let cameraArg = args[1] as! CameraOptions
         let coordinatesPaddingArg: MbxEdgeInsets? = nilOrValue(args[2])
         let maxZoomArg: Double? = nilOrValue(args[3])
@@ -2395,7 +2396,7 @@ class _CameraManagerSetup {
     if let api = api {
       cameraForCoordinatesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinatesArg = args[0] as! [[String?: Any?]?]
+        let coordinatesArg = args[0] as! [Point]
         let paddingArg: MbxEdgeInsets? = nilOrValue(args[1])
         let bearingArg: Double? = nilOrValue(args[2])
         let pitchArg: Double? = nilOrValue(args[3])
@@ -2426,7 +2427,7 @@ class _CameraManagerSetup {
     if let api = api {
       cameraForCoordinatesCameraOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinatesArg = args[0] as! [[String?: Any?]?]
+        let coordinatesArg = args[0] as! [Point]
         let cameraArg = args[1] as! CameraOptions
         let boxArg = args[2] as! ScreenBox
         do {
@@ -2572,7 +2573,7 @@ class _CameraManagerSetup {
     if let api = api {
       pixelForCoordinateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         do {
           let result = try api.pixelForCoordinate(coordinate: coordinateArg)
           reply(wrapResult(result))
@@ -2620,7 +2621,7 @@ class _CameraManagerSetup {
     if let api = api {
       pixelsForCoordinatesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinatesArg = args[0] as! [[String?: Any?]?]
+        let coordinatesArg = args[0] as! [Point]
         do {
           let result = try api.pixelsForCoordinates(coordinates: coordinatesArg)
           reply(wrapResult(result))
@@ -3117,7 +3118,7 @@ protocol _MapInterface {
   ///
   /// @param coordinate The `coordinate` defined as longitude-latitude pair.
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  func getElevation(coordinate: [String?: Any?]) throws -> Double?
+  func getElevation(coordinate: Point) throws -> Double?
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3678,7 +3679,7 @@ class _MapInterfaceSetup {
     if let api = api {
       getElevationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         do {
           let result = try api.getElevation(coordinate: coordinateArg)
           reply(wrapResult(result))
@@ -3700,6 +3701,8 @@ private class OfflineRegionCodecReader: FlutterStandardReader {
       return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
     case 130:
       return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
+    case 131:
+      return Point.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -3716,6 +3719,9 @@ private class OfflineRegionCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? OfflineRegionTilePyramidDefinition {
       super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? Point {
+      super.writeByte(131)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3998,85 +4004,11 @@ private class ProjectionCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 129:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
-    case 130:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
-    case 131:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
-    case 132:
-      return CameraState.fromList(self.readValue() as! [Any?])
-    case 133:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 134:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 135:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 136:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 137:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 138:
-      return FlatLight.fromList(self.readValue() as! [Any?])
-    case 139:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 140:
-      return ImageContent.fromList(self.readValue() as! [Any?])
-    case 141:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 142:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 143:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
-    case 144:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 145:
-      return MapOptions.fromList(self.readValue() as! [Any?])
-    case 146:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
-    case 147:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 148:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
+    case 129:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
+    case 130:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
-      return Size.fromList(self.readValue() as! [Any?])
-    case 161:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4085,125 +4017,14 @@ private class ProjectionCodecReader: FlutterStandardReader {
 
 private class ProjectionCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? AmbientLight {
+    if let value = value as? MercatorCoordinate {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? Point {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
-      super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
-      super.writeByte(136)
-      super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
-      super.writeByte(137)
-      super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
-      super.writeByte(138)
-      super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
-      super.writeByte(139)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
-      super.writeByte(140)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
-      super.writeByte(141)
-      super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
-      super.writeByte(142)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
-      super.writeByte(143)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
-      super.writeByte(144)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
-      super.writeByte(145)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
-      super.writeByte(146)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
-      super.writeByte(147)
-      super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
-      super.writeByte(148)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
-      super.writeByte(149)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
-      super.writeByte(150)
-      super.writeValue(value.toList())
-    } else if let value = value as? Point {
-      super.writeByte(151)
-      super.writeValue(value.toList())
     } else if let value = value as? ProjectedMeters {
-      super.writeByte(152)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
-      super.writeByte(153)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
-      super.writeByte(154)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
-      super.writeByte(155)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
-      super.writeByte(156)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
-      super.writeByte(157)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
-      super.writeByte(158)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
-      super.writeByte(159)
-      super.writeValue(value.toList())
-    } else if let value = value as? Size {
-      super.writeByte(160)
-      super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
-      super.writeByte(161)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
-      super.writeByte(162)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
-      super.writeByte(163)
-      super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
-      super.writeByte(164)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
-      super.writeByte(165)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
-      super.writeByte(167)
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4243,7 +4064,7 @@ protocol Projection {
   /// `projected meters` coordinates.
   ///
   /// @return Returns Spherical Mercator ProjectedMeters coordinates.
-  func projectedMetersForCoordinate(coordinate: [String?: Any?]) throws -> ProjectedMeters
+  func projectedMetersForCoordinate(coordinate: Point) throws -> ProjectedMeters
   /// Calculate a longitude-latitude pair for a Spherical Mercator projected
   /// meters.
   ///
@@ -4251,7 +4072,7 @@ protocol Projection {
   /// which to calculate a longitude-latitude pair.
   ///
   /// @return Returns a longitude-latitude pair.
-  func coordinateForProjectedMeters(projectedMeters: ProjectedMeters) throws -> [String?: Any?]
+  func coordinateForProjectedMeters(projectedMeters: ProjectedMeters) throws -> Point
   /// Calculate a point on the map in Mercator Projection for a given
   /// coordinate at the specified zoom scale.
   ///
@@ -4261,7 +4082,7 @@ protocol Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a point on the map in Mercator projection.
-  func project(coordinate: [String?: Any?], zoomScale: Double) throws -> MercatorCoordinate
+  func project(coordinate: Point, zoomScale: Double) throws -> MercatorCoordinate
   /// Calculate a coordinate for a given point on the map in Mercator Projection.
   ///
   /// @param coordinate Point on the map in Mercator projection.
@@ -4270,7 +4091,7 @@ protocol Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a coordinate.
-  func unproject(coordinate: MercatorCoordinate, zoomScale: Double) throws -> [String?: Any?]
+  func unproject(coordinate: MercatorCoordinate, zoomScale: Double) throws -> Point
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4312,7 +4133,7 @@ class ProjectionSetup {
     if let api = api {
       projectedMetersForCoordinateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         do {
           let result = try api.projectedMetersForCoordinate(coordinate: coordinateArg)
           reply(wrapResult(result))
@@ -4358,7 +4179,7 @@ class ProjectionSetup {
     if let api = api {
       projectChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         let zoomScaleArg = args[1] as! Double
         do {
           let result = try api.project(coordinate: coordinateArg, zoomScale: zoomScaleArg)
@@ -4696,85 +4517,11 @@ private class MapSnapshotCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 129:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
-    case 130:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
-    case 131:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
-    case 132:
-      return CameraState.fromList(self.readValue() as! [Any?])
-    case 133:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 134:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 135:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 136:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 137:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 138:
-      return FlatLight.fromList(self.readValue() as! [Any?])
-    case 139:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 140:
-      return ImageContent.fromList(self.readValue() as! [Any?])
-    case 141:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 142:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 143:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
-    case 144:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 145:
-      return MapOptions.fromList(self.readValue() as! [Any?])
-    case 146:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
-    case 147:
       return MbxImage.fromList(self.readValue() as! [Any?])
-    case 148:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
+    case 129:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 130:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
-      return Size.fromList(self.readValue() as! [Any?])
-    case 161:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4783,125 +4530,14 @@ private class MapSnapshotCodecReader: FlutterStandardReader {
 
 private class MapSnapshotCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? AmbientLight {
+    if let value = value as? MbxImage {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? Point {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
-      super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
-      super.writeByte(136)
-      super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
-      super.writeByte(137)
-      super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
-      super.writeByte(138)
-      super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
-      super.writeByte(139)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
-      super.writeByte(140)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
-      super.writeByte(141)
-      super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
-      super.writeByte(142)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
-      super.writeByte(143)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
-      super.writeByte(144)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
-      super.writeByte(145)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
-      super.writeByte(146)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
-      super.writeByte(147)
-      super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
-      super.writeByte(148)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
-      super.writeByte(149)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
-      super.writeByte(150)
-      super.writeValue(value.toList())
-    } else if let value = value as? Point {
-      super.writeByte(151)
-      super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
-      super.writeByte(152)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
-      super.writeByte(153)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
-      super.writeByte(154)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
-      super.writeByte(155)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
-      super.writeByte(156)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
-      super.writeByte(157)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
-      super.writeByte(158)
-      super.writeValue(value.toList())
     } else if let value = value as? ScreenCoordinate {
-      super.writeByte(159)
-      super.writeValue(value.toList())
-    } else if let value = value as? Size {
-      super.writeByte(160)
-      super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
-      super.writeByte(161)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
-      super.writeByte(162)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
-      super.writeByte(163)
-      super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
-      super.writeByte(164)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
-      super.writeByte(165)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
-      super.writeByte(167)
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4931,12 +4567,12 @@ protocol MapSnapshot {
   ///
   /// @param coordinate A geographical `coordinate`.
   /// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-  func screenCoordinate(coordinate: [String?: Any?]) throws -> ScreenCoordinate
+  func screenCoordinate(coordinate: Point) throws -> ScreenCoordinate
   /// Calculate geographical coordinates from a point on the snapshot.
   ///
   /// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
   /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-  func coordinate(screenCoordinate: ScreenCoordinate) throws -> [String?: Any?]
+  func coordinate(screenCoordinate: ScreenCoordinate) throws -> Point
   /// Get list of attributions for the sources in this snapshot.
   ///
   /// @return A list of attributions for the sources in this snapshot.
@@ -4961,7 +4597,7 @@ class MapSnapshotSetup {
     if let api = api {
       screenCoordinateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         do {
           let result = try api.screenCoordinate(coordinate: coordinateArg)
           reply(wrapResult(result))
@@ -5029,85 +4665,9 @@ private class MapSnapshotterCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 129:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
-    case 130:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
-    case 131:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
-    case 132:
-      return CameraState.fromList(self.readValue() as! [Any?])
-    case 133:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 134:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 135:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 136:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 137:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 138:
-      return FlatLight.fromList(self.readValue() as! [Any?])
-    case 139:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 140:
-      return ImageContent.fromList(self.readValue() as! [Any?])
-    case 141:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 142:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 143:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
-    case 144:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 145:
-      return MapOptions.fromList(self.readValue() as! [Any?])
-    case 146:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
-    case 147:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 148:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 129:
       return Size.fromList(self.readValue() as! [Any?])
-    case 161:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -5116,125 +4676,11 @@ private class MapSnapshotterCodecReader: FlutterStandardReader {
 
 private class MapSnapshotterCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? AmbientLight {
+    if let value = value as? Point {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
-      super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
-      super.writeByte(136)
-      super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
-      super.writeByte(137)
-      super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
-      super.writeByte(138)
-      super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
-      super.writeByte(139)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
-      super.writeByte(140)
-      super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
-      super.writeByte(141)
-      super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
-      super.writeByte(142)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
-      super.writeByte(143)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
-      super.writeByte(144)
-      super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
-      super.writeByte(145)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
-      super.writeByte(146)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
-      super.writeByte(147)
-      super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
-      super.writeByte(148)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
-      super.writeByte(149)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
-      super.writeByte(150)
-      super.writeValue(value.toList())
-    } else if let value = value as? Point {
-      super.writeByte(151)
-      super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
-      super.writeByte(152)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
-      super.writeByte(153)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
-      super.writeByte(154)
-      super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
-      super.writeByte(155)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
-      super.writeByte(156)
-      super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
-      super.writeByte(157)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
-      super.writeByte(158)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
-      super.writeByte(159)
-      super.writeValue(value.toList())
     } else if let value = value as? Size {
-      super.writeByte(160)
-      super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
-      super.writeByte(161)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
-      super.writeByte(162)
-      super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
-      super.writeByte(163)
-      super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
-      super.writeByte(164)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
-      super.writeByte(165)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
-      super.writeByte(167)
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -5289,7 +4735,7 @@ protocol MapSnapshotter {
   /// @param coordinate defined as longitude-latitude pair.
   ///
   /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  func getElevation(coordinate: [String?: Any?]) throws -> Double?
+  func getElevation(coordinate: Point) throws -> Double?
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -5395,7 +4841,7 @@ class MapSnapshotterSetup {
     if let api = api {
       getElevationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let coordinateArg = args[0] as! [String?: Any?]
+        let coordinateArg = args[0] as! Point
         do {
           let result = try api.getElevation(coordinate: coordinateArg)
           reply(wrapResult(result))

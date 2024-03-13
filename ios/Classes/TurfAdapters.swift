@@ -2,7 +2,7 @@ import Foundation
 import Turf
 
 extension Point {
-    static func fromList(_ list: [Any?]) -> Point {
+    static func fromList(_ list: [Any?]) -> Point! {
         let rawPoint = list.first as! [String: Any]
         let coordinates = rawPoint["coordinates"] as! [Double]
         return Point(

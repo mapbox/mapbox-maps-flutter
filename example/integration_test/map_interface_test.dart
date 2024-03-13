@@ -244,8 +244,7 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
-        zoom: 10);
+        center: Point(coordinates: Position(-77.032667, 38.913175)), zoom: 10);
 
     app.events.resetOnCameraChanged();
     mapboxMap.setCamera(options);
@@ -300,7 +299,7 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        center: Point(coordinates: Position(-77.032667, 38.913175)),
         zoom: 10,
         pitch: 0);
 

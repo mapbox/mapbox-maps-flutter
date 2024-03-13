@@ -507,7 +507,7 @@ class CameraState {
   });
 
   /// Coordinate at the center of the camera.
-  Map<String?, Object?> center;
+  Point center;
 
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
@@ -525,7 +525,7 @@ class CameraState {
 
   Object encode() {
     return <Object?>[
-      center,
+      center.encode(),
       padding.encode(),
       zoom,
       bearing,
@@ -536,7 +536,7 @@ class CameraState {
   static CameraState decode(Object result) {
     result as List<Object?>;
     return CameraState(
-      center: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      center: Point.decode(result[0]! as List<Object?>),
       padding: MbxEdgeInsets.decode(result[1]! as List<Object?>),
       zoom: result[2]! as double,
       bearing: result[3]! as double,
@@ -681,11 +681,11 @@ class CoordinateBounds {
 
   /// Coordinate at the southwest corner.
   /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  Map<String?, Object?> southwest;
+  Point southwest;
 
   /// Coordinate at the northeast corner.
   /// Note: setting this field with invalid values (infinite, NaN) will crash the application.
-  Map<String?, Object?> northeast;
+  Point northeast;
 
   /// If set to `true`, an infinite (unconstrained) bounds covering the world coordinates would be used.
   /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
@@ -693,8 +693,8 @@ class CoordinateBounds {
 
   Object encode() {
     return <Object?>[
-      southwest,
-      northeast,
+      southwest.encode(),
+      northeast.encode(),
       infiniteBounds,
     ];
   }
@@ -702,10 +702,8 @@ class CoordinateBounds {
   static CoordinateBounds decode(Object result) {
     result as List<Object?>;
     return CoordinateBounds(
-      southwest:
-          (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
-      northeast:
-          (result[1] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      southwest: Point.decode(result[0]! as List<Object?>),
+      northeast: Point.decode(result[1]! as List<Object?>),
       infiniteBounds: result[2]! as bool,
     );
   }
@@ -2402,7 +2400,7 @@ class _CameraManager {
   /// @param offset The center of the given bounds relative to map center in screen points.
   /// @return The `camera options` object representing the provided parameters.
   Future<CameraOptions> cameraForCoordinatesPadding(
-      List<Map<String?, Object?>?> coordinates,
+      List<Point?> coordinates,
       CameraOptions camera,
       MbxEdgeInsets? coordinatesPadding,
       double? maxZoom,
@@ -2489,11 +2487,8 @@ class _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  Future<CameraOptions> cameraForCoordinates(
-      List<Map<String?, Object?>?> coordinates,
-      MbxEdgeInsets? padding,
-      double? bearing,
-      double? pitch) async {
+  Future<CameraOptions> cameraForCoordinates(List<Point?> coordinates,
+      MbxEdgeInsets? padding, double? bearing, double? pitch) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinates';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -2537,9 +2532,7 @@ class _CameraManager {
   ///
   /// @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
-      List<Map<String?, Object?>?> coordinates,
-      CameraOptions camera,
-      ScreenBox box) async {
+      List<Point?> coordinates, CameraOptions camera, ScreenBox box) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesCameraOptions';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -2769,8 +2762,7 @@ class _CameraManager {
   /// @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
   ///
   /// @return A `screen coordinate` on the screen in `logical pixels`.
-  Future<ScreenCoordinate> pixelForCoordinate(
-      Map<String?, Object?> coordinate) async {
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelForCoordinate';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -2808,8 +2800,7 @@ class _CameraManager {
   /// @param pixel A `screen coordinate` on the screen in `logical pixels`.
   ///
   /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
-  Future<Map<String?, Object?>> coordinateForPixel(
-      ScreenCoordinate pixel) async {
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateForPixel';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -2834,8 +2825,7 @@ class _CameraManager {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (__pigeon_replyList[0] as Point?)!;
     }
   }
 
@@ -2849,7 +2839,7 @@ class _CameraManager {
   ///
   /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
-      List<Map<String?, Object?>?> coordinates) async {
+      List<Point?> coordinates) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -2888,7 +2878,7 @@ class _CameraManager {
   /// @param pixels A `screen coordinates` in `logical pixels`.
   ///
   /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
-  Future<List<Map<String?, Object?>?>> coordinatesForPixels(
+  Future<List<Point?>> coordinatesForPixels(
       List<ScreenCoordinate?> pixels) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels';
@@ -2914,10 +2904,7 @@ class _CameraManager {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (__pigeon_replyList[0] as List<Object?>?)!.map((e) {
-        return Map<Object?, Object?>.from(e as Map<dynamic, dynamic>)
-            .cast<String?, Object?>();
-      }).toList();
+      return (__pigeon_replyList[0] as List<Object?>?)!.cast<Point?>();
     }
   }
 
@@ -4124,7 +4111,7 @@ class _MapInterface {
   ///
   /// @param coordinate The `coordinate` defined as longitude-latitude pair.
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  Future<double?> getElevation(Map<String?, Object?> coordinate) async {
+  Future<double?> getElevation(Point coordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getElevation';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -4162,6 +4149,9 @@ class _OfflineRegionCodec extends StandardMessageCodec {
     } else if (value is OfflineRegionTilePyramidDefinition) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
+    } else if (value is Point) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -4176,6 +4166,8 @@ class _OfflineRegionCodec extends StandardMessageCodec {
         return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
       case 130:
         return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
+      case 131:
+        return Point.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -4485,125 +4477,14 @@ class _ProjectionCodec extends StandardMessageCodec {
   const _ProjectionCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is AmbientLight) {
+    if (value is MercatorCoordinate) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is Point) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
-      buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
-      buffer.putUint8(137);
-      writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
-      buffer.putUint8(138);
-      writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
-      buffer.putUint8(139);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
-      buffer.putUint8(140);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
-      buffer.putUint8(141);
-      writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
-      buffer.putUint8(142);
-      writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
-      buffer.putUint8(143);
-      writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
-      buffer.putUint8(144);
-      writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
-      buffer.putUint8(145);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
-      buffer.putUint8(146);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
-      buffer.putUint8(147);
-      writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
-      buffer.putUint8(148);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
-      buffer.putUint8(149);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
-      buffer.putUint8(150);
-      writeValue(buffer, value.encode());
-    } else if (value is Point) {
-      buffer.putUint8(151);
-      writeValue(buffer, value.encode());
     } else if (value is ProjectedMeters) {
-      buffer.putUint8(152);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
-      buffer.putUint8(153);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
-      buffer.putUint8(154);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
-      buffer.putUint8(155);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
-      buffer.putUint8(156);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
-      buffer.putUint8(157);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
-      buffer.putUint8(158);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
-      buffer.putUint8(159);
-      writeValue(buffer, value.encode());
-    } else if (value is Size) {
-      buffer.putUint8(160);
-      writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
-      buffer.putUint8(161);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
-      buffer.putUint8(162);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
-      buffer.putUint8(163);
-      writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
-      buffer.putUint8(164);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
-      buffer.putUint8(165);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
-      buffer.putUint8(167);
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -4614,85 +4495,11 @@ class _ProjectionCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return AmbientLight.decode(readValue(buffer)!);
-      case 129:
-        return CameraBounds.decode(readValue(buffer)!);
-      case 130:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 131:
-        return CameraOptions.decode(readValue(buffer)!);
-      case 132:
-        return CameraState.decode(readValue(buffer)!);
-      case 133:
-        return CanonicalTileID.decode(readValue(buffer)!);
-      case 134:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 135:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 136:
-        return DirectionalLight.decode(readValue(buffer)!);
-      case 137:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 138:
-        return FlatLight.decode(readValue(buffer)!);
-      case 139:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 140:
-        return ImageContent.decode(readValue(buffer)!);
-      case 141:
-        return ImageStretches.decode(readValue(buffer)!);
-      case 142:
-        return LayerPosition.decode(readValue(buffer)!);
-      case 143:
-        return MapAnimationOptions.decode(readValue(buffer)!);
-      case 144:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 145:
-        return MapOptions.decode(readValue(buffer)!);
-      case 146:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 147:
-        return MbxImage.decode(readValue(buffer)!);
-      case 148:
         return MercatorCoordinate.decode(readValue(buffer)!);
-      case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
+      case 129:
         return Point.decode(readValue(buffer)!);
-      case 152:
+      case 130:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
-        return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
-        return ScreenBox.decode(readValue(buffer)!);
-      case 159:
-        return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
-        return Size.decode(readValue(buffer)!);
-      case 161:
-        return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
-        return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
-        return StyleProjection.decode(readValue(buffer)!);
-      case 164:
-        return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
-        return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -4753,8 +4560,7 @@ class Projection {
   /// `projected meters` coordinates.
   ///
   /// @return Returns Spherical Mercator ProjectedMeters coordinates.
-  Future<ProjectedMeters> projectedMetersForCoordinate(
-      Map<String?, Object?> coordinate) async {
+  Future<ProjectedMeters> projectedMetersForCoordinate(Point coordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -4790,7 +4596,7 @@ class Projection {
   /// which to calculate a longitude-latitude pair.
   ///
   /// @return Returns a longitude-latitude pair.
-  Future<Map<String?, Object?>> coordinateForProjectedMeters(
+  Future<Point> coordinateForProjectedMeters(
       ProjectedMeters projectedMeters) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters';
@@ -4816,8 +4622,7 @@ class Projection {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (__pigeon_replyList[0] as Point?)!;
     }
   }
 
@@ -4830,8 +4635,7 @@ class Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a point on the map in Mercator projection.
-  Future<MercatorCoordinate> project(
-      Map<String?, Object?> coordinate, double zoomScale) async {
+  Future<MercatorCoordinate> project(Point coordinate, double zoomScale) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.project';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -4868,7 +4672,7 @@ class Projection {
   /// where tileSize is the width of a tile in pixels.
   ///
   /// @return Returns a coordinate.
-  Future<Map<String?, Object?>> unproject(
+  Future<Point> unproject(
       MercatorCoordinate coordinate, double zoomScale) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.Projection.unproject';
@@ -4894,8 +4698,7 @@ class Projection {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (__pigeon_replyList[0] as Point?)!;
     }
   }
 }
@@ -5364,125 +5167,14 @@ class _MapSnapshotCodec extends StandardMessageCodec {
   const _MapSnapshotCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is AmbientLight) {
+    if (value is MbxImage) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is Point) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
-      buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
-      buffer.putUint8(137);
-      writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
-      buffer.putUint8(138);
-      writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
-      buffer.putUint8(139);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
-      buffer.putUint8(140);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
-      buffer.putUint8(141);
-      writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
-      buffer.putUint8(142);
-      writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
-      buffer.putUint8(143);
-      writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
-      buffer.putUint8(144);
-      writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
-      buffer.putUint8(145);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
-      buffer.putUint8(146);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
-      buffer.putUint8(147);
-      writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
-      buffer.putUint8(148);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
-      buffer.putUint8(149);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
-      buffer.putUint8(150);
-      writeValue(buffer, value.encode());
-    } else if (value is Point) {
-      buffer.putUint8(151);
-      writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
-      buffer.putUint8(152);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
-      buffer.putUint8(153);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
-      buffer.putUint8(154);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
-      buffer.putUint8(155);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
-      buffer.putUint8(156);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
-      buffer.putUint8(157);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
-      buffer.putUint8(158);
-      writeValue(buffer, value.encode());
     } else if (value is ScreenCoordinate) {
-      buffer.putUint8(159);
-      writeValue(buffer, value.encode());
-    } else if (value is Size) {
-      buffer.putUint8(160);
-      writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
-      buffer.putUint8(161);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
-      buffer.putUint8(162);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
-      buffer.putUint8(163);
-      writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
-      buffer.putUint8(164);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
-      buffer.putUint8(165);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
-      buffer.putUint8(167);
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5493,85 +5185,11 @@ class _MapSnapshotCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return AmbientLight.decode(readValue(buffer)!);
-      case 129:
-        return CameraBounds.decode(readValue(buffer)!);
-      case 130:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 131:
-        return CameraOptions.decode(readValue(buffer)!);
-      case 132:
-        return CameraState.decode(readValue(buffer)!);
-      case 133:
-        return CanonicalTileID.decode(readValue(buffer)!);
-      case 134:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 135:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 136:
-        return DirectionalLight.decode(readValue(buffer)!);
-      case 137:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 138:
-        return FlatLight.decode(readValue(buffer)!);
-      case 139:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 140:
-        return ImageContent.decode(readValue(buffer)!);
-      case 141:
-        return ImageStretches.decode(readValue(buffer)!);
-      case 142:
-        return LayerPosition.decode(readValue(buffer)!);
-      case 143:
-        return MapAnimationOptions.decode(readValue(buffer)!);
-      case 144:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 145:
-        return MapOptions.decode(readValue(buffer)!);
-      case 146:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 147:
         return MbxImage.decode(readValue(buffer)!);
-      case 148:
-        return MercatorCoordinate.decode(readValue(buffer)!);
-      case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
+      case 129:
         return Point.decode(readValue(buffer)!);
-      case 152:
-        return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
-        return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
-        return ScreenBox.decode(readValue(buffer)!);
-      case 159:
+      case 130:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
-        return Size.decode(readValue(buffer)!);
-      case 161:
-        return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
-        return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
-        return StyleProjection.decode(readValue(buffer)!);
-      case 164:
-        return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
-        return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -5593,8 +5211,7 @@ class MapSnapshot {
   ///
   /// @param coordinate A geographical `coordinate`.
   /// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-  Future<ScreenCoordinate> screenCoordinate(
-      Map<String?, Object?> coordinate) async {
+  Future<ScreenCoordinate> screenCoordinate(Point coordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.screenCoordinate';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5627,8 +5244,7 @@ class MapSnapshot {
   ///
   /// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
   /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-  Future<Map<String?, Object?>> coordinate(
-      ScreenCoordinate screenCoordinate) async {
+  Future<Point> coordinate(ScreenCoordinate screenCoordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.coordinate';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5653,8 +5269,7 @@ class MapSnapshot {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
-          .cast<String?, Object?>();
+      return (__pigeon_replyList[0] as Point?)!;
     }
   }
 
@@ -5727,125 +5342,11 @@ class _MapSnapshotterCodec extends StandardMessageCodec {
   const _MapSnapshotterCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is AmbientLight) {
+    if (value is Point) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
-      buffer.putUint8(136);
-      writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
-      buffer.putUint8(137);
-      writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
-      buffer.putUint8(138);
-      writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
-      buffer.putUint8(139);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
-      buffer.putUint8(140);
-      writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
-      buffer.putUint8(141);
-      writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
-      buffer.putUint8(142);
-      writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
-      buffer.putUint8(143);
-      writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
-      buffer.putUint8(144);
-      writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
-      buffer.putUint8(145);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
-      buffer.putUint8(146);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
-      buffer.putUint8(147);
-      writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
-      buffer.putUint8(148);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
-      buffer.putUint8(149);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
-      buffer.putUint8(150);
-      writeValue(buffer, value.encode());
-    } else if (value is Point) {
-      buffer.putUint8(151);
-      writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
-      buffer.putUint8(152);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
-      buffer.putUint8(153);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
-      buffer.putUint8(154);
-      writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
-      buffer.putUint8(155);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
-      buffer.putUint8(156);
-      writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
-      buffer.putUint8(157);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
-      buffer.putUint8(158);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
-      buffer.putUint8(159);
-      writeValue(buffer, value.encode());
     } else if (value is Size) {
-      buffer.putUint8(160);
-      writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
-      buffer.putUint8(161);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
-      buffer.putUint8(162);
-      writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
-      buffer.putUint8(163);
-      writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
-      buffer.putUint8(164);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
-      buffer.putUint8(165);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
-      buffer.putUint8(167);
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5856,85 +5357,9 @@ class _MapSnapshotterCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return AmbientLight.decode(readValue(buffer)!);
-      case 129:
-        return CameraBounds.decode(readValue(buffer)!);
-      case 130:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 131:
-        return CameraOptions.decode(readValue(buffer)!);
-      case 132:
-        return CameraState.decode(readValue(buffer)!);
-      case 133:
-        return CanonicalTileID.decode(readValue(buffer)!);
-      case 134:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 135:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 136:
-        return DirectionalLight.decode(readValue(buffer)!);
-      case 137:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 138:
-        return FlatLight.decode(readValue(buffer)!);
-      case 139:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 140:
-        return ImageContent.decode(readValue(buffer)!);
-      case 141:
-        return ImageStretches.decode(readValue(buffer)!);
-      case 142:
-        return LayerPosition.decode(readValue(buffer)!);
-      case 143:
-        return MapAnimationOptions.decode(readValue(buffer)!);
-      case 144:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 145:
-        return MapOptions.decode(readValue(buffer)!);
-      case 146:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 147:
-        return MbxImage.decode(readValue(buffer)!);
-      case 148:
-        return MercatorCoordinate.decode(readValue(buffer)!);
-      case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
         return Point.decode(readValue(buffer)!);
-      case 152:
-        return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
-        return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
-        return ScreenBox.decode(readValue(buffer)!);
-      case 159:
-        return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
+      case 129:
         return Size.decode(readValue(buffer)!);
-      case 161:
-        return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
-        return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
-        return StyleProjection.decode(readValue(buffer)!);
-      case 164:
-        return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
-        return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -6107,7 +5532,7 @@ class MapSnapshotter {
   /// @param coordinate defined as longitude-latitude pair.
   ///
   /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  Future<double?> getElevation(Map<String?, Object?> coordinate) async {
+  Future<double?> getElevation(Point coordinate) async {
     const String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getElevation';
     final BasicMessageChannel<Object?> __pigeon_channel =

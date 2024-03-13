@@ -1,20 +1,21 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import com.mapbox.geojson.Point
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.animation.*
 
 class CameraController(private val mapboxMap: MapboxMap, private val context: Context) : _CameraManager {
   override fun cameraForCoordinatesPadding(
-    coordinates: List<Map<String?, Any?>?>,
+    coordinates: List<Point>,
     camera: CameraOptions,
     coordinatesPadding: MbxEdgeInsets?,
     maxZoom: Double?,
     offset: ScreenCoordinate?
   ): CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
-      coordinates.map { it!!.toPoint() },
+      coordinates,
       camera.toCameraOptions(context),
       coordinatesPadding?.toEdgeInsets(context),
       maxZoom,
@@ -43,13 +44,13 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
   }
 
   override fun cameraForCoordinates(
-    coordinates: List<Map<String?, Any?>?>,
+    coordinates: List<Point>,
     padding: MbxEdgeInsets?,
     bearing: Double?,
     pitch: Double?
   ): CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
-      coordinates.map { it!!.toPoint() },
+      coordinates,
       padding?.toEdgeInsets(context),
       bearing,
       pitch
@@ -58,12 +59,12 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
   }
 
   override fun cameraForCoordinatesCameraOptions(
-    coordinates: List<Map<String?, Any?>?>,
+    coordinates: List<Point>,
     camera: CameraOptions,
     box: ScreenBox
   ): CameraOptions {
     val cameraOptions = mapboxMap.cameraForCoordinates(
-      coordinates.map { it!!.toPoint() },
+      coordinates,
       camera.toCameraOptions(context),
       box.toScreenBox(context)
     )
@@ -107,24 +108,22 @@ class CameraController(private val mapboxMap: MapboxMap, private val context: Co
     return coordinateBoundsZoom.toFLTCoordinateBoundsZoom()
   }
 
-  override fun pixelForCoordinate(coordinate: Map<String?, Any?>): ScreenCoordinate {
-    val screenCoordinate = mapboxMap.pixelForCoordinate(coordinate.toPoint())
+  override fun pixelForCoordinate(coordinate: Point): ScreenCoordinate {
+    val screenCoordinate = mapboxMap.pixelForCoordinate(coordinate)
     return screenCoordinate.toFLTScreenCoordinate(context)
   }
 
-  override fun coordinateForPixel(pixel: ScreenCoordinate): Map<String?, Any?> {
-    val screenCoordinate = mapboxMap.coordinateForPixel(pixel.toScreenCoordinate(context))
-    return screenCoordinate.toMap() as Map<String?, Any?>
+  override fun coordinateForPixel(pixel: ScreenCoordinate): Point {
+    return mapboxMap.coordinateForPixel(pixel.toScreenCoordinate(context))
   }
 
-  override fun pixelsForCoordinates(coordinates: List<Map<String?, Any?>?>): MutableList<ScreenCoordinate> {
-    val screenCoordinates = mapboxMap.pixelsForCoordinates(coordinates.map { it!!.toPoint() })
+  override fun pixelsForCoordinates(coordinates: List<Point>): MutableList<ScreenCoordinate> {
+    val screenCoordinates = mapboxMap.pixelsForCoordinates(coordinates)
     return screenCoordinates.map { it.toFLTScreenCoordinate(context) }.toMutableList()
   }
 
-  override fun coordinatesForPixels(pixels: List<ScreenCoordinate?>): List<Map<String?, Any?>?> {
-    val points = mapboxMap.coordinatesForPixels(pixels.map { it!!.toScreenCoordinate(context) })
-    return points.map { it.toMap().toMutableMap() }.toMutableList()
+  override fun coordinatesForPixels(pixels: List<ScreenCoordinate?>): List<Point> {
+    return mapboxMap.coordinatesForPixels(pixels.map { it!!.toScreenCoordinate(context) })
   }
 
   override fun setCamera(cameraOptions: CameraOptions) {

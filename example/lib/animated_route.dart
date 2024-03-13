@@ -145,10 +145,11 @@ class AnimatedRouteState extends State<AnimatedRoute>
           .addOnPointAnnotationClickListener(AnnotationClickListener(this));
 
       // animate camera to view annotations + puck position
-      final camera = await mapboxMap.cameraForCoordinates([
-        ...coordinates.map((e) => e.toJson()),
-        Point(coordinates: myCoordinate).toJson()
-      ], defaultEdgeInsets, null, null);
+      final camera = await mapboxMap.cameraForCoordinates(
+          [...coordinates.map((e) => e), Point(coordinates: myCoordinate)],
+          defaultEdgeInsets,
+          null,
+          null);
       mapboxMap.flyTo(camera, null);
     } else {
       pointAnnotationManager.deleteAll();
