@@ -1,3 +1,31 @@
+### main
+
+#### ⚠️ Breaking change
+
+`Map<String?, Object?>?` is replaced wiht `Point` from [turf](https://pub.dev/packages/turf) package.
+Pass `Point`s directly instead of converting them to JSON.
+*Before:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )).toJson())
+```
+*After:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )))
+```
+
+* Bump Pigeon to 17.1.2
+* Replace `Map<String?, Object?>?` with `Point` from [turf](https://pub.dev/packages/turf) package.
+
 ### 1.0.0
 
 * Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
