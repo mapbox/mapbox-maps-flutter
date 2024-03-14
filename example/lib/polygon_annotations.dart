@@ -38,13 +38,9 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.setCamera(CameraOptions(
-      center:
-        Point(coordinates: Position(
-          -3.363937, -10.733102
-        )),
-      zoom: 1,
-      pitch: 0)
-    );
+        center: Point(coordinates: Position(-3.363937, -10.733102)),
+        zoom: 1,
+        pitch: 0));
     mapboxMap.annotations.createPolygonAnnotationManager().then((value) {
       polygonAnnotationManager = value;
       createOneAnnotation();

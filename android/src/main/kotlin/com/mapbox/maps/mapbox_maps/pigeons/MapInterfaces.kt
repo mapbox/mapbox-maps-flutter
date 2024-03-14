@@ -18,7 +18,7 @@ private fun wrapResult(result: Any?): List<Any?> {
 }
 
 private fun wrapError(exception: Throwable): List<Any?> {
-  if (exception is MapInterfacesFlutterError) {
+  if (exception is FlutterError) {
     return listOf(
       exception.code,
       exception.message,
@@ -39,7 +39,7 @@ private fun wrapError(exception: Throwable): List<Any?> {
  * @property message The error message.
  * @property details The error details. Must be a datatype supported by the api codec.
  */
-class MapInterfacesFlutterError(
+class FlutterError(
   val code: String,
   override val message: String? = null,
   val details: Any? = null

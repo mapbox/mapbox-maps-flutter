@@ -10,21 +10,9 @@ import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
-private fun createConnectionError(channelName: String): GestureListenersFlutterError {
-  return GestureListenersFlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class GestureListenersFlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
 @Suppress("UNCHECKED_CAST")
 private object GestureListenerCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
@@ -63,7 +51,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger) {
     channel.send(listOf(coordinateArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(GestureListenersFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }
@@ -78,7 +66,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger) {
     channel.send(listOf(coordinateArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(GestureListenersFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }
@@ -93,7 +81,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger) {
     channel.send(listOf(coordinateArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(GestureListenersFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }

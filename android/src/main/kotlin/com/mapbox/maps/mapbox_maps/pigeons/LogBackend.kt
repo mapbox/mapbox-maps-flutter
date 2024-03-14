@@ -8,21 +8,9 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
 
-private fun createConnectionError(channelName: String): LogBackendFlutterError {
-  return LogBackendFlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class LogBackendFlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
 
 enum class LoggingLevel(val raw: Int) {
   /** Verbose log data to understand how the code executes. */
@@ -60,7 +48,7 @@ class LogWriterBackend(private val binaryMessenger: BinaryMessenger) {
     channel.send(listOf(levelArg.raw, messageArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(LogBackendFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }
