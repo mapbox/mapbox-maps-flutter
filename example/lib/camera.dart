@@ -71,32 +71,6 @@ class CameraPageBodyState extends State<CameraPageBody> {
     );
   }
 
-  Widget _cameraForCoordinates() {
-    return TextButton(
-      child: Text('cameraForCoordinates'),
-      onPressed: () {
-        mapboxMap?.cameraForCoordinates([
-          Point(
-              coordinates: Position(
-            1.0,
-            2.0,
-          )),
-          Point(
-              coordinates: Position(
-            3.0,
-            4.0,
-          ))
-        ], MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20).then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Camera zoom: ${value.zoom}, pitch: ${value.pitch}, bearing: ${value.bearing},padding: ${value.padding},center: ${value.center}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
-      },
-    );
-  }
-
   Widget _cameraForCoordinatesCameraOptions() {
     return TextButton(
       child: Text('cameraForCoordinatesCameraOptions'),
@@ -434,7 +408,6 @@ class CameraPageBodyState extends State<CameraPageBody> {
     listViewChildren.addAll(
       <Widget>[
         _cameraForCoordinateBounds(),
-        _cameraForCoordinates(),
         _cameraForCoordinatesCameraOptions(),
         _cameraForGeometry(),
         _coordinateBoundsForCamera(),

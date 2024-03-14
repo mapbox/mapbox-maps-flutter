@@ -76,33 +76,6 @@ void main() {
     expect(camera.anchor, isNull);
   });
 
-  testWidgets('cameraForCoordinates', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-
-    var camera = await mapboxMap.cameraForCoordinates([
-      Point(
-          coordinates: Position(
-        1.0,
-        2.0,
-      )),
-      Point(
-          coordinates: Position(
-        3.0,
-        4.0,
-      ))
-    ], MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20);
-    expect(camera.bearing, 10);
-    expect(camera.pitch, 20);
-    // TODO zoom might be different depending whether surface has changed the size
-    // expect(camera.zoom!.round(), 7);
-    final position = camera.center;
-    expect((position?.coordinates.lng as double).round(), 2);
-    expect((position?.coordinates.lat as double).round(), 3);
-    expect(camera.anchor, isNull);
-  });
-
   testWidgets('cameraForCoordinatesCameraOptions', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
