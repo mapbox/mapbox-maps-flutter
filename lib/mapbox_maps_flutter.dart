@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
+import 'package:turf/turf.dart' as turf;
 
 import 'src/proxy_binary_messenger.dart' show ProxyBinaryMessenger;
 
@@ -55,3 +56,4 @@ part 'src/style/source/vector_source.dart';
 part 'src/style/style.dart';
 part 'src/location_settings.dart';
 part 'src/log_configuration.dart';
+part 'src/turf_adapters.dart';

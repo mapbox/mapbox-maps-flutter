@@ -48,12 +48,12 @@ class CameraPageBodyState extends State<CameraPageBody> {
                         coordinates: Position(
                       1.0,
                       2.0,
-                    )).toJson(),
+                    )),
                     northeast: Point(
                         coordinates: Position(
                       3.0,
                       4.0,
-                    )).toJson(),
+                    )),
                     infiniteBounds: true),
                 MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 10,
@@ -80,12 +80,12 @@ class CameraPageBodyState extends State<CameraPageBody> {
               coordinates: Position(
             1.0,
             2.0,
-          )).toJson(),
+          )),
           Point(
               coordinates: Position(
             3.0,
             4.0,
-          )).toJson()
+          ))
         ], MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4), 10, 20).then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
@@ -107,19 +107,19 @@ class CameraPageBodyState extends State<CameraPageBody> {
                   coordinates: Position(
                 1.0,
                 2.0,
-              )).toJson(),
+              )),
               Point(
                   coordinates: Position(
                 3.0,
                 4.0,
-              )).toJson()
+              ))
             ],
             CameraOptions(
                 center: Point(
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -173,7 +173,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -200,7 +200,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -226,7 +226,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -252,7 +252,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
                 anchor: ScreenCoordinate(x: 1, y: 1),
                 zoom: 10,
@@ -277,7 +277,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                 coordinates: Position(
               1.0,
               2.0,
-            )).toJson())
+            )))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content:
@@ -298,12 +298,12 @@ class CameraPageBodyState extends State<CameraPageBody> {
               coordinates: Position(
             1.0,
             2.0,
-          )).toJson(),
+          )),
           Point(
               coordinates: Position(
             2.0,
             3.0,
-          )).toJson()
+          ))
         ]).then((value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                   "ScreenCoordinate x: ${value.first?.x}, y: ${value.first?.y}"),
@@ -320,8 +320,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
       onPressed: () {
         mapboxMap
             ?.coordinateForPixel(ScreenCoordinate(x: 100, y: 100))
-            .then((value) {
-          final point = Point.fromJson(Map<String, dynamic>.from(value));
+            .then((point) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
                 "Point latitude: ${point.coordinates.lat}, longitude: ${point.coordinates.lng}"),
@@ -360,7 +359,7 @@ class CameraPageBodyState extends State<CameraPageBody> {
                 coordinates: Position(
               0.381457,
               6.687337,
-            )).toJson(),
+            )),
             padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
             anchor: ScreenCoordinate(x: 1, y: 1),
             zoom: 3,
@@ -395,12 +394,12 @@ class CameraPageBodyState extends State<CameraPageBody> {
                     coordinates: Position(
                   1.0,
                   2.0,
-                )).toJson(),
+                )),
                 northeast: Point(
                     coordinates: Position(
                   3.0,
                   4.0,
-                )).toJson(),
+                )),
                 infiniteBounds: true),
             maxZoom: 10,
             minZoom: 0,

@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
+import com.mapbox.geojson.Point
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
@@ -247,8 +248,8 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
     mapboxMap.reduceMemoryUse()
   }
 
-  override fun getElevation(coordinate: Map<String?, Any?>): Double? {
-    return mapboxMap.getElevation(coordinate.toPoint())
+  override fun getElevation(coordinate: Point): Double? {
+    return mapboxMap.getElevation(coordinate)
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {

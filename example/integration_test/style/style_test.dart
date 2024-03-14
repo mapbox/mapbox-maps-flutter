@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 import '../utils/list_close_to_matcher.dart';
 
@@ -236,9 +235,9 @@ void main() {
     expect(camera.pitch, 0);
     expect(camera.zoom, 2.0);
     expect(camera.anchor, null);
-    var coordinates = camera.center!['coordinates'] as List;
-    expect(coordinates.first, -92.25);
-    expect(coordinates.last, 37.75);
+    final point = camera.center;
+    expect(point?.coordinates.lng, -92.25);
+    expect(point?.coordinates.lat, 37.75);
   });
 
   testWidgets('StyleLightProperty', (WidgetTester tester) async {
@@ -440,12 +439,12 @@ void main() {
                 coordinates: Position(
               1.0,
               2.0,
-            )).toJson(),
+            )),
             northeast: Point(
                 coordinates: Position(
               3.0,
               4.0,
-            )).toJson(),
+            )),
             infiniteBounds: true));
   });
 

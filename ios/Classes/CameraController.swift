@@ -1,14 +1,15 @@
 import MapboxMaps
 import Foundation
 import Flutter
+import Turf
 
 final class CameraController: _CameraManager {
     private static let errorCode = "0"
 
-    func cameraForCoordinatesPadding(coordinates: [[String?: Any?]?], camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?) throws -> CameraOptions {
+    func cameraForCoordinatesPadding(coordinates: [Point], camera: CameraOptions, coordinatesPadding: MbxEdgeInsets?, maxZoom: Double?, offset: ScreenCoordinate?) throws -> CameraOptions {
         do {
             let camera = try mapboxMap.camera(
-                for: coordinates.compactMap(convertDictionaryToCLLocationCoordinate2D(dict:)),
+                for: coordinates.map(\.coordinates),
                 camera: camera.toCameraOptions(),
                 coordinatesPadding: coordinatesPadding?.toUIEdgeInsets(),
                 maxZoom: maxZoom,
@@ -30,18 +31,18 @@ final class CameraController: _CameraManager {
         return camera.toFLTCameraOptions()
     }
 
-    func cameraForCoordinates(coordinates: [[String?: Any?]?], padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?) throws -> CameraOptions {
+    func cameraForCoordinates(coordinates: [Point], padding: MbxEdgeInsets?, bearing: Double?, pitch: Double?) throws -> CameraOptions {
         let cameraOptions = mapboxMap.camera(
-            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}),
+            for: coordinates.map(\.coordinates),
             padding: padding?.toUIEdgeInsets(),
             bearing: bearing,
             pitch: pitch)
         return cameraOptions.toFLTCameraOptions()
     }
 
-    func cameraForCoordinatesCameraOptions(coordinates: [[String?: Any?]?], camera: CameraOptions, box: ScreenBox) throws -> CameraOptions {
+    func cameraForCoordinatesCameraOptions(coordinates: [Point], camera: CameraOptions, box: ScreenBox) throws -> CameraOptions {
         let cameraOptions = mapboxMap.camera(
-            for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}),
+            for: coordinates.map(\.coordinates),
             camera: camera.toCameraOptions(),
             rect: box.toCGRect())
         return cameraOptions.toFLTCameraOptions()
@@ -77,24 +78,24 @@ final class CameraController: _CameraManager {
         return coordinate.toFLTCoordinateBoundsZoom()
     }
 
-    func pixelForCoordinate(coordinate: [String?: Any?]) throws -> ScreenCoordinate {
-        let point = self.mapboxMap.point(for: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
+    func pixelForCoordinate(coordinate: Point) throws -> ScreenCoordinate {
+        let point = self.mapboxMap.point(for: coordinate.coordinates)
         return point.toFLTScreenCoordinate()
     }
 
-    func coordinateForPixel(pixel: ScreenCoordinate) throws -> [String?: Any?] {
+    func coordinateForPixel(pixel: ScreenCoordinate) throws -> Point {
         let coordinate = self.mapboxMap.coordinate(for: pixel.toCGPoint())
-        return coordinate.toDict()
+        return Point(coordinate)
     }
 
-    func pixelsForCoordinates(coordinates: [[String?: Any?]?]) throws -> [ScreenCoordinate?] {
-        let points = self.mapboxMap.points(for: coordinates.map({convertDictionaryToCLLocationCoordinate2D(dict: $0)!}))
+    func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate?] {
+        let points = self.mapboxMap.points(for: coordinates.map(\.coordinates))
         return points.map({$0.toFLTScreenCoordinate()})
     }
 
-    func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [[String?: Any?]?] {
+    func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [Point] {
         let coordinates = self.mapboxMap.coordinates(for: pixels.compactMap({$0?.toCGPoint()}) )
-        return coordinates.map({$0.toDict()})
+        return coordinates.map(Point.init)
     }
 
     func setCamera(cameraOptions: CameraOptions) throws {
@@ -104,7 +105,7 @@ final class CameraController: _CameraManager {
     func getCameraState() throws -> CameraState {
         let camera = self.mapboxMap.cameraState
         return CameraState(
-            center: ["coordinates": [camera.center.longitude, camera.center.latitude]],
+            center: Point(camera.center),
             padding: MbxEdgeInsets(
                 top: camera.padding.top,
                 left: camera.padding.left,

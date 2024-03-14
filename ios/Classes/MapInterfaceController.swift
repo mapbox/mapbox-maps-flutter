@@ -2,6 +2,7 @@ import Foundation
 @_spi(Experimental) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
+import Turf
 
 final class MapInterfaceController: _MapInterface {
     private static let errorCode = "0"
@@ -269,7 +270,7 @@ final class MapInterfaceController: _MapInterface {
         mapboxMap.reduceMemoryUse()
     }
 
-    func getElevation(coordinate: [String?: Any?]) throws -> Double? {
-        return mapboxMap.elevation(at: convertDictionaryToCLLocationCoordinate2D(dict: coordinate)!)
+    func getElevation(coordinate: Point) throws -> Double? {
+        return mapboxMap.elevation(at: coordinate.coordinates)
     }
 }

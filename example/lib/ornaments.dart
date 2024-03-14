@@ -40,7 +40,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
           coordinates: Position(
         -0.11968,
         51.50325,
-      )).toJson(),
+      )),
       padding: null,
       anchor: null,
       zoom: 12,

@@ -273,7 +273,7 @@ fun Map<String?, Any?>.toPolygon(): Polygon {
 }
 
 fun CoordinateBounds.toCoordinateBounds() =
-  com.mapbox.maps.CoordinateBounds(southwest.toPoint(), northeast.toPoint(), infiniteBounds)
+  com.mapbox.maps.CoordinateBounds(southwest, northeast, infiniteBounds)
 
 fun MbxEdgeInsets.toEdgeInsets(context: Context): EdgeInsets {
   return EdgeInsets(
@@ -291,7 +291,7 @@ fun ScreenCoordinate.toScreenCoordinate(context: Context): com.mapbox.maps.Scree
 fun CameraOptions.toCameraOptions(context: Context): com.mapbox.maps.CameraOptions = com.mapbox.maps.CameraOptions.Builder()
   .anchor(anchor?.toScreenCoordinate(context))
   .bearing(bearing)
-  .center(center?.toPoint())
+  .center(center)
   .padding(padding?.toEdgeInsets(context))
   .zoom(zoom)
   .pitch(pitch)
@@ -474,11 +474,11 @@ fun com.mapbox.maps.CameraState.toCameraState(context: Context): CameraState = C
   padding = padding.toFLTEdgeInsets(context),
   pitch = pitch,
   zoom = zoom,
-  center = center.toMap()
+  center = center
 )
 
 fun com.mapbox.maps.CoordinateBounds.toFLTCoordinateBounds(): CoordinateBounds =
-  CoordinateBounds(southwest.toMap(), northeast.toMap(), infiniteBounds)
+  CoordinateBounds(southwest, northeast, infiniteBounds)
 
 fun com.mapbox.maps.CoordinateBoundsZoom.toFLTCoordinateBoundsZoom(): CoordinateBoundsZoom =
   CoordinateBoundsZoom(bounds.toFLTCoordinateBounds(), zoom)
@@ -493,7 +493,7 @@ fun com.mapbox.maps.CameraBounds.toFLTCameraBounds() = CameraBounds(
 
 fun com.mapbox.maps.CameraOptions.toFLTCameraOptions(context: Context): CameraOptions {
   return CameraOptions(
-    center = center?.let { mapOf("coordinates" to listOf(it.longitude(), it.latitude())) },
+    center = center,
     anchor = anchor?.toFLTScreenCoordinate(context),
     padding = padding?.toFLTEdgeInsets(context),
     zoom = zoom,

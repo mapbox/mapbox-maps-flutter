@@ -84,7 +84,7 @@ extension MapDebugOptions {
 extension CameraOptions {
     func toCameraOptions() -> MapboxMaps.CameraOptions {
         return MapboxMaps.CameraOptions(
-            center: convertDictionaryToCLLocationCoordinate2D(dict: self.center),
+            center: self.center?.coordinates,
             padding: self.padding?.toUIEdgeInsets(),
             anchor: self.anchor?.toCGPoint(),
             zoom: self.zoom?.CGFloat,
@@ -124,9 +124,7 @@ extension ScreenCoordinate {
 }
 extension CoordinateBounds {
     func toCoordinateBounds() -> MapboxMaps.CoordinateBounds {
-        let southwest = convertDictionaryToCLLocationCoordinate2D(dict: self.southwest)
-        let northeast = convertDictionaryToCLLocationCoordinate2D(dict: self.northeast)
-        return MapboxMaps.CoordinateBounds(southwest: southwest!, northeast: northeast!)
+        return MapboxMaps.CoordinateBounds(southwest: southwest.coordinates, northeast: northeast.coordinates)
     }
 }
 
@@ -314,14 +312,13 @@ extension MapboxMaps.CoordinateBoundsZoom {
 extension MapboxMaps.CoordinateBounds {
     func toFLTCoordinateBounds() -> CoordinateBounds {
         CoordinateBounds(
-            southwest: southwest.toDict(),
-            northeast: northeast.toDict(),
+            southwest: Point(southwest),
+            northeast: Point(northeast),
             infiniteBounds: infiniteBounds)
     }
 }
 extension MapboxMaps.CameraOptions {
     func toFLTCameraOptions() -> CameraOptions {
-        let center = self.center != nil ? self.center?.toDict(): nil
         let padding = self.padding != nil ? MbxEdgeInsets(
             top: padding!.top,
             left: padding!.left,
@@ -331,7 +328,7 @@ extension MapboxMaps.CameraOptions {
         let anchor = self.anchor != nil ? ScreenCoordinate(x: self.anchor!.x, y: self.anchor!.y) : nil
 
         return CameraOptions(
-            center: center,
+            center: center.map(Point.init),
             padding: padding,
             anchor: anchor,
             zoom: zoom.map(Double.init),

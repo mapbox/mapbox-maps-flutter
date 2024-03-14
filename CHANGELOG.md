@@ -1,5 +1,29 @@
 ### main
 
+#### ⚠️ Breaking change
+
+Geographical positions denoted by `Map<String?, Object?>?` are migrated to [`Point`](https://pub.dev/documentation/turf/latest/turf/Point-class.html) type from [turf](https://pub.dev/packages/turf) package.
+Pass `Point`s directly instead of converting them to JSON.
+*Before:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )).toJson())
+```
+*After:*
+```dart
+CameraOptions(
+    center: Point(
+        coordinates: Position(
+        -0.11968,
+        51.50325,
+    )))
+```
+
+* Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
 
 ### 1.0.0

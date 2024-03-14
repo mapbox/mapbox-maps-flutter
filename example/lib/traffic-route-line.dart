@@ -94,7 +94,7 @@ class RouteLineState extends State<RouteLine> {
         ),
         body: MapWidget(
           key: const ValueKey("mapWidget"),
-          cameraOptions: CameraOptions(center: _sfAirport.toJson(), zoom: 11.0),
+          cameraOptions: CameraOptions(center: _sfAirport, zoom: 11.0),
           textureView: true,
           onMapCreated: _onMapCreated,
         ));
