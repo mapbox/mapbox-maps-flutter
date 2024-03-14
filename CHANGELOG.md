@@ -2,7 +2,7 @@
 
 #### ⚠️ Breaking change
 
-`Map<String?, Object?>?` is replaced wiht `Point` from [turf](https://pub.dev/packages/turf) package.
+Geographical positions denoted by `Map<String?, Object?>?` are migrated to [`Point`](https://pub.dev/documentation/turf/latest/turf/Point-class.html) type from [turf](https://pub.dev/packages/turf) package.
 Pass `Point`s directly instead of converting them to JSON.
 *Before:*
 ```dart
@@ -24,7 +24,6 @@ CameraOptions(
 ```
 
 * Bump Pigeon to 17.1.2
-* Replace `Map<String?, Object?>?` with `Point` from [turf](https://pub.dev/packages/turf) package.
 
 ### 1.0.0
 
