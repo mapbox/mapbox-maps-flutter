@@ -16,7 +16,7 @@ private fun wrapResult(result: Any?): List<Any?> {
 }
 
 private fun wrapError(exception: Throwable): List<Any?> {
-  if (exception is PolylineAnnotationMessagerFlutterError) {
+  if (exception is FlutterError) {
     return listOf(
       exception.code,
       exception.message,
@@ -31,21 +31,9 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): PolylineAnnotationMessagerFlutterError {
-  return PolylineAnnotationMessagerFlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class PolylineAnnotationMessagerFlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
 
 /** The display of line endings. */
 enum class LineCap(val raw: Int) {
@@ -266,7 +254,7 @@ class OnPolylineAnnotationClickListener(private val binaryMessenger: BinaryMesse
     channel.send(listOf(annotationArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(PolylineAnnotationMessagerFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }

@@ -16,7 +16,7 @@ private fun wrapResult(result: Any?): List<Any?> {
 }
 
 private fun wrapError(exception: Throwable): List<Any?> {
-  if (exception is PointAnnotationMessagerFlutterError) {
+  if (exception is FlutterError) {
     return listOf(
       exception.code,
       exception.message,
@@ -31,21 +31,9 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): PointAnnotationMessagerFlutterError {
-  return PointAnnotationMessagerFlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
-
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class PointAnnotationMessagerFlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
 
 /** Part of the icon placed closest to the anchor. */
 enum class IconAnchor(val raw: Int) {
@@ -692,7 +680,7 @@ class OnPointAnnotationClickListener(private val binaryMessenger: BinaryMessenge
     channel.send(listOf(annotationArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
-          callback(Result.failure(PointAnnotationMessagerFlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
         } else {
           callback(Result.success(Unit))
         }
