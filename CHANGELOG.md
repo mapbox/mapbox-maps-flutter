@@ -25,6 +25,7 @@ CameraOptions(
 
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
+* Deprecate `cameraForCoordinates`, please use `cameraForCoordinatesPadding` instead.
 
 ### 1.0.0
 
