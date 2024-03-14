@@ -24,6 +24,7 @@ CameraOptions(
 ```
 
 * Bump Pigeon to 17.1.2
+* [iOS] Fix crash in `onStyleImageMissingListener`.
 
 ### 1.0.0
 

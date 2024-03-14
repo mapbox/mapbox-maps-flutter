@@ -33,7 +33,7 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
         id: "line_layer",
         sourceId: "line",
         symbolPlacement: SymbolPlacement.LINE,
-        iconImage: "car-15",
+        iconImage: "car",
         symbolSpacing: 10));
   }
 
