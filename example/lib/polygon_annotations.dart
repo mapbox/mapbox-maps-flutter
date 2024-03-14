@@ -41,7 +41,7 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
       center:
         Point(coordinates: Position(
           -3.363937, -10.733102
-        )).toJson(),
+        )),
       zoom: 1,
       pitch: 0)
     );

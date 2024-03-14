@@ -33,7 +33,7 @@ class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
         Point(coordinates: Position(
           -103.94925008414447,
           10.867890040082585,
-        )).toJson(),
+        )),
       zoom: 1,
       pitch: 0)
     );

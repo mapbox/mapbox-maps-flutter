@@ -40,7 +40,7 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       center:
         Point(coordinates: Position(
           0, 0
-        )).toJson(),
+        )),
       zoom: 1,
       pitch: 0)
     );
