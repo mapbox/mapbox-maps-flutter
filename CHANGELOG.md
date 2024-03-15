@@ -1,6 +1,6 @@
 ### main
 
-* Mark `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()` as experimental.
+* Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
 
 #### ⚠️ Breaking change
 
