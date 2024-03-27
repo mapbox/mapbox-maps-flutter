@@ -13,6 +13,7 @@ final class MapboxOptions {
 
   /// The access token that is used to access resources provided by Mapbox services.
   static void setAccessToken(String token) {
+    LogConfiguration._setupDebugLoggingIfNeeded();
     _options.setAccessToken(token);
   }
 }
