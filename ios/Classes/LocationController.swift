@@ -5,15 +5,9 @@ import Flutter
 final class LocationController: _LocationComponentSettingsInterface {
     func updateSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Bool) throws {
         do {
-            var locationOptions = try mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(settings: settings)
-            if useDefaultPuck2DIfNeeded, case .puck2D(var config) = locationOptions.puckType {
-                let defaultPuck2DConfig = Puck2DConfiguration.makeDefault(showBearing: locationOptions.puckBearingEnabled)
-                config.topImage ?= defaultPuck2DConfig.topImage
-                config.bearingImage ?= defaultPuck2DConfig.bearingImage
-                config.shadowImage ?= defaultPuck2DConfig.shadowImage
-                locationOptions.puckType = .puck2D(config)
-            }
-            mapView.location.options = locationOptions
+            mapView.location.options = try mapView.location.options.fromFLT_SETTINGSLocationComponentSettings(
+                settings: settings,
+                useDefaultPuck2DIfNeeded: useDefaultPuck2DIfNeeded)
         } catch let settingsError {
             throw FlutterError(code: "0", message: settingsError.localizedDescription, details: settingsError)
         }
@@ -31,7 +25,7 @@ final class LocationController: _LocationComponentSettingsInterface {
 }
 
 extension LocationOptions {
-    func fromFLT_SETTINGSLocationComponentSettings(settings: LocationComponentSettings) throws -> LocationOptions {
+    func fromFLT_SETTINGSLocationComponentSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Bool) throws -> LocationOptions {
         var options = LocationOptions()
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled
@@ -66,13 +60,19 @@ extension LocationOptions {
                 }
                 options.puckType = .puck3D(configuration)
         } else if let puck2D = settings.locationPuck?.locationPuck2D {
-            var configuration: Puck2DConfiguration = {
-                if case .puck2D(let config) = puckType { return config }
-                return Puck2DConfiguration()
-            }()
-            configuration.topImage = puck2D.topImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
-            configuration.bearingImage = puck2D.bearingImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
-            configuration.shadowImage = puck2D.shadowImage.flatMap { UIImage(data: $0.data, scale: UIScreen.main.scale ) }
+            var configuration = useDefaultPuck2DIfNeeded
+            ? Puck2DConfiguration.makeDefault(showBearing: options.puckBearingEnabled)
+            : Puck2DConfiguration()
+
+            if let topImage = puck2D.topImage {
+                configuration.topImage = UIImage(data: topImage.data, scale: UIScreen.main.scale)
+            }
+            if let bearingImage = puck2D.bearingImage {
+                configuration.bearingImage = UIImage(data: bearingImage.data, scale: UIScreen.main.scale)
+            }
+            if let shadowImage = puck2D.shadowImage {
+                configuration.shadowImage = UIImage(data: shadowImage.data, scale: UIScreen.main.scale)
+            }
 
             if let scaleData = puck2D.scaleExpression?.data(using: .utf8) {
                 configuration.scale = try JSONDecoder().decode(Value<Double>.self, from: scaleData)
