@@ -1,6 +1,18 @@
 ### main
 
 * Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
+* Bump Pigeon to 17.1.2
+* [iOS] Fix crash in `onStyleImageMissingListener`.
+* Deprecate `cameraForCoordinates`, please use `cameraForCoordinatesPadding` instead.
+* Add a way to disable default puck' image(s) when using `DefaultLocationPuck2D` by passing an empty byte array, for example, the following code shows a puck 2D with custom top image, default bearing image and no shadow image.
+```
+mapboxMap?.location.updateSettings(LocationComponentSettings(
+    enabled: true,
+    puckBearingEnabled: true,
+    locationPuck:
+        LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([]))))
+);
+```
 
 #### ⚠️ Breaking change
 
@@ -24,10 +36,6 @@ CameraOptions(
         51.50325,
     )))
 ```
-
-* Bump Pigeon to 17.1.2
-* [iOS] Fix crash in `onStyleImageMissingListener`.
-* Deprecate `cameraForCoordinates`, please use `cameraForCoordinatesPadding` instead.
 
 ### 1.0.0
 
