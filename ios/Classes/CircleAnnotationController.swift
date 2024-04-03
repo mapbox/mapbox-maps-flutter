@@ -3,7 +3,7 @@ import MapboxMaps
 import Foundation
 import Flutter
 
-final class CircleAnnotationController: _CircleAnnotationMessager {
+final class CircleAnnotationController: _CircleAnnotationMessenger {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
 

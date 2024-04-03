@@ -186,8 +186,8 @@ abstract class OnPolygonAnnotationClickListener {
   }
 }
 
-class __PolygonAnnotationMessagerCodec extends StandardMessageCodec {
-  const __PolygonAnnotationMessagerCodec();
+class __PolygonAnnotationMessengerCodec extends StandardMessageCodec {
+  const __PolygonAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is PolygonAnnotation) {
@@ -224,21 +224,21 @@ class __PolygonAnnotationMessagerCodec extends StandardMessageCodec {
   }
 }
 
-class _PolygonAnnotationMessager {
-  /// Constructor for [_PolygonAnnotationMessager].  The [binaryMessenger] named argument is
+class _PolygonAnnotationMessenger {
+  /// Constructor for [_PolygonAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _PolygonAnnotationMessager({BinaryMessenger? binaryMessenger})
+  _PolygonAnnotationMessenger({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
-      __PolygonAnnotationMessagerCodec();
+      __PolygonAnnotationMessengerCodec();
 
   Future<PolygonAnnotation> create(
       String managerId, PolygonAnnotationOptions annotationOption) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.create';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -268,7 +268,7 @@ class _PolygonAnnotationMessager {
   Future<List<PolygonAnnotation?>> createMulti(String managerId,
       List<PolygonAnnotationOptions?> annotationOptions) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.createMulti';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.createMulti';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -298,7 +298,7 @@ class _PolygonAnnotationMessager {
 
   Future<void> update(String managerId, PolygonAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.update';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.update';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -322,7 +322,7 @@ class _PolygonAnnotationMessager {
 
   Future<void> delete(String managerId, PolygonAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.delete';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.delete';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -346,7 +346,7 @@ class _PolygonAnnotationMessager {
 
   Future<void> deleteAll(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.deleteAll';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.deleteAll';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -370,7 +370,7 @@ class _PolygonAnnotationMessager {
 
   Future<void> setFillAntialias(String managerId, bool fillAntialias) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillAntialias';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -394,7 +394,7 @@ class _PolygonAnnotationMessager {
 
   Future<bool?> getFillAntialias(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillAntialias';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillAntialias';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -419,7 +419,7 @@ class _PolygonAnnotationMessager {
   Future<void> setFillEmissiveStrength(
       String managerId, double fillEmissiveStrength) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -443,7 +443,7 @@ class _PolygonAnnotationMessager {
 
   Future<double?> getFillEmissiveStrength(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -468,7 +468,7 @@ class _PolygonAnnotationMessager {
   Future<void> setFillTranslate(
       String managerId, List<double?> fillTranslate) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -492,7 +492,7 @@ class _PolygonAnnotationMessager {
 
   Future<List<double?>?> getFillTranslate(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -517,7 +517,7 @@ class _PolygonAnnotationMessager {
   Future<void> setFillTranslateAnchor(
       String managerId, FillTranslateAnchor fillTranslateAnchor) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -542,7 +542,7 @@ class _PolygonAnnotationMessager {
 
   Future<FillTranslateAnchor?> getFillTranslateAnchor(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

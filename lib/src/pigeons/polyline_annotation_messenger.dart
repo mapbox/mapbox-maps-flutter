@@ -282,8 +282,8 @@ abstract class OnPolylineAnnotationClickListener {
   }
 }
 
-class __PolylineAnnotationMessagerCodec extends StandardMessageCodec {
-  const __PolylineAnnotationMessagerCodec();
+class __PolylineAnnotationMessengerCodec extends StandardMessageCodec {
+  const __PolylineAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is PolylineAnnotation) {
@@ -320,21 +320,21 @@ class __PolylineAnnotationMessagerCodec extends StandardMessageCodec {
   }
 }
 
-class _PolylineAnnotationMessager {
-  /// Constructor for [_PolylineAnnotationMessager].  The [binaryMessenger] named argument is
+class _PolylineAnnotationMessenger {
+  /// Constructor for [_PolylineAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _PolylineAnnotationMessager({BinaryMessenger? binaryMessenger})
+  _PolylineAnnotationMessenger({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
-      __PolylineAnnotationMessagerCodec();
+      __PolylineAnnotationMessengerCodec();
 
   Future<PolylineAnnotation> create(
       String managerId, PolylineAnnotationOptions annotationOption) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.create';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.create';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -364,7 +364,7 @@ class _PolylineAnnotationMessager {
   Future<List<PolylineAnnotation?>> createMulti(String managerId,
       List<PolylineAnnotationOptions?> annotationOptions) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.createMulti';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.createMulti';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -394,7 +394,7 @@ class _PolylineAnnotationMessager {
 
   Future<void> update(String managerId, PolylineAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.update';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.update';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -418,7 +418,7 @@ class _PolylineAnnotationMessager {
 
   Future<void> delete(String managerId, PolylineAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.delete';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.delete';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -442,7 +442,7 @@ class _PolylineAnnotationMessager {
 
   Future<void> deleteAll(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.deleteAll';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.deleteAll';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -466,7 +466,7 @@ class _PolylineAnnotationMessager {
 
   Future<void> setLineCap(String managerId, LineCap lineCap) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineCap';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCap';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -490,7 +490,7 @@ class _PolylineAnnotationMessager {
 
   Future<LineCap?> getLineCap(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineCap';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCap';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -517,7 +517,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineMiterLimit(
       String managerId, double lineMiterLimit) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineMiterLimit';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineMiterLimit';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -541,7 +541,7 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineMiterLimit(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineMiterLimit';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineMiterLimit';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -566,7 +566,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineRoundLimit(
       String managerId, double lineRoundLimit) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineRoundLimit';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineRoundLimit';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -590,7 +590,7 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineRoundLimit(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineRoundLimit';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineRoundLimit';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -615,7 +615,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineDasharray(
       String managerId, List<double?> lineDasharray) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDasharray';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDasharray';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -639,7 +639,7 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineDasharray(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDasharray';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDasharray';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -664,7 +664,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineDepthOcclusionFactor(
       String managerId, double lineDepthOcclusionFactor) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineDepthOcclusionFactor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDepthOcclusionFactor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -688,7 +688,7 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineDepthOcclusionFactor(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineDepthOcclusionFactor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDepthOcclusionFactor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -713,7 +713,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineEmissiveStrength(
       String managerId, double lineEmissiveStrength) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -737,7 +737,7 @@ class _PolylineAnnotationMessager {
 
   Future<double?> getLineEmissiveStrength(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -762,7 +762,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineTranslate(
       String managerId, List<double?> lineTranslate) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -786,7 +786,7 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineTranslate(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -811,7 +811,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineTranslateAnchor(
       String managerId, LineTranslateAnchor lineTranslateAnchor) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -836,7 +836,7 @@ class _PolylineAnnotationMessager {
 
   Future<LineTranslateAnchor?> getLineTranslateAnchor(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -863,7 +863,7 @@ class _PolylineAnnotationMessager {
   Future<void> setLineTrimOffset(
       String managerId, List<double?> lineTrimOffset) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.setLineTrimOffset';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -887,7 +887,7 @@ class _PolylineAnnotationMessager {
 
   Future<List<double?>?> getLineTrimOffset(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessager.getLineTrimOffset';
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimOffset';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

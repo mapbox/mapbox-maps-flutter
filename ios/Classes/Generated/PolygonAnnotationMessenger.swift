@@ -210,7 +210,7 @@ class OnPolygonAnnotationClickListener: OnPolygonAnnotationClickListenerProtocol
     }
   }
 }
-private class _PolygonAnnotationMessagerCodecReader: FlutterStandardReader {
+private class _PolygonAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -227,7 +227,7 @@ private class _PolygonAnnotationMessagerCodecReader: FlutterStandardReader {
   }
 }
 
-private class _PolygonAnnotationMessagerCodecWriter: FlutterStandardWriter {
+private class _PolygonAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? PolygonAnnotation {
       super.writeByte(128)
@@ -247,22 +247,22 @@ private class _PolygonAnnotationMessagerCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class _PolygonAnnotationMessagerCodecReaderWriter: FlutterStandardReaderWriter {
+private class _PolygonAnnotationMessengerCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    return _PolygonAnnotationMessagerCodecReader(data: data)
+    return _PolygonAnnotationMessengerCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return _PolygonAnnotationMessagerCodecWriter(data: data)
+    return _PolygonAnnotationMessengerCodecWriter(data: data)
   }
 }
 
-class _PolygonAnnotationMessagerCodec: FlutterStandardMessageCodec {
-  static let shared = _PolygonAnnotationMessagerCodec(readerWriter: _PolygonAnnotationMessagerCodecReaderWriter())
+class _PolygonAnnotationMessengerCodec: FlutterStandardMessageCodec {
+  static let shared = _PolygonAnnotationMessengerCodec(readerWriter: _PolygonAnnotationMessengerCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _PolygonAnnotationMessager {
+protocol _PolygonAnnotationMessenger {
   func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [PolygonAnnotationOptions], completion: @escaping (Result<[PolygonAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -279,12 +279,12 @@ protocol _PolygonAnnotationMessager {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class _PolygonAnnotationMessagerSetup {
-  /// The codec used by _PolygonAnnotationMessager.
-  static var codec: FlutterStandardMessageCodec { _PolygonAnnotationMessagerCodec.shared }
-  /// Sets up an instance of `_PolygonAnnotationMessager` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolygonAnnotationMessager?) {
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.create", binaryMessenger: binaryMessenger, codec: codec)
+class _PolygonAnnotationMessengerSetup {
+  /// The codec used by _PolygonAnnotationMessenger.
+  static var codec: FlutterStandardMessageCodec { _PolygonAnnotationMessengerCodec.shared }
+  /// Sets up an instance of `_PolygonAnnotationMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolygonAnnotationMessenger?) {
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -302,7 +302,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.createMulti", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.createMulti", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -320,7 +320,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.update", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.update", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -338,7 +338,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.delete", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.delete", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -356,7 +356,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -373,7 +373,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillAntialias", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillAntialiasChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -391,7 +391,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       setFillAntialiasChannel.setMessageHandler(nil)
     }
-    let getFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillAntialias", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillAntialias", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillAntialiasChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -408,7 +408,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       getFillAntialiasChannel.setMessageHandler(nil)
     }
-    let setFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -426,7 +426,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       setFillEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -443,7 +443,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       getFillEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -461,7 +461,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       setFillTranslateChannel.setMessageHandler(nil)
     }
-    let getFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -478,7 +478,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       getFillTranslateChannel.setMessageHandler(nil)
     }
-    let setFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -496,7 +496,7 @@ class _PolygonAnnotationMessagerSetup {
     } else {
       setFillTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
