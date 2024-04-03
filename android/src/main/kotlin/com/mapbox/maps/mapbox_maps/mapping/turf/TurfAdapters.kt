@@ -1,6 +1,5 @@
 package com.mapbox.maps.mapbox_maps.mapping.turf
 
-import com.google.gson.Gson
 import com.mapbox.geojson.Point
 
 fun Point.toList(): List<Any?> {
@@ -8,7 +7,11 @@ fun Point.toList(): List<Any?> {
 }
 
 object PointDecoder {
+  @Suppress("UNCHECKED_CAST")
   fun fromList(list: List<Any?>): Point {
-    return Point.fromJson(Gson().toJson(list.first()))
+    val rawPoint = list.first() as Map<String, Any>
+    val coordinates = rawPoint["coordinates"] as List<Double>
+
+    return Point.fromLngLat(coordinates[0], coordinates[1])
   }
 }
