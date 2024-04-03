@@ -623,38 +623,102 @@ extension PointAnnotationOptions {
         if let image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
         }
-        annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
-        annotation.iconImage = iconImage
-        annotation.iconOffset = iconOffset?.compactMap { $0 }
-        annotation.iconRotate = iconRotate
-        annotation.iconSize = iconSize
-        annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
-        annotation.iconTextFitPadding = iconTextFitPadding?.compactMap { $0 }
-        annotation.symbolSortKey = symbolSortKey
-        annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
-        annotation.textField = textField
-        annotation.textJustify = MapboxMaps.TextJustify(textJustify)
-        annotation.textLetterSpacing = textLetterSpacing
-        annotation.textLineHeight = textLineHeight
-        annotation.textMaxWidth = textMaxWidth
-        annotation.textOffset = textOffset?.compactMap { $0 }
-        annotation.textRadialOffset = textRadialOffset
-        annotation.textRotate = textRotate
-        annotation.textSize = textSize
-        annotation.textTransform = MapboxMaps.TextTransform(textTransform)
-        annotation.iconColor = StyleColor(rgb: iconColor)
-        annotation.iconEmissiveStrength = iconEmissiveStrength
-        annotation.iconHaloBlur = iconHaloBlur
-        annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
-        annotation.iconHaloWidth = iconHaloWidth
-        annotation.iconImageCrossFade = iconImageCrossFade
-        annotation.iconOpacity = iconOpacity
-        annotation.textColor = StyleColor(rgb: textColor)
-        annotation.textEmissiveStrength = textEmissiveStrength
-        annotation.textHaloBlur = textHaloBlur
-        annotation.textHaloColor = StyleColor(rgb: textHaloColor)
-        annotation.textHaloWidth = textHaloWidth
-        annotation.textOpacity = textOpacity
+        if let iconAnchor {
+            annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
+        }
+        if let iconImage {
+            annotation.iconImage = iconImage
+        }
+        if let iconOffset {
+            annotation.iconOffset = iconOffset.compactMap { $0 }
+        }
+        if let iconRotate {
+            annotation.iconRotate = iconRotate
+        }
+        if let iconSize {
+            annotation.iconSize = iconSize
+        }
+        if let iconTextFit {
+            annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
+        }
+        if let iconTextFitPadding {
+            annotation.iconTextFitPadding = iconTextFitPadding.compactMap { $0 }
+        }
+        if let symbolSortKey {
+            annotation.symbolSortKey = symbolSortKey
+        }
+        if let textAnchor {
+            annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
+        }
+        if let textField {
+            annotation.textField = textField
+        }
+        if let textJustify {
+            annotation.textJustify = MapboxMaps.TextJustify(textJustify)
+        }
+        if let textLetterSpacing {
+            annotation.textLetterSpacing = textLetterSpacing
+        }
+        if let textLineHeight {
+            annotation.textLineHeight = textLineHeight
+        }
+        if let textMaxWidth {
+            annotation.textMaxWidth = textMaxWidth
+        }
+        if let textOffset {
+            annotation.textOffset = textOffset.compactMap { $0 }
+        }
+        if let textRadialOffset {
+            annotation.textRadialOffset = textRadialOffset
+        }
+        if let textRotate {
+            annotation.textRotate = textRotate
+        }
+        if let textSize {
+            annotation.textSize = textSize
+        }
+        if let textTransform {
+            annotation.textTransform = MapboxMaps.TextTransform(textTransform)
+        }
+        if let iconColor {
+            annotation.iconColor = StyleColor(rgb: iconColor)
+        }
+        if let iconEmissiveStrength {
+            annotation.iconEmissiveStrength = iconEmissiveStrength
+        }
+        if let iconHaloBlur {
+            annotation.iconHaloBlur = iconHaloBlur
+        }
+        if let iconHaloColor {
+            annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
+        }
+        if let iconHaloWidth {
+            annotation.iconHaloWidth = iconHaloWidth
+        }
+        if let iconImageCrossFade {
+            annotation.iconImageCrossFade = iconImageCrossFade
+        }
+        if let iconOpacity {
+            annotation.iconOpacity = iconOpacity
+        }
+        if let textColor {
+            annotation.textColor = StyleColor(rgb: textColor)
+        }
+        if let textEmissiveStrength {
+            annotation.textEmissiveStrength = textEmissiveStrength
+        }
+        if let textHaloBlur {
+            annotation.textHaloBlur = textHaloBlur
+        }
+        if let textHaloColor {
+            annotation.textHaloColor = StyleColor(rgb: textHaloColor)
+        }
+        if let textHaloWidth {
+            annotation.textHaloWidth = textHaloWidth
+        }
+        if let textOpacity {
+            annotation.textOpacity = textOpacity
+        }
         return annotation
     }
 }
@@ -666,38 +730,102 @@ extension PointAnnotation {
         if let image = self.image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
         }
-                annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
-        annotation.iconImage = iconImage
-        annotation.iconOffset = iconOffset?.compactMap { $0 }
-        annotation.iconRotate = iconRotate
-        annotation.iconSize = iconSize
-        annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
-        annotation.iconTextFitPadding = iconTextFitPadding?.compactMap { $0 }
-        annotation.symbolSortKey = symbolSortKey
-        annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
-        annotation.textField = textField
-        annotation.textJustify = MapboxMaps.TextJustify(textJustify)
-        annotation.textLetterSpacing = textLetterSpacing
-        annotation.textLineHeight = textLineHeight
-        annotation.textMaxWidth = textMaxWidth
-        annotation.textOffset = textOffset?.compactMap { $0 }
-        annotation.textRadialOffset = textRadialOffset
-        annotation.textRotate = textRotate
-        annotation.textSize = textSize
-        annotation.textTransform = MapboxMaps.TextTransform(textTransform)
-        annotation.iconColor = StyleColor(rgb: iconColor)
-        annotation.iconEmissiveStrength = iconEmissiveStrength
-        annotation.iconHaloBlur = iconHaloBlur
-        annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
-        annotation.iconHaloWidth = iconHaloWidth
-        annotation.iconImageCrossFade = iconImageCrossFade
-        annotation.iconOpacity = iconOpacity
-        annotation.textColor = StyleColor(rgb: textColor)
-        annotation.textEmissiveStrength = textEmissiveStrength
-        annotation.textHaloBlur = textHaloBlur
-        annotation.textHaloColor = StyleColor(rgb: textHaloColor)
-        annotation.textHaloWidth = textHaloWidth
-        annotation.textOpacity = textOpacity
+                if let iconAnchor {
+            annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
+        }
+        if let iconImage {
+            annotation.iconImage = iconImage
+        }
+        if let iconOffset {
+            annotation.iconOffset = iconOffset.compactMap { $0 }
+        }
+        if let iconRotate {
+            annotation.iconRotate = iconRotate
+        }
+        if let iconSize {
+            annotation.iconSize = iconSize
+        }
+        if let iconTextFit {
+            annotation.iconTextFit = MapboxMaps.IconTextFit(iconTextFit)
+        }
+        if let iconTextFitPadding {
+            annotation.iconTextFitPadding = iconTextFitPadding.compactMap { $0 }
+        }
+        if let symbolSortKey {
+            annotation.symbolSortKey = symbolSortKey
+        }
+        if let textAnchor {
+            annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
+        }
+        if let textField {
+            annotation.textField = textField
+        }
+        if let textJustify {
+            annotation.textJustify = MapboxMaps.TextJustify(textJustify)
+        }
+        if let textLetterSpacing {
+            annotation.textLetterSpacing = textLetterSpacing
+        }
+        if let textLineHeight {
+            annotation.textLineHeight = textLineHeight
+        }
+        if let textMaxWidth {
+            annotation.textMaxWidth = textMaxWidth
+        }
+        if let textOffset {
+            annotation.textOffset = textOffset.compactMap { $0 }
+        }
+        if let textRadialOffset {
+            annotation.textRadialOffset = textRadialOffset
+        }
+        if let textRotate {
+            annotation.textRotate = textRotate
+        }
+        if let textSize {
+            annotation.textSize = textSize
+        }
+        if let textTransform {
+            annotation.textTransform = MapboxMaps.TextTransform(textTransform)
+        }
+        if let iconColor {
+            annotation.iconColor = StyleColor(rgb: iconColor)
+        }
+        if let iconEmissiveStrength {
+            annotation.iconEmissiveStrength = iconEmissiveStrength
+        }
+        if let iconHaloBlur {
+            annotation.iconHaloBlur = iconHaloBlur
+        }
+        if let iconHaloColor {
+            annotation.iconHaloColor = StyleColor(rgb: iconHaloColor)
+        }
+        if let iconHaloWidth {
+            annotation.iconHaloWidth = iconHaloWidth
+        }
+        if let iconImageCrossFade {
+            annotation.iconImageCrossFade = iconImageCrossFade
+        }
+        if let iconOpacity {
+            annotation.iconOpacity = iconOpacity
+        }
+        if let textColor {
+            annotation.textColor = StyleColor(rgb: textColor)
+        }
+        if let textEmissiveStrength {
+            annotation.textEmissiveStrength = textEmissiveStrength
+        }
+        if let textHaloBlur {
+            annotation.textHaloBlur = textHaloBlur
+        }
+        if let textHaloColor {
+            annotation.textHaloColor = StyleColor(rgb: textHaloColor)
+        }
+        if let textHaloWidth {
+            annotation.textHaloWidth = textHaloWidth
+        }
+        if let textOpacity {
+            annotation.textOpacity = textOpacity
+        }
         return annotation
     }
 }

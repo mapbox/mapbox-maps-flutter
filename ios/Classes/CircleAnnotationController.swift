@@ -220,14 +220,30 @@ extension CircleAnnotationOptions {
 
     func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
         var annotation = MapboxMaps.CircleAnnotation(centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: geometry)!)
-        annotation.circleSortKey = circleSortKey
-        annotation.circleBlur = circleBlur
-        annotation.circleColor = StyleColor(rgb: circleColor)
-        annotation.circleOpacity = circleOpacity
-        annotation.circleRadius = circleRadius
-        annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
-        annotation.circleStrokeOpacity = circleStrokeOpacity
-        annotation.circleStrokeWidth = circleStrokeWidth
+        if let circleSortKey {
+            annotation.circleSortKey = circleSortKey
+        }
+        if let circleBlur {
+            annotation.circleBlur = circleBlur
+        }
+        if let circleColor {
+            annotation.circleColor = StyleColor(rgb: circleColor)
+        }
+        if let circleOpacity {
+            annotation.circleOpacity = circleOpacity
+        }
+        if let circleRadius {
+            annotation.circleRadius = circleRadius
+        }
+        if let circleStrokeColor {
+            annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
+        }
+        if let circleStrokeOpacity {
+            annotation.circleStrokeOpacity = circleStrokeOpacity
+        }
+        if let circleStrokeWidth {
+            annotation.circleStrokeWidth = circleStrokeWidth
+        }
         return annotation
     }
 }
@@ -236,14 +252,30 @@ extension CircleAnnotation {
 
     func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
                 var annotation = MapboxMaps.CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
-                annotation.circleSortKey = circleSortKey
-        annotation.circleBlur = circleBlur
-        annotation.circleColor = StyleColor(rgb: circleColor)
-        annotation.circleOpacity = circleOpacity
-        annotation.circleRadius = circleRadius
-        annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
-        annotation.circleStrokeOpacity = circleStrokeOpacity
-        annotation.circleStrokeWidth = circleStrokeWidth
+                if let circleSortKey {
+            annotation.circleSortKey = circleSortKey
+        }
+        if let circleBlur {
+            annotation.circleBlur = circleBlur
+        }
+        if let circleColor {
+            annotation.circleColor = StyleColor(rgb: circleColor)
+        }
+        if let circleOpacity {
+            annotation.circleOpacity = circleOpacity
+        }
+        if let circleRadius {
+            annotation.circleRadius = circleRadius
+        }
+        if let circleStrokeColor {
+            annotation.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
+        }
+        if let circleStrokeOpacity {
+            annotation.circleStrokeOpacity = circleStrokeOpacity
+        }
+        if let circleStrokeWidth {
+            annotation.circleStrokeWidth = circleStrokeWidth
+        }
         return annotation
     }
 }
