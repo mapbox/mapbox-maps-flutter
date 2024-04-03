@@ -37,6 +37,10 @@ CameraOptions(
     )))
 ```
 
+* Bump Pigeon to 17.1.2
+* [iOS] Fix crash in `onStyleImageMissingListener`.
+* Fix camera center not applied from map init options.
+
 ### 1.0.0
 
 * Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.

@@ -84,8 +84,8 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         let bearing: CLLocationDirection? =  cameraOptionsMap[4] as? CLLocationDirection
         let pitch: CGFloat? =  cameraOptionsMap[5] as? CGFloat
 
-        if let centerMap = cameraOptionsMap[0] as? [String: Any] {
-            center = convertDictionaryToCLLocationCoordinate2D(dict: centerMap)
+        if let centerList = cameraOptionsMap[0] as? [Any] {
+            center = Point.fromList(centerList).coordinates
         }
 
         if let paddingMap = cameraOptionsMap[1] as? [CGFloat] {
