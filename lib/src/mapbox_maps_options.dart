@@ -94,6 +94,7 @@ final class MapboxMapsOptions {
   /// Current worldview preference for Mapbox products.
   ///
   /// Represented as a ISO 3166-1 alpha-2 country code.
+  @experimental
   static Future<String?> getWorldview() {
     return _options.getWorldview();
   }
@@ -101,6 +102,7 @@ final class MapboxMapsOptions {
   /// Set preferred worldview for Mapbox products as a ISO 3166-1 alpha-2 country code.
   ///
   /// Learn more about Mapbox worldviews at https://docs.mapbox.com/help/glossary/worldview/#available-worldviews.
+  @experimental
   static void setWorldview(String? worldview) {
     _options.setWorldview(worldview);
   }
@@ -108,11 +110,13 @@ final class MapboxMapsOptions {
   /// Current language preference for Mapbox products.
   ///
   /// Represented as a bcp-47 tag.
+  @experimental
   static Future<String?> getLanguage() {
     return _options.getLanguage();
   }
 
   /// Set preferred language for Mapbox products with a bcp-47 tag.
+  @experimental
   static void setLanguage(String? language) {
     _options.setLanguage(language);
   }
