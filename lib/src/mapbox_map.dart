@@ -233,6 +233,7 @@ class MapboxMap extends ChangeNotifier {
           bounds, padding, bearing, pitch, maxZoom, offset);
 
   /// Convenience method that returns the `camera options` object for given parameters.
+  @Deprecated('Use [cameraForCoordinatesPadding] instead')
   Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
           MbxEdgeInsets padding, double? bearing, double? pitch) =>
       _cameraManager.cameraForCoordinates(coordinates, padding, bearing, pitch);

@@ -171,8 +171,10 @@ class LocationPageBodyState extends State<LocationPageBody> {
         final Uint8List list = bytes.buffer.asUint8List();
 
         mapboxMap?.location.updateSettings(LocationComponentSettings(
+          enabled: true,
+            puckBearingEnabled: true,
             locationPuck:
-                LocationPuck(locationPuck2D: LocationPuck2D(topImage: list))));
+                LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([])))));
       },
     );
   }

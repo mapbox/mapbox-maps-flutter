@@ -8,10 +8,11 @@ import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTModelScaleMode
 import com.mapbox.maps.mapbox_maps.toModelScaleMode
+import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSettingsInterface
 import java.io.ByteArrayOutputStream
 
-fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentSettings, context: Context) {
+fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean, context: Context) {
   settings.enabled?.let { enabled = it }
   settings.pulsingEnabled?.let { pulsingEnabled = it }
   settings.pulsingColor?.let { pulsingColor = it.toInt() }
@@ -46,13 +47,14 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
         puck3D.modelEmissiveStrengthExpression?.let { modelEmissiveStrengthExpression = it }
       }
     } else {
-      com.mapbox.maps.plugin.LocationPuck2D().apply {
-        puck2D?.topImage?.let { topImage = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
-        puck2D?.bearingImage?.let { bearingImage = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
-        puck2D?.shadowImage?.let { shadowImage = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
-        puck2D?.scaleExpression?.let { scaleExpression = it }
-        puck2D?.opacity?.let { opacity = it.toFloat() }
-      }
+      (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = puckBearingEnabled) else com.mapbox.maps.plugin.LocationPuck2D())
+        .apply {
+          puck2D?.topImage?.let { topImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+          puck2D?.bearingImage?.let { bearingImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+          puck2D?.shadowImage?.let { shadowImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+          puck2D?.scaleExpression?.let { scaleExpression = it }
+          puck2D?.opacity?.let { opacity = it.toFloat() }
+        }
     }
   }
 }
