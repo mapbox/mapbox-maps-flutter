@@ -25,6 +25,7 @@ CameraOptions(
 
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
+* Fix camera center not applied from map init options.
 
 ### 1.0.0
 
