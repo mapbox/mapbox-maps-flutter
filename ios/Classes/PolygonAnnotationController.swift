@@ -200,11 +200,21 @@ extension PolygonAnnotationOptions {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
         var annotation = MapboxMaps.PolygonAnnotation(polygon: convertDictionaryToPolygon(dict: self.geometry!))
-        annotation.fillSortKey = fillSortKey
-        annotation.fillColor = StyleColor(rgb: fillColor)
-        annotation.fillOpacity = fillOpacity
-        annotation.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
-        annotation.fillPattern = fillPattern
+        if let fillSortKey {
+            annotation.fillSortKey = fillSortKey
+        }
+        if let fillColor {
+            annotation.fillColor = StyleColor(rgb: fillColor)
+        }
+        if let fillOpacity {
+            annotation.fillOpacity = fillOpacity
+        }
+        if let fillOutlineColor {
+            annotation.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
+        }
+        if let fillPattern {
+            annotation.fillPattern = fillPattern
+        }
         return annotation
     }
 }
@@ -213,11 +223,21 @@ extension PolygonAnnotation {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
                 var annotation = MapboxMaps.PolygonAnnotation(id: self.id, polygon: convertDictionaryToPolygon(dict: self.geometry!))
-                annotation.fillSortKey = fillSortKey
-        annotation.fillColor = StyleColor(rgb: fillColor)
-        annotation.fillOpacity = fillOpacity
-        annotation.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
-        annotation.fillPattern = fillPattern
+                if let fillSortKey {
+            annotation.fillSortKey = fillSortKey
+        }
+        if let fillColor {
+            annotation.fillColor = StyleColor(rgb: fillColor)
+        }
+        if let fillOpacity {
+            annotation.fillOpacity = fillOpacity
+        }
+        if let fillOutlineColor {
+            annotation.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
+        }
+        if let fillPattern {
+            annotation.fillPattern = fillPattern
+        }
         return annotation
     }
 }

@@ -300,17 +300,39 @@ extension PolylineAnnotationOptions {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(lineString: convertDictionaryToPolyline(dict: self.geometry!))
-        annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
-        annotation.lineSortKey = lineSortKey
-        annotation.lineBlur = lineBlur
-        annotation.lineBorderColor = StyleColor(rgb: lineBorderColor)
-        annotation.lineBorderWidth = lineBorderWidth
-        annotation.lineColor = StyleColor(rgb: lineColor)
-        annotation.lineGapWidth = lineGapWidth
-        annotation.lineOffset = lineOffset
-        annotation.lineOpacity = lineOpacity
-        annotation.linePattern = linePattern
-        annotation.lineWidth = lineWidth
+        if let lineJoin {
+            annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
+        }
+        if let lineSortKey {
+            annotation.lineSortKey = lineSortKey
+        }
+        if let lineBlur {
+            annotation.lineBlur = lineBlur
+        }
+        if let lineBorderColor {
+            annotation.lineBorderColor = StyleColor(rgb: lineBorderColor)
+        }
+        if let lineBorderWidth {
+            annotation.lineBorderWidth = lineBorderWidth
+        }
+        if let lineColor {
+            annotation.lineColor = StyleColor(rgb: lineColor)
+        }
+        if let lineGapWidth {
+            annotation.lineGapWidth = lineGapWidth
+        }
+        if let lineOffset {
+            annotation.lineOffset = lineOffset
+        }
+        if let lineOpacity {
+            annotation.lineOpacity = lineOpacity
+        }
+        if let linePattern {
+            annotation.linePattern = linePattern
+        }
+        if let lineWidth {
+            annotation.lineWidth = lineWidth
+        }
         return annotation
     }
 }
@@ -319,17 +341,39 @@ extension PolylineAnnotation {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
                 var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
-                annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
-        annotation.lineSortKey = lineSortKey
-        annotation.lineBlur = lineBlur
-        annotation.lineBorderColor = StyleColor(rgb: lineBorderColor)
-        annotation.lineBorderWidth = lineBorderWidth
-        annotation.lineColor = StyleColor(rgb: lineColor)
-        annotation.lineGapWidth = lineGapWidth
-        annotation.lineOffset = lineOffset
-        annotation.lineOpacity = lineOpacity
-        annotation.linePattern = linePattern
-        annotation.lineWidth = lineWidth
+                if let lineJoin {
+            annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
+        }
+        if let lineSortKey {
+            annotation.lineSortKey = lineSortKey
+        }
+        if let lineBlur {
+            annotation.lineBlur = lineBlur
+        }
+        if let lineBorderColor {
+            annotation.lineBorderColor = StyleColor(rgb: lineBorderColor)
+        }
+        if let lineBorderWidth {
+            annotation.lineBorderWidth = lineBorderWidth
+        }
+        if let lineColor {
+            annotation.lineColor = StyleColor(rgb: lineColor)
+        }
+        if let lineGapWidth {
+            annotation.lineGapWidth = lineGapWidth
+        }
+        if let lineOffset {
+            annotation.lineOffset = lineOffset
+        }
+        if let lineOpacity {
+            annotation.lineOpacity = lineOpacity
+        }
+        if let linePattern {
+            annotation.linePattern = linePattern
+        }
+        if let lineWidth {
+            annotation.lineWidth = lineWidth
+        }
         return annotation
     }
 }
