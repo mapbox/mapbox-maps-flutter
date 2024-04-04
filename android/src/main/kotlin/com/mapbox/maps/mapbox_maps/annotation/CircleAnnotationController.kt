@@ -12,7 +12,7 @@ import toFLTCirclePitchAlignment
 import toFLTCirclePitchScale
 import toFLTCircleTranslateAnchor
 
-class CircleAnnotationController(private val delegate: ControllerDelegate) : _CircleAnnotationMessager {
+class CircleAnnotationController(private val delegate: ControllerDelegate) : _CircleAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.CircleAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 

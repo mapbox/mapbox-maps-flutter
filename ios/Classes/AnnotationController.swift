@@ -123,10 +123,10 @@ class AnnotationController: ControllerDelegate {
     }
 
     func setup(messenger: FlutterBinaryMessenger) {
-        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
-        _PointAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
-        _PolygonAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
-        _PolylineAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
         onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: messenger)
         onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: messenger)
         onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: messenger)

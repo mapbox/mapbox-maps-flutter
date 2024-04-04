@@ -256,7 +256,7 @@ class OnCircleAnnotationClickListener: OnCircleAnnotationClickListenerProtocol {
     }
   }
 }
-private class _CircleAnnotationMessagerCodecReader: FlutterStandardReader {
+private class _CircleAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -273,7 +273,7 @@ private class _CircleAnnotationMessagerCodecReader: FlutterStandardReader {
   }
 }
 
-private class _CircleAnnotationMessagerCodecWriter: FlutterStandardWriter {
+private class _CircleAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? CircleAnnotation {
       super.writeByte(128)
@@ -293,22 +293,22 @@ private class _CircleAnnotationMessagerCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class _CircleAnnotationMessagerCodecReaderWriter: FlutterStandardReaderWriter {
+private class _CircleAnnotationMessengerCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    return _CircleAnnotationMessagerCodecReader(data: data)
+    return _CircleAnnotationMessengerCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return _CircleAnnotationMessagerCodecWriter(data: data)
+    return _CircleAnnotationMessengerCodecWriter(data: data)
   }
 }
 
-class _CircleAnnotationMessagerCodec: FlutterStandardMessageCodec {
-  static let shared = _CircleAnnotationMessagerCodec(readerWriter: _CircleAnnotationMessagerCodecReaderWriter())
+class _CircleAnnotationMessengerCodec: FlutterStandardMessageCodec {
+  static let shared = _CircleAnnotationMessengerCodec(readerWriter: _CircleAnnotationMessengerCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _CircleAnnotationMessager {
+protocol _CircleAnnotationMessenger {
   func create(managerId: String, annotationOption: CircleAnnotationOptions, completion: @escaping (Result<CircleAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [CircleAnnotationOptions], completion: @escaping (Result<[CircleAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -327,12 +327,12 @@ protocol _CircleAnnotationMessager {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class _CircleAnnotationMessagerSetup {
-  /// The codec used by _CircleAnnotationMessager.
-  static var codec: FlutterStandardMessageCodec { _CircleAnnotationMessagerCodec.shared }
-  /// Sets up an instance of `_CircleAnnotationMessager` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _CircleAnnotationMessager?) {
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.create", binaryMessenger: binaryMessenger, codec: codec)
+class _CircleAnnotationMessengerSetup {
+  /// The codec used by _CircleAnnotationMessenger.
+  static var codec: FlutterStandardMessageCodec { _CircleAnnotationMessengerCodec.shared }
+  /// Sets up an instance of `_CircleAnnotationMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _CircleAnnotationMessenger?) {
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.create", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -350,7 +350,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.createMulti", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.createMulti", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -368,7 +368,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.update", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.update", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -386,7 +386,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.delete", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.delete", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -404,7 +404,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -421,7 +421,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setCircleEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
+    let setCircleEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCircleEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -439,7 +439,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       setCircleEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getCircleEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
+    let getCircleEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleEmissiveStrength", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCircleEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -456,7 +456,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       getCircleEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setCirclePitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let setCirclePitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCirclePitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -474,7 +474,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       setCirclePitchAlignmentChannel.setMessageHandler(nil)
     }
-    let getCirclePitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let getCirclePitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCirclePitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -491,7 +491,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       getCirclePitchAlignmentChannel.setMessageHandler(nil)
     }
-    let setCirclePitchScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchScale", binaryMessenger: binaryMessenger, codec: codec)
+    let setCirclePitchScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchScale", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCirclePitchScaleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -509,7 +509,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       setCirclePitchScaleChannel.setMessageHandler(nil)
     }
-    let getCirclePitchScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchScale", binaryMessenger: binaryMessenger, codec: codec)
+    let getCirclePitchScaleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchScale", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCirclePitchScaleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -526,7 +526,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       getCirclePitchScaleChannel.setMessageHandler(nil)
     }
-    let setCircleTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let setCircleTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCircleTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -544,7 +544,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       setCircleTranslateChannel.setMessageHandler(nil)
     }
-    let getCircleTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let getCircleTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCircleTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -561,7 +561,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       getCircleTranslateChannel.setMessageHandler(nil)
     }
-    let setCircleTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let setCircleTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCircleTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -579,7 +579,7 @@ class _CircleAnnotationMessagerSetup {
     } else {
       setCircleTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getCircleTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let getCircleTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCircleTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

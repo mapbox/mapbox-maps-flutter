@@ -708,7 +708,7 @@ class OnPointAnnotationClickListener: OnPointAnnotationClickListenerProtocol {
     }
   }
 }
-private class _PointAnnotationMessagerCodecReader: FlutterStandardReader {
+private class _PointAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
@@ -725,7 +725,7 @@ private class _PointAnnotationMessagerCodecReader: FlutterStandardReader {
   }
 }
 
-private class _PointAnnotationMessagerCodecWriter: FlutterStandardWriter {
+private class _PointAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? PointAnnotation {
       super.writeByte(128)
@@ -745,22 +745,22 @@ private class _PointAnnotationMessagerCodecWriter: FlutterStandardWriter {
   }
 }
 
-private class _PointAnnotationMessagerCodecReaderWriter: FlutterStandardReaderWriter {
+private class _PointAnnotationMessengerCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    return _PointAnnotationMessagerCodecReader(data: data)
+    return _PointAnnotationMessengerCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return _PointAnnotationMessagerCodecWriter(data: data)
+    return _PointAnnotationMessengerCodecWriter(data: data)
   }
 }
 
-class _PointAnnotationMessagerCodec: FlutterStandardMessageCodec {
-  static let shared = _PointAnnotationMessagerCodec(readerWriter: _PointAnnotationMessagerCodecReaderWriter())
+class _PointAnnotationMessengerCodec: FlutterStandardMessageCodec {
+  static let shared = _PointAnnotationMessengerCodec(readerWriter: _PointAnnotationMessengerCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _PointAnnotationMessager {
+protocol _PointAnnotationMessenger {
   func create(managerId: String, annotationOption: PointAnnotationOptions, completion: @escaping (Result<PointAnnotation, Error>) -> Void)
   func createMulti(managerId: String, annotationOptions: [PointAnnotationOptions], completion: @escaping (Result<[PointAnnotation], Error>) -> Void)
   func update(managerId: String, annotation: PointAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
@@ -819,12 +819,12 @@ protocol _PointAnnotationMessager {
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class _PointAnnotationMessagerSetup {
-  /// The codec used by _PointAnnotationMessager.
-  static var codec: FlutterStandardMessageCodec { _PointAnnotationMessagerCodec.shared }
-  /// Sets up an instance of `_PointAnnotationMessager` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PointAnnotationMessager?) {
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.create", binaryMessenger: binaryMessenger, codec: codec)
+class _PointAnnotationMessengerSetup {
+  /// The codec used by _PointAnnotationMessenger.
+  static var codec: FlutterStandardMessageCodec { _PointAnnotationMessengerCodec.shared }
+  /// Sets up an instance of `_PointAnnotationMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PointAnnotationMessenger?) {
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.create", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -842,7 +842,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.createMulti", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.createMulti", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -860,7 +860,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.update", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.update", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -878,7 +878,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.delete", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.delete", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -896,7 +896,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.deleteAll", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -913,7 +913,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -931,7 +931,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconAllowOverlapChannel.setMessageHandler(nil)
     }
-    let getIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -948,7 +948,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconAllowOverlapChannel.setMessageHandler(nil)
     }
-    let setIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -966,7 +966,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let getIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -983,7 +983,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let setIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1001,7 +1001,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconKeepUprightChannel.setMessageHandler(nil)
     }
-    let getIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1018,7 +1018,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconKeepUprightChannel.setMessageHandler(nil)
     }
-    let setIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconOptional", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOptional", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1036,7 +1036,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconOptionalChannel.setMessageHandler(nil)
     }
-    let getIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconOptional", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOptional", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1053,7 +1053,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconOptionalChannel.setMessageHandler(nil)
     }
-    let setIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconPadding", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPadding", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1071,7 +1071,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconPaddingChannel.setMessageHandler(nil)
     }
-    let getIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPadding", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPadding", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1088,7 +1088,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconPaddingChannel.setMessageHandler(nil)
     }
-    let setIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1106,7 +1106,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let getIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1123,7 +1123,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let setIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1141,7 +1141,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let getIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1158,7 +1158,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let setSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolAvoidEdges", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolAvoidEdges", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolAvoidEdgesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1176,7 +1176,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setSymbolAvoidEdgesChannel.setMessageHandler(nil)
     }
-    let getSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolAvoidEdges", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolAvoidEdges", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolAvoidEdgesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1193,7 +1193,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getSymbolAvoidEdgesChannel.setMessageHandler(nil)
     }
-    let setSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolPlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolPlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolPlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1211,7 +1211,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setSymbolPlacementChannel.setMessageHandler(nil)
     }
-    let getSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolPlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolPlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolPlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1228,7 +1228,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getSymbolPlacementChannel.setMessageHandler(nil)
     }
-    let setSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolSpacing", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSpacing", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1246,7 +1246,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setSymbolSpacingChannel.setMessageHandler(nil)
     }
-    let getSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolSpacing", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSpacing", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1263,7 +1263,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getSymbolSpacingChannel.setMessageHandler(nil)
     }
-    let setSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZElevate", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZElevate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolZElevateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1281,7 +1281,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setSymbolZElevateChannel.setMessageHandler(nil)
     }
-    let getSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZElevate", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZElevate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolZElevateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1298,7 +1298,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getSymbolZElevateChannel.setMessageHandler(nil)
     }
-    let setSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setSymbolZOrder", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOrder", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolZOrderChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1316,7 +1316,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setSymbolZOrderChannel.setMessageHandler(nil)
     }
-    let getSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getSymbolZOrder", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOrder", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolZOrderChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1333,7 +1333,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getSymbolZOrderChannel.setMessageHandler(nil)
     }
-    let setTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1351,7 +1351,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextAllowOverlapChannel.setMessageHandler(nil)
     }
-    let getTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAllowOverlap", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1368,7 +1368,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextAllowOverlapChannel.setMessageHandler(nil)
     }
-    let setTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextFont", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextFontChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1386,7 +1386,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextFontChannel.setMessageHandler(nil)
     }
-    let getTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextFont", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextFont", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextFontChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1403,7 +1403,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextFontChannel.setMessageHandler(nil)
     }
-    let setTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1421,7 +1421,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let getTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextIgnorePlacement", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1438,7 +1438,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let setTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1456,7 +1456,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextKeepUprightChannel.setMessageHandler(nil)
     }
-    let getTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextKeepUpright", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1473,7 +1473,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextKeepUprightChannel.setMessageHandler(nil)
     }
-    let setTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextMaxAngle", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextMaxAngleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1491,7 +1491,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextMaxAngleChannel.setMessageHandler(nil)
     }
-    let getTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextMaxAngle", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxAngle", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextMaxAngleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1508,7 +1508,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextMaxAngleChannel.setMessageHandler(nil)
     }
-    let setTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextOptional", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOptional", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1526,7 +1526,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextOptionalChannel.setMessageHandler(nil)
     }
-    let getTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextOptional", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOptional", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1543,7 +1543,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextOptionalChannel.setMessageHandler(nil)
     }
-    let setTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextPadding", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPadding", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1561,7 +1561,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextPaddingChannel.setMessageHandler(nil)
     }
-    let getTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPadding", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPadding", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1578,7 +1578,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextPaddingChannel.setMessageHandler(nil)
     }
-    let setTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1596,7 +1596,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let getTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPitchAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1613,7 +1613,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let setTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1631,7 +1631,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let getTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotationAlignment", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1648,7 +1648,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1666,7 +1666,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconTranslateChannel.setMessageHandler(nil)
     }
-    let getIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1683,7 +1683,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconTranslateChannel.setMessageHandler(nil)
     }
-    let setIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setIconTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1701,7 +1701,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setIconTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getIconTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1718,7 +1718,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1736,7 +1736,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextTranslateChannel.setMessageHandler(nil)
     }
-    let getTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslate", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1753,7 +1753,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       getTextTranslateChannel.setMessageHandler(nil)
     }
-    let setTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.setTextTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1771,7 +1771,7 @@ class _PointAnnotationMessagerSetup {
     } else {
       setTextTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessager.getTextTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslateAnchor", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

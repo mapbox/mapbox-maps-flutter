@@ -3,7 +3,7 @@ import MapboxMaps
 import Foundation
 import Flutter
 
-final class PolygonAnnotationController: _PolygonAnnotationMessager {
+final class PolygonAnnotationController: _PolygonAnnotationMessenger {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
 

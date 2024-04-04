@@ -9,7 +9,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import toFLTFillTranslateAnchor
 import toFillTranslateAnchor
 
-class PolygonAnnotationController(private val delegate: ControllerDelegate) : _PolygonAnnotationMessager {
+class PolygonAnnotationController(private val delegate: ControllerDelegate) : _PolygonAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 

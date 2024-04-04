@@ -233,7 +233,7 @@ class OnCircleAnnotationClickListener(private val binaryMessenger: BinaryMesseng
   }
 }
 @Suppress("UNCHECKED_CAST")
-private object _CircleAnnotationMessagerCodec : StandardMessageCodec() {
+private object _CircleAnnotationMessengerCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
@@ -283,7 +283,7 @@ private object _CircleAnnotationMessagerCodec : StandardMessageCodec() {
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface _CircleAnnotationMessager {
+interface _CircleAnnotationMessenger {
   fun create(managerId: String, annotationOption: CircleAnnotationOptions, callback: (Result<CircleAnnotation>) -> Unit)
   fun createMulti(managerId: String, annotationOptions: List<CircleAnnotationOptions>, callback: (Result<List<CircleAnnotation>>) -> Unit)
   fun update(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
@@ -301,15 +301,15 @@ interface _CircleAnnotationMessager {
   fun getCircleTranslateAnchor(managerId: String, callback: (Result<CircleTranslateAnchor?>) -> Unit)
 
   companion object {
-    /** The codec used by _CircleAnnotationMessager. */
+    /** The codec used by _CircleAnnotationMessenger. */
     val codec: MessageCodec<Any?> by lazy {
-      _CircleAnnotationMessagerCodec
+      _CircleAnnotationMessengerCodec
     }
-    /** Sets up an instance of `_CircleAnnotationMessager` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `_CircleAnnotationMessenger` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: _CircleAnnotationMessager?) {
+    fun setUp(binaryMessenger: BinaryMessenger, api: _CircleAnnotationMessenger?) {
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.create", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.create", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -330,7 +330,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.createMulti", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.createMulti", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -351,7 +351,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.update", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.update", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -371,7 +371,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.delete", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.delete", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -391,7 +391,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.deleteAll", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.deleteAll", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -410,7 +410,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleEmissiveStrength", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -430,7 +430,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleEmissiveStrength", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -450,7 +450,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchAlignment", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -470,7 +470,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchAlignment", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchAlignment", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -490,7 +490,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchScale", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchScale", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -510,7 +510,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchScale", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchScale", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -530,7 +530,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslate", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslate", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -550,7 +550,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslate", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslate", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -570,7 +570,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslateAnchor", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslateAnchor", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -590,7 +590,7 @@ interface _CircleAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslateAnchor", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslateAnchor", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>

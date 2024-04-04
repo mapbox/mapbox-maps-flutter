@@ -181,7 +181,7 @@ class OnPolygonAnnotationClickListener(private val binaryMessenger: BinaryMessen
   }
 }
 @Suppress("UNCHECKED_CAST")
-private object _PolygonAnnotationMessagerCodec : StandardMessageCodec() {
+private object _PolygonAnnotationMessengerCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
@@ -231,7 +231,7 @@ private object _PolygonAnnotationMessagerCodec : StandardMessageCodec() {
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface _PolygonAnnotationMessager {
+interface _PolygonAnnotationMessenger {
   fun create(managerId: String, annotationOption: PolygonAnnotationOptions, callback: (Result<PolygonAnnotation>) -> Unit)
   fun createMulti(managerId: String, annotationOptions: List<PolygonAnnotationOptions>, callback: (Result<List<PolygonAnnotation>>) -> Unit)
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
@@ -247,15 +247,15 @@ interface _PolygonAnnotationMessager {
   fun getFillTranslateAnchor(managerId: String, callback: (Result<FillTranslateAnchor?>) -> Unit)
 
   companion object {
-    /** The codec used by _PolygonAnnotationMessager. */
+    /** The codec used by _PolygonAnnotationMessenger. */
     val codec: MessageCodec<Any?> by lazy {
-      _PolygonAnnotationMessagerCodec
+      _PolygonAnnotationMessengerCodec
     }
-    /** Sets up an instance of `_PolygonAnnotationMessager` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `_PolygonAnnotationMessenger` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: _PolygonAnnotationMessager?) {
+    fun setUp(binaryMessenger: BinaryMessenger, api: _PolygonAnnotationMessenger?) {
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.create", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -276,7 +276,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.createMulti", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.createMulti", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -297,7 +297,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.update", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.update", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -317,7 +317,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.delete", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.delete", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -337,7 +337,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.deleteAll", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.deleteAll", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -356,7 +356,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillAntialias", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -376,7 +376,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillAntialias", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillAntialias", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -396,7 +396,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillEmissiveStrength", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -416,7 +416,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillEmissiveStrength", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillEmissiveStrength", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -436,7 +436,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslate", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -456,7 +456,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslate", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslate", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -476,7 +476,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.setFillTranslateAnchor", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslateAnchor", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -496,7 +496,7 @@ interface _PolygonAnnotationMessager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessager.getFillTranslateAnchor", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslateAnchor", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>

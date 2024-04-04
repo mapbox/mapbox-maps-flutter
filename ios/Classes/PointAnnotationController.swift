@@ -3,7 +3,7 @@ import MapboxMaps
 import Foundation
 import Flutter
 
-final class PointAnnotationController: _PointAnnotationMessager {
+final class PointAnnotationController: _PointAnnotationMessenger {
     private static let errorCode = "0"
     private weak var delegate: ControllerDelegate?
 
