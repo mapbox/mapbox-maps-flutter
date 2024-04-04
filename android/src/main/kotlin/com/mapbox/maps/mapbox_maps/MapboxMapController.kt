@@ -154,7 +154,9 @@ class MapboxMapController(
     return mapView
   }
 
-  override fun dispose() {
+  override fun dispose() { }
+
+  private fun releaseMethodChannels() {
     lifecycleProvider.getLifecycle()?.removeObserver(this)
     mapView.onStop()
     mapView.onDestroy()
@@ -197,6 +199,10 @@ class MapboxMapController(
       }
       "gesture#remove_listeners" -> {
         gestureController.removeListeners()
+        result.success(null)
+      }
+      "platform#releaseMethodChannels" -> {
+        releaseMethodChannels()
         result.success(null)
       }
       else -> {

@@ -35,7 +35,7 @@ import toTextTransform
 import toTextTranslateAnchor
 import java.io.ByteArrayOutputStream
 
-class PointAnnotationController(private val delegate: ControllerDelegate) : _PointAnnotationMessager {
+class PointAnnotationController(private val delegate: ControllerDelegate) : _PointAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PointAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 

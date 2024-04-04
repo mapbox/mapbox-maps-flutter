@@ -240,8 +240,8 @@ abstract class OnCircleAnnotationClickListener {
   }
 }
 
-class __CircleAnnotationMessagerCodec extends StandardMessageCodec {
-  const __CircleAnnotationMessagerCodec();
+class __CircleAnnotationMessengerCodec extends StandardMessageCodec {
+  const __CircleAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is CircleAnnotation) {
@@ -278,21 +278,21 @@ class __CircleAnnotationMessagerCodec extends StandardMessageCodec {
   }
 }
 
-class _CircleAnnotationMessager {
-  /// Constructor for [_CircleAnnotationMessager].  The [binaryMessenger] named argument is
+class _CircleAnnotationMessenger {
+  /// Constructor for [_CircleAnnotationMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _CircleAnnotationMessager({BinaryMessenger? binaryMessenger})
+  _CircleAnnotationMessenger({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec =
-      __CircleAnnotationMessagerCodec();
+      __CircleAnnotationMessengerCodec();
 
   Future<CircleAnnotation> create(
       String managerId, CircleAnnotationOptions annotationOption) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.create';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.create';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -322,7 +322,7 @@ class _CircleAnnotationMessager {
   Future<List<CircleAnnotation?>> createMulti(String managerId,
       List<CircleAnnotationOptions?> annotationOptions) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.createMulti';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.createMulti';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -352,7 +352,7 @@ class _CircleAnnotationMessager {
 
   Future<void> update(String managerId, CircleAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.update';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.update';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -376,7 +376,7 @@ class _CircleAnnotationMessager {
 
   Future<void> delete(String managerId, CircleAnnotation annotation) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.delete';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.delete';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -400,7 +400,7 @@ class _CircleAnnotationMessager {
 
   Future<void> deleteAll(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.deleteAll';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.deleteAll';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -425,7 +425,7 @@ class _CircleAnnotationMessager {
   Future<void> setCircleEmissiveStrength(
       String managerId, double circleEmissiveStrength) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -449,7 +449,7 @@ class _CircleAnnotationMessager {
 
   Future<double?> getCircleEmissiveStrength(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleEmissiveStrength';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleEmissiveStrength';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -474,7 +474,7 @@ class _CircleAnnotationMessager {
   Future<void> setCirclePitchAlignment(
       String managerId, CirclePitchAlignment circlePitchAlignment) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchAlignment';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchAlignment';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -500,7 +500,7 @@ class _CircleAnnotationMessager {
   Future<CirclePitchAlignment?> getCirclePitchAlignment(
       String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchAlignment';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchAlignment';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -527,7 +527,7 @@ class _CircleAnnotationMessager {
   Future<void> setCirclePitchScale(
       String managerId, CirclePitchScale circlePitchScale) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCirclePitchScale';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCirclePitchScale';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -551,7 +551,7 @@ class _CircleAnnotationMessager {
 
   Future<CirclePitchScale?> getCirclePitchScale(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCirclePitchScale';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCirclePitchScale';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -578,7 +578,7 @@ class _CircleAnnotationMessager {
   Future<void> setCircleTranslate(
       String managerId, List<double?> circleTranslate) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -602,7 +602,7 @@ class _CircleAnnotationMessager {
 
   Future<List<double?>?> getCircleTranslate(String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslate';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslate';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -627,7 +627,7 @@ class _CircleAnnotationMessager {
   Future<void> setCircleTranslateAnchor(
       String managerId, CircleTranslateAnchor circleTranslateAnchor) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.setCircleTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -653,7 +653,7 @@ class _CircleAnnotationMessager {
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor(
       String managerId) async {
     const String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessager.getCircleTranslateAnchor';
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslateAnchor';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

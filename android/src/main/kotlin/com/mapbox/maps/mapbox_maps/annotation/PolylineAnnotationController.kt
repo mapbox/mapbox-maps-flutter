@@ -13,7 +13,7 @@ import toLineCap
 import toLineJoin
 import toLineTranslateAnchor
 
-class PolylineAnnotationController(private val delegate: ControllerDelegate) : _PolylineAnnotationMessager {
+class PolylineAnnotationController(private val delegate: ControllerDelegate) : _PolylineAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 

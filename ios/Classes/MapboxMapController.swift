@@ -67,7 +67,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         )
 
         super.init()
-
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
 
         let styleController = StyleController(styleManager: mapboxMap)
@@ -184,9 +183,28 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
             result(nil)
+        case "platform#releaseMethodChannels":
+            releaseMethodChannels()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+
+    private func releaseMethodChannels() {
+        channel.setMethodCallHandler(nil)
+        StyleManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        _CameraManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        _MapInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        ProjectionSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        _AnimationManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        _LocationComponentSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        GesturesSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        LogoSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        AttributionSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        CompassSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
+        annotationController?.tearDown(messenger: proxyBinaryMessenger)
     }
 
     final class HttpUseragentInterceptor: HttpServiceInterceptorInterface {

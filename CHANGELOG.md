@@ -63,6 +63,7 @@ onTapListener: { (context)
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
 * Fix camera center not applied from map init options.
+* [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
 
 ### 1.0.0
 

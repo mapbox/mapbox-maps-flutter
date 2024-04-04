@@ -123,14 +123,25 @@ class AnnotationController: ControllerDelegate {
     }
 
     func setup(messenger: FlutterBinaryMessenger) {
-        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
-        _PointAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
-        _PolygonAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
-        _PolylineAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
         onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: messenger)
         onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: messenger)
         onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: messenger)
         onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: messenger)
+    }
+
+    func tearDown(messenger: FlutterBinaryMessenger) {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        onPointAnnotationClickListener = nil
+        onCircleAnnotationClickListener = nil
+        onPolygonAnnotationClickListener = nil
+        onPolylineAnnotationClickListener = nil
     }
 
     func getManager(managerId: String) throws -> AnnotationManager {
