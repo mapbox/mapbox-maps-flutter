@@ -14,7 +14,9 @@ mapboxMap?.location.updateSettings(LocationComponentSettings(
 );
 ```
 
-#### ⚠️ Breaking change
+#### ⚠️ Breaking changes
+
+##### Geographical position represented by `Point`s
 
 Geographical positions denoted by `Map<String?, Object?>?` are migrated to [`Point`](https://pub.dev/documentation/turf/latest/turf/Point-class.html) type from [turf](https://pub.dev/packages/turf) package.
 Pass `Point`s directly instead of converting them to JSON.
@@ -36,6 +38,27 @@ CameraOptions(
         51.50325,
     )))
 ```
+
+##### Screen and geographical positions in map interaction(gestures) callbacks
+`MapWidget`'s `onTapListener`/`onLongTapListener`/`onScrollListener` now receive `MapContentGestureContext` containing both touch position of the gesture, as well as the projected map coordinate corresponding to the touch position.
+*Before:*
+```dart
+onTapListener: { (coordinate)
+    final lat = coordinate.x;
+    final lng = coordinate.y;
+    ...
+}
+```
+
+*After:*
+```dart
+onTapListener: { (context)
+    final coordinates = context.point.coordinates; // Position
+    final touchPosition = context.touchPosition; // ScreenCoordinate
+    ...
+}
+```
+
 
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
