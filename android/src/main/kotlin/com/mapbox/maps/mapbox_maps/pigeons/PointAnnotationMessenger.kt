@@ -360,7 +360,7 @@ data class PointAnnotation(
   val textTransform: TextTransform? = null,
   /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
   val iconColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+  /** Controls the intensity of light emitted on the source features. */
   val iconEmissiveStrength: Double? = null,
   /** Fade out the halo towards the outside. */
   val iconHaloBlur: Double? = null,
@@ -374,7 +374,7 @@ data class PointAnnotation(
   val iconOpacity: Double? = null,
   /** The color with which the text will be drawn. */
   val textColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+  /** Controls the intensity of light emitted on the source features. */
   val textEmissiveStrength: Double? = null,
   /** The halo's fadeout distance towards the outside. */
   val textHaloBlur: Double? = null,
@@ -527,7 +527,7 @@ data class PointAnnotationOptions(
   val textTransform: TextTransform? = null,
   /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
   val iconColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+  /** Controls the intensity of light emitted on the source features. */
   val iconEmissiveStrength: Double? = null,
   /** Fade out the halo towards the outside. */
   val iconHaloBlur: Double? = null,
@@ -541,7 +541,7 @@ data class PointAnnotationOptions(
   val iconOpacity: Double? = null,
   /** The color with which the text will be drawn. */
   val textColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined. */
+  /** Controls the intensity of light emitted on the source features. */
   val textEmissiveStrength: Double? = null,
   /** The halo's fadeout distance towards the outside. */
   val textHaloBlur: Double? = null,
@@ -789,6 +789,8 @@ interface _PointAnnotationMessenger {
   fun getTextPitchAlignment(managerId: String, callback: (Result<TextPitchAlignment?>) -> Unit)
   fun setTextRotationAlignment(managerId: String, textRotationAlignment: TextRotationAlignment, callback: (Result<Unit>) -> Unit)
   fun getTextRotationAlignment(managerId: String, callback: (Result<TextRotationAlignment?>) -> Unit)
+  fun setIconColorSaturation(managerId: String, iconColorSaturation: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconColorSaturation(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconTranslate(managerId: String, iconTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -1740,6 +1742,46 @@ interface _PointAnnotationMessenger {
               } else {
                 val data = result.getOrNull()
                 reply.reply(wrapResult(data?.raw))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconColorSaturationArg = args[1] as Double
+            api.setIconColorSaturation(managerIdArg, iconColorSaturationArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorSaturation", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconColorSaturation(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

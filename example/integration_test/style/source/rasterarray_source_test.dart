@@ -12,13 +12,13 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Add RasterDemSource', (WidgetTester tester) async {
+  testWidgets('Add RasterArraySource', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     await app.events.onMapLoaded.future;
 
-    await mapboxMap.style.addSource(RasterDemSource(
+    await mapboxMap.style.addSource(RasterArraySource(
       id: "source",
       tiles: ["a", "b", "c"],
       bounds: [0.0, 1.0, 2.0, 3.0],
@@ -26,17 +26,13 @@ void main() {
       maxzoom: 1.0,
       tileSize: 1.0,
       attribution: "abc",
-      encoding: Encoding.TERRARIUM,
-      volatile: true,
-      prefetchZoomDelta: 1.0,
+      rasterLayers: [
+        RasterDataLayer("layerId", ["123", "456"])
+      ],
       tileCacheBudget: TileCacheBudget.MEGABYTES,
-      minimumTileUpdateInterval: 1.0,
-      maxOverscaleFactorForParentTiles: 1.0,
-      tileRequestsDelay: 1.0,
-      tileNetworkRequestsDelay: 1.0,
     ));
 
-    var source = await mapboxMap.style.getSource('source') as RasterDemSource;
+    var source = await mapboxMap.style.getSource('source') as RasterArraySource;
     expect(source.id, 'source');
     var tiles = await source.tiles;
     expect(tiles, ["a", "b", "c"]);
@@ -56,30 +52,13 @@ void main() {
     var attribution = await source.attribution;
     expect(attribution, "abc");
 
-    var encoding = await source.encoding;
-    expect(encoding, Encoding.TERRARIUM);
-
-    var volatile = await source.volatile;
-    expect(volatile, true);
-
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
-    expect(prefetchZoomDelta, 1.0);
+    var rasterLayers = await source.rasterLayers;
+    expect(rasterLayers, [
+      RasterDataLayer("layerId", ["123", "456"])
+    ]);
 
     var tileCacheBudget = await source.tileCacheBudget;
     expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
-
-    var minimumTileUpdateInterval = await source.minimumTileUpdateInterval;
-    expect(minimumTileUpdateInterval, 1.0);
-
-    var maxOverscaleFactorForParentTiles =
-        await source.maxOverscaleFactorForParentTiles;
-    expect(maxOverscaleFactorForParentTiles, 1.0);
-
-    var tileRequestsDelay = await source.tileRequestsDelay;
-    expect(tileRequestsDelay, 1.0);
-
-    var tileNetworkRequestsDelay = await source.tileNetworkRequestsDelay;
-    expect(tileNetworkRequestsDelay, 1.0);
   });
 }
 // End of generated file.

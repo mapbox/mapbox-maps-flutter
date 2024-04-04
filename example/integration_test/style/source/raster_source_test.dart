@@ -29,6 +29,7 @@ void main() {
       attribution: "abc",
       volatile: true,
       prefetchZoomDelta: 1.0,
+      tileCacheBudget: TileCacheBudget.MEGABYTES,
       minimumTileUpdateInterval: 1.0,
       maxOverscaleFactorForParentTiles: 1.0,
       tileRequestsDelay: 1.0,
@@ -63,6 +64,9 @@ void main() {
 
     var prefetchZoomDelta = await source.prefetchZoomDelta;
     expect(prefetchZoomDelta, 1.0);
+
+    var tileCacheBudget = await source.tileCacheBudget;
+    expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
 
     var minimumTileUpdateInterval = await source.minimumTileUpdateInterval;
     expect(minimumTileUpdateInterval, 1.0);

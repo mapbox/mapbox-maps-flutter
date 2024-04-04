@@ -276,7 +276,7 @@ struct PointAnnotation {
   var textTransform: TextTransform?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   var iconColor: Int64?
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   var iconEmissiveStrength: Double?
   /// Fade out the halo towards the outside.
   var iconHaloBlur: Double?
@@ -290,7 +290,7 @@ struct PointAnnotation {
   var iconOpacity: Double?
   /// The color with which the text will be drawn.
   var textColor: Int64?
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   var textEmissiveStrength: Double?
   /// The halo's fadeout distance towards the outside.
   var textHaloBlur: Double?
@@ -484,7 +484,7 @@ struct PointAnnotationOptions {
   var textTransform: TextTransform?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   var iconColor: Int64?
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   var iconEmissiveStrength: Double?
   /// Fade out the halo towards the outside.
   var iconHaloBlur: Double?
@@ -498,7 +498,7 @@ struct PointAnnotationOptions {
   var iconOpacity: Double?
   /// The color with which the text will be drawn.
   var textColor: Int64?
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   var textEmissiveStrength: Double?
   /// The halo's fadeout distance towards the outside.
   var textHaloBlur: Double?
@@ -808,6 +808,8 @@ protocol _PointAnnotationMessenger {
   func getTextPitchAlignment(managerId: String, completion: @escaping (Result<TextPitchAlignment?, Error>) -> Void)
   func setTextRotationAlignment(managerId: String, textRotationAlignment: TextRotationAlignment, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextRotationAlignment(managerId: String, completion: @escaping (Result<TextRotationAlignment?, Error>) -> Void)
+  func setIconColorSaturation(managerId: String, iconColorSaturation: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1647,6 +1649,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextRotationAlignmentChannel.setMessageHandler(nil)
+    }
+    let setIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorSaturationChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorSaturationArg = args[1] as! Double
+        api.setIconColorSaturation(managerId: managerIdArg, iconColorSaturation: iconColorSaturationArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorSaturationChannel.setMessageHandler(nil)
+    }
+    let getIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorSaturation", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorSaturationChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColorSaturation(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorSaturationChannel.setMessageHandler(nil)
     }
     let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

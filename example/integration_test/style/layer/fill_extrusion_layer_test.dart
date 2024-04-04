@@ -32,6 +32,7 @@ void main() {
       fillExtrusionBase: 1.0,
       fillExtrusionColor: Colors.red.value,
       fillExtrusionCutoffFadeRange: 1.0,
+      fillExtrusionEmissiveStrength: 1.0,
       fillExtrusionFloodLightColor: Colors.red.value,
       fillExtrusionFloodLightGroundAttenuation: 1.0,
       fillExtrusionFloodLightGroundRadius: 1.0,
@@ -61,6 +62,7 @@ void main() {
     expect(layer.fillExtrusionBase, 1.0);
     expect(layer.fillExtrusionColor, Colors.red.value);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
+    expect(layer.fillExtrusionEmissiveStrength, 1.0);
     expect(layer.fillExtrusionFloodLightColor, Colors.red.value);
     expect(layer.fillExtrusionFloodLightGroundAttenuation, 1.0);
     expect(layer.fillExtrusionFloodLightGroundRadius, 1.0);

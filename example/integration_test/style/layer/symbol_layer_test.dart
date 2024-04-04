@@ -68,6 +68,7 @@ void main() {
       textVariableAnchor: ["center", "left"],
       textWritingMode: ["horizontal", "vertical"],
       iconColor: Colors.red.value,
+      iconColorSaturation: 1.0,
       iconEmissiveStrength: 1.0,
       iconHaloBlur: 1.0,
       iconHaloColor: Colors.red.value,
@@ -133,6 +134,7 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconColorSaturation, 1.0);
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColor, Colors.red.value);

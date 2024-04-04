@@ -22,6 +22,15 @@ enum Encoding {
   MAPBOX,
 }
 
+///
+enum TileCacheBudget {
+  /// A tile cache budget measured in tile units
+  TILES,
+
+  /// A tile cache budget measured in megabyte units
+  MEGABYTES
+}
+
 /// The visibility of a layer.
 enum Visibility {
   /// The layer is shown.
@@ -73,6 +82,17 @@ enum FillExtrusionTranslateAnchor {
 
   /// The fill extrusion is translated relative to the viewport.
   VIEWPORT,
+}
+
+/// The description of the raster data layers and the bands contained within the tiles.
+class RasterDataLayer {
+  /// Identifier of the data layer fetched from tiles.
+  String layerId;
+
+  /// An array of bands found in the data layer.
+  List<String> bands;
+
+  RasterDataLayer(this.layerId, this.bands);
 }
 
 /// Define the duration and delay for a style transition.
@@ -257,6 +277,9 @@ extension StyleSource on StyleManager {
         break;
       case "raster":
         source = RasterSource(id: sourceId);
+        break;
+      case "raster-array":
+        source = RasterArraySource(id: sourceId);
         break;
       default:
         print("Source type: $type unknown.");

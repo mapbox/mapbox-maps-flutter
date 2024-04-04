@@ -47,6 +47,7 @@ void main() {
       lineMetrics: true,
       generateId: true,
       prefetchZoomDelta: 1.0,
+      tileCacheBudget: TileCacheBudget.MEGABYTES,
     ));
 
     var source = await mapboxMap.style.getSource('source') as GeoJsonSource;
@@ -102,6 +103,9 @@ void main() {
       var prefetchZoomDelta = await source.prefetchZoomDelta;
       expect(prefetchZoomDelta, 1.0);
     }
+
+    var tileCacheBudget = await source.tileCacheBudget;
+    expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
   });
 }
 // End of generated file.

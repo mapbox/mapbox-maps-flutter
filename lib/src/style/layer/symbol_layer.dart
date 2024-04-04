@@ -53,6 +53,7 @@ class SymbolLayer extends Layer {
     this.textVariableAnchor,
     this.textWritingMode,
     this.iconColor,
+    this.iconColorSaturation,
     this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
@@ -139,7 +140,7 @@ class SymbolLayer extends Layer {
   /// Distance between two symbol anchors.
   double? symbolSpacing;
 
-  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
   bool? symbolZElevate;
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
@@ -211,7 +212,10 @@ class SymbolLayer extends Layer {
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  double? iconColorSaturation;
+
+  /// Controls the intensity of light emitted on the source features.
   double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
@@ -238,7 +242,7 @@ class SymbolLayer extends Layer {
   /// The color with which the text will be drawn.
   int? textColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
@@ -403,6 +407,9 @@ class SymbolLayer extends Layer {
     var paint = {};
     if (iconColor != null) {
       paint["icon-color"] = iconColor?.toRGBA();
+    }
+    if (iconColorSaturation != null) {
+      paint["icon-color-saturation"] = iconColorSaturation;
     }
     if (iconEmissiveStrength != null) {
       paint["icon-emissive-strength"] = iconEmissiveStrength;
@@ -679,6 +686,9 @@ class SymbolLayer extends Layer {
           ?.map<String?>((e) => e.toString())
           .toList(),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
+      iconColorSaturation: map["paint"]["icon-color-saturation"] is num?
+          ? (map["paint"]["icon-color-saturation"] as num?)?.toDouble()
+          : null,
       iconEmissiveStrength: map["paint"]["icon-emissive-strength"] is num?
           ? (map["paint"]["icon-emissive-strength"] as num?)?.toDouble()
           : null,
