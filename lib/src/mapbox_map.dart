@@ -200,9 +200,10 @@ class MapboxMap extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
     _mapboxMapsPlatform.dispose();
     GestureListener.setup(null, binaryMessenger: _proxyBinaryMessenger);
+
+    super.dispose();
   }
 
   /// Convenience method that returns the `camera options` object for given parameters.

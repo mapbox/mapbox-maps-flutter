@@ -133,6 +133,18 @@ class AnnotationController: ControllerDelegate {
         onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: messenger)
     }
 
+    func tearDown(messenger: FlutterBinaryMessenger) {
+        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PointAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolygonAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolylineAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        onPointAnnotationClickListener = nil
+        onCircleAnnotationClickListener = nil
+        onPolygonAnnotationClickListener = nil
+        onPolylineAnnotationClickListener = nil
+    }
+
     func getManager(managerId: String) throws -> AnnotationManager {
         if annotationManagers[managerId] == nil {
             throw AnnotationControllerError.noManagerFound

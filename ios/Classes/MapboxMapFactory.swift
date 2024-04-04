@@ -5,6 +5,11 @@ import MapboxCommon
 class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     var registrar: FlutterPluginRegistrar
 
+    deinit {
+        _MapboxOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
+        _MapboxMapsOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
+    }
+
     init(withRegistrar registrar: FlutterPluginRegistrar) {
         self.registrar = registrar
     }
