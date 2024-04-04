@@ -134,10 +134,11 @@ class AnnotationController: ControllerDelegate {
     }
 
     func tearDown(messenger: FlutterBinaryMessenger) {
-        SetUpFLT_CircleAnnotationMessager(messenger, nil)
-        SetUpFLT_PointAnnotationMessager(messenger, nil)
-        SetUpFLT_PolygonAnnotationMessager(messenger, nil)
-        SetUpFLT_PolylineAnnotationMessager(messenger, nil)
+        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _CircleAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PointAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolygonAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolylineAnnotationMessagerSetup.setUp(binaryMessenger: messenger, api: nil)
         onPointAnnotationClickListener = nil
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil

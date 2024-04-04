@@ -6,8 +6,8 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     var registrar: FlutterPluginRegistrar
 
     deinit {
-        SetUpFLT_MapboxOptions(registrar.messenger(), nil)
-        SetUpFLT_MapboxMapsOptions(registrar.messenger(), nil)
+        _MapboxOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
+        _MapboxMapsOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
     }
 
     init(withRegistrar registrar: FlutterPluginRegistrar) {
