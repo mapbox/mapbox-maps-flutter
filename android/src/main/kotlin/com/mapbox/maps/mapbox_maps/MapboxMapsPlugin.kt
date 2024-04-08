@@ -13,21 +13,12 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 /** MapboxMapsPlugin */
-class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private val optionsController = MapboxOptionsController()
 
   private var lifecycle: Lifecycle? = null
 
-  // / The MethodChannel that will the communication between Flutter and native Android
-  // /
-  // / This local reference serves to register the plugin with the Flutter Engine and unregister it
-  // / when the Flutter Engine is detached from the Activity
-  private lateinit var channel: MethodChannel
-
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "mapbox_maps")
-    channel.setMethodCallHandler(this)
-
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
     _MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
@@ -50,11 +41,7 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       )
   }
 
-  override fun onMethodCall(call: MethodCall, result: Result) {
-  }
-
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
