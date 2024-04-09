@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// An extruded (3D) polygon.
 class FillExtrusionLayer extends Layer {
   FillExtrusionLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.fillExtrusionEdgeRadius,
@@ -20,6 +20,7 @@ class FillExtrusionLayer extends Layer {
     this.fillExtrusionBase,
     this.fillExtrusionColor,
     this.fillExtrusionCutoffFadeRange,
+    this.fillExtrusionEmissiveStrength,
     this.fillExtrusionFloodLightColor,
     this.fillExtrusionFloodLightGroundAttenuation,
     this.fillExtrusionFloodLightGroundRadius,
@@ -52,19 +53,19 @@ class FillExtrusionLayer extends Layer {
   /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
   double? fillExtrusionEdgeRadius;
 
-  /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
   double? fillExtrusionAmbientOcclusionGroundAttenuation;
 
-  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
   double? fillExtrusionAmbientOcclusionGroundRadius;
 
   /// Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
   double? fillExtrusionAmbientOcclusionIntensity;
 
-  /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D light is enabled `fill-extrusion-ambient-occlusion-wall-radius` and `fill-extrusion-ambient-occlusion-ground-radius` are used instead.
+  /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fill-extrusion-ambient-occlusion-wall-radius` and `fill-extrusion-ambient-occlusion-ground-radius` are used instead.
   double? fillExtrusionAmbientOcclusionRadius;
 
-  /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
   double? fillExtrusionAmbientOcclusionWallRadius;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
@@ -76,19 +77,22 @@ class FillExtrusionLayer extends Layer {
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   double? fillExtrusionCutoffFadeRange;
 
-  /// The color of the flood light effect on the walls of the extruded buildings. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
+  double? fillExtrusionEmissiveStrength;
+
+  /// The color of the flood light effect on the walls of the extruded buildings.
   int? fillExtrusionFloodLightColor;
 
-  /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
   double? fillExtrusionFloodLightGroundAttenuation;
 
-  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters.
   double? fillExtrusionFloodLightGroundRadius;
 
-  /// The intensity of the flood light color. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// The intensity of the flood light color.
   double? fillExtrusionFloodLightIntensity;
 
-  /// The extent of the flood light effect on the walls of the extruded buildings in meters. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// The extent of the flood light effect on the walls of the extruded buildings in meters.
   double? fillExtrusionFloodLightWallRadius;
 
   /// The height with which to extrude this layer.
@@ -120,7 +124,7 @@ class FillExtrusionLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillExtrusionEdgeRadius != null) {
       layout["fill-extrusion-edge-radius"] = fillExtrusionEdgeRadius;
@@ -154,6 +158,9 @@ class FillExtrusionLayer extends Layer {
     }
     if (fillExtrusionCutoffFadeRange != null) {
       paint["fill-extrusion-cutoff-fade-range"] = fillExtrusionCutoffFadeRange;
+    }
+    if (fillExtrusionEmissiveStrength != null) {
+      paint["fill-extrusion-emissive-strength"] = fillExtrusionEmissiveStrength;
     }
     if (fillExtrusionFloodLightColor != null) {
       paint["fill-extrusion-flood-light-color"] =
@@ -191,11 +198,8 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-translate"] = fillExtrusionTranslate;
     }
     if (fillExtrusionTranslateAnchor != null) {
-      paint["fill-extrusion-translate-anchor"] = fillExtrusionTranslateAnchor
-          ?.toString()
-          .split('.')
-          .last
-          .toLowerCase();
+      paint["fill-extrusion-translate-anchor"] =
+          fillExtrusionTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillExtrusionVerticalGradient != null) {
       paint["fill-extrusion-vertical-gradient"] = fillExtrusionVerticalGradient;
@@ -243,11 +247,9 @@ class FillExtrusionLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       fillExtrusionEdgeRadius: map["layout"]["fill-extrusion-edge-radius"]
               is num?
@@ -289,6 +291,11 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionCutoffFadeRange:
           map["paint"]["fill-extrusion-cutoff-fade-range"] is num?
               ? (map["paint"]["fill-extrusion-cutoff-fade-range"] as num?)
+                  ?.toDouble()
+              : null,
+      fillExtrusionEmissiveStrength:
+          map["paint"]["fill-extrusion-emissive-strength"] is num?
+              ? (map["paint"]["fill-extrusion-emissive-strength"] as num?)
                   ?.toDouble()
               : null,
       fillExtrusionFloodLightColor:
@@ -335,11 +342,9 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionTranslateAnchor:
           map["paint"]["fill-extrusion-translate-anchor"] == null
               ? null
-              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e
-                  .toString()
-                  .split('.')
-                  .last
+              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e.name
                   .toLowerCase()
+                  .replaceAll("_", "-")
                   .contains(map["paint"]["fill-extrusion-translate-anchor"])),
       fillExtrusionVerticalGradient:
           map["paint"]["fill-extrusion-vertical-gradient"] is bool?

@@ -1,18 +1,23 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.mapping.applyFromFLT
 import com.mapbox.maps.mapbox_maps.mapping.toFLT
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.GestureListener
+import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettings
+import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.MapContentGestureContext
+import com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import io.flutter.plugin.common.BinaryMessenger
 
-class GestureController(private val mapView: MapView) :
+class GestureController(private val mapView: MapView, private val context: Context) :
   GesturesSettingsInterface {
 
   override fun getSettings(): GesturesSettings = mapView.gestures.toFLT(mapView.context)
@@ -32,22 +37,26 @@ class GestureController(private val mapView: MapView) :
     removeListeners()
 
     onClickListener = OnMapClickListener { point ->
-      fltGestureListener.onTap(point.toFLTScreenCoordinate()) { }
+      val pixel = mapView.mapboxMap.pixelForCoordinate(point)
+      val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point)
+      fltGestureListener.onTap(context) { }
       false
     }.also { mapView.gestures.addOnMapClickListener(it) }
 
     onLongClickListener = OnMapLongClickListener {
-      fltGestureListener.onLongTap(it.toFLTScreenCoordinate()) { }
+      val pixel = mapView.mapboxMap.pixelForCoordinate(it)
+      val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), it)
+
+      fltGestureListener.onLongTap(context) { }
       false
     }.also { mapView.gestures.addOnMapLongClickListener(it) }
 
     onMoveListener = object : OnMoveListener {
       override fun onMove(detector: MoveGestureDetector): Boolean {
-        fltGestureListener.onScroll(
-          mapView.mapboxMap.coordinateForPixel(
-            com.mapbox.maps.ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
-          ).toFLTScreenCoordinate(),
-        ) { }
+        val pixel = com.mapbox.maps.ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
+        val point = mapView.mapboxMap.coordinateForPixel(pixel)
+        val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point)
+        fltGestureListener.onScroll(context) { }
         return false
       }
 

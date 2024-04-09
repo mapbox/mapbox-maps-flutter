@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide Visibility;
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/utils.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'page.dart';
 
 class CircleAnnotationPage extends ExamplePage {
@@ -20,9 +20,16 @@ class CircleAnnotationPageBody extends StatefulWidget {
 }
 
 class AnnotationClickListener extends OnCircleAnnotationClickListener {
+  AnnotationClickListener({
+    required this.onAnnotationClick,
+  });
+
+  final void Function(CircleAnnotation annotation) onAnnotationClick;
+
   @override
   void onCircleAnnotationClick(CircleAnnotation annotation) {
     print("onAnnotationClick, id: ${annotation.id}");
+    onAnnotationClick(annotation);
   }
 }
 
@@ -45,26 +52,32 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       var options = <CircleAnnotationOptions>[];
       for (var i = 0; i < 2000; i++) {
         options.add(CircleAnnotationOptions(
-            geometry: createRandomPoint().toJson(),
+            geometry: createRandomPoint(),
             circleColor: createRandomColor(),
             circleRadius: 8.0));
       }
       circleAnnotationManager?.createMulti(options);
-      circleAnnotationManager
-          ?.addOnCircleAnnotationClickListener(AnnotationClickListener());
+      circleAnnotationManager?.addOnCircleAnnotationClickListener(
+        AnnotationClickListener(
+          onAnnotationClick: (annotation) => circleAnnotation = annotation,
+        ),
+      );
     });
   }
 
   void createOneAnnotation() {
-    circleAnnotationManager?.create(CircleAnnotationOptions(
-      geometry: Point(
-          coordinates: Position(
-        0.381457,
-        6.687337,
-      )).toJson(),
-      circleColor: Colors.yellow.value,
-      circleRadius: 12.0,
-    ));
+    circleAnnotationManager
+        ?.create(CircleAnnotationOptions(
+          geometry: Point(
+              coordinates: Position(
+            0.381457,
+            6.687337,
+          )),
+          circleColor: Colors.yellow.value,
+          circleRadius: 12.0,
+        ))
+        .then((value) => circleAnnotation = value);
+    ;
   }
 
   @override
@@ -82,11 +95,11 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       child: Text('update a circle annotation'),
       onPressed: () {
         if (circleAnnotation != null) {
-          var point = Point.fromJson((circleAnnotation!.geometry)!.cast());
+          var point = circleAnnotation!.geometry;
           var newPoint = Point(
               coordinates: Position(
                   point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
-          circleAnnotation?.geometry = newPoint.toJson();
+          circleAnnotation?.geometry = newPoint;
           circleAnnotationManager?.update(circleAnnotation!);
         }
       },
@@ -108,6 +121,7 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
         onPressed: () async {
           if (circleAnnotation != null) {
             circleAnnotationManager?.delete(circleAnnotation!);
+            circleAnnotation = null;
           }
         });
   }
@@ -117,6 +131,7 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       child: Text('delete all circle annotations'),
       onPressed: () {
         circleAnnotationManager?.deleteAll();
+        circleAnnotation = null;
       },
     );
   }

@@ -23,7 +23,7 @@ fun CompassSettingsInterface.applyFromFLT(settings: CompassSettings, context: Co
   settings.visibility?.let { visibility = it }
   settings.fadeWhenFacingNorth?.let { fadeWhenFacingNorth = it }
   settings.clickable?.let { clickable = it }
-  settings.image?.let { image = ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) }
+  settings.image?.let { image = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
 }
 
 fun CompassSettingsInterface.toFLT(context: Context) = CompassSettings(

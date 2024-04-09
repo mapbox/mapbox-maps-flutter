@@ -1,5 +1,5 @@
 import Foundation
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
 
@@ -8,6 +8,53 @@ let COORDINATES = "coordinates"
 extension FlutterError: Error { }
 
 // FLT to Mapbox
+
+extension GlyphsRasterizationMode {
+    func toGlyphsRasterizationMode() -> MapboxMaps.GlyphsRasterizationMode {
+        switch self {
+        case .nOGLYPHSRASTERIZEDLOCALLY: return .noGlyphsRasterizedLocally
+        case .iDEOGRAPHSRASTERIZEDLOCALLY: return .ideographsRasterizedLocally
+        case .aLLGLYPHSRASTERIZEDLOCALLY: return .allGlyphsRasterizedLocally
+        }
+    }
+}
+
+extension GlyphsRasterizationOptions {
+    func toGlyphsRasterizationOptions() -> MapboxMaps.GlyphsRasterizationOptions {
+        return MapboxMaps.GlyphsRasterizationOptions(
+            rasterizationMode: rasterizationMode.toGlyphsRasterizationMode(),
+            fontFamilies: fontFamily.map { [$0 ]} ?? []
+        )
+    }
+}
+
+extension MapSnapshotOptions {
+    func toMapSnapshotOptions() -> MapboxMaps.MapSnapshotOptions {
+        return MapboxMaps.MapSnapshotOptions(
+            size: size.toCGSize(),
+            pixelRatio: pixelRatio,
+            glyphsRasterizationOptions: glyphsRasterizationOptions?.toGlyphsRasterizationOptions() ?? .init(),
+            showsLogo: showsLogo ?? true,
+            showsAttribution: showsAttribution ?? true
+        )
+    }
+}
+
+extension TileCoverOptions {
+    func toTileCoverOptions() -> MapboxMaps.TileCoverOptions {
+        return MapboxMaps.TileCoverOptions(
+            tileSize: tileSize.map(UInt16.init),
+            minZoom: minZoom.map(UInt8.init),
+            maxZoom: maxZoom.map(UInt8.init),
+            roundZoom: roundZoom
+        )
+    }
+}
+extension Size {
+    func toCGSize() -> CGSize {
+        return CGSize(width: width, height: height)
+    }
+}
 
 extension ViewportMode {
     func toViewportMode() -> MapboxCoreMaps.ViewportMode {
@@ -175,6 +222,28 @@ extension MbxEdgeInsets {
 
 // Mapbox to FLT
 
+extension MapboxMaps.CanonicalTileID {
+    func toFLTCanonicalTileID() -> CanonicalTileID {
+        return CanonicalTileID(z: Int64(z), x: Int64(x), y: Int64(y))
+    }
+}
+
+extension MapboxMaps.CameraState {
+    func toFLTCameraState() -> CameraState {
+        return CameraState(
+            center: Point(center),
+            padding: MbxEdgeInsets(
+                top: padding.top,
+                left: padding.left,
+                bottom: padding.bottom,
+                right: padding.right
+            ),
+            zoom: zoom,
+            bearing: bearing,
+            pitch: pitch
+        )
+    }
+}
 extension MapboxMaps.LoggingLevel {
     func toFLTLoggingLevel() -> LoggingLevel {
         switch self {
@@ -269,6 +338,7 @@ extension CGSize {
         return Size(width: width, height: height)
     }
 }
+
 extension MapboxMaps.GlyphsRasterizationOptions {
     func toFLTGlyphsRasterizationOptions() -> GlyphsRasterizationOptions {
         let mode = GlyphsRasterizationMode(rawValue: rasterizationMode.rawValue)

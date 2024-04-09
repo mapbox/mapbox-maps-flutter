@@ -35,6 +35,7 @@ Contributions welcome!
 | Point Annotations | :white_check_mark:   | :white_check_mark: |
 | Line Annotations | :white_check_mark:   | :white_check_mark: |
 | Fill Annotations | :white_check_mark:   | :white_check_mark: |
+| Snapshotter | :white_check_mark: | :white_check_mark: |
 | Offline | :x: | :x: |
 | Viewport | :x: | :x: |
 | Style DSL   | :x:  | :x:  |
@@ -69,7 +70,7 @@ To access platform SDKs you will need to create a secret access token with the `
 ```
 
 #### Public token
-You can set the access token for Mapbox Maps Flutter Plugin(as well as for evey Mapbox SDK) via `MapboxOptions`:
+You can set the access token for Mapbox Maps Flutter Plugin(as well as for every Mapbox SDK) via `MapboxOptions`:
 ```
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
@@ -110,7 +111,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^1.0.0
+  mapbox_maps_flutter: ^2.0.0-beta.1
 ```
 
 ### Configure permissions

@@ -51,7 +51,7 @@ class PolylineAnnotationPageBodyState
 
       polylineAnnotationManager?.createMulti(positions
           .map((e) => PolylineAnnotationOptions(
-              geometry: LineString(coordinates: e).toJson(),
+              geometry: LineString(coordinates: e),
               lineColor: createRandomColor()))
           .toList());
       polylineAnnotationManager
@@ -74,13 +74,12 @@ class PolylineAnnotationPageBodyState
       child: Text('update a polyline annotation'),
       onPressed: () {
         if (polylineAnnotation != null) {
-          var lineString =
-              LineString.fromJson((polylineAnnotation!.geometry)!.cast());
+          var lineString = polylineAnnotation!.geometry;
           var newlineString = LineString(
               coordinates: lineString.coordinates
                   .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
                   .toList());
-          polylineAnnotation?.geometry = newlineString.toJson();
+          polylineAnnotation?.geometry = newlineString;
           polylineAnnotationManager?.update(polylineAnnotation!);
         }
       },
@@ -108,7 +107,7 @@ class PolylineAnnotationPageBodyState
                 10.0,
                 20.0,
               )
-            ]).toJson(),
+            ]),
             lineColor: Colors.red.value,
             lineWidth: 2))
         .then((value) => polylineAnnotation = value);

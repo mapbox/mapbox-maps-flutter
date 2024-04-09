@@ -1,76 +1,101 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.Image
-import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.MapboxStyleManager
+import com.mapbox.maps.RuntimeStylingOptions
 import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
 import com.mapbox.maps.logE
-import com.mapbox.maps.mapbox_maps.pigeons.*
-import java.lang.RuntimeException
+import com.mapbox.maps.mapbox_maps.pigeons.AmbientLight
+import com.mapbox.maps.mapbox_maps.pigeons.CameraOptions
+import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
+import com.mapbox.maps.mapbox_maps.pigeons.CoordinateBounds
+import com.mapbox.maps.mapbox_maps.pigeons.DirectionalLight
+import com.mapbox.maps.mapbox_maps.pigeons.FlatLight
+import com.mapbox.maps.mapbox_maps.pigeons.ImageContent
+import com.mapbox.maps.mapbox_maps.pigeons.ImageStretches
+import com.mapbox.maps.mapbox_maps.pigeons.LayerPosition
+import com.mapbox.maps.mapbox_maps.pigeons.MbxImage
+import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
+import com.mapbox.maps.mapbox_maps.pigeons.StyleObjectInfo
+import com.mapbox.maps.mapbox_maps.pigeons.StyleProjection
+import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValue
+import com.mapbox.maps.mapbox_maps.pigeons.StylePropertyValueKind
+import com.mapbox.maps.mapbox_maps.pigeons.TransitionOptions
 import java.nio.ByteBuffer
-import java.util.HashMap
 import java.util.Locale
 
-class StyleController(private val mapboxMap: MapboxMap, private val context: Context) :
+class StyleController(private val context: Context, private val styleManager: MapboxStyleManager) :
   StyleManager {
   override fun getStyleURI(callback: (Result<String>) -> Unit) {
-    callback(Result.success(mapboxMap.style?.styleURI ?: ""))
+    callback(Result.success(styleManager.styleURI))
   }
 
+  @SuppressLint("RestrictedApi")
   override fun setStyleURI(uri: String, callback: (Result<Unit>) -> Unit) {
-    mapboxMap.loadStyle(uri) {
-      callback(Result.success(Unit))
-    }
+    val options = RuntimeStylingOptions.Builder()
+      .completedCallback { callback(Result.success(Unit)) }
+      .errorCallback { _, mapLoadingError -> callback(Result.failure(Throwable(mapLoadingError.message))) }
+      .build()
+    styleManager.styleManager.setStyleURI(uri, options)
   }
 
   override fun getStyleJSON(callback: (Result<String>) -> Unit) {
-    callback(Result.success(mapboxMap.style?.styleJSON ?: ""))
+    callback(Result.success(styleManager.styleJSON))
   }
 
+  @SuppressLint("RestrictedApi")
   override fun setStyleJSON(json: String, callback: (Result<Unit>) -> Unit) {
-    mapboxMap.loadStyle(json) {
-      callback(Result.success(Unit))
-    }
+    val options = RuntimeStylingOptions.Builder()
+      .completedCallback { callback(Result.success(Unit)) }
+      .errorCallback { _, mapLoadingError -> callback(Result.failure(Throwable(mapLoadingError.message))) }
+      .build()
+    styleManager.styleManager.setStyleJSON(json, options)
   }
 
   override fun getStyleDefaultCamera(callback: (Result<CameraOptions>) -> Unit) {
-    val camera = mapboxMap.styleDefaultCamera
+    val camera = styleManager.styleDefaultCamera
     callback(Result.success(camera.toFLTCameraOptions(context)))
   }
 
   override fun getStyleTransition(callback: (Result<TransitionOptions>) -> Unit) {
-    val transitionOptions = mapboxMap.getStyleTransition()
+    val transitionOptions = styleManager.getStyleTransition()
     callback(
       Result.success(
-        TransitionOptions(duration = transitionOptions.duration, delay = transitionOptions.delay, enablePlacementTransitions = transitionOptions.enablePlacementTransitions)
+        TransitionOptions(
+          duration = transitionOptions.duration,
+          delay = transitionOptions.delay,
+          enablePlacementTransitions = transitionOptions.enablePlacementTransitions
+        )
       )
     )
   }
 
   override fun getStyleImports(): List<StyleObjectInfo> {
-    return mapboxMap.getStyleImports().map { it.toFLTStyleObjectInfo() }
+    return styleManager.getStyleImports().map { it.toFLTStyleObjectInfo() }
   }
 
   override fun removeStyleImport(importId: String) {
-    mapboxMap.removeStyleImport(importId)
+    styleManager.removeStyleImport(importId)
   }
 
   override fun getStyleImportSchema(importId: String): Any {
-    return mapboxMap.getStyleImportSchema(importId)
+    return styleManager.getStyleImportSchema(importId)
       .getValueOrElse {
         throw RuntimeException(it)
       }
   }
 
   override fun getStyleImportConfigProperties(importId: String): Map<String, StylePropertyValue> {
-    return mapboxMap.getStyleImportConfigProperties(importId)
+    return styleManager.getStyleImportConfigProperties(importId)
       .getValueOrElse { throw RuntimeException(it) }
       .mapValues { it.value.toFLTStylePropertyValue() }
       .toMutableMap()
@@ -80,27 +105,27 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     importId: String,
     config: String
   ): StylePropertyValue {
-    return mapboxMap.getStyleImportConfigProperty(importId, config)
+    return styleManager.getStyleImportConfigProperty(importId, config)
       .getValueOrElse { throw RuntimeException(it) }
       .toFLTStylePropertyValue()
   }
 
   override fun setStyleImportConfigProperties(importId: String, configs: Map<String, Any>) {
-    mapboxMap.setStyleImportConfigProperties(
+    styleManager.setStyleImportConfigProperties(
       importId,
       configs.mapValues { it.toValue() } as HashMap<String, Value>
     )
   }
 
   override fun setStyleImportConfigProperty(importId: String, config: String, value: Any) {
-    mapboxMap.setStyleImportConfigProperty(importId, config, value.toValue())
+    styleManager.setStyleImportConfigProperty(importId, config, value.toValue())
   }
 
   override fun setStyleTransition(
     transitionOptions: TransitionOptions,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.setStyleTransition(
+    styleManager.setStyleTransition(
       com.mapbox.maps.TransitionOptions.Builder()
         .delay(transitionOptions.delay)
         .duration(transitionOptions.duration)
@@ -115,7 +140,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     callback: (Result<Unit>) -> Unit
   ) {
     properties.toValue().let { parameters ->
-      val expected = mapboxMap.addStyleLayer(
+      val expected = styleManager.addStyleLayer(
         parameters,
         com.mapbox.maps.LayerPosition(
           layerPosition?.above,
@@ -137,7 +162,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     callback: (Result<Unit>) -> Unit
   ) {
     properties.toValue().let { parameters ->
-      val expected = mapboxMap.addPersistentStyleLayer(
+      val expected = styleManager.addPersistentStyleLayer(
         parameters,
         com.mapbox.maps.LayerPosition(
           layerPosition?.above,
@@ -154,7 +179,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun isStyleLayerPersistent(layerId: String, callback: (Result<Boolean>) -> Unit) {
-    val expected = mapboxMap.isStyleLayerPersistent(layerId)
+    val expected = styleManager.isStyleLayerPersistent(layerId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -163,7 +188,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun removeStyleLayer(layerId: String, callback: (Result<Unit>) -> Unit) {
-    val expected = mapboxMap.removeStyleLayer(layerId)
+    val expected = styleManager.removeStyleLayer(layerId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -176,7 +201,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     layerPosition: LayerPosition?,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.moveStyleLayer(
+    val expected = styleManager.moveStyleLayer(
       layerId,
       if (layerPosition != null) com.mapbox.maps.LayerPosition(
         layerPosition.above,
@@ -192,14 +217,14 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun styleLayerExists(layerId: String, callback: (Result<Boolean>) -> Unit) {
-    val expected = mapboxMap.styleLayerExists(layerId)
+    val expected = styleManager.styleLayerExists(layerId)
     callback(Result.success(expected))
   }
 
   override fun getStyleLayers(callback: (Result<List<StyleObjectInfo?>>) -> Unit) {
     callback(
       Result.success(
-        mapboxMap.styleLayers.map { it.toFLTStyleObjectInfo() }.toMutableList()
+        styleManager.styleLayers.map { it.toFLTStyleObjectInfo() }.toMutableList()
       )
     )
   }
@@ -209,7 +234,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     property: String,
     callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    val styleLayerProperty = mapboxMap.getStyleLayerProperty(layerId, property)
+    val styleLayerProperty = styleManager.getStyleLayerProperty(layerId, property)
     val stylePropertyValueKind =
       StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
     val stylePropertyValue =
@@ -224,7 +249,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     callback: (Result<Unit>) -> Unit
   ) {
     val expected =
-      mapboxMap.setStyleLayerProperty(layerId, property, value.toValue())
+      styleManager.setStyleLayerProperty(layerId, property, value.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -233,7 +258,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleLayerProperties(layerId: String, callback: (Result<String>) -> Unit) {
-    val expected = mapboxMap.getStyleLayerProperties(layerId)
+    val expected = styleManager.getStyleLayerProperties(layerId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -246,7 +271,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     properties: String,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.setStyleLayerProperties(layerId, properties.toValue())
+    val expected = styleManager.setStyleLayerProperties(layerId, properties.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -259,7 +284,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     properties: String,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.addStyleSource(sourceId, properties.toValue())
+    val expected = styleManager.addStyleSource(sourceId, properties.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -272,7 +297,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     property: String,
     callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    val styleLayerProperty = mapboxMap.getStyleSourceProperty(sourceId, property)
+    val styleLayerProperty = styleManager.getStyleSourceProperty(sourceId, property)
     val stylePropertyValueKind =
       StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
     val value = styleLayerProperty.value.toFLTValue()
@@ -288,7 +313,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     callback: (Result<Unit>) -> Unit
   ) {
     val expected =
-      mapboxMap.setStyleSourceProperty(sourceId, property, value.toValue())
+      styleManager.setStyleSourceProperty(sourceId, property, value.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -297,7 +322,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleSourceProperties(sourceId: String, callback: (Result<String>) -> Unit) {
-    val expected = mapboxMap.getStyleSourceProperties(sourceId)
+    val expected = styleManager.getStyleSourceProperties(sourceId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -310,7 +335,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     properties: String,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.setStyleSourceProperties(sourceId, properties.toValue())
+    val expected = styleManager.setStyleSourceProperties(sourceId, properties.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -334,7 +359,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
 
-    val expected = mapboxMap.updateStyleImageSourceImage(
+    val expected = styleManager.updateStyleImageSourceImage(
       sourceId,
       Image(
         image.width.toInt(),
@@ -350,7 +375,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun removeStyleSource(sourceId: String, callback: (Result<Unit>) -> Unit) {
-    val expected = mapboxMap.removeStyleSource(sourceId)
+    val expected = styleManager.removeStyleSource(sourceId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -359,32 +384,31 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun styleSourceExists(sourceId: String, callback: (Result<Boolean>) -> Unit) {
-    val expected = mapboxMap.styleSourceExists(sourceId)
+    val expected = styleManager.styleSourceExists(sourceId)
     callback(Result.success(expected))
   }
 
   override fun getStyleSources(callback: (Result<List<StyleObjectInfo?>>) -> Unit) {
     callback(
       Result.success(
-        mapboxMap.styleSources.map { it.toFLTStyleObjectInfo() }.toMutableList()
+        styleManager.styleSources.map { it.toFLTStyleObjectInfo() }.toMutableList()
       )
     )
   }
 
   override fun getStyleLights(): List<StyleObjectInfo> {
-    return mapboxMap.style?.getStyleLights()?.map { it.toFLTStyleObjectInfo() }
-      ?: listOf()
+    return styleManager.getStyleLights().map { it.toFLTStyleObjectInfo() }
   }
 
   override fun setLight(flatLight: FlatLight) {
-    mapboxMap.style?.setLight(flatLight.toFlatLight())
+    styleManager.setLight(flatLight.toFlatLight())
   }
 
   override fun setLights(
     ambientLight: AmbientLight,
     directionalLight: DirectionalLight
   ) {
-    mapboxMap.style?.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
+    styleManager.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
   }
 
   override fun getStyleLightProperty(
@@ -392,17 +416,16 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     property: String,
     callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    val styleLightProperty = mapboxMap.style?.getStyleLightProperty(id, property)
+    val styleLightProperty = styleManager.getStyleLightProperty(id, property)
 
-    if (styleLightProperty != null) {
-      callback(
-        Result.success(
-          StylePropertyValue(styleLightProperty.value.toFLTValue(), StylePropertyValueKind.values()[styleLightProperty.kind.ordinal])
+    callback(
+      Result.success(
+        StylePropertyValue(
+          styleLightProperty.value.toFLTValue(),
+          StylePropertyValueKind.values()[styleLightProperty.kind.ordinal]
         )
       )
-    } else {
-      callback(Result.failure(Throwable("No style available")))
-    }
+    )
   }
 
   override fun setStyleLightProperty(
@@ -411,8 +434,8 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     value: Any,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.style?.setStyleLightProperty(id, property, value.toValue())
-    if (expected?.isError == true) {
+    val expected = styleManager.setStyleLightProperty(id, property, value.toValue())
+    if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
       callback(Result.success(Unit))
@@ -420,7 +443,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun setStyleTerrain(properties: String, callback: (Result<Unit>) -> Unit) {
-    val expected = mapboxMap.setStyleTerrain(properties.toValue())
+    val expected = styleManager.setStyleTerrain(properties.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -432,7 +455,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     property: String,
     callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    val styleProperty = mapboxMap.getStyleTerrainProperty(property)
+    val styleProperty = styleManager.getStyleTerrainProperty(property)
     val stylePropertyValueKind =
       StylePropertyValueKind.values()[styleProperty.kind.ordinal]
     val stylePropertyValue =
@@ -445,7 +468,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     value: Any,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.setStyleTerrainProperty(property, value.toValue())
+    val expected = styleManager.setStyleTerrainProperty(property, value.toValue())
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -454,7 +477,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun getStyleImage(imageId: String, callback: (Result<MbxImage?>) -> Unit) {
-    val image = mapboxMap.getStyleImage(imageId)
+    val image = styleManager.getStyleImage(imageId)
 
     if (image == null) {
       callback(Result.success(null))
@@ -471,7 +494,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun removeStyleImage(imageId: String, callback: (Result<Unit>) -> Unit) {
-    val expected = mapboxMap.removeStyleImage(imageId)
+    val expected = styleManager.removeStyleImage(imageId)
     if (expected.isError) {
       callback(Result.failure(Throwable(expected.error)))
     } else {
@@ -480,7 +503,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun hasStyleImage(imageId: String, callback: (Result<Boolean>) -> Unit) {
-    callback(Result.success(mapboxMap.hasStyleImage(imageId)))
+    callback(Result.success(styleManager.hasStyleImage(imageId)))
   }
 
   override fun invalidateStyleCustomGeometrySourceTile(
@@ -488,7 +511,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     tileId: CanonicalTileID,
     callback: (Result<Unit>) -> Unit
   ) {
-    val expected = mapboxMap.invalidateStyleCustomGeometrySourceTile(
+    val expected = styleManager.invalidateStyleCustomGeometrySourceTile(
       sourceId,
       com.mapbox.maps.CanonicalTileID(
         tileId.z.toByte(), tileId.x.toInt(), tileId.y.toInt()
@@ -506,7 +529,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     bounds: CoordinateBounds,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.invalidateStyleCustomGeometrySourceRegion(
+    styleManager.invalidateStyleCustomGeometrySourceRegion(
       sourceId,
       bounds.toCoordinateBounds()
     )
@@ -514,15 +537,15 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun isStyleLoaded(callback: (Result<Boolean>) -> Unit) {
-    callback(Result.success(mapboxMap.isStyleLoaded()))
+    callback(Result.success(styleManager.isStyleLoaded()))
   }
 
   override fun getProjection(): StyleProjection? {
-    return mapboxMap.style?.getProjection()?.toFLTProjection()
+    return styleManager.getProjection()?.toFLTProjection()
   }
 
   override fun setProjection(projection: StyleProjection) {
-    mapboxMap.style?.setProjection(projection.toProjection())
+    styleManager.setProjection(projection.toProjection())
   }
 
   override fun localizeLabels(
@@ -530,7 +553,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     layerIds: List<String>?,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.style?.localizeLabels(Locale(locale), layerIds)
+    styleManager.localizeLabels(Locale(locale), layerIds)
     callback(Result.success(Unit))
   }
 
@@ -554,7 +577,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     }
     val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
     bitmap.copyPixelsToBuffer(byteBuffer)
-    val expected = mapboxMap.addStyleImage(
+    val expected = styleManager.addStyleImage(
       imageId, scale.toFloat(),
       Image(
         image.width.toInt(),
@@ -565,10 +588,11 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
       stretchX.map {
         com.mapbox.maps.ImageStretches(
           it!!.first.toFloat(),
-          it!!.second.toFloat()
+          it.second.toFloat()
         )
       },
-      stretchY.map { com.mapbox.maps.ImageStretches(it!!.first.toFloat(), it!!.second.toFloat()) }.toMutableList(),
+      stretchY.map { com.mapbox.maps.ImageStretches(it!!.first.toFloat(), it.second.toFloat()) }
+        .toMutableList(),
       if (content != null) com.mapbox.maps.ImageContent(
         content.left.toFloat(),
         content.top.toFloat(), content.right.toFloat(), content.bottom.toFloat()
@@ -637,11 +661,13 @@ fun Value.toFLTValue(): Any? {
     is List<*> -> {
       (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
     }
+
     is Map<*, *> -> {
       (contents as Map<*, *>)
         .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
         .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
     }
+
     else -> {
       contents
     }

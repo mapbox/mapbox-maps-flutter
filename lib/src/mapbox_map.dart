@@ -4,20 +4,6 @@ part of mapbox_maps_flutter;
 class MapboxMap extends ChangeNotifier {
   MapboxMap({
     required _MapboxMapsPlatform mapboxMapsPlatform,
-    this.onStyleLoadedListener,
-    this.onCameraChangeListener,
-    this.onMapIdleListener,
-    this.onMapLoadedListener,
-    this.onMapLoadErrorListener,
-    this.onRenderFrameStartedListener,
-    this.onRenderFrameFinishedListener,
-    this.onSourceAddedListener,
-    this.onSourceDataLoadedListener,
-    this.onSourceRemovedListener,
-    this.onStyleDataLoadedListener,
-    this.onStyleImageMissingListener,
-    this.onStyleImageUnusedListener,
-    this.onResourceRequestListener,
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
@@ -25,128 +11,10 @@ class MapboxMap extends ChangeNotifier {
     _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
 
     annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
-    if (onStyleLoadedListener != null) {
-      _mapboxMapsPlatform.onStyleLoadedPlatform.add((argument) {
-        onStyleLoadedListener?.call(argument);
-      });
-    }
-    if (onCameraChangeListener != null) {
-      _mapboxMapsPlatform.onCameraChangeListenerPlatform.add((argument) {
-        onCameraChangeListener?.call(argument);
-      });
-    }
-    if (onMapIdleListener != null) {
-      _mapboxMapsPlatform.onMapIdlePlatform.add((argument) {
-        onMapIdleListener?.call(argument);
-      });
-    }
-    if (onMapLoadedListener != null) {
-      _mapboxMapsPlatform.onMapLoadedPlatform.add((argument) {
-        onMapLoadedListener?.call(argument);
-      });
-    }
-    if (onMapLoadErrorListener != null) {
-      _mapboxMapsPlatform.onMapLoadErrorPlatform.add((argument) {
-        onMapLoadErrorListener?.call(argument);
-      });
-    }
-    if (onRenderFrameFinishedListener != null) {
-      _mapboxMapsPlatform.onRenderFrameFinishedPlatform.add((argument) {
-        onRenderFrameFinishedListener?.call(argument);
-      });
-    }
-    if (onRenderFrameStartedListener != null) {
-      _mapboxMapsPlatform.onRenderFrameStartedPlatform.add((argument) {
-        onRenderFrameStartedListener?.call(argument);
-      });
-    }
-    if (onSourceAddedListener != null) {
-      _mapboxMapsPlatform.onSourceAddedPlatform.add((argument) {
-        onSourceAddedListener?.call(argument);
-      });
-    }
-    if (onSourceDataLoadedListener != null) {
-      _mapboxMapsPlatform.onSourceDataLoadedPlatform.add((argument) {
-        onSourceDataLoadedListener?.call(argument);
-      });
-    }
-    if (onSourceRemovedListener != null) {
-      _mapboxMapsPlatform.onSourceRemovedPlatform.add((argument) {
-        onSourceRemovedListener?.call(argument);
-      });
-    }
-    if (onStyleDataLoadedListener != null) {
-      _mapboxMapsPlatform.onStyleDataLoadedPlatform.add((argument) {
-        onStyleDataLoadedListener?.call(argument);
-      });
-    }
-    if (onStyleImageMissingListener != null) {
-      _mapboxMapsPlatform.onStyleImageMissingPlatform.add((argument) {
-        onStyleImageMissingListener?.call(argument);
-      });
-    }
-    if (onStyleImageUnusedListener != null) {
-      _mapboxMapsPlatform.onStyleImageUnusedPlatform.add((argument) {
-        onStyleImageUnusedListener?.call(argument);
-      });
-    }
-    if (onResourceRequestListener != null) {
-      _mapboxMapsPlatform.onResourceRequestPlatform.add((argument) {
-        onResourceRequestListener?.call(argument);
-      });
-    }
     _setupGestures();
   }
 
   final _MapboxMapsPlatform _mapboxMapsPlatform;
-
-  /// Invoked when the requested style has been fully loaded, including the style, specified sprite and sources' metadata.
-  final OnStyleLoadedListener? onStyleLoadedListener;
-
-  /// Invoked whenever camera position changes.
-  final OnCameraChangeListener? onCameraChangeListener;
-
-  /// Invoked when the Map has entered the idle state. The Map is in the idle state when there are no ongoing transitions
-  /// and the Map has rendered all available tiles.
-  final OnMapIdleListener? onMapIdleListener;
-
-  /// Invoked when the Map's style has been fully loaded, and the Map has rendered all visible tiles.
-  final OnMapLoadedListener? onMapLoadedListener;
-
-  /// Invoked whenever the map load errors out
-  final OnMapLoadErrorListener? onMapLoadErrorListener;
-
-  /// Invoked whenever the Map finished rendering a frame.
-  /// The render-mode value tells whether the Map has all data ("full") required to render the visible viewport.
-  /// The needs-repaint value provides information about ongoing transitions that trigger Map repaint.
-  /// The placement-changed value tells if the symbol placement has been changed in the visible viewport.
-  final OnRenderFrameFinishedListener? onRenderFrameFinishedListener;
-
-  /// Invoked whenever the Map started rendering a frame.
-  final OnRenderFrameStartedListener? onRenderFrameStartedListener;
-
-  /// Invoked whenever the Source has been added with StyleManager#addStyleSource runtime API.
-  final OnSourceAddedListener? onSourceAddedListener;
-
-  /// Invoked when the requested source data has been loaded.
-  final OnSourceDataLoadedListener? onSourceDataLoadedListener;
-
-  /// Invoked whenever the Source has been removed with StyleManager#removeStyleSource runtime API.
-  final OnSourceRemovedListener? onSourceRemovedListener;
-
-  /// Invoked when the requested style data has been loaded.
-  final OnStyleDataLoadedListener? onStyleDataLoadedListener;
-
-  /// Invoked whenever a style has a missing image. This event is emitted when the Map renders visible tiles and
-  /// one of the required images is missing in the sprite sheet. Subscriber has to provide the missing image
-  /// by calling StyleManager#addStyleImage method.
-  final OnStyleImageMissingListener? onStyleImageMissingListener;
-
-  /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
-  final OnStyleImageUnusedListener? onStyleImageUnusedListener;
-
-  /// Invoked when map makes a request to load required resources.
-  final OnResourceRequestListener? onResourceRequestListener;
 
   /// The currently loaded Style]object.
   late StyleManager style =
@@ -201,7 +69,7 @@ class MapboxMap extends ChangeNotifier {
   @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
-    GestureListener.setup(null, binaryMessenger: _proxyBinaryMessenger);
+    GestureListener.setUp(null, binaryMessenger: _proxyBinaryMessenger);
 
     super.dispose();
   }
@@ -234,6 +102,7 @@ class MapboxMap extends ChangeNotifier {
           bounds, padding, bearing, pitch, maxZoom, offset);
 
   /// Convenience method that returns the `camera options` object for given parameters.
+
   @Deprecated('Use [cameraForCoordinatesPadding] instead')
   Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
           MbxEdgeInsets padding, double? bearing, double? pitch) =>
@@ -559,7 +428,7 @@ class MapboxMap extends ChangeNotifier {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
         onMapScrollListener != null) {
-      GestureListener.setup(
+      GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,
             onMapLongTapListener: onMapLongTapListener,
@@ -584,6 +453,10 @@ class MapboxMap extends ChangeNotifier {
     this.onMapScrollListener = onMapScrollListener;
     _setupGestures();
   }
+
+  /// Returns a snapshot of the map.
+  /// The snapshot is taken from the current state of the map.
+  Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
 }
 
 class _GestureListener extends GestureListener {
@@ -598,17 +471,17 @@ class _GestureListener extends GestureListener {
   final OnMapScrollListener? onMapScrollListener;
 
   @override
-  void onTap(ScreenCoordinate coordinate) {
-    onMapTapListener?.call(coordinate);
+  void onTap(MapContentGestureContext context) {
+    onMapTapListener?.call(context);
   }
 
   @override
-  void onLongTap(ScreenCoordinate coordinate) {
-    onMapLongTapListener?.call(coordinate);
+  void onLongTap(MapContentGestureContext context) {
+    onMapLongTapListener?.call(context);
   }
 
   @override
-  void onScroll(ScreenCoordinate coordinate) {
-    onMapScrollListener?.call(coordinate);
+  void onScroll(MapContentGestureContext context) {
+    onMapScrollListener?.call(context);
   }
 }

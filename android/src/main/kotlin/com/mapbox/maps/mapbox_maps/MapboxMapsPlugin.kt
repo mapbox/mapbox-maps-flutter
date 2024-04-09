@@ -1,40 +1,22 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
+import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterInstanceManager
+import com.mapbox.maps.mapbox_maps.snapshot.SnapshotterInstanceManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.BinaryMessenger
 
 /** MapboxMapsPlugin */
-class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
-  private val optionsController = MapboxOptionsController()
-
+class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private var lifecycle: Lifecycle? = null
 
-  // / The MethodChannel that will the communication between Flutter and native Android
-  // /
-  // / This local reference serves to register the plugin with the Flutter Engine and unregister it
-  // / when the Flutter Engine is detached from the Activity
-  private lateinit var channel: MethodChannel
-
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "mapbox_maps")
-    channel.setMethodCallHandler(this)
-
-    // static options handling should be setup upon attachment,
-    // as options can before configured before the map view is setup
-    _MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
-    _MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
-
-    LoggingController.setup(flutterPluginBinding.binaryMessenger)
-
     flutterPluginBinding
       .platformViewRegistry
       .registerViewFactory(
@@ -48,13 +30,22 @@ class MapboxMapsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
           }
         )
       )
+
+    setupStaticChannels(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger)
   }
 
-  override fun onMethodCall(call: MethodCall, result: Result) {
+  private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger) {
+    val optionsController = MapboxOptionsController()
+    val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
+    // static options handling should be setup upon attachment,
+    // as options can before configured before the map view is setup
+    _MapboxMapsOptions.setUp(binaryMessenger, optionsController)
+    _MapboxOptions.setUp(binaryMessenger, optionsController)
+    _SnapshotterInstanceManager.setUp(binaryMessenger, snapshotterInstanceManager)
+    LoggingController.setup(binaryMessenger)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {

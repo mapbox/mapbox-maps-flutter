@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// A stroked line.
 class LineLayer extends Layer {
   LineLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.lineCap,
@@ -81,7 +81,7 @@ class LineLayer extends Layer {
   /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
   double? lineDepthOcclusionFactor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? lineEmissiveStrength;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
@@ -116,13 +116,13 @@ class LineLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (lineCap != null) {
-      layout["line-cap"] = lineCap?.toString().split('.').last.toLowerCase();
+      layout["line-cap"] = lineCap?.name.toLowerCase().replaceAll("_", "-");
     }
     if (lineJoin != null) {
-      layout["line-join"] = lineJoin?.toString().split('.').last.toLowerCase();
+      layout["line-join"] = lineJoin?.name.toLowerCase().replaceAll("_", "-");
     }
     if (lineMiterLimit != null) {
       layout["line-miter-limit"] = lineMiterLimit;
@@ -175,7 +175,7 @@ class LineLayer extends Layer {
     }
     if (lineTranslateAnchor != null) {
       paint["line-translate-anchor"] =
-          lineTranslateAnchor?.toString().split('.').last.toLowerCase();
+          lineTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (lineTrimOffset != null) {
       paint["line-trim-offset"] = lineTrimOffset;
@@ -223,27 +223,21 @@ class LineLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       lineCap: map["layout"]["line-cap"] == null
           ? null
-          : LineCap.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : LineCap.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["line-cap"])),
       lineJoin: map["layout"]["line-join"] == null
           ? null
-          : LineJoin.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : LineJoin.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["line-join"])),
       lineMiterLimit: map["layout"]["line-miter-limit"] is num?
           ? (map["layout"]["line-miter-limit"] as num?)?.toDouble()
@@ -291,11 +285,9 @@ class LineLayer extends Layer {
           .toList(),
       lineTranslateAnchor: map["paint"]["line-translate-anchor"] == null
           ? null
-          : LineTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : LineTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["line-translate-anchor"])),
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())

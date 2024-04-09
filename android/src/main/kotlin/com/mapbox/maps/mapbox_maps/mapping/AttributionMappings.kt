@@ -8,16 +8,20 @@ import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettingsInterface
 
 fun AttributionSettingsInterface.applyFromFLT(settings: AttributionSettings, context: Context) {
-  settings.iconColor?.let { iconColor = it.toInt() }
-  settings.position?.let { position = it.toPosition() }
-  settings.marginLeft?.let { marginLeft = it.toDevicePixels(context) }
-  settings.marginTop?.let { marginTop = it.toDevicePixels(context) }
-  settings.marginRight?.let { marginRight = it.toDevicePixels(context) }
-  settings.marginBottom?.let { marginBottom = it.toDevicePixels(context) }
-  settings.clickable?.let { clickable = it }
+  updateSettings {
+    settings.enabled?.let { this.enabled = it }
+    settings.iconColor?.let { this.iconColor = it.toInt() }
+    settings.position?.let { this.position = it.toPosition() }
+    settings.marginLeft?.let { this.marginLeft = it.toDevicePixels(context) }
+    settings.marginTop?.let { this.marginTop = it.toDevicePixels(context) }
+    settings.marginRight?.let { this.marginRight = it.toDevicePixels(context) }
+    settings.marginBottom?.let { this.marginBottom = it.toDevicePixels(context) }
+    settings.clickable?.let { this.clickable = it }
+  }
 }
 
 fun AttributionSettingsInterface.toFLT(context: Context) = AttributionSettings(
+  enabled = enabled,
   iconColor = iconColor.toUInt().toLong(),
   position = position.toOrnamentPosition(),
   marginLeft = marginLeft.toLogicalPixels(context),

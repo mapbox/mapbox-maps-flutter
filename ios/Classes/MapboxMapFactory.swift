@@ -1,8 +1,11 @@
 import Flutter
 import MapboxMaps
 import MapboxCommon
+import MapboxCommon_Private
 
-class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
+final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
+    private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
+
     var registrar: FlutterPluginRegistrar
 
     deinit {
@@ -121,7 +124,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     ) -> FlutterPlatformView {
 
         var mapInitOptions = MapInitOptions()
-        var eventTypes = [Int]()
         var pluginVersion = ""
         var channelSuffix = 0
 
@@ -130,18 +132,15 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 withFrame: frame,
                 mapInitOptions: mapInitOptions,
                 channelSuffix: channelSuffix,
-                eventTypes: eventTypes,
                 arguments: args,
                 registrar: registrar,
-                pluginVersion: pluginVersion
+                pluginVersion: pluginVersion,
+                eventTypes: []
             )
         }
         var styleURI: StyleURI? = .streets
         if let styleURIString = args["styleUri"] as? String {
             styleURI = StyleURI(rawValue: styleURIString)
-        }
-        if let types = args["eventTypes"] as? [Int] {
-            eventTypes = types
         }
 
         mapInitOptions = MapInitOptions(
@@ -158,14 +157,17 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             channelSuffix = suffix
         }
 
+        var eventTypes = args["eventTypes"] as? [Int] ?? []
+
+        Self.mapCounter.increment()
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
             channelSuffix: channelSuffix,
-            eventTypes: eventTypes,
             arguments: args,
             registrar: registrar,
-            pluginVersion: pluginVersion
+            pluginVersion: pluginVersion,
+            eventTypes: eventTypes
         )
     }
 }

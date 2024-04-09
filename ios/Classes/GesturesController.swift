@@ -13,8 +13,11 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
             return
         }
 
-        let point = Point(mapView.mapboxMap.coordinate(for: gestureManager.singleTapGestureRecognizer.location(in: mapView)))
-        self.onGestureListener?.onTap(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        let touchPoint = gestureManager.singleTapGestureRecognizer.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(touchPosition: touchPoint.toFLTScreenCoordinate(), point: point)
+
+        onGestureListener?.onTap(context: context, completion: { _ in })
     }
 
     func gestureManager(_ gestureManager: MapboxMaps.GestureManager, didEndAnimatingFor gestureType: MapboxMaps.GestureType) {}
@@ -24,14 +27,21 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
             return
         }
 
-        let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onScroll(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(touchPosition: touchPoint.toFLTScreenCoordinate(), point: point)
+
+        onGestureListener?.onScroll(context: context, completion: { _ in })
     }
 
     @objc private func onMapLongTap(_ sender: UITapGestureRecognizer) {
         guard sender.state == .ended else { return }
-        let point = Point(mapView.mapboxMap.coordinate(for: sender.location(in: mapView)))
-        self.onGestureListener?.onLongTap(coordinate: ScreenCoordinate(x: point.coordinates.latitude, y: point.coordinates.longitude), completion: {_ in })
+
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(touchPosition: touchPoint.toFLTScreenCoordinate(), point: point)
+
+        onGestureListener?.onLongTap(context: context, completion: { _ in })
     }
 
     func updateSettings(settings: GesturesSettings) throws {

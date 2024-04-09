@@ -13,7 +13,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
-    OnPolygonAnnotationClickListener.setup(listener,
+    OnPolygonAnnotationClickListener.setUp(listener,
         binaryMessenger: _messenger);
   }
 
@@ -44,11 +44,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Whether or not the fill should be antialiased.
   Future<bool?> getFillAntialias() => messenger.getFillAntialias(id);
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   Future<void> setFillEmissiveStrength(double fillEmissiveStrength) =>
       messenger.setFillEmissiveStrength(id, fillEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   Future<double?> getFillEmissiveStrength() =>
       messenger.getFillEmissiveStrength(id);
 

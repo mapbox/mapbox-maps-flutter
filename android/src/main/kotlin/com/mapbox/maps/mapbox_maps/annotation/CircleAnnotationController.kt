@@ -2,8 +2,6 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.mapbox_maps.pigeons.*
-import com.mapbox.maps.mapbox_maps.toMap
-import com.mapbox.maps.mapbox_maps.toPoint
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
 import toCirclePitchAlignment
 import toCirclePitchScale
@@ -124,7 +122,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
   private fun updateAnnotation(annotation: CircleAnnotation): com.mapbox.maps.plugin.annotation.generated.CircleAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {
-      originalAnnotation.geometry = it.toPoint()
+      originalAnnotation.geometry = it
     }
     annotation.circleSortKey?.let {
       originalAnnotation.circleSortKey = it
@@ -267,7 +265,7 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
 fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnnotation(): CircleAnnotation {
   return CircleAnnotation(
     id = id,
-    geometry = geometry.toMap(),
+    geometry = geometry,
     circleSortKey = circleSortKey,
     circleBlur = circleBlur,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
@@ -284,7 +282,7 @@ fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnno
 fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions {
   val options = com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions()
   this.geometry?.let {
-    options.withPoint(it.toPoint())
+    options.withPoint(it)
   }
   this.circleSortKey?.let {
     options.withCircleSortKey(it)

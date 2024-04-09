@@ -94,3 +94,10 @@ Future<MapboxMap> runFixedSizeMap() {
 
   return completer.future;
 }
+
+void runEmpty() {
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
+
+  runApp(MaterialApp());
+}

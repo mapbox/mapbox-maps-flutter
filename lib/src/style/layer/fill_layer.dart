@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// A filled polygon with an optional stroked border.
 class FillLayer extends Layer {
   FillLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.fillSortKey,
@@ -45,7 +45,7 @@ class FillLayer extends Layer {
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   int? fillColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
@@ -68,7 +68,7 @@ class FillLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillSortKey != null) {
       layout["fill-sort-key"] = fillSortKey;
@@ -97,7 +97,7 @@ class FillLayer extends Layer {
     }
     if (fillTranslateAnchor != null) {
       paint["fill-translate-anchor"] =
-          fillTranslateAnchor?.toString().split('.').last.toLowerCase();
+          fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     var properties = {
       "id": id,
@@ -139,11 +139,9 @@ class FillLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       fillSortKey: map["layout"]["fill-sort-key"] is num?
           ? (map["layout"]["fill-sort-key"] as num?)?.toDouble()
@@ -168,11 +166,9 @@ class FillLayer extends Layer {
           .toList(),
       fillTranslateAnchor: map["paint"]["fill-translate-anchor"] == null
           ? null
-          : FillTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : FillTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["fill-translate-anchor"])),
     );
   }

@@ -1,6 +1,8 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
+import com.mapbox.common.FeatureTelemetryCounter
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.ConstrainMode
 import com.mapbox.maps.ContextMode
@@ -26,6 +28,7 @@ class MapboxMapFactory(
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
+  @SuppressLint("RestrictedApi")
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     if (context == null) {
       throw RuntimeException("Context is null, can't create MapView!")
@@ -116,6 +119,8 @@ class MapboxMapFactory(
     val textureView = params["textureView"] as? Boolean ?: false
     val styleUri = params["styleUri"] as? String ?: Style.MAPBOX_STREETS
     val pluginVersion = params["mapboxPluginVersion"] as String
+    val eventTypes: List<Int> = params["eventTypes"] as List<Int>
+
     val mapInitOptions = MapInitOptions(
       context = context,
       mapOptions = mapOptionsBuilder.build(),
@@ -123,20 +128,20 @@ class MapboxMapFactory(
       textureView = textureView,
       styleUri = styleUri
     )
-    // TODO: Check if the cast succeeds
-    val eventTypes = params["eventTypes"] as? List<Int> ?: listOf()
+    mapCounter.increment()
     return MapboxMapController(
       context,
       mapInitOptions,
       lifecycleProvider,
-      eventTypes,
       messenger,
       channelSuffix,
       pluginVersion,
+      eventTypes
     )
   }
 
   companion object {
-    private const val TAG = "MapBoxFactory"
+    @SuppressLint("RestrictedApi")
+    private val mapCounter = FeatureTelemetryCounter.create("maps-mobile/flutter/map")
   }
 }

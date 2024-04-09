@@ -299,7 +299,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
 extension PolylineAnnotationOptions {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
-        var annotation = MapboxMaps.PolylineAnnotation(lineString: convertDictionaryToPolyline(dict: self.geometry!))
+        var annotation = MapboxMaps.PolylineAnnotation(lineString: geometry)
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
         }
@@ -340,8 +340,8 @@ extension PolylineAnnotationOptions {
 extension PolylineAnnotation {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
-                var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: convertDictionaryToPolyline(dict: self.geometry!))
-                if let lineJoin {
+        var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: geometry)
+        if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
         }
         if let lineSortKey {
@@ -380,9 +380,9 @@ extension PolylineAnnotation {
 
 extension MapboxMaps.PolylineAnnotation {
     func toFLTPolylineAnnotation() -> PolylineAnnotation {
-        return PolylineAnnotation(
+        PolylineAnnotation(
             id: id,
-            geometry: geometry.toMap(),
+            geometry: lineString,
             lineJoin: lineJoin?.toFLTLineJoin(),
             lineSortKey: lineSortKey,
             lineBlur: lineBlur,

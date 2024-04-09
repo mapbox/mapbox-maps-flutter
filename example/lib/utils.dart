@@ -68,7 +68,7 @@ Position createRandomPositionAround(Position myPosition) {
 extension AnnotationCreation on PointAnnotationManager {
   addAnnotation(Uint8List imageData, Point position, {String textField = ""}) {
     return create(PointAnnotationOptions(
-        geometry: position.toJson(),
+        geometry: position,
         textField: textField,
         textOffset: [0.0, -2.0],
         textColor: Colors.red.value,
@@ -95,7 +95,7 @@ extension PuckPosition on StyleManager {
 extension PolylineCreation on PolylineAnnotationManager {
   addAnnotation(List<Position> coordinates) {
     return PolylineAnnotationOptions(
-        geometry: LineString(coordinates: coordinates).toJson(),
+        geometry: LineString(coordinates: coordinates),
         lineColor: Colors.red.value,
         lineWidth: 2);
   }

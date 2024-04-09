@@ -33,6 +33,63 @@ void main() {
     expect(styleJson, getStyleJson);
   });
 
+  testWidgets('loadRasterArray', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var styleJson =
+        await rootBundle.loadString('assets/raster_array_layers.json');
+    var expectedValue = [
+      RasterDataLayer("temperature", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800"
+      ]),
+      RasterDataLayer("humidity", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800"
+      ])
+    ];
+    app.events.resetOnStyleLoaded();
+    mapboxMap.loadStyleJson(styleJson);
+
+    await app.events.onStyleLoaded.future;
+
+    var getStyleJson = await mapboxMap.style.getStyleJSON();
+    expect(styleJson, getStyleJson);
+
+    // Test getStyleSourceProperty method
+    var rasterLayers =
+        await mapboxMap.style.getStyleSourceProperty("mapbox", "rasterLayers");
+    final Map<Object?, Object?> dataMap =
+        rasterLayers.value as Map<Object?, Object?>;
+    List<RasterDataLayer> rasterDataLayers = [];
+
+    dataMap.forEach((key, value) {
+      rasterDataLayers
+          .add(RasterDataLayer(key as String, (value as List).cast<String>()));
+    });
+    expect(rasterDataLayers.contains(expectedValue.first), true);
+    expect(rasterDataLayers.contains(expectedValue.last), true);
+
+    // Test getting the value from the source directly
+    var source = await mapboxMap.style.getSource("mapbox");
+    if (source is RasterArraySource) {
+      var layers = await source.rasterLayers;
+      expect(layers?.contains(expectedValue.first), true);
+      expect(layers?.contains(expectedValue.last), true);
+    } else {
+      fail("Expected source to be RasterArraySource");
+    }
+  });
+
   testWidgets('clearData', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -375,5 +432,15 @@ void main() {
     var clusterExpansionZoom =
         await mapboxMap.getGeoJsonClusterExpansionZoom('earthquakes', feature);
     expect(clusterExpansionZoom.value, '1');
+  });
+
+  testWidgets('snapshot', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await mapboxMap.loadStyleURI(MapboxStyles.DARK);
+    await app.events.onMapIdle.future;
+    final snapshot = await mapboxMap.snapshot();
+    expect(snapshot, isNotNull);
   });
 }

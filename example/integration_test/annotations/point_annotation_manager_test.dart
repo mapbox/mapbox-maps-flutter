@@ -116,6 +116,10 @@ void main() {
     var textRotationAlignment = await manager.getTextRotationAlignment();
     expect(TextRotationAlignment.MAP, textRotationAlignment);
 
+    await manager.setIconColorSaturation(1.0);
+    var iconColorSaturation = await manager.getIconColorSaturation();
+    expect(1.0, iconColorSaturation);
+
     await manager.setIconTranslate([0.0, 1.0]);
     var iconTranslate = await manager.getIconTranslate();
     expect([0.0, 1.0], iconTranslate);

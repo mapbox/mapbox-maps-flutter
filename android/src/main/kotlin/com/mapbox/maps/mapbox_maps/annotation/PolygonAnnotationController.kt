@@ -2,9 +2,6 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.mapbox_maps.pigeons.*
-import com.mapbox.maps.mapbox_maps.toMap
-import com.mapbox.maps.mapbox_maps.toPointsList
-import com.mapbox.maps.mapbox_maps.toPolygon
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import toFLTFillTranslateAnchor
 import toFillTranslateAnchor
@@ -121,7 +118,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
   private fun updateAnnotation(annotation: PolygonAnnotation): com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {
-      originalAnnotation.geometry = it.toPolygon()
+      originalAnnotation.geometry = it
     }
     annotation.fillSortKey?.let {
       originalAnnotation.fillSortKey = it
@@ -233,7 +230,7 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
 fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAnnotation(): PolygonAnnotation {
   return PolygonAnnotation(
     id = id,
-    geometry = geometry.toMap(),
+    geometry = geometry,
     fillSortKey = fillSortKey,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillColor = fillColorInt?.toUInt()?.toLong(),
@@ -247,7 +244,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
 fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions {
   val options = com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions()
   this.geometry?.let {
-    options.withPoints(it.toPointsList())
+    options.withGeometry(it)
   }
   this.fillSortKey?.let {
     options.withFillSortKey(it)

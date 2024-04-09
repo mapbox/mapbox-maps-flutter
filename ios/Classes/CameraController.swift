@@ -103,19 +103,7 @@ final class CameraController: _CameraManager {
     }
 
     func getCameraState() throws -> CameraState {
-        let camera = self.mapboxMap.cameraState
-        return CameraState(
-            center: Point(camera.center),
-            padding: MbxEdgeInsets(
-                top: camera.padding.top,
-                left: camera.padding.left,
-                bottom: camera.padding.bottom,
-                right: camera.padding.right
-            ),
-            zoom: camera.zoom,
-            bearing: camera.bearing,
-            pitch: camera.pitch
-        )
+        return mapboxMap.cameraState.toFLTCameraState()
     }
 
     func setBounds(options: CameraBoundsOptions) throws {

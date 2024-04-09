@@ -47,15 +47,15 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
       createOneAnnotation(list);
       var options = <PointAnnotationOptions>[];
       for (var i = 0; i < 5; i++) {
-        options.add(PointAnnotationOptions(
-            geometry: createRandomPoint().toJson(), image: list));
+        options.add(
+            PointAnnotationOptions(geometry: createRandomPoint(), image: list));
       }
       pointAnnotationManager?.createMulti(options);
 
       var carOptions = <PointAnnotationOptions>[];
       for (var i = 0; i < 20; i++) {
         carOptions.add(PointAnnotationOptions(
-            geometry: createRandomPoint().toJson(), iconImage: "car-15"));
+            geometry: createRandomPoint(), iconImage: "car-15"));
       }
       pointAnnotationManager?.createMulti(carOptions);
       pointAnnotationManager
@@ -70,7 +70,7 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
                 coordinates: Position(
               0.381457,
               6.687337,
-            )).toJson(),
+            )),
             textField: "custom-icon",
             textOffset: [0.0, -2.0],
             textColor: Colors.red.value,
@@ -96,11 +96,11 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
       child: Text('update a point annotation'),
       onPressed: () {
         if (pointAnnotation != null) {
-          var point = Point.fromJson((pointAnnotation!.geometry)!.cast());
+          var point = pointAnnotation!.geometry;
           var newPoint = Point(
               coordinates: Position(
                   point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
-          pointAnnotation?.geometry = newPoint.toJson();
+          pointAnnotation?.geometry = newPoint;
           pointAnnotationManager?.update(pointAnnotation!);
         }
       },

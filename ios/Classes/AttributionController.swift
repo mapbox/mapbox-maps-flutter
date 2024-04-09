@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Restricted) import MapboxMaps
 
 final class AttributionController: AttributionSettingsInterface {
 
@@ -19,7 +19,7 @@ final class AttributionController: AttributionSettingsInterface {
             attributionButton.position = .topTrailing
             attributionButton.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-
+        attributionButton.visibility = (settings.enabled ?? true) ? .visible : .hidden
         ornaments.options.attributionButton = attributionButton
 
         if let iconColor = settings.iconColor {
@@ -33,6 +33,7 @@ final class AttributionController: AttributionSettingsInterface {
         let iconColor = ornaments.attributionButton.tintColor.rgb()
 
         return AttributionSettings(
+            enabled: options.visibility != .hidden,
             iconColor: Int64(iconColor),
             position: position,
             marginLeft: options.margins.x,

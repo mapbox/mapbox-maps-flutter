@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// A spherical dome around the map that is always rendered behind all other layers.
 class SkyLayer extends Layer {
   SkyLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     this.skyAtmosphereColor,
     this.skyAtmosphereHaloColor,
     this.skyAtmosphereSun,
@@ -60,7 +60,7 @@ class SkyLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
     if (skyAtmosphereColor != null) {
@@ -88,7 +88,7 @@ class SkyLayer extends Layer {
       paint["sky-opacity"] = skyOpacity;
     }
     if (skyType != null) {
-      paint["sky-type"] = skyType?.toString().split('.').last.toLowerCase();
+      paint["sky-type"] = skyType?.name.toLowerCase().replaceAll("_", "-");
     }
     var properties = {
       "id": id,
@@ -124,11 +124,9 @@ class SkyLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       skyAtmosphereColor:
           (map["paint"]["sky-atmosphere-color"] as List?)?.toRGBAInt(),
@@ -153,11 +151,9 @@ class SkyLayer extends Layer {
           : null,
       skyType: map["paint"]["sky-type"] == null
           ? null
-          : SkyType.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : SkyType.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["sky-type"])),
     );
   }

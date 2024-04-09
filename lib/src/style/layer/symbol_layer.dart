@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// An icon or a text label.
 class SymbolLayer extends Layer {
   SymbolLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.iconAllowOverlap,
@@ -53,6 +53,7 @@ class SymbolLayer extends Layer {
     this.textVariableAnchor,
     this.textWritingMode,
     this.iconColor,
+    this.iconColorSaturation,
     this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
@@ -139,7 +140,7 @@ class SymbolLayer extends Layer {
   /// Distance between two symbol anchors.
   double? symbolSpacing;
 
-  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
   bool? symbolZElevate;
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
@@ -211,7 +212,10 @@ class SymbolLayer extends Layer {
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  double? iconColorSaturation;
+
+  /// Controls the intensity of light emitted on the source features.
   double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
@@ -238,7 +242,7 @@ class SymbolLayer extends Layer {
   /// The color with which the text will be drawn.
   int? textColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
@@ -264,14 +268,14 @@ class SymbolLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (iconAllowOverlap != null) {
       layout["icon-allow-overlap"] = iconAllowOverlap;
     }
     if (iconAnchor != null) {
       layout["icon-anchor"] =
-          iconAnchor?.toString().split('.').last.toLowerCase();
+          iconAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (iconIgnorePlacement != null) {
       layout["icon-ignore-placement"] = iconIgnorePlacement;
@@ -293,21 +297,21 @@ class SymbolLayer extends Layer {
     }
     if (iconPitchAlignment != null) {
       layout["icon-pitch-alignment"] =
-          iconPitchAlignment?.toString().split('.').last.toLowerCase();
+          iconPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
     if (iconRotate != null) {
       layout["icon-rotate"] = iconRotate;
     }
     if (iconRotationAlignment != null) {
       layout["icon-rotation-alignment"] =
-          iconRotationAlignment?.toString().split('.').last.toLowerCase();
+          iconRotationAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
     if (iconSize != null) {
       layout["icon-size"] = iconSize;
     }
     if (iconTextFit != null) {
       layout["icon-text-fit"] =
-          iconTextFit?.toString().split('.').last.toLowerCase();
+          iconTextFit?.name.toLowerCase().replaceAll("_", "-");
     }
     if (iconTextFitPadding != null) {
       layout["icon-text-fit-padding"] = iconTextFitPadding;
@@ -317,7 +321,7 @@ class SymbolLayer extends Layer {
     }
     if (symbolPlacement != null) {
       layout["symbol-placement"] =
-          symbolPlacement?.toString().split('.').last.toLowerCase();
+          symbolPlacement?.name.toLowerCase().replaceAll("_", "-");
     }
     if (symbolSortKey != null) {
       layout["symbol-sort-key"] = symbolSortKey;
@@ -330,14 +334,14 @@ class SymbolLayer extends Layer {
     }
     if (symbolZOrder != null) {
       layout["symbol-z-order"] =
-          symbolZOrder?.toString().split('.').last.toLowerCase();
+          symbolZOrder?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textAllowOverlap != null) {
       layout["text-allow-overlap"] = textAllowOverlap;
     }
     if (textAnchor != null) {
       layout["text-anchor"] =
-          textAnchor?.toString().split('.').last.toLowerCase();
+          textAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textFont != null) {
       layout["text-font"] = textFont;
@@ -347,7 +351,7 @@ class SymbolLayer extends Layer {
     }
     if (textJustify != null) {
       layout["text-justify"] =
-          textJustify?.toString().split('.').last.toLowerCase();
+          textJustify?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textKeepUpright != null) {
       layout["text-keep-upright"] = textKeepUpright;
@@ -375,7 +379,7 @@ class SymbolLayer extends Layer {
     }
     if (textPitchAlignment != null) {
       layout["text-pitch-alignment"] =
-          textPitchAlignment?.toString().split('.').last.toLowerCase();
+          textPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textRadialOffset != null) {
       layout["text-radial-offset"] = textRadialOffset;
@@ -385,14 +389,14 @@ class SymbolLayer extends Layer {
     }
     if (textRotationAlignment != null) {
       layout["text-rotation-alignment"] =
-          textRotationAlignment?.toString().split('.').last.toLowerCase();
+          textRotationAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textSize != null) {
       layout["text-size"] = textSize;
     }
     if (textTransform != null) {
       layout["text-transform"] =
-          textTransform?.toString().split('.').last.toLowerCase();
+          textTransform?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textVariableAnchor != null) {
       layout["text-variable-anchor"] = textVariableAnchor;
@@ -403,6 +407,9 @@ class SymbolLayer extends Layer {
     var paint = {};
     if (iconColor != null) {
       paint["icon-color"] = iconColor?.toRGBA();
+    }
+    if (iconColorSaturation != null) {
+      paint["icon-color-saturation"] = iconColorSaturation;
     }
     if (iconEmissiveStrength != null) {
       paint["icon-emissive-strength"] = iconEmissiveStrength;
@@ -427,7 +434,7 @@ class SymbolLayer extends Layer {
     }
     if (iconTranslateAnchor != null) {
       paint["icon-translate-anchor"] =
-          iconTranslateAnchor?.toString().split('.').last.toLowerCase();
+          iconTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (textColor != null) {
       paint["text-color"] = textColor?.toRGBA();
@@ -452,7 +459,7 @@ class SymbolLayer extends Layer {
     }
     if (textTranslateAnchor != null) {
       paint["text-translate-anchor"] =
-          textTranslateAnchor?.toString().split('.').last.toLowerCase();
+          textTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     var properties = {
       "id": id,
@@ -494,22 +501,18 @@ class SymbolLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       iconAllowOverlap: map["layout"]["icon-allow-overlap"] is bool?
           ? map["layout"]["icon-allow-overlap"] as bool?
           : null,
       iconAnchor: map["layout"]["icon-anchor"] == null
           ? null
-          : IconAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : IconAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["icon-anchor"])),
       iconIgnorePlacement: map["layout"]["icon-ignore-placement"] is bool?
           ? map["layout"]["icon-ignore-placement"] as bool?
@@ -531,33 +534,27 @@ class SymbolLayer extends Layer {
           : null,
       iconPitchAlignment: map["layout"]["icon-pitch-alignment"] == null
           ? null
-          : IconPitchAlignment.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : IconPitchAlignment.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["icon-pitch-alignment"])),
       iconRotate: map["layout"]["icon-rotate"] is num?
           ? (map["layout"]["icon-rotate"] as num?)?.toDouble()
           : null,
       iconRotationAlignment: map["layout"]["icon-rotation-alignment"] == null
           ? null
-          : IconRotationAlignment.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : IconRotationAlignment.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["icon-rotation-alignment"])),
       iconSize: map["layout"]["icon-size"] is num?
           ? (map["layout"]["icon-size"] as num?)?.toDouble()
           : null,
       iconTextFit: map["layout"]["icon-text-fit"] == null
           ? null
-          : IconTextFit.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : IconTextFit.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["icon-text-fit"])),
       iconTextFitPadding: (map["layout"]["icon-text-fit-padding"] as List?)
           ?.map<double?>((e) => e.toDouble())
@@ -567,11 +564,9 @@ class SymbolLayer extends Layer {
           : null,
       symbolPlacement: map["layout"]["symbol-placement"] == null
           ? null
-          : SymbolPlacement.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : SymbolPlacement.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["symbol-placement"])),
       symbolSortKey: map["layout"]["symbol-sort-key"] is num?
           ? (map["layout"]["symbol-sort-key"] as num?)?.toDouble()
@@ -584,22 +579,18 @@ class SymbolLayer extends Layer {
           : null,
       symbolZOrder: map["layout"]["symbol-z-order"] == null
           ? null
-          : SymbolZOrder.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : SymbolZOrder.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["symbol-z-order"])),
       textAllowOverlap: map["layout"]["text-allow-overlap"] is bool?
           ? map["layout"]["text-allow-overlap"] as bool?
           : null,
       textAnchor: map["layout"]["text-anchor"] == null
           ? null
-          : TextAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["text-anchor"])),
       textFont: (map["layout"]["text-font"] as List?)
           ?.map<String?>((e) => e.toString())
@@ -609,11 +600,9 @@ class SymbolLayer extends Layer {
           : null,
       textJustify: map["layout"]["text-justify"] == null
           ? null
-          : TextJustify.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextJustify.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["text-justify"])),
       textKeepUpright: map["layout"]["text-keep-upright"] is bool?
           ? map["layout"]["text-keep-upright"] as bool?
@@ -641,11 +630,9 @@ class SymbolLayer extends Layer {
           : null,
       textPitchAlignment: map["layout"]["text-pitch-alignment"] == null
           ? null
-          : TextPitchAlignment.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextPitchAlignment.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["text-pitch-alignment"])),
       textRadialOffset: map["layout"]["text-radial-offset"] is num?
           ? (map["layout"]["text-radial-offset"] as num?)?.toDouble()
@@ -655,22 +642,18 @@ class SymbolLayer extends Layer {
           : null,
       textRotationAlignment: map["layout"]["text-rotation-alignment"] == null
           ? null
-          : TextRotationAlignment.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextRotationAlignment.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["text-rotation-alignment"])),
       textSize: map["layout"]["text-size"] is num?
           ? (map["layout"]["text-size"] as num?)?.toDouble()
           : null,
       textTransform: map["layout"]["text-transform"] == null
           ? null
-          : TextTransform.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextTransform.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["text-transform"])),
       textVariableAnchor: (map["layout"]["text-variable-anchor"] as List?)
           ?.map<String?>((e) => e.toString())
@@ -679,6 +662,9 @@ class SymbolLayer extends Layer {
           ?.map<String?>((e) => e.toString())
           .toList(),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
+      iconColorSaturation: map["paint"]["icon-color-saturation"] is num?
+          ? (map["paint"]["icon-color-saturation"] as num?)?.toDouble()
+          : null,
       iconEmissiveStrength: map["paint"]["icon-emissive-strength"] is num?
           ? (map["paint"]["icon-emissive-strength"] as num?)?.toDouble()
           : null,
@@ -700,11 +686,9 @@ class SymbolLayer extends Layer {
           .toList(),
       iconTranslateAnchor: map["paint"]["icon-translate-anchor"] == null
           ? null
-          : IconTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : IconTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["icon-translate-anchor"])),
       textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
       textEmissiveStrength: map["paint"]["text-emissive-strength"] is num?
@@ -725,11 +709,9 @@ class SymbolLayer extends Layer {
           .toList(),
       textTranslateAnchor: map["paint"]["text-translate-anchor"] == null
           ? null
-          : TextTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : TextTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["text-translate-anchor"])),
     );
   }

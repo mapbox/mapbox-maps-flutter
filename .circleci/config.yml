@@ -35,12 +35,12 @@ jobs:
         type: string
         default: example/build/app/outputs/apk
     docker:
-      - image: cimg/android:2022.09
+      - image: cimg/android:2024.04
     resource_class: 2xlarge
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.16.9
+          version: 3.19.6
           app-dir: example
       - run:
           name: ktlint
@@ -99,7 +99,7 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.16.9
+          version: 3.19.6
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
