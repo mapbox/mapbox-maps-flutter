@@ -6,16 +6,20 @@ class BackgroundLayer extends Layer {
   BackgroundLayer({
     required id,
     visibility,
+    visibilityAsExpression,
     minZoom,
     maxZoom,
     slot,
     this.backgroundColor,
+    this.backgroundColorExpression,
     this.backgroundEmissiveStrength,
+    this.backgroundEmissiveStrengthExpression,
     this.backgroundOpacity,
     this.backgroundPattern,
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityAsExpression: visibilityAsExpression,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -26,8 +30,14 @@ class BackgroundLayer extends Layer {
   /// The color with which the background will be drawn.
   int? backgroundColor;
 
+  /// The color with which the background will be drawn.
+  List<Object>? backgroundColorExpression;
+
   /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
   double? backgroundEmissiveStrength;
+
+  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  List<Object>? backgroundEmissiveStrengthExpression;
 
   /// The opacity at which the background will be drawn.
   double? backgroundOpacity;
@@ -45,6 +55,9 @@ class BackgroundLayer extends Layer {
     var paint = {};
     if (backgroundColor != null) {
       paint["background-color"] = backgroundColor?.toRGBA();
+    }
+    if (backgroundColorExpression != null) {
+      paint["background-color"] = backgroundColorExpression;
     }
     if (backgroundEmissiveStrength != null) {
       paint["background-emissive-strength"] = backgroundEmissiveStrength;
@@ -87,19 +100,14 @@ class BackgroundLayer extends Layer {
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       slot: map["slot"],
-      visibility: map["layout"]["visibility"] == null
-          ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
-              .toLowerCase()
-              .contains(map["layout"]["visibility"])),
+      visibility: map["layout"]["visibility"] is String
+          ? Layer._normalizedVisibilityNames.contains(map["layout"]["visibility"])
+          : Visibility.VISIBLE,
+      visibilityAsExpression: map["layout"]["visibility"].optionalCast(),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
-      backgroundEmissiveStrength: map["paint"]["background-emissive-strength"]
-              is num?
-          ? (map["paint"]["background-emissive-strength"] as num?)?.toDouble()
-          : null,
+      backgroundColorExpression: map["paint"]["background-color"].optionalCast(),
+      backgroundEmissiveStrength: map["paint"]["background-emissive-strength"].optionalCast(),
+      backgroundEmissiveStrengthExpression: map["paint"]["background-emissive-strength"].optionalCast(),
       backgroundOpacity: map["paint"]["background-opacity"] is num?
           ? (map["paint"]["background-opacity"] as num?)?.toDouble()
           : null,
@@ -110,4 +118,7 @@ class BackgroundLayer extends Layer {
   }
 }
 
+extension on dynamic {
+  T? optionalCast<T>() => this is T ? this : null;
+}
 // End of generated file.
