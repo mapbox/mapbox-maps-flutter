@@ -1,6 +1,5 @@
 package com.mapbox.maps.mapbox_maps
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
