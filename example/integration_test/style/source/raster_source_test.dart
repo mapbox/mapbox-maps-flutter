@@ -29,7 +29,8 @@ void main() {
       attribution: "abc",
       volatile: true,
       prefetchZoomDelta: 1.0,
-      tileCacheBudget: TileCacheBudget.MEGABYTES,
+      tileCacheBudget:
+          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
       minimumTileUpdateInterval: 1.0,
       maxOverscaleFactorForParentTiles: 1.0,
       tileRequestsDelay: 1.0,
@@ -66,7 +67,10 @@ void main() {
     expect(prefetchZoomDelta, 1.0);
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
+    expect(tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
+    expect(tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
 
     var minimumTileUpdateInterval = await source.minimumTileUpdateInterval;
     expect(minimumTileUpdateInterval, 1.0);

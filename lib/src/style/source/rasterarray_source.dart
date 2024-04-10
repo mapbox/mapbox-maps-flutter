@@ -13,7 +13,7 @@ class RasterArraySource extends Source {
     double? maxzoom,
     double? tileSize,
     String? attribution,
-    List<RasterDataLayer>? rasterLayers,
+    List<RasterDataLayer?>? rasterLayers,
     TileCacheBudget? tileCacheBudget,
   }) : super(id: id) {
     _url = url;
@@ -121,10 +121,10 @@ class RasterArraySource extends Source {
     });
   }
 
-  List<RasterDataLayer>? _rasterLayers;
+  List<RasterDataLayer?>? _rasterLayers;
 
   /// Contains the description of the raster data layers and the bands contained within the tiles.
-  Future<List<RasterDataLayer>?> get rasterLayers async {
+  Future<List<RasterDataLayer?>?> get rasterLayers async {
     return _style?.getStyleSourceProperty(id, "rasterLayers").then((value) {
       if (value.value != null) {
         return (value.value as List<dynamic>).cast();
@@ -142,7 +142,7 @@ class RasterArraySource extends Source {
         ?.getStyleSourceProperty(id, "tile-cache-budget")
         .then((value) {
       if (value.value != null) {
-        return TileCacheBudget.MEGABYTES;
+        return TileCacheBudget.decode(value.value);
       } else {
         return null;
       }
@@ -182,7 +182,7 @@ class RasterArraySource extends Source {
         properties["attribution"] = _attribution;
       }
       if (_rasterLayers != null) {
-        properties["rasterLayers"] = _rasterLayers;
+        properties["rasterLayers"] = _rasterLayers?.first;
       }
     }
 

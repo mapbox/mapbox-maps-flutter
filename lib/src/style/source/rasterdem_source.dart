@@ -187,7 +187,7 @@ class RasterDemSource extends Source {
         ?.getStyleSourceProperty(id, "tile-cache-budget")
         .then((value) {
       if (value.value != null) {
-        return TileCacheBudget.MEGABYTES;
+        return TileCacheBudget.decode(value.value);
       } else {
         return null;
       }

@@ -47,7 +47,8 @@ void main() {
       lineMetrics: true,
       generateId: true,
       prefetchZoomDelta: 1.0,
-      tileCacheBudget: TileCacheBudget.MEGABYTES,
+      tileCacheBudget:
+          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
     ));
 
     var source = await mapboxMap.style.getSource('source') as GeoJsonSource;
@@ -97,7 +98,7 @@ void main() {
     var generateId = await source.generateId;
     expect(generateId, true);
 
-    // TODO: Investigate why this check is suseptible to fail on iOS
+    // TODO: Investigate why this check is susceptible to fail on iOS
     // https://mapbox.atlassian.net/browse/MAPSFLT-141
     if (Platform.isAndroid) {
       var prefetchZoomDelta = await source.prefetchZoomDelta;
@@ -105,7 +106,10 @@ void main() {
     }
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
+    expect(tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
+    expect(tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
   });
 }
 // End of generated file.

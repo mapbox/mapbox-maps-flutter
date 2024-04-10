@@ -29,7 +29,8 @@ void main() {
       rasterLayers: [
         RasterDataLayer("layerId", ["123", "456"])
       ],
-      tileCacheBudget: TileCacheBudget.MEGABYTES,
+      tileCacheBudget:
+          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
     ));
 
     var source = await mapboxMap.style.getSource('source') as RasterArraySource;
@@ -52,13 +53,17 @@ void main() {
     var attribution = await source.attribution;
     expect(attribution, "abc");
 
+    // This fails
     var rasterLayers = await source.rasterLayers;
     expect(rasterLayers, [
       RasterDataLayer("layerId", ["123", "456"])
     ]);
 
     var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget, TileCacheBudget.MEGABYTES);
+    expect(tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
+    expect(tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
   });
 }
 // End of generated file.
