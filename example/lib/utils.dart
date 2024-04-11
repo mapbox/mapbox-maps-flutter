@@ -80,7 +80,7 @@ extension AnnotationCreation on PointAnnotationManager {
 }
 
 extension PuckPosition on StyleManager {
-  Future<Position> getPuckPosition() async {
+  Future<Position?> getPuckPosition() async {
     Layer? layer;
     if (Platform.isAndroid) {
       layer = await getLayer("mapbox-location-indicator-layer");
@@ -88,7 +88,10 @@ extension PuckPosition on StyleManager {
       layer = await getLayer("puck");
     }
     final location = (layer as LocationIndicatorLayer).location;
-    return Future.value(Position(location![1]!, location[0]!));
+    if (location == null) {
+      return null;
+    }
+    return Future.value(Position(location[1]!, location[0]!));
   }
 }
 
