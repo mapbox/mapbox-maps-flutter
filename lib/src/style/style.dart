@@ -22,9 +22,6 @@ enum Encoding {
   MAPBOX,
 }
 
-enum Foo {
-  bar
-}
 /// The visibility of a layer.
 enum Visibility {
   /// The layer is shown.
@@ -179,7 +176,8 @@ class StyleTransition {
 
 /// Super class for all different types of layers.
 abstract class Layer {
-  static final List<String> _normalizedVisibilityNames = Visibility.values.map((e) => e.name.toLowerCase()).toList();
+  static final List<String> _normalizedVisibilityNames =
+      Visibility.values.map((e) => e.name.toLowerCase()).toList();
 
   /// The ID of the Layer.
   String id;
@@ -403,7 +401,10 @@ extension StyleColorList on List {
     final lightness = this[3] is num ? (this[3] as num).toDouble() : null;
     final alpha = this[4] is num ? ((this[4] as num) * 255).toDouble() : null;
 
-    if (hue != null && saturation != null && lightness != null && alpha != null) {
+    if (hue != null &&
+        saturation != null &&
+        lightness != null &&
+        alpha != null) {
       return HSLColor.fromAHSL(alpha, hue, saturation, lightness).toColor();
     } else {
       return Colors.transparent;
@@ -435,8 +436,4 @@ extension StyleColorList on List {
       return Colors.transparent;
     }
   }
-}
-
-extension on dynamic {
-  T? optionalCast<T>() => this is T ? this : null;
 }
