@@ -20,7 +20,7 @@ class ImageSource extends Source {
 
   String? _url;
 
-  /// URL that points to an image.
+  /// URL that points to an image. If the URL is not specified, the image is expected to be loaded directly during runtime.
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
       if (value.value != null) {

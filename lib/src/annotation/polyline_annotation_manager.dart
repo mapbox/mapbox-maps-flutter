@@ -72,11 +72,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineDepthOcclusionFactor() =>
       messenger.getLineDepthOcclusionFactor(id);
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   Future<void> setLineEmissiveStrength(double lineEmissiveStrength) =>
       messenger.setLineEmissiveStrength(id, lineEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   Future<double?> getLineEmissiveStrength() =>
       messenger.getLineEmissiveStrength(id);
 

@@ -16,6 +16,7 @@ class RasterDemSource extends Source {
     Encoding? encoding,
     bool? volatile,
     double? prefetchZoomDelta,
+    TileCacheBudget? tileCacheBudget,
     double? minimumTileUpdateInterval,
     double? maxOverscaleFactorForParentTiles,
     double? tileRequestsDelay,
@@ -31,6 +32,7 @@ class RasterDemSource extends Source {
     _encoding = encoding;
     _volatile = volatile;
     _prefetchZoomDelta = prefetchZoomDelta;
+    _tileCacheBudget = tileCacheBudget;
     _minimumTileUpdateInterval = minimumTileUpdateInterval;
     _maxOverscaleFactorForParentTiles = maxOverscaleFactorForParentTiles;
     _tileRequestsDelay = tileRequestsDelay;
@@ -177,6 +179,21 @@ class RasterDemSource extends Source {
     });
   }
 
+  TileCacheBudget? _tileCacheBudget;
+
+  /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
+  Future<TileCacheBudget?> get tileCacheBudget async {
+    return _style
+        ?.getStyleSourceProperty(id, "tile-cache-budget")
+        .then((value) {
+      if (value.value != null) {
+        return TileCacheBudget.decode(value.value);
+      } else {
+        return null;
+      }
+    });
+  }
+
   double? _minimumTileUpdateInterval;
 
   /// Minimum tile update interval in seconds, which is used to throttle the tile update network requests. If the given source supports loading tiles from a server, sets the minimum tile update interval. Update network requests that are more frequent than the minimum tile update interval are suppressed.
@@ -244,6 +261,9 @@ class RasterDemSource extends Source {
     if (volatile) {
       if (_prefetchZoomDelta != null) {
         properties["prefetch-zoom-delta"] = _prefetchZoomDelta;
+      }
+      if (_tileCacheBudget != null) {
+        properties["tile-cache-budget"] = _tileCacheBudget;
       }
       if (_minimumTileUpdateInterval != null) {
         properties["minimum-tile-update-interval"] = _minimumTileUpdateInterval;

@@ -111,11 +111,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Distance between two symbol anchors.
   Future<double?> getSymbolSpacing() => messenger.getSymbolSpacing(id);
 
-  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
   Future<void> setSymbolZElevate(bool symbolZElevate) =>
       messenger.setSymbolZElevate(id, symbolZElevate);
 
-  /// Position symbol on buildings (both fill extrusions and models) roof tops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and not edited after initial bucket creation. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building roofs. Symbols are sorted by elevation, except in case when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
   Future<bool?> getSymbolZElevate() => messenger.getSymbolZElevate(id);
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
@@ -191,6 +191,14 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
   Future<TextRotationAlignment?> getTextRotationAlignment() =>
       messenger.getTextRotationAlignment(id);
+
+  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  Future<void> setIconColorSaturation(double iconColorSaturation) =>
+      messenger.setIconColorSaturation(id, iconColorSaturation);
+
+  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  Future<double?> getIconColorSaturation() =>
+      messenger.getIconColorSaturation(id);
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   Future<void> setIconTranslate(List<double?> iconTranslate) =>

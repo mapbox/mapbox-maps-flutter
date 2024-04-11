@@ -178,7 +178,6 @@ class _MapboxMapsPlatform {
         '$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
-
   AndroidViewController Function(
           {required int id,
           required String viewType,

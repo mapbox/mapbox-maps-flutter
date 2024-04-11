@@ -81,7 +81,7 @@ class LineLayer extends Layer {
   /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
   double? lineDepthOcclusionFactor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? lineEmissiveStrength;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.

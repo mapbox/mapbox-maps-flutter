@@ -12,6 +12,7 @@ class HillshadeLayer extends Layer {
     required this.sourceId,
     this.sourceLayer,
     this.hillshadeAccentColor,
+    this.hillshadeEmissiveStrength,
     this.hillshadeExaggeration,
     this.hillshadeHighlightColor,
     this.hillshadeIlluminationAnchor,
@@ -36,6 +37,9 @@ class HillshadeLayer extends Layer {
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
   int? hillshadeAccentColor;
 
+  /// Controls the intensity of light emitted on the source features.
+  double? hillshadeEmissiveStrength;
+
   /// Intensity of the hillshade
   double? hillshadeExaggeration;
 
@@ -45,7 +49,7 @@ class HillshadeLayer extends Layer {
   /// Direction of light source when map is rotated.
   HillshadeIlluminationAnchor? hillshadeIlluminationAnchor;
 
-  /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map`.
+  /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.
   double? hillshadeIlluminationDirection;
 
   /// The shading color of areas that face away from the light source.
@@ -61,6 +65,9 @@ class HillshadeLayer extends Layer {
     var paint = {};
     if (hillshadeAccentColor != null) {
       paint["hillshade-accent-color"] = hillshadeAccentColor?.toRGBA();
+    }
+    if (hillshadeEmissiveStrength != null) {
+      paint["hillshade-emissive-strength"] = hillshadeEmissiveStrength;
     }
     if (hillshadeExaggeration != null) {
       paint["hillshade-exaggeration"] = hillshadeExaggeration;
@@ -127,6 +134,10 @@ class HillshadeLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       hillshadeAccentColor:
           (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
+      hillshadeEmissiveStrength: map["paint"]["hillshade-emissive-strength"]
+              is num?
+          ? (map["paint"]["hillshade-emissive-strength"] as num?)?.toDouble()
+          : null,
       hillshadeExaggeration: map["paint"]["hillshade-exaggeration"] is num?
           ? (map["paint"]["hillshade-exaggeration"] as num?)?.toDouble()
           : null,

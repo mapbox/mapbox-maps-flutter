@@ -535,6 +535,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
+    func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.iconColorSaturation))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconColorSaturation(managerId: String, iconColorSaturation: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.iconColorSaturation = iconColorSaturation
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)

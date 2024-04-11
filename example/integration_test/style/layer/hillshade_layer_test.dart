@@ -26,6 +26,7 @@ void main() {
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
       hillshadeAccentColor: Colors.red.value,
+      hillshadeEmissiveStrength: 1.0,
       hillshadeExaggeration: 1.0,
       hillshadeHighlightColor: Colors.red.value,
       hillshadeIlluminationAnchor: HillshadeIlluminationAnchor.MAP,
@@ -39,6 +40,7 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.hillshadeAccentColor, Colors.red.value);
+    expect(layer.hillshadeEmissiveStrength, 1.0);
     expect(layer.hillshadeExaggeration, 1.0);
     expect(layer.hillshadeHighlightColor, Colors.red.value);
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);

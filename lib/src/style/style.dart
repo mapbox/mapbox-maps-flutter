@@ -75,6 +75,64 @@ enum FillExtrusionTranslateAnchor {
   VIEWPORT,
 }
 
+/// The unit a cache budget should be measured in. Either Tiles or Megabytes.
+enum TileCacheBudgetType {
+  /// A tile cache budget measured in tile units
+  TILES,
+
+  /// A tile cache budget measured in megabyte units
+  MEGABYTES
+}
+
+/// Defines a resource budget, either in tile units or in megabytes.
+class TileCacheBudget {
+  /// The type of TileCacheBudget, either in Tiles or in Megabytes
+  TileCacheBudgetType type;
+
+  /// The size of the budget.
+  int size;
+
+  /// Returns the TileCacheBudget formatted into an object
+  Object toJson() {
+    switch (type) {
+      case TileCacheBudgetType.MEGABYTES:
+        return {"megabytes": size};
+      case TileCacheBudgetType.TILES:
+        return {"tiles": size};
+    }
+  }
+
+  /// Decodes the TileCacheBudget from and object
+  static TileCacheBudget? decode(Object? budget) {
+    var budgetObject =
+        Map<String, dynamic>.from(budget as Map<dynamic, dynamic>)
+            .cast<String, dynamic>();
+    var budgetType = budgetObject.keys.first;
+    var budgetSize = budgetObject.values.first;
+
+    if (budgetType == 'megabytes') {
+      return TileCacheBudget.inMegabytes(
+        TileCacheBudgetInMegabytes(size: budgetSize));
+    } else if (budgetType == 'tiles') {
+      return TileCacheBudget.inTiles(
+        TileCacheBudgetInTiles(size: budgetSize));
+    } else {
+      return null;
+    }
+  }
+
+  TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes budget)
+      : type = TileCacheBudgetType.MEGABYTES,
+        size = budget.size;
+
+  TileCacheBudget.inTiles(TileCacheBudgetInTiles budget)
+      : type = TileCacheBudgetType.TILES,
+        size = budget.size;
+
+  TileCacheBudget(this.type, this.size);
+}
+
+
 /// Define the duration and delay for a style transition.
 class StyleTransition {
   StyleTransition({this.duration, this.delay});
@@ -165,7 +223,7 @@ extension StyleLayer on StyleManager {
     return addStyleLayer(encode, position);
   }
 
-  /// Update an exsiting layer in the style.
+  /// Update an existing layer in the style.
   Future<void> updateLayer(Layer layer) {
     var encode = layer._encode();
     return setStyleLayerProperties(layer.id, encode);

@@ -713,6 +713,28 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
   }
 
+  override fun setIconColorSaturation(
+    managerId: String,
+    iconColorSaturation: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconColorSaturation = iconColorSaturation
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconColorSaturation(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    if (manager.iconColorSaturation != null) {
+      callback(Result.success(manager.iconColorSaturation!!))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setIconTranslate(
     managerId: String,
     iconTranslate: List<Double?>,
