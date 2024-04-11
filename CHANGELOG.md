@@ -63,6 +63,7 @@ onTapListener: { (context)
 * Fix camera center not applied from map init options.
 * [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
 * [Android] Fix `maps-lifecycle` plugin crash with `java.lang.IllegalStateException: Please ensure that the hosting activity/fragment is a valid LifecycleOwner`.
+* Update Maps SDK to 11.3.0.
 
 ### 1.0.0
 
