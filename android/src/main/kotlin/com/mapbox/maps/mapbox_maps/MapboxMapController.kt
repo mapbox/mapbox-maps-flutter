@@ -3,7 +3,10 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
@@ -57,30 +60,106 @@ class MapboxMapController(
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
 
-  private val mapView: MapView = MapView(context, mapInitOptions)
-  private val mapboxMap: MapboxMap = mapView.mapboxMap
+  private var mapView: MapView? = null
+  private var mapboxMap: MapboxMap? = null
   private val methodChannel: MethodChannel
-  private val styleController: StyleController = StyleController(mapboxMap, context)
-  private val cameraController: CameraController = CameraController(mapboxMap, context)
-  private val projectionController: MapProjectionController = MapProjectionController(mapboxMap)
-  private val mapInterfaceController: MapInterfaceController = MapInterfaceController(mapboxMap, context)
-  private val animationController: AnimationController = AnimationController(mapboxMap, context)
-  private val annotationController: AnnotationController = AnnotationController(mapView)
-  private val locationComponentController = LocationComponentController(mapView, context)
-  private val gestureController = GestureController(mapView, context)
-  private val logoController = LogoController(mapView)
-  private val attributionController = AttributionController(mapView)
-  private val scaleBarController = ScaleBarController(mapView)
-  private val compassController = CompassController(mapView)
+  private val styleController: StyleController
+  private val cameraController: CameraController
+  private val projectionController: MapProjectionController
+  private val mapInterfaceController: MapInterfaceController
+  private val animationController: AnimationController
+  private val annotationController: AnnotationController
+  private val locationComponentController: LocationComponentController
+  private val gestureController: GestureController
+  private val logoController: LogoController
+  private val attributionController: AttributionController
+  private val scaleBarController: ScaleBarController
+  private val compassController: CompassController
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
   private val gson = GsonBuilder()
     .registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter)
     .registerTypeAdapterFactory(EnumOrdinalTypeAdapterFactory)
     .create()
+
+  /*
+    Mirrors lifecycle of the parent, with one addition - switches to DESTROYED state
+    when `dispose` is called.
+    `parentLifecycle` is the lifecycle of the Flutter activity, which may live much longer then
+    the MapView attached.
+  */
+  private class LifecycleHelper(
+    val parentLifecycle: Lifecycle,
+  ) : LifecycleOwner, DefaultLifecycleObserver {
+
+    val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
+
+    init {
+      parentLifecycle.addObserver(this)
+    }
+
+    override fun getLifecycle(): Lifecycle {
+      return lifecycleRegistry
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.CREATED
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.STARTED
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.RESUMED
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.STARTED
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.CREATED
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+      lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+    }
+
+    fun dispose() {
+      parentLifecycle.removeObserver(this)
+      // fires MapView.onStop
+      lifecycleRegistry.currentState = Lifecycle.State.CREATED
+      // fires MapView.onDestroy
+      lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
+    }
+  }
+
+  private val lifecycleHelper: LifecycleHelper
+
   init {
+    val mapView = MapView(context, mapInitOptions)
+    val mapboxMap = mapView.mapboxMap
+    this.mapView = mapView
+    this.mapboxMap = mapboxMap
+    styleController = StyleController(mapboxMap, context)
+    cameraController = CameraController(mapboxMap, context)
+    projectionController = MapProjectionController(mapboxMap)
+    mapInterfaceController = MapInterfaceController(mapboxMap, context)
+    animationController = AnimationController(mapboxMap, context)
+    annotationController = AnnotationController(mapView)
+    locationComponentController = LocationComponentController(mapView, context)
+    gestureController = GestureController(mapView, context)
+    logoController = LogoController(mapView)
+    attributionController = AttributionController(mapView)
+    scaleBarController = ScaleBarController(mapView)
+    compassController = CompassController(mapView)
+
     changeUserAgent(pluginVersion)
-    lifecycleProvider.getLifecycle()?.addObserver(this)
+
+    lifecycleHelper = LifecycleHelper(lifecycleProvider.getLifecycle()!!)
+    ViewTreeLifecycleOwner.set(mapView, lifecycleHelper)
+
     StyleManager.setUp(proxyBinaryMessenger, styleController)
     _CameraManager.setUp(proxyBinaryMessenger, cameraController)
     Projection.setUp(proxyBinaryMessenger, projectionController)
@@ -99,67 +178,68 @@ class MapboxMapController(
 
     // TODO: check if state-triggered subscription change does not lead to multiple subscriptions/not unsubscribing when listener becomes null
     for (event in eventTypes) {
-      subscribeToEvent(_MapEvent.values()[event])
+      mapboxMap.subscribeToEvent(_MapEvent.values()[event])
     }
   }
 
-  private fun subscribeToEvent(event: _MapEvent) {
+  private fun MapboxMap.subscribeToEvent(event: _MapEvent) {
     when (event) {
-      _MapEvent.MAP_LOADED -> mapboxMap.subscribeMapLoaded {
+      _MapEvent.MAP_LOADED -> subscribeMapLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.MAP_LOADING_ERROR -> mapboxMap.subscribeMapLoadingError {
+      _MapEvent.MAP_LOADING_ERROR -> subscribeMapLoadingError {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.STYLE_LOADED -> mapboxMap.subscribeStyleLoaded {
+      _MapEvent.STYLE_LOADED -> subscribeStyleLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.STYLE_DATA_LOADED -> mapboxMap.subscribeStyleDataLoaded {
+      _MapEvent.STYLE_DATA_LOADED -> subscribeStyleDataLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.CAMERA_CHANGED -> mapboxMap.subscribeCameraChanged {
+      _MapEvent.CAMERA_CHANGED -> subscribeCameraChanged {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.MAP_IDLE -> mapboxMap.subscribeMapIdle {
+      _MapEvent.MAP_IDLE -> subscribeMapIdle {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.SOURCE_ADDED -> mapboxMap.subscribeSourceAdded {
+      _MapEvent.SOURCE_ADDED -> subscribeSourceAdded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.SOURCE_REMOVED -> mapboxMap.subscribeSourceRemoved {
+      _MapEvent.SOURCE_REMOVED -> subscribeSourceRemoved {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.SOURCE_DATA_LOADED -> mapboxMap.subscribeSourceDataLoaded {
+      _MapEvent.SOURCE_DATA_LOADED -> subscribeSourceDataLoaded {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.STYLE_IMAGE_MISSING -> mapboxMap.subscribeStyleImageMissing {
+      _MapEvent.STYLE_IMAGE_MISSING -> subscribeStyleImageMissing {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> mapboxMap.subscribeStyleImageRemoveUnused {
+      _MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> subscribeStyleImageRemoveUnused {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.RENDER_FRAME_STARTED -> mapboxMap.subscribeRenderFrameStarted {
+      _MapEvent.RENDER_FRAME_STARTED -> subscribeRenderFrameStarted {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.RENDER_FRAME_FINISHED -> mapboxMap.subscribeRenderFrameFinished {
+      _MapEvent.RENDER_FRAME_FINISHED -> subscribeRenderFrameFinished {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
-      _MapEvent.RESOURCE_REQUEST -> mapboxMap.subscribeResourceRequest {
+      _MapEvent.RESOURCE_REQUEST -> subscribeResourceRequest {
         methodChannel.invokeMethod(event.methodName, gson.toJson(it))
       }
     }
   }
 
-  override fun getView(): View {
+  override fun getView(): View? {
     return mapView
   }
 
-  override fun dispose() { }
-
-  private fun releaseMethodChannels() {
-    lifecycleProvider.getLifecycle()?.removeObserver(this)
-    mapView.onStop()
-    mapView.onDestroy()
+  override fun dispose() {
+    if (mapView == null) {
+      return
+    }
+    lifecycleHelper.dispose()
+    mapView = null
+    mapboxMap = null
     methodChannel.setMethodCallHandler(null)
     StyleManager.setUp(proxyBinaryMessenger, null)
     _CameraManager.setUp(proxyBinaryMessenger, null)
@@ -173,16 +253,6 @@ class MapboxMapController(
     CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
     ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
     AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
-  }
-
-  override fun onStart(owner: LifecycleOwner) {
-    super.onStart(owner)
-    mapView.onStart()
-  }
-
-  override fun onStop(owner: LifecycleOwner) {
-    super.onStop(owner)
-    mapView.onStop()
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -202,7 +272,7 @@ class MapboxMapController(
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {
-        releaseMethodChannels()
+        dispose()
         result.success(null)
       }
       else -> {
