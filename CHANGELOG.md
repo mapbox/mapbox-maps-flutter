@@ -4,7 +4,7 @@
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
 * Deprecate `cameraForCoordinates`, please use `cameraForCoordinatesPadding` instead.
-* Add a way to disable default puck' image(s) when using `DefaultLocationPuck2D` by passing an empty byte array, for example, the following code shows a puck 2D with custom top image, default bearing image and no shadow image.
+* Add a way to disable default puck's image(s) when using `DefaultLocationPuck2D`. By passing an empty byte array, for example, the following code shows a puck 2D with custom top image, default bearing image and no shadow image.
 ```
 mapboxMap?.location.updateSettings(LocationComponentSettings(
     enabled: true,
@@ -60,14 +60,12 @@ onTapListener: { (context)
 ```
 
 
-* Bump Pigeon to 17.1.2
-* [iOS] Fix crash in `onStyleImageMissingListener`.
 * Fix camera center not applied from map init options.
 * [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
 
 ### 1.0.0
 
-* Add `MapboxMapsOptions.get/setWorldview()` and ``MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
+* Add `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()`. Use this to to adjust administrative boundaries/map language based on the map's audience.
 Read more about [Mapbox worldviews](https://docs.mapbox.com/help/glossary/worldview/) and [language support](https://docs.mapbox.com/help/troubleshooting/change-language/).
 * Add a way to specify custom id for annotation manager(and subsequently its backing layer's and source's ids).
 * Add `below` parameter to `createAnnotationManager()`, use this to control the position of the annotation layer in relation to other style layers.
