@@ -18,8 +18,12 @@ import com.google.gson.TypeAdapterFactory
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.mapbox.common.*
-import com.mapbox.maps.*
+import com.mapbox.bindgen.Value
+import com.mapbox.common.SettingsServiceFactory
+import com.mapbox.common.SettingsServiceStorageType
+import com.mapbox.maps.MapInitOptions
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.pigeons.FLTMapInterfaces
 import com.mapbox.maps.pigeons.FLTSettings
@@ -260,24 +264,8 @@ class MapboxMapController(
   }
 
   private fun changeUserAgent(version: String) {
-    HttpServiceFactory.setHttpServiceInterceptor(
-      object : HttpServiceInterceptorInterface {
-        override fun onRequest(
-          request: HttpRequest,
-          continuation: HttpServiceInterceptorRequestContinuation
-        ) {
-          request.headers["user-agent"] = "${request.headers["user-agent"]} Flutter Plugin/$version"
-          continuation.run(HttpRequestOrResponse(request))
-        }
-
-        override fun onResponse(
-          response: HttpResponse,
-          continuation: HttpServiceInterceptorResponseContinuation
-        ) {
-          continuation.run(response)
-        }
-      }
-    )
+    SettingsServiceFactory.getInstance(SettingsServiceStorageType.NON_PERSISTENT)
+      .set("com.mapbox.common.telemetry.internal.custom_user_agent_fragment", Value.valueOf("FlutterPlugin/$version"))
   }
 }
 
