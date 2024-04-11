@@ -54,7 +54,8 @@ class MapboxMapController: NSObject, FlutterPlatformView {
     ) {
         self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(channelSuffix)")
 
-        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(HttpUseragentInterceptor(pluginVersion: pluginVersion))
+        _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
+            .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
@@ -205,27 +206,6 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
         annotationController?.tearDown(messenger: proxyBinaryMessenger)
-    }
-
-    final class HttpUseragentInterceptor: HttpServiceInterceptorInterface {
-
-        private var pluginVersion: String
-
-        init(pluginVersion: String) {
-            self.pluginVersion = pluginVersion
-        }
-
-        func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
-            if let oldUseragent = request.headers["userAgent"] {
-                request.headers["userAgent"] = "\(oldUseragent) FlutterPlugin/\(self.pluginVersion)"
-            }
-
-            continuation(.fromHttpRequest(request))
-        }
-
-        func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
-            continuation(response)
-        }
     }
 }
 
