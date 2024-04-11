@@ -52,7 +52,6 @@ part 'src/style/source/geojson_source.dart';
 part 'src/style/source/image_source.dart';
 part 'src/style/source/raster_source.dart';
 part 'src/style/source/rasterdem_source.dart';
-part 'src/style/source/rasterarray_source.dart';
 part 'src/style/source/vector_source.dart';
 part 'src/style/style.dart';
 part 'src/location_settings.dart';
