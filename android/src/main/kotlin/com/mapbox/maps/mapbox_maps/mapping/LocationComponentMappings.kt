@@ -47,7 +47,7 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
         puck3D.modelEmissiveStrengthExpression?.let { modelEmissiveStrengthExpression = it }
       }
     } else {
-      (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = puckBearingEnabled) else com.mapbox.maps.plugin.LocationPuck2D())
+      (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
         .apply {
           puck2D?.topImage?.let { topImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
           puck2D?.bearingImage?.let { bearingImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
