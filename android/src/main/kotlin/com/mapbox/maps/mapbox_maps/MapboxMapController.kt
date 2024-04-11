@@ -18,12 +18,29 @@ import com.google.gson.TypeAdapterFactory
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
-import com.mapbox.common.*
+import com.mapbox.common.HttpRequest
+import com.mapbox.common.HttpRequestOrResponse
+import com.mapbox.common.HttpResponse
+import com.mapbox.common.HttpServiceFactory
+import com.mapbox.common.HttpServiceInterceptorInterface
+import com.mapbox.common.HttpServiceInterceptorRequestContinuation
+import com.mapbox.common.HttpServiceInterceptorResponseContinuation
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.Projection
+import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
+import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
+import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
+import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons._MapEvent
+import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -132,7 +149,7 @@ class MapboxMapController(
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)
-    gestureController = GestureController(mapView)
+    gestureController = GestureController(mapView, context)
     logoController = LogoController(mapView)
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)

@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 private func createConnectionError(withChannelName channelName: String) -> FlutterError {
   return FlutterError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
@@ -23,10 +24,40 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   if value is NSNull { return nil }
   return value as! T?
 }
+
+/// A structure that defines additional information about map content gesture.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct MapContentGestureContext {
+  /// The location of gesture in Map view bounds.
+  var touchPosition: ScreenCoordinate
+  /// Geographical coordinate of the map gesture.
+  var point: Point
+
+  static func fromList(_ list: [Any?]) -> MapContentGestureContext? {
+    let touchPosition = ScreenCoordinate.fromList(list[0] as! [Any?])!
+    let point = Point.fromList(list[1] as! [Any?])!
+
+    return MapContentGestureContext(
+      touchPosition: touchPosition,
+      point: point
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      touchPosition.toList(),
+      point.toList(),
+    ]
+  }
+}
 private class GestureListenerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+    case 129:
+      return Point.fromList(self.readValue() as! [Any?])
+    case 130:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -36,8 +67,14 @@ private class GestureListenerCodecReader: FlutterStandardReader {
 
 private class GestureListenerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? ScreenCoordinate {
+    if let value = value as? MapContentGestureContext {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? Point {
+      super.writeByte(129)
+      super.writeValue(value.toList())
+    } else if let value = value as? ScreenCoordinate {
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -61,9 +98,9 @@ class GestureListenerCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol GestureListenerProtocol {
-  func onTap(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onLongTap(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void)
-  func onScroll(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onLongTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void)
+  func onScroll(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void)
 }
 class GestureListener: GestureListenerProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
@@ -73,10 +110,10 @@ class GestureListener: GestureListenerProtocol {
   var codec: FlutterStandardMessageCodec {
     return GestureListenerCodec.shared
   }
-  func onTap(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([coordinateArg] as [Any?]) { response in
+    channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -91,10 +128,10 @@ class GestureListener: GestureListenerProtocol {
       }
     }
   }
-  func onLongTap(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onLongTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([coordinateArg] as [Any?]) { response in
+    channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -109,10 +146,10 @@ class GestureListener: GestureListenerProtocol {
       }
     }
   }
-  func onScroll(coordinate coordinateArg: ScreenCoordinate, completion: @escaping (Result<Void, FlutterError>) -> Void) {
+  func onScroll(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, FlutterError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([coordinateArg] as [Any?]) { response in
+    channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
