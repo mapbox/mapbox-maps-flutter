@@ -1,6 +1,8 @@
 ### main
 
+
 * [Android] Fix `maps-lifecycle` plugin crash with `java.lang.IllegalStateException: Please ensure that the hosting activity/fragment is a valid LifecycleOwner`.
+* [iOS] Fix crash in `onStyleImageMissingListener`.
 * Update Maps SDK to 11.3.0.
 
 ### 1.1.0-rc.1
