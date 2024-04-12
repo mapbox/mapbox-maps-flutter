@@ -112,10 +112,9 @@ class TileCacheBudget {
 
     if (budgetType == 'megabytes') {
       return TileCacheBudget.inMegabytes(
-        TileCacheBudgetInMegabytes(size: budgetSize));
+          TileCacheBudgetInMegabytes(size: budgetSize));
     } else if (budgetType == 'tiles') {
-      return TileCacheBudget.inTiles(
-        TileCacheBudgetInTiles(size: budgetSize));
+      return TileCacheBudget.inTiles(TileCacheBudgetInTiles(size: budgetSize));
     } else {
       return null;
     }
@@ -131,7 +130,6 @@ class TileCacheBudget {
 
   TileCacheBudget(this.type, this.size);
 }
-
 
 /// Define the duration and delay for a style transition.
 class StyleTransition {
