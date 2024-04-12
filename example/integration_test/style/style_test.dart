@@ -463,12 +463,16 @@ void main() {
     await style.addStyleImage('icon', 1.0,
         MbxImage(width: 40, height: 40, data: list), true, [], [], null);
 
+    expect(await style.hasStyleImage('icon'), isTrue);
+
     getImage = await style.getStyleImage('icon');
     expect(getImage, isNotNull);
     expect(getImage!.width, 40);
     expect(getImage.height, 40);
 
     await style.removeStyleImage('icon');
+
+    expect(await style.hasStyleImage('icon'), isFalse);
 
     getImage = await style.getStyleImage('icon');
     expect(getImage, isNull);

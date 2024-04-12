@@ -330,8 +330,8 @@ final class StyleController: NSObject, FLTStyleManager {
     }
 
     func hasStyleImageImageId(_ imageId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        let image = styleManager.image(withId: imageId)
-        completion(NSNumber(value: image != nil), nil)
+        let imageExists = styleManager.imageExists(withId: imageId)
+        completion(NSNumber(value: imageExists), nil)
     }
 //
 //    func setStyleCustomGeometrySourceTileDataSourceId(_ sourceId: String,

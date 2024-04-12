@@ -1,9 +1,11 @@
-### main
-
+### 1.1.0
 
 * [Android] Fix `maps-lifecycle` plugin crash with `java.lang.IllegalStateException: Please ensure that the hosting activity/fragment is a valid LifecycleOwner`.
+* [Android] Fix `hasStyleImage()` method hanging.
+* [Android] Fix `getStyleImage()` method causing native exception.
 * [iOS] Fix crash in `onStyleImageMissingListener`.
-* Update Maps SDK to 11.3.0.
+* Update MapboxMaps version to 11.3.0. For platform-specific updates see: [iOS](https://github.com/mapbox/mapbox-maps-ios/releases/tag/v11.3.0)& [Android](https://github.com/mapbox/mapbox-maps-android/releases/tag/v11.3.0)
+
 
 ### 1.1.0-rc.1
 
