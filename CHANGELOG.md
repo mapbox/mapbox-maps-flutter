@@ -6,7 +6,6 @@
 * [iOS] Fix crash in `onStyleImageMissingListener`.
 * Update MapboxMaps version to 11.3.0. For platform-specific updates see: [iOS](https://github.com/mapbox/mapbox-maps-ios/releases/tag/v11.3.0)& [Android](https://github.com/mapbox/mapbox-maps-android/releases/tag/v11.3.0)
 
-
 ### 1.1.0-rc.1
 
 * Update MapboxMaps version to 11.3.0-rc.1. For platform-specific updates see: [iOS](https://github.com/mapbox/mapbox-maps-ios/releases/tag/v11.3.0-rc.1)& [Android](https://github.com/mapbox/mapbox-maps-android/releases/tag/v11.3.0-rc.1)
