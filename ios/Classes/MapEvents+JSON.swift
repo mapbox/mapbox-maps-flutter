@@ -113,7 +113,7 @@ extension StyleImageMissing: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
             "imageId": imageId,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
