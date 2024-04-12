@@ -5,6 +5,7 @@
 * [Android] Fix `hasStyleImage()` method hanging.
 * [Android] Fix `getStyleImage()` method causing native exception.
 * [iOS] Fix crash in `onStyleImageMissingListener`.
+* Update Maps SDK to 11.3.0.
 
 ### 1.1.0-rc.1
 
