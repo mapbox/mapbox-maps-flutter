@@ -473,7 +473,9 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
     imageId: String,
     result: FLTMapInterfaces.NullableResult<FLTMapInterfaces.MbxImage>
   ) {
-    mapboxMap.getStyleImage(imageId)?.let { image ->
+    val image = mapboxMap.getStyleImage(imageId)
+
+    if (image != null) {
       val byteArray = ByteArray(image.data.buffer.capacity())
       image.data.buffer.get(byteArray)
       result.success(
@@ -483,8 +485,9 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
           .setData(byteArray)
           .build()
       )
+    } else {
+      result.success(null)
     }
-    result.success(null)
   }
 
   override fun removeStyleImage(imageId: String, result: FLTMapInterfaces.VoidResult) {
