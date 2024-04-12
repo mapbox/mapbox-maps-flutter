@@ -500,7 +500,7 @@ class StyleController(private val mapboxMap: MapboxMap, private val context: Con
   }
 
   override fun hasStyleImage(imageId: String, result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.hasStyleImage(imageId)
+    result.success(mapboxMap.hasStyleImage(imageId))
   }
 
   override fun invalidateStyleCustomGeometrySourceTile(
