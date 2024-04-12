@@ -1,6 +1,7 @@
 ### main
 
 * [Android] Fix `maps-lifecycle` plugin crash with `java.lang.IllegalStateException: Please ensure that the hosting activity/fragment is a valid LifecycleOwner`.
+* Update Maps SDK to 11.3.0.
 
 ### 1.1.0-rc.1
 
