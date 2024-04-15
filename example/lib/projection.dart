@@ -60,7 +60,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                 coordinates: Position(
               1.0,
               60,
-            )).toJson())
+            )))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
@@ -81,7 +81,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                 ProjectedMeters(northing: 1.0, easting: 1.0))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("coordinates: ${value["coordinates"]}"),
+                      content: Text("coordinates: ${value.coordinates}"),
                       backgroundColor: Theme.of(context).primaryColor,
                       duration: Duration(seconds: 2),
                     )));
@@ -97,7 +97,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
             .unproject(MercatorCoordinate(x: 1.0, y: 1.0), 16)
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("coordinates: ${value["coordinates"]}"),
+                      content: Text("coordinates: ${value.coordinates}"),
                       backgroundColor: Theme.of(context).primaryColor,
                       duration: Duration(seconds: 2),
                     )));
@@ -115,7 +115,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                     coordinates: Position(
                   1.0,
                   60,
-                )).toJson(),
+                )),
                 16)
             .then((value) =>
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(

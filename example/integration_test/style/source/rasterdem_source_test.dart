@@ -8,7 +8,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +29,8 @@ void main() {
       encoding: Encoding.TERRARIUM,
       volatile: true,
       prefetchZoomDelta: 1.0,
+      tileCacheBudget:
+          TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)),
       minimumTileUpdateInterval: 1.0,
       maxOverscaleFactorForParentTiles: 1.0,
       tileRequestsDelay: 1.0,
@@ -64,6 +65,12 @@ void main() {
 
     var prefetchZoomDelta = await source.prefetchZoomDelta;
     expect(prefetchZoomDelta, 1.0);
+
+    var tileCacheBudget = await source.tileCacheBudget;
+    expect(tileCacheBudget?.size,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
+    expect(tileCacheBudget?.type,
+        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
 
     var minimumTileUpdateInterval = await source.minimumTileUpdateInterval;
     expect(minimumTileUpdateInterval, 1.0);

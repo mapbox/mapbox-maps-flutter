@@ -25,6 +25,7 @@ class _MapboxMapsPlatform {
       ArgumentCallbacks<StyleImageMissingEventData>();
   final onStyleImageUnusedPlatform =
       ArgumentCallbacks<StyleImageUnusedEventData>();
+  final onResourceRequestPlatform = ArgumentCallbacks<ResourceEventData>();
 
   final int _channelSuffix = _suffixesRegistry.getSuffix();
   late MethodChannel _channel;
@@ -98,6 +99,10 @@ class _MapboxMapsPlatform {
         onStyleImageUnusedPlatform(
             StyleImageUnusedEventData.fromJson(jsonDecode(call.arguments)));
         break;
+      case _MapEvent.resourceRequest:
+        onResourceRequestPlatform(
+            ResourceEventData.fromJson(jsonDecode(call.arguments)));
+        break;
       default:
         throw MissingPluginException();
     }
@@ -111,19 +116,55 @@ class _MapboxMapsPlatform {
   }
 
   Widget buildView(
+      AndroidPlatformViewHostingMode androidHostingMode,
       Map<String, dynamic> creationParams,
       OnPlatformViewCreatedCallback onPlatformViewCreated,
       Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers) {
     creationParams['channelSuffix'] = _channelSuffix;
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'plugins.flutter.io/mapbox_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
+      switch (androidHostingMode) {
+        case AndroidPlatformViewHostingMode.TLHC_VD:
+        case AndroidPlatformViewHostingMode.TLHC_HC:
+        case AndroidPlatformViewHostingMode.HC:
+          return PlatformViewLink(
+            viewType: "plugins.flutter.io/mapbox_maps",
+            surfaceFactory: (context, controller) {
+              return AndroidViewSurface(
+                  controller: controller as AndroidViewController,
+                  hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                  gestureRecognizers: gestureRecognizers ?? Set());
+            },
+            onCreatePlatformView: (params) {
+              final AndroidViewController controller =
+                  _androidViewControllerFactoryForMode(androidHostingMode)(
+                id: params.id,
+                viewType: 'plugins.flutter.io/mapbox_maps',
+                layoutDirection: TextDirection.ltr,
+                creationParams: creationParams,
+                creationParamsCodec: const StandardMessageCodec(),
+                onFocus: () => params.onFocusChanged(true),
+              );
+              controller.addOnPlatformViewCreatedListener(
+                params.onPlatformViewCreated,
+              );
+              controller.addOnPlatformViewCreatedListener(
+                onPlatformViewCreated,
+              );
+
+              controller.create();
+              return controller;
+            },
+          );
+        case AndroidPlatformViewHostingMode.VD:
+          return AndroidView(
+            viewType: 'plugins.flutter.io/mapbox_maps',
+            onPlatformViewCreated: onPlatformViewCreated,
+            gestureRecognizers: gestureRecognizers,
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+          );
+      }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
         viewType: 'plugins.flutter.io/mapbox_maps',
@@ -137,18 +178,32 @@ class _MapboxMapsPlatform {
         '$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
-  void dispose() {
-    _suffixesRegistry.releaseSuffix(_channelSuffix);
-    _channel.setMethodCallHandler(null);
+  AndroidViewController Function(
+          {required int id,
+          required String viewType,
+          required TextDirection layoutDirection,
+          dynamic creationParams,
+          MessageCodec<dynamic>? creationParamsCodec,
+          VoidCallback? onFocus})
+      _androidViewControllerFactoryForMode(
+          AndroidPlatformViewHostingMode hostingMode) {
+    switch (hostingMode) {
+      case AndroidPlatformViewHostingMode.TLHC_VD:
+        return PlatformViewsService.initAndroidView;
+      case AndroidPlatformViewHostingMode.TLHC_HC:
+        return PlatformViewsService.initSurfaceAndroidView;
+      case AndroidPlatformViewHostingMode.HC:
+        return PlatformViewsService.initExpensiveAndroidView;
+      case AndroidPlatformViewHostingMode.VD:
+        throw "Unexpected hostring mode(VD) when selecting an android view controller";
+    }
   }
 
-  Future<void> addEventListener(_MapEvent event) async {
-    try {
-      await _channel
-          .invokeMethod('map#subscribe', <String, dynamic>{'event': event});
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
+  void dispose() async {
+    await _channel.invokeMethod('platform#releaseMethodChannels');
+
+    _suffixesRegistry.releaseSuffix(_channelSuffix);
+    _channel.setMethodCallHandler(null);
   }
 
   Future<dynamic> createAnnotationManager(String type,

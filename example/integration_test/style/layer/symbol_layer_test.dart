@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -69,6 +68,7 @@ void main() {
       textVariableAnchor: ["center", "left"],
       textWritingMode: ["horizontal", "vertical"],
       iconColor: Colors.red.value,
+      iconColorSaturation: 1.0,
       iconEmissiveStrength: 1.0,
       iconHaloBlur: 1.0,
       iconHaloColor: Colors.red.value,
@@ -134,6 +134,7 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconColorSaturation, 1.0);
     expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColor, Colors.red.value);

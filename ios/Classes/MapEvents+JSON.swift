@@ -1,5 +1,5 @@
 import Foundation
-import MapboxCoreMaps
+import MapboxMaps
 
 protocol MapEventEncodable {
     var toJSON: [String: Any?] { get }
@@ -15,7 +15,7 @@ extension EventTimeInterval {
     }
 }
 
-extension CanonicalTileID {
+extension MapboxMaps.CanonicalTileID {
     var toJSON: [String: Any] {
         [
             "x": x,
@@ -113,7 +113,7 @@ extension StyleImageMissing: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
             "imageId": imageId,
-            "timestamp": timestamp
+            "timestamp": timestamp.microsecondsSince1970
         ]
     }
 }
@@ -174,8 +174,8 @@ extension ResponseInfo {
         result["mustRevalidate"] = mustRevalidate
         result["source"] = source.rawValue
         result["size"] = size
-        result["modified"] = modified
-        result["expires"] = expires
+        result["modified"] = modified?.microsecondsSince1970
+        result["expires"] = expires?.microsecondsSince1970
         result["etag"] = etag
         result["error"] = error?.toJSON
         return result

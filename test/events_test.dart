@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('CameraChangedEventData fromJson', () {
-    var cameraChangedEventData = CameraChangedEventData.fromJson(
-        <String, dynamic>{'timestamp': 1});
+    var cameraChangedEventData =
+        CameraChangedEventData.fromJson(<String, dynamic>{'timestamp': 1});
     expect(cameraChangedEventData.timestamp, 1);
   });
 
@@ -15,10 +15,9 @@ void main() {
   });
 
   test('MapLoadedEventData fromJson', () {
-    var mapLoadedEventData =
-        MapLoadedEventData.fromJson(<String, dynamic>{
-          'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
-          });
+    var mapLoadedEventData = MapLoadedEventData.fromJson(<String, dynamic>{
+      'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
+    });
     expect(mapLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
     expect(mapLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
   });
@@ -44,12 +43,8 @@ void main() {
   });
 
   test('MapLoadingErrorEventData fromJson with null value', () {
-    var mapLoadingErrorEventData =
-        MapLoadingErrorEventData.fromJson(<String, dynamic>{
-      'timestamp': 1,
-      'type': 0,
-      'message': 'message'
-    });
+    var mapLoadingErrorEventData = MapLoadingErrorEventData.fromJson(
+        <String, dynamic>{'timestamp': 1, 'type': 0, 'message': 'message'});
     expect(mapLoadingErrorEventData.timestamp, 1);
     expect(mapLoadingErrorEventData.type, MapLoadErrorType.STYLE);
     expect(mapLoadingErrorEventData.message, 'message');
@@ -65,16 +60,19 @@ void main() {
       'placementChanged': true,
       'needsRepaint': false
     });
-    expect(renderFrameFinishedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
-    expect(renderFrameFinishedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
+    expect(
+        renderFrameFinishedEventData.timeInterval.begin.microsecondsSinceEpoch,
+        1);
+    expect(renderFrameFinishedEventData.timeInterval.end.microsecondsSinceEpoch,
+        2);
     expect(renderFrameFinishedEventData.renderMode, RenderMode.FULL);
     expect(renderFrameFinishedEventData.placementChanged, true);
     expect(renderFrameFinishedEventData.needsRepaint, false);
   });
 
   test('RenderFrameStartedEventData fromJson', () {
-    var renderFrameStartedEventData = RenderFrameStartedEventData.fromJson(
-        <String, dynamic>{'timestamp': 1});
+    var renderFrameStartedEventData =
+        RenderFrameStartedEventData.fromJson(<String, dynamic>{'timestamp': 1});
     expect(renderFrameStartedEventData.timestamp, 1);
   });
 
@@ -84,7 +82,7 @@ void main() {
       'cancelled': false,
       'source': 3,
       'request': <String, dynamic>{
-        'loading-method': [0],
+        'loadingMethod': [0],
         'url': 'https://api.mapbox.com',
         'resource': 3,
         'priority': 0
@@ -93,15 +91,12 @@ void main() {
         'etag': 'd8abd8d10bee6b45b4dbf5c05496587a',
         'mustRevalidate': false,
         'noContent': false,
-        'modified': 'Mon, 05 Oct 2020 14:23:52 GMT',
+        'modified': 3,
         'source': 0,
         'notModified': false,
-        'expires': 'Thu, 15 Oct 2020 14:32:23 GMT',
+        'expires': 4,
         'size': 181576,
-        'error': <String, dynamic>{
-          'reason': 1,
-          'message': 'error message'
-        }
+        'error': <String, dynamic>{'reason': 1, 'message': 'error message'}
       }
     });
     expect(resourceEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
@@ -109,7 +104,8 @@ void main() {
     expect(resourceEventData.cancelled, false);
     expect(resourceEventData.dataSource, DataSourceType.NETWORK);
     expect(resourceEventData.request.kind, RequestType.TILE);
-    expect(resourceEventData.request.loadingMethod, [RequestLoadingMethodType.NETWORK]);
+    expect(resourceEventData.request.loadingMethod,
+        [RequestLoadingMethodType.NETWORK]);
     expect(resourceEventData.request.url, 'https://api.mapbox.com');
     expect(resourceEventData.request.priority, RequestPriority.REGULAR);
     expect(
@@ -118,8 +114,8 @@ void main() {
     expect(resourceEventData.response!.noContent, false);
     expect(resourceEventData.response!.source, ResponseSourceType.NETWORK);
     expect(resourceEventData.response!.notModified, false);
-    expect(
-        resourceEventData.response!.expires, 'Thu, 15 Oct 2020 14:32:23 GMT');
+    expect(resourceEventData.response!.modified?.microsecondsSinceEpoch, 3);
+    expect(resourceEventData.response!.expires?.microsecondsSinceEpoch, 4);
     expect(resourceEventData.response!.size, 181576);
     expect(resourceEventData.response!.error!.reason,
         ResponseErrorReason.NOT_FOUND);
@@ -142,8 +138,10 @@ void main() {
       'loaded': false,
       'tileId': <String, dynamic>{'x': 1, 'y': 2, 'z': 3}
     });
-    expect(sourceDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
-    expect(sourceDataLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
+    expect(
+        sourceDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(
+        sourceDataLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
     expect(sourceDataLoadedEventData.id, 'id');
     expect(sourceDataLoadedEventData.type, SourceDataType.TILE);
     expect(sourceDataLoadedEventData.loaded, false);
@@ -160,11 +158,13 @@ void main() {
   });
 
   test('StyleDataLoadedEventData fromJson', () {
-    var styleDataLoadedEventData = StyleDataLoadedEventData.fromJson(<String, dynamic>{
+    var styleDataLoadedEventData =
+        StyleDataLoadedEventData.fromJson(<String, dynamic>{
       'timeInterval': <String, dynamic>{'begin': 1, 'end': 2},
       'type': 0
     });
-    expect(styleDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
+    expect(
+        styleDataLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
     expect(styleDataLoadedEventData.type, StyleDataType.STYLE);
   });
 
@@ -183,10 +183,9 @@ void main() {
   });
 
   test('StyleLoadedEventData fromJson', () {
-    var styleLoadedEventData = StyleLoadedEventData.fromJson(
-        <String, dynamic>{
-          'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
-        });
+    var styleLoadedEventData = StyleLoadedEventData.fromJson(<String, dynamic>{
+      'timeInterval': <String, dynamic>{'begin': 1, 'end': 2}
+    });
     expect(styleLoadedEventData.timeInterval.begin.microsecondsSinceEpoch, 1);
     expect(styleLoadedEventData.timeInterval.end.microsecondsSinceEpoch, 2);
   });

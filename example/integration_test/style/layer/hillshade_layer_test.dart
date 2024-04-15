@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +26,7 @@ void main() {
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
       hillshadeAccentColor: Colors.red.value,
+      hillshadeEmissiveStrength: 1.0,
       hillshadeExaggeration: 1.0,
       hillshadeHighlightColor: Colors.red.value,
       hillshadeIlluminationAnchor: HillshadeIlluminationAnchor.MAP,
@@ -40,6 +40,7 @@ void main() {
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.hillshadeAccentColor, Colors.red.value);
+    expect(layer.hillshadeEmissiveStrength, 1.0);
     expect(layer.hillshadeExaggeration, 1.0);
     expect(layer.hillshadeHighlightColor, Colors.red.value);
     expect(layer.hillshadeIlluminationAnchor, HillshadeIlluminationAnchor.MAP);

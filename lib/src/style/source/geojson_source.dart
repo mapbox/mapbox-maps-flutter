@@ -18,6 +18,7 @@ class GeoJsonSource extends Source {
     bool? lineMetrics,
     bool? generateId,
     double? prefetchZoomDelta,
+    TileCacheBudget? tileCacheBudget,
   }) : super(id: id) {
     _data = data;
     _maxzoom = maxzoom;
@@ -31,6 +32,7 @@ class GeoJsonSource extends Source {
     _lineMetrics = lineMetrics;
     _generateId = generateId;
     _prefetchZoomDelta = prefetchZoomDelta;
+    _tileCacheBudget = tileCacheBudget;
   }
 
   @override
@@ -159,7 +161,6 @@ class GeoJsonSource extends Source {
       if (value.value != null) {
         return Map<String, dynamic>.from(value.value as Map<dynamic, dynamic>)
             .cast<String, dynamic>();
-        ;
       } else {
         return null;
       }
@@ -207,6 +208,21 @@ class GeoJsonSource extends Source {
     });
   }
 
+  TileCacheBudget? _tileCacheBudget;
+
+  /// This property defines a source-specific resource budget, either in tile units or in megabytes. Whenever the tile cache goes over the defined limit, the least recently used tile will be evicted from the in-memory cache. Note that the current implementation does not take into account resources allocated by the visible tiles.
+  Future<TileCacheBudget?> get tileCacheBudget async {
+    return _style
+        ?.getStyleSourceProperty(id, "tile-cache-budget")
+        .then((value) {
+      if (value.value != null) {
+        return TileCacheBudget.decode(value.value);
+      } else {
+        return null;
+      }
+    });
+  }
+
   /// Update this GeojsonSource with a URL to a GeoJSON file, or inline GeoJSON.
   Future<void>? updateGeoJSON(String geoJson) async {
     return _style?.setStyleSourceProperty(id, "data", geoJson);
@@ -219,6 +235,9 @@ class GeoJsonSource extends Source {
     if (volatile) {
       if (_prefetchZoomDelta != null) {
         properties["prefetch-zoom-delta"] = _prefetchZoomDelta;
+      }
+      if (_tileCacheBudget != null) {
+        properties["tile-cache-budget"] = _tileCacheBudget;
       }
     } else {
       properties["id"] = id;

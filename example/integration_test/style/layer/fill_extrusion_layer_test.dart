@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +32,7 @@ void main() {
       fillExtrusionBase: 1.0,
       fillExtrusionColor: Colors.red.value,
       fillExtrusionCutoffFadeRange: 1.0,
+      fillExtrusionEmissiveStrength: 1.0,
       fillExtrusionFloodLightColor: Colors.red.value,
       fillExtrusionFloodLightGroundAttenuation: 1.0,
       fillExtrusionFloodLightGroundRadius: 1.0,
@@ -62,6 +62,7 @@ void main() {
     expect(layer.fillExtrusionBase, 1.0);
     expect(layer.fillExtrusionColor, Colors.red.value);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
+    expect(layer.fillExtrusionEmissiveStrength, 1.0);
     expect(layer.fillExtrusionFloodLightColor, Colors.red.value);
     expect(layer.fillExtrusionFloodLightGroundAttenuation, 1.0);
     expect(layer.fillExtrusionFloodLightGroundRadius, 1.0);

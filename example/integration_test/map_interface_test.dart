@@ -48,24 +48,31 @@ void main() {
     mapboxMap.setTileCacheBudget(null, TileCacheBudgetInTiles(size: 100));
   });
 
-  if (Platform.isAndroid) {
-    testWidgets('getSize', (WidgetTester tester) async {
-      final mapFuture = app.main();
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
+  testWidgets('getSize', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+
+    await app.events.onMapLoaded.future;
+
+    if (Platform.isIOS) {
+      final throwsPlatformException = throwsA(predicate(
+          (p) => p is PlatformException && p.message == 'Not available.'));
+      expect(() async => await mapboxMap.getSize(), throwsPlatformException);
+    } else {
       var size = await mapboxMap.getSize();
-      expect(size.width, tester.binding.renderView.size.width);
-      expect(size.height, tester.binding.renderView.size.height);
-    });
+      expect(size.width, closeTo(tester.binding.renderView.size.width, 1));
+      expect(size.height, closeTo(tester.binding.renderView.size.height, 1));
+    }
+  });
 
-    testWidgets('reduceMemoryUse', (WidgetTester tester) async {
-      final mapFuture = app.main();
-      await tester.pumpAndSettle();
-      final mapboxMap = await mapFuture;
+  testWidgets('reduceMemoryUse', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
 
-      await mapboxMap.reduceMemoryUse();
-    });
-  }
+    await mapboxMap.reduceMemoryUse();
+  });
 
   testWidgets('triggerRepaint', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -88,59 +95,47 @@ void main() {
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     var options = await mapboxMap.getMapOptions();
-    if (Platform.isAndroid) {
-      expect(options.orientation, NorthOrientation.UPWARDS);
-      expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
-      expect(options.contextMode, isNull);
-      expect(options.viewportMode, ViewportMode.DEFAULT);
-    }
+    expect(options.orientation, NorthOrientation.UPWARDS);
+    expect(options.constrainMode, ConstrainMode.HEIGHT_ONLY);
+    expect(options.contextMode, isNull);
+    expect(options.viewportMode, ViewportMode.DEFAULT);
+
     expect(options.crossSourceCollisions, true);
     expect(options.pixelRatio, tester.binding.window.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, isNotNull);
     expect(options.size!.height, isNotNull);
-    if (Platform.isAndroid) {
-      await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
-      await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
-      await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
 
-      options = await mapboxMap.getMapOptions();
-      expect(options.orientation, NorthOrientation.DOWNWARDS);
-      expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
-      expect(options.viewportMode, ViewportMode.FLIPPED_Y);
-    }
+    await mapboxMap.setConstrainMode(ConstrainMode.WIDTH_AND_HEIGHT);
+    await mapboxMap.setNorthOrientation(NorthOrientation.DOWNWARDS);
+    await mapboxMap.setViewportMode(ViewportMode.FLIPPED_Y);
+
+    options = await mapboxMap.getMapOptions();
+    expect(options.orientation, NorthOrientation.DOWNWARDS);
+    expect(options.constrainMode, ConstrainMode.WIDTH_AND_HEIGHT);
+    expect(options.viewportMode, ViewportMode.FLIPPED_Y);
   });
 
   testWidgets('isGestureInProgress', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    if (Platform.isAndroid) {
-      var isGestureInProgress = await mapboxMap.isGestureInProgress();
-      expect(isGestureInProgress, false);
-    }
+
+    expect(await mapboxMap.isGestureInProgress(), false);
+
     await mapboxMap.setGestureInProgress(true);
-    if (Platform.isAndroid) {
-      var isGestureInProgress = await mapboxMap.isGestureInProgress();
-      expect(isGestureInProgress, true);
-    }
+    expect(await mapboxMap.isGestureInProgress(), true);
   });
 
   testWidgets('isUserAnimationInProgress', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    if (Platform.isAndroid) {
-      var isUserAnimationInProgress =
-          await mapboxMap.isUserAnimationInProgress();
-      expect(isUserAnimationInProgress, false);
-    }
+
+    expect(await mapboxMap.isUserAnimationInProgress(), false);
+
     await mapboxMap.setUserAnimationInProgress(true);
-    if (Platform.isAndroid) {
-      var isUserAnimationInProgress =
-          await mapboxMap.isUserAnimationInProgress();
-      expect(isUserAnimationInProgress, true);
-    }
+    expect(await mapboxMap.isUserAnimationInProgress(), true);
   });
 
   testWidgets('debugOptions', (WidgetTester tester) async {
@@ -184,14 +179,63 @@ void main() {
     expect(stateMap.length, 0);
   });
 
-  testWidgets('MapboxMapsOptions', (WidgetTester tester) async {
+  testWidgets('MapboxMapsOptions default values', (WidgetTester tester) async {
     final _ = app.main();
     await tester.pumpAndSettle();
 
-    var baseUrl = await MapboxMapsOptions.getBaseUrl();
-    expect(baseUrl, 'https://api.mapbox.com');
-    var accessToken = await MapboxOptions.getAccessToken();
-    expect(accessToken, isNotNull);
+    expect(await MapboxOptions.getAccessToken(), isNotNull);
+    expect(await MapboxMapsOptions.getBaseUrl(), 'https://api.mapbox.com');
+    expect(await MapboxMapsOptions.getDataPath(), isNotNull);
+    expect(await MapboxMapsOptions.getAssetPath(), isNotNull);
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(),
+        TileStoreUsageMode.READ_ONLY);
+  });
+
+  testWidgets('MapboxMapsOptions read and update', (WidgetTester tester) async {
+    final _ = app.main();
+    await tester.pumpAndSettle();
+
+    final originalBaseURL = await MapboxMapsOptions.getBaseUrl();
+    final originalDataPath = await MapboxMapsOptions.getDataPath();
+    final originalAssetPath = await MapboxMapsOptions.getAssetPath();
+    final originalTileStoreUsageMode =
+        await MapboxMapsOptions.getTileStoreUsageMode();
+
+    // given
+    final token = 'test token';
+    final baseUrl = 'https://test.mapbox.com/maps-flutter-test';
+    final dataPath = 'data/path';
+    final assetPath = 'asset/path';
+    final tileStoreUsageMode = TileStoreUsageMode.DISABLED;
+    final language = "ua";
+    final worldview = "MA";
+
+    // when
+    MapboxOptions.setAccessToken(token);
+    MapboxMapsOptions.setBaseUrl(baseUrl);
+    MapboxMapsOptions.setDataPath(dataPath);
+    MapboxMapsOptions.setAssetPath(assetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(tileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(language);
+    MapboxMapsOptions.setWorldview(worldview);
+
+    // then
+    expect(await MapboxOptions.getAccessToken(), token);
+    expect(await MapboxMapsOptions.getBaseUrl(), baseUrl);
+    expect(await MapboxMapsOptions.getDataPath(), endsWith(dataPath));
+    expect(await MapboxMapsOptions.getAssetPath(),
+        Platform.isAndroid ? "" : endsWith(assetPath));
+    expect(await MapboxMapsOptions.getTileStoreUsageMode(), tileStoreUsageMode);
+    expect(await MapboxMapsOptions.getLanguage(), language);
+    expect(await MapboxMapsOptions.getWorldview(), worldview);
+
+    // restore original values
+    MapboxMapsOptions.setBaseUrl(originalBaseURL);
+    MapboxMapsOptions.setDataPath(originalDataPath);
+    MapboxMapsOptions.setAssetPath(originalAssetPath);
+    MapboxMapsOptions.setTileStoreUsageMode(originalTileStoreUsageMode);
+    MapboxMapsOptions.setLanguage(null);
+    MapboxMapsOptions.setWorldview(null);
   });
 
   testWidgets('queryRenderedFeatures', (WidgetTester tester) async {
@@ -200,8 +244,7 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
-        zoom: 10);
+        center: Point(coordinates: Position(-77.032667, 38.913175)), zoom: 10);
 
     app.events.resetOnCameraChanged();
     mapboxMap.setCamera(options);
@@ -256,7 +299,7 @@ void main() {
     final mapboxMap = await mapFuture;
     var style = mapboxMap.style;
     var options = CameraOptions(
-        center: Point(coordinates: Position(-77.032667, 38.913175)).toJson(),
+        center: Point(coordinates: Position(-77.032667, 38.913175)),
         zoom: 10,
         pitch: 0);
 

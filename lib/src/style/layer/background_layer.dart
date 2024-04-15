@@ -26,7 +26,7 @@ class BackgroundLayer extends Layer {
   /// The color with which the background will be drawn.
   int? backgroundColor;
 
-  /// Controls the intensity of light emitted on the source features. This property works only with 3D light, i.e. when `lights` root property is defined.
+  /// Controls the intensity of light emitted on the source features.
   double? backgroundEmissiveStrength;
 
   /// The opacity at which the background will be drawn.

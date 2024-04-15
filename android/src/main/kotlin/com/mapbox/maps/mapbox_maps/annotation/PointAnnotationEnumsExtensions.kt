@@ -1,241 +1,241 @@
 // This file is generated.
 
-import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
-import com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment
-import com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment
-import com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit
-import com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor
-import com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement
-import com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder
-import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor
-import com.mapbox.maps.extension.style.layers.properties.generated.TextJustify
-import com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment
-import com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment
-import com.mapbox.maps.extension.style.layers.properties.generated.TextTransform
-import com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor
-import com.mapbox.maps.pigeons.FLTPointAnnotationMessager
+import com.mapbox.maps.mapbox_maps.pigeons.*
 
 // FLT to Android
 
-fun FLTPointAnnotationMessager.IconAnchor.toIconAnchor(): IconAnchor {
+fun IconAnchor.toIconAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor {
   return when (this) {
-    FLTPointAnnotationMessager.IconAnchor.CENTER -> IconAnchor.CENTER
-    FLTPointAnnotationMessager.IconAnchor.LEFT -> IconAnchor.LEFT
-    FLTPointAnnotationMessager.IconAnchor.RIGHT -> IconAnchor.RIGHT
-    FLTPointAnnotationMessager.IconAnchor.TOP -> IconAnchor.TOP
-    FLTPointAnnotationMessager.IconAnchor.BOTTOM -> IconAnchor.BOTTOM
-    FLTPointAnnotationMessager.IconAnchor.TOP_LEFT -> IconAnchor.TOP_LEFT
-    FLTPointAnnotationMessager.IconAnchor.TOP_RIGHT -> IconAnchor.TOP_RIGHT
-    FLTPointAnnotationMessager.IconAnchor.BOTTOM_LEFT -> IconAnchor.BOTTOM_LEFT
-    FLTPointAnnotationMessager.IconAnchor.BOTTOM_RIGHT -> IconAnchor.BOTTOM_RIGHT
+    IconAnchor.CENTER -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.CENTER
+    IconAnchor.LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.LEFT
+    IconAnchor.RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.RIGHT
+    IconAnchor.TOP -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP
+    IconAnchor.BOTTOM -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM
+    IconAnchor.TOP_LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP_LEFT
+    IconAnchor.TOP_RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP_RIGHT
+    IconAnchor.BOTTOM_LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM_LEFT
+    IconAnchor.BOTTOM_RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM_RIGHT
+    else -> throw(RuntimeException("Unsupported IconAnchor: $this"))
   }
 }
-fun FLTPointAnnotationMessager.IconPitchAlignment.toIconPitchAlignment(): IconPitchAlignment {
+fun IconPitchAlignment.toIconPitchAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment {
   return when (this) {
-    FLTPointAnnotationMessager.IconPitchAlignment.MAP -> IconPitchAlignment.MAP
-    FLTPointAnnotationMessager.IconPitchAlignment.VIEWPORT -> IconPitchAlignment.VIEWPORT
-    FLTPointAnnotationMessager.IconPitchAlignment.AUTO -> IconPitchAlignment.AUTO
+    IconPitchAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.MAP
+    IconPitchAlignment.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.VIEWPORT
+    IconPitchAlignment.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.AUTO
+    else -> throw(RuntimeException("Unsupported IconPitchAlignment: $this"))
   }
 }
-fun FLTPointAnnotationMessager.IconRotationAlignment.toIconRotationAlignment(): IconRotationAlignment {
+fun IconRotationAlignment.toIconRotationAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment {
   return when (this) {
-    FLTPointAnnotationMessager.IconRotationAlignment.MAP -> IconRotationAlignment.MAP
-    FLTPointAnnotationMessager.IconRotationAlignment.VIEWPORT -> IconRotationAlignment.VIEWPORT
-    FLTPointAnnotationMessager.IconRotationAlignment.AUTO -> IconRotationAlignment.AUTO
+    IconRotationAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.MAP
+    IconRotationAlignment.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.VIEWPORT
+    IconRotationAlignment.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.AUTO
+    else -> throw(RuntimeException("Unsupported IconRotationAlignment: $this"))
   }
 }
-fun FLTPointAnnotationMessager.IconTextFit.toIconTextFit(): IconTextFit {
+fun IconTextFit.toIconTextFit(): com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit {
   return when (this) {
-    FLTPointAnnotationMessager.IconTextFit.NONE -> IconTextFit.NONE
-    FLTPointAnnotationMessager.IconTextFit.WIDTH -> IconTextFit.WIDTH
-    FLTPointAnnotationMessager.IconTextFit.HEIGHT -> IconTextFit.HEIGHT
-    FLTPointAnnotationMessager.IconTextFit.BOTH -> IconTextFit.BOTH
+    IconTextFit.NONE -> com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.NONE
+    IconTextFit.WIDTH -> com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.WIDTH
+    IconTextFit.HEIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.HEIGHT
+    IconTextFit.BOTH -> com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.BOTH
+    else -> throw(RuntimeException("Unsupported IconTextFit: $this"))
   }
 }
-fun FLTPointAnnotationMessager.SymbolPlacement.toSymbolPlacement(): SymbolPlacement {
+fun SymbolPlacement.toSymbolPlacement(): com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement {
   return when (this) {
-    FLTPointAnnotationMessager.SymbolPlacement.POINT -> SymbolPlacement.POINT
-    FLTPointAnnotationMessager.SymbolPlacement.LINE -> SymbolPlacement.LINE
-    FLTPointAnnotationMessager.SymbolPlacement.LINE_CENTER -> SymbolPlacement.LINE_CENTER
+    SymbolPlacement.POINT -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.POINT
+    SymbolPlacement.LINE -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.LINE
+    SymbolPlacement.LINE_CENTER -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.LINE_CENTER
+    else -> throw(RuntimeException("Unsupported SymbolPlacement: $this"))
   }
 }
-fun FLTPointAnnotationMessager.SymbolZOrder.toSymbolZOrder(): SymbolZOrder {
+fun SymbolZOrder.toSymbolZOrder(): com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder {
   return when (this) {
-    FLTPointAnnotationMessager.SymbolZOrder.AUTO -> SymbolZOrder.AUTO
-    FLTPointAnnotationMessager.SymbolZOrder.VIEWPORT_Y -> SymbolZOrder.VIEWPORT_Y
-    FLTPointAnnotationMessager.SymbolZOrder.SOURCE -> SymbolZOrder.SOURCE
+    SymbolZOrder.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.AUTO
+    SymbolZOrder.VIEWPORT_Y -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.VIEWPORT_Y
+    SymbolZOrder.SOURCE -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.SOURCE
+    else -> throw(RuntimeException("Unsupported SymbolZOrder: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextAnchor.toTextAnchor(): TextAnchor {
+fun TextAnchor.toTextAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor {
   return when (this) {
-    FLTPointAnnotationMessager.TextAnchor.CENTER -> TextAnchor.CENTER
-    FLTPointAnnotationMessager.TextAnchor.LEFT -> TextAnchor.LEFT
-    FLTPointAnnotationMessager.TextAnchor.RIGHT -> TextAnchor.RIGHT
-    FLTPointAnnotationMessager.TextAnchor.TOP -> TextAnchor.TOP
-    FLTPointAnnotationMessager.TextAnchor.BOTTOM -> TextAnchor.BOTTOM
-    FLTPointAnnotationMessager.TextAnchor.TOP_LEFT -> TextAnchor.TOP_LEFT
-    FLTPointAnnotationMessager.TextAnchor.TOP_RIGHT -> TextAnchor.TOP_RIGHT
-    FLTPointAnnotationMessager.TextAnchor.BOTTOM_LEFT -> TextAnchor.BOTTOM_LEFT
-    FLTPointAnnotationMessager.TextAnchor.BOTTOM_RIGHT -> TextAnchor.BOTTOM_RIGHT
+    TextAnchor.CENTER -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.CENTER
+    TextAnchor.LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.LEFT
+    TextAnchor.RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.RIGHT
+    TextAnchor.TOP -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP
+    TextAnchor.BOTTOM -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM
+    TextAnchor.TOP_LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP_LEFT
+    TextAnchor.TOP_RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP_RIGHT
+    TextAnchor.BOTTOM_LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM_LEFT
+    TextAnchor.BOTTOM_RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM_RIGHT
+    else -> throw(RuntimeException("Unsupported TextAnchor: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextJustify.toTextJustify(): TextJustify {
+fun TextJustify.toTextJustify(): com.mapbox.maps.extension.style.layers.properties.generated.TextJustify {
   return when (this) {
-    FLTPointAnnotationMessager.TextJustify.AUTO -> TextJustify.AUTO
-    FLTPointAnnotationMessager.TextJustify.LEFT -> TextJustify.LEFT
-    FLTPointAnnotationMessager.TextJustify.CENTER -> TextJustify.CENTER
-    FLTPointAnnotationMessager.TextJustify.RIGHT -> TextJustify.RIGHT
+    TextJustify.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.AUTO
+    TextJustify.LEFT -> com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.LEFT
+    TextJustify.CENTER -> com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.CENTER
+    TextJustify.RIGHT -> com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.RIGHT
+    else -> throw(RuntimeException("Unsupported TextJustify: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextPitchAlignment.toTextPitchAlignment(): TextPitchAlignment {
+fun TextPitchAlignment.toTextPitchAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment {
   return when (this) {
-    FLTPointAnnotationMessager.TextPitchAlignment.MAP -> TextPitchAlignment.MAP
-    FLTPointAnnotationMessager.TextPitchAlignment.VIEWPORT -> TextPitchAlignment.VIEWPORT
-    FLTPointAnnotationMessager.TextPitchAlignment.AUTO -> TextPitchAlignment.AUTO
+    TextPitchAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.MAP
+    TextPitchAlignment.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.VIEWPORT
+    TextPitchAlignment.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.AUTO
+    else -> throw(RuntimeException("Unsupported TextPitchAlignment: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextRotationAlignment.toTextRotationAlignment(): TextRotationAlignment {
+fun TextRotationAlignment.toTextRotationAlignment(): com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment {
   return when (this) {
-    FLTPointAnnotationMessager.TextRotationAlignment.MAP -> TextRotationAlignment.MAP
-    FLTPointAnnotationMessager.TextRotationAlignment.VIEWPORT -> TextRotationAlignment.VIEWPORT
-    FLTPointAnnotationMessager.TextRotationAlignment.AUTO -> TextRotationAlignment.AUTO
+    TextRotationAlignment.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.MAP
+    TextRotationAlignment.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.VIEWPORT
+    TextRotationAlignment.AUTO -> com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.AUTO
+    else -> throw(RuntimeException("Unsupported TextRotationAlignment: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextTransform.toTextTransform(): TextTransform {
+fun TextTransform.toTextTransform(): com.mapbox.maps.extension.style.layers.properties.generated.TextTransform {
   return when (this) {
-    FLTPointAnnotationMessager.TextTransform.NONE -> TextTransform.NONE
-    FLTPointAnnotationMessager.TextTransform.UPPERCASE -> TextTransform.UPPERCASE
-    FLTPointAnnotationMessager.TextTransform.LOWERCASE -> TextTransform.LOWERCASE
+    TextTransform.NONE -> com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.NONE
+    TextTransform.UPPERCASE -> com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.UPPERCASE
+    TextTransform.LOWERCASE -> com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.LOWERCASE
+    else -> throw(RuntimeException("Unsupported TextTransform: $this"))
   }
 }
-fun FLTPointAnnotationMessager.IconTranslateAnchor.toIconTranslateAnchor(): IconTranslateAnchor {
+fun IconTranslateAnchor.toIconTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor {
   return when (this) {
-    FLTPointAnnotationMessager.IconTranslateAnchor.MAP -> IconTranslateAnchor.MAP
-    FLTPointAnnotationMessager.IconTranslateAnchor.VIEWPORT -> IconTranslateAnchor.VIEWPORT
+    IconTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.MAP
+    IconTranslateAnchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.VIEWPORT
+    else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
   }
 }
-fun FLTPointAnnotationMessager.TextTranslateAnchor.toTextTranslateAnchor(): TextTranslateAnchor {
+fun TextTranslateAnchor.toTextTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor {
   return when (this) {
-    FLTPointAnnotationMessager.TextTranslateAnchor.MAP -> TextTranslateAnchor.MAP
-    FLTPointAnnotationMessager.TextTranslateAnchor.VIEWPORT -> TextTranslateAnchor.VIEWPORT
+    TextTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.MAP
+    TextTranslateAnchor.VIEWPORT -> com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.VIEWPORT
+    else -> throw(RuntimeException("Unsupported TextTranslateAnchor: $this"))
   }
 }
 
 // Android to FLT
 
-fun IconAnchor.toFLTIconAnchor(): FLTPointAnnotationMessager.IconAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.toFLTIconAnchor(): IconAnchor {
   return when (this) {
-    IconAnchor.CENTER -> FLTPointAnnotationMessager.IconAnchor.CENTER
-    IconAnchor.LEFT -> FLTPointAnnotationMessager.IconAnchor.LEFT
-    IconAnchor.RIGHT -> FLTPointAnnotationMessager.IconAnchor.RIGHT
-    IconAnchor.TOP -> FLTPointAnnotationMessager.IconAnchor.TOP
-    IconAnchor.BOTTOM -> FLTPointAnnotationMessager.IconAnchor.BOTTOM
-    IconAnchor.TOP_LEFT -> FLTPointAnnotationMessager.IconAnchor.TOP_LEFT
-    IconAnchor.TOP_RIGHT -> FLTPointAnnotationMessager.IconAnchor.TOP_RIGHT
-    IconAnchor.BOTTOM_LEFT -> FLTPointAnnotationMessager.IconAnchor.BOTTOM_LEFT
-    IconAnchor.BOTTOM_RIGHT -> FLTPointAnnotationMessager.IconAnchor.BOTTOM_RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.CENTER -> IconAnchor.CENTER
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.LEFT -> IconAnchor.LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.RIGHT -> IconAnchor.RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP -> IconAnchor.TOP
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM -> IconAnchor.BOTTOM
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP_LEFT -> IconAnchor.TOP_LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.TOP_RIGHT -> IconAnchor.TOP_RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM_LEFT -> IconAnchor.BOTTOM_LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor.BOTTOM_RIGHT -> IconAnchor.BOTTOM_RIGHT
     else -> throw(RuntimeException("Unsupported IconAnchor: $this"))
   }
 }
-fun IconPitchAlignment.toFLTIconPitchAlignment(): FLTPointAnnotationMessager.IconPitchAlignment {
+fun com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.toFLTIconPitchAlignment(): IconPitchAlignment {
   return when (this) {
-    IconPitchAlignment.MAP -> FLTPointAnnotationMessager.IconPitchAlignment.MAP
-    IconPitchAlignment.VIEWPORT -> FLTPointAnnotationMessager.IconPitchAlignment.VIEWPORT
-    IconPitchAlignment.AUTO -> FLTPointAnnotationMessager.IconPitchAlignment.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.MAP -> IconPitchAlignment.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.VIEWPORT -> IconPitchAlignment.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconPitchAlignment.AUTO -> IconPitchAlignment.AUTO
     else -> throw(RuntimeException("Unsupported IconPitchAlignment: $this"))
   }
 }
-fun IconRotationAlignment.toFLTIconRotationAlignment(): FLTPointAnnotationMessager.IconRotationAlignment {
+fun com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.toFLTIconRotationAlignment(): IconRotationAlignment {
   return when (this) {
-    IconRotationAlignment.MAP -> FLTPointAnnotationMessager.IconRotationAlignment.MAP
-    IconRotationAlignment.VIEWPORT -> FLTPointAnnotationMessager.IconRotationAlignment.VIEWPORT
-    IconRotationAlignment.AUTO -> FLTPointAnnotationMessager.IconRotationAlignment.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.MAP -> IconRotationAlignment.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.VIEWPORT -> IconRotationAlignment.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconRotationAlignment.AUTO -> IconRotationAlignment.AUTO
     else -> throw(RuntimeException("Unsupported IconRotationAlignment: $this"))
   }
 }
-fun IconTextFit.toFLTIconTextFit(): FLTPointAnnotationMessager.IconTextFit {
+fun com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.toFLTIconTextFit(): IconTextFit {
   return when (this) {
-    IconTextFit.NONE -> FLTPointAnnotationMessager.IconTextFit.NONE
-    IconTextFit.WIDTH -> FLTPointAnnotationMessager.IconTextFit.WIDTH
-    IconTextFit.HEIGHT -> FLTPointAnnotationMessager.IconTextFit.HEIGHT
-    IconTextFit.BOTH -> FLTPointAnnotationMessager.IconTextFit.BOTH
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.NONE -> IconTextFit.NONE
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.WIDTH -> IconTextFit.WIDTH
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.HEIGHT -> IconTextFit.HEIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTextFit.BOTH -> IconTextFit.BOTH
     else -> throw(RuntimeException("Unsupported IconTextFit: $this"))
   }
 }
-fun SymbolPlacement.toFLTSymbolPlacement(): FLTPointAnnotationMessager.SymbolPlacement {
+fun com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.toFLTSymbolPlacement(): SymbolPlacement {
   return when (this) {
-    SymbolPlacement.POINT -> FLTPointAnnotationMessager.SymbolPlacement.POINT
-    SymbolPlacement.LINE -> FLTPointAnnotationMessager.SymbolPlacement.LINE
-    SymbolPlacement.LINE_CENTER -> FLTPointAnnotationMessager.SymbolPlacement.LINE_CENTER
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.POINT -> SymbolPlacement.POINT
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.LINE -> SymbolPlacement.LINE
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolPlacement.LINE_CENTER -> SymbolPlacement.LINE_CENTER
     else -> throw(RuntimeException("Unsupported SymbolPlacement: $this"))
   }
 }
-fun SymbolZOrder.toFLTSymbolZOrder(): FLTPointAnnotationMessager.SymbolZOrder {
+fun com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.toFLTSymbolZOrder(): SymbolZOrder {
   return when (this) {
-    SymbolZOrder.AUTO -> FLTPointAnnotationMessager.SymbolZOrder.AUTO
-    SymbolZOrder.VIEWPORT_Y -> FLTPointAnnotationMessager.SymbolZOrder.VIEWPORT_Y
-    SymbolZOrder.SOURCE -> FLTPointAnnotationMessager.SymbolZOrder.SOURCE
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.AUTO -> SymbolZOrder.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.VIEWPORT_Y -> SymbolZOrder.VIEWPORT_Y
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolZOrder.SOURCE -> SymbolZOrder.SOURCE
     else -> throw(RuntimeException("Unsupported SymbolZOrder: $this"))
   }
 }
-fun TextAnchor.toFLTTextAnchor(): FLTPointAnnotationMessager.TextAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.toFLTTextAnchor(): TextAnchor {
   return when (this) {
-    TextAnchor.CENTER -> FLTPointAnnotationMessager.TextAnchor.CENTER
-    TextAnchor.LEFT -> FLTPointAnnotationMessager.TextAnchor.LEFT
-    TextAnchor.RIGHT -> FLTPointAnnotationMessager.TextAnchor.RIGHT
-    TextAnchor.TOP -> FLTPointAnnotationMessager.TextAnchor.TOP
-    TextAnchor.BOTTOM -> FLTPointAnnotationMessager.TextAnchor.BOTTOM
-    TextAnchor.TOP_LEFT -> FLTPointAnnotationMessager.TextAnchor.TOP_LEFT
-    TextAnchor.TOP_RIGHT -> FLTPointAnnotationMessager.TextAnchor.TOP_RIGHT
-    TextAnchor.BOTTOM_LEFT -> FLTPointAnnotationMessager.TextAnchor.BOTTOM_LEFT
-    TextAnchor.BOTTOM_RIGHT -> FLTPointAnnotationMessager.TextAnchor.BOTTOM_RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.CENTER -> TextAnchor.CENTER
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.LEFT -> TextAnchor.LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.RIGHT -> TextAnchor.RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP -> TextAnchor.TOP
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM -> TextAnchor.BOTTOM
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP_LEFT -> TextAnchor.TOP_LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.TOP_RIGHT -> TextAnchor.TOP_RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM_LEFT -> TextAnchor.BOTTOM_LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor.BOTTOM_RIGHT -> TextAnchor.BOTTOM_RIGHT
     else -> throw(RuntimeException("Unsupported TextAnchor: $this"))
   }
 }
-fun TextJustify.toFLTTextJustify(): FLTPointAnnotationMessager.TextJustify {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.toFLTTextJustify(): TextJustify {
   return when (this) {
-    TextJustify.AUTO -> FLTPointAnnotationMessager.TextJustify.AUTO
-    TextJustify.LEFT -> FLTPointAnnotationMessager.TextJustify.LEFT
-    TextJustify.CENTER -> FLTPointAnnotationMessager.TextJustify.CENTER
-    TextJustify.RIGHT -> FLTPointAnnotationMessager.TextJustify.RIGHT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.AUTO -> TextJustify.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.LEFT -> TextJustify.LEFT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.CENTER -> TextJustify.CENTER
+    com.mapbox.maps.extension.style.layers.properties.generated.TextJustify.RIGHT -> TextJustify.RIGHT
     else -> throw(RuntimeException("Unsupported TextJustify: $this"))
   }
 }
-fun TextPitchAlignment.toFLTTextPitchAlignment(): FLTPointAnnotationMessager.TextPitchAlignment {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.toFLTTextPitchAlignment(): TextPitchAlignment {
   return when (this) {
-    TextPitchAlignment.MAP -> FLTPointAnnotationMessager.TextPitchAlignment.MAP
-    TextPitchAlignment.VIEWPORT -> FLTPointAnnotationMessager.TextPitchAlignment.VIEWPORT
-    TextPitchAlignment.AUTO -> FLTPointAnnotationMessager.TextPitchAlignment.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.MAP -> TextPitchAlignment.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.VIEWPORT -> TextPitchAlignment.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextPitchAlignment.AUTO -> TextPitchAlignment.AUTO
     else -> throw(RuntimeException("Unsupported TextPitchAlignment: $this"))
   }
 }
-fun TextRotationAlignment.toFLTTextRotationAlignment(): FLTPointAnnotationMessager.TextRotationAlignment {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.toFLTTextRotationAlignment(): TextRotationAlignment {
   return when (this) {
-    TextRotationAlignment.MAP -> FLTPointAnnotationMessager.TextRotationAlignment.MAP
-    TextRotationAlignment.VIEWPORT -> FLTPointAnnotationMessager.TextRotationAlignment.VIEWPORT
-    TextRotationAlignment.AUTO -> FLTPointAnnotationMessager.TextRotationAlignment.AUTO
+    com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.MAP -> TextRotationAlignment.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.VIEWPORT -> TextRotationAlignment.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextRotationAlignment.AUTO -> TextRotationAlignment.AUTO
     else -> throw(RuntimeException("Unsupported TextRotationAlignment: $this"))
   }
 }
-fun TextTransform.toFLTTextTransform(): FLTPointAnnotationMessager.TextTransform {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.toFLTTextTransform(): TextTransform {
   return when (this) {
-    TextTransform.NONE -> FLTPointAnnotationMessager.TextTransform.NONE
-    TextTransform.UPPERCASE -> FLTPointAnnotationMessager.TextTransform.UPPERCASE
-    TextTransform.LOWERCASE -> FLTPointAnnotationMessager.TextTransform.LOWERCASE
+    com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.NONE -> TextTransform.NONE
+    com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.UPPERCASE -> TextTransform.UPPERCASE
+    com.mapbox.maps.extension.style.layers.properties.generated.TextTransform.LOWERCASE -> TextTransform.LOWERCASE
     else -> throw(RuntimeException("Unsupported TextTransform: $this"))
   }
 }
-fun IconTranslateAnchor.toFLTIconTranslateAnchor(): FLTPointAnnotationMessager.IconTranslateAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.toFLTIconTranslateAnchor(): IconTranslateAnchor {
   return when (this) {
-    IconTranslateAnchor.MAP -> FLTPointAnnotationMessager.IconTranslateAnchor.MAP
-    IconTranslateAnchor.VIEWPORT -> FLTPointAnnotationMessager.IconTranslateAnchor.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.MAP -> IconTranslateAnchor.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.VIEWPORT -> IconTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
   }
 }
-fun TextTranslateAnchor.toFLTTextTranslateAnchor(): FLTPointAnnotationMessager.TextTranslateAnchor {
+fun com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.toFLTTextTranslateAnchor(): TextTranslateAnchor {
   return when (this) {
-    TextTranslateAnchor.MAP -> FLTPointAnnotationMessager.TextTranslateAnchor.MAP
-    TextTranslateAnchor.VIEWPORT -> FLTPointAnnotationMessager.TextTranslateAnchor.VIEWPORT
+    com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.MAP -> TextTranslateAnchor.MAP
+    com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.VIEWPORT -> TextTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported TextTranslateAnchor: $this"))
   }
 }

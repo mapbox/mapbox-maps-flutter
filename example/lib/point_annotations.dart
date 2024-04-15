@@ -37,6 +37,8 @@ class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
   int styleIndex = 1;
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
+    mapboxMap.setCamera(CameraOptions(
+        center: Point(coordinates: Position(0, 0)), zoom: 1, pitch: 0));
     mapboxMap.annotations.createPointAnnotationManager().then((value) async {
       pointAnnotationManager = value;
       final ByteData bytes =

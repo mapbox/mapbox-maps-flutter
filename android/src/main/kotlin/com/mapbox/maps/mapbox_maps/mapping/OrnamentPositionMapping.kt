@@ -1,24 +1,24 @@
 package com.mapbox.maps.mapbox_maps.mapping
 
 import android.view.Gravity
-import com.mapbox.maps.pigeons.FLTSettings
+import com.mapbox.maps.mapbox_maps.pigeons.OrnamentPosition
 
-fun FLTSettings.OrnamentPosition.toPosition(): Int {
+fun OrnamentPosition.toPosition(): Int {
   return when (this) {
-    FLTSettings.OrnamentPosition.BOTTOM_LEFT -> Gravity.BOTTOM or Gravity.START
-    FLTSettings.OrnamentPosition.BOTTOM_RIGHT -> Gravity.BOTTOM or Gravity.END
-    FLTSettings.OrnamentPosition.TOP_LEFT -> Gravity.TOP or Gravity.START
-    FLTSettings.OrnamentPosition.TOP_RIGHT -> Gravity.TOP or Gravity.END
+    OrnamentPosition.BOTTOM_LEFT -> Gravity.BOTTOM or Gravity.START
+    OrnamentPosition.BOTTOM_RIGHT -> Gravity.BOTTOM or Gravity.END
+    OrnamentPosition.TOP_LEFT -> Gravity.TOP or Gravity.START
+    OrnamentPosition.TOP_RIGHT -> Gravity.TOP or Gravity.END
   }
 }
 
-fun Int.toOrnamentPosition(): FLTSettings.OrnamentPosition {
+fun Int.toOrnamentPosition(): OrnamentPosition {
   return when (this) {
-    Gravity.BOTTOM or Gravity.START -> FLTSettings.OrnamentPosition.BOTTOM_LEFT
-    Gravity.BOTTOM or Gravity.END -> FLTSettings.OrnamentPosition.BOTTOM_RIGHT
-    Gravity.TOP or Gravity.START -> FLTSettings.OrnamentPosition.TOP_LEFT
+    Gravity.BOTTOM or Gravity.START -> OrnamentPosition.BOTTOM_LEFT
+    Gravity.BOTTOM or Gravity.END -> OrnamentPosition.BOTTOM_RIGHT
+    Gravity.TOP or Gravity.START -> OrnamentPosition.TOP_LEFT
     else -> {
-      FLTSettings.OrnamentPosition.TOP_RIGHT
+      OrnamentPosition.TOP_RIGHT
     }
   }
 }
