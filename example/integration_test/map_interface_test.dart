@@ -33,6 +33,56 @@ void main() {
     expect(styleJson, getStyleJson);
   });
 
+  testWidgets('loadRasterArray', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var styleJson =
+        await rootBundle.loadString('assets/raster_array_layers.json');
+    app.events.resetOnStyleLoaded();
+    mapboxMap.loadStyleJson(styleJson);
+
+    await app.events.onStyleLoaded.future;
+
+    var getStyleJson = await mapboxMap.style.getStyleJSON();
+    expect(styleJson, getStyleJson);
+
+    var rasterLayers =
+        await mapboxMap.style.getStyleSourceProperty("mapbox", "rasterLayers");
+    final Map<Object?, Object?> dataMap =
+        rasterLayers.value as Map<Object?, Object?>;
+    List<RasterDataLayer> rasterDataLayers = [];
+
+    dataMap.forEach((key, value) {
+      rasterDataLayers
+          .add(RasterDataLayer(key as String, (value as List).cast<String>()));
+    });
+
+    var expectedValue = [
+      RasterDataLayer("temperature", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800"
+      ]),
+      RasterDataLayer("humidity", [
+        "1659898800",
+        "1659902400",
+        "1659906000",
+        "1659909600",
+        "1659913200",
+        "1659916800"
+      ])
+    ];
+
+    expect(rasterDataLayers.first.layerId, expectedValue.first.layerId);
+    expect(rasterDataLayers.first.bands, expectedValue.first.bands);
+    expect(rasterDataLayers.last.layerId, expectedValue.last.layerId);
+    expect(rasterDataLayers.last.bands, expectedValue.last.bands);
+  });
+
   testWidgets('clearData', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

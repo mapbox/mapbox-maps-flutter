@@ -32,6 +32,7 @@ import 'style/source/geojson_source_test.dart' as geojson_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
 import 'style/source/rasterdem_source_test.dart' as rasterdem_source_test;
+import 'style/source/rasterarray_source_test.dart' as rasterarray_source_test;
 import 'style/source/vector_source_test.dart' as vector_source_test;
 import 'style/style_test.dart' as style_test;
 import 'location_test.dart' as location_test;

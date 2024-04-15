@@ -1,5 +1,6 @@
 ### main
 
+* Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property. Use `mapboxMap.style.getStyleSourceProperty()` to fetch a value of `RasterArraySource.rasterLayers`.
 * Introduce `TileCacheBudget`, a property to set per-source cache budgets in either megabytes or tiles. 
 * Expose `iconColorSaturation`, `rasterArrayBand`, `rasterElevation`, `rasterEmissiveStrength`, `hillshadeEmissiveStrength`, and `fillExtrusionEmissiveStrength` on their respective layers. 
 * Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
