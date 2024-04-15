@@ -13,7 +13,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
-    OnPolylineAnnotationClickListener.setup(listener,
+    OnPolylineAnnotationClickListener.setUp(listener,
         binaryMessenger: _messenger);
   }
 

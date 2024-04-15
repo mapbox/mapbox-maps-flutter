@@ -7,6 +7,6 @@ final class LogConfiguration {
   /// Pass backend which writes logs as [backend], if you provide null for this parameter then previously
   /// used logger backend will be replaced with Mapbox default implementation.
   static void registerLogWriterBackend(LogWriterBackend? backend) {
-    LogWriterBackend.setup(backend);
+    LogWriterBackend.setUp(backend);
   }
 }

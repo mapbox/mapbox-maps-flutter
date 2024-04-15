@@ -13,7 +13,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
-    OnPolygonAnnotationClickListener.setup(listener,
+    OnPolygonAnnotationClickListener.setUp(listener,
         binaryMessenger: _messenger);
   }
 
