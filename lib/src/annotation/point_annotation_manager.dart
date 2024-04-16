@@ -13,7 +13,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPointAnnotationClickListener(
       OnPointAnnotationClickListener listener) {
-    OnPointAnnotationClickListener.setup(listener, binaryMessenger: _messenger);
+    OnPointAnnotationClickListener.setUp(listener, binaryMessenger: _messenger);
   }
 
   /// Create a new annotation with the option.

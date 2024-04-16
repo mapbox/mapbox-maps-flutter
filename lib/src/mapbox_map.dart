@@ -199,7 +199,7 @@ class MapboxMap extends ChangeNotifier {
   @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
-    GestureListener.setup(null, binaryMessenger: _proxyBinaryMessenger);
+    GestureListener.setUp(null, binaryMessenger: _proxyBinaryMessenger);
 
     super.dispose();
   }
@@ -529,8 +529,10 @@ class MapboxMap extends ChangeNotifier {
   Future<void> cancelCameraAnimation() => _animationManager.cancelCameraAnimation();
 
   void _setupGestures() {
-    if (onMapTapListener != null || onMapLongTapListener != null || onMapScrollListener != null) {
-      GestureListener.setup(
+    if (onMapTapListener != null ||
+        onMapLongTapListener != null ||
+        onMapScrollListener != null) {
+      GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,
             onMapLongTapListener: onMapLongTapListener,
