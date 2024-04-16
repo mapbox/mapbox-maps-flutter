@@ -13,7 +13,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnCircleAnnotationClickListener(
       OnCircleAnnotationClickListener listener) {
-    OnCircleAnnotationClickListener.setup(listener,
+    OnCircleAnnotationClickListener.setUp(listener,
         binaryMessenger: _messenger);
   }
 
