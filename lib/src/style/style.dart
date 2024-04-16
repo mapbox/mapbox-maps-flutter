@@ -148,6 +148,14 @@ class RasterDataLayer {
     return RasterDataLayer(layerObject.keys.first, layerObject.values.first);
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RasterDataLayer &&
+          runtimeType == other.runtimeType &&
+          layerId == other.layerId &&
+          listEquals(bands, other.bands);
+
   RasterDataLayer(this.layerId, this.bands);
 }
 

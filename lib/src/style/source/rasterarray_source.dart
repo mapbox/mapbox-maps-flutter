@@ -9,22 +9,14 @@ class RasterArraySource extends Source {
     required id,
     String? url,
     List<String?>? tiles,
-    List<double?>? bounds,
     double? minzoom,
     double? maxzoom,
-    double? tileSize,
-    String? attribution,
-    List<RasterDataLayer?>? rasterLayers,
     TileCacheBudget? tileCacheBudget,
   }) : super(id: id) {
     _url = url;
     _tiles = tiles;
-    _bounds = bounds;
     _minzoom = minzoom;
     _maxzoom = maxzoom;
-    _tileSize = tileSize;
-    _attribution = attribution;
-    _rasterLayers = rasterLayers;
     _tileCacheBudget = tileCacheBudget;
   }
 
@@ -56,8 +48,6 @@ class RasterArraySource extends Source {
       }
     });
   }
-
-  List<double?>? _bounds;
 
   /// An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
   Future<List<double?>?> get bounds async {
@@ -96,8 +86,6 @@ class RasterArraySource extends Source {
     });
   }
 
-  double? _tileSize;
-
   /// The minimum visual size to display tiles for this layer. Only configurable for raster layers.
   Future<double?> get tileSize async {
     return _style?.getStyleSourceProperty(id, "tileSize").then((value) {
@@ -109,8 +97,6 @@ class RasterArraySource extends Source {
     });
   }
 
-  String? _attribution;
-
   /// Contains an attribution to be displayed when the map is shown to a user.
   Future<String?> get attribution async {
     return _style?.getStyleSourceProperty(id, "attribution").then((value) {
@@ -121,8 +107,6 @@ class RasterArraySource extends Source {
       }
     });
   }
-
-  List<RasterDataLayer?>? _rasterLayers;
 
   /// Contains the description of the raster data layers and the bands contained within the tiles.
   Future<List<RasterDataLayer?>?> get rasterLayers async {
@@ -167,23 +151,11 @@ class RasterArraySource extends Source {
       if (_tiles != null) {
         properties["tiles"] = _tiles;
       }
-      if (_bounds != null) {
-        properties["bounds"] = _bounds;
-      }
       if (_minzoom != null) {
         properties["minzoom"] = _minzoom;
       }
       if (_maxzoom != null) {
         properties["maxzoom"] = _maxzoom;
-      }
-      if (_tileSize != null) {
-        properties["tileSize"] = _tileSize;
-      }
-      if (_attribution != null) {
-        properties["attribution"] = _attribution;
-      }
-      if (_rasterLayers != null) {
-        properties["rasterLayers"] = _rasterLayers;
       }
     }
 

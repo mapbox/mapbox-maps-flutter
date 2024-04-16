@@ -77,10 +77,8 @@ void main() {
       ])
     ];
 
-    expect(rasterDataLayers.first.layerId, expectedValue.first.layerId);
-    expect(rasterDataLayers.first.bands, expectedValue.first.bands);
-    expect(rasterDataLayers.last.layerId, expectedValue.last.layerId);
-    expect(rasterDataLayers.last.bands, expectedValue.last.bands);
+    expect(rasterDataLayers.contains(expectedValue.first), true);
+    expect(rasterDataLayers.contains(expectedValue.last), true);
   });
 
   testWidgets('clearData', (WidgetTester tester) async {
