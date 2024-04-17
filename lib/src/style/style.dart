@@ -142,12 +142,6 @@ class RasterDataLayer {
 
   Map<String, List<String>> toJson() => {layerId: bands};
 
-  static RasterDataLayer? decode(Object? layer) {
-    var layerObject = Map<String, dynamic>.from(layer as Map<dynamic, dynamic>)
-        .cast<String, dynamic>();
-    return RasterDataLayer(layerObject.keys.first, layerObject.values.first);
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

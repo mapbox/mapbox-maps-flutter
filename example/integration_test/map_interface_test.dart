@@ -39,25 +39,6 @@ void main() {
     final mapboxMap = await mapFuture;
     var styleJson =
         await rootBundle.loadString('assets/raster_array_layers.json');
-    app.events.resetOnStyleLoaded();
-    mapboxMap.loadStyleJson(styleJson);
-
-    await app.events.onStyleLoaded.future;
-
-    var getStyleJson = await mapboxMap.style.getStyleJSON();
-    expect(styleJson, getStyleJson);
-
-    var rasterLayers =
-        await mapboxMap.style.getStyleSourceProperty("mapbox", "rasterLayers");
-    final Map<Object?, Object?> dataMap =
-        rasterLayers.value as Map<Object?, Object?>;
-    List<RasterDataLayer> rasterDataLayers = [];
-
-    dataMap.forEach((key, value) {
-      rasterDataLayers
-          .add(RasterDataLayer(key as String, (value as List).cast<String>()));
-    });
-
     var expectedValue = [
       RasterDataLayer("temperature", [
         "1659898800",
@@ -76,9 +57,37 @@ void main() {
         "1659916800"
       ])
     ];
+    app.events.resetOnStyleLoaded();
+    mapboxMap.loadStyleJson(styleJson);
 
+    await app.events.onStyleLoaded.future;
+
+    var getStyleJson = await mapboxMap.style.getStyleJSON();
+    expect(styleJson, getStyleJson);
+
+    // Test getStyleSourceProperty method
+    var rasterLayers =
+        await mapboxMap.style.getStyleSourceProperty("mapbox", "rasterLayers");
+    final Map<Object?, Object?> dataMap =
+        rasterLayers.value as Map<Object?, Object?>;
+    List<RasterDataLayer> rasterDataLayers = [];
+
+    dataMap.forEach((key, value) {
+      rasterDataLayers
+          .add(RasterDataLayer(key as String, (value as List).cast<String>()));
+    });
     expect(rasterDataLayers.contains(expectedValue.first), true);
     expect(rasterDataLayers.contains(expectedValue.last), true);
+
+    // Test getting the value from the source directly
+    var source = await mapboxMap.style.getSource("mapbox");
+    if (source is RasterArraySource) {
+      var layers = await source.rasterLayers;
+      expect(layers?.contains(expectedValue.first), true);
+      expect(layers?.contains(expectedValue.last), true);
+    } else {
+      fail("Expected source to be RasterArraySource");
+    }
   });
 
   testWidgets('clearData', (WidgetTester tester) async {
