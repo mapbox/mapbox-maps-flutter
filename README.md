@@ -323,4 +323,3 @@ You can retrieve or update the `GestureSettings` using `MapboxMap.gestures`.
 
 You can observe gesture events using `MapWidget.onTapListener`, `MapWidget.onLongTapListener`, `MapWidget.onScrollListener`.
 
-
