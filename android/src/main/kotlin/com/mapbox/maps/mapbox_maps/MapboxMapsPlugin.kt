@@ -1,27 +1,22 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
+import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterInstanceManager
+import com.mapbox.maps.mapbox_maps.snapshot.SnapshotterInstanceManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
+import io.flutter.plugin.common.BinaryMessenger
 
 /** MapboxMapsPlugin */
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
-  private val optionsController = MapboxOptionsController()
-
   private var lifecycle: Lifecycle? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    // static options handling should be setup upon attachment,
-    // as options can before configured before the map view is setup
-    _MapboxMapsOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
-    _MapboxOptions.setUp(flutterPluginBinding.binaryMessenger, optionsController)
-
-    LoggingController.setup(flutterPluginBinding.binaryMessenger)
-
     flutterPluginBinding
       .platformViewRegistry
       .registerViewFactory(
@@ -35,6 +30,19 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
           }
         )
       )
+
+    setupStaticChannels(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger)
+  }
+
+  private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger) {
+    val optionsController = MapboxOptionsController()
+    val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
+    // static options handling should be setup upon attachment,
+    // as options can before configured before the map view is setup
+    _MapboxMapsOptions.setUp(binaryMessenger, optionsController)
+    _MapboxOptions.setUp(binaryMessenger, optionsController)
+    _SnapshotterInstanceManager.setUp(binaryMessenger, snapshotterInstanceManager)
+    LoggingController.setup(binaryMessenger)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

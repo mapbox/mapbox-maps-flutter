@@ -343,6 +343,47 @@ enum _MapEvent: Int {
   case resourceRequest = 13
 }
 
+/// Various options needed for tile cover.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileCoverOptions {
+  /// Tile size of the source. Defaults to 512.
+  var tileSize: Int64?
+  /// Min zoom defined in the source between range [0, 22].
+  /// if not provided or is out of range, defaults to 0.
+  var minZoom: Int64?
+  /// Max zoom defined in the source between range [0, 22].
+  /// Should be greater than or equal to minZoom.
+  /// If not provided or is out of range, defaults to 22.
+  var maxZoom: Int64?
+  /// Whether to round zoom values when calculating tilecover.
+  /// Set this to true for raster and raster-dem sources.
+  /// If not specified, defaults to false.
+  var roundZoom: Bool?
+
+  static func fromList(_ list: [Any?]) -> TileCoverOptions? {
+    let tileSize: Int64? = isNullish(list[0]) ? nil : (list[0] is Int64? ? list[0] as! Int64? : Int64(list[0] as! Int32))
+    let minZoom: Int64? = isNullish(list[1]) ? nil : (list[1] is Int64? ? list[1] as! Int64? : Int64(list[1] as! Int32))
+    let maxZoom: Int64? = isNullish(list[2]) ? nil : (list[2] is Int64? ? list[2] as! Int64? : Int64(list[2] as! Int32))
+    let roundZoom: Bool? = nilOrValue(list[3])
+
+    return TileCoverOptions(
+      tileSize: tileSize,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
+      roundZoom: roundZoom
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      tileSize,
+      minZoom,
+      maxZoom,
+      roundZoom,
+    ]
+  }
+}
+
 /// The distance on each side between rectangles, when one is contained into other.
 ///
 /// All fields' values are in `logical pixel` units.
@@ -2012,6 +2053,8 @@ private class _CameraManagerCodecReader: FlutterStandardReader {
     case 166:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 167:
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+    case 168:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2138,8 +2181,11 @@ private class _CameraManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(167)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(168)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2817,6 +2863,8 @@ private class _MapInterfaceCodecReader: FlutterStandardReader {
     case 166:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 167:
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+    case 168:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2943,8 +2991,11 @@ private class _MapInterfaceCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(167)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(168)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3121,6 +3172,8 @@ protocol _MapInterface {
   /// @param coordinate The `coordinate` defined as longitude-latitude pair.
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
   func getElevation(coordinate: Point) throws -> Double?
+  /// Returns array of tile identifiers that cover current map camera.
+  func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3693,6 +3746,22 @@ class _MapInterfaceSetup {
     } else {
       getElevationChannel.setMessageHandler(nil)
     }
+    /// Returns array of tile identifiers that cover current map camera.
+    let tileCoverChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileCoverChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! TileCoverOptions
+        do {
+          let result = try api.tileCover(options: optionsArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      tileCoverChannel.setMessageHandler(nil)
+    }
   }
 }
 private class OfflineRegionCodecReader: FlutterStandardReader {
@@ -4075,7 +4144,7 @@ protocol Projection {
   ///
   /// @param projectedMeters Spherical Mercator ProjectedMeters coordinates for
   /// which to calculate a longitude-latitude pair.
-  ///
+  /// 
   /// @return Returns a longitude-latitude pair.
   func coordinateForProjectedMeters(projectedMeters: ProjectedMeters) throws -> Point
   /// Calculate a point on the map in Mercator Projection for a given
@@ -4155,7 +4224,7 @@ class ProjectionSetup {
     ///
     /// @param projectedMeters Spherical Mercator ProjectedMeters coordinates for
     /// which to calculate a longitude-latitude pair.
-    ///
+    /// 
     /// @return Returns a longitude-latitude pair.
     let coordinateForProjectedMetersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -4522,349 +4591,6 @@ class SettingsSetup {
     }
   }
 }
-private class MapSnapshotCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 128:
-      return MbxImage.fromList(self.readValue() as! [Any?])
-    case 129:
-      return Point.fromList(self.readValue() as! [Any?])
-    case 130:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
-}
-
-private class MapSnapshotCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? MbxImage {
-      super.writeByte(128)
-      super.writeValue(value.toList())
-    } else if let value = value as? Point {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else {
-      super.writeValue(value)
-    }
-  }
-}
-
-private class MapSnapshotCodecReaderWriter: FlutterStandardReaderWriter {
-  override func reader(with data: Data) -> FlutterStandardReader {
-    return MapSnapshotCodecReader(data: data)
-  }
-
-  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return MapSnapshotCodecWriter(data: data)
-  }
-}
-
-class MapSnapshotCodec: FlutterStandardMessageCodec {
-  static let shared = MapSnapshotCodec(readerWriter: MapSnapshotCodecReaderWriter())
-}
-
-/// An image snapshot of a map rendered by `map snapshotter`.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol MapSnapshot {
-  /// Calculate screen coordinate on the snapshot from geographical `coordinate`.
-  ///
-  /// @param coordinate A geographical `coordinate`.
-  /// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-  func screenCoordinate(coordinate: Point) throws -> ScreenCoordinate
-  /// Calculate geographical coordinates from a point on the snapshot.
-  ///
-  /// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
-  /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-  func coordinate(screenCoordinate: ScreenCoordinate) throws -> Point
-  /// Get list of attributions for the sources in this snapshot.
-  ///
-  /// @return A list of attributions for the sources in this snapshot.
-  func attributions() throws -> [String?]
-  /// Get the rendered snapshot `image`.
-  ///
-  /// @return A rendered snapshot `image`.
-  func image() throws -> MbxImage
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class MapSnapshotSetup {
-  /// The codec used by MapSnapshot.
-  static var codec: FlutterStandardMessageCodec { MapSnapshotCodec.shared }
-  /// Sets up an instance of `MapSnapshot` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MapSnapshot?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// Calculate screen coordinate on the snapshot from geographical `coordinate`.
-    ///
-    /// @param coordinate A geographical `coordinate`.
-    /// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-    let screenCoordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.screenCoordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      screenCoordinateChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let coordinateArg = args[0] as! Point
-        do {
-          let result = try api.screenCoordinate(coordinate: coordinateArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      screenCoordinateChannel.setMessageHandler(nil)
-    }
-    /// Calculate geographical coordinates from a point on the snapshot.
-    ///
-    /// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
-    /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-    let coordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.coordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      coordinateChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let screenCoordinateArg = args[0] as! ScreenCoordinate
-        do {
-          let result = try api.coordinate(screenCoordinate: screenCoordinateArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      coordinateChannel.setMessageHandler(nil)
-    }
-    /// Get list of attributions for the sources in this snapshot.
-    ///
-    /// @return A list of attributions for the sources in this snapshot.
-    let attributionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.attributions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      attributionsChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.attributions()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      attributionsChannel.setMessageHandler(nil)
-    }
-    /// Get the rendered snapshot `image`.
-    ///
-    /// @return A rendered snapshot `image`.
-    let imageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.image\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      imageChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.image()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      imageChannel.setMessageHandler(nil)
-    }
-  }
-}
-private class MapSnapshotterCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 128:
-      return Point.fromList(self.readValue() as! [Any?])
-    case 129:
-      return Size.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
-}
-
-private class MapSnapshotterCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? Point {
-      super.writeByte(128)
-      super.writeValue(value.toList())
-    } else if let value = value as? Size {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else {
-      super.writeValue(value)
-    }
-  }
-}
-
-private class MapSnapshotterCodecReaderWriter: FlutterStandardReaderWriter {
-  override func reader(with data: Data) -> FlutterStandardReader {
-    return MapSnapshotterCodecReader(data: data)
-  }
-
-  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return MapSnapshotterCodecWriter(data: data)
-  }
-}
-
-class MapSnapshotterCodec: FlutterStandardMessageCodec {
-  static let shared = MapSnapshotterCodec(readerWriter: MapSnapshotterCodecReaderWriter())
-}
-
-/// MapSnapshotter exposes functionality to capture static map images.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol MapSnapshotter {
-  /// Sets the `size` of the snapshot
-  ///
-  /// @param size The new `size` of the snapshot in `logical pixels`.
-  func setSize(size: Size) throws
-  /// Gets the size of the snapshot
-  ///
-  /// @return Snapshot `size` in `logical pixels`.
-  func getSize() throws -> Size
-  /// Returns `true` if the snapshotter is in the tile mode.
-  ///
-  /// @return `true` if the snapshotter is in the tile mode, `false` otherwise.
-  func isInTileMode() throws -> Bool
-  /// Sets the snapshotter to the tile mode.
-  ///
-  /// In the tile mode, the snapshotter fetches the still image of a single tile.
-  ///
-  /// @param set A `boolean` value representing if the snapshotter is in the tile mode.
-  func setTileMode(set: Bool) throws
-  /// Cancel the current snapshot operation.
-  ///
-  /// Cancel the current snapshot operation, if any. The callback passed to the start method
-  /// is called with error parameter set.
-  func cancel() throws
-  /// Get elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen.
-  ///
-  /// @param coordinate defined as longitude-latitude pair.
-  ///
-  /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  func getElevation(coordinate: Point) throws -> Double?
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class MapSnapshotterSetup {
-  /// The codec used by MapSnapshotter.
-  static var codec: FlutterStandardMessageCodec { MapSnapshotterCodec.shared }
-  /// Sets up an instance of `MapSnapshotter` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MapSnapshotter?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// Sets the `size` of the snapshot
-    ///
-    /// @param size The new `size` of the snapshot in `logical pixels`.
-    let setSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setSizeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let sizeArg = args[0] as! Size
-        do {
-          try api.setSize(size: sizeArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setSizeChannel.setMessageHandler(nil)
-    }
-    /// Gets the size of the snapshot
-    ///
-    /// @return Snapshot `size` in `logical pixels`.
-    let getSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getSizeChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getSize()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getSizeChannel.setMessageHandler(nil)
-    }
-    /// Returns `true` if the snapshotter is in the tile mode.
-    ///
-    /// @return `true` if the snapshotter is in the tile mode, `false` otherwise.
-    let isInTileModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.isInTileMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      isInTileModeChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.isInTileMode()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      isInTileModeChannel.setMessageHandler(nil)
-    }
-    /// Sets the snapshotter to the tile mode.
-    ///
-    /// In the tile mode, the snapshotter fetches the still image of a single tile.
-    ///
-    /// @param set A `boolean` value representing if the snapshotter is in the tile mode.
-    let setTileModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setTileMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setTileModeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let setArg = args[0] as! Bool
-        do {
-          try api.setTileMode(set: setArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setTileModeChannel.setMessageHandler(nil)
-    }
-    /// Cancel the current snapshot operation.
-    ///
-    /// Cancel the current snapshot operation, if any. The callback passed to the start method
-    /// is called with error parameter set.
-    let cancelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.cancel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      cancelChannel.setMessageHandler { _, reply in
-        do {
-          try api.cancel()
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      cancelChannel.setMessageHandler(nil)
-    }
-    /// Get elevation for the given coordinate.
-    /// Note: Elevation is only available for the visible region on the screen.
-    ///
-    /// @param coordinate defined as longitude-latitude pair.
-    ///
-    /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-    let getElevationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getElevation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getElevationChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let coordinateArg = args[0] as! Point
-        do {
-          let result = try api.getElevation(coordinate: coordinateArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getElevationChannel.setMessageHandler(nil)
-    }
-  }
-}
 private class StyleManagerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -4947,6 +4673,8 @@ private class StyleManagerCodecReader: FlutterStandardReader {
     case 166:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 167:
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+    case 168:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -5073,8 +4801,11 @@ private class StyleManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(167)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(168)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

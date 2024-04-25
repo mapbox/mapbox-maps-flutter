@@ -19,6 +19,44 @@ import java.io.ByteArrayOutputStream
 
 // FLT to Android
 
+fun GlyphsRasterizationMode.toGlyphsRasterizationMode(): com.mapbox.maps.GlyphsRasterizationMode {
+  return when (this) {
+    GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
+    GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
+    GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+  }
+}
+fun GlyphsRasterizationOptions.toGlyphsRasterizationOptions(): com.mapbox.maps.GlyphsRasterizationOptions {
+  return com.mapbox.maps.GlyphsRasterizationOptions.Builder()
+    .rasterizationMode(rasterizationMode.toGlyphsRasterizationMode())
+    .fontFamily(fontFamily)
+    .build()
+}
+fun MapSnapshotOptions.toSnapshotOptions(context: Context): com.mapbox.maps.MapSnapshotOptions {
+  return com.mapbox.maps.MapSnapshotOptions.Builder()
+    .size(size.toSize(context))
+    .pixelRatio(pixelRatio.toFloat())
+    .glyphsRasterizationOptions(glyphsRasterizationOptions?.toGlyphsRasterizationOptions())
+    .build()
+}
+
+fun MapSnapshotOptions.toSnapshotOverlayOptions(): com.mapbox.maps.SnapshotOverlayOptions {
+  return com.mapbox.maps.SnapshotOverlayOptions(
+    showLogo = showsLogo ?: true,
+    showAttributes = showsAttribution ?: true
+  )
+}
+fun Size.toSize(context: Context): com.mapbox.maps.Size {
+  return com.mapbox.maps.Size(width.toDevicePixels(context), height.toDevicePixels(context))
+}
+fun TileCoverOptions.toTileCoverOptions(): com.mapbox.maps.TileCoverOptions {
+  return com.mapbox.maps.TileCoverOptions.Builder()
+    .tileSize(tileSize?.toShort())
+    .maxZoom(maxZoom?.toByte())
+    .minZoom(minZoom?.toByte())
+    .roundZoom(roundZoom)
+    .build()
+}
 fun ModelScaleMode.toModelScaleMode(): com.mapbox.maps.plugin.ModelScaleMode {
   return when (this) {
     ModelScaleMode.VIEWPORT -> com.mapbox.maps.plugin.ModelScaleMode.VIEWPORT
@@ -352,6 +390,10 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun com.mapbox.maps.CanonicalTileID.toFLTCanonicalTileID(): CanonicalTileID {
+  return CanonicalTileID(z = z.toLong(), x = x.toLong(), y = y.toLong())
+}
 
 fun com.mapbox.common.LoggingLevel.toFLTLoggingLevel(): LoggingLevel {
   return when (this) {

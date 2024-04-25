@@ -10,7 +10,7 @@ import 'package:mapbox_maps_example/image_source.dart';
 import 'package:mapbox_maps_example/map_interface.dart';
 import 'package:mapbox_maps_example/polygon_annotations.dart';
 import 'package:mapbox_maps_example/polyline_annotations.dart';
-import 'package:mapbox_maps_example/snapshot.dart';
+import 'package:mapbox_maps_example/snapshotter.dart';
 import 'package:mapbox_maps_example/traffic-route-line.dart';
 import 'package:mapbox_maps_example/tile_json.dart';
 import 'package:mapbox_maps_example/vector_tile_source.dart';
@@ -44,7 +44,7 @@ final List<ExamplePage> _allPages = <ExamplePage>[
   GesturesPage(),
   OrnamentsPage(),
   AnimatedRoutePage(),
-  SnapshotPage(),
+  SnapshotterPage(),
   TrafficRouteLinePage(),
 ];
 
@@ -74,7 +74,8 @@ class MapsDemo extends StatelessWidget {
           ? buildAccessTokenWarning()
           : ListView.separated(
               itemCount: _allPages.length,
-              separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(height: 1),
               itemBuilder: (_, int index) => ListTile(
                 leading: _allPages[index].leading,
                 title: Text(_allPages[index].title),
@@ -100,7 +101,9 @@ class MapsDemo extends StatelessWidget {
                     child: Text(text,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                   ))
               .toList(),
         ),

@@ -388,6 +388,52 @@ enum _MapEvent {
   resourceRequest,
 }
 
+/// Various options needed for tile cover.
+class TileCoverOptions {
+  TileCoverOptions({
+    this.tileSize,
+    this.minZoom,
+    this.maxZoom,
+    this.roundZoom,
+  });
+
+  /// Tile size of the source. Defaults to 512.
+  int? tileSize;
+
+  /// Min zoom defined in the source between range [0, 22].
+  /// if not provided or is out of range, defaults to 0.
+  int? minZoom;
+
+  /// Max zoom defined in the source between range [0, 22].
+  /// Should be greater than or equal to minZoom.
+  /// If not provided or is out of range, defaults to 22.
+  int? maxZoom;
+
+  /// Whether to round zoom values when calculating tilecover.
+  /// Set this to true for raster and raster-dem sources.
+  /// If not specified, defaults to false.
+  bool? roundZoom;
+
+  Object encode() {
+    return <Object?>[
+      tileSize,
+      minZoom,
+      maxZoom,
+      roundZoom,
+    ];
+  }
+
+  static TileCoverOptions decode(Object result) {
+    result as List<Object?>;
+    return TileCoverOptions(
+      tileSize: result[0] as int?,
+      minZoom: result[1] as int?,
+      maxZoom: result[2] as int?,
+      roundZoom: result[3] as bool?,
+    );
+  }
+}
+
 /// The distance on each side between rectangles, when one is contained into other.
 ///
 /// All fields' values are in `logical pixel` units.
@@ -2285,8 +2331,11 @@ class __CameraManagerCodec extends StandardMessageCodec {
     } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(167);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2375,6 +2424,8 @@ class __CameraManagerCodec extends StandardMessageCodec {
       case 166:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 167:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 168:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3165,8 +3216,11 @@ class __MapInterfaceCodec extends StandardMessageCodec {
     } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(167);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3255,6 +3309,8 @@ class __MapInterfaceCodec extends StandardMessageCodec {
       case 166:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 167:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 168:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4147,6 +4203,37 @@ class _MapInterface {
       );
     } else {
       return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  /// Returns array of tile identifiers that cover current map camera.
+  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[options]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)!
+          .cast<CanonicalTileID?>();
     }
   }
 }
@@ -5207,410 +5294,6 @@ class Settings {
   }
 }
 
-class _MapSnapshotCodec extends StandardMessageCodec {
-  const _MapSnapshotCodec();
-  @override
-  void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is MbxImage) {
-      buffer.putUint8(128);
-      writeValue(buffer, value.encode());
-    } else if (value is Point) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else {
-      super.writeValue(buffer, value);
-    }
-  }
-
-  @override
-  Object? readValueOfType(int type, ReadBuffer buffer) {
-    switch (type) {
-      case 128:
-        return MbxImage.decode(readValue(buffer)!);
-      case 129:
-        return Point.decode(readValue(buffer)!);
-      case 130:
-        return ScreenCoordinate.decode(readValue(buffer)!);
-      default:
-        return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-/// An image snapshot of a map rendered by `map snapshotter`.
-class MapSnapshot {
-  /// Constructor for [MapSnapshot].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  MapSnapshot(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec = _MapSnapshotCodec();
-
-  final String __pigeon_messageChannelSuffix;
-
-  /// Calculate screen coordinate on the snapshot from geographical `coordinate`.
-  ///
-  /// @param coordinate A geographical `coordinate`.
-  /// @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-  Future<ScreenCoordinate> screenCoordinate(Point coordinate) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.screenCoordinate$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[coordinate]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as ScreenCoordinate?)!;
-    }
-  }
-
-  /// Calculate geographical coordinates from a point on the snapshot.
-  ///
-  /// @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
-  /// @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-  Future<Point> coordinate(ScreenCoordinate screenCoordinate) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.coordinate$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[screenCoordinate]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as Point?)!;
-    }
-  }
-
-  /// Get list of attributions for the sources in this snapshot.
-  ///
-  /// @return A list of attributions for the sources in this snapshot.
-  Future<List<String?>> attributions() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.attributions$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as List<Object?>?)!.cast<String?>();
-    }
-  }
-
-  /// Get the rendered snapshot `image`.
-  ///
-  /// @return A rendered snapshot `image`.
-  Future<MbxImage> image() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.image$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as MbxImage?)!;
-    }
-  }
-}
-
-class _MapSnapshotterCodec extends StandardMessageCodec {
-  const _MapSnapshotterCodec();
-  @override
-  void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is Point) {
-      buffer.putUint8(128);
-      writeValue(buffer, value.encode());
-    } else if (value is Size) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else {
-      super.writeValue(buffer, value);
-    }
-  }
-
-  @override
-  Object? readValueOfType(int type, ReadBuffer buffer) {
-    switch (type) {
-      case 128:
-        return Point.decode(readValue(buffer)!);
-      case 129:
-        return Size.decode(readValue(buffer)!);
-      default:
-        return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-/// MapSnapshotter exposes functionality to capture static map images.
-class MapSnapshotter {
-  /// Constructor for [MapSnapshotter].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  MapSnapshotter(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      _MapSnapshotterCodec();
-
-  final String __pigeon_messageChannelSuffix;
-
-  /// Sets the `size` of the snapshot
-  ///
-  /// @param size The new `size` of the snapshot in `logical pixels`.
-  Future<void> setSize(Size size) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setSize$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[size]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Gets the size of the snapshot
-  ///
-  /// @return Snapshot `size` in `logical pixels`.
-  Future<Size> getSize() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getSize$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as Size?)!;
-    }
-  }
-
-  /// Returns `true` if the snapshotter is in the tile mode.
-  ///
-  /// @return `true` if the snapshotter is in the tile mode, `false` otherwise.
-  Future<bool> isInTileMode() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.isInTileMode$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as bool?)!;
-    }
-  }
-
-  /// Sets the snapshotter to the tile mode.
-  ///
-  /// In the tile mode, the snapshotter fetches the still image of a single tile.
-  ///
-  /// @param set A `boolean` value representing if the snapshotter is in the tile mode.
-  Future<void> setTileMode(bool set) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setTileMode$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[set]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Cancel the current snapshot operation.
-  ///
-  /// Cancel the current snapshot operation, if any. The callback passed to the start method
-  /// is called with error parameter set.
-  Future<void> cancel() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.cancel$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Get elevation for the given coordinate.
-  /// Note: Elevation is only available for the visible region on the screen.
-  ///
-  /// @param coordinate defined as longitude-latitude pair.
-  ///
-  /// @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-  Future<double?> getElevation(Point coordinate) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getElevation$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[coordinate]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return (__pigeon_replyList[0] as double?);
-    }
-  }
-}
-
 class _StyleManagerCodec extends StandardMessageCodec {
   const _StyleManagerCodec();
   @override
@@ -5732,8 +5415,11 @@ class _StyleManagerCodec extends StandardMessageCodec {
     } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(167);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(168);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5822,6 +5508,8 @@ class _StyleManagerCodec extends StandardMessageCodec {
       case 166:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 167:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 168:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

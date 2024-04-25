@@ -507,6 +507,53 @@ enum class _MapEvent(val raw: Int) {
 }
 
 /**
+ * Various options needed for tile cover.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileCoverOptions(
+  /** Tile size of the source. Defaults to 512. */
+  val tileSize: Long? = null,
+  /**
+   * Min zoom defined in the source between range [0, 22].
+   * if not provided or is out of range, defaults to 0.
+   */
+  val minZoom: Long? = null,
+  /**
+   * Max zoom defined in the source between range [0, 22].
+   * Should be greater than or equal to minZoom.
+   * If not provided or is out of range, defaults to 22.
+   */
+  val maxZoom: Long? = null,
+  /**
+   * Whether to round zoom values when calculating tilecover.
+   * Set this to true for raster and raster-dem sources.
+   * If not specified, defaults to false.
+   */
+  val roundZoom: Boolean? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileCoverOptions {
+      val tileSize = list[0].let { if (it is Int) it.toLong() else it as Long? }
+      val minZoom = list[1].let { if (it is Int) it.toLong() else it as Long? }
+      val maxZoom = list[2].let { if (it is Int) it.toLong() else it as Long? }
+      val roundZoom = list[3] as Boolean?
+      return TileCoverOptions(tileSize, minZoom, maxZoom, roundZoom)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      tileSize,
+      minZoom,
+      maxZoom,
+      roundZoom,
+    )
+  }
+}
+
+/**
  * The distance on each side between rectangles, when one is contained into other.
  *
  * All fields' values are in `logical pixel` units.
@@ -2374,6 +2421,11 @@ private object _CameraManagerCodec : StandardMessageCodec() {
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          TileCoverOptions.fromList(it)
+        }
+      }
+      168.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
       }
@@ -2538,8 +2590,12 @@ private object _CameraManagerCodec : StandardMessageCodec() {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is TileCoverOptions -> {
         stream.write(167)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3276,6 +3332,11 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          TileCoverOptions.fromList(it)
+        }
+      }
+      168.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
       }
@@ -3440,8 +3501,12 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is TileCoverOptions -> {
         stream.write(167)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3644,6 +3709,8 @@ interface _MapInterface {
    * @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
    */
   fun getElevation(coordinate: Point): Double?
+  /** Returns array of tile identifiers that cover current map camera. */
+  fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -4175,6 +4242,24 @@ interface _MapInterface {
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.getElevation(coordinateArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as TileCoverOptions
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.tileCover(optionsArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -5069,358 +5154,6 @@ interface Settings {
   }
 }
 @Suppress("UNCHECKED_CAST")
-private object MapSnapshotCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
-        }
-      }
-      129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    when (value) {
-      is MbxImage -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      is Point -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      is ScreenCoordinate -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
-/**
- * An image snapshot of a map rendered by `map snapshotter`.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface MapSnapshot {
-  /**
-   * Calculate screen coordinate on the snapshot from geographical `coordinate`.
-   *
-   * @param coordinate A geographical `coordinate`.
-   * @return A `screen coordinate` measured in `logical pixels` on the snapshot for geographical `coordinate`.
-   */
-  fun screenCoordinate(coordinate: Point): ScreenCoordinate
-  /**
-   * Calculate geographical coordinates from a point on the snapshot.
-   *
-   * @param screenCoordinate A `screen coordinate` on the snapshot in `logical pixels`.
-   * @return A geographical `coordinate` for a `screen coordinate` on the snapshot.
-   */
-  fun coordinate(screenCoordinate: ScreenCoordinate): Point
-  /**
-   * Get list of attributions for the sources in this snapshot.
-   *
-   * @return A list of attributions for the sources in this snapshot.
-   */
-  fun attributions(): List<String?>
-  /**
-   * Get the rendered snapshot `image`.
-   *
-   * @return A rendered snapshot `image`.
-   */
-  fun image(): MbxImage
-
-  companion object {
-    /** The codec used by MapSnapshot. */
-    val codec: MessageCodec<Any?> by lazy {
-      MapSnapshotCodec
-    }
-    /** Sets up an instance of `MapSnapshot` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: MapSnapshot?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.screenCoordinate$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val coordinateArg = args[0] as Point
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.screenCoordinate(coordinateArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.coordinate$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val screenCoordinateArg = args[0] as ScreenCoordinate
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.coordinate(screenCoordinateArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.attributions$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.attributions())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshot.image$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.image())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-@Suppress("UNCHECKED_CAST")
-private object MapSnapshotterCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    when (value) {
-      is Point -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      is Size -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
-/**
- * MapSnapshotter exposes functionality to capture static map images.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface MapSnapshotter {
-  /**
-   * Sets the `size` of the snapshot
-   *
-   * @param size The new `size` of the snapshot in `logical pixels`.
-   */
-  fun setSize(size: Size)
-  /**
-   * Gets the size of the snapshot
-   *
-   * @return Snapshot `size` in `logical pixels`.
-   */
-  fun getSize(): Size
-  /**
-   * Returns `true` if the snapshotter is in the tile mode.
-   *
-   * @return `true` if the snapshotter is in the tile mode, `false` otherwise.
-   */
-  fun isInTileMode(): Boolean
-  /**
-   * Sets the snapshotter to the tile mode.
-   *
-   * In the tile mode, the snapshotter fetches the still image of a single tile.
-   *
-   * @param set A `boolean` value representing if the snapshotter is in the tile mode.
-   */
-  fun setTileMode(set: Boolean)
-  /**
-   * Cancel the current snapshot operation.
-   *
-   * Cancel the current snapshot operation, if any. The callback passed to the start method
-   * is called with error parameter set.
-   */
-  fun cancel()
-  /**
-   * Get elevation for the given coordinate.
-   * Note: Elevation is only available for the visible region on the screen.
-   *
-   * @param coordinate defined as longitude-latitude pair.
-   *
-   * @return Elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-   */
-  fun getElevation(coordinate: Point): Double?
-
-  companion object {
-    /** The codec used by MapSnapshotter. */
-    val codec: MessageCodec<Any?> by lazy {
-      MapSnapshotterCodec
-    }
-    /** Sets up an instance of `MapSnapshotter` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: MapSnapshotter?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setSize$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val sizeArg = args[0] as Size
-            var wrapped: List<Any?>
-            try {
-              api.setSize(sizeArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getSize$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getSize())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.isInTileMode$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isInTileMode())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.setTileMode$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val setArg = args[0] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setTileMode(setArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.cancel$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              api.cancel()
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.MapSnapshotter.getElevation$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val coordinateArg = args[0] as Point
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getElevation(coordinateArg))
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-@Suppress("UNCHECKED_CAST")
 private object StyleManagerCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -5621,6 +5354,11 @@ private object StyleManagerCodec : StandardMessageCodec() {
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          TileCoverOptions.fromList(it)
+        }
+      }
+      168.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
       }
@@ -5785,8 +5523,12 @@ private object StyleManagerCodec : StandardMessageCodec() {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is TileCoverOptions -> {
         stream.write(167)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(168)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

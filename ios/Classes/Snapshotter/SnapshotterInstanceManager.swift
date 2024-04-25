@@ -1,0 +1,36 @@
+import Foundation
+import MapboxMaps
+import Flutter
+
+final class SnapshotterInstanceManager: _SnapshotterInstanceManager {
+    private let binaryMessenger: FlutterBinaryMessenger
+    private var proxyMessengers = [String: ProxyBinaryMessenger]()
+
+    init(binaryMessenger: FlutterBinaryMessenger) {
+        self.binaryMessenger = binaryMessenger
+    }
+
+    func setupSnapshotterForSuffix(suffix: String, options: MapSnapshotOptions) throws {
+        let snapshotter = Snapshotter(options: options.toMapSnapshotOptions())
+
+        let proxyMessenger = ProxyBinaryMessenger(with: binaryMessenger, channelSuffix: suffix)
+        let snapshotterController = SnapshotterController(
+            snapshotter: snapshotter,
+            binaryMessenger: proxyMessenger
+        )
+        let snapshotStyleController = StyleController(styleManager: snapshotter)
+
+        _SnapshotterMessengerSetup.setUp(binaryMessenger: proxyMessenger, api: snapshotterController)
+        StyleManagerSetup.setUp(binaryMessenger: proxyMessenger, api: snapshotStyleController)
+
+        proxyMessengers[suffix] = proxyMessenger
+    }
+
+    func tearDownSnapshotterForSuffix(suffix: String) throws {
+        guard let proxyMessenger = proxyMessengers[suffix] else {
+            return
+        }
+        _SnapshotterMessengerSetup.setUp(binaryMessenger: proxyMessenger, api: nil)
+        StyleManagerSetup.setUp(binaryMessenger: proxyMessenger, api: nil)
+    }
+}

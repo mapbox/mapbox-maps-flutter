@@ -7,7 +7,23 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
+import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
+import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
+import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
+import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
+import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
+import com.mapbox.maps.mapbox_maps.pigeons.QueriedRenderedFeature
+import com.mapbox.maps.mapbox_maps.pigeons.QueriedSourceFeature
+import com.mapbox.maps.mapbox_maps.pigeons.RenderedQueryGeometry
+import com.mapbox.maps.mapbox_maps.pigeons.RenderedQueryOptions
+import com.mapbox.maps.mapbox_maps.pigeons.Size
+import com.mapbox.maps.mapbox_maps.pigeons.SourceQueryOptions
+import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInMegabytes
+import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInTiles
+import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
+import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
+import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
 class MapInterfaceController(private val mapboxMap: MapboxMap, private val context: Context) : _MapInterface {
@@ -250,6 +266,11 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
 
   override fun getElevation(coordinate: Point): Double? {
     return mapboxMap.getElevation(coordinate)
+  }
+
+  override fun tileCover(options: TileCoverOptions): List<CanonicalTileID> {
+    return mapboxMap.tileCover(options.toTileCoverOptions(), null)
+      .map { it.toFLTCanonicalTileID() }
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {
