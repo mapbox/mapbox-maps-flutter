@@ -123,13 +123,10 @@ class MapboxMapFactory(
       textureView = textureView,
       styleUri = styleUri
     )
-    // TODO: Check if the cast succeeds
-    val eventTypes = params["eventTypes"] as? List<Int> ?: listOf()
     return MapboxMapController(
       context,
       mapInitOptions,
       lifecycleProvider,
-      eventTypes,
       messenger,
       channelSuffix,
       pluginVersion,

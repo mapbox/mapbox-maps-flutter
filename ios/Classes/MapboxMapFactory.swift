@@ -121,7 +121,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     ) -> FlutterPlatformView {
 
         var mapInitOptions = MapInitOptions()
-        var eventTypes = [Int]()
         var pluginVersion = ""
         var channelSuffix = 0
 
@@ -130,7 +129,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 withFrame: frame,
                 mapInitOptions: mapInitOptions,
                 channelSuffix: channelSuffix,
-                eventTypes: eventTypes,
                 arguments: args,
                 registrar: registrar,
                 pluginVersion: pluginVersion
@@ -139,9 +137,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         var styleURI: StyleURI? = .streets
         if let styleURIString = args["styleUri"] as? String {
             styleURI = StyleURI(rawValue: styleURIString)
-        }
-        if let types = args["eventTypes"] as? [Int] {
-            eventTypes = types
         }
 
         mapInitOptions = MapInitOptions(
@@ -162,7 +157,6 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             withFrame: frame,
             mapInitOptions: mapInitOptions,
             channelSuffix: channelSuffix,
-            eventTypes: eventTypes,
             arguments: args,
             registrar: registrar,
             pluginVersion: pluginVersion
