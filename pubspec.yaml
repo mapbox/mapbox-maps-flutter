@@ -25,7 +25,7 @@ dev_dependencies:
   test: ^1.19.0
   pigeon:
     git:
-      url: git@github.com:mapbox/flutter-packages.git
+      url: https://github.com/mapbox/flutter-packages
       ref: 0a692590a8853c6b3ea7b8e5ef16d1b746b2d39a
       path: packages/pigeon
 
