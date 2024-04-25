@@ -1,6 +1,6 @@
 name: mapbox_maps_flutter
 description: A Flutter plugin for integrating Mapbox Maps SDK v10 in Android/iOS application.
-version: 0.6.0
+version: 0.5.1
 homepage: https://github.com/mapbox/mapbox-maps-flutter
 
 environment:
@@ -25,8 +25,8 @@ dev_dependencies:
   test: ^1.19.0
   pigeon:
     git:
-      url: https://github.com/mapbox/flutter-packages
-      ref: 0a692590a8853c6b3ea7b8e5ef16d1b746b2d39a
+      url: https://github.com/evil159/packages.git
+      ref: cc713e558de9bbfd037620c83b001e10a8af2119
       path: packages/pigeon
 
 
