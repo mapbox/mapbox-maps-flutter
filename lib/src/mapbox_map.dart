@@ -450,6 +450,11 @@ class MapboxMap extends ChangeNotifier {
     this.onMapScrollListener = onMapScrollListener;
     _setupGestures();
   }
+
+  /// Returns a snapshot of the map.
+  /// The snapshot is taken from the current state of the map.
+  Future<Image> snapshot() =>
+      _mapboxMapsPlatform.snapshot().then((value) => Image.memory(value));
 }
 
 class _GestureListener extends GestureListener {

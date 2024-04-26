@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -29,6 +30,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import java.io.ByteArrayOutputStream
 
 class MapboxMapController(
   context: Context,
@@ -201,6 +203,21 @@ class MapboxMapController(
       "platform#releaseMethodChannels" -> {
         dispose()
         result.success(null)
+      }
+      "map#snapshot" -> {
+        val mapView = mapView
+        val snapshot = mapView?.snapshot()
+        if (mapView == null) {
+          result.error("2342345", "Failed to create snapshot: map view is not found.", null)
+        } else if (snapshot == null) {
+          result.error("2342345", "Failed to create snapshot: snapshotting timed out.", null)
+        } else {
+          val byteArray = ByteArrayOutputStream().also { stream ->
+            snapshot.compress(Bitmap.CompressFormat.PNG, 100, stream)
+          }.toByteArray()
+
+          result.success(byteArray)
+        }
       }
       else -> {
         result.notImplemented()
