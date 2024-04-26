@@ -6,7 +6,7 @@ final _SnapshotterInstanceManager _snapshotterInstanceManager =
 /// A utility class for capturing styled map snapshots.
 ///
 /// Use a [Snapshotter] when you need to capture a static snapshot of a map without using the actual [MapWidget].
-/// You can configure the final result via [MapSnapshotOptions] upon construction time and take.
+/// You can configure the final result via [MapSnapshotOptions] upon construction time and then start the snapshot.
 final class Snapshotter {
   /// A `style` object that can be manipulated to set different styles for a snapshot.
   late StyleManager style;
@@ -26,7 +26,7 @@ final class Snapshotter {
   final OnStyleImageMissingListener? onStyleImageMissingListener;
 
   late _SnapshotterMessenger _snapshotterMessager;
-  late _MapEvents mapEvents;
+  late _MapEvents _mapEvents;
   final int _suffix = _suffixesRegistry.getSuffix();
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
     try {
@@ -48,7 +48,7 @@ final class Snapshotter {
     final messenger = ProxyBinaryMessenger(suffix: _suffix.toString());
     _snapshotterMessager = _SnapshotterMessenger(binaryMessenger: messenger);
     style = StyleManager(binaryMessenger: messenger);
-    mapEvents = _MapEvents(binaryMessenger: messenger);
+    _mapEvents = _MapEvents(binaryMessenger: messenger);
   }
 
   /// Creates a new [Snapshotter] instance.
@@ -70,7 +70,7 @@ final class Snapshotter {
     await _snapshotterInstanceManager.setupSnapshotterForSuffix(
         snapshotter._suffix.toString(), options);
 
-    snapshotter.mapEvents.updateSubscriptions(
+    snapshotter._mapEvents.updateSubscriptions(
       onStyleLoadedListener: onStyleLoadedListener,
       onMapLoadErrorListener: onMapLoadErrorListener,
       onStyleDataLoadedListener: onStyleDataLoadedListener,
@@ -104,7 +104,7 @@ final class Snapshotter {
   Future<void> setSize(Size size) => _snapshotterMessager.setSize(size);
 
   /// Request a new snapshot. If there is a pending snapshot request, it is cancelled automatically.
-  Future<Uint8List?> start() async => _snapshotterMessager.start();
+  Future<Image?> start() async => _snapshotterMessager.start().then((value) => value != null ? Image.memory(value) : null);
 
   /// Cancel the current snapshot operation, if any. The callback passed to the start method
   /// is called with error parameter set.

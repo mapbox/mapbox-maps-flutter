@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -28,13 +26,13 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
 
   GlobalKey _snapshotKey = GlobalKey();
   MapboxMap? mapboxMap;
-  Uint8List? imageData;
+  Image? snapshotImage;
   Snapshotter? _snapshotter;
   bool snapshotting = false;
 
   @override
   void dispose() {
-    // _snapshotter?.dispose();
+    _snapshotter?.dispose();
     super.dispose();
   }
 
@@ -51,6 +49,13 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
       },
     );
     _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
+
+    final snapshot = await _snapshotter?.start();
+
+    setState(() {
+      snapshotImage = snapshot;
+    });
+
   }
 
   _onMapIdle(MapIdleEventData data) async {
@@ -72,7 +77,7 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
     final snapshot = await _snapshotter?.start();
 
     setState(() {
-      imageData = snapshot;
+      snapshotImage = snapshot;
     });
     snapshotting = false;
   }
@@ -84,10 +89,6 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
       onMapCreated: _onMapCreated,
       onMapIdleListener: _onMapIdle,
     );
-    final snapshotWidget = imageData != null
-        ? Image.memory(imageData!)
-        : ColoredBox(color: Colors.grey);
-
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -99,7 +100,7 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
               color: Colors.amber,
             ),
           ),
-          Expanded(key: _snapshotKey, child: snapshotWidget),
+          Expanded(key: _snapshotKey, child: snapshotImage ?? ColoredBox(color: Colors.grey)),
         ],
       ),
     );
