@@ -43,7 +43,6 @@ class StyleController(private val context: Context, private val styleManager: Ma
   override fun setStyleURI(uri: String, callback: (Result<Unit>) -> Unit) {
     val options = RuntimeStylingOptions.Builder()
       .completedCallback { callback(Result.success(Unit)) }
-      .errorCallback { callback(Result.failure(Throwable("Failed to load style."))) }
       .errorCallback { _, mapLoadingError -> callback(Result.failure(Throwable(mapLoadingError.message))) }
       .build()
     styleManager.styleManager.setStyleURI(uri, options)
