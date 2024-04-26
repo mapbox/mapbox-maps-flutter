@@ -15,6 +15,31 @@ mapboxMap?.location.updateSettings(LocationComponentSettings(
         LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([]))))
 );
 ```
+##### Snapshotter
+
+Show multiple maps in at the same time with no performance penalty. With all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
+
+The `Snapshotter` class is highly configurable. You can set the final result at the time of construction using the `MapSnapshotOptions`. Once you've configured your snapshot, you can start the snapshotting process.
+
+One of the key features of the `Snapshotter` class is the `style` object. This object can be manipulated to set different styles for your snapshot, as well as to apply runtime styling to the style, giving you the flexibility to create a snapshot that fits your needs.
+
+```dart
+final snapshotter = await Snapshotter.create(
+  options: MapSnapshotOptions(
+      size: Size(width: 400, height: 400),
+      pixelRatio: MediaQuery.of(context).devicePixelRatio),
+  onStyleLoadedListener: (_) {
+    // apply runtime styleing
+    final layer = CircleLayer(id: "circle-layer", sourceId: "poi-source");
+    _snapshotter?.style.addLayer(layer);
+  },
+);
+snapshotter.style.setStyleURI(MapboxStyles.STANDARD);
+
+...
+
+final snapshotImage = await snapshotter.start()
+```
 
 #### ⚠️ Breaking changes
 
