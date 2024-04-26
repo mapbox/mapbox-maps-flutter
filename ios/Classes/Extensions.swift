@@ -377,10 +377,10 @@ func toRgb(alpha: Int, red: Int, green: Int, blue: Int) -> Int {
 extension StyleColor {
     func rgb() -> Int {
         return toRgb(
-            alpha: Int(self.alpha * 255),
-            red: Int(self.red),
-            green: Int(self.green),
-            blue: Int(self.blue)
+            alpha: Int(alpha.rounded() * 255),
+            red: Int(self.red.rounded()),
+            green: Int(self.green.rounded()),
+            blue: Int(self.blue.rounded())
         )
     }
 }
