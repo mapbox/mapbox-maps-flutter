@@ -104,7 +104,7 @@ final class Snapshotter {
   Future<void> setSize(Size size) => _snapshotterMessager.setSize(size);
 
   /// Request a new snapshot. If there is a pending snapshot request, it is cancelled automatically.
-  Future<Uint8List?> start() async => _snapshotterMessager.start();
+  Future<Image?> start() async => _snapshotterMessager.start().then((value) => Image.memory(value));
 
   /// Cancel the current snapshot operation, if any. The callback passed to the start method
   /// is called with error parameter set.
