@@ -43,19 +43,8 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
       options: MapSnapshotOptions(
           size: Size(width: 400, height: 400),
           pixelRatio: MediaQuery.of(context).devicePixelRatio),
-      onStyleLoadedListener: (_) {
-        final layer = CircleLayer(id: "id", sourceId: "sourceId");
-        _snapshotter?.style.addLayer(layer);
-      },
     );
     _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
-
-    final snapshot = await _snapshotter?.start();
-
-    setState(() {
-      snapshotImage = snapshot;
-    });
-
   }
 
   _onMapIdle(MapIdleEventData data) async {
