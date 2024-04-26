@@ -1,4 +1,17 @@
-### 0.5.1
+## 0.6.0
+
+> [!NOTE] 
+> This release contains fixes to the Privacy Manifest on iOS. Upgrade to avoid issues in the App Store app submission starting from May 1st.
+
+### Android
+* Fix map being pixelated on some devices when ContextMode.SHARED is used (e.g. in AndroidAuto extension).
+* Fix incorrect widget position and scale when resizing the drawing surface.
+* Fix a crash in MapView.snapshot happening on specific devices.
+
+### iOS
+* Fix the issue with invalid privacy manifest
+
+## 0.5.1
 ### Android
 
 * Fix registry token lookup failing with an unrelated error in certain circumstances.
