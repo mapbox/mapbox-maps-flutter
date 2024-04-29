@@ -83,9 +83,9 @@ final class Snapshotter {
 
   /// Disposes the snapshotter instance.
   /// The instance should not be used after calling this method.
-  void dispose() {
+  Future<void> dispose() async {
     _finalizer.detach(this);
-    _snapshotterInstanceManager
+    await _snapshotterInstanceManager
         .tearDownSnapshotterForSuffix(_suffix.toString());
     _suffixesRegistry.releaseSuffix(_suffix);
   }
@@ -104,11 +104,12 @@ final class Snapshotter {
   Future<void> setSize(Size size) => _snapshotterMessager.setSize(size);
 
   /// Request a new snapshot. If there is a pending snapshot request, it is cancelled automatically.
-  Future<Image?> start() async => _snapshotterMessager.start().then((value) => value != null ? Image.memory(value) : null);
+  /// Throws an error if the snapshot is cancelled.
+  Future<Uint8List?> start() async => _snapshotterMessager.start();
 
   /// Cancel the current snapshot operation, if any. The callback passed to the start method
   /// is called with error parameter set.
-  void cancel() async => _snapshotterMessager.cancel();
+  Future<void> cancel() async => _snapshotterMessager.cancel();
 
   /// Returns the coordinate bounds corresponding to a given `CameraOptions`
   Future<CoordinateBounds> coordinateBounds(CameraOptions camera) =>
@@ -138,5 +139,5 @@ final class Snapshotter {
   ///
   /// Note: Calling this API will affect all maps that use the same data path
   ///       and does not affect persistent map data like offline style packages.
-  void clearData() async => _snapshotterMessager.clearData();
+  Future<void> clearData() async => _snapshotterMessager.clearData();
 }

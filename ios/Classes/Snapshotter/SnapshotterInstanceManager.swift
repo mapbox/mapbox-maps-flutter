@@ -27,10 +27,11 @@ final class SnapshotterInstanceManager: _SnapshotterInstanceManager {
     }
 
     func tearDownSnapshotterForSuffix(suffix: String) throws {
-        guard let proxyMessenger = proxyMessengers[suffix] else {
+        guard let proxyMessenger = proxyMessengers.removeValue(forKey: suffix) else {
             return
         }
-        _SnapshotterMessengerSetup.setUp(binaryMessenger: proxyMessenger, api: nil)
+
         StyleManagerSetup.setUp(binaryMessenger: proxyMessenger, api: nil)
+        _SnapshotterMessengerSetup.setUp(binaryMessenger: proxyMessenger, api: nil)
     }
 }

@@ -45,10 +45,6 @@ final class MapboxEventHandler {
     private let channel: FlutterMethodChannel
     private var cancelables = Set<AnyCancelable>()
 
-    deinit {
-        channel.setMethodCallHandler(nil)
-    }
-
     init(eventProvider: EventProvider, binaryMessenger: FlutterBinaryMessenger) {
         self.eventProvider = eventProvider
         self.binaryMessenger = binaryMessenger
