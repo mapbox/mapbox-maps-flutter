@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class GesturesPage extends ExamplePage {
@@ -27,16 +26,19 @@ class GesturesPageBodyState extends State<GesturesPageBody> {
 
   MapboxMap? mapboxMap;
 
-  _onTap(ScreenCoordinate coordinate) {
-    print("OnTap ${coordinate.x} - ${coordinate.y}");
+  _onTap(MapContentGestureContext context) {
+    print("OnTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
   }
 
-  _onLongTap(ScreenCoordinate coordinate) {
-    print("OnLongTap ${coordinate.x} - ${coordinate.y}");
+  _onLongTap(MapContentGestureContext context) {
+    print("OnLongTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
   }
 
-  _onMove(ScreenCoordinate coordinate) {
-    print("OnMove ${coordinate.x} - ${coordinate.y}");
+  _onMove(MapContentGestureContext context) {
+    print("OnMove coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
   }
 
   _onMapCreated(MapboxMap mapboxMap) {
@@ -123,7 +125,6 @@ class GesturesPageBodyState extends State<GesturesPageBody> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       onMapCreated: _onMapCreated,
       onTapListener: _onTap,
       onLongTapListener: _onLongTap,

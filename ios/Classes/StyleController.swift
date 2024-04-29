@@ -1,423 +1,465 @@
+@_spi(Experimental) import MapboxMaps
 import Foundation
-import MapboxMaps
-import UIKit
+import Flutter
 
-class StyleController: NSObject, FLTStyleManager {
+final class StyleController: StyleManager {
+    private static let errorCode = "0"
 
-    private var mapboxMap: MapboxMap
-    init(withMapboxMap mapboxMap: MapboxMap) {
-        self.mapboxMap = mapboxMap
-    }
-    func getStyleURI(completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(mapboxMap.style.uri?.rawValue, nil)
+    private let styleManager: MapboxMaps.StyleManager
+
+    init(styleManager: MapboxMaps.StyleManager) {
+        self.styleManager = styleManager
     }
 
-    func setStyleURIUri(_ uri: String, completion: @escaping (FlutterError?) -> Void) {
-        mapboxMap.style.uri = StyleURI(rawValue: uri)
-        completion(nil)
+    func getStyleURI(completion: @escaping (Result<String, Error>) -> Void) {
+        completion(.success(styleManager.styleURI?.rawValue ?? ""))
     }
 
-    func getStyleJSON(completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(mapboxMap.style.JSON, nil)
+    func setStyleURI(uri: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let styleURI = StyleURI(rawValue: uri) else {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: "Invalid style uri", details: nil)))
+            return
+        }
+        styleManager.load(mapStyle: MapStyle(uri: styleURI)) { error in
+            guard let error else {
+                completion(.success(()))
+                return
+            }
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
+        }
     }
 
-    func setStyleJSONJson(_ json: String, completion: @escaping (FlutterError?) -> Void) {
-        mapboxMap.style.JSON = json
-        completion(nil)
+    func getStyleJSON(completion: @escaping (Result<String, Error>) -> Void) {
+        completion(.success(styleManager.styleJSON))
     }
 
-    func getStyleDefaultCamera(completion: @escaping (FLTCameraOptions?, FlutterError?) -> Void) {
-        let camera = mapboxMap.style.defaultCamera
-        completion(camera.toFLTCameraOptions(), nil)
+    func setStyleJSON(json: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.load(mapStyle: MapStyle(json: json)) { error in
+            guard let error else {
+                completion(.success(()))
+                return
+            }
+
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
+        }
     }
 
-    func getStyleTransition(completion: @escaping (FLTTransitionOptions?, FlutterError?) -> Void) {
-        let transition = mapboxMap.style.transition
-        completion(transition.toFLTTransitionOptions(), nil)
+    func getStyleDefaultCamera(completion: @escaping (Result<CameraOptions, Error>) -> Void) {
+        let camera = styleManager.styleDefaultCamera
+        completion(.success(camera.toFLTCameraOptions()))
+    }
+
+    func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void) {
+        let transition = styleManager.styleTransition
+        completion(.success(transition.toFLTTransitionOptions()))
 
     }
 
-    func setStyleTransitionTransitionOptions(_ transitionOptions: FLTTransitionOptions,
-                                             completion: @escaping (FlutterError?) -> Void) {
-        mapboxMap.style.transition = transitionOptions.toTransitionOptions()
-        completion(nil)
+    func setStyleTransition(transitionOptions: TransitionOptions, completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.styleTransition = transitionOptions.toTransitionOptions()
+        completion(.success(()))
     }
 
-    func addStyleLayerProperties(_ properties: String, layerPosition: FLTLayerPosition?,
-                                 completion: @escaping (FlutterError?) -> Void) {
+    func addStyleLayer(properties: String, layerPosition: LayerPosition?, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let layerProperties: [String: Any] = convertStringToDictionary(properties: properties)
-            try mapboxMap.style.addLayer(with: layerProperties, layerPosition: layerPosition?.toLayerPosition())
-            completion(nil)
+            try styleManager.addLayer(with: layerProperties, layerPosition: layerPosition?.toLayerPosition())
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func addPersistentStyleLayerProperties(_ properties: String, layerPosition: FLTLayerPosition?,
-                                           completion: @escaping (FlutterError?) -> Void) {
+    func addPersistentStyleLayer(properties: String, layerPosition: LayerPosition?, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style
-                .addPersistentLayer(
-                    with: convertStringToDictionary(properties: properties),
-                    layerPosition: layerPosition?.toLayerPosition()
-                )
-            completion(nil)
+            try styleManager.addPersistentLayer(
+                with: convertStringToDictionary(properties: properties),
+                layerPosition: layerPosition?.toLayerPosition()
+            )
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func isStyleLayerPersistentLayerId(_ layerId: String,
-                                       completion: @escaping (NSNumber?, FlutterError?) -> Void) {
+    func isStyleLayerPersistent(layerId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         do {
-            let isPersistent = try mapboxMap.style.isPersistentLayer(id: layerId)
-            completion(NSNumber(value: isPersistent), nil)
+            let isPersistent = try styleManager.isPersistentLayer(id: layerId)
+            completion(.success(isPersistent))
         } catch {
-            completion(nil, FlutterError(code: "\(error)", message: nil, details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func removeStyleLayerLayerId(_ layerId: String, completion: @escaping (FlutterError?) -> Void) {
+    func removeStyleLayer(layerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.removeLayer(withId: layerId)
-            completion(nil)
+            try styleManager.removeLayer(withId: layerId)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func moveStyleLayerLayerId(_ layerId: String, layerPosition: FLTLayerPosition?,
-                               completion: @escaping (FlutterError?) -> Void) {
+    func moveStyleLayer(layerId: String, layerPosition: LayerPosition?, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             if layerPosition != nil {
-                try mapboxMap.style.moveLayer(withId: layerId, to: layerPosition!.toLayerPosition())
+                try styleManager.moveLayer(withId: layerId, to: layerPosition!.toLayerPosition())
             } else {
-                try mapboxMap.style.moveLayer(withId: layerId, to: LayerPosition.default)
+                try styleManager.moveLayer(withId: layerId, to: .default)
             }
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func styleLayerExistsLayerId(_ layerId: String,
-                                 completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        let existes = mapboxMap.style.layerExists(withId: layerId)
-        completion(NSNumber(value: existes), nil)
+    func styleLayerExists(layerId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let exists = styleManager.layerExists(withId: layerId)
+        completion(.success(exists))
     }
 
-    func getStyleLayers(completion: @escaping ([FLTStyleObjectInfo]?, FlutterError?) -> Void) {
-        let layerInfos = mapboxMap.style.allLayerIdentifiers.map {
-            FLTStyleObjectInfo.make(withId: $0.id as String, type: $0.type.rawValue)
+    func getStyleLayers(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void) {
+        let layerInfos = styleManager.allLayerIdentifiers.map {
+            StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }
-        completion(layerInfos, nil)
+        completion(.success(layerInfos))
     }
 
-    func getStyleLayerPropertyLayerId(_ layerId: String,
-                                      property: String,
-                                      completion: @escaping (FLTStylePropertyValue?,
-                                                             FlutterError?) -> Void) {
-        let layerProperty = mapboxMap.style.layerProperty(for: layerId, property: property)
-        completion(layerProperty.toFLTStylePropertyValue(property: property), nil)
+    func getStyleLayerProperty(layerId: String, property: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void) {
+        let layerProperty = styleManager.layerProperty(for: layerId, property: property)
+        completion(.success(layerProperty.toFLTStylePropertyValue(property: property)))
     }
 
-    func setStyleLayerPropertyLayerId(_ layerId: String,
-                                      property: String,
-                                      value: Any,
-                                      completion: @escaping (FlutterError?) -> Void) {
+    func setStyleLayerProperty(layerId: String, property: String, value: Any, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             var mappedValue = value
             if let stringValue = value as? String {
-                if (stringValue.hasPrefix("[") || stringValue.hasPrefix("{")) {
+                if stringValue.hasPrefix("[") || stringValue.hasPrefix("{") {
                     if let expressionData = stringValue.data(using: .utf8) {
                         let expJSONObject = try JSONSerialization.jsonObject(with: expressionData, options: [])
                         mappedValue = expJSONObject
                     }
                 }
             }
-            try mapboxMap.style.setLayerProperty(for: layerId, property: property, value: mappedValue)
-            completion(nil)
+            try styleManager.setLayerProperty(for: layerId, property: property, value: mappedValue)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func getStyleLayerPropertiesLayerId(_ layerId: String,
-                                        completion: @escaping (String?, FlutterError?) -> Void) {
+    func getStyleLayerProperties(layerId: String, completion: @escaping (Result<String, Error>) -> Void) {
         do {
-            let properties = try mapboxMap.style.layerProperties(for: layerId)
-            completion(convertDictionaryToString(dict: properties), nil)
+            let properties = try styleManager.layerProperties(for: layerId)
+            completion(.success(convertDictionaryToString(dict: properties)))
         } catch {
-            completion(nil, FlutterError(code: "\(error)", message: nil, details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func setStyleLayerPropertiesLayerId(_ layerId: String, properties: String,
-                                        completion: @escaping (FlutterError?) -> Void) {
+    func setStyleLayerProperties(layerId: String, properties: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let data = properties.data(using: String.Encoding.utf8)!
         let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
         do {
-            try mapboxMap.style.setLayerProperties(for: layerId, properties: jsonObject as? [String: Any] ?? [:])
-            completion(nil)
+            try styleManager.setLayerProperties(for: layerId, properties: jsonObject as? [String: Any] ?? [:])
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func addStyleSourceSourceId(_ sourceId: String, properties: String,
-                                completion: @escaping (FlutterError?) -> Void) {
+    func addStyleSource(sourceId: String, properties: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.addSource(withId: sourceId,
+            try styleManager.addSource(withId: sourceId,
                                           properties: convertStringToDictionary(properties: properties))
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func getStyleSourcePropertySourceId(_ sourceId: String, property: String,
-                                        completion: @escaping (FLTStylePropertyValue?, FlutterError?) -> Void) {
-        let sourceProperty = mapboxMap.style.sourceProperty(for: sourceId, property: property)
-        completion(sourceProperty.toFLTStylePropertyValue(property: property), nil)
+    func getStyleSourceProperty(sourceId: String, property: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void) {
+        let sourceProperty = styleManager.sourceProperty(for: sourceId, property: property)
+        completion(.success(sourceProperty.toFLTStylePropertyValue(property: property)))
     }
 
-    func setStyleSourcePropertySourceId(_ sourceId: String, property: String,
-                                        value: Any, completion: @escaping (FlutterError?) -> Void) {
+    func setStyleSourceProperty(sourceId: String, property: String, value: Any, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.setSourceProperty(for: sourceId, property: property, value: value)
-            completion(nil)
+            try styleManager.setSourceProperty(for: sourceId, property: property, value: value)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func getStyleSourcePropertiesSourceId(_ sourceId: String,
-                                          completion: @escaping (String?, FlutterError?) -> Void) {
+    func getStyleSourceProperties(sourceId: String, completion: @escaping (Result<String, Error>) -> Void) {
         do {
-            let properties = try mapboxMap.style.sourceProperties(for: sourceId)
-            completion(convertDictionaryToString(dict: properties), nil)
+            let properties = try styleManager.sourceProperties(for: sourceId)
+            completion(.success(convertDictionaryToString(dict: properties)))
         } catch {
-            completion(nil, FlutterError(code: "\(error)", message: nil, details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func setStyleSourcePropertiesSourceId(_ sourceId: String, properties: String,
-                                          completion: @escaping (FlutterError?) -> Void) {
+    func setStyleSourceProperties(sourceId: String, properties: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.setSourceProperties(for: sourceId,
-                                                       properties: convertStringToDictionary(properties: properties))
-            completion(nil)
+            try styleManager.setSourceProperties(for: sourceId, properties: convertStringToDictionary(properties: properties))
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func updateStyleImageSourceImageSourceId(_ sourceId: String, image: FLTMbxImage,
-                                             completion: @escaping (FlutterError?) -> Void) {
+    func updateStyleImageSourceImage(sourceId: String, image: MbxImage, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else { return }
         do {
-            try mapboxMap.style.updateImageSource(withId: sourceId, image: image)
-            completion(nil)
+            try styleManager.updateImageSource(withId: sourceId, image: image)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func removeStyleSourceSourceId(_ sourceId: String, completion: @escaping (FlutterError?) -> Void) {
+    func removeStyleSource(sourceId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.removeSource(withId: sourceId)
-            completion(nil)
+            try styleManager.removeSource(withId: sourceId)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func styleSourceExistsSourceId(_ sourceId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        let existes = mapboxMap.style.sourceExists(withId: sourceId)
-        completion(NSNumber(value: existes), nil)
+    func styleSourceExists(sourceId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let exists = styleManager.sourceExists(withId: sourceId)
+        completion(.success(exists))
     }
 
-    func getStyleSources(completion: @escaping ([FLTStyleObjectInfo]?, FlutterError?) -> Void) {
-        let sourcesInfos = mapboxMap.style.allSourceIdentifiers.map {
-            FLTStyleObjectInfo.make(withId: $0.id as String, type: $0.type.rawValue)
+    func getStyleSources(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void) {
+        let sourcesInfos = styleManager.allSourceIdentifiers.map {
+            StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }
-        completion(sourcesInfos, nil)
+        completion(.success(sourcesInfos))
     }
 
-    func setStyleLightProperties(_ properties: String, completion: @escaping (FlutterError?) -> Void) {
+    func setStyleTerrain(properties: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let data = properties.data(using: String.Encoding.utf8)!
         let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
         do {
-            try mapboxMap.style.setLight(properties: jsonObject as? [String: Any] ?? [:])
-            completion(nil)
+            try styleManager.setTerrain(properties: jsonObject as? [String: Any] ?? [:])
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func getStyleLightPropertyProperty(_ property: String,
-                                       completion: @escaping (FLTStylePropertyValue?, FlutterError?) -> Void) {
-        let lightProperty: StylePropertyValue = mapboxMap.style.lightProperty(property)
-        completion(lightProperty.toFLTStylePropertyValue(property: property), nil)
+    func getStyleTerrainProperty(property: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void) {
+        let terrainProperty: MapboxMaps.StylePropertyValue = styleManager.terrainProperty(property)
+        completion(.success(terrainProperty.toFLTStylePropertyValue(property: property)))
     }
 
-    func setStyleLightPropertyProperty(_ property: String, value: Any,
-                                       completion: @escaping (FlutterError?) -> Void) {
+    func setStyleTerrainProperty(property: String, value: Any, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.setLightProperty(property, value: value)
-            completion(nil)
+            try styleManager.setTerrainProperty(property, value: value)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func setStyleTerrainProperties(_ properties: String, completion: @escaping (FlutterError?) -> Void) {
-        let data = properties.data(using: String.Encoding.utf8)!
-        let jsonObject = try? JSONSerialization.jsonObject(with: data, options: [])
-        do {
-            try mapboxMap.style.setTerrain(properties: jsonObject as? [String: Any] ?? [:])
-            completion(nil)
-        } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
-        }
-    }
-
-    func getStyleTerrainPropertyProperty(_ property: String,
-                                         completion: @escaping (FLTStylePropertyValue?, FlutterError?) -> Void) {
-        let terrainProperty: StylePropertyValue = mapboxMap.style.terrainProperty(property)
-        completion(terrainProperty.toFLTStylePropertyValue(property: property), nil)
-    }
-
-    func setStyleTerrainPropertyProperty(_ property: String, value: Any,
-                                         completion: @escaping (FlutterError?) -> Void) {
-        do {
-            try mapboxMap.style.setTerrainProperty(property, value: value)
-            completion(nil)
-        } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
-        }
-    }
-
-    func getStyleImageImageId(_ imageId: String, completion: @escaping (FLTMbxImage?, FlutterError?) -> Void) {
-        guard let image = mapboxMap.style.image(withId: imageId) else {
-            completion(nil, nil)
+    func getStyleImage(imageId: String, completion: @escaping (Result<MbxImage?, Error>) -> Void) {
+        guard let image = styleManager.image(withId: imageId) else {
+            completion(.success(nil))
             return
         }
 
         let data = FlutterStandardTypedData(bytes: image.pngData()!)
 
-        completion(FLTMbxImage.make(withWidth: NSNumber(value: Int(image.size.width * image.scale)),
-                                    height: NSNumber(value: Int(image.size.height * image.scale)),
-                                    data: data), nil)
+        completion(.success(MbxImage(width: Int64(image.size.width * image.scale),
+                                    height: Int64(image.size.height * image.scale),
+                                    data: data)))
     }
 
-    func addStyleImageImageId(_ imageId: String, scale: NSNumber,
-                              image: FLTMbxImage, sdf: NSNumber,
-                              stretchX: [FLTImageStretches],
-                              stretchY: [FLTImageStretches],
-                              content: FLTImageContent?,
-                              completion: @escaping (FlutterError?) -> Void) {
-
-        guard let image = UIImage(data: image.data.data, scale: CGFloat(truncating: scale)) else { return }
-        var imageContent: ImageContent?
-        if content != nil {
-            imageContent = ImageContent(left: Float(truncating: content!.left),
-                                        top: Float(truncating: content!.top),
-                                        right: Float(truncating: content!.right),
-                                        bottom: Float(truncating: content!.bottom))
+    func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let image = UIImage(data: image.data.data, scale: scale) else { return }
+        var imageContent: MapboxMaps.ImageContent?
+        if let content {
+            imageContent = MapboxMaps.ImageContent(left: Float(content.left),
+                                        top: Float(content.top),
+                                        right: Float(content.right),
+                                        bottom: Float(content.bottom))
         }
         do {
-            try mapboxMap.style.addImage(image,
+            try styleManager.addImage(image,
                                          id: imageId,
-                                         sdf: sdf as? Bool ?? false,
-                                         stretchX: stretchX.map {
-                ImageStretches(first: Float(truncating: $0.first), second: Float(truncating: $0.second))
+                                         sdf: sdf,
+                                      stretchX: stretchX.compactMap {$0 }.map {
+                MapboxMaps.ImageStretches(first: Float($0.first), second: Float($0.second))
 
-            }, stretchY: stretchY.map {
-                ImageStretches(first: Float(truncating: $0.first), second: Float(truncating: $0.second))},
+            }, stretchY: stretchY.compactMap {$0 }.map {
+                MapboxMaps.ImageStretches(first: Float($0.first), second: Float($0.second))},
                                          content: imageContent)
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func removeStyleImageImageId(_ imageId: String, completion: @escaping (FlutterError?) -> Void) {
+    func removeStyleImage(imageId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.removeImage(withId: imageId)
-            completion(nil)
+            try styleManager.removeImage(withId: imageId)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func hasStyleImageImageId(_ imageId: String, completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        let image = mapboxMap.style.image(withId: imageId)
-        completion(NSNumber(value: image != nil), nil)
+    func hasStyleImage(imageId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
+        let image = styleManager.image(withId: imageId)
+        completion(.success(image != nil))
     }
-//
-//    func setStyleCustomGeometrySourceTileDataSourceId(_ sourceId: String,
-//                                                      tileId: FLTCanonicalTileID,
-//                                                      featureCollection: String,
-//                                                      completion: @escaping (FlutterError?) -> Void) {
-//        do {
-//            let features = try JSONDecoder().decode(FeatureCollection.self,
-//                                                    from: featureCollection.data(using: String.Encoding.utf8)!)
-//
-//            let tileID = CanonicalTileID(z: UInt8(truncating: tileId.z),
-//                                         x: UInt32(truncating: tileId.x),
-//                                         y: UInt32(truncating: tileId.y)
-//                                         try mapboxMap.style.setCustomGeometrySourceTileData(forSourceId: sourceId,
-//                                                                                             tileId: tileID),
-//                                         features: features.features)
-//            completion(nil)
-//        } catch {
-//            completion(FlutterError(code: StyleController.errorCode , message: "\(error)", details: nil))
-//        }
-//    }
 
-    func invalidateStyleCustomGeometrySourceTileSourceId(_ sourceId: String,
-                                                         tileId: FLTCanonicalTileID,
-                                                         completion: @escaping (FlutterError?) -> Void) {
+    func invalidateStyleCustomGeometrySourceTile(sourceId: String, tileId: CanonicalTileID, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.invalidateCustomGeometrySourceTile(forSourceId: sourceId,
+            try styleManager.invalidateCustomGeometrySourceTile(forSourceId: sourceId,
                                                                    tileId: tileId.toCanonicalTileID())
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func invalidateStyleCustomGeometrySourceRegionSourceId(_ sourceId: String,
-                                                           bounds: FLTCoordinateBounds,
-                                                           completion: @escaping (FlutterError?) -> Void) {
+    func invalidateStyleCustomGeometrySourceRegion(sourceId: String, bounds: CoordinateBounds, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try mapboxMap.style.invalidateCustomGeometrySourceRegion(forSourceId: sourceId,
+            try styleManager.invalidateCustomGeometrySourceRegion(forSourceId: sourceId,
                                                                      bounds: bounds.toCoordinateBounds())
-            completion(nil)
+            completion(.success(()))
         } catch {
-            completion(FlutterError(code: StyleController.errorCode, message: "\(error)", details: nil))
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
         }
     }
 
-    func isStyleLoaded(completion: @escaping (NSNumber?, FlutterError?) -> Void) {
-        completion(NSNumber(value: (mapboxMap.style.isLoaded)), nil)
+    func isStyleLoaded(completion: @escaping (Result<Bool, Error>) -> Void) {
+        completion(.success(styleManager.isStyleLoaded))
     }
 
-    func getProjectionWithCompletion(_ completion: @escaping (String?, FlutterError?) -> Void) {
-        completion(mapboxMap.style.projection.name.rawValue, nil)
+    func localizeLabels(locale: String, layerIds: [String]?, completion: @escaping (Result<Void, Error>) -> Void) {
+        try! styleManager.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
+        completion(.success(()))
     }
 
-    func setProjectionProjection(_ projection: String, completion: @escaping (FlutterError?) -> Void) {
-        try! mapboxMap.style.setProjection(projection == "globe" ? StyleProjection(name: StyleProjectionName.globe) : StyleProjection(name: StyleProjectionName.mercator))
-        completion(nil)
+    // MARK: Style Imports
+
+    func getStyleImports() throws -> [StyleObjectInfo?] {
+        styleManager.styleImports.map { StyleObjectInfo(id: $0.id, type: $0.type) }
     }
 
-    func localizeLabelsLocale(_ locale: String, layerIds: [String]?, completion: @escaping (FlutterError?) -> Void) {
-        try! mapboxMap.style.localizeLabels(into: Locale(identifier: locale), forLayerIds: layerIds)
-        completion(nil)
+    func removeStyleImport(importId: String) throws {
+        do {
+            try styleManager.removeStyleImport(for: importId)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
     }
 
-    private static let errorCode = "0"
+    func getStyleImportSchema(importId: String) throws -> Any {
+        do {
+            return try styleManager.getStyleImportSchema(for: importId)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func getStyleImportConfigProperties(importId: String) throws -> [String: StylePropertyValue] {
+        do {
+            let styleImportsConfig = try styleManager.getStyleImportConfigProperties(for: importId)
+            return styleImportsConfig.reduce(into: [:]) { partialResult, pair in
+                let (key, value) = pair
+                partialResult[key] = value.toFLTStylePropertyValue(property: key)
+            }
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func getStyleImportConfigProperty(importId: String, config: String) throws -> StylePropertyValue {
+        do {
+            let value = try styleManager.getStyleImportConfigProperty(for: importId, config: config)
+            return value.toFLTStylePropertyValue(property: config)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setStyleImportConfigProperties(importId: String, configs: [String: Any]) throws {
+        do {
+            try styleManager.setStyleImportConfigProperties(for: importId, configs: configs)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setStyleImportConfigProperty(importId: String, config: String, value: Any) throws {
+        do {
+            try styleManager.setStyleImportConfigProperty(for: importId, config: config, value: value)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    // MARK: Style Lights
+
+    func getStyleLights() throws -> [StyleObjectInfo?] {
+        styleManager.allLightIdentifiers.map {
+            StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
+        }
+    }
+
+    func setLight(flatLight: FlatLight) throws {
+        do {
+            try styleManager.setLights(MapboxMaps.FlatLight(flatLight))
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func setLights(ambientLight: AmbientLight, directionalLight: DirectionalLight) throws {
+        do {
+            try styleManager.setLights(ambient: MapboxMaps.AmbientLight(ambientLight), directional: MapboxMaps.DirectionalLight(directionalLight))
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func getStyleLightProperty(id: String, property: String, completion: @escaping (Result<StylePropertyValue, Error>) -> Void) {
+        let value = styleManager.lightProperty(for: id, property: property)
+        var kind = MapboxMaps.StylePropertyValueKind.constant
+        // FIXME: Remove workaround to get property kind one MapboxMaps iOS SDK updates.
+        if property.hasSuffix("transition") {
+            kind = .transition
+        }
+        completion(.success(MapboxMaps.StylePropertyValue(value: value, kind: kind).toFLTStylePropertyValue(property: property)))
+    }
+
+    func setStyleLightProperty(id: String, property: String, value: Any, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            try styleManager.setLightProperty(for: id, property: property, value: value)
+            completion(.success(()))
+        } catch let styleError {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)))
+        }
+    }
+
+    // MARK: Style Projection
+
+    func getProjection() throws -> StyleProjection? {
+        return styleManager.projection?.toFLTStyleProjection()
+    }
+
+    func setProjection(projection: StyleProjection) throws {
+        do {
+            try styleManager.setProjection(MapboxMaps.StyleProjection(name: MapboxMaps.StyleProjectionName(projection.name)))
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
 }

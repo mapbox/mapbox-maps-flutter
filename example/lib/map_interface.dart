@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show ByteData, rootBundle;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class MapInterfacePage extends ExamplePage {
@@ -246,14 +245,14 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
   Widget _getResourceOptions() {
     return TextButton(
       child: Text('getResourceOptions'),
-      onPressed: () {
-        mapboxMap?.getResourceOptions().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "baseURL: ${value.baseURL}, accessToken: ${value.accessToken}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
+      onPressed: () async {
+        String baseUrl = await MapboxMapsOptions.getBaseUrl();
+        String accessToken = await MapboxOptions.getAccessToken();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("baseURL: ${baseUrl}, accessToken: ${accessToken}"),
+          backgroundColor: Theme.of(context).primaryColor,
+          duration: Duration(seconds: 2),
+        ));
       },
     );
   }
@@ -314,10 +313,8 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

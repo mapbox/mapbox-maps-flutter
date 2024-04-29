@@ -1,51 +1,56 @@
 import Foundation
 @_spi(Experimental) import MapboxMaps
-import UIKit
-class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
+import Flutter
 
-    func updateSettingsSettings(_ settings: FLT_SETTINGSCompassSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
+final class CompassController: CompassSettingsInterface {
+
+    func updateSettings(settings: CompassSettings) throws {
+        var compass = ornaments.options.compass
         switch settings.position {
-        case .BOTTOM_LEFT:
-            mapView.ornaments.options.compass.position = .bottomLeading
-            mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .BOTTOM_RIGHT:
-            mapView.ornaments.options.compass.position = .bottomTrailing
-            mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginBottom?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .TOP_LEFT:
-            mapView.ornaments.options.compass.position = .topLeading
-            mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginLeft?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
-        case .TOP_RIGHT:
-            mapView.ornaments.options.compass.position = .topTrailing
-            mapView.ornaments.options.compass.margins = CGPoint(x: (settings.marginRight?.CGFloat ?? 0.0)/UIScreen.main.scale, y: (settings.marginTop?.CGFloat ?? 0.0)/UIScreen.main.scale)
+        case .bOTTOMLEFT:
+            compass.position = .bottomLeading
+            compass.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginBottom ?? 0)
+        case .bOTTOMRIGHT:
+            compass.position = .bottomTrailing
+            compass.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginBottom ?? 0)
+        case .tOPLEFT:
+            compass.position = .topLeading
+            compass.margins = CGPoint(x: settings.marginLeft ?? 0, y: settings.marginTop ?? 0)
+        case .tOPRIGHT, .none:
+            compass.position = .topTrailing
+            compass.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
 
         if let data = settings.image?.data {
-            mapView.ornaments.options.compass.image = UIImage(data: data, scale: UIScreen.main.scale)
+            compass.image = UIImage(data: data, scale: UIScreen.main.scale)
         }
 
         if let visible = settings.enabled {
-            if !visible.boolValue {
-                mapView.ornaments.options.compass.visibility = OrnamentVisibility.hidden
-            } else {
-                if settings.fadeWhenFacingNorth?.boolValue ?? true {
-                    mapView.ornaments.options.compass.visibility = OrnamentVisibility.adaptive
-                } else {
-                    mapView.ornaments.options.compass.visibility = OrnamentVisibility.visible
-                }
+            let fadeWhenFacingNorth = settings.fadeWhenFacingNorth ?? true
+
+            let visibility: OrnamentVisibility
+            switch (visible, fadeWhenFacingNorth) {
+            case (true, true): visibility = .adaptive
+            case (true, false): visibility = .visible
+            case (false, _): visibility = .hidden
             }
+
+            compass.visibility = visibility
         }
+
+        ornaments.options.compass = compass
     }
 
-    func getSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> FLT_SETTINGSCompassSettings? {
-        let options = mapView.ornaments.options.compass
+    func getSettings() throws -> CompassSettings {
+        let options = ornaments.options.compass
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
         var topImage: FlutterStandardTypedData?
         if let topData = options.image?.pngData() {
             topImage = FlutterStandardTypedData(bytes: topData)
         }
 
-        var visibility: NSNumber
-        var fadeNorth: NSNumber
+        let visibility: Bool
+        let fadeNorth: Bool
         switch options.visibility {
         case .adaptive:
             fadeNorth = true
@@ -58,28 +63,39 @@ class CompassController: NSObject, FLT_SETTINGSCompassSettingsInterface {
             visibility = true
         }
 
-        let settings = FLT_SETTINGSCompassSettings.make(withEnabled: true, position: position, marginLeft: NSNumber(value: options.margins.x * UIScreen.main.scale), marginTop: NSNumber(value: options.margins.y * UIScreen.main.scale), marginRight: NSNumber(value: options.margins.x * UIScreen.main.scale), marginBottom: NSNumber(value: options.margins.y * UIScreen.main.scale), opacity: NSNumber(value: 0.0), rotation: NSNumber(value: 0.0), visibility: visibility, fadeWhenFacingNorth: fadeNorth, clickable: true, image: topImage)
-
-        return settings
+        return CompassSettings(
+            enabled: true,
+            position: position,
+            marginLeft: options.margins.x,
+            marginTop: options.margins.y,
+            marginRight: options.margins.x,
+            marginBottom: options.margins.y,
+            opacity: 1,
+            rotation: 0,
+            visibility: visibility,
+            fadeWhenFacingNorth: fadeNorth,
+            clickable: true,
+            image: topImage
+        )
     }
 
-    func getFLT_SETTINGSOrnamentPosition(position: OrnamentPosition) -> FLT_SETTINGSOrnamentPosition {
+    func getFLT_SETTINGSOrnamentPosition(position: MapboxMaps.OrnamentPosition) -> OrnamentPosition {
         switch position {
         case .bottomLeading:
-            return .BOTTOM_LEFT
+            return .bOTTOMLEFT
         case  .bottomTrailing:
-            return .BOTTOM_RIGHT
+            return .bOTTOMRIGHT
         case .topLeading:
-            return .TOP_LEFT
+            return .tOPLEFT
         default:
-            return.TOP_RIGHT
+            return.tOPRIGHT
         }
     }
 
-    private var mapView: MapView
+    private var ornaments: OrnamentsManager
     private var cancelable: Cancelable?
 
     init(withMapView mapView: MapView) {
-        self.mapView = mapView
+        self.ornaments = mapView.ornaments
     }
 }

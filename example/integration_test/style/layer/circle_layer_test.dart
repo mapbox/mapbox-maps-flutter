@@ -6,20 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
 
   testWidgets('Add CircleLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     final point = Point(coordinates: Position(-77.032667, 38.913175));
     await mapboxMap.style
@@ -31,9 +25,11 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       circleSortKey: 1.0,
       circleBlur: 1.0,
       circleColor: Colors.red.value,
+      circleEmissiveStrength: 1.0,
       circleOpacity: 1.0,
       circlePitchAlignment: CirclePitchAlignment.MAP,
       circlePitchScale: CirclePitchScale.MAP,
@@ -48,10 +44,12 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColor, Colors.red.value);
+    expect(layer.circleEmissiveStrength, 1.0);
     expect(layer.circleOpacity, 1.0);
     expect(layer.circlePitchAlignment, CirclePitchAlignment.MAP);
     expect(layer.circlePitchScale, CirclePitchScale.MAP);

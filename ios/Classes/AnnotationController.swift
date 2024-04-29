@@ -1,6 +1,6 @@
 import Foundation
 import MapboxMaps
-import UIKit
+import Flutter
 
 public enum AnnotationControllerError: Error {
     case noManagerFound
@@ -8,7 +8,7 @@ public enum AnnotationControllerError: Error {
     case wrongManagerType
 }
 
-public protocol ControllerDelegate: class {
+public protocol ControllerDelegate: AnyObject {
     func getManager(managerId: String) throws -> AnnotationManager
 }
 
@@ -16,16 +16,28 @@ extension AnnotationController: AnnotationInteractionDelegate {
     func annotationManager(_ manager: AnnotationManager, didDetectTappedAnnotations annotations: [Annotation]) {
         let annotation = annotations.first
         switch annotation {
-        case let annotation as PointAnnotation:
-            self.onPointAnnotationClickListener?.onPointAnnotationClick(annotation.toFLTPointAnnotation(), completion: {_ in })
-        case let annotation as CircleAnnotation:
-            self.onCircleAnnotationClickListener?.onCircleAnnotationClick(annotation.toFLTCircleAnnotation(), completion: {_ in })
-        case let annotation as PolygonAnnotation:
-            self.onPolygonAnnotationClickListener?.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation(), completion: {_ in })
-        case let annotation as PolylineAnnotation:
-            self.onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation(), completion: {_ in })
+        case let annotation as MapboxMaps.PointAnnotation:
+            self.onPointAnnotationClickListener?.onPointAnnotationClick(
+                annotation: annotation.toFLTPointAnnotation(),
+                completion: {_ in }
+            )
+        case let annotation as MapboxMaps.CircleAnnotation:
+            self.onCircleAnnotationClickListener?.onCircleAnnotationClick(
+                annotation: annotation.toFLTCircleAnnotation(),
+                completion: {_ in }
+            )
+        case let annotation as MapboxMaps.PolygonAnnotation:
+            self.onPolygonAnnotationClickListener?.onPolygonAnnotationClick(
+                annotation: annotation.toFLTPolygonAnnotation(),
+                completion: {_ in }
+            )
+        case let annotation as MapboxMaps.PolylineAnnotation:
+            self.onPolylineAnnotationClickListener?.onPolylineAnnotationClick(
+                annotation: annotation.toFLTPolylineAnnotation(),
+                completion: {_ in }
+            )
         default:
-            print("Can't detemine the type of annotation: \(annotation)")
+            print("Can't detemine the type of annotation: \(String(describing: annotation))")
         }
     }
 }
@@ -37,10 +49,10 @@ class AnnotationController: ControllerDelegate {
     private var pointAnnotationController: PointAnnotationController?
     private var polygonAnnotationController: PolygonAnnotationController?
     private var polylineAnnotationController: PolylineAnnotationController?
-    private var onPointAnnotationClickListener: FLTOnPointAnnotationClickListener?
-    private var onCircleAnnotationClickListener: FLTOnCircleAnnotationClickListener?
-    private var onPolygonAnnotationClickListener: FLTOnPolygonAnnotationClickListener?
-    private var onPolylineAnnotationClickListener: FLTOnPolylineAnnotationClickListener?
+    private var onPointAnnotationClickListener: OnPointAnnotationClickListener?
+    private var onCircleAnnotationClickListener: OnCircleAnnotationClickListener?
+    private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener?
+    private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener?
 
     init(withMapView mapView: MapView) {
         self.mapView = mapView
@@ -53,23 +65,42 @@ class AnnotationController: ControllerDelegate {
     func handleCreateManager(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = methodCall.arguments as? [String: Any] else { return }
         guard let type = arguments["type"] as? String else { return }
+        let id = (arguments["id"] as? String) ?? String(UUID().uuidString.prefix(5))
+        let belowLayerId: String?
+        if let layerId = arguments["belowLayerId"] as? String, mapView.mapboxMap.layerExists(withId: layerId) {
+            belowLayerId = layerId
+        } else {
+            belowLayerId = nil
+        }
 
         if let manager = { () -> AnnotationManager? in
             switch type {
             case "circle":
-                let circleManager = mapView.annotations.makeCircleAnnotationManager()
+                let circleManager = mapView.annotations.makeCircleAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
+                )
                 circleManager.delegate = self
                 return circleManager
             case "point":
-                let pointManager = mapView.annotations.makePointAnnotationManager()
+                let pointManager = mapView.annotations.makePointAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
+                )
                 pointManager.delegate = self
                 return pointManager
             case "polygon":
-                let polygonManager: PolygonAnnotationManager = mapView.annotations.makePolygonAnnotationManager()
+                let polygonManager: PolygonAnnotationManager = mapView.annotations.makePolygonAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
+                )
                 polygonManager.delegate = self
                 return polygonManager
             case "polyline":
-                let polylineManager: PolylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager()
+                let polylineManager: PolylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager(
+                    id: id,
+                    layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
+                )
                 polylineManager.delegate = self
                 return polylineManager
             default:
@@ -92,14 +123,25 @@ class AnnotationController: ControllerDelegate {
     }
 
     func setup(messenger: FlutterBinaryMessenger) {
-        FLT_CircleAnnotationMessagerSetup(messenger, circleAnnotationController)
-        FLT_PointAnnotationMessagerSetup(messenger, pointAnnotationController)
-        FLT_PolygonAnnotationMessagerSetup(messenger, polygonAnnotationController)
-        FLT_PolylineAnnotationMessagerSetup(messenger, polylineAnnotationController)
-        onPointAnnotationClickListener = FLTOnPointAnnotationClickListener.init(binaryMessenger: messenger)
-        onCircleAnnotationClickListener = FLTOnCircleAnnotationClickListener.init(binaryMessenger: messenger)
-        onPolygonAnnotationClickListener = FLTOnPolygonAnnotationClickListener.init(binaryMessenger: messenger)
-        onPolylineAnnotationClickListener = FLTOnPolylineAnnotationClickListener.init(binaryMessenger: messenger)
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
+        onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: messenger)
+        onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: messenger)
+        onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: messenger)
+        onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: messenger)
+    }
+
+    func tearDown(messenger: FlutterBinaryMessenger) {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+        onPointAnnotationClickListener = nil
+        onCircleAnnotationClickListener = nil
+        onPolygonAnnotationClickListener = nil
+        onPolylineAnnotationClickListener = nil
     }
 
     func getManager(managerId: String) throws -> AnnotationManager {

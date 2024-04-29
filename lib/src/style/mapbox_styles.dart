@@ -3,6 +3,9 @@ part of mapbox_maps_flutter;
 /// A convenience object to access [the style ID](https://docs.mapbox.com/help/glossary/style-id/) strings of the professionally-designed
 /// map styles made by Mapbox.
 class MapboxStyles {
+  /// Mapbox Standard is a general-purpose style with 3D visualization.
+  static const String STANDARD = "mapbox://styles/mapbox/standard";
+
   /// Mapbox Streets: A complete base map, perfect for incorporating your own data. Using this
   /// constant means your map style will always use the latest version and may change as we
   /// improve the style.
@@ -29,18 +32,17 @@ class MapboxStyles {
   /// improve the style.
   static const String SATELLITE_STREETS =
       "mapbox://styles/mapbox/satellite-streets-v12";
+}
 
-  /// Traffic Day: Color-coded roads based on live traffic congestion data. Traffic data is currently
-  /// available in
-  /// <a href="https://www.mapbox.com/help/how-directions-work/#traffic-data">these select
-  /// countries</a>. Using this constant means your map style will always use the latest version and
-  /// may change as we improve the style.
-  static const String TRAFFIC_DAY = "mapbox://styles/mapbox/traffic-day-v2";
+/// A pre-specified location in the style where layer will be added to.
+/// (such as on top of existing land layers, but below all labels).
+class LayerSlot {
+  /// Place layer above POI labels and behind Place and Transit labels.
+  static const String TOP = "top";
 
-  /// Traffic Night: Color-coded roads based on live traffic congestion data, designed to maximize
-  /// legibility in low-light situations. Traffic data is currently available in
-  /// <a href="https://www.mapbox.com/help/how-directions-work/#traffic-data">these select
-  /// countries</a>. Using this constant means your map style will always use the latest version and
-  /// may change as we improve the style.
-  static const String TRAFFIC_NIGHT = "mapbox://styles/mapbox/traffic-night-v2";
+  /// Place layer above lines (roads, etc.) and behind 3D buildings.
+  static const String MIDDLE = "middle";
+
+  /// Place layer above polygons (land, landuse, water, etc.)
+  static const String BOTTOM = "bottom";
 }
