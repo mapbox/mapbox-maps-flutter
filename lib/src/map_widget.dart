@@ -161,7 +161,6 @@ class MapWidget extends StatefulWidget {
 
   @override
   State createState() {
-    print('MapWidget createState');
     return _mapWidgetState;
   }
 
