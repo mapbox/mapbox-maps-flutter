@@ -131,6 +131,28 @@ class TileCacheBudget {
   TileCacheBudget(this.type, this.size);
 }
 
+/// The description of the raster data layers and the bands contained within the tiles.
+@experimental
+class RasterDataLayer {
+  /// Identifier of the data layer fetched from tiles.
+  String layerId;
+
+  /// An array of bands found in the data layer.
+  List<String> bands;
+
+  Map<String, List<String>> toJson() => {layerId: bands};
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is RasterDataLayer &&
+          runtimeType == other.runtimeType &&
+          layerId == other.layerId &&
+          listEquals(bands, other.bands);
+
+  RasterDataLayer(this.layerId, this.bands);
+}
+
 /// Define the duration and delay for a style transition.
 class StyleTransition {
   StyleTransition({this.duration, this.delay});
@@ -313,6 +335,9 @@ extension StyleSource on StyleManager {
         break;
       case "raster":
         source = RasterSource(id: sourceId);
+        break;
+      case "raster-array":
+        source = RasterArraySource(id: sourceId);
         break;
       default:
         print("Source type: $type unknown.");
