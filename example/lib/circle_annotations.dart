@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
-import 'main.dart';
 import 'page.dart';
 
 class CircleAnnotationPage extends ExamplePage {
@@ -45,6 +43,8 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
+    mapboxMap.setCamera(CameraOptions(
+        center: Point(coordinates: Position(0, 0)), zoom: 1, pitch: 0));
     mapboxMap.annotations.createCircleAnnotationManager().then((value) {
       circleAnnotationManager = value;
       createOneAnnotation();
@@ -137,10 +137,8 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

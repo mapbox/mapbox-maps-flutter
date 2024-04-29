@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'main.dart';
 import 'page.dart';
-
-import 'package:turf/helpers.dart';
 
 class OrnamentsPage extends ExamplePage {
   OrnamentsPage() : super(const Icon(Icons.map), 'Ornaments');
@@ -33,7 +30,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
   bool showScaleBar = true;
   OrnamentPosition scaleBarPosition = OrnamentPosition.TOP_LEFT;
   OrnamentPosition logoPosition = OrnamentPosition.BOTTOM_LEFT;
-  OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_LEFT;
+  OrnamentPosition attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -43,7 +40,7 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
           coordinates: Position(
         -0.11968,
         51.50325,
-      )).toJson(),
+      )),
       padding: null,
       anchor: null,
       zoom: 12,
@@ -51,7 +48,11 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       pitch: null,
     ));
 
-    mapboxMap.compass.updateSettings(CompassSettings(
+    _updateOrnamentSettings();
+  }
+
+  void _updateOrnamentSettings() {
+    mapboxMap?.compass.updateSettings(CompassSettings(
       position: compassPosition,
       enabled: showOrnaments,
       marginBottom: 10,
@@ -60,25 +61,30 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
       marginRight: 10,
     ));
 
-    mapboxMap.scaleBar.updateSettings(ScaleBarSettings(
+    mapboxMap?.scaleBar.updateSettings(ScaleBarSettings(
       position: scaleBarPosition,
       enabled: showScaleBar,
       marginBottom: 20,
-      marginLeft: 20,
-      marginTop: 20,
+      marginLeft: 10,
+      marginTop: 10,
       marginRight: 20,
     ));
 
-    mapboxMap.logo.updateSettings(LogoSettings(
+    mapboxMap?.logo.updateSettings(LogoSettings(
       position: logoPosition,
-      marginBottom: 30,
-      marginLeft: 30,
+      marginBottom: 10,
+      marginLeft: 10,
       marginTop: 30,
       marginRight: 30,
     ));
 
-    mapboxMap.attribution
-        .updateSettings(AttributionSettings(position: attributionPosition));
+    mapboxMap?.attribution.updateSettings(AttributionSettings(
+      position: attributionPosition,
+      marginBottom: 10,
+      marginLeft: 40,
+      marginTop: 40,
+      marginRight: 0,
+    ));
   }
 
   @override
@@ -121,13 +127,12 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('toggle compass'),
       onPressed: () {
-        setState(() {
-          if (showOrnaments) {
-            showOrnaments = false;
-          } else {
-            showOrnaments = true;
-          }
-        });
+        if (showOrnaments) {
+          showOrnaments = false;
+        } else {
+          showOrnaments = true;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -136,22 +141,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move compass'),
       onPressed: () {
-        setState(() {
-          switch (compassPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              compassPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              compassPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              compassPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              compassPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-        });
+        switch (compassPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            compassPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            compassPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            compassPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            compassPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -160,13 +164,12 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('toggle scale bar'),
       onPressed: () {
-        setState(() {
-          if (showScaleBar) {
-            showScaleBar = false;
-          } else {
-            showScaleBar = true;
-          }
-        });
+        if (showScaleBar) {
+          showScaleBar = false;
+        } else {
+          showScaleBar = true;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -175,22 +178,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move scale bar'),
       onPressed: () {
-        setState(() {
-          switch (scaleBarPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              scaleBarPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              scaleBarPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              scaleBarPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-        });
+        switch (scaleBarPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            scaleBarPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            scaleBarPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            scaleBarPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            scaleBarPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -199,22 +201,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move attribution'),
       onPressed: () {
-        setState(() {
-          switch (attributionPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              attributionPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              attributionPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              attributionPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-        });
+        switch (attributionPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            attributionPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            attributionPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            attributionPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            attributionPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -223,22 +224,21 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
     return TextButton(
       child: Text('move logo'),
       onPressed: () {
-        setState(() {
-          switch (logoPosition) {
-            case OrnamentPosition.BOTTOM_LEFT:
-              logoPosition = OrnamentPosition.TOP_LEFT;
-              break;
-            case OrnamentPosition.TOP_LEFT:
-              logoPosition = OrnamentPosition.TOP_RIGHT;
-              break;
-            case OrnamentPosition.TOP_RIGHT:
-              logoPosition = OrnamentPosition.BOTTOM_RIGHT;
-              break;
-            case OrnamentPosition.BOTTOM_RIGHT:
-              logoPosition = OrnamentPosition.BOTTOM_LEFT;
-              break;
-          }
-        });
+        switch (logoPosition) {
+          case OrnamentPosition.BOTTOM_LEFT:
+            logoPosition = OrnamentPosition.TOP_LEFT;
+            break;
+          case OrnamentPosition.TOP_LEFT:
+            logoPosition = OrnamentPosition.TOP_RIGHT;
+            break;
+          case OrnamentPosition.TOP_RIGHT:
+            logoPosition = OrnamentPosition.BOTTOM_RIGHT;
+            break;
+          case OrnamentPosition.BOTTOM_RIGHT:
+            logoPosition = OrnamentPosition.BOTTOM_LEFT;
+            break;
+        }
+        _updateOrnamentSettings();
       },
     );
   }
@@ -247,7 +247,6 @@ class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
   Widget build(BuildContext context) {
     final MapWidget mapWidget = MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       onMapCreated: _onMapCreated,
     );
 

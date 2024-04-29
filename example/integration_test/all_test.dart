@@ -14,7 +14,6 @@ import 'annotations/polyline_annotation_test.dart' as polyline_annotation_test;
 import 'camera_test.dart' as camera_test;
 import 'gestures_test.dart' as gestures_test;
 import 'map_interface_test.dart' as map_interface_test;
-import 'mapboxMap_test.dart' as mapboxMap_test;
 import 'projection_test.dart' as projection_test;
 import 'style/layer/background_layer_test.dart' as background_layer_test;
 import 'style/layer/circle_layer_test.dart' as circle_layer_test;
@@ -29,7 +28,6 @@ import 'style/layer/location_indicator_layer_test.dart'
 import 'style/layer/raster_layer_test.dart' as raster_layer_test;
 import 'style/layer/sky_layer_test.dart' as sky_layer_test;
 import 'style/layer/symbol_layer_test.dart' as symbol_layer_test;
-import 'style/light_test.dart' as light_test;
 import 'style/source/geojson_source_test.dart' as geojson_source_test;
 import 'style/source/image_source_test.dart' as image_source_test;
 import 'style/source/raster_source_test.dart' as raster_source_test;
@@ -45,9 +43,7 @@ import 'scale_bar_test.dart' as scale_bar_test;
 void main() {
   animation_test.main();
   camera_test.main();
-  location_test.main();
   map_interface_test.main();
-  mapboxMap_test.main();
   projection_test.main();
   gestures_test.main();
   logo_test.main();
@@ -66,7 +62,6 @@ void main() {
   polyline_annotation_test.main();
 
   // style tests
-  light_test.main();
   style_test.main();
 
   // layer tests
@@ -88,4 +83,9 @@ void main() {
   raster_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
+
+  // location test has to be at the bottom as on iOS it triggers location permission dialog
+  // to be shown which makes tests that rely on QRF/QSF fail
+  // TODO: address this properly by granting the location permission somehow
+  location_test.main();
 }

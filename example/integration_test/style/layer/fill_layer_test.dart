@@ -6,20 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
 
   testWidgets('Add FillLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     var polygon = Polygon(coordinates: [
       [
@@ -38,9 +32,11 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       fillSortKey: 1.0,
       fillAntialias: true,
       fillColor: Colors.red.value,
+      fillEmissiveStrength: 1.0,
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
@@ -51,10 +47,12 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillColor, Colors.red.value);
+    expect(layer.fillEmissiveStrength, 1.0);
     expect(layer.fillOpacity, 1.0);
     expect(layer.fillOutlineColor, Colors.red.value);
     expect(layer.fillPattern, "abc");

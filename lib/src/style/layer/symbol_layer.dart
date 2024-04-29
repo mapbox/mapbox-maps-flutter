@@ -8,6 +8,7 @@ class SymbolLayer extends Layer {
     visibility,
     minZoom,
     maxZoom,
+    slot,
     required this.sourceId,
     this.sourceLayer,
     this.iconAllowOverlap,
@@ -28,6 +29,7 @@ class SymbolLayer extends Layer {
     this.symbolPlacement,
     this.symbolSortKey,
     this.symbolSpacing,
+    this.symbolZElevate,
     this.symbolZOrder,
     this.textAllowOverlap,
     this.textAnchor,
@@ -51,13 +53,17 @@ class SymbolLayer extends Layer {
     this.textVariableAnchor,
     this.textWritingMode,
     this.iconColor,
+    this.iconColorSaturation,
+    this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
+    this.iconImageCrossFade,
     this.iconOpacity,
     this.iconTranslate,
     this.iconTranslateAnchor,
     this.textColor,
+    this.textEmissiveStrength,
     this.textHaloBlur,
     this.textHaloColor,
     this.textHaloWidth,
@@ -65,7 +71,11 @@ class SymbolLayer extends Layer {
     this.textTranslate,
     this.textTranslateAnchor,
   }) : super(
-            id: id, visibility: visibility, maxZoom: maxZoom, minZoom: minZoom);
+            id: id,
+            visibility: visibility,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
+            slot: slot);
 
   @override
   String getType() => "symbol";
@@ -124,11 +134,14 @@ class SymbolLayer extends Layer {
   /// Label placement relative to its geometry.
   SymbolPlacement? symbolPlacement;
 
-  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first.  When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
+  /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
 
   /// Distance between two symbol anchors.
   double? symbolSpacing;
+
+  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
+  bool? symbolZElevate;
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
   SymbolZOrder? symbolZOrder;
@@ -193,20 +206,29 @@ class SymbolLayer extends Layer {
   /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
   List<String?>? textVariableAnchor;
 
-  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. The order of elements in an array define priority order for the placement of an orientation variant.
+  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
   List<String?>? textWritingMode;
 
-  /// The color of the icon. This can only be used with sdf icons.
+  /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconColor;
+
+  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  double? iconColorSaturation;
+
+  /// Controls the intensity of light emitted on the source features.
+  double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
   double? iconHaloBlur;
 
-  /// The color of the icon's halo. Icon halos can only be used with SDF icons.
+  /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   int? iconHaloColor;
 
   /// Distance of halo to the icon outline.
   double? iconHaloWidth;
+
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn.
   double? iconOpacity;
@@ -219,6 +241,9 @@ class SymbolLayer extends Layer {
 
   /// The color with which the text will be drawn.
   int? textColor;
+
+  /// Controls the intensity of light emitted on the source features.
+  double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
   double? textHaloBlur;
@@ -304,6 +329,9 @@ class SymbolLayer extends Layer {
     if (symbolSpacing != null) {
       layout["symbol-spacing"] = symbolSpacing;
     }
+    if (symbolZElevate != null) {
+      layout["symbol-z-elevate"] = symbolZElevate;
+    }
     if (symbolZOrder != null) {
       layout["symbol-z-order"] =
           symbolZOrder?.toString().split('.').last.toLowerCase();
@@ -380,6 +408,12 @@ class SymbolLayer extends Layer {
     if (iconColor != null) {
       paint["icon-color"] = iconColor?.toRGBA();
     }
+    if (iconColorSaturation != null) {
+      paint["icon-color-saturation"] = iconColorSaturation;
+    }
+    if (iconEmissiveStrength != null) {
+      paint["icon-emissive-strength"] = iconEmissiveStrength;
+    }
     if (iconHaloBlur != null) {
       paint["icon-halo-blur"] = iconHaloBlur;
     }
@@ -388,6 +422,9 @@ class SymbolLayer extends Layer {
     }
     if (iconHaloWidth != null) {
       paint["icon-halo-width"] = iconHaloWidth;
+    }
+    if (iconImageCrossFade != null) {
+      paint["icon-image-cross-fade"] = iconImageCrossFade;
     }
     if (iconOpacity != null) {
       paint["icon-opacity"] = iconOpacity;
@@ -401,6 +438,9 @@ class SymbolLayer extends Layer {
     }
     if (textColor != null) {
       paint["text-color"] = textColor?.toRGBA();
+    }
+    if (textEmissiveStrength != null) {
+      paint["text-emissive-strength"] = textEmissiveStrength;
     }
     if (textHaloBlur != null) {
       paint["text-halo-blur"] = textHaloBlur;
@@ -437,6 +477,9 @@ class SymbolLayer extends Layer {
     if (maxZoom != null) {
       properties["maxzoom"] = maxZoom!;
     }
+    if (slot != null) {
+      properties["slot"] = slot!;
+    }
 
     return json.encode(properties);
   }
@@ -455,6 +498,7 @@ class SymbolLayer extends Layer {
       sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
+      slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
           : Visibility.values.firstWhere((e) => e
@@ -463,7 +507,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["visibility"])),
-      iconAllowOverlap: map["layout"]["icon-allow-overlap"],
+      iconAllowOverlap: map["layout"]["icon-allow-overlap"] is bool?
+          ? map["layout"]["icon-allow-overlap"] as bool?
+          : null,
       iconAnchor: map["layout"]["icon-anchor"] == null
           ? null
           : IconAnchor.values.firstWhere((e) => e
@@ -472,13 +518,21 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["icon-anchor"])),
-      iconIgnorePlacement: map["layout"]["icon-ignore-placement"],
-      iconImage: map["layout"]["icon-image"],
-      iconKeepUpright: map["layout"]["icon-keep-upright"],
+      iconIgnorePlacement: map["layout"]["icon-ignore-placement"] is bool?
+          ? map["layout"]["icon-ignore-placement"] as bool?
+          : null,
+      iconImage: map["layout"]["icon-image"] is String?
+          ? map["layout"]["icon-image"] as String?
+          : null,
+      iconKeepUpright: map["layout"]["icon-keep-upright"] is bool?
+          ? map["layout"]["icon-keep-upright"] as bool?
+          : null,
       iconOffset: (map["layout"]["icon-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      iconOptional: map["layout"]["icon-optional"],
+      iconOptional: map["layout"]["icon-optional"] is bool?
+          ? map["layout"]["icon-optional"] as bool?
+          : null,
       iconPadding: map["layout"]["icon-padding"] is num?
           ? (map["layout"]["icon-padding"] as num?)?.toDouble()
           : null,
@@ -515,7 +569,9 @@ class SymbolLayer extends Layer {
       iconTextFitPadding: (map["layout"]["icon-text-fit-padding"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      symbolAvoidEdges: map["layout"]["symbol-avoid-edges"],
+      symbolAvoidEdges: map["layout"]["symbol-avoid-edges"] is bool?
+          ? map["layout"]["symbol-avoid-edges"] as bool?
+          : null,
       symbolPlacement: map["layout"]["symbol-placement"] == null
           ? null
           : SymbolPlacement.values.firstWhere((e) => e
@@ -530,6 +586,9 @@ class SymbolLayer extends Layer {
       symbolSpacing: map["layout"]["symbol-spacing"] is num?
           ? (map["layout"]["symbol-spacing"] as num?)?.toDouble()
           : null,
+      symbolZElevate: map["layout"]["symbol-z-elevate"] is bool?
+          ? map["layout"]["symbol-z-elevate"] as bool?
+          : null,
       symbolZOrder: map["layout"]["symbol-z-order"] == null
           ? null
           : SymbolZOrder.values.firstWhere((e) => e
@@ -538,7 +597,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["symbol-z-order"])),
-      textAllowOverlap: map["layout"]["text-allow-overlap"],
+      textAllowOverlap: map["layout"]["text-allow-overlap"] is bool?
+          ? map["layout"]["text-allow-overlap"] as bool?
+          : null,
       textAnchor: map["layout"]["text-anchor"] == null
           ? null
           : TextAnchor.values.firstWhere((e) => e
@@ -550,7 +611,9 @@ class SymbolLayer extends Layer {
       textFont: (map["layout"]["text-font"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
-      textIgnorePlacement: map["layout"]["text-ignore-placement"],
+      textIgnorePlacement: map["layout"]["text-ignore-placement"] is bool?
+          ? map["layout"]["text-ignore-placement"] as bool?
+          : null,
       textJustify: map["layout"]["text-justify"] == null
           ? null
           : TextJustify.values.firstWhere((e) => e
@@ -559,7 +622,9 @@ class SymbolLayer extends Layer {
               .last
               .toLowerCase()
               .contains(map["layout"]["text-justify"])),
-      textKeepUpright: map["layout"]["text-keep-upright"],
+      textKeepUpright: map["layout"]["text-keep-upright"] is bool?
+          ? map["layout"]["text-keep-upright"] as bool?
+          : null,
       textLetterSpacing: map["layout"]["text-letter-spacing"] is num?
           ? (map["layout"]["text-letter-spacing"] as num?)?.toDouble()
           : null,
@@ -575,7 +640,9 @@ class SymbolLayer extends Layer {
       textOffset: (map["layout"]["text-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      textOptional: map["layout"]["text-optional"],
+      textOptional: map["layout"]["text-optional"] is bool?
+          ? map["layout"]["text-optional"] as bool?
+          : null,
       textPadding: map["layout"]["text-padding"] is num?
           ? (map["layout"]["text-padding"] as num?)?.toDouble()
           : null,
@@ -619,12 +686,21 @@ class SymbolLayer extends Layer {
           ?.map<String?>((e) => e.toString())
           .toList(),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
+      iconColorSaturation: map["paint"]["icon-color-saturation"] is num?
+          ? (map["paint"]["icon-color-saturation"] as num?)?.toDouble()
+          : null,
+      iconEmissiveStrength: map["paint"]["icon-emissive-strength"] is num?
+          ? (map["paint"]["icon-emissive-strength"] as num?)?.toDouble()
+          : null,
       iconHaloBlur: map["paint"]["icon-halo-blur"] is num?
           ? (map["paint"]["icon-halo-blur"] as num?)?.toDouble()
           : null,
       iconHaloColor: (map["paint"]["icon-halo-color"] as List?)?.toRGBAInt(),
       iconHaloWidth: map["paint"]["icon-halo-width"] is num?
           ? (map["paint"]["icon-halo-width"] as num?)?.toDouble()
+          : null,
+      iconImageCrossFade: map["paint"]["icon-image-cross-fade"] is num?
+          ? (map["paint"]["icon-image-cross-fade"] as num?)?.toDouble()
           : null,
       iconOpacity: map["paint"]["icon-opacity"] is num?
           ? (map["paint"]["icon-opacity"] as num?)?.toDouble()
@@ -641,6 +717,9 @@ class SymbolLayer extends Layer {
               .toLowerCase()
               .contains(map["paint"]["icon-translate-anchor"])),
       textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
+      textEmissiveStrength: map["paint"]["text-emissive-strength"] is num?
+          ? (map["paint"]["text-emissive-strength"] as num?)?.toDouble()
+          : null,
       textHaloBlur: map["paint"]["text-halo-blur"] is num?
           ? (map["paint"]["text-halo-blur"] as num?)?.toDouble()
           : null,

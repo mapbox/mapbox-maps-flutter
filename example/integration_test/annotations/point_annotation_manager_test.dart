@@ -1,5 +1,4 @@
 // This file is generated.
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -8,16 +7,30 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
+  testWidgets('PointAnnotationManager custom id and position',
+      (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final dummyLayer = SymbolLayer(id: "dummyLayer", sourceId: 'sourceId');
+    await mapboxMap.style.addLayer(dummyLayer);
+    final id = "PointAnnotationManagerId";
+    final manager = await mapboxMap.annotations
+        .createPointAnnotationManager(id: id, below: 'dummyLayer');
+
+    expect(await mapboxMap.style.styleLayerExists(id), isTrue);
+    expect(await mapboxMap.style.styleSourceExists(id), isTrue);
+    expect(manager.id, id);
+    final layers = await mapboxMap.style.getStyleLayers();
+    expect(layers.first?.id, id);
+    expect(layers.last?.id, dummyLayer.id);
+  });
 
   testWidgets('create PointAnnotation_manager ', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createPointAnnotationManager();
-    await addDelay(1000);
 
     await manager.setIconAllowOverlap(true);
     var iconAllowOverlap = await manager.getIconAllowOverlap();
@@ -47,14 +60,6 @@ void main() {
     var iconRotationAlignment = await manager.getIconRotationAlignment();
     expect(IconRotationAlignment.MAP, iconRotationAlignment);
 
-    await manager.setIconTextFit(IconTextFit.NONE);
-    var iconTextFit = await manager.getIconTextFit();
-    expect(IconTextFit.NONE, iconTextFit);
-
-    await manager.setIconTextFitPadding([0.0, 1.0, 2.0, 3.0]);
-    var iconTextFitPadding = await manager.getIconTextFitPadding();
-    expect([0.0, 1.0, 2.0, 3.0], iconTextFitPadding);
-
     await manager.setSymbolAvoidEdges(true);
     var symbolAvoidEdges = await manager.getSymbolAvoidEdges();
     expect(true, symbolAvoidEdges);
@@ -66,6 +71,10 @@ void main() {
     await manager.setSymbolSpacing(1.0);
     var symbolSpacing = await manager.getSymbolSpacing();
     expect(1.0, symbolSpacing);
+
+    await manager.setSymbolZElevate(true);
+    var symbolZElevate = await manager.getSymbolZElevate();
+    expect(true, symbolZElevate);
 
     await manager.setSymbolZOrder(SymbolZOrder.AUTO);
     var symbolZOrder = await manager.getSymbolZOrder();
@@ -87,10 +96,6 @@ void main() {
     var textKeepUpright = await manager.getTextKeepUpright();
     expect(true, textKeepUpright);
 
-    await manager.setTextLineHeight(1.0);
-    var textLineHeight = await manager.getTextLineHeight();
-    expect(1.0, textLineHeight);
-
     await manager.setTextMaxAngle(1.0);
     var textMaxAngle = await manager.getTextMaxAngle();
     expect(1.0, textMaxAngle);
@@ -111,6 +116,10 @@ void main() {
     var textRotationAlignment = await manager.getTextRotationAlignment();
     expect(TextRotationAlignment.MAP, textRotationAlignment);
 
+    await manager.setIconColorSaturation(1.0);
+    var iconColorSaturation = await manager.getIconColorSaturation();
+    expect(1.0, iconColorSaturation);
+
     await manager.setIconTranslate([0.0, 1.0]);
     var iconTranslate = await manager.getIconTranslate();
     expect([0.0, 1.0], iconTranslate);
@@ -126,7 +135,6 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
-    await addDelay(1000);
   });
 }
 // End of generated file.

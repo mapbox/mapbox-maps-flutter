@@ -1,23 +1,23 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
-import com.mapbox.maps.*
+import com.mapbox.geojson.Point
+import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
-import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
-class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterfaces._MapInterface {
-  override fun loadStyleURI(
-    styleURI: String,
-    result: FLTMapInterfaces.Result<Void>?
-  ) {
+class MapInterfaceController(private val mapboxMap: MapboxMap, private val context: Context) : _MapInterface {
+  override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
       styleURI,
-      { result?.success(null) },
+      { callback(Result.success(Unit)) },
       object : OnMapLoadErrorListener {
         override fun onMapLoadError(eventData: MapLoadingErrorEventData) {
-          result?.error(Throwable(eventData.message))
+          callback(Result.failure(Throwable(eventData.message)))
         }
       }
     )
@@ -25,43 +25,42 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
 
   override fun loadStyleJson(
     styleJson: String,
-    result: FLTMapInterfaces.Result<Void>?
+    callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.loadStyleJson(
       styleJson,
-      { result?.success(null) },
+      { callback(Result.success(Unit)) },
       object : OnMapLoadErrorListener {
         override fun onMapLoadError(eventData: MapLoadingErrorEventData) {
-          result?.error(Throwable(eventData.message))
+          callback(Result.failure(Throwable(eventData.message)))
         }
       }
     )
   }
 
-  override fun clearData(result: FLTMapInterfaces.Result<Void>?) {
-    mapboxMap.clearData {
+  override fun clearData(callback: (Result<Unit>) -> Unit) {
+    MapboxMap.clearData {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(null)
+        callback(Result.success(Unit))
       }
     }
   }
 
-  @OptIn(MapboxExperimental::class)
-  override fun setMemoryBudget(
-    mapMemoryBudgetInMegabytes: FLTMapInterfaces.MapMemoryBudgetInMegabytes?,
-    mapMemoryBudgetInTiles: FLTMapInterfaces.MapMemoryBudgetInTiles?
+  override fun setTileCacheBudget(
+    tileCacheBudgetInMegabytes: TileCacheBudgetInMegabytes?,
+    tileCacheBudgetInTiles: TileCacheBudgetInTiles?
   ) {
-    if (mapMemoryBudgetInMegabytes != null) {
-      mapboxMap.setMemoryBudget(MapMemoryBudget.valueOf(mapMemoryBudgetInMegabytes.toMapMemoryBudgetInMegabytes()))
-    } else if (mapMemoryBudgetInTiles != null) {
-      mapboxMap.setMemoryBudget(MapMemoryBudget.valueOf(mapMemoryBudgetInTiles.toMapMemoryBudgetInTiles()))
+    if (tileCacheBudgetInMegabytes != null) {
+      mapboxMap.setTileCacheBudget(TileCacheBudget.valueOf(tileCacheBudgetInMegabytes.toMapMemoryBudgetInMegabytes()))
+    } else if (tileCacheBudgetInTiles != null) {
+      mapboxMap.setTileCacheBudget(TileCacheBudget.valueOf(tileCacheBudgetInTiles.toMapMemoryBudgetInTiles()))
     }
   }
 
-  override fun getSize(): FLTMapInterfaces.Size {
-    return mapboxMap.getSize().toFLTSize()
+  override fun getSize(): Size {
+    return mapboxMap.getSize().toFLTSize(context)
   }
 
   override fun triggerRepaint() {
@@ -80,45 +79,46 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     return mapboxMap.getPrefetchZoomDelta().toLong()
   }
 
-  override fun setNorthOrientation(orientation: FLTMapInterfaces.NorthOrientation) {
-    mapboxMap.setNorthOrientation(NorthOrientation.values()[orientation.ordinal])
+  override fun setNorthOrientation(orientation: NorthOrientation) {
+    mapboxMap.setNorthOrientation(com.mapbox.maps.NorthOrientation.values()[orientation.ordinal])
   }
 
-  override fun setConstrainMode(mode: FLTMapInterfaces.ConstrainMode) {
-    mapboxMap.setConstrainMode(ConstrainMode.values()[mode.ordinal])
+  override fun setConstrainMode(mode: ConstrainMode) {
+    mapboxMap.setConstrainMode(com.mapbox.maps.ConstrainMode.values()[mode.ordinal])
   }
 
-  override fun setViewportMode(mode: FLTMapInterfaces.ViewportMode) {
-    mapboxMap.setViewportMode(ViewportMode.values()[mode.ordinal])
+  override fun setViewportMode(mode: ViewportMode) {
+    mapboxMap.setViewportMode(com.mapbox.maps.ViewportMode.values()[mode.ordinal])
   }
 
-  override fun getMapOptions(): FLTMapInterfaces.MapOptions {
-    return mapboxMap.getMapOptions().toFLTMapOptions()
+  override fun getMapOptions(): MapOptions {
+    return mapboxMap.getMapOptions().toFLTMapOptions(context)
   }
 
-  override fun getDebug(): MutableList<FLTMapInterfaces.MapDebugOptions> {
+  override fun getDebug(): List<MapDebugOptions> {
     return mapboxMap.getDebug().map { it.toFLTMapDebugOptions() }.toMutableList()
   }
 
-  override fun setDebug(debugOptions: MutableList<FLTMapInterfaces.MapDebugOptions>, value: Boolean) {
-    mapboxMap.setDebug(debugOptions.map { it.toMapDebugOptions() }, value)
+  override fun setDebug(debugOptions: List<MapDebugOptions?>, value: Boolean) {
+    mapboxMap.setDebug(debugOptions.map { it!!.toMapDebugOptions() }, value)
   }
 
   override fun queryRenderedFeatures(
-    geometry: FLTMapInterfaces.RenderedQueryGeometry,
-    options: FLTMapInterfaces.RenderedQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
+    geometry: RenderedQueryGeometry,
+    options: RenderedQueryOptions,
+    callback: (Result<List<QueriedRenderedFeature?>>) -> Unit
   ) {
     mapboxMap.queryRenderedFeatures(
-      geometry.toRenderedQueryGeometry(),
+      geometry.toRenderedQueryGeometry(context),
       options.toRenderedQueryOptions()
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(
-          it.value?.map { feature -> feature.toFLTQueriedFeature() }
-            ?.toMutableList()
+        callback(
+          Result.success(
+            it.value!!.map { feature -> feature.toFLTQueriedRenderedFeature() }.toMutableList()
+          )
         )
       }
     }
@@ -126,16 +126,17 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
 
   override fun querySourceFeatures(
     sourceId: String,
-    options: FLTMapInterfaces.SourceQueryOptions,
-    result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.QueriedFeature>>?
+    options: SourceQueryOptions,
+    callback: (Result<List<QueriedSourceFeature?>>) -> Unit
   ) {
     mapboxMap.querySourceFeatures(sourceId, options.toSourceQueryOptions()) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(
-          it.value?.map { feature -> feature.toFLTQueriedFeature() }
-            ?.toMutableList()
+        callback(
+          Result.success(
+            it.value!!.map { feature -> feature.toFLTQueriedSourceFeature() }.toMutableList()
+          )
         )
       }
     }
@@ -143,53 +144,53 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
 
   override fun getGeoJsonClusterLeaves(
     sourceIdentifier: String,
-    cluster: MutableMap<String, Any>,
+    cluster: Map<String?, Any?>,
     limit: Long?,
     offset: Long?,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    callback: (Result<FeatureExtensionValue>) -> Unit
   ) {
     mapboxMap.getGeoJsonClusterLeaves(
       sourceIdentifier, Feature.fromJson(Gson().toJson(cluster)),
       limit ?: 10, offset ?: 0
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        callback(Result.success(it.value!!.toFLTFeatureExtensionValue()))
       }
     }
   }
 
   override fun getGeoJsonClusterChildren(
     sourceIdentifier: String,
-    cluster: MutableMap<String, Any>,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    cluster: Map<String?, Any?>,
+    callback: (Result<FeatureExtensionValue>) -> Unit
   ) {
     mapboxMap.getGeoJsonClusterChildren(
       sourceIdentifier,
       Feature.fromJson(Gson().toJson(cluster))
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        callback(Result.success(it.value!!.toFLTFeatureExtensionValue()))
       }
     }
   }
 
   override fun getGeoJsonClusterExpansionZoom(
     sourceIdentifier: String,
-    cluster: MutableMap<String, Any>,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.FeatureExtensionValue>?
+    cluster: Map<String?, Any?>,
+    callback: (Result<FeatureExtensionValue>) -> Unit
   ) {
     mapboxMap.getGeoJsonClusterExpansionZoom(
       sourceIdentifier,
       Feature.fromJson(Gson().toJson(cluster))
     ) {
       if (it.isError) {
-        result?.error(Throwable(it.error))
+        callback(Result.failure(Throwable(it.error)))
       } else {
-        result?.success(it.value?.toFLTFeatureExtensionValue())
+        callback(Result.success(it.value!!.toFLTFeatureExtensionValue()))
       }
     }
   }
@@ -198,23 +199,30 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    state: String
+    state: String,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.setFeatureState(sourceId, sourceLayerId, featureId, state.toValue())
+    mapboxMap.setFeatureState(sourceId, sourceLayerId, featureId, state.toValue()) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
   }
 
   override fun getFeatureState(
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    result: FLTMapInterfaces.Result<String>?
+    callback: (Result<String>) -> Unit
   ) {
-    return mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
-      result?.let {
+    mapboxMap.getFeatureState(sourceId, sourceLayerId, featureId) { expected ->
+      callback.let {
         if (expected.isError) {
-          it.error(Throwable(expected.error))
+          it(Result.failure(Throwable(expected.error)))
         } else {
-          it.success(expected.value?.toJson())
+          it(Result.success(expected.value!!.toJson()))
         }
       }
     }
@@ -224,21 +232,24 @@ class MapInterfaceController(private val mapboxMap: MapboxMap) : FLTMapInterface
     sourceId: String,
     sourceLayerId: String?,
     featureId: String,
-    stateKey: String?
+    stateKey: String?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey)
+    mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
   }
 
   override fun reduceMemoryUse() {
     mapboxMap.reduceMemoryUse()
   }
 
-  override fun getResourceOptions(): FLTMapInterfaces.ResourceOptions {
-    return mapboxMap.getResourceOptions().toFLTResourceOptions()
-  }
-
-  override fun getElevation(coordinate: MutableMap<String, Any>): Double? {
-    return mapboxMap.getElevation(coordinate.toPoint())
+  override fun getElevation(coordinate: Point): Double? {
+    return mapboxMap.getElevation(coordinate)
   }
 
   override fun setPrefetchZoomDelta(delta: Long) {

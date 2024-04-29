@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
-
-import 'main.dart';
 import 'page.dart';
 
 class ProjectionPage extends ExamplePage {
@@ -63,7 +60,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                 coordinates: Position(
               1.0,
               60,
-            )).toJson())
+            )))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
@@ -84,7 +81,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                 ProjectedMeters(northing: 1.0, easting: 1.0))
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("coordinates: ${value["coordinates"]}"),
+                      content: Text("coordinates: ${value.coordinates}"),
                       backgroundColor: Theme.of(context).primaryColor,
                       duration: Duration(seconds: 2),
                     )));
@@ -100,7 +97,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
             .unproject(MercatorCoordinate(x: 1.0, y: 1.0), 16)
             .then(
                 (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("coordinates: ${value["coordinates"]}"),
+                      content: Text("coordinates: ${value.coordinates}"),
                       backgroundColor: Theme.of(context).primaryColor,
                       duration: Duration(seconds: 2),
                     )));
@@ -118,7 +115,7 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
                     coordinates: Position(
                   1.0,
                   60,
-                )).toJson(),
+                )),
                 16)
             .then((value) =>
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -133,10 +130,8 @@ class ProjectionPageBodyState extends State<ProjectionPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

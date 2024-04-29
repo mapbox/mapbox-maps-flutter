@@ -5,7 +5,6 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 final _SuffixesRegistry _suffixesRegistry = _SuffixesRegistry._instance();
 
 class _MapboxMapsPlatform {
-  final observers = ArgumentCallbacks<Event>();
   final onStyleLoadedPlatform = ArgumentCallbacks<StyleLoadedEventData>();
   final onCameraChangeListenerPlatform =
       ArgumentCallbacks<CameraChangedEventData>();
@@ -26,6 +25,7 @@ class _MapboxMapsPlatform {
       ArgumentCallbacks<StyleImageMissingEventData>();
   final onStyleImageUnusedPlatform =
       ArgumentCallbacks<StyleImageUnusedEventData>();
+  final onResourceRequestPlatform = ArgumentCallbacks<ResourceEventData>();
 
   final int _channelSuffix = _suffixesRegistry.getSuffix();
   late MethodChannel _channel;
@@ -45,60 +45,63 @@ class _MapboxMapsPlatform {
   }
 
   void handleEvents(MethodCall call) {
-    var eventType = call.method.split("#")[1];
-    observers(Event(type: eventType, data: call.arguments));
+    final eventType = _MapEvent.values[int.parse(call.method.split("#")[1])];
     switch (eventType) {
-      case MapEvents.STYLE_LOADED:
+      case _MapEvent.styleLoaded:
         onStyleLoadedPlatform(
             StyleLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.CAMERA_CHANGED:
+      case _MapEvent.cameraChanged:
         onCameraChangeListenerPlatform(
             CameraChangedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_IDLE:
+      case _MapEvent.mapIdle:
         onMapIdlePlatform(
             MapIdleEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_LOADED:
+      case _MapEvent.mapLoaded:
         onMapLoadedPlatform(
             MapLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.MAP_LOADING_ERROR:
+      case _MapEvent.mapLoadingError:
         onMapLoadErrorPlatform(
             MapLoadingErrorEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.RENDER_FRAME_FINISHED:
+      case _MapEvent.renderFrameFinished:
         onRenderFrameFinishedPlatform(
             RenderFrameFinishedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.RENDER_FRAME_STARTED:
+      case _MapEvent.renderFrameStarted:
         onRenderFrameStartedPlatform(
             RenderFrameStartedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_ADDED:
+      case _MapEvent.sourceAdded:
         onSourceAddedPlatform(
             SourceAddedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_REMOVED:
+      case _MapEvent.sourceRemoved:
         onSourceRemovedPlatform(
             SourceRemovedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.SOURCE_DATA_LOADED:
+      case _MapEvent.sourceDataLoaded:
         onSourceDataLoadedPlatform(
             SourceDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_DATA_LOADED:
+      case _MapEvent.styleDataLoaded:
         onStyleDataLoadedPlatform(
             StyleDataLoadedEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_IMAGE_MISSING:
+      case _MapEvent.styleImageMissing:
         onStyleImageMissingPlatform(
             StyleImageMissingEventData.fromJson(jsonDecode(call.arguments)));
         break;
-      case MapEvents.STYLE_IMAGE_REMOVE_UNUSED:
+      case _MapEvent.styleImageRemoveUnused:
         onStyleImageUnusedPlatform(
             StyleImageUnusedEventData.fromJson(jsonDecode(call.arguments)));
+        break;
+      case _MapEvent.resourceRequest:
+        onResourceRequestPlatform(
+            ResourceEventData.fromJson(jsonDecode(call.arguments)));
         break;
       default:
         throw MissingPluginException();
@@ -113,19 +116,55 @@ class _MapboxMapsPlatform {
   }
 
   Widget buildView(
+      AndroidPlatformViewHostingMode androidHostingMode,
       Map<String, dynamic> creationParams,
       OnPlatformViewCreatedCallback onPlatformViewCreated,
       Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers) {
     creationParams['channelSuffix'] = _channelSuffix;
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return AndroidView(
-        viewType: 'plugins.flutter.io/mapbox_maps',
-        onPlatformViewCreated: onPlatformViewCreated,
-        gestureRecognizers: gestureRecognizers,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
+      switch (androidHostingMode) {
+        case AndroidPlatformViewHostingMode.TLHC_VD:
+        case AndroidPlatformViewHostingMode.TLHC_HC:
+        case AndroidPlatformViewHostingMode.HC:
+          return PlatformViewLink(
+            viewType: "plugins.flutter.io/mapbox_maps",
+            surfaceFactory: (context, controller) {
+              return AndroidViewSurface(
+                  controller: controller as AndroidViewController,
+                  hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+                  gestureRecognizers: gestureRecognizers ?? Set());
+            },
+            onCreatePlatformView: (params) {
+              final AndroidViewController controller =
+                  _androidViewControllerFactoryForMode(androidHostingMode)(
+                id: params.id,
+                viewType: 'plugins.flutter.io/mapbox_maps',
+                layoutDirection: TextDirection.ltr,
+                creationParams: creationParams,
+                creationParamsCodec: const StandardMessageCodec(),
+                onFocus: () => params.onFocusChanged(true),
+              );
+              controller.addOnPlatformViewCreatedListener(
+                params.onPlatformViewCreated,
+              );
+              controller.addOnPlatformViewCreatedListener(
+                onPlatformViewCreated,
+              );
+
+              controller.create();
+              return controller;
+            },
+          );
+        case AndroidPlatformViewHostingMode.VD:
+          return AndroidView(
+            viewType: 'plugins.flutter.io/mapbox_maps',
+            onPlatformViewCreated: onPlatformViewCreated,
+            gestureRecognizers: gestureRecognizers,
+            creationParams: creationParams,
+            creationParamsCodec: const StandardMessageCodec(),
+          );
+      }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
         viewType: 'plugins.flutter.io/mapbox_maps',
@@ -139,24 +178,43 @@ class _MapboxMapsPlatform {
         '$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
-  void dispose() {
+  AndroidViewController Function(
+          {required int id,
+          required String viewType,
+          required TextDirection layoutDirection,
+          dynamic creationParams,
+          MessageCodec<dynamic>? creationParamsCodec,
+          VoidCallback? onFocus})
+      _androidViewControllerFactoryForMode(
+          AndroidPlatformViewHostingMode hostingMode) {
+    switch (hostingMode) {
+      case AndroidPlatformViewHostingMode.TLHC_VD:
+        return PlatformViewsService.initAndroidView;
+      case AndroidPlatformViewHostingMode.TLHC_HC:
+        return PlatformViewsService.initSurfaceAndroidView;
+      case AndroidPlatformViewHostingMode.HC:
+        return PlatformViewsService.initExpensiveAndroidView;
+      case AndroidPlatformViewHostingMode.VD:
+        throw "Unexpected hostring mode(VD) when selecting an android view controller";
+    }
+  }
+
+  void dispose() async {
+    await _channel.invokeMethod('platform#releaseMethodChannels');
+
     _suffixesRegistry.releaseSuffix(_channelSuffix);
     _channel.setMethodCallHandler(null);
   }
 
-  Future<void> addEventListener(String event) async {
+  Future<dynamic> createAnnotationManager(String type,
+      {String? id, String? belowLayerId}) async {
     try {
-      await _channel
-          .invokeMethod('map#subscribe', <String, dynamic>{'event': event});
-    } on PlatformException catch (e) {
-      return new Future.error(e);
-    }
-  }
-
-  Future<dynamic> createAnnotationManager(String type) async {
-    try {
-      return _channel.invokeMethod(
-          'annotation#create_manager', <String, dynamic>{'type': type});
+      return _channel
+          .invokeMethod('annotation#create_manager', <String, dynamic>{
+        'type': type,
+        'id': id,
+        'belowLayerId': belowLayerId,
+      });
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
