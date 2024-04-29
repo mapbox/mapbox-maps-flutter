@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// Location Indicator layer.
 class LocationIndicatorLayer extends Layer {
   LocationIndicatorLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     this.bearingImage,
     this.shadowImage,
     this.topImage,

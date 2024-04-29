@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// A filled polygon with an optional stroked border.
 class FillLayer extends Layer {
   FillLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.fillSortKey,

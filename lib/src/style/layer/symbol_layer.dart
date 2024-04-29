@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// An icon or a text label.
 class SymbolLayer extends Layer {
   SymbolLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     required this.sourceId,
     this.sourceLayer,
     this.iconAllowOverlap,
