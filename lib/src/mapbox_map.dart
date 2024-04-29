@@ -453,8 +453,7 @@ class MapboxMap extends ChangeNotifier {
 
   /// Returns a snapshot of the map.
   /// The snapshot is taken from the current state of the map.
-  Future<Image> snapshot() =>
-      _mapboxMapsPlatform.snapshot().then((value) => Image.memory(value));
+  Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
 }
 
 class _GestureListener extends GestureListener {
