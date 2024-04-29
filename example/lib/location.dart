@@ -1,11 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class LocationPage extends ExamplePage {
@@ -33,7 +30,7 @@ class LocationPageBodyState extends State<LocationPageBody> {
   int _accuracyColor = 0;
   int _pulsingColor = 0;
   int _accuracyBorderColor = 0;
-  double _puckScale = 1.0;
+  double _puckScale = 10.0;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -174,8 +171,11 @@ class LocationPageBodyState extends State<LocationPageBody> {
         final Uint8List list = bytes.buffer.asUint8List();
 
         mapboxMap?.location.updateSettings(LocationComponentSettings(
-            locationPuck:
-                LocationPuck(locationPuck2D: LocationPuck2D(topImage: list))));
+            enabled: true,
+            puckBearingEnabled: true,
+            locationPuck: LocationPuck(
+                locationPuck2D: DefaultLocationPuck2D(
+                    topImage: list, shadowImage: Uint8List.fromList([])))));
       },
     );
   }
@@ -199,8 +199,8 @@ class LocationPageBodyState extends State<LocationPageBody> {
       child: Text('scale 3d puck'),
       onPressed: () {
         _puckScale /= 2;
-        if (_puckScale < 0.1) {
-          _puckScale = 1.0;
+        if (_puckScale < 1) {
+          _puckScale = 10.0;
         }
         print("Scale : $_puckScale");
         mapboxMap?.location.updateSettings(LocationComponentSettings(
@@ -233,7 +233,7 @@ class LocationPageBodyState extends State<LocationPageBody> {
                   Location settings : 
                     enabled : ${value.enabled}, 
                     puckBearingEnabled : ${value.puckBearingEnabled}
-                    puckBearingSource : ${value.puckBearingSource}
+                    puckBearing : ${value.puckBearing}
                     pulsing : ${value.pulsingEnabled}
                     pulsing radius : ${value.pulsingMaxRadius}
                     pulsing color : ${value.pulsingColor}
@@ -251,10 +251,8 @@ class LocationPageBodyState extends State<LocationPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget = MapWidget(
-        key: ValueKey("mapWidget"),
-        resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
-        onMapCreated: _onMapCreated);
+    final MapWidget mapWidget =
+        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
 
     final List<Widget> listViewChildren = <Widget>[];
 

@@ -6,26 +6,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
 
   testWidgets('Add LocationIndicatorLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     await mapboxMap.style.addLayer(LocationIndicatorLayer(
       id: 'layer',
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       bearingImage: "abc",
       shadowImage: "abc",
       topImage: "abc",
@@ -38,6 +33,7 @@ void main() {
       emphasisCircleRadius: 1.0,
       imagePitchDisplacement: 1.0,
       location: [0.0, 1.0, 2.0],
+      locationIndicatorOpacity: 1.0,
       perspectiveCompensation: 1.0,
       shadowImageSize: 1.0,
       topImageSize: 1.0,
@@ -46,6 +42,7 @@ void main() {
         await mapboxMap.style.getLayer('layer') as LocationIndicatorLayer;
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.bearingImage, "abc");
     expect(layer.shadowImage, "abc");
@@ -59,6 +56,7 @@ void main() {
     expect(layer.emphasisCircleRadius, 1.0);
     expect(layer.imagePitchDisplacement, 1.0);
     expect(layer.location, [0.0, 1.0, 2.0]);
+    expect(layer.locationIndicatorOpacity, 1.0);
     expect(layer.perspectiveCompensation, 1.0);
     expect(layer.shadowImageSize, 1.0);
     expect(layer.topImageSize, 1.0);

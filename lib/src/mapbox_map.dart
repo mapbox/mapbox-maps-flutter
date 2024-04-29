@@ -17,6 +17,7 @@ class MapboxMap extends ChangeNotifier {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
+    this.onResourceRequestListener,
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
@@ -89,6 +90,11 @@ class MapboxMap extends ChangeNotifier {
         onStyleImageUnusedListener?.call(argument);
       });
     }
+    if (onResourceRequestListener != null) {
+      _mapboxMapsPlatform.onResourceRequestPlatform.add((argument) {
+        onResourceRequestListener?.call(argument);
+      });
+    }
     _setupGestures();
   }
 
@@ -139,14 +145,17 @@ class MapboxMap extends ChangeNotifier {
   /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
   final OnStyleImageUnusedListener? onStyleImageUnusedListener;
 
+  /// Invoked when map makes a request to load required resources.
+  final OnResourceRequestListener? onResourceRequestListener;
+
   /// The currently loaded Style]object.
   late StyleManager style =
       StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  late LocationComponentSettingsInterface location =
-      LocationComponentSettingsInterface(
-          binaryMessenger: _proxyBinaryMessenger);
+  late LocationSettings location = LocationSettings(
+      _LocationComponentSettingsInterface(
+          binaryMessenger: _proxyBinaryMessenger));
 
   late BinaryMessenger _proxyBinaryMessenger;
 
@@ -191,64 +200,43 @@ class MapboxMap extends ChangeNotifier {
 
   @override
   void dispose() {
-    super.dispose();
     _mapboxMapsPlatform.dispose();
-    _observersMap.clear();
-    GestureListener.setup(null, binaryMessenger: _proxyBinaryMessenger);
-  }
+    GestureListener.setUp(null, binaryMessenger: _proxyBinaryMessenger);
 
-  var _observersMap = Map<String, List<Observer>>();
-
-  /// Subscribes an `observer` to a provided array of event types.
-  /// The `observable` will hold a strong reference to an `observer` instance, therefore,
-  /// in order to stop receiving notifications, caller must call `unsubscribe` with an
-  /// `observer` instance used for an initial subscription.
-  void subscribe(Observer observer, List<String> events) {
-    events.forEach((element) {
-      _mapboxMapsPlatform.addEventListener(element);
-      if (_observersMap[element] == null) {
-        // Haven't subscribed this event
-        _observersMap[element] = [observer];
-      } else {
-        // Have subscribed this event, just add observer to ths list
-        _observersMap[element]!.add(observer);
-      }
-    });
-    _mapboxMapsPlatform.observers.add((argument) {
-      // Notify all the observers registered with this event.
-      _observersMap[argument.type]?.forEach((element) {
-        element(argument);
-      });
-    });
-  }
-
-  /// Unsubscribes an `observer` from a provided array of event types.
-  void unsubscribe(Observer observer, List<String> events) {
-    events.forEach((element) {
-      _observersMap[element]!.remove(observer);
-    });
-  }
-
-  /// Unsubscribes an `observer` from all events.
-  void unsubscribeAll(Observer observer) {
-    _observersMap.forEach((key, value) {
-      if (value.contains(observer)) {
-        value.remove(observer);
-      }
-    });
+    super.dispose();
   }
 
   /// Convenience method that returns the `camera options` object for given parameters.
-  Future<CameraOptions> cameraForCoordinateBounds(CoordinateBounds bounds,
-          MbxEdgeInsets padding, double? bearing, double? pitch) =>
-      _cameraManager.cameraForCoordinateBounds(bounds, padding, bearing, pitch);
+  Future<CameraOptions> cameraForCoordinatesPadding(
+    List<Point> coordinates,
+    CameraOptions camera,
+    MbxEdgeInsets? coordinatesPadding,
+    double? maxZoom,
+    ScreenCoordinate? offset,
+  ) =>
+      _cameraManager.cameraForCoordinatesPadding(
+        coordinates,
+        camera,
+        coordinatesPadding,
+        maxZoom,
+        offset,
+      );
 
   /// Convenience method that returns the `camera options` object for given parameters.
-  Future<CameraOptions> cameraForCoordinates(
-          List<Map<String?, Object?>?> coordinates,
+  Future<CameraOptions> cameraForCoordinateBounds(
+          CoordinateBounds bounds,
           MbxEdgeInsets padding,
           double? bearing,
-          double? pitch) =>
+          double? pitch,
+          double? maxZoom,
+          ScreenCoordinate? offset) =>
+      _cameraManager.cameraForCoordinateBounds(
+          bounds, padding, bearing, pitch, maxZoom, offset);
+
+  /// Convenience method that returns the `camera options` object for given parameters.
+  @Deprecated('Use [cameraForCoordinatesPadding] instead')
+  Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
+          MbxEdgeInsets padding, double? bearing, double? pitch) =>
       _cameraManager.cameraForCoordinates(coordinates, padding, bearing, pitch);
 
   /// Convenience method that adjusts the provided `camera options` object for given parameters.
@@ -259,9 +247,7 @@ class MapboxMap extends ChangeNotifier {
   /// Note that this method may fail if the principal point of the projection is not inside the `box` or
   /// if there is no sufficient screen space, defined by principal point and the `box`, to fit the geometry.
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
-          List<Map<String?, Object?>?> coordinates,
-          CameraOptions camera,
-          ScreenBox box) =>
+          List<Point> coordinates, CameraOptions camera, ScreenBox box) =>
       _cameraManager.cameraForCoordinatesCameraOptions(
           coordinates, camera, box);
 
@@ -297,36 +283,34 @@ class MapboxMap extends ChangeNotifier {
   /// Calculates a `screen coordinate` that corresponds to a geographical coordinate
   /// (i.e., longitude-latitude pair).
   ///
-  /// The `screen coordinate` is in `platform pixels` relative to the top left corner
+  /// The `screen coordinate` is in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<ScreenCoordinate> pixelForCoordinate(
-          Map<String?, Object?> coordinate) =>
+  Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) =>
       _cameraManager.pixelForCoordinate(coordinate);
 
   /// Calculates a geographical `coordinate` (i.e., longitude-latitude pair) that corresponds
   /// to a `screen coordinate`.
   ///
-  /// The screen coordinate is in `platform pixels`relative to the top left corner
+  /// The screen coordinate is in `logical pixels`relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<Map<String?, Object?>> coordinateForPixel(ScreenCoordinate pixel) =>
+  Future<Point> coordinateForPixel(ScreenCoordinate pixel) =>
       _cameraManager.coordinateForPixel(pixel);
 
   /// Calculates `screen coordinates` that correspond to geographical `coordinates`
   /// (i.e., longitude-latitude pairs).
   ///
-  /// The `screen coordinates` are in `platform pixels` relative to the top left corner
+  /// The `screen coordinates` are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
-          List<Map<String?, Object?>?> coordinates) =>
+          List<Point> coordinates) =>
       _cameraManager.pixelsForCoordinates(coordinates);
 
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
   /// to `screen coordinates`.
   ///
-  /// The screen coordinates are in `platform pixels` relative to the top left corner
+  /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<List<Map<String?, Object?>?>> coordinatesForPixels(
-          List<ScreenCoordinate?> pixels) =>
+  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
       _cameraManager.coordinatesForPixels(pixels);
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
@@ -349,18 +333,6 @@ class MapboxMap extends ChangeNotifier {
 
   /// Returns the `camera bounds` of the map.
   Future<CameraBounds> getBounds() => _cameraManager.getBounds();
-
-  /// Prepares the drag gesture to use the provided screen coordinate as a pivot `point`. This function should be called each time when user starts a dragging action (e.g. by clicking on the map). The following dragging will be relative to the pivot.
-  Future<void> dragStart(ScreenCoordinate point) =>
-      _cameraManager.dragStart(point);
-
-  /// Calculates target point where camera should move after drag. The method should be called after `dragStart` and before `dragEnd`.
-  Future<CameraOptions> getDragCameraOptions(
-          ScreenCoordinate fromPoint, ScreenCoordinate toPoint) =>
-      _cameraManager.getDragCameraOptions(fromPoint, toPoint);
-
-  /// Ends the ongoing drag gesture. This function should be called always after the user has ended a drag gesture initiated by `dragStart`.
-  Future<void> dragEnd() => _cameraManager.dragEnd();
 
   /// Gets the size of the map.
   /// Note : not supported for iOS.
@@ -420,12 +392,12 @@ class MapboxMap extends ChangeNotifier {
       _mapInterface.setDebug(debugOptions, value);
 
   /// Queries the map for rendered features.
-  Future<List<QueriedFeature?>> queryRenderedFeatures(
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
           RenderedQueryGeometry geometry, RenderedQueryOptions options) =>
       _mapInterface.queryRenderedFeatures(geometry, options);
 
   /// Queries the map for source features.
-  Future<List<QueriedFeature?>> querySourceFeatures(
+  Future<List<QueriedSourceFeature?>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
       _mapInterface.querySourceFeatures(sourceId, options);
 
@@ -489,17 +461,9 @@ class MapboxMap extends ChangeNotifier {
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
 
-  /// Gets the resource options for the map.
-  ///
-  /// All optional fields of the returned object are initialized with the actual values.
-  ///
-  /// Note that result of this method is different from the `resource options` that were provided to the map's constructor.
-  Future<ResourceOptions> getResourceOptions() =>
-      _mapInterface.getResourceOptions();
-
   /// Gets elevation for the given coordinate.
   /// Note: Elevation is only available for the visible region on the screen and with terrain enabled.
-  Future<double?> getElevation(Map<String?, Object?> coordinate) =>
+  Future<double?> getElevation(Point coordinate) =>
       _mapInterface.getElevation(coordinate);
 
   /// Will load a new map style asynchronous from the specified URI.
@@ -551,11 +515,11 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// If null is set, the memory budget in tile units will be dynamically calculated based on
   /// the current viewport size.
-  Future<void> setMemoryBudget(
-          MapMemoryBudgetInMegabytes? mapMemoryBudgetInMegabytes,
-          MapMemoryBudgetInTiles? mapMemoryBudgetInTiles) =>
-      _mapInterface.setMemoryBudget(
-          mapMemoryBudgetInMegabytes, mapMemoryBudgetInTiles);
+  Future<void> setTileCacheBudget(
+          TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
+          TileCacheBudgetInTiles? tileCacheBudgetInTiles) =>
+      _mapInterface.setTileCacheBudget(
+          tileCacheBudgetInMegabytes, tileCacheBudgetInTiles);
 
   /// Ease the map camera to a given camera options and animation options
   Future<void> easeTo(CameraOptions cameraOptions,
@@ -595,7 +559,7 @@ class MapboxMap extends ChangeNotifier {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
         onMapScrollListener != null) {
-      GestureListener.setup(
+      GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,
             onMapLongTapListener: onMapLongTapListener,
@@ -634,17 +598,17 @@ class _GestureListener extends GestureListener {
   final OnMapScrollListener? onMapScrollListener;
 
   @override
-  void onTap(ScreenCoordinate coordinate) {
-    onMapTapListener?.call(coordinate);
+  void onTap(MapContentGestureContext context) {
+    onMapTapListener?.call(context);
   }
 
   @override
-  void onLongTap(ScreenCoordinate coordinate) {
-    onMapLongTapListener?.call(coordinate);
+  void onLongTap(MapContentGestureContext context) {
+    onMapLongTapListener?.call(context);
   }
 
   @override
-  void onScroll(ScreenCoordinate coordinate) {
-    onMapScrollListener?.call(coordinate);
+  void onScroll(MapContentGestureContext context) {
+    onMapScrollListener?.call(context);
   }
 }

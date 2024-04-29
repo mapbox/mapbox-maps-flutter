@@ -6,20 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
 
   testWidgets('Add RasterLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     await mapboxMap.style
         .addSource(RasterSource(id: "source", tileSize: 256, tiles: [
@@ -34,9 +28,16 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
+      rasterArrayBand: "abc",
       rasterBrightnessMax: 1.0,
       rasterBrightnessMin: 1.0,
+      rasterColor: Colors.red.value,
+      rasterColorMix: [0.0, 1.0, 2.0, 3.0],
+      rasterColorRange: [0.0, 1.0],
       rasterContrast: 1.0,
+      rasterElevation: 1.0,
+      rasterEmissiveStrength: 1.0,
       rasterFadeDuration: 1.0,
       rasterHueRotate: 1.0,
       rasterOpacity: 1.0,
@@ -47,10 +48,17 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.rasterArrayBand, "abc");
     expect(layer.rasterBrightnessMax, 1.0);
     expect(layer.rasterBrightnessMin, 1.0);
+    expect(layer.rasterColor, Colors.red.value);
+    expect(layer.rasterColorMix, [0.0, 1.0, 2.0, 3.0]);
+    expect(layer.rasterColorRange, [0.0, 1.0]);
     expect(layer.rasterContrast, 1.0);
+    expect(layer.rasterElevation, 1.0);
+    expect(layer.rasterEmissiveStrength, 1.0);
     expect(layer.rasterFadeDuration, 1.0);
     expect(layer.rasterHueRotate, 1.0);
     expect(layer.rasterOpacity, 1.0);

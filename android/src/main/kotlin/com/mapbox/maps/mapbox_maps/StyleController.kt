@@ -1,647 +1,583 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Value
-import com.mapbox.common.Logger
-import com.mapbox.maps.*
+import com.mapbox.maps.Image
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.extension.localization.localizeLabels
-import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
-import com.mapbox.maps.extension.style.projection.generated.Projection
+import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
-import com.mapbox.maps.pigeons.FLTMapInterfaces
+import com.mapbox.maps.logE
+import com.mapbox.maps.mapbox_maps.pigeons.*
+import java.lang.RuntimeException
 import java.nio.ByteBuffer
+import java.util.HashMap
 import java.util.Locale
 
-class StyleController(private val mapboxMap: MapboxMap) : FLTMapInterfaces.StyleManager {
-  override fun getStyleURI(result: FLTMapInterfaces.Result<String>) {
-    mapboxMap.getStyle {
-      result.success(it.styleURI)
+class StyleController(private val mapboxMap: MapboxMap, private val context: Context) :
+  StyleManager {
+  override fun getStyleURI(callback: (Result<String>) -> Unit) {
+    callback(Result.success(mapboxMap.style?.styleURI ?: ""))
+  }
+
+  override fun setStyleURI(uri: String, callback: (Result<Unit>) -> Unit) {
+    mapboxMap.loadStyle(uri) {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun setStyleURI(uri: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      it.styleURI = uri
-      result.success(null)
+  override fun getStyleJSON(callback: (Result<String>) -> Unit) {
+    callback(Result.success(mapboxMap.style?.styleJSON ?: ""))
+  }
+
+  override fun setStyleJSON(json: String, callback: (Result<Unit>) -> Unit) {
+    mapboxMap.loadStyle(json) {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun getStyleJSON(result: FLTMapInterfaces.Result<String>) {
-    mapboxMap.getStyle {
-      result.success(it.styleJSON)
-    }
+  override fun getStyleDefaultCamera(callback: (Result<CameraOptions>) -> Unit) {
+    val camera = mapboxMap.styleDefaultCamera
+    callback(Result.success(camera.toFLTCameraOptions(context)))
   }
 
-  override fun setStyleJSON(json: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      it.styleJSON = json
-      result.success(null)
-    }
-  }
-
-  override fun getStyleDefaultCamera(result: FLTMapInterfaces.Result<FLTMapInterfaces.CameraOptions>?) {
-    mapboxMap.getStyle {
-      val camera = it.styleDefaultCamera
-      result?.success(camera.toFLTCameraOptions())
-    }
-  }
-
-  override fun getStyleTransition(result: FLTMapInterfaces.Result<FLTMapInterfaces.TransitionOptions>) {
-    mapboxMap.getStyle {
-      val transitionOptions = it.styleTransition
-      result.success(
-        FLTMapInterfaces.TransitionOptions.Builder().setDelay(transitionOptions.delay)
-          .setDuration(transitionOptions.duration)
-          .setEnablePlacementTransitions(transitionOptions.enablePlacementTransitions)
-          .build()
+  override fun getStyleTransition(callback: (Result<TransitionOptions>) -> Unit) {
+    val transitionOptions = mapboxMap.getStyleTransition()
+    callback(
+      Result.success(
+        TransitionOptions(duration = transitionOptions.duration, delay = transitionOptions.delay, enablePlacementTransitions = transitionOptions.enablePlacementTransitions)
       )
-    }
+    )
+  }
+
+  override fun getStyleImports(): List<StyleObjectInfo> {
+    return mapboxMap.getStyleImports().map { it.toFLTStyleObjectInfo() }
+  }
+
+  override fun removeStyleImport(importId: String) {
+    mapboxMap.removeStyleImport(importId)
+  }
+
+  override fun getStyleImportSchema(importId: String): Any {
+    return mapboxMap.getStyleImportSchema(importId)
+      .getValueOrElse {
+        throw RuntimeException(it)
+      }
+  }
+
+  override fun getStyleImportConfigProperties(importId: String): Map<String, StylePropertyValue> {
+    return mapboxMap.getStyleImportConfigProperties(importId)
+      .getValueOrElse { throw RuntimeException(it) }
+      .mapValues { it.value.toFLTStylePropertyValue() }
+      .toMutableMap()
+  }
+
+  override fun getStyleImportConfigProperty(
+    importId: String,
+    config: String
+  ): StylePropertyValue {
+    return mapboxMap.getStyleImportConfigProperty(importId, config)
+      .getValueOrElse { throw RuntimeException(it) }
+      .toFLTStylePropertyValue()
+  }
+
+  override fun setStyleImportConfigProperties(importId: String, configs: Map<String, Any>) {
+    mapboxMap.setStyleImportConfigProperties(
+      importId,
+      configs.mapValues { it.toValue() } as HashMap<String, Value>
+    )
+  }
+
+  override fun setStyleImportConfigProperty(importId: String, config: String, value: Any) {
+    mapboxMap.setStyleImportConfigProperty(importId, config, value.toValue())
   }
 
   override fun setStyleTransition(
-    transitionOptions: FLTMapInterfaces.TransitionOptions,
-    result: FLTMapInterfaces.Result<Void>
+    transitionOptions: TransitionOptions,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      it.styleTransition = TransitionOptions.Builder().delay(transitionOptions.delay)
+    mapboxMap.setStyleTransition(
+      com.mapbox.maps.TransitionOptions.Builder()
+        .delay(transitionOptions.delay)
         .duration(transitionOptions.duration)
         .enablePlacementTransitions(transitionOptions.enablePlacementTransitions).build()
-      result.success(null)
-    }
+    )
+    callback(Result.success(Unit))
   }
 
   override fun addStyleLayer(
     properties: String,
-    layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    layerPosition: LayerPosition?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      properties.toValue().let { parameters ->
-        val expected = it.addStyleLayer(
-          parameters,
-          LayerPosition(
-            layerPosition?.above,
-            layerPosition?.below,
-            layerPosition?.at?.toInt()
-          )
+    properties.toValue().let { parameters ->
+      val expected = mapboxMap.addStyleLayer(
+        parameters,
+        com.mapbox.maps.LayerPosition(
+          layerPosition?.above,
+          layerPosition?.below,
+          layerPosition?.at?.toInt()
         )
-        if (expected.isError) {
-          result.error(Throwable(expected.error))
-        } else {
-          result.success(null)
-        }
+      )
+      if (expected.isError) {
+        callback(Result.failure(Throwable(expected.error)))
+      } else {
+        callback(Result.success(Unit))
       }
     }
   }
 
   override fun addPersistentStyleLayer(
     properties: String,
-    layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    layerPosition: LayerPosition?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      properties.toValue().let { parameters ->
-        val expected = it.addPersistentStyleLayer(
-          parameters,
-          LayerPosition(
-            layerPosition?.above,
-            layerPosition?.below,
-            layerPosition?.at?.toInt()
-          )
+    properties.toValue().let { parameters ->
+      val expected = mapboxMap.addPersistentStyleLayer(
+        parameters,
+        com.mapbox.maps.LayerPosition(
+          layerPosition?.above,
+          layerPosition?.below,
+          layerPosition?.at?.toInt()
         )
-        if (expected.isError) {
-          result.error(Throwable(expected.error))
-        } else {
-          result.success(null)
-        }
+      )
+      if (expected.isError) {
+        callback(Result.failure(Throwable(expected.error)))
+      } else {
+        callback(Result.success(Unit))
       }
     }
   }
 
-  override fun isStyleLayerPersistent(layerId: String, result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.getStyle {
-      val expected = it.isStyleLayerPersistent(layerId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(expected.value)
-      }
+  override fun isStyleLayerPersistent(layerId: String, callback: (Result<Boolean>) -> Unit) {
+    val expected = mapboxMap.isStyleLayerPersistent(layerId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(expected.value!!))
     }
   }
 
-  override fun removeStyleLayer(layerId: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      val expected = it.removeStyleLayer(layerId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+  override fun removeStyleLayer(layerId: String, callback: (Result<Unit>) -> Unit) {
+    val expected = mapboxMap.removeStyleLayer(layerId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun moveStyleLayer(
     layerId: String,
-    layerPosition: FLTMapInterfaces.LayerPosition?,
-    result: FLTMapInterfaces.Result<Void>
+    layerPosition: LayerPosition?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.moveStyleLayer(
-        layerId,
-        if (layerPosition != null) LayerPosition(
-          layerPosition.above,
-          layerPosition.below,
-          layerPosition.at?.toInt()
-        ) else null
-      )
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected = mapboxMap.moveStyleLayer(
+      layerId,
+      if (layerPosition != null) com.mapbox.maps.LayerPosition(
+        layerPosition.above,
+        layerPosition.below,
+        layerPosition.at?.toInt()
+      ) else null
+    )
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun styleLayerExists(layerId: String, result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.getStyle {
-      val expected = it.styleLayerExists(layerId)
-      result.success(expected)
-    }
+  override fun styleLayerExists(layerId: String, callback: (Result<Boolean>) -> Unit) {
+    val expected = mapboxMap.styleLayerExists(layerId)
+    callback(Result.success(expected))
   }
 
-  override fun getStyleLayers(result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.StyleObjectInfo>>) {
-    mapboxMap.getStyle {
-      result.success(
-        it.styleLayers.map { styleObjectInfo ->
-          FLTMapInterfaces.StyleObjectInfo.Builder().setId(styleObjectInfo.id)
-            .setType(styleObjectInfo.type).build()
-        }.toMutableList()
+  override fun getStyleLayers(callback: (Result<List<StyleObjectInfo?>>) -> Unit) {
+    callback(
+      Result.success(
+        mapboxMap.styleLayers.map { it.toFLTStyleObjectInfo() }.toMutableList()
       )
-    }
+    )
   }
 
   override fun getStyleLayerProperty(
     layerId: String,
     property: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.StylePropertyValue>
+    callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val styleLayerProperty = it.getStyleLayerProperty(layerId, property)
-      val stylePropertyValueKind =
-        FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
-      val stylePropertyValue =
-        FLTMapInterfaces.StylePropertyValue.Builder()
-          .setValue(styleLayerProperty.value.toString())
-          .setKind(stylePropertyValueKind).build()
-      result.success(stylePropertyValue)
-    }
+    val styleLayerProperty = mapboxMap.getStyleLayerProperty(layerId, property)
+    val stylePropertyValueKind =
+      StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
+    val stylePropertyValue =
+      StylePropertyValue(styleLayerProperty.value.toFLTValue(), stylePropertyValueKind)
+    callback(Result.success(stylePropertyValue))
   }
 
   override fun setStyleLayerProperty(
     layerId: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>?
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected =
-        it.setStyleLayerProperty(layerId, property, value.toValue())
-      if (expected.isError) {
-        result?.error(Throwable(expected.error))
-      } else {
-        result?.success(null)
-      }
+    val expected =
+      mapboxMap.setStyleLayerProperty(layerId, property, value.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun getStyleLayerProperties(
-    layerId: String,
-    result: FLTMapInterfaces.Result<String>
-  ) {
-    mapboxMap.getStyle {
-      val expected = it.getStyleLayerProperties(layerId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(expected.value?.toJson())
-      }
+  override fun getStyleLayerProperties(layerId: String, callback: (Result<String>) -> Unit) {
+    val expected = mapboxMap.getStyleLayerProperties(layerId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(expected.value!!.toJson()))
     }
   }
 
   override fun setStyleLayerProperties(
     layerId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleLayerProperties(layerId, properties.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected = mapboxMap.setStyleLayerProperties(layerId, properties.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun addStyleSource(
     sourceId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.addStyleSource(sourceId, properties.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected = mapboxMap.addStyleSource(sourceId, properties.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun getStyleSourceProperty(
     sourceId: String,
     property: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.StylePropertyValue>
+    callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val styleLayerProperty = it.getStyleSourceProperty(sourceId, property)
-      val stylePropertyValueKind =
-        FLTMapInterfaces.StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
-      val value = if (property == "tiles" || property == "bounds" || property == "clusterProperties") {
-        styleLayerProperty.value.toJson()
-      } else {
-        styleLayerProperty.value.toString()
-      }
-      val stylePropertyValue =
-        FLTMapInterfaces.StylePropertyValue.Builder()
-          .setValue(value)
-          .setKind(stylePropertyValueKind).build()
-      result.success(stylePropertyValue)
-    }
+    val styleLayerProperty = mapboxMap.getStyleSourceProperty(sourceId, property)
+    val stylePropertyValueKind =
+      StylePropertyValueKind.values()[styleLayerProperty.kind.ordinal]
+    val value = styleLayerProperty.value.toFLTValue()
+    val stylePropertyValue =
+      StylePropertyValue(value, stylePropertyValueKind)
+    callback(Result.success(stylePropertyValue))
   }
 
   override fun setStyleSourceProperty(
     sourceId: String,
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected =
-        it.setStyleSourceProperty(sourceId, property, value.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected =
+      mapboxMap.setStyleSourceProperty(sourceId, property, value.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun getStyleSourceProperties(
-    sourceId: String,
-    result: FLTMapInterfaces.Result<String>
-  ) {
-    mapboxMap.getStyle {
-      val expected = it.getStyleSourceProperties(sourceId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(expected.value!!.toJson())
-      }
+  override fun getStyleSourceProperties(sourceId: String, callback: (Result<String>) -> Unit) {
+    val expected = mapboxMap.getStyleSourceProperties(sourceId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(expected.value!!.toJson()))
     }
   }
 
   override fun setStyleSourceProperties(
     sourceId: String,
     properties: String,
-    result: FLTMapInterfaces.Result<Void>
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleSourceProperties(sourceId, properties.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected = mapboxMap.setStyleSourceProperties(sourceId, properties.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun updateStyleImageSourceImage(
     sourceId: String,
-    image: FLTMapInterfaces.MbxImage,
-    result: FLTMapInterfaces.Result<Void>
+    image: MbxImage,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      var bitmap = BitmapFactory.decodeByteArray(
-        image.data,
-        0,
-        image.data.size
+    var bitmap = BitmapFactory.decodeByteArray(
+      image.data,
+      0,
+      image.data.size
+    )
+    if (bitmap.config != Bitmap.Config.ARGB_8888) {
+      bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+    }
+    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
+    bitmap.copyPixelsToBuffer(byteBuffer)
+
+    val expected = mapboxMap.updateStyleImageSourceImage(
+      sourceId,
+      Image(
+        image.width.toInt(),
+        image.height.toInt(),
+        DataRef(byteBuffer)
       )
-      if (bitmap.config != Bitmap.Config.ARGB_8888) {
-        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
-      }
-      val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
-      bitmap.copyPixelsToBuffer(byteBuffer)
+    )
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
+    }
+  }
 
-      val expected = it.updateStyleImageSourceImage(
-        sourceId,
-        Image(
-          image.width.toInt(),
-          image.height.toInt(), byteBuffer.array()
-        )
+  override fun removeStyleSource(sourceId: String, callback: (Result<Unit>) -> Unit) {
+    val expected = mapboxMap.removeStyleSource(sourceId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
+    }
+  }
+
+  override fun styleSourceExists(sourceId: String, callback: (Result<Boolean>) -> Unit) {
+    val expected = mapboxMap.styleSourceExists(sourceId)
+    callback(Result.success(expected))
+  }
+
+  override fun getStyleSources(callback: (Result<List<StyleObjectInfo?>>) -> Unit) {
+    callback(
+      Result.success(
+        mapboxMap.styleSources.map { it.toFLTStyleObjectInfo() }.toMutableList()
       )
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
-    }
+    )
   }
 
-  override fun removeStyleSource(sourceId: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      val expected = it.removeStyleSource(sourceId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
-    }
+  override fun getStyleLights(): List<StyleObjectInfo> {
+    return mapboxMap.style?.getStyleLights()?.map { it.toFLTStyleObjectInfo() }
+      ?: listOf()
   }
 
-  override fun styleSourceExists(sourceId: String, result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.getStyle {
-      val expected = it.styleSourceExists(sourceId)
-      result.success(expected)
-    }
+  override fun setLight(flatLight: FlatLight) {
+    mapboxMap.style?.setLight(flatLight.toFlatLight())
   }
 
-  override fun getStyleSources(result: FLTMapInterfaces.Result<MutableList<FLTMapInterfaces.StyleObjectInfo>>) {
-    mapboxMap.getStyle {
-      result.success(
-        it.styleSources.map {
-          FLTMapInterfaces.StyleObjectInfo.Builder().setId(it.id).setType(it.type).build()
-        }.toMutableList()
-      )
-    }
-  }
-
-  override fun setStyleLight(properties: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleLight(properties.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
-    }
+  override fun setLights(
+    ambientLight: AmbientLight,
+    directionalLight: DirectionalLight
+  ) {
+    mapboxMap.style?.setLight(ambientLight.toAmbientLight(), directionalLight.toDirectionalLight())
   }
 
   override fun getStyleLightProperty(
+    id: String,
     property: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.StylePropertyValue>
+    callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val styleLightProperty = it.getStyleLightProperty(property)
-      result.success(
-        FLTMapInterfaces.StylePropertyValue.Builder()
-          .setKind(
-            FLTMapInterfaces.StylePropertyValueKind.values()[styleLightProperty.kind.ordinal]
-          )
-          .setValue(styleLightProperty.value.toString()).build()
+    val styleLightProperty = mapboxMap.style?.getStyleLightProperty(id, property)
+
+    if (styleLightProperty != null) {
+      callback(
+        Result.success(
+          StylePropertyValue(styleLightProperty.value.toFLTValue(), StylePropertyValueKind.values()[styleLightProperty.kind.ordinal])
+        )
       )
+    } else {
+      callback(Result.failure(Throwable("No style available")))
     }
   }
 
-  override fun setStyleLightProperty(id: String, value: Any, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleLightProperty(id, value.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+  override fun setStyleLightProperty(
+    id: String,
+    property: String,
+    value: Any,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val expected = mapboxMap.style?.setStyleLightProperty(id, property, value.toValue())
+    if (expected?.isError == true) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun setStyleTerrain(properties: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleTerrain(properties.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+  override fun setStyleTerrain(properties: String, callback: (Result<Unit>) -> Unit) {
+    val expected = mapboxMap.setStyleTerrain(properties.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun getStyleTerrainProperty(
     property: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.StylePropertyValue>
+    callback: (Result<StylePropertyValue>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val styleProperty = it.getStyleTerrainProperty(property)
-      val stylePropertyValueKind =
-        FLTMapInterfaces.StylePropertyValueKind.values()[styleProperty.kind.ordinal]
-      val stylePropertyValue =
-        FLTMapInterfaces.StylePropertyValue.Builder().setValue(styleProperty.value.toString())
-          .setKind(stylePropertyValueKind).build()
-      result.success(stylePropertyValue)
-    }
+    val styleProperty = mapboxMap.getStyleTerrainProperty(property)
+    val stylePropertyValueKind =
+      StylePropertyValueKind.values()[styleProperty.kind.ordinal]
+    val stylePropertyValue =
+      StylePropertyValue(styleProperty.value.toFLTValue(), stylePropertyValueKind)
+    callback(Result.success(stylePropertyValue))
   }
 
   override fun setStyleTerrainProperty(
     property: String,
     value: Any,
-    result: FLTMapInterfaces.Result<Void>
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.setStyleTerrainProperty(property, value.toValue())
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    val expected = mapboxMap.setStyleTerrainProperty(property, value.toValue())
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun getStyleImage(
-    imageId: String,
-    result: FLTMapInterfaces.Result<FLTMapInterfaces.MbxImage>
-  ) {
-    mapboxMap.getStyle {
-      it.getStyleImage(imageId)?.let { image ->
-        result.success(
-          FLTMapInterfaces.MbxImage.Builder().setWidth(image.width.toLong()).setHeight(
-            image.height.toLong()
-          ).setData(image.data).build()
-        )
-      }
-      result.success(null)
+  override fun getStyleImage(imageId: String, callback: (Result<MbxImage?>) -> Unit) {
+    val image = mapboxMap.getStyleImage(imageId)
+
+    if (image == null) {
+      callback(Result.success(null))
+      return
+    }
+
+    val byteArray = ByteArray(image.data.buffer.capacity())
+    image.data.buffer.get(byteArray)
+    callback(
+      Result.success(
+        MbxImage(width = image.width.toLong(), height = image.height.toLong(), data = byteArray)
+      )
+    )
+  }
+
+  override fun removeStyleImage(imageId: String, callback: (Result<Unit>) -> Unit) {
+    val expected = mapboxMap.removeStyleImage(imageId)
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
-  override fun removeStyleImage(imageId: String, result: FLTMapInterfaces.Result<Void?>) {
-    mapboxMap.getStyle {
-      val expected = it.removeStyleImage(imageId)
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
-    }
+  override fun hasStyleImage(imageId: String, callback: (Result<Boolean>) -> Unit) {
+    callback(Result.success(mapboxMap.hasStyleImage(imageId)))
   }
-
-  override fun hasStyleImage(imageId: String, result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.getStyle {
-      result.success(it.hasStyleImage(imageId))
-    }
-  }
-
-//    override fun setStyleCustomGeometrySourceTileData(
-//        sourceId: String,
-//        tileId: FLTMapInterfaces.CanonicalTileID,
-//        featureCollection: String,
-//        result: FLTMapInterfaces.Result<Void>
-//    ) {
-//        mapboxMap.getStyle { style ->
-//            val canonicalTileID = CanonicalTileID(
-//                tileId.z.toByte(), tileId.x.toInt(),
-//                tileId.y.toInt()
-//            )
-//            FeatureCollection.fromJson(featureCollection).features()?.let {
-//                val expected = style.setStyleCustomGeometrySourceTileData(
-//                    sourceId,
-//                    tileId = canonicalTileID,
-//                    it
-//                )
-//                if (expected.isError) {
-//                    result.error(Throwable(expected.error))
-//                } else {
-//                    result.success(null)
-//                }
-//            }
-//            result.error(Throwable("Features are null."))
-//        }
-//    }
 
   override fun invalidateStyleCustomGeometrySourceTile(
     sourceId: String,
-    tileId: FLTMapInterfaces.CanonicalTileID,
-    result: FLTMapInterfaces.Result<Void>
+    tileId: CanonicalTileID,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      val expected = it.invalidateStyleCustomGeometrySourceTile(
-        sourceId,
-        CanonicalTileID(
-          tileId.z.toByte(), tileId.x.toInt(), tileId.y.toInt()
-        )
+    val expected = mapboxMap.invalidateStyleCustomGeometrySourceTile(
+      sourceId,
+      com.mapbox.maps.CanonicalTileID(
+        tileId.z.toByte(), tileId.x.toInt(), tileId.y.toInt()
       )
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    )
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 
   override fun invalidateStyleCustomGeometrySourceRegion(
     sourceId: String,
-    bounds: FLTMapInterfaces.CoordinateBounds,
-    result: FLTMapInterfaces.Result<Void>?
+    bounds: CoordinateBounds,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle { style ->
-      style.invalidateStyleCustomGeometrySourceRegion(
-        sourceId,
-        coordinateBounds = bounds.toCoordinateBounds()
-      )
-      result?.success(null)
-    }
+    mapboxMap.invalidateStyleCustomGeometrySourceRegion(
+      sourceId,
+      bounds.toCoordinateBounds()
+    )
+    callback(Result.success(Unit))
   }
 
-  override fun isStyleLoaded(result: FLTMapInterfaces.Result<Boolean>) {
-    mapboxMap.getStyle {
-      result.success(it.isStyleLoaded)
-    }
+  override fun isStyleLoaded(callback: (Result<Boolean>) -> Unit) {
+    callback(Result.success(mapboxMap.isStyleLoaded()))
   }
 
-  override fun getProjection(result: FLTMapInterfaces.Result<String>) {
-    mapboxMap.getStyle {
-      result.success(it.getProjection().name.value)
-    }
+  override fun getProjection(): StyleProjection? {
+    return mapboxMap.style?.getProjection()?.toFLTProjection()
   }
 
-  override fun setProjection(projection: String, result: FLTMapInterfaces.Result<Void>) {
-    mapboxMap.getStyle {
-      when (projection) {
-        ProjectionName.GLOBE.value -> it.setProjection(Projection(ProjectionName.GLOBE))
-        ProjectionName.MERCATOR.value -> it.setProjection(Projection(ProjectionName.MERCATOR))
-        else -> {
-          result.error(Throwable("Invalid projection $projection"))
-        }
-      }
-      result.success(null)
-    }
+  override fun setProjection(projection: StyleProjection) {
+    mapboxMap.style?.setProjection(projection.toProjection())
   }
 
   override fun localizeLabels(
     locale: String,
-    layerIds: MutableList<String>?,
-    result: FLTMapInterfaces.Result<Void>
+    layerIds: List<String>?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      it.localizeLabels(Locale(locale), layerIds)
-      result.success(null)
-    }
+    mapboxMap.style?.localizeLabels(Locale(locale), layerIds)
+    callback(Result.success(Unit))
   }
 
   override fun addStyleImage(
     imageId: String,
     scale: Double,
-    image: FLTMapInterfaces.MbxImage,
+    image: MbxImage,
     sdf: Boolean,
-    stretchX: MutableList<FLTMapInterfaces.ImageStretches>,
-    stretchY: MutableList<FLTMapInterfaces.ImageStretches>,
-    content: FLTMapInterfaces.ImageContent?,
-    result: FLTMapInterfaces.Result<Void>
+    stretchX: List<ImageStretches?>,
+    stretchY: List<ImageStretches?>,
+    content: ImageContent?,
+    callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.getStyle {
-      var bitmap = BitmapFactory.decodeByteArray(
-        image.data,
-        0,
-        image.data.size
-      )
-      if (bitmap.config != Bitmap.Config.ARGB_8888) {
-        bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
-      }
-      val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
-      bitmap.copyPixelsToBuffer(byteBuffer)
-      val expected = it.addStyleImage(
-        imageId, scale.toFloat(),
-        Image(
-          image.width.toInt(),
-          image.height.toInt(), byteBuffer.array()
-        ),
-        sdf,
-        stretchX.map {
-          ImageStretches(
-            it.first.toFloat(),
-            it.second.toFloat()
-          )
-        },
-        stretchY.map { ImageStretches(it.first.toFloat(), it.second.toFloat()) },
-        if (content != null) ImageContent(
-          content.left.toFloat(),
-          content.top.toFloat(), content.right.toFloat(), content.bottom.toFloat()
-        ) else null
-      )
-      if (expected.isError) {
-        result.error(Throwable(expected.error))
-      } else {
-        result.success(null)
-      }
+    var bitmap = BitmapFactory.decodeByteArray(
+      image.data,
+      0,
+      image.data.size
+    )
+    if (bitmap.config != Bitmap.Config.ARGB_8888) {
+      bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false)
+    }
+    val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
+    bitmap.copyPixelsToBuffer(byteBuffer)
+    val expected = mapboxMap.addStyleImage(
+      imageId, scale.toFloat(),
+      Image(
+        image.width.toInt(),
+        image.height.toInt(),
+        DataRef(byteBuffer)
+      ),
+      sdf,
+      stretchX.map {
+        com.mapbox.maps.ImageStretches(
+          it!!.first.toFloat(),
+          it!!.second.toFloat()
+        )
+      },
+      stretchY.map { com.mapbox.maps.ImageStretches(it!!.first.toFloat(), it!!.second.toFloat()) }.toMutableList(),
+      if (content != null) com.mapbox.maps.ImageContent(
+        content.left.toFloat(),
+        content.top.toFloat(), content.right.toFloat(), content.bottom.toFloat()
+      ) else null
+    )
+    if (expected.isError) {
+      callback(Result.failure(Throwable(expected.error)))
+    } else {
+      callback(Result.success(Unit))
     }
   }
 }
@@ -688,10 +624,26 @@ fun Any.toValue(): Value {
     val valueArray = this.map { it?.toValue() }
     Value(valueArray)
   } else {
-    Logger.e(
+    logE(
       "StyleController",
       "Can not map value, type is not supported: ${this::class.java.canonicalName}"
     )
     Value.valueOf("")
+  }
+}
+
+fun Value.toFLTValue(): Any? {
+  return when (contents) {
+    is List<*> -> {
+      (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
+    }
+    is Map<*, *> -> {
+      (contents as Map<*, *>)
+        .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
+        .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
+    }
+    else -> {
+      contents
+    }
   }
 }

@@ -7,71 +7,76 @@ class CircleAnnotationManager extends BaseAnnotationManager {
       {required String id, required BinaryMessenger messenger})
       : super(id: id, messenger: messenger);
 
-  late _CircleAnnotationMessager messager =
-      _CircleAnnotationMessager(binaryMessenger: _messenger);
+  late _CircleAnnotationMessenger messenger =
+      _CircleAnnotationMessenger(binaryMessenger: _messenger);
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnCircleAnnotationClickListener(
       OnCircleAnnotationClickListener listener) {
-    OnCircleAnnotationClickListener.setup(listener,
+    OnCircleAnnotationClickListener.setUp(listener,
         binaryMessenger: _messenger);
   }
 
   /// Create a new annotation with the option.
   Future<CircleAnnotation> create(CircleAnnotationOptions annotation) =>
-      messager.create(id, annotation);
+      messenger.create(id, annotation);
 
   /// Create multi annotations with the options.
   Future<List<CircleAnnotation?>> createMulti(
           List<CircleAnnotationOptions> annotations) =>
-      messager.createMulti(id, annotations);
+      messenger.createMulti(id, annotations);
 
   /// Update an added annotation with new properties.
   Future<void> update(CircleAnnotation annotation) =>
-      messager.update(id, annotation);
+      messenger.update(id, annotation);
 
   /// Delete an added annotation.
   Future<void> delete(CircleAnnotation annotation) =>
-      messager.delete(id, annotation);
+      messenger.delete(id, annotation);
 
   /// Delete all the annotation added by this manager.
-  Future<void> deleteAll() => messager.deleteAll(id);
+  Future<void> deleteAll() => messenger.deleteAll(id);
+
+  /// Controls the intensity of light emitted on the source features.
+  Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
+      messenger.setCircleEmissiveStrength(id, circleEmissiveStrength);
+
+  /// Controls the intensity of light emitted on the source features.
+  Future<double?> getCircleEmissiveStrength() =>
+      messenger.getCircleEmissiveStrength(id);
 
   /// Orientation of circle when map is pitched.
   Future<void> setCirclePitchAlignment(
           CirclePitchAlignment circlePitchAlignment) =>
-      messager.setCirclePitchAlignment(id, circlePitchAlignment);
+      messenger.setCirclePitchAlignment(id, circlePitchAlignment);
 
   /// Orientation of circle when map is pitched.
   Future<CirclePitchAlignment?> getCirclePitchAlignment() =>
-      messager.getCirclePitchAlignment(id).then(
-          (value) => value != null ? CirclePitchAlignment.values[value] : null);
+      messenger.getCirclePitchAlignment(id);
 
   /// Controls the scaling behavior of the circle when the map is pitched.
   Future<void> setCirclePitchScale(CirclePitchScale circlePitchScale) =>
-      messager.setCirclePitchScale(id, circlePitchScale);
+      messenger.setCirclePitchScale(id, circlePitchScale);
 
   /// Controls the scaling behavior of the circle when the map is pitched.
-  Future<CirclePitchScale?> getCirclePitchScale() => messager
-      .getCirclePitchScale(id)
-      .then((value) => value != null ? CirclePitchScale.values[value] : null);
+  Future<CirclePitchScale?> getCirclePitchScale() =>
+      messenger.getCirclePitchScale(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   Future<void> setCircleTranslate(List<double?> circleTranslate) =>
-      messager.setCircleTranslate(id, circleTranslate);
+      messenger.setCircleTranslate(id, circleTranslate);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   Future<List<double?>?> getCircleTranslate() =>
-      messager.getCircleTranslate(id);
+      messenger.getCircleTranslate(id);
 
   /// Controls the frame of reference for `circle-translate`.
   Future<void> setCircleTranslateAnchor(
           CircleTranslateAnchor circleTranslateAnchor) =>
-      messager.setCircleTranslateAnchor(id, circleTranslateAnchor);
+      messenger.setCircleTranslateAnchor(id, circleTranslateAnchor);
 
   /// Controls the frame of reference for `circle-translate`.
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
-      messager.getCircleTranslateAnchor(id).then((value) =>
-          value != null ? CircleTranslateAnchor.values[value] : null);
+      messenger.getCircleTranslateAnchor(id);
 }
 // End of generated file.

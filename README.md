@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter Plugin
 
-The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v10.13.0). It is currently in beta, but can be used in production. The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS. 
+The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.2.0). The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -45,9 +45,9 @@ Contributions welcome!
 
 The Maps Flutter Plugin is compatible with applications:
 
-- Deployed on iOS 11 or higher
+- Deployed on iOS 12 or higher
 - Built using the Android SDK 21 or higher
-- Built using the Dart SDK 2.17.1 or higher
+- Built using the Dart SDK 3.0.0 or higher
 
 ## Installation
 
@@ -69,11 +69,9 @@ To access platform SDKs you will need to create a secret access token with the `
 ```
 
 #### Public token
-To instantiate the `MapWidget` widget pass the public access token with `ResourceOptions`:
+You can set the access token for Mapbox Maps Flutter Plugin(as well as for evey Mapbox SDK) via `MapboxOptions`:
 ```
-  MapWidget(
-    resourceOptions:
-        ResourceOptions(accessToken: PUBLIC_ACCESS_TOKEN))));
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
 
 It's a good practice to retrieve access tokens from some external source.
@@ -104,7 +102,7 @@ You can also persist token in launch.json :
 
 Then to retrieve the token from the environment in the application :
 ```
-String ACCESS_TOKEN = String.fromEnvironment("PUBLIC_ACCESS_TOKEN");
+String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 ```
 
 ### Add the dependency
@@ -112,7 +110,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^0.4.4
+  mapbox_maps_flutter: ^1.1.0
 ```
 
 ### Configure permissions
@@ -144,14 +142,12 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 void main() {
-  runApp(MaterialApp(
-      home: MapWidget(
-          resourceOptions: ResourceOptions(accessToken: YOUR_ACCESS_TOKEN))));
+  runApp(MaterialApp(home: MapWidget()));
 }
 ```
 
 #### MapWidget widget
-The `MapWidget` widget provides options to customize the map - you can set `ResourceOptions`, `MapOptions`, `CameraOptions`, `styleURL`.
+The `MapWidget` widget provides options to customize the map - you can set `MapOptions`, `CameraOptions`, `styleURL` etc.
 
 It also allows or add listeners for various events - related to style loading, map rendering, map loading. 
 
@@ -161,7 +157,7 @@ The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` ca
 `MapboxMap` exposes an entry point to the most of the APIs Maps Flutter Plugin provides. It allows to control the map, camera, styles, observe map events, 
 query rendered features, etc.
 
-It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/10.8.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/10.8.1/Classes/MapboxMap.html) counterparts.
+It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.2.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.2.0/documentation/mapboxmaps/mapboxmap) counterparts.
 
 To interact with the map after it's created store the MapboxMap object somewhere : 
 ```
@@ -184,7 +180,6 @@ class FullMapState extends State<FullMap> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: ACCESS_TOKEN),
       onMapCreated: _onMapCreated,
     ));
   }
@@ -288,7 +283,6 @@ You can set the starting camera position using `MapWidget.cameraOptions` :
 ```
 MapWidget(
   key: ValueKey("mapWidget"),
-  resourceOptions: ResourceOptions(accessToken: ACCESS_TOKEN),
   cameraOptions: CameraOptions(
       center: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
       zoom: 12.0),

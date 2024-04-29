@@ -8,10 +8,6 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('create PolylineAnnotation', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -26,6 +22,8 @@ void main() {
       lineJoin: LineJoin.BEVEL,
       lineSortKey: 1.0,
       lineBlur: 1.0,
+      lineBorderColor: Colors.red.value,
+      lineBorderWidth: 1.0,
       lineColor: Colors.red.value,
       lineGapWidth: 1.0,
       lineOffset: 1.0,
@@ -44,6 +42,8 @@ void main() {
     expect(LineJoin.BEVEL, annotation.lineJoin);
     expect(1.0, annotation.lineSortKey);
     expect(1.0, annotation.lineBlur);
+    expect(Colors.red.value, annotation.lineBorderColor);
+    expect(1.0, annotation.lineBorderWidth);
     expect(Colors.red.value, annotation.lineColor);
     expect(1.0, annotation.lineGapWidth);
     expect(1.0, annotation.lineOffset);
@@ -80,7 +80,6 @@ void main() {
     }
 
     await manager.deleteAll();
-    await addDelay(1000);
   });
 }
 // End of generated file.

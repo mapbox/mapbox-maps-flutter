@@ -2,21 +2,20 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - mapbox_maps_flutter (0.4.4):
+  - mapbox_maps_flutter (1.1.0):
     - Flutter
-    - MapboxMaps (~> 10.13.1)
-  - MapboxCommon (23.5.0)
-  - MapboxCoreMaps (10.13.1):
-    - MapboxCommon (~> 23.5)
-  - MapboxMaps (10.13.1):
-    - MapboxCommon (= 23.5.0)
-    - MapboxCoreMaps (= 10.13.1)
-    - MapboxMobileEvents (= 1.0.10)
-    - Turf (~> 2.0)
-  - MapboxMobileEvents (1.0.10)
-  - permission_handler_apple (9.0.4):
+    - MapboxMaps (~> 11.3.0)
+    - Turf (= 2.8.0)
+  - MapboxCommon (24.3.1)
+  - MapboxCoreMaps (11.3.0):
+    - MapboxCommon (~> 24.3)
+  - MapboxMaps (11.3.0):
+    - MapboxCommon (= 24.3.1)
+    - MapboxCoreMaps (= 11.3.0)
+    - Turf (= 2.8.0)
+  - permission_handler_apple (9.1.1):
     - Flutter
-  - Turf (2.6.1)
+  - Turf (2.8.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -29,7 +28,6 @@ SPEC REPOS:
     - MapboxCommon
     - MapboxCoreMaps
     - MapboxMaps
-    - MapboxMobileEvents
     - Turf
 
 EXTERNAL SOURCES:
@@ -43,16 +41,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
-  mapbox_maps_flutter: b7750303639682268cc7f487bfc6f474a456acab
-  MapboxCommon: fdf7fd31c90b7b607cd9c63e37797f023c01d860
-  MapboxCoreMaps: 24270c7c6b8cb71819fc2f3c549db9620ee4d019
-  MapboxMaps: cb76511b98d3b95c74b0771ed105bc69f30ace6b
-  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  Turf: 469ce2c3d22e5e8e4818d5a3b254699a5c89efa4
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+  mapbox_maps_flutter: fe398def5810ab550d0022cb8be6cdbbfe59cbd0
+  MapboxCommon: e6d0d15f1e34278e21bae28bdc548d378757b51e
+  MapboxCoreMaps: 0e3eab0bd5787e833d48261fa1d01f356d6c4ad8
+  MapboxMaps: 5aba2ba70a85d08e0ea00ad011ca3d2965e69a59
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
 
-PODFILE CHECKSUM: 04c8a50f0eb98e8e64bc4237a0712e89ba6c14b8
+PODFILE CHECKSUM: e9395e37b54f3250ebce302f8de7800b2ba2b828
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2
