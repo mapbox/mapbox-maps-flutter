@@ -29,18 +29,19 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
     var data = await rootBundle
         .loadString('assets/from_crema_to_council_crest.geojson');
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
-    await mapboxMap.style.addLayer(SymbolLayer(
+    await mapboxMap.style.addLayer(LineLayer(
         id: "line_layer",
         sourceId: "line",
-        symbolPlacement: SymbolPlacement.LINE,
-        iconImage: "car",
-        symbolSpacing: 10));
+        lineJoin: LineJoin.ROUND,
+        lineCap: LineCap.ROUND,
+        lineColor: Colors.red.value,
+        lineWidth:  6.0));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: MapWidget(
+      body: MapWidget(
       key: ValueKey("mapWidget"),
       styleUri: MapboxStyles.MAPBOX_STREETS,
       cameraOptions: CameraOptions(
