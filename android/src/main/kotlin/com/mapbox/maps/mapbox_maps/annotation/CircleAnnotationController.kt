@@ -1,96 +1,98 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
-import com.mapbox.maps.extension.style.layers.properties.generated.*
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toMap
 import com.mapbox.maps.mapbox_maps.toPoint
-import com.mapbox.maps.pigeons.FLTCircleAnnotationMessager
-import com.mapbox.maps.plugin.annotation.generated.CircleAnnotation
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
+import toCirclePitchAlignment
+import toCirclePitchScale
+import toCircleTranslateAnchor
+import toFLTCirclePitchAlignment
+import toFLTCirclePitchScale
+import toFLTCircleTranslateAnchor
 
-class CircleAnnotationController(private val delegate: ControllerDelegate) :
-  FLTCircleAnnotationMessager._CircleAnnotationMessager {
-  private val annotationMap = mutableMapOf<String, CircleAnnotation>()
+class CircleAnnotationController(private val delegate: ControllerDelegate) : _CircleAnnotationMessenger {
+  private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.CircleAnnotation>()
   private val managerCreateAnnotationMap = mutableMapOf<String, MutableList<String>>()
 
   override fun create(
     managerId: String,
-    annotationOption: FLTCircleAnnotationMessager.CircleAnnotationOptions,
-    result: FLTCircleAnnotationMessager.Result<FLTCircleAnnotationMessager.CircleAnnotation>?
+    annotationOption: CircleAnnotationOptions,
+    callback: (Result<CircleAnnotation>) -> Unit
   ) {
     try {
       val manager = delegate.getManager(managerId) as CircleAnnotationManager
       val annotation = manager.create(annotationOption.toCircleAnnotationOptions())
-      annotationMap[annotation.id.toString()] = annotation
+      annotationMap[annotation.id] = annotation
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id.toString())
+        managerCreateAnnotationMap[managerId] = mutableListOf(annotation.id)
       } else {
-        managerCreateAnnotationMap[managerId]!!.add(annotation.id.toString())
+        managerCreateAnnotationMap[managerId]!!.add(annotation.id)
       }
-      result?.success(annotation.toFLTCircleAnnotation())
+      callback(Result.success(annotation.toFLTCircleAnnotation()))
     } catch (e: Exception) {
-      result?.error(e)
+      callback(Result.failure(e))
     }
   }
 
   override fun createMulti(
     managerId: String,
-    annotationOptions: MutableList<FLTCircleAnnotationMessager.CircleAnnotationOptions>,
-    result: FLTCircleAnnotationMessager.Result<MutableList<FLTCircleAnnotationMessager.CircleAnnotation>>?
+    annotationOptions: List<CircleAnnotationOptions>,
+    callback: (Result<List<CircleAnnotation>>) -> Unit
   ) {
     try {
       val manager = delegate.getManager(managerId) as CircleAnnotationManager
       val annotations = manager.create(annotationOptions.map { it.toCircleAnnotationOptions() })
       annotations.forEach {
-        annotationMap[it.id.toString()] = it
+        annotationMap[it.id] = it
       }
       if (managerCreateAnnotationMap[managerId].isNullOrEmpty()) {
-        managerCreateAnnotationMap[managerId] = annotations.map { it.id.toString() }.toMutableList()
+        managerCreateAnnotationMap[managerId] = annotations.map { it.id }.toMutableList()
       } else {
         managerCreateAnnotationMap[managerId]!!.addAll(
-          annotations.map { it.id.toString() }
+          annotations.map { it.id }
             .toList()
         )
       }
-      result?.success(annotations.map { it.toFLTCircleAnnotation() }.toMutableList())
+      callback(Result.success(annotations.map { it.toFLTCircleAnnotation() }.toMutableList()))
     } catch (e: Exception) {
-      result?.error(e)
+      callback(Result.failure(e))
     }
   }
 
   override fun update(
     managerId: String,
-    annotation: FLTCircleAnnotationMessager.CircleAnnotation,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    annotation: CircleAnnotation,
+    callback: (Result<Unit>) -> Unit
   ) {
     try {
       val manager = delegate.getManager(managerId) as CircleAnnotationManager
 
       if (!annotationMap.containsKey(annotation.id)) {
-        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        callback(Result.failure(Throwable("Annotation has not been added on the map: $annotation.")))
         return
       }
       val originalAnnotation = updateAnnotation(annotation)
 
       manager.update(originalAnnotation)
       annotationMap[annotation.id] = originalAnnotation
-      result?.success(null)
+      callback(Result.success(Unit))
     } catch (e: Exception) {
-      result?.error(e)
+      callback(Result.failure(e))
     }
   }
 
   override fun delete(
     managerId: String,
-    annotation: FLTCircleAnnotationMessager.CircleAnnotation,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    annotation: CircleAnnotation,
+    callback: (Result<Unit>) -> Unit
   ) {
     try {
       val manager = delegate.getManager(managerId) as CircleAnnotationManager
 
       if (!annotationMap.containsKey(annotation.id)) {
-        result?.error(Throwable("Annotation has not been added on the map: $annotation."))
+        callback(Result.failure(Throwable("Annotation has not been added on the map: $annotation.")))
         return
       }
 
@@ -99,13 +101,13 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
       )
       annotationMap.remove(annotation.id)
       managerCreateAnnotationMap[managerId]?.remove(annotation.id)
-      result?.success(null)
+      callback(Result.success(Unit))
     } catch (e: Exception) {
-      result?.error(e)
+      callback(Result.failure(e))
     }
   }
 
-  override fun deleteAll(managerId: String, result: FLTCircleAnnotationMessager.Result<Void>?) {
+  override fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit) {
     try {
       val manager = delegate.getManager(managerId) as CircleAnnotationManager
       managerCreateAnnotationMap[managerId]?.apply {
@@ -113,13 +115,13 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
         clear()
       }
       manager.deleteAll()
-      result?.success(null)
+      callback(Result.success(Unit))
     } catch (e: Exception) {
-      result?.error(e)
+      callback(Result.failure(e))
     }
   }
 
-  private fun updateAnnotation(annotation: FLTCircleAnnotationMessager.CircleAnnotation): CircleAnnotation {
+  private fun updateAnnotation(annotation: CircleAnnotation): com.mapbox.maps.plugin.annotation.generated.CircleAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {
       originalAnnotation.geometry = it.toPoint()
@@ -151,134 +153,136 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) :
     return originalAnnotation
   }
 
-  override fun setCirclePitchAlignment(
+  override fun setCircleEmissiveStrength(
     managerId: String,
-    circlePitchAlignment: FLTCircleAnnotationMessager.CirclePitchAlignment,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    circleEmissiveStrength: Double,
+    callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circlePitchAlignment = CirclePitchAlignment.values()[circlePitchAlignment.ordinal]
-    result?.success(null)
+    manager.circleEmissiveStrength = circleEmissiveStrength
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleEmissiveStrength(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    if (manager.circleEmissiveStrength != null) {
+      callback(Result.success(manager.circleEmissiveStrength!!))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCirclePitchAlignment(
+    managerId: String,
+    circlePitchAlignment: CirclePitchAlignment,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circlePitchAlignment = circlePitchAlignment.toCirclePitchAlignment()
+    callback(Result.success(Unit))
   }
 
   override fun getCirclePitchAlignment(
     managerId: String,
-    result: FLTCircleAnnotationMessager.Result<Long>?
+    callback: (Result<CirclePitchAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
     if (manager.circlePitchAlignment != null) {
-      result?.success(manager.circlePitchAlignment!!.ordinal.toLong())
+      callback(Result.success(manager.circlePitchAlignment!!.toFLTCirclePitchAlignment()))
     } else {
-      result?.success(null)
+      callback(Result.success(null))
     }
   }
 
   override fun setCirclePitchScale(
     managerId: String,
-    circlePitchScale: FLTCircleAnnotationMessager.CirclePitchScale,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    circlePitchScale: CirclePitchScale,
+    callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circlePitchScale = CirclePitchScale.values()[circlePitchScale.ordinal]
-    result?.success(null)
+    manager.circlePitchScale = circlePitchScale.toCirclePitchScale()
+    callback(Result.success(Unit))
   }
 
   override fun getCirclePitchScale(
     managerId: String,
-    result: FLTCircleAnnotationMessager.Result<Long>?
+    callback: (Result<CirclePitchScale?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
     if (manager.circlePitchScale != null) {
-      result?.success(manager.circlePitchScale!!.ordinal.toLong())
+      callback(Result.success(manager.circlePitchScale!!.toFLTCirclePitchScale()))
     } else {
-      result?.success(null)
+      callback(Result.success(null))
     }
   }
 
   override fun setCircleTranslate(
     managerId: String,
-    circleTranslate: List<Double>,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    circleTranslate: List<Double?>,
+    callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circleTranslate = circleTranslate
-    result?.success(null)
+    manager.circleTranslate = circleTranslate.mapNotNull { it }
+    callback(Result.success(Unit))
   }
 
   override fun getCircleTranslate(
     managerId: String,
-    result: FLTCircleAnnotationMessager.Result<List<Double>>?
+    callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
     if (manager.circleTranslate != null) {
-      result?.success(manager.circleTranslate!!)
+      callback(Result.success(manager.circleTranslate!!))
     } else {
-      result?.success(null)
+      callback(Result.success(null))
     }
   }
 
   override fun setCircleTranslateAnchor(
     managerId: String,
-    circleTranslateAnchor: FLTCircleAnnotationMessager.CircleTranslateAnchor,
-    result: FLTCircleAnnotationMessager.Result<Void>?
+    circleTranslateAnchor: CircleTranslateAnchor,
+    callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circleTranslateAnchor = CircleTranslateAnchor.values()[circleTranslateAnchor.ordinal]
-    result?.success(null)
+    manager.circleTranslateAnchor = circleTranslateAnchor.toCircleTranslateAnchor()
+    callback(Result.success(Unit))
   }
 
   override fun getCircleTranslateAnchor(
     managerId: String,
-    result: FLTCircleAnnotationMessager.Result<Long>?
+    callback: (Result<CircleTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
     if (manager.circleTranslateAnchor != null) {
-      result?.success(manager.circleTranslateAnchor!!.ordinal.toLong())
+      callback(Result.success(manager.circleTranslateAnchor!!.toFLTCircleTranslateAnchor()))
     } else {
-      result?.success(null)
+      callback(Result.success(null))
     }
   }
 }
 
-fun CircleAnnotation.toFLTCircleAnnotation(): FLTCircleAnnotationMessager.CircleAnnotation {
-  val builder = FLTCircleAnnotationMessager.CircleAnnotation.Builder()
-  builder.setId(this.id.toString())
-
-  this.geometry.let {
-    builder.setGeometry(it.toMap())
-  }
-  this.circleSortKey?.let {
-    builder.setCircleSortKey(it)
-  }
-  this.circleBlur?.let {
-    builder.setCircleBlur(it)
-  }
-  this.circleColorInt?.let {
+fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnnotation(): CircleAnnotation {
+  return CircleAnnotation(
+    id = id,
+    geometry = geometry.toMap(),
+    circleSortKey = circleSortKey,
+    circleBlur = circleBlur,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
-    builder.setCircleColor(it.toUInt().toLong())
-  }
-  this.circleOpacity?.let {
-    builder.setCircleOpacity(it)
-  }
-  this.circleRadius?.let {
-    builder.setCircleRadius(it)
-  }
-  this.circleStrokeColorInt?.let {
+    circleColor = circleColorInt?.toUInt()?.toLong(),
+    circleOpacity = circleOpacity,
+    circleRadius = circleRadius,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
-    builder.setCircleStrokeColor(it.toUInt().toLong())
-  }
-  this.circleStrokeOpacity?.let {
-    builder.setCircleStrokeOpacity(it)
-  }
-  this.circleStrokeWidth?.let {
-    builder.setCircleStrokeWidth(it)
-  }
-
-  return builder.build()
+    circleStrokeColor = circleStrokeColorInt?.toUInt()?.toLong(),
+    circleStrokeOpacity = circleStrokeOpacity,
+    circleStrokeWidth = circleStrokeWidth,
+  )
 }
 
-fun FLTCircleAnnotationMessager.CircleAnnotationOptions.toCircleAnnotationOptions(): CircleAnnotationOptions {
-  val options = CircleAnnotationOptions()
+fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions {
+  val options = com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions()
   this.geometry?.let {
     options.withPoint(it.toPoint())
   }

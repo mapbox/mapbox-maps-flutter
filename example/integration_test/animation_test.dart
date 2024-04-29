@@ -8,10 +8,6 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
-
   testWidgets('easeTo', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
@@ -24,12 +20,11 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
-    await addDelay(1000);
   });
 
   testWidgets('flyTo', (WidgetTester tester) async {
@@ -44,12 +39,11 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
-    await addDelay(1000);
   });
 
   if (Platform.isAndroid) {
@@ -98,12 +92,11 @@ void main() {
                 coordinates: Position(
               -0.11968,
               51.50325,
-            )).toJson(),
+            )),
             zoom: 15,
             bearing: 0,
             pitch: 3),
         MapAnimationOptions(duration: 2000, startDelay: 0));
     mapboxMap.cancelCameraAnimation();
-    await addDelay(1000);
   });
 }

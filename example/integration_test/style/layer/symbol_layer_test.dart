@@ -6,20 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
-import 'package:turf/helpers.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> addDelay(int ms) async {
-    await Future<void>.delayed(Duration(milliseconds: ms));
-  }
 
   testWidgets('Add SymbolLayer', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await addDelay(1000);
 
     final point = Point(coordinates: Position(-77.032667, 38.913175));
     await mapboxMap.style
@@ -31,6 +25,7 @@ void main() {
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
+      slot: LayerSlot.BOTTOM,
       iconAllowOverlap: true,
       iconAnchor: IconAnchor.CENTER,
       iconIgnorePlacement: true,
@@ -49,6 +44,7 @@ void main() {
       symbolPlacement: SymbolPlacement.POINT,
       symbolSortKey: 1.0,
       symbolSpacing: 1.0,
+      symbolZElevate: true,
       symbolZOrder: SymbolZOrder.AUTO,
       textAllowOverlap: true,
       textAnchor: TextAnchor.CENTER,
@@ -72,13 +68,17 @@ void main() {
       textVariableAnchor: ["center", "left"],
       textWritingMode: ["horizontal", "vertical"],
       iconColor: Colors.red.value,
+      iconColorSaturation: 1.0,
+      iconEmissiveStrength: 1.0,
       iconHaloBlur: 1.0,
       iconHaloColor: Colors.red.value,
       iconHaloWidth: 1.0,
+      iconImageCrossFade: 1.0,
       iconOpacity: 1.0,
       iconTranslate: [0.0, 1.0],
       iconTranslateAnchor: IconTranslateAnchor.MAP,
       textColor: Colors.red.value,
+      textEmissiveStrength: 1.0,
       textHaloBlur: 1.0,
       textHaloColor: Colors.red.value,
       textHaloWidth: 1.0,
@@ -90,6 +90,7 @@ void main() {
     expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
+    expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
     expect(layer.iconAllowOverlap, true);
     expect(layer.iconAnchor, IconAnchor.CENTER);
@@ -109,6 +110,7 @@ void main() {
     expect(layer.symbolPlacement, SymbolPlacement.POINT);
     expect(layer.symbolSortKey, 1.0);
     expect(layer.symbolSpacing, 1.0);
+    expect(layer.symbolZElevate, true);
     expect(layer.symbolZOrder, SymbolZOrder.AUTO);
     expect(layer.textAllowOverlap, true);
     expect(layer.textAnchor, TextAnchor.CENTER);
@@ -132,13 +134,17 @@ void main() {
     expect(layer.textVariableAnchor, ["center", "left"]);
     expect(layer.textWritingMode, ["horizontal", "vertical"]);
     expect(layer.iconColor, Colors.red.value);
+    expect(layer.iconColorSaturation, 1.0);
+    expect(layer.iconEmissiveStrength, 1.0);
     expect(layer.iconHaloBlur, 1.0);
     expect(layer.iconHaloColor, Colors.red.value);
     expect(layer.iconHaloWidth, 1.0);
+    expect(layer.iconImageCrossFade, 1.0);
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
     expect(layer.textColor, Colors.red.value);
+    expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColor, Colors.red.value);
     expect(layer.textHaloWidth, 1.0);

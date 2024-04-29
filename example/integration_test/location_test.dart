@@ -42,33 +42,33 @@ void main() {
         puckBearingEnabled: true,
         layerAbove: "layer-above",
         layerBelow: "layer-below",
-        puckBearingSource: PuckBearingSource.COURSE,
+        puckBearing: PuckBearing.COURSE,
         locationPuck: LocationPuck(
             locationPuck2D: LocationPuck2D(
                 bearingImage: list,
                 topImage: list,
                 shadowImage: list,
-                scaleExpression: expression)));
+                scaleExpression: expression,
+                opacity: 0.5)));
 
     location.updateSettings(settings);
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);
+    expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
+    expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
+    expect(updatedSettings.pulsingColor, settings.pulsingColor);
     if (Platform.isAndroid) {
-      expect(updatedSettings.pulsingEnabled, settings.pulsingEnabled);
-      expect(updatedSettings.pulsingMaxRadius, settings.pulsingMaxRadius);
-      // FIXME colors are parsed incorrectly
-      // expect(updatedSettings.pulsingColor, settings.pulsingColor);
       expect(updatedSettings.layerAbove, settings.layerAbove);
       expect(updatedSettings.layerBelow, settings.layerBelow);
     }
     expect(updatedSettings.puckBearingEnabled, settings.puckBearingEnabled);
-    expect(updatedSettings.puckBearingSource, settings.puckBearingSource);
+    expect(updatedSettings.puckBearing, settings.puckBearing);
     expect(updatedSettings.showAccuracyRing, settings.showAccuracyRing);
     // FIXME bitmaps are decoded incorrectly for some reason
-    // expect(updatedSettings.accuracyRingBorderColor,
-    //     settings.accuracyRingBorderColor);
-    // expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
+    expect(updatedSettings.accuracyRingBorderColor,
+        settings.accuracyRingBorderColor);
+    expect(updatedSettings.accuracyRingColor, settings.accuracyRingColor);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.bearingImage,
     //     settings.locationPuck?.locationPuck2D?.bearingImage);
     // expect(updatedSettings.locationPuck?.locationPuck2D?.topImage,
@@ -77,6 +77,8 @@ void main() {
     //     settings.locationPuck?.locationPuck2D?.bearingImage);
     expect(updatedSettings.locationPuck?.locationPuck2D?.scaleExpression,
         settings.locationPuck?.locationPuck2D?.scaleExpression);
+    expect(updatedSettings.locationPuck?.locationPuck2D?.opacity,
+        settings.locationPuck?.locationPuck2D?.opacity);
   });
 
   testWidgets('Location is updated puck 3d', (WidgetTester tester) async {
@@ -101,7 +103,7 @@ void main() {
 
     final settings = LocationComponentSettings(
         enabled: true,
-        puckBearingSource: PuckBearingSource.COURSE,
+        puckBearing: PuckBearing.COURSE,
         locationPuck: LocationPuck(
             locationPuck3D: LocationPuck3D(
                 modelUri:

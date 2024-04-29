@@ -100,11 +100,14 @@ typedef void OnStyleImageMissingListener(
 typedef void OnStyleImageUnusedListener(
     StyleImageUnusedEventData styleImageUnusedEventData);
 
+/// Definition for listener invoked when the map makes a resource request.
+typedef void OnResourceRequestListener(ResourceEventData resourceEventData);
+
 /// Gesture listener called on map tap.
-typedef void OnMapTapListener(ScreenCoordinate coordinate);
+typedef void OnMapTapListener(MapContentGestureContext context);
 
 /// Gesture listener called on map double tap.
-typedef void OnMapLongTapListener(ScreenCoordinate coordinate);
+typedef void OnMapLongTapListener(MapContentGestureContext context);
 
 /// Gesture listener called on map scroll.
-typedef void OnMapScrollListener(ScreenCoordinate coordinate);
+typedef void OnMapScrollListener(MapContentGestureContext context);

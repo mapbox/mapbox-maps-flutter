@@ -1,5 +1,33 @@
 part of mapbox_maps_flutter;
 
+/// A mode for platform MapView to be hosted in Flutter on Android platform.
+///
+/// As per https://github.com/flutter/flutter/wiki/Android-Platform-Views#selecting-a-mode
+@experimental
+enum AndroidPlatformViewHostingMode {
+  /// Texture Layer Hybrid Composition with fallback to Virtual Display,
+  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
+  TLHC_VD,
+
+  /// Use Texture Layer Hybrid Composition hosting mode with fallback to Hybrid Composition,
+  /// when the current SDK version is <23 or [MapWidget.textureView] is `false`.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Texture-Layer-Hybrid-Composition
+  TLHC_HC,
+
+  /// Always use Hybrid Composition hosting mode.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Hybrid-Composition
+  HC,
+
+  /// Always use Virtual Display hosting mode.
+  ///
+  /// https://github.com/flutter/flutter/wiki/Virtual-Display
+  VD,
+}
+
 /// A MapWidget provides an embeddable map interface.
 /// You use this class to display map information and to manipulate the map contents from your application.
 /// You can center the map on a given coordinate, specify the size of the area you want to display,
@@ -13,13 +41,13 @@ part of mapbox_maps_flutter;
 class MapWidget extends StatefulWidget {
   MapWidget({
     Key? key,
-    required this.resourceOptions,
     this.mapOptions,
     this.cameraOptions,
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
     this.textureView = true,
-    this.styleUri,
+    this.androidHostingMode = AndroidPlatformViewHostingMode.HC,
+    this.styleUri = MapboxStyles.STANDARD,
     this.gestureRecognizers,
     this.onMapCreated,
     this.onStyleLoadedListener,
@@ -35,53 +63,54 @@ class MapWidget extends StatefulWidget {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
     this.onStyleImageUnusedListener,
+    this.onResourceRequestListener,
     this.onTapListener,
     this.onLongTapListener,
     this.onScrollListener,
   }) : super(key: key) {
     if (onStyleLoadedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_LOADED);
+      _eventTypes.add(_MapEvent.styleLoaded);
     }
     if (onCameraChangeListener != null) {
-      _eventTypes.add(MapEvents.CAMERA_CHANGED);
+      _eventTypes.add(_MapEvent.cameraChanged);
     }
     if (onMapIdleListener != null) {
-      _eventTypes.add(MapEvents.MAP_IDLE);
+      _eventTypes.add(_MapEvent.mapIdle);
     }
     if (onMapLoadedListener != null) {
-      _eventTypes.add(MapEvents.MAP_LOADED);
+      _eventTypes.add(_MapEvent.mapLoaded);
     }
     if (onMapLoadErrorListener != null) {
-      _eventTypes.add(MapEvents.MAP_LOADING_ERROR);
+      _eventTypes.add(_MapEvent.mapLoadingError);
     }
     if (onRenderFrameFinishedListener != null) {
-      _eventTypes.add(MapEvents.RENDER_FRAME_FINISHED);
+      _eventTypes.add(_MapEvent.renderFrameFinished);
     }
     if (onRenderFrameStartedListener != null) {
-      _eventTypes.add(MapEvents.RENDER_FRAME_STARTED);
+      _eventTypes.add(_MapEvent.renderFrameStarted);
     }
     if (onSourceAddedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_ADDED);
+      _eventTypes.add(_MapEvent.sourceAdded);
     }
     if (onSourceDataLoadedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_DATA_LOADED);
+      _eventTypes.add(_MapEvent.sourceDataLoaded);
     }
     if (onSourceRemovedListener != null) {
-      _eventTypes.add(MapEvents.SOURCE_REMOVED);
+      _eventTypes.add(_MapEvent.sourceRemoved);
     }
     if (onStyleDataLoadedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_DATA_LOADED);
+      _eventTypes.add(_MapEvent.styleDataLoaded);
     }
     if (onStyleImageMissingListener != null) {
-      _eventTypes.add(MapEvents.STYLE_IMAGE_MISSING);
+      _eventTypes.add(_MapEvent.styleImageMissing);
     }
     if (onStyleImageUnusedListener != null) {
-      _eventTypes.add(MapEvents.STYLE_IMAGE_REMOVE_UNUSED);
+      _eventTypes.add(_MapEvent.styleImageRemoveUnused);
+    }
+    if (onResourceRequestListener != null) {
+      _eventTypes.add(_MapEvent.resourceRequest);
     }
   }
-
-  /// Resource options when using a MapWidget. Access token required when using a Mapbox service. Please see [https://www.mapbox.com/help/create-api-access-token/](https://www.mapbox.com/help/create-api-access-token/) to learn how to create one.More information in this guide [https://www.mapbox.com/help/first-steps-android-sdk/#access-tokens](https://www.mapbox.com/help/first-steps-android-sdk/#access-tokens).
-  final ResourceOptions resourceOptions;
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -95,8 +124,13 @@ class MapWidget extends StatefulWidget {
   /// As a workaround default is true.
   final bool? textureView;
 
+  /// Controls the way the underlaying MapView is being hosted by Flutter on Android.
+  /// This setting has no effect on iOS.
+  @experimental
+  final AndroidPlatformViewHostingMode androidHostingMode;
+
   /// The styleUri will applied for the MapWidget in the onStart lifecycle event if no style is set. Default is [Style.MAPBOX_STREETS].
-  final String? styleUri;
+  final String styleUri;
 
   /// Invoked when a new Map is created and return a MapboxMap instance to handle the Map.
   final MapCreatedCallback? onMapCreated;
@@ -146,6 +180,9 @@ class MapWidget extends StatefulWidget {
   /// Invoked whenever an image added to the Style is no longer needed and can be removed using StyleManager#removeStyleImage method.
   final OnStyleImageUnusedListener? onStyleImageUnusedListener;
 
+  /// Invoked when map makes a request to load required resources.
+  final OnResourceRequestListener? onResourceRequestListener;
+
   /// Which gestures should be consumed by the map.
   ///
   /// It is possible for other gesture recognizers to be competing with the map on pointer
@@ -158,7 +195,7 @@ class MapWidget extends StatefulWidget {
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   final _mapWidgetState = _MapWidgetState();
-  final _eventTypes = [];
+  final List<_MapEvent> _eventTypes = [];
 
   final OnMapTapListener? onTapListener;
   final OnMapLongTapListener? onLongTapListener;
@@ -182,16 +219,15 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = <String, dynamic>{
-      'resourceOptions': widget.resourceOptions.encode(),
       'mapOptions': widget.mapOptions?.encode(),
       'cameraOptions': widget.cameraOptions?.encode(),
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
-      'eventTypes': widget._eventTypes,
-      'mapboxPluginVersion': '0.4.4'
+      'eventTypes': widget._eventTypes.map((e) => e.index).toList(),
+      'mapboxPluginVersion': '1.1.0'
     };
 
-    return _mapboxMapsPlatform.buildView(
+    return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
         creationParams, onPlatformViewCreated, widget.gestureRecognizers);
   }
 
@@ -231,6 +267,7 @@ class _MapWidgetState extends State<MapWidget> {
       onStyleDataLoadedListener: widget.onStyleDataLoadedListener,
       onStyleImageMissingListener: widget.onStyleImageMissingListener,
       onStyleImageUnusedListener: widget.onStyleImageUnusedListener,
+      onResourceRequestListener: widget.onResourceRequestListener,
       onMapTapListener: widget.onTapListener,
       onMapLongTapListener: widget.onLongTapListener,
       onMapScrollListener: widget.onScrollListener,

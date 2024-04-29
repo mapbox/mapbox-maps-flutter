@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:turf/helpers.dart';
 
-import 'main.dart';
 import 'page.dart';
 
 class DrawGeoJsonLinePage extends ExamplePage {
@@ -35,7 +33,7 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
         id: "line_layer",
         sourceId: "line",
         symbolPlacement: SymbolPlacement.LINE,
-        iconImage: "car-15",
+        iconImage: "car",
         symbolSpacing: 10));
   }
 
@@ -44,10 +42,9 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
     return new Scaffold(
         body: MapWidget(
       key: ValueKey("mapWidget"),
-      resourceOptions: ResourceOptions(accessToken: MapsDemo.ACCESS_TOKEN),
       styleUri: MapboxStyles.MAPBOX_STREETS,
       cameraOptions: CameraOptions(
-          center: Point(coordinates: Position(-122.486052, 37.830348)).toJson(),
+          center: Point(coordinates: Position(-122.486052, 37.830348)),
           zoom: 14.0),
       onMapCreated: _onMapCreated,
     ));
