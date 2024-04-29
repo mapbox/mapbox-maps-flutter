@@ -44,7 +44,7 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
           size: Size(width: 400, height: 400),
           pixelRatio: MediaQuery.of(context).devicePixelRatio),
     );
-    _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
+    await _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
   }
 
   _onMapIdle(MapIdleEventData data) async {
@@ -65,9 +65,11 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
 
     final snapshot = await _snapshotter?.start();
 
-    setState(() {
-      snapshotImage = snapshot;
-    });
+    if (snapshot != null) {
+      setState(() {
+        snapshotImage = Image.memory(snapshot);
+      });
+    }
     snapshotting = false;
   }
 
