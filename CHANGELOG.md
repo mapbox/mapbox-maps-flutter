@@ -17,7 +17,7 @@ mapboxMap?.location.updateSettings(LocationComponentSettings(
 ```
 ##### Snapshotter
 
-Show multiple maps in at the same time with no performance penalty. With all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
+Show multiple maps at the same time with no performance penalty. With the all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
 
 The `Snapshotter` class is highly configurable. You can set the final result at the time of construction using the `MapSnapshotOptions`. Once you've configured your snapshot, you can start the snapshotting process.
 
@@ -29,9 +29,9 @@ final snapshotter = await Snapshotter.create(
       size: Size(width: 400, height: 400),
       pixelRatio: MediaQuery.of(context).devicePixelRatio),
   onStyleLoadedListener: (_) {
-    // apply runtime styleing
+    // apply runtime styling
     final layer = CircleLayer(id: "circle-layer", sourceId: "poi-source");
-    _snapshotter?.style.addLayer(layer);
+    snapshotter?.style.addLayer(layer);
   },
 );
 snapshotter.style.setStyleURI(MapboxStyles.STANDARD);
