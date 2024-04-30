@@ -304,7 +304,7 @@ class RasterDemSource extends Source {
       }
       if (_encoding != null) {
         properties["encoding"] =
-            _encoding.toString().split('.').last.toLowerCase();
+            _encoding?.name.toLowerCase().replaceAll("_", "-");
       }
       if (_volatile != null) {
         properties["volatile"] = _volatile;

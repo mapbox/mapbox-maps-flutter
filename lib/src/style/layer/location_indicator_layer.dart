@@ -88,7 +88,7 @@ class LocationIndicatorLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (bearingImage != null) {
       layout["bearing-image"] = bearingImage;
@@ -174,11 +174,9 @@ class LocationIndicatorLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       bearingImage: map["layout"]["bearing-image"] is String?
           ? map["layout"]["bearing-image"] as String?

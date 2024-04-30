@@ -68,7 +68,7 @@ class FillLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillSortKey != null) {
       layout["fill-sort-key"] = fillSortKey;
@@ -97,7 +97,7 @@ class FillLayer extends Layer {
     }
     if (fillTranslateAnchor != null) {
       paint["fill-translate-anchor"] =
-          fillTranslateAnchor?.toString().split('.').last.toLowerCase();
+          fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     var properties = {
       "id": id,
@@ -139,11 +139,9 @@ class FillLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       fillSortKey: map["layout"]["fill-sort-key"] is num?
           ? (map["layout"]["fill-sort-key"] as num?)?.toDouble()
@@ -168,11 +166,9 @@ class FillLayer extends Layer {
           .toList(),
       fillTranslateAnchor: map["paint"]["fill-translate-anchor"] == null
           ? null
-          : FillTranslateAnchor.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : FillTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["fill-translate-anchor"])),
     );
   }

@@ -300,7 +300,7 @@ class RasterSource extends Source {
         properties["tileSize"] = _tileSize;
       }
       if (_scheme != null) {
-        properties["scheme"] = _scheme.toString().split('.').last.toLowerCase();
+        properties["scheme"] = _scheme?.name.toLowerCase().replaceAll("_", "-");
       }
       if (_attribution != null) {
         properties["attribution"] = _attribution;
