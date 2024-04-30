@@ -4,11 +4,11 @@ part of mapbox_maps_flutter;
 /// A spherical dome around the map that is always rendered behind all other layers.
 class SkyLayer extends Layer {
   SkyLayer({
-    required id,
-    visibility,
-    minZoom,
-    maxZoom,
-    slot,
+    required String id,
+    Visibility? visibility,
+    double? minZoom,
+    double? maxZoom,
+    String? slot,
     this.skyAtmosphereColor,
     this.skyAtmosphereHaloColor,
     this.skyAtmosphereSun,
