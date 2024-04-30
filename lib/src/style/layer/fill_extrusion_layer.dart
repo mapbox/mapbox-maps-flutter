@@ -124,7 +124,7 @@ class FillExtrusionLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillExtrusionEdgeRadius != null) {
       layout["fill-extrusion-edge-radius"] = fillExtrusionEdgeRadius;
@@ -198,11 +198,8 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-translate"] = fillExtrusionTranslate;
     }
     if (fillExtrusionTranslateAnchor != null) {
-      paint["fill-extrusion-translate-anchor"] = fillExtrusionTranslateAnchor
-          ?.toString()
-          .split('.')
-          .last
-          .toLowerCase();
+      paint["fill-extrusion-translate-anchor"] =
+          fillExtrusionTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (fillExtrusionVerticalGradient != null) {
       paint["fill-extrusion-vertical-gradient"] = fillExtrusionVerticalGradient;
@@ -250,11 +247,9 @@ class FillExtrusionLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       fillExtrusionEdgeRadius: map["layout"]["fill-extrusion-edge-radius"]
               is num?
@@ -347,11 +342,9 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionTranslateAnchor:
           map["paint"]["fill-extrusion-translate-anchor"] == null
               ? null
-              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e
-                  .toString()
-                  .split('.')
-                  .last
+              : FillExtrusionTranslateAnchor.values.firstWhere((e) => e.name
                   .toLowerCase()
+                  .replaceAll("_", "-")
                   .contains(map["paint"]["fill-extrusion-translate-anchor"])),
       fillExtrusionVerticalGradient:
           map["paint"]["fill-extrusion-vertical-gradient"] is bool?

@@ -88,7 +88,7 @@ class RasterLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
     if (rasterArrayBand != null) {
@@ -129,7 +129,7 @@ class RasterLayer extends Layer {
     }
     if (rasterResampling != null) {
       paint["raster-resampling"] =
-          rasterResampling?.toString().split('.').last.toLowerCase();
+          rasterResampling?.name.toLowerCase().replaceAll("_", "-");
     }
     if (rasterSaturation != null) {
       paint["raster-saturation"] = rasterSaturation;
@@ -174,11 +174,9 @@ class RasterLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       rasterArrayBand: map["paint"]["raster-array-band"] is String?
           ? map["paint"]["raster-array-band"] as String?
@@ -216,11 +214,9 @@ class RasterLayer extends Layer {
           : null,
       rasterResampling: map["paint"]["raster-resampling"] == null
           ? null
-          : RasterResampling.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : RasterResampling.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["paint"]["raster-resampling"])),
       rasterSaturation: map["paint"]["raster-saturation"] is num?
           ? (map["paint"]["raster-saturation"] as num?)?.toDouble()

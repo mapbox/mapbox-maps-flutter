@@ -40,7 +40,7 @@ class BackgroundLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
     if (backgroundColor != null) {
@@ -89,11 +89,9 @@ class BackgroundLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
       backgroundEmissiveStrength: map["paint"]["background-emissive-strength"]

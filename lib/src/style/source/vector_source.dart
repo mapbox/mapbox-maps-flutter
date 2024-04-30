@@ -276,7 +276,7 @@ class VectorSource extends Source {
         properties["bounds"] = _bounds;
       }
       if (_scheme != null) {
-        properties["scheme"] = _scheme.toString().split('.').last.toLowerCase();
+        properties["scheme"] = _scheme?.name.toLowerCase().replaceAll("_", "-");
       }
       if (_minzoom != null) {
         properties["minzoom"] = _minzoom;

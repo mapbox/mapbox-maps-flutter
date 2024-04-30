@@ -52,7 +52,7 @@ class HeatmapLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
     if (heatmapColor != null) {
@@ -110,11 +110,9 @@ class HeatmapLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
       heatmapIntensity: map["paint"]["heatmap-intensity"] is num?

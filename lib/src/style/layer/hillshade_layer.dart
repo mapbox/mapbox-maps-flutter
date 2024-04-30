@@ -60,7 +60,7 @@ class HillshadeLayer extends Layer {
     var layout = {};
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.toString().split('.').last.toLowerCase();
+          visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
     if (hillshadeAccentColor != null) {
@@ -77,7 +77,7 @@ class HillshadeLayer extends Layer {
     }
     if (hillshadeIlluminationAnchor != null) {
       paint["hillshade-illumination-anchor"] =
-          hillshadeIlluminationAnchor?.toString().split('.').last.toLowerCase();
+          hillshadeIlluminationAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
     if (hillshadeIlluminationDirection != null) {
       paint["hillshade-illumination-direction"] =
@@ -126,11 +126,9 @@ class HillshadeLayer extends Layer {
       slot: map["slot"],
       visibility: map["layout"]["visibility"] == null
           ? Visibility.VISIBLE
-          : Visibility.values.firstWhere((e) => e
-              .toString()
-              .split('.')
-              .last
+          : Visibility.values.firstWhere((e) => e.name
               .toLowerCase()
+              .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       hillshadeAccentColor:
           (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
@@ -146,11 +144,9 @@ class HillshadeLayer extends Layer {
       hillshadeIlluminationAnchor:
           map["paint"]["hillshade-illumination-anchor"] == null
               ? null
-              : HillshadeIlluminationAnchor.values.firstWhere((e) => e
-                  .toString()
-                  .split('.')
-                  .last
+              : HillshadeIlluminationAnchor.values.firstWhere((e) => e.name
                   .toLowerCase()
+                  .replaceAll("_", "-")
                   .contains(map["paint"]["hillshade-illumination-anchor"])),
       hillshadeIlluminationDirection:
           map["paint"]["hillshade-illumination-direction"] is num?
