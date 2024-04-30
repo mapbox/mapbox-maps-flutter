@@ -15,7 +15,9 @@ mapboxMap?.location.updateSettings(LocationComponentSettings(
         LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([]))))
 );
 ```
-##### Snapshotter
+##### Snapshots
+
+###### Standalone snapshotter
 
 Show multiple maps at the same time with no performance penalty. With the all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
 
@@ -35,11 +37,25 @@ final snapshotter = await Snapshotter.create(
   },
 );
 snapshotter.style.setStyleURI(MapboxStyles.STANDARD);
+snapshotter.setCamera(CameraOptions(center: Point(...)));
 
 ...
 
 final snapshotImage = await snapshotter.start()
 ```
+##### Map wiget snapshotting
+
+Create snapshots of the map displayed in the `MapWidget` with `MapboxMap.snapshot()`. This new feature allows you to capture a static image of the current map view.
+
+The `snapshot()` method captures the current state of the Mapbox map, including all visible layers, markers, and user interactions.
+
+To use the snapshot() method, simply call it on your Mapbox map instance. The method will return a Future that resolves to the image of the current map view.
+
+```dart
+final snapshotImage = await mapboxMap.snapshot();
+```
+
+Please note that the `snapshot()` method works best if the Mapbox Map is fully loaded before capturing an image. If the map is not fully loaded, the method might return a blank image.
 
 #### ⚠️ Breaking changes
 
