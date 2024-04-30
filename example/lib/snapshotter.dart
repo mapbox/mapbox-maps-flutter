@@ -44,7 +44,7 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
           size: Size(width: 400, height: 400),
           pixelRatio: MediaQuery.of(context).devicePixelRatio),
     );
-    await _snapshotter?.style.setStyleURI(MapboxStyles.STANDARD);
+    await _snapshotter?.style.setStyleURI(MapboxStyles.OUTDOORS);
   }
 
   _onMapIdle(MapIdleEventData data) async {
