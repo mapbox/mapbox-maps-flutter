@@ -1,6 +1,7 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
@@ -14,9 +15,48 @@ import com.mapbox.maps.extension.style.types.StyleTransition
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 
 // FLT to Android
 
+fun GlyphsRasterizationMode.toGlyphsRasterizationMode(): com.mapbox.maps.GlyphsRasterizationMode {
+  return when (this) {
+    GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
+    GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
+    GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+  }
+}
+fun GlyphsRasterizationOptions.toGlyphsRasterizationOptions(): com.mapbox.maps.GlyphsRasterizationOptions {
+  return com.mapbox.maps.GlyphsRasterizationOptions.Builder()
+    .rasterizationMode(rasterizationMode.toGlyphsRasterizationMode())
+    .fontFamily(fontFamily)
+    .build()
+}
+fun MapSnapshotOptions.toSnapshotOptions(context: Context): com.mapbox.maps.MapSnapshotOptions {
+  return com.mapbox.maps.MapSnapshotOptions.Builder()
+    .size(size.toSize(context))
+    .pixelRatio(pixelRatio.toFloat())
+    .glyphsRasterizationOptions(glyphsRasterizationOptions?.toGlyphsRasterizationOptions())
+    .build()
+}
+
+fun MapSnapshotOptions.toSnapshotOverlayOptions(): com.mapbox.maps.SnapshotOverlayOptions {
+  return com.mapbox.maps.SnapshotOverlayOptions(
+    showLogo = showsLogo ?: true,
+    showAttributes = showsAttribution ?: true
+  )
+}
+fun Size.toSize(context: Context): com.mapbox.maps.Size {
+  return com.mapbox.maps.Size(width.toDevicePixels(context), height.toDevicePixels(context))
+}
+fun TileCoverOptions.toTileCoverOptions(): com.mapbox.maps.TileCoverOptions {
+  return com.mapbox.maps.TileCoverOptions.Builder()
+    .tileSize(tileSize?.toShort())
+    .maxZoom(maxZoom?.toByte())
+    .minZoom(minZoom?.toByte())
+    .roundZoom(roundZoom)
+    .build()
+}
 fun ModelScaleMode.toModelScaleMode(): com.mapbox.maps.plugin.ModelScaleMode {
   return when (this) {
     ModelScaleMode.VIEWPORT -> com.mapbox.maps.plugin.ModelScaleMode.VIEWPORT
@@ -31,12 +71,14 @@ fun TileStoreUsageMode.toTileStoreUsageMode(): com.mapbox.maps.TileStoreUsageMod
     TileStoreUsageMode.READ_ONLY -> com.mapbox.maps.TileStoreUsageMode.READ_ONLY
   }
 }
+
 fun StyleProjectionName.toProjectionName(): ProjectionName {
   return when (this) {
     StyleProjectionName.GLOBE -> ProjectionName.GLOBE
     StyleProjectionName.MERCATOR -> ProjectionName.MERCATOR
   }
 }
+
 fun StyleProjection.toProjection(): com.mapbox.maps.extension.style.projection.generated.Projection {
   return com.mapbox.maps.extension.style.projection.generated.Projection(name.toProjectionName())
 }
@@ -314,25 +356,32 @@ fun Map<String?, Any?>.toGeometry(): Geometry {
     this["type"] == "Point" -> {
       return Point.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "Polygon" -> {
       return Polygon.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiPolygon" -> {
       return MultiPolygon.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiPoint" -> {
       return MultiPoint.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "MultiLineString" -> {
       return MultiLineString.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "LineString" -> {
       return LineString.fromJson(Gson().toJson(this))
     }
+
     this["type"] == "GeometryCollection" -> {
       return GeometryCollection.fromJson(Gson().toJson(this))
     }
-    else -> throw(RuntimeException("Unsupported Geometry: ${Gson().toJson(this)}"))
+
+    else -> throw (RuntimeException("Unsupported Geometry: ${Gson().toJson(this)}"))
   }
 }
 
@@ -341,6 +390,10 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun com.mapbox.maps.CanonicalTileID.toFLTCanonicalTileID(): CanonicalTileID {
+  return CanonicalTileID(z = z.toLong(), x = x.toLong(), y = y.toLong())
+}
 
 fun com.mapbox.common.LoggingLevel.toFLTLoggingLevel(): LoggingLevel {
   return when (this) {
@@ -368,12 +421,16 @@ fun ProjectionName.toFLTProjectionName(): StyleProjectionName {
   return when (this) {
     ProjectionName.GLOBE -> StyleProjectionName.GLOBE
     ProjectionName.MERCATOR -> StyleProjectionName.MERCATOR
-    else -> { throw java.lang.RuntimeException("Projection $this is not supported.") }
+    else -> {
+      throw java.lang.RuntimeException("Projection $this is not supported.")
+    }
   }
 }
+
 fun Projection.toFLTProjection(): StyleProjection {
   return StyleProjection(name.toFLTProjectionName())
 }
+
 fun com.mapbox.maps.StyleObjectInfo.toFLTStyleObjectInfo(): StyleObjectInfo {
   return StyleObjectInfo(id, type)
 }
@@ -398,6 +455,7 @@ fun com.mapbox.maps.QueriedFeature.toFLTQueriedFeature(): QueriedFeature {
 fun com.mapbox.maps.QueriedRenderedFeature.toFLTQueriedRenderedFeature(): QueriedRenderedFeature {
   return QueriedRenderedFeature(queriedFeature.toFLTQueriedFeature(), layers)
 }
+
 fun com.mapbox.maps.QueriedSourceFeature.toFLTQueriedSourceFeature(): QueriedSourceFeature {
   return QueriedSourceFeature(queriedFeature.toFLTQueriedFeature())
 }
@@ -508,6 +566,7 @@ fun JSONObject.toMap(): Map<String?, Any?> = keys().asSequence().associateWith {
       val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
       JSONObject(map).toMap().values.toList()
     }
+
     is JSONObject -> value.toMap()
     JSONObject.NULL -> null
     else -> value
@@ -516,4 +575,10 @@ fun JSONObject.toMap(): Map<String?, Any?> = keys().asSequence().associateWith {
 
 fun Number.toLogicalPixels(context: Context): Double {
   return this.toDouble() / context.resources.displayMetrics.density
+}
+
+fun Bitmap.toMbxImage(): MbxImage {
+  val outputStream = ByteArrayOutputStream(byteCount)
+  compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+  return MbxImage(width.toLong(), height.toLong(), outputStream.toByteArray())
 }

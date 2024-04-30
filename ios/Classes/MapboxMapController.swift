@@ -29,15 +29,15 @@ class ProxyBinaryMessenger: NSObject, FlutterBinaryMessenger {
     }
 }
 
-class MapboxMapController: NSObject, FlutterPlatformView {
-    private var registrar: FlutterPluginRegistrar
-    private var mapView: MapView
-    private var mapboxMap: MapboxMap
-    private var channel: FlutterMethodChannel
-    private var annotationController: AnnotationController?
-    private var gesturesController: GesturesController?
-    private var proxyBinaryMessenger: ProxyBinaryMessenger
-    private var cancelables = Set<AnyCancelable>()
+final class MapboxMapController: NSObject, FlutterPlatformView {
+    private let registrar: FlutterPluginRegistrar
+    private let mapView: MapView
+    private let mapboxMap: MapboxMap
+    private let channel: FlutterMethodChannel
+    private let annotationController: AnnotationController?
+    private let gesturesController: GesturesController?
+    private let proxyBinaryMessenger: ProxyBinaryMessenger
+    private let eventHandler: MapboxEventHandler
 
     func view() -> UIView {
         return mapView
@@ -47,13 +47,11 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         withFrame frame: CGRect,
         mapInitOptions: MapInitOptions,
         channelSuffix: Int,
-        eventTypes: [Int],
         arguments args: Any?,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String
     ) {
-        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "/map_\(channelSuffix)")
-
+        self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "\(channelSuffix)")
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
@@ -66,9 +64,7 @@ class MapboxMapController: NSObject, FlutterPlatformView {
             name: "plugins.flutter.io",
             binaryMessenger: proxyBinaryMessenger
         )
-
-        super.init()
-        channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
+        self.eventHandler = MapboxEventHandler(eventProvider: mapboxMap, binaryMessenger: proxyBinaryMessenger)
 
         let styleController = StyleController(styleManager: mapboxMap)
         StyleManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: styleController)
@@ -106,70 +102,9 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)
 
-        for eventType in eventTypes.compactMap({ _MapEvent(rawValue: $0) }) {
-            subscribeToEvent(eventType)
-        }
-    }
+        super.init()
 
-    private func subscribeToEvent(_ event: _MapEvent) {
-        switch event {
-        case .mapLoaded:
-            mapboxMap.onMapLoaded.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .mapLoadingError:
-            mapboxMap.onMapLoadingError.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .styleLoaded:
-            mapboxMap.onStyleLoaded.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .styleDataLoaded:
-            mapboxMap.onStyleDataLoaded.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .cameraChanged:
-            mapboxMap.onCameraChanged.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .mapIdle:
-            mapboxMap.onMapIdle.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .sourceAdded:
-            mapboxMap.onSourceAdded.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .sourceRemoved:
-            mapboxMap.onSourceRemoved.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .sourceDataLoaded:
-            mapboxMap.onSourceDataLoaded.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .styleImageMissing:
-            mapboxMap.onStyleImageMissing.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .styleImageRemoveUnused:
-            mapboxMap.onStyleImageRemoveUnused.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .renderFrameStarted:
-            mapboxMap.onRenderFrameStarted.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .renderFrameFinished:
-            mapboxMap.onRenderFrameFinished.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        case .resourceRequest:
-            mapboxMap.onResourceRequest.observe { [weak self] payload in
-                self?.channel.invokeMethod(event.methodName, arguments: payload.toJSONString)
-            }.store(in: &cancelables)
-        }
+        channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
     }
 
     func onMethodCall(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -187,6 +122,13 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         case "platform#releaseMethodChannels":
             releaseMethodChannels()
             result(nil)
+        case "map#snapshot":
+            do {
+                let snapshot = try mapView.snapshot()
+                result(snapshot.pngData())
+            } catch {
+                result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -207,8 +149,4 @@ class MapboxMapController: NSObject, FlutterPlatformView {
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
         annotationController?.tearDown(messenger: proxyBinaryMessenger)
     }
-}
-
-private extension _MapEvent {
-    var methodName: String { "event#\(rawValue)" }
 }

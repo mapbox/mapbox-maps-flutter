@@ -2,9 +2,7 @@ library mapbox_maps_flutter;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +33,7 @@ part 'src/pigeons/polyline_annotation_messenger.dart';
 part 'src/pigeons/map_interfaces.dart';
 part 'src/pigeons/settings.dart';
 part 'src/pigeons/gesture_listeners.dart';
+part 'src/snapshotter/snapshotter_messenger.dart';
 part 'src/pigeons/log_backend.dart';
 part 'src/style/layer/background_layer.dart';
 part 'src/style/layer/circle_layer.dart';
@@ -56,5 +55,8 @@ part 'src/style/source/rasterarray_source.dart';
 part 'src/style/source/vector_source.dart';
 part 'src/style/style.dart';
 part 'src/location_settings.dart';
+part 'src/snapshotter/snapshotter.dart';
 part 'src/log_configuration.dart';
 part 'src/turf_adapters.dart';
+part 'src/extensions.dart';
+part 'src/map_events.dart';

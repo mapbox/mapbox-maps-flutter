@@ -16,6 +16,47 @@ mapboxMap?.location.updateSettings(LocationComponentSettings(
         LocationPuck(locationPuck2D: DefaultLocationPuck2D(topImage: list, shadowImage: Uint8List.fromList([]))))
 );
 ```
+##### Snapshots
+
+###### Standalone snapshotter
+
+Show multiple maps at the same time with no performance penalty. With the all new `Snapshotter` you can get image snapshots of the map, styled the same way as `MapWidget`.
+
+The `Snapshotter` class is highly configurable. You can set the final result at the time of construction using the `MapSnapshotOptions`. Once you've configured your snapshot, you can start the snapshotting process.
+
+One of the key features of the `Snapshotter` class is the `style` object. This object can be manipulated to set different styles for your snapshot, as well as to apply runtime styling to the style, giving you the flexibility to create a snapshot that fits your needs.
+
+```dart
+final snapshotter = await Snapshotter.create(
+  options: MapSnapshotOptions(
+      size: Size(width: 400, height: 400),
+      pixelRatio: MediaQuery.of(context).devicePixelRatio),
+  onStyleLoadedListener: (_) {
+    // apply runtime styling
+    final layer = CircleLayer(id: "circle-layer", sourceId: "poi-source");
+    snapshotter?.style.addLayer(layer);
+  },
+);
+snapshotter.style.setStyleURI(MapboxStyles.STANDARD);
+snapshotter.setCamera(CameraOptions(center: Point(...)));
+
+...
+
+final snapshotImage = await snapshotter.start()
+```
+##### Map wiget snapshotting
+
+Create snapshots of the map displayed in the `MapWidget` with `MapboxMap.snapshot()`. This new feature allows you to capture a static image of the current map view.
+
+The `snapshot()` method captures the current state of the Mapbox map, including all visible layers, markers, and user interactions.
+
+To use the snapshot() method, simply call it on your Mapbox map instance. The method will return a Future that resolves to the image of the current map view.
+
+```dart
+final snapshotImage = await mapboxMap.snapshot();
+```
+
+Please note that the `snapshot()` method works best if the Mapbox Map is fully loaded before capturing an image. If the map is not fully loaded, the method might return a blank image.
 
 #### ⚠️ Breaking changes
 

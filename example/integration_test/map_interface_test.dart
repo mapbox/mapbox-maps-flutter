@@ -433,4 +433,14 @@ void main() {
         await mapboxMap.getGeoJsonClusterExpansionZoom('earthquakes', feature);
     expect(clusterExpansionZoom.value, '1');
   });
+
+  testWidgets('snapshot', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    await mapboxMap.loadStyleURI(MapboxStyles.DARK);
+    await app.events.onMapIdle.future;
+    final snapshot = await mapboxMap.snapshot();
+    expect(snapshot, isNotNull);
+  });
 }

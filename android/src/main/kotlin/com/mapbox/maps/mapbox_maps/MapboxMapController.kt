@@ -1,23 +1,13 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.ViewTreeLifecycleOwner
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import com.google.gson.TypeAdapter
-import com.google.gson.TypeAdapterFactory
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
@@ -35,20 +25,17 @@ import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
-import com.mapbox.maps.mapbox_maps.pigeons._MapEvent
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
-import java.lang.reflect.Type
-import java.util.Date
+import java.io.ByteArrayOutputStream
 
 class MapboxMapController(
   context: Context,
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
-  eventTypes: List<Int>,
   messenger: BinaryMessenger,
   channelSuffix: Int,
   pluginVersion: String
@@ -72,11 +59,8 @@ class MapboxMapController(
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
 
-  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "/map_$channelSuffix")
-  private val gson = GsonBuilder()
-    .registerTypeAdapter(Date::class.java, MicrosecondsDateTypeAdapter)
-    .registerTypeAdapterFactory(EnumOrdinalTypeAdapterFactory)
-    .create()
+  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "$channelSuffix")
+  private val eventHandler: MapboxEventHandler
 
   /*
     Mirrors lifecycle of the parent, with one addition - switches to DESTROYED state
@@ -138,7 +122,8 @@ class MapboxMapController(
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
-    styleController = StyleController(mapboxMap, context)
+    eventHandler = MapboxEventHandler(mapboxMap.styleManager, proxyBinaryMessenger)
+    styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
     projectionController = MapProjectionController(mapboxMap)
     mapInterfaceController = MapInterfaceController(mapboxMap, context)
@@ -171,58 +156,6 @@ class MapboxMapController(
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
-
-    // TODO: check if state-triggered subscription change does not lead to multiple subscriptions/not unsubscribing when listener becomes null
-    for (event in eventTypes) {
-      mapboxMap.subscribeToEvent(_MapEvent.values()[event])
-    }
-  }
-
-  private fun MapboxMap.subscribeToEvent(event: _MapEvent) {
-    when (event) {
-      _MapEvent.MAP_LOADED -> subscribeMapLoaded {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.MAP_LOADING_ERROR -> subscribeMapLoadingError {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.STYLE_LOADED -> subscribeStyleLoaded {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.STYLE_DATA_LOADED -> subscribeStyleDataLoaded {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.CAMERA_CHANGED -> subscribeCameraChanged {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.MAP_IDLE -> subscribeMapIdle {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.SOURCE_ADDED -> subscribeSourceAdded {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.SOURCE_REMOVED -> subscribeSourceRemoved {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.SOURCE_DATA_LOADED -> subscribeSourceDataLoaded {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.STYLE_IMAGE_MISSING -> subscribeStyleImageMissing {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.STYLE_IMAGE_REMOVE_UNUSED -> subscribeStyleImageRemoveUnused {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.RENDER_FRAME_STARTED -> subscribeRenderFrameStarted {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.RENDER_FRAME_FINISHED -> subscribeRenderFrameFinished {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-      _MapEvent.RESOURCE_REQUEST -> subscribeResourceRequest {
-        methodChannel.invokeMethod(event.methodName, gson.toJson(it))
-      }
-    }
   }
 
   override fun getView(): View? {
@@ -271,6 +204,21 @@ class MapboxMapController(
         dispose()
         result.success(null)
       }
+      "map#snapshot" -> {
+        val mapView = mapView
+        val snapshot = mapView?.snapshot()
+        if (mapView == null) {
+          result.error("2342345", "Failed to create snapshot: map view is not found.", null)
+        } else if (snapshot == null) {
+          result.error("2342345", "Failed to create snapshot: snapshotting timed out.", null)
+        } else {
+          val byteArray = ByteArrayOutputStream().also { stream ->
+            snapshot.compress(Bitmap.CompressFormat.PNG, 100, stream)
+          }.toByteArray()
+
+          result.success(byteArray)
+        }
+      }
       else -> {
         result.notImplemented()
       }
@@ -280,37 +228,5 @@ class MapboxMapController(
   private fun changeUserAgent(version: String) {
     SettingsServiceFactory.getInstance(SettingsServiceStorageType.NON_PERSISTENT)
       .set("com.mapbox.common.telemetry.internal.custom_user_agent_fragment", Value.valueOf("FlutterPlugin/$version"))
-  }
-}
-
-private val _MapEvent.methodName: String
-  get() = "event#$ordinal"
-
-object MicrosecondsDateTypeAdapter : JsonSerializer<Date> {
-  override fun serialize(
-    src: Date,
-    typeOfSrc: Type?,
-    context: JsonSerializationContext?
-  ): JsonElement {
-    return JsonPrimitive(src.time * 1000)
-  }
-}
-
-class EnumOrdinalTypeAdapter<T>() : TypeAdapter<T>() {
-  override fun write(out: JsonWriter?, value: T) {
-    out?.value((value as Enum<*>).ordinal)
-  }
-  override fun read(`in`: JsonReader?): T {
-    throw NotImplementedError("Not supported")
-  }
-}
-
-object EnumOrdinalTypeAdapterFactory : TypeAdapterFactory {
-  override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
-    if (type == null || !type.rawType.isEnum) {
-      return null
-    }
-
-    return EnumOrdinalTypeAdapter()
   }
 }
