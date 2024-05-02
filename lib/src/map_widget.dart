@@ -238,8 +238,12 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   void onPlatformViewCreated(int id) {
-    final MapboxMap controller =
-        MapboxMap(mapboxMapsPlatform: _mapboxMapsPlatform);
+    final MapboxMap controller = MapboxMap(
+      mapboxMapsPlatform: _mapboxMapsPlatform,
+      onMapTapListener: widget.onTapListener,
+      onMapLongTapListener: widget.onLongTapListener,
+      onMapScrollListener: widget.onScrollListener,
+    );
     _controller.complete(controller);
     if (widget.onMapCreated != null) {
       widget.onMapCreated!(controller);
