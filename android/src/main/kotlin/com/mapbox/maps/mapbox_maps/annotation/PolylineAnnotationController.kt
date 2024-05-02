@@ -2,9 +2,6 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.mapbox_maps.pigeons.*
-import com.mapbox.maps.mapbox_maps.toLineString
-import com.mapbox.maps.mapbox_maps.toMap
-import com.mapbox.maps.mapbox_maps.toPoints
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import toFLTLineCap
 import toFLTLineJoin
@@ -125,7 +122,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
   private fun updateAnnotation(annotation: PolylineAnnotation): com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation {
     val originalAnnotation = annotationMap[annotation.id]!!
     annotation.geometry?.let {
-      originalAnnotation.geometry = it.toLineString()
+      originalAnnotation.geometry = it
     }
     annotation.lineJoin?.let {
       originalAnnotation.lineJoin = it.toLineJoin()
@@ -365,7 +362,7 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
 fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolylineAnnotation(): PolylineAnnotation {
   return PolylineAnnotation(
     id = id,
-    geometry = geometry.toMap(),
+    geometry = geometry,
     lineJoin = lineJoin?.toFLTLineJoin(),
     lineSortKey = lineSortKey,
     lineBlur = lineBlur,
@@ -385,7 +382,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
 fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions {
   val options = com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions()
   this.geometry?.let {
-    options.withPoints(it.toPoints())
+    options.withGeometry(it)
   }
   this.lineJoin?.let {
     options.withLineJoin(it.toLineJoin())

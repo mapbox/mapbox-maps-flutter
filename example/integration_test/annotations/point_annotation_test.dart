@@ -20,7 +20,7 @@ void main() {
     final Uint8List imageData = bytes.buffer.asUint8List();
 
     var pointAnnotationOptions = PointAnnotationOptions(
-      geometry: geometry.toJson(),
+      geometry: geometry,
       image: imageData,
       iconAnchor: IconAnchor.CENTER,
       iconImage: "abc",
@@ -56,7 +56,7 @@ void main() {
       textOpacity: 1.0,
     );
     final annotation = await manager.create(pointAnnotationOptions);
-    var point = Point.fromJson((annotation.geometry)!.cast());
+    var point = annotation.geometry;
     expect(1.0, point.coordinates.lng);
     expect(2.0, point.coordinates.lat);
     expect(annotation.image, isNotNull);
@@ -102,14 +102,14 @@ void main() {
     var geometry = Point(coordinates: Position(1.0, 2.0));
 
     var pointAnnotationOptions = PointAnnotationOptions(
-      geometry: geometry.toJson(),
+      geometry: geometry,
     );
     final annotation = await manager.create(pointAnnotationOptions);
-    var point = Point.fromJson((annotation.geometry)!.cast());
+    var point = annotation.geometry;
     var newPoint = Point(
         coordinates:
             Position(point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
-    annotation.geometry = newPoint.toJson();
+    annotation.geometry = newPoint;
     await manager.update(annotation);
     await manager.delete(annotation);
 

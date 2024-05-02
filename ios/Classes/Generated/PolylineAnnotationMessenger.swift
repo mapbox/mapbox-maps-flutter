@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.LineString
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -76,7 +77,7 @@ struct PolylineAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: LineString
   /// The display of lines when joining.
   var lineJoin: LineJoin?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -102,7 +103,7 @@ struct PolylineAnnotation {
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotation? {
     let id = list[0] as! String
-    let geometry: [String?: Any?]? = nilOrValue(list[1])
+    let geometry = LineString.fromList(list[1] as! [Any?])!
     var lineJoin: LineJoin?
     let lineJoinEnumVal: Int? = nilOrValue(list[2])
     if let lineJoinRawValue = lineJoinEnumVal {
@@ -138,7 +139,7 @@ struct PolylineAnnotation {
   func toList() -> [Any?] {
     return [
       id,
-      geometry,
+      geometry.toList(),
       lineJoin?.rawValue,
       lineSortKey,
       lineBlur,
@@ -157,7 +158,7 @@ struct PolylineAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: LineString
   /// The display of lines when joining.
   var lineJoin: LineJoin?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -182,7 +183,7 @@ struct PolylineAnnotationOptions {
   var lineWidth: Double?
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotationOptions? {
-    let geometry: [String?: Any?]? = nilOrValue(list[0])
+    let geometry = LineString.fromList(list[0] as! [Any?])!
     var lineJoin: LineJoin?
     let lineJoinEnumVal: Int? = nilOrValue(list[1])
     if let lineJoinRawValue = lineJoinEnumVal {
@@ -216,7 +217,7 @@ struct PolylineAnnotationOptions {
   }
   func toList() -> [Any?] {
     return [
-      geometry,
+      geometry.toList(),
       lineJoin?.rawValue,
       lineSortKey,
       lineBlur,
@@ -235,6 +236,8 @@ private class OnPolylineAnnotationClickListenerCodecReader: FlutterStandardReade
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
+      return LineString.fromList(self.readValue() as! [Any?])
+    case 129:
       return PolylineAnnotation.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -244,8 +247,11 @@ private class OnPolylineAnnotationClickListenerCodecReader: FlutterStandardReade
 
 private class OnPolylineAnnotationClickListenerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PolylineAnnotation {
+    if let value = value as? LineString {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotation {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -304,12 +310,14 @@ private class _PolylineAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
+      return LineString.fromList(self.readValue() as! [Any?])
     case 129:
       return PolylineAnnotation.fromList(self.readValue() as! [Any?])
     case 130:
-      return PolylineAnnotationOptions.fromList(self.readValue() as! [Any?])
+      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
     case 131:
+      return PolylineAnnotationOptions.fromList(self.readValue() as! [Any?])
+    case 132:
       return PolylineAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -319,17 +327,20 @@ private class _PolylineAnnotationMessengerCodecReader: FlutterStandardReader {
 
 private class _PolylineAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PolylineAnnotation {
+    if let value = value as? LineString {
       super.writeByte(128)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineAnnotation {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineAnnotationOptions {
+    } else if let value = value as? PolylineAnnotation {
       super.writeByte(130)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineAnnotationOptions {
       super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotationOptions {
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

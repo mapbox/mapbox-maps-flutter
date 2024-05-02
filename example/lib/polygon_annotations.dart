@@ -54,8 +54,7 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
       var options = <PolygonAnnotationOptions>[];
       for (var i = 0; i < 2; i++) {
         options.add(PolygonAnnotationOptions(
-            geometry:
-                Polygon(coordinates: createRandomPositionsList()).toJson(),
+            geometry: Polygon(coordinates: createRandomPositionsList()),
             fillColor: createRandomColor()));
       }
       polygonAnnotationManager?.createMulti(options);
@@ -77,7 +76,7 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
                 Position(-15.747196, -21.085074),
                 Position(-3.363937, -10.733102)
               ]
-            ]).toJson(),
+            ]),
             fillColor: Colors.red.value,
             fillOutlineColor: Colors.purple.value))
         .then((value) => polygonAnnotation = value);
@@ -98,13 +97,13 @@ class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
       child: Text('update a polygon annotation'),
       onPressed: () {
         if (polygonAnnotation != null) {
-          var polygon = Polygon.fromJson((polygonAnnotation!.geometry)!.cast());
+          var polygon = polygonAnnotation!.geometry;
           var newPolygon = Polygon(
               coordinates: polygon.coordinates
                   .map((e) =>
                       e.map((e) => Position(e.lng + 1.0, e.lat + 1.0)).toList())
                   .toList());
-          polygonAnnotation?.geometry = newPolygon.toJson();
+          polygonAnnotation?.geometry = newPolygon;
           polygonAnnotationManager?.update(polygonAnnotation!);
         }
       },

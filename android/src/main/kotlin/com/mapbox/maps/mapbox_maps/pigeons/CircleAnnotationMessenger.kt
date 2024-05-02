@@ -4,6 +4,8 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Point
+import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
@@ -82,7 +84,7 @@ data class CircleAnnotation(
   /** The id for annotation */
   val id: String,
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: Point,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
   /** Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. */
@@ -105,7 +107,7 @@ data class CircleAnnotation(
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): CircleAnnotation {
       val id = list[0] as String
-      val geometry = list[1] as Map<String?, Any?>?
+      val geometry = PointDecoder.fromList(list[1] as List<Any?>)
       val circleSortKey = list[2] as Double?
       val circleBlur = list[3] as Double?
       val circleColor = list[4].let { if (it is Int) it.toLong() else it as Long? }
@@ -120,7 +122,7 @@ data class CircleAnnotation(
   fun toList(): List<Any?> {
     return listOf<Any?>(
       id,
-      geometry,
+      geometry.toList(),
       circleSortKey,
       circleBlur,
       circleColor,
@@ -136,7 +138,7 @@ data class CircleAnnotation(
 /** Generated class from Pigeon that represents data sent in messages. */
 data class CircleAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: Point,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
   /** Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. */
@@ -158,7 +160,7 @@ data class CircleAnnotationOptions(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): CircleAnnotationOptions {
-      val geometry = list[0] as Map<String?, Any?>?
+      val geometry = PointDecoder.fromList(list[0] as List<Any?>)
       val circleSortKey = list[1] as Double?
       val circleBlur = list[2] as Double?
       val circleColor = list[3].let { if (it is Int) it.toLong() else it as Long? }
@@ -172,7 +174,7 @@ data class CircleAnnotationOptions(
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      geometry,
+      geometry.toList(),
       circleSortKey,
       circleBlur,
       circleColor,
@@ -193,6 +195,11 @@ private object OnCircleAnnotationClickListenerCodec : StandardMessageCodec() {
           CircleAnnotation.fromList(it)
         }
       }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -200,6 +207,10 @@ private object OnCircleAnnotationClickListenerCodec : StandardMessageCodec() {
     when (value) {
       is CircleAnnotation -> {
         stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is Point -> {
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -257,6 +268,11 @@ private object _CircleAnnotationMessengerCodec : StandardMessageCodec() {
           CircleAnnotationOptions.fromList(it)
         }
       }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -276,6 +292,10 @@ private object _CircleAnnotationMessengerCodec : StandardMessageCodec() {
       }
       is CircleAnnotationOptions -> {
         stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is Point -> {
+        stream.write(132)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

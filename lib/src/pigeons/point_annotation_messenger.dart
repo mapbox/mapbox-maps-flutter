@@ -238,7 +238,7 @@ enum TextTranslateAnchor {
 class PointAnnotation {
   PointAnnotation({
     required this.id,
-    this.geometry,
+    required this.geometry,
     this.image,
     this.iconAnchor,
     this.iconImage,
@@ -278,7 +278,7 @@ class PointAnnotation {
   String id;
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  Point geometry;
 
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
@@ -383,7 +383,7 @@ class PointAnnotation {
   Object encode() {
     return <Object?>[
       id,
-      geometry,
+      geometry.encode(),
       image,
       iconAnchor?.index,
       iconImage,
@@ -424,7 +424,7 @@ class PointAnnotation {
     result as List<Object?>;
     return PointAnnotation(
       id: result[0]! as String,
-      geometry: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: Point.decode(result[1]! as List<Object?>),
       image: result[2] as Uint8List?,
       iconAnchor:
           result[3] != null ? IconAnchor.values[result[3]! as int] : null,
@@ -469,7 +469,7 @@ class PointAnnotation {
 
 class PointAnnotationOptions {
   PointAnnotationOptions({
-    this.geometry,
+    required this.geometry,
     this.image,
     this.iconAnchor,
     this.iconImage,
@@ -506,7 +506,7 @@ class PointAnnotationOptions {
   });
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  Point geometry;
 
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
@@ -610,7 +610,7 @@ class PointAnnotationOptions {
 
   Object encode() {
     return <Object?>[
-      geometry,
+      geometry.encode(),
       image,
       iconAnchor?.index,
       iconImage,
@@ -650,7 +650,7 @@ class PointAnnotationOptions {
   static PointAnnotationOptions decode(Object result) {
     result as List<Object?>;
     return PointAnnotationOptions(
-      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: Point.decode(result[0]! as List<Object?>),
       image: result[1] as Uint8List?,
       iconAnchor:
           result[2] != null ? IconAnchor.values[result[2]! as int] : null,
@@ -697,8 +697,11 @@ class _OnPointAnnotationClickListenerCodec extends StandardMessageCodec {
   const _OnPointAnnotationClickListenerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PointAnnotation) {
+    if (value is Point) {
       buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is PointAnnotation) {
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -709,6 +712,8 @@ class _OnPointAnnotationClickListenerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
+        return Point.decode(readValue(buffer)!);
+      case 129:
         return PointAnnotation.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -764,17 +769,20 @@ class __PointAnnotationMessengerCodec extends StandardMessageCodec {
   const __PointAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PointAnnotation) {
+    if (value is Point) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else if (value is PointAnnotation) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is PointAnnotationOptions) {
+    } else if (value is PointAnnotation) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else if (value is PointAnnotationOptions) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is PointAnnotationOptions) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -785,12 +793,14 @@ class __PointAnnotationMessengerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return PointAnnotation.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 129:
         return PointAnnotation.decode(readValue(buffer)!);
       case 130:
-        return PointAnnotationOptions.decode(readValue(buffer)!);
+        return PointAnnotation.decode(readValue(buffer)!);
       case 131:
+        return PointAnnotationOptions.decode(readValue(buffer)!);
+      case 132:
         return PointAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

@@ -4,6 +4,8 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.LineString
+import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
@@ -86,7 +88,7 @@ data class PolylineAnnotation(
   /** The id for annotation */
   val id: String,
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: LineString,
   /** The display of lines when joining. */
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
@@ -115,7 +117,7 @@ data class PolylineAnnotation(
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): PolylineAnnotation {
       val id = list[0] as String
-      val geometry = list[1] as Map<String?, Any?>?
+      val geometry = LineStringDecoder.fromList(list[1] as List<Any?>)
       val lineJoin = (list[2] as Int?)?.let {
         LineJoin.ofRaw(it)
       }
@@ -135,7 +137,7 @@ data class PolylineAnnotation(
   fun toList(): List<Any?> {
     return listOf<Any?>(
       id,
-      geometry,
+      geometry.toList(),
       lineJoin?.raw,
       lineSortKey,
       lineBlur,
@@ -154,7 +156,7 @@ data class PolylineAnnotation(
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PolylineAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: LineString,
   /** The display of lines when joining. */
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
@@ -182,7 +184,7 @@ data class PolylineAnnotationOptions(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): PolylineAnnotationOptions {
-      val geometry = list[0] as Map<String?, Any?>?
+      val geometry = LineStringDecoder.fromList(list[0] as List<Any?>)
       val lineJoin = (list[1] as Int?)?.let {
         LineJoin.ofRaw(it)
       }
@@ -201,7 +203,7 @@ data class PolylineAnnotationOptions(
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      geometry,
+      geometry.toList(),
       lineJoin?.raw,
       lineSortKey,
       lineBlur,
@@ -222,6 +224,11 @@ private object OnPolylineAnnotationClickListenerCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          LineStringDecoder.fromList(it)
+        }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           PolylineAnnotation.fromList(it)
         }
       }
@@ -230,8 +237,12 @@ private object OnPolylineAnnotationClickListenerCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is PolylineAnnotation -> {
+      is LineString -> {
         stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotation -> {
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -271,7 +282,7 @@ private object _PolylineAnnotationMessengerCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolylineAnnotation.fromList(it)
+          LineStringDecoder.fromList(it)
         }
       }
       129.toByte() -> {
@@ -281,10 +292,15 @@ private object _PolylineAnnotationMessengerCodec : StandardMessageCodec() {
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolylineAnnotationOptions.fromList(it)
+          PolylineAnnotation.fromList(it)
         }
       }
       131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineAnnotationOptions.fromList(it)
+        }
+      }
+      132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolylineAnnotationOptions.fromList(it)
         }
@@ -294,7 +310,7 @@ private object _PolylineAnnotationMessengerCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is PolylineAnnotation -> {
+      is LineString -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
@@ -302,12 +318,16 @@ private object _PolylineAnnotationMessengerCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is PolylineAnnotationOptions -> {
+      is PolylineAnnotation -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
       is PolylineAnnotationOptions -> {
         stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotationOptions -> {
+        stream.write(132)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

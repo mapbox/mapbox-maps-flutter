@@ -639,7 +639,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
 extension PointAnnotationOptions {
 
     func toPointAnnotation() -> MapboxMaps.PointAnnotation {
-        var annotation = MapboxMaps.PointAnnotation(coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+        var annotation = MapboxMaps.PointAnnotation(point: geometry)
         if let image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
         }
@@ -746,11 +746,11 @@ extension PointAnnotationOptions {
 extension PointAnnotation {
 
     func toPointAnnotation() -> MapboxMaps.PointAnnotation {
-                var annotation = MapboxMaps.PointAnnotation(id: self.id, coordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
+        var annotation = MapboxMaps.PointAnnotation(id: self.id, point: geometry)
         if let image = self.image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
         }
-                if let iconAnchor {
+        if let iconAnchor {
             annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
         }
         if let iconImage {
@@ -852,9 +852,9 @@ extension PointAnnotation {
 
 extension MapboxMaps.PointAnnotation {
     func toFLTPointAnnotation() -> PointAnnotation {
-        return PointAnnotation(
+        PointAnnotation(
             id: id,
-            geometry: geometry.toMap(),
+            geometry: point,
             image: image?.image.pngData().map(FlutterStandardTypedData.init(bytes:)),
             iconAnchor: iconAnchor?.toFLTIconAnchor(),
             iconImage: iconImage,

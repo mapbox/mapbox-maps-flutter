@@ -16,7 +16,7 @@ enum FillTranslateAnchor {
 class PolygonAnnotation {
   PolygonAnnotation({
     required this.id,
-    this.geometry,
+    required this.geometry,
     this.fillSortKey,
     this.fillColor,
     this.fillOpacity,
@@ -28,7 +28,7 @@ class PolygonAnnotation {
   String id;
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  Polygon geometry;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
@@ -48,7 +48,7 @@ class PolygonAnnotation {
   Object encode() {
     return <Object?>[
       id,
-      geometry,
+      geometry.encode(),
       fillSortKey,
       fillColor,
       fillOpacity,
@@ -61,7 +61,7 @@ class PolygonAnnotation {
     result as List<Object?>;
     return PolygonAnnotation(
       id: result[0]! as String,
-      geometry: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: Polygon.decode(result[1]! as List<Object?>),
       fillSortKey: result[2] as double?,
       fillColor: result[3] as int?,
       fillOpacity: result[4] as double?,
@@ -73,7 +73,7 @@ class PolygonAnnotation {
 
 class PolygonAnnotationOptions {
   PolygonAnnotationOptions({
-    this.geometry,
+    required this.geometry,
     this.fillSortKey,
     this.fillColor,
     this.fillOpacity,
@@ -82,7 +82,7 @@ class PolygonAnnotationOptions {
   });
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  Polygon geometry;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
@@ -101,7 +101,7 @@ class PolygonAnnotationOptions {
 
   Object encode() {
     return <Object?>[
-      geometry,
+      geometry.encode(),
       fillSortKey,
       fillColor,
       fillOpacity,
@@ -113,7 +113,7 @@ class PolygonAnnotationOptions {
   static PolygonAnnotationOptions decode(Object result) {
     result as List<Object?>;
     return PolygonAnnotationOptions(
-      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: Polygon.decode(result[0]! as List<Object?>),
       fillSortKey: result[1] as double?,
       fillColor: result[2] as int?,
       fillOpacity: result[3] as double?,
@@ -127,8 +127,11 @@ class _OnPolygonAnnotationClickListenerCodec extends StandardMessageCodec {
   const _OnPolygonAnnotationClickListenerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PolygonAnnotation) {
+    if (value is Polygon) {
       buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotation) {
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -139,6 +142,8 @@ class _OnPolygonAnnotationClickListenerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
+        return Polygon.decode(readValue(buffer)!);
+      case 129:
         return PolygonAnnotation.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -195,17 +200,20 @@ class __PolygonAnnotationMessengerCodec extends StandardMessageCodec {
   const __PolygonAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PolygonAnnotation) {
+    if (value is Polygon) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else if (value is PolygonAnnotation) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotationOptions) {
+    } else if (value is PolygonAnnotation) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else if (value is PolygonAnnotationOptions) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotationOptions) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -216,12 +224,14 @@ class __PolygonAnnotationMessengerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return PolygonAnnotation.decode(readValue(buffer)!);
+        return Polygon.decode(readValue(buffer)!);
       case 129:
         return PolygonAnnotation.decode(readValue(buffer)!);
       case 130:
-        return PolygonAnnotationOptions.decode(readValue(buffer)!);
+        return PolygonAnnotation.decode(readValue(buffer)!);
       case 131:
+        return PolygonAnnotationOptions.decode(readValue(buffer)!);
+      case 132:
         return PolygonAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
