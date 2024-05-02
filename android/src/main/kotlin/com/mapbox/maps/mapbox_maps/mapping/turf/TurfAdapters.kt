@@ -17,7 +17,7 @@ object PointDecoder {
 }
 
 fun LineString.toList(): List<Any?> {
-  return listOf(mapOf("coordinates" to coordinates()))
+  return listOf(mapOf("coordinates" to coordinates().map { it.coordinates() }))
 }
 
 object LineStringDecoder {
@@ -34,7 +34,7 @@ object LineStringDecoder {
 }
 
 fun Polygon.toList(): List<Any?> {
-  return listOf(mapOf("coordinates" to coordinates()))
+  return listOf(mapOf("coordinates" to coordinates().map { it.map { it.coordinates() } }))
 }
 
 object PolygonDecoder {
