@@ -4,6 +4,9 @@ part of mapbox_maps_flutter;
 class MapboxMap extends ChangeNotifier {
   MapboxMap({
     required _MapboxMapsPlatform mapboxMapsPlatform,
+    this.onMapTapListener,
+    this.onMapLongTapListener,
+    this.onMapScrollListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
     _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
 
