@@ -34,7 +34,11 @@ class SnapshotterInstanceManager(
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
     val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger)
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
-    val mapboxStyleManager = MapboxStyleManager(styleManager, options.pixelRatio.toFloat())
+    val mapboxStyleManager = MapboxStyleManager(
+      styleManager,
+      options.pixelRatio.toFloat(),
+      mapLoadingErrorDelegate = {}
+    )
     val snapshotterStyleController = StyleController(context, mapboxStyleManager)
 
     _SnapshotterMessenger.setUp(proxyBinaryMessenger, snapshotterController)

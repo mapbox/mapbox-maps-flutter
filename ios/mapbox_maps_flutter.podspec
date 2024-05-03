@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
 
-  s.dependency 'MapboxMaps', '~> 11.3.0'
+  s.dependency 'MapboxMaps', '~> 11.4.0-beta.2'
   s.dependency 'Turf', '2.8.0'
 
   # Flutter.framework does not contain a i386 slice.
