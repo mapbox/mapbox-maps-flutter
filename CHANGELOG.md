@@ -1,5 +1,7 @@
 ### main
 
+### 2.0.0-beta.1
+
 * Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property and cannot be set.
 * Introduce `TileCacheBudget`, a property to set per-source cache budgets in either megabytes or tiles. 
 * Expose `iconColorSaturation`, `rasterArrayBand`, `rasterElevation`, `rasterEmissiveStrength`, `hillshadeEmissiveStrength`, and `fillExtrusionEmissiveStrength` on their respective layers. 

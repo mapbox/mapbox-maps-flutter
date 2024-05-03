@@ -187,7 +187,7 @@ class _MapWidgetState extends State<MapWidget> {
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'channelSuffix': _suffix,
-      'mapboxPluginVersion': '1.1.0'
+      'mapboxPluginVersion': '2.0.0-beta.1'
     };
 
     return _mapboxMapsPlatform.buildView(widget.androidHostingMode,

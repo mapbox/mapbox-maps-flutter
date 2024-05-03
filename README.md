@@ -69,7 +69,7 @@ To access platform SDKs you will need to create a secret access token with the `
 ```
 
 #### Public token
-You can set the access token for Mapbox Maps Flutter Plugin(as well as for evey Mapbox SDK) via `MapboxOptions`:
+You can set the access token for Mapbox Maps Flutter Plugin(as well as for every Mapbox SDK) via `MapboxOptions`:
 ```
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
@@ -110,7 +110,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^1.1.0
+  mapbox_maps_flutter: ^2.0.0-beta.1
 ```
 
 ### Configure permissions
