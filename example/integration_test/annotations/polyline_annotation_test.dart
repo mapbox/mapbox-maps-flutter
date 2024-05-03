@@ -18,7 +18,7 @@ void main() {
         LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
-      geometry: geometry.toJson(),
+      geometry: geometry,
       lineJoin: LineJoin.BEVEL,
       lineSortKey: 1.0,
       lineBlur: 1.0,
@@ -32,7 +32,7 @@ void main() {
       lineWidth: 1.0,
     );
     final annotation = await manager.create(polylineAnnotationOptions);
-    var lineString = LineString.fromJson((annotation.geometry)!.cast());
+    var lineString = annotation.geometry;
     var points = lineString.coordinates;
     expect(2, points.length);
     expect(1.0, points.first.lng);
@@ -63,15 +63,15 @@ void main() {
         LineString(coordinates: [Position(1.0, 2.0), Position(10.0, 20.0)]);
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
-      geometry: geometry.toJson(),
+      geometry: geometry,
     );
     final annotation = await manager.create(polylineAnnotationOptions);
-    var lineString = LineString.fromJson((annotation.geometry)!.cast());
+    var lineString = annotation.geometry;
     var newlineString = LineString(
         coordinates: lineString.coordinates
             .map((e) => Position(e.lng + 1.0, e.lat + 1.0))
             .toList());
-    annotation.geometry = newlineString.toJson();
+    annotation.geometry = newlineString;
     await manager.update(annotation);
     await manager.delete(annotation);
 

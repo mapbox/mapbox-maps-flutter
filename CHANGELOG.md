@@ -44,7 +44,7 @@ snapshotter.setCamera(CameraOptions(center: Point(...)));
 
 final snapshotImage = await snapshotter.start()
 ```
-##### Map wiget snapshotting
+##### Map widget snapshotting
 
 Create snapshots of the map displayed in the `MapWidget` with `MapboxMap.snapshot()`. This new feature allows you to capture a static image of the current map view.
 
@@ -59,6 +59,10 @@ final snapshotImage = await mapboxMap.snapshot();
 Please note that the `snapshot()` method works best if the Mapbox Map is fully loaded before capturing an image. If the map is not fully loaded, the method might return a blank image.
 
 #### ⚠️ Breaking changes
+
+##### Leveraging [Turf](https://pub.dev/packages/turf)'s geometries as a replacement for Map<String, Any?>
+
+You now have the convenience of directly initializing annotations with Turf's geometries, eliminating the need for converting geometry to JSON.
 
 ##### Geographical position represented by `Point`s
 
@@ -102,7 +106,56 @@ onTapListener: { (context)
     ...
 }
 ```
+##### Creating an annotation with a given geometry
+*Before:*
+```dart
+PointAnnotationOptions(
+  geometry: Point(
+    coordinates: Position(0.381457, 6.687337)
+  ).toJson()
+)
+PolygonAnnotationOptions(
+  geometry: Polygon(coordinates: [
+    [
+      Position(-3.363937, -10.733102),
+      Position(1.754703, -19.716317),
+      Position(-15.747196, -21.085074),
+      Position(-3.363937, -10.733102)
+    ]
+  ]).toJson()
+)
+PolylineAnnotationOptions(
+  geometry: LineString(coordinates: [
+    Position(1.0, 2.0), 
+    Position(10.0, 20.0)
+  ]).toJson()
+)
+```
 
+*After:*
+```dart
+PointAnnotationOptions(
+  geometry: Point(
+    coordinates: Position(0.381457, 6.687337)
+  )
+)
+PolygonAnnotationOptions(
+  geometry: Polygon(coordinates: [
+    [
+      Position(-3.363937, -10.733102),
+      Position(1.754703, -19.716317),
+      Position(-15.747196, -21.085074),
+      Position(-3.363937, -10.733102)
+    ]
+  ])
+)
+PolylineAnnotationOptions(
+  geometry: LineString(coordinates: [
+    Position(1.0, 2.0), 
+    Position(10.0, 20.0)
+  ])
+)
+```
 
 * Fix camera center not applied from map init options.
 * [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.

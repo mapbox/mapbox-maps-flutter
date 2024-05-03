@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Polygon
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -56,7 +57,7 @@ struct PolygonAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
@@ -70,7 +71,7 @@ struct PolygonAnnotation {
 
   static func fromList(_ list: [Any?]) -> PolygonAnnotation? {
     let id = list[0] as! String
-    let geometry: [String?: Any?]? = nilOrValue(list[1])
+    let geometry = Polygon.fromList(list[1] as! [Any?])!
     let fillSortKey: Double? = nilOrValue(list[2])
     let fillColor: Int64? = isNullish(list[3]) ? nil : (list[3] is Int64? ? list[3] as! Int64? : Int64(list[3] as! Int32))
     let fillOpacity: Double? = nilOrValue(list[4])
@@ -90,7 +91,7 @@ struct PolygonAnnotation {
   func toList() -> [Any?] {
     return [
       id,
-      geometry,
+      geometry.toList(),
       fillSortKey,
       fillColor,
       fillOpacity,
@@ -103,7 +104,7 @@ struct PolygonAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PolygonAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
@@ -116,7 +117,7 @@ struct PolygonAnnotationOptions {
   var fillPattern: String?
 
   static func fromList(_ list: [Any?]) -> PolygonAnnotationOptions? {
-    let geometry: [String?: Any?]? = nilOrValue(list[0])
+    let geometry = Polygon.fromList(list[0] as! [Any?])!
     let fillSortKey: Double? = nilOrValue(list[1])
     let fillColor: Int64? = isNullish(list[2]) ? nil : (list[2] is Int64? ? list[2] as! Int64? : Int64(list[2] as! Int32))
     let fillOpacity: Double? = nilOrValue(list[3])
@@ -134,7 +135,7 @@ struct PolygonAnnotationOptions {
   }
   func toList() -> [Any?] {
     return [
-      geometry,
+      geometry.toList(),
       fillSortKey,
       fillColor,
       fillOpacity,
@@ -147,6 +148,8 @@ private class OnPolygonAnnotationClickListenerCodecReader: FlutterStandardReader
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
+      return Polygon.fromList(self.readValue() as! [Any?])
+    case 129:
       return PolygonAnnotation.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -156,8 +159,11 @@ private class OnPolygonAnnotationClickListenerCodecReader: FlutterStandardReader
 
 private class OnPolygonAnnotationClickListenerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PolygonAnnotation {
+    if let value = value as? Polygon {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotation {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -216,12 +222,14 @@ private class _PolygonAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+      return Polygon.fromList(self.readValue() as! [Any?])
     case 129:
       return PolygonAnnotation.fromList(self.readValue() as! [Any?])
     case 130:
-      return PolygonAnnotationOptions.fromList(self.readValue() as! [Any?])
+      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
     case 131:
+      return PolygonAnnotationOptions.fromList(self.readValue() as! [Any?])
+    case 132:
       return PolygonAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -231,17 +239,20 @@ private class _PolygonAnnotationMessengerCodecReader: FlutterStandardReader {
 
 private class _PolygonAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PolygonAnnotation {
+    if let value = value as? Polygon {
       super.writeByte(128)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonAnnotation {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotationOptions {
+    } else if let value = value as? PolygonAnnotation {
       super.writeByte(130)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonAnnotationOptions {
       super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotationOptions {
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

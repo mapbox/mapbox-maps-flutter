@@ -52,7 +52,7 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       var options = <CircleAnnotationOptions>[];
       for (var i = 0; i < 2000; i++) {
         options.add(CircleAnnotationOptions(
-            geometry: createRandomPoint().toJson(),
+            geometry: createRandomPoint(),
             circleColor: createRandomColor(),
             circleRadius: 8.0));
       }
@@ -72,11 +72,12 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
               coordinates: Position(
             0.381457,
             6.687337,
-          )).toJson(),
+          )),
           circleColor: Colors.yellow.value,
           circleRadius: 12.0,
         ))
         .then((value) => circleAnnotation = value);
+    ;
   }
 
   @override
@@ -94,11 +95,11 @@ class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
       child: Text('update a circle annotation'),
       onPressed: () {
         if (circleAnnotation != null) {
-          var point = Point.fromJson((circleAnnotation!.geometry)!.cast());
+          var point = circleAnnotation!.geometry;
           var newPoint = Point(
               coordinates: Position(
                   point.coordinates.lng + 1.0, point.coordinates.lat + 1.0));
-          circleAnnotation?.geometry = newPoint.toJson();
+          circleAnnotation?.geometry = newPoint;
           circleAnnotationManager?.update(circleAnnotation!);
         }
       },

@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -72,7 +73,7 @@ struct CircleAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
@@ -92,7 +93,7 @@ struct CircleAnnotation {
 
   static func fromList(_ list: [Any?]) -> CircleAnnotation? {
     let id = list[0] as! String
-    let geometry: [String?: Any?]? = nilOrValue(list[1])
+    let geometry = Point.fromList(list[1] as! [Any?])!
     let circleSortKey: Double? = nilOrValue(list[2])
     let circleBlur: Double? = nilOrValue(list[3])
     let circleColor: Int64? = isNullish(list[4]) ? nil : (list[4] is Int64? ? list[4] as! Int64? : Int64(list[4] as! Int32))
@@ -118,7 +119,7 @@ struct CircleAnnotation {
   func toList() -> [Any?] {
     return [
       id,
-      geometry,
+      geometry.toList(),
       circleSortKey,
       circleBlur,
       circleColor,
@@ -134,7 +135,7 @@ struct CircleAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CircleAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
@@ -153,7 +154,7 @@ struct CircleAnnotationOptions {
   var circleStrokeWidth: Double?
 
   static func fromList(_ list: [Any?]) -> CircleAnnotationOptions? {
-    let geometry: [String?: Any?]? = nilOrValue(list[0])
+    let geometry = Point.fromList(list[0] as! [Any?])!
     let circleSortKey: Double? = nilOrValue(list[1])
     let circleBlur: Double? = nilOrValue(list[2])
     let circleColor: Int64? = isNullish(list[3]) ? nil : (list[3] is Int64? ? list[3] as! Int64? : Int64(list[3] as! Int32))
@@ -177,7 +178,7 @@ struct CircleAnnotationOptions {
   }
   func toList() -> [Any?] {
     return [
-      geometry,
+      geometry.toList(),
       circleSortKey,
       circleBlur,
       circleColor,
@@ -194,6 +195,8 @@ private class OnCircleAnnotationClickListenerCodecReader: FlutterStandardReader 
     switch type {
     case 128:
       return CircleAnnotation.fromList(self.readValue() as! [Any?])
+    case 129:
+      return Point.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -204,6 +207,9 @@ private class OnCircleAnnotationClickListenerCodecWriter: FlutterStandardWriter 
   override func writeValue(_ value: Any) {
     if let value = value as? CircleAnnotation {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? Point {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -269,6 +275,8 @@ private class _CircleAnnotationMessengerCodecReader: FlutterStandardReader {
       return CircleAnnotationOptions.fromList(self.readValue() as! [Any?])
     case 131:
       return CircleAnnotationOptions.fromList(self.readValue() as! [Any?])
+    case 132:
+      return Point.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -288,6 +296,9 @@ private class _CircleAnnotationMessengerCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? CircleAnnotationOptions {
       super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? Point {
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

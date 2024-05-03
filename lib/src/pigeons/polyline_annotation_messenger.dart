@@ -40,7 +40,7 @@ enum LineTranslateAnchor {
 class PolylineAnnotation {
   PolylineAnnotation({
     required this.id,
-    this.geometry,
+    required this.geometry,
     this.lineJoin,
     this.lineSortKey,
     this.lineBlur,
@@ -58,7 +58,7 @@ class PolylineAnnotation {
   String id;
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  LineString geometry;
 
   /// The display of lines when joining.
   LineJoin? lineJoin;
@@ -96,7 +96,7 @@ class PolylineAnnotation {
   Object encode() {
     return <Object?>[
       id,
-      geometry,
+      geometry.encode(),
       lineJoin?.index,
       lineSortKey,
       lineBlur,
@@ -115,7 +115,7 @@ class PolylineAnnotation {
     result as List<Object?>;
     return PolylineAnnotation(
       id: result[0]! as String,
-      geometry: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: LineString.decode(result[1]! as List<Object?>),
       lineJoin: result[2] != null ? LineJoin.values[result[2]! as int] : null,
       lineSortKey: result[3] as double?,
       lineBlur: result[4] as double?,
@@ -133,7 +133,7 @@ class PolylineAnnotation {
 
 class PolylineAnnotationOptions {
   PolylineAnnotationOptions({
-    this.geometry,
+    required this.geometry,
     this.lineJoin,
     this.lineSortKey,
     this.lineBlur,
@@ -148,7 +148,7 @@ class PolylineAnnotationOptions {
   });
 
   /// The geometry that determines the location/shape of this annotation
-  Map<String?, Object?>? geometry;
+  LineString geometry;
 
   /// The display of lines when joining.
   LineJoin? lineJoin;
@@ -185,7 +185,7 @@ class PolylineAnnotationOptions {
 
   Object encode() {
     return <Object?>[
-      geometry,
+      geometry.encode(),
       lineJoin?.index,
       lineSortKey,
       lineBlur,
@@ -203,7 +203,7 @@ class PolylineAnnotationOptions {
   static PolylineAnnotationOptions decode(Object result) {
     result as List<Object?>;
     return PolylineAnnotationOptions(
-      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: LineString.decode(result[0]! as List<Object?>),
       lineJoin: result[1] != null ? LineJoin.values[result[1]! as int] : null,
       lineSortKey: result[2] as double?,
       lineBlur: result[3] as double?,
@@ -223,8 +223,11 @@ class _OnPolylineAnnotationClickListenerCodec extends StandardMessageCodec {
   const _OnPolylineAnnotationClickListenerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PolylineAnnotation) {
+    if (value is LineString) {
       buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotation) {
+      buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -235,6 +238,8 @@ class _OnPolylineAnnotationClickListenerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
+        return LineString.decode(readValue(buffer)!);
+      case 129:
         return PolylineAnnotation.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -291,17 +296,20 @@ class __PolylineAnnotationMessengerCodec extends StandardMessageCodec {
   const __PolylineAnnotationMessengerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is PolylineAnnotation) {
+    if (value is LineString) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else if (value is PolylineAnnotation) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineAnnotationOptions) {
+    } else if (value is PolylineAnnotation) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else if (value is PolylineAnnotationOptions) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotationOptions) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -312,12 +320,14 @@ class __PolylineAnnotationMessengerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return PolylineAnnotation.decode(readValue(buffer)!);
+        return LineString.decode(readValue(buffer)!);
       case 129:
         return PolylineAnnotation.decode(readValue(buffer)!);
       case 130:
-        return PolylineAnnotationOptions.decode(readValue(buffer)!);
+        return PolylineAnnotation.decode(readValue(buffer)!);
       case 131:
+        return PolylineAnnotationOptions.decode(readValue(buffer)!);
+      case 132:
         return PolylineAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

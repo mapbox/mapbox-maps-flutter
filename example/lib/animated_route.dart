@@ -184,7 +184,7 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
     // build route from puck position to the clicked annotation
     final start = await mapState.mapboxMap.style.getPuckPosition();
-    final end = Point.fromJson((annotation.geometry)!.cast());
+    final end = annotation.geometry;
 
     final coordinates = await fetchRouteCoordinates(
         start, end.coordinates, MapsDemo.ACCESS_TOKEN);

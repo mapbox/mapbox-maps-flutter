@@ -219,7 +219,7 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
 extension CircleAnnotationOptions {
 
     func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
-        var annotation = MapboxMaps.CircleAnnotation(centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: geometry)!)
+        var annotation = MapboxMaps.CircleAnnotation(point: geometry)
         if let circleSortKey {
             annotation.circleSortKey = circleSortKey
         }
@@ -251,8 +251,8 @@ extension CircleAnnotationOptions {
 extension CircleAnnotation {
 
     func toCircleAnnotation() -> MapboxMaps.CircleAnnotation {
-                var annotation = MapboxMaps.CircleAnnotation(id: self.id, centerCoordinate: convertDictionaryToCLLocationCoordinate2D(dict: self.geometry)!)
-                if let circleSortKey {
+        var annotation = MapboxMaps.CircleAnnotation(id: self.id, point: geometry)
+        if let circleSortKey {
             annotation.circleSortKey = circleSortKey
         }
         if let circleBlur {
@@ -282,9 +282,9 @@ extension CircleAnnotation {
 
 extension MapboxMaps.CircleAnnotation {
     func toFLTCircleAnnotation() -> CircleAnnotation {
-        return CircleAnnotation(
+        CircleAnnotation(
             id: id,
-            geometry: geometry.toMap(),
+            geometry: point,
             circleSortKey: circleSortKey,
             circleBlur: circleBlur,
             circleColor: circleColor?.intValue,

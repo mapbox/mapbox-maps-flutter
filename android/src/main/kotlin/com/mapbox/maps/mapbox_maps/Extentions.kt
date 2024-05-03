@@ -284,36 +284,6 @@ fun Map<String?, Any?>.toPoint(): Point {
   return Point.fromLngLat(longitude, latitude, boundingBox)
 }
 
-fun Map<String?, Any?>.toPoints(): List<Point> {
-  return (this["coordinates"] as List<List<Double>>).map {
-    Point.fromLngLat(it.first(), it.last())
-  }
-}
-
-fun Map<String?, Any?>.toPointsList(): List<List<Point>> {
-  return (this["coordinates"] as List<List<List<Double>>>).map {
-    it.map {
-      Point.fromLngLat(it.first(), it.last())
-    }
-  }
-}
-
-fun Map<String?, Any?>.toLineString(): LineString {
-  return LineString.fromLngLats(
-    (this["coordinates"] as List<List<Double>>).map {
-      Point.fromLngLat(it.first(), it.last())
-    }
-  )
-}
-
-fun Map<String?, Any?>.toPolygon(): Polygon {
-  return Polygon.fromLngLats(
-    (this["coordinates"] as List<List<List<Double>>>).map {
-      it.map { Point.fromLngLat(it.first(), it.last()) }
-    }
-  )
-}
-
 fun CoordinateBounds.toCoordinateBounds() =
   com.mapbox.maps.CoordinateBounds(southwest, northeast, infiniteBounds)
 
@@ -487,33 +457,6 @@ fun com.mapbox.maps.MapOptions.toFLTMapOptions(context: Context): MapOptions {
 
 fun com.mapbox.maps.Size.toFLTSize(context: Context): Size {
   return Size(width.toLogicalPixels(context), height.toLogicalPixels(context))
-}
-
-fun Point.toMap(): Map<String?, Any> {
-  val map = mutableMapOf<String?, Any>()
-  map["coordinates"] = coordinates()
-  bbox()?.let {
-    map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
-  }
-  return map
-}
-
-fun Polygon.toMap(): Map<String?, Any> {
-  val map = mutableMapOf<String?, Any>()
-  map["coordinates"] = coordinates().map { it.map { it.coordinates() } }
-  bbox()?.let {
-    map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
-  }
-  return map
-}
-
-fun LineString.toMap(): Map<String?, Any> {
-  val map = mutableMapOf<String?, Any>()
-  map["coordinates"] = coordinates().map { it.coordinates() }
-  bbox()?.let {
-    map["bbox"] = mapOf(Pair("southwest", it.southwest()), Pair("northeast", it.northeast()))
-  }
-  return map
 }
 
 fun com.mapbox.maps.ScreenCoordinate.toFLTScreenCoordinate(context: Context): ScreenCoordinate {

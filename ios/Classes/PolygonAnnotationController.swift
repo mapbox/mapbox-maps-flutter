@@ -199,7 +199,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 extension PolygonAnnotationOptions {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
-        var annotation = MapboxMaps.PolygonAnnotation(polygon: convertDictionaryToPolygon(dict: self.geometry!))
+        var annotation = MapboxMaps.PolygonAnnotation(polygon: geometry)
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
@@ -222,8 +222,8 @@ extension PolygonAnnotationOptions {
 extension PolygonAnnotation {
 
     func toPolygonAnnotation() -> MapboxMaps.PolygonAnnotation {
-                var annotation = MapboxMaps.PolygonAnnotation(id: self.id, polygon: convertDictionaryToPolygon(dict: self.geometry!))
-                if let fillSortKey {
+        var annotation = MapboxMaps.PolygonAnnotation(id: self.id, polygon: geometry)
+        if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
         if let fillColor {
@@ -244,9 +244,9 @@ extension PolygonAnnotation {
 
 extension MapboxMaps.PolygonAnnotation {
     func toFLTPolygonAnnotation() -> PolygonAnnotation {
-        return PolygonAnnotation(
+        PolygonAnnotation(
             id: id,
-            geometry: geometry.toMap(),
+            geometry: polygon,
             fillSortKey: fillSortKey,
             fillColor: fillColor?.intValue,
             fillOpacity: fillOpacity,

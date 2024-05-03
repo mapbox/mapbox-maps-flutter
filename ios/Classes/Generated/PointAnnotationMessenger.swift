@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -232,7 +233,7 @@ struct PointAnnotation {
   /// The id for annotation
   var id: String
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Point
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
@@ -303,7 +304,7 @@ struct PointAnnotation {
 
   static func fromList(_ list: [Any?]) -> PointAnnotation? {
     let id = list[0] as! String
-    let geometry: [String?: Any?]? = nilOrValue(list[1])
+    let geometry = Point.fromList(list[1] as! [Any?])!
     let image: FlutterStandardTypedData? = nilOrValue(list[2])
     var iconAnchor: IconAnchor?
     let iconAnchorEnumVal: Int? = nilOrValue(list[3])
@@ -399,7 +400,7 @@ struct PointAnnotation {
   func toList() -> [Any?] {
     return [
       id,
-      geometry,
+      geometry.toList(),
       image,
       iconAnchor?.rawValue,
       iconImage,
@@ -440,7 +441,7 @@ struct PointAnnotation {
 /// Generated class from Pigeon that represents data sent in messages.
 struct PointAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
-  var geometry: [String?: Any?]?
+  var geometry: Point
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
@@ -510,7 +511,7 @@ struct PointAnnotationOptions {
   var textOpacity: Double?
 
   static func fromList(_ list: [Any?]) -> PointAnnotationOptions? {
-    let geometry: [String?: Any?]? = nilOrValue(list[0])
+    let geometry = Point.fromList(list[0] as! [Any?])!
     let image: FlutterStandardTypedData? = nilOrValue(list[1])
     var iconAnchor: IconAnchor?
     let iconAnchorEnumVal: Int? = nilOrValue(list[2])
@@ -604,7 +605,7 @@ struct PointAnnotationOptions {
   }
   func toList() -> [Any?] {
     return [
-      geometry,
+      geometry.toList(),
       image,
       iconAnchor?.rawValue,
       iconImage,
@@ -645,6 +646,8 @@ private class OnPointAnnotationClickListenerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
+      return Point.fromList(self.readValue() as! [Any?])
+    case 129:
       return PointAnnotation.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -654,8 +657,11 @@ private class OnPointAnnotationClickListenerCodecReader: FlutterStandardReader {
 
 private class OnPointAnnotationClickListenerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PointAnnotation {
+    if let value = value as? Point {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotation {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -714,12 +720,14 @@ private class _PointAnnotationMessengerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return PointAnnotation.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 129:
       return PointAnnotation.fromList(self.readValue() as! [Any?])
     case 130:
-      return PointAnnotationOptions.fromList(self.readValue() as! [Any?])
+      return PointAnnotation.fromList(self.readValue() as! [Any?])
     case 131:
+      return PointAnnotationOptions.fromList(self.readValue() as! [Any?])
+    case 132:
       return PointAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -729,17 +737,20 @@ private class _PointAnnotationMessengerCodecReader: FlutterStandardReader {
 
 private class _PointAnnotationMessengerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? PointAnnotation {
+    if let value = value as? Point {
       super.writeByte(128)
       super.writeValue(value.toList())
     } else if let value = value as? PointAnnotation {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotationOptions {
+    } else if let value = value as? PointAnnotation {
       super.writeByte(130)
       super.writeValue(value.toList())
     } else if let value = value as? PointAnnotationOptions {
       super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? PointAnnotationOptions {
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

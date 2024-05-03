@@ -4,6 +4,8 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Point
+import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
@@ -314,7 +316,7 @@ data class PointAnnotation(
   /** The id for annotation */
   val id: String,
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: Point,
   /**
    * The bitmap image for this Annotation
    * Will not take effect if [iconImage] has been set.
@@ -390,7 +392,7 @@ data class PointAnnotation(
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): PointAnnotation {
       val id = list[0] as String
-      val geometry = list[1] as Map<String?, Any?>?
+      val geometry = PointDecoder.fromList(list[1] as List<Any?>)
       val image = list[2] as ByteArray?
       val iconAnchor = (list[3] as Int?)?.let {
         IconAnchor.ofRaw(it)
@@ -440,7 +442,7 @@ data class PointAnnotation(
   fun toList(): List<Any?> {
     return listOf<Any?>(
       id,
-      geometry,
+      geometry.toList(),
       image,
       iconAnchor?.raw,
       iconImage,
@@ -481,7 +483,7 @@ data class PointAnnotation(
 /** Generated class from Pigeon that represents data sent in messages. */
 data class PointAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: Point,
   /**
    * The bitmap image for this Annotation
    * Will not take effect if [iconImage] has been set.
@@ -556,7 +558,7 @@ data class PointAnnotationOptions(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): PointAnnotationOptions {
-      val geometry = list[0] as Map<String?, Any?>?
+      val geometry = PointDecoder.fromList(list[0] as List<Any?>)
       val image = list[1] as ByteArray?
       val iconAnchor = (list[2] as Int?)?.let {
         IconAnchor.ofRaw(it)
@@ -605,7 +607,7 @@ data class PointAnnotationOptions(
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
-      geometry,
+      geometry.toList(),
       image,
       iconAnchor?.raw,
       iconImage,
@@ -648,6 +650,11 @@ private object OnPointAnnotationClickListenerCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           PointAnnotation.fromList(it)
         }
       }
@@ -656,8 +663,12 @@ private object OnPointAnnotationClickListenerCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is PointAnnotation -> {
+      is Point -> {
         stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotation -> {
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -697,7 +708,7 @@ private object _PointAnnotationMessengerCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointAnnotation.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       129.toByte() -> {
@@ -707,10 +718,15 @@ private object _PointAnnotationMessengerCodec : StandardMessageCodec() {
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointAnnotationOptions.fromList(it)
+          PointAnnotation.fromList(it)
         }
       }
       131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointAnnotationOptions.fromList(it)
+        }
+      }
+      132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PointAnnotationOptions.fromList(it)
         }
@@ -720,7 +736,7 @@ private object _PointAnnotationMessengerCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is PointAnnotation -> {
+      is Point -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
@@ -728,12 +744,16 @@ private object _PointAnnotationMessengerCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is PointAnnotationOptions -> {
+      is PointAnnotation -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
       is PointAnnotationOptions -> {
         stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotationOptions -> {
+        stream.write(132)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
