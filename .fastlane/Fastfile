@@ -28,9 +28,9 @@ platform :ios do
     run_tests(
       workspace: 'example/ios/Runner.xcworkspace',
       scheme: 'Runner',                   # XCTest scheme
-      xcconfig: "example/ios/Flutter/Release.xcconfig",
+      xcconfig: "example/ios/Flutter/Debug.xcconfig",
       derived_data_path: "example/build/output",
-      configuration: "Release",
+      configuration: "Debug",
       xcargs: "ENABLE_TESTABILITY=YES SWIFT_TREAT_WARNINGS_AS_ERRORS=NO COMPILER_INDEX_STORE_ENABLE=NO",
       skip_detect_devices: true,          # Required
       build_for_testing: true,            # Required
