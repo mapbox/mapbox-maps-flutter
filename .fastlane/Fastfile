@@ -31,7 +31,7 @@ platform :ios do
       xcconfig: "example/ios/Flutter/Release.xcconfig",
       derived_data_path: "example/build/output",
       configuration: "Release",
-      xcargs: "ENABLE_TESTABILITY=YES SWIFT_TREAT_WARNINGS_AS_ERRORS=NO COMPILER_INDEX_STORE_ENABLE=NO",
+      xcargs: "SWIFT_TREAT_WARNINGS_AS_ERRORS=NO COMPILER_INDEX_STORE_ENABLE=NO",
       skip_detect_devices: true,          # Required
       build_for_testing: true,            # Required
       sdk: 'iphoneos',                    # Required
