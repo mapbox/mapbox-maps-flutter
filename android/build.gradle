@@ -42,6 +42,7 @@ apply plugin: 'kotlin-android'
 android {
     compileSdk 33
 
+    namespace 'com.mapbox.maps.mapbox_maps'
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -52,6 +53,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
