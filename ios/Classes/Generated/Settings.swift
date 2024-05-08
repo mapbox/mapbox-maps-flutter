@@ -609,6 +609,9 @@ struct CompassSettings {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct AttributionSettings {
+  /// Whether the attribution icon is visible on the map.
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  var enabled: Bool?
   /// Defines text color of the attribution icon.
   var iconColor: Int64?
   /// Defines where the attribution icon is positioned on the map
@@ -625,19 +628,21 @@ struct AttributionSettings {
   var clickable: Bool?
 
   static func fromList(_ list: [Any?]) -> AttributionSettings? {
-    let iconColor: Int64? = isNullish(list[0]) ? nil : (list[0] is Int64? ? list[0] as! Int64? : Int64(list[0] as! Int32))
+    let enabled: Bool? = nilOrValue(list[0])
+    let iconColor: Int64? = isNullish(list[1]) ? nil : (list[1] is Int64? ? list[1] as! Int64? : Int64(list[1] as! Int32))
     var position: OrnamentPosition?
-    let positionEnumVal: Int? = nilOrValue(list[1])
+    let positionEnumVal: Int? = nilOrValue(list[2])
     if let positionRawValue = positionEnumVal {
       position = OrnamentPosition(rawValue: positionRawValue)!
     }
-    let marginLeft: Double? = nilOrValue(list[2])
-    let marginTop: Double? = nilOrValue(list[3])
-    let marginRight: Double? = nilOrValue(list[4])
-    let marginBottom: Double? = nilOrValue(list[5])
-    let clickable: Bool? = nilOrValue(list[6])
+    let marginLeft: Double? = nilOrValue(list[3])
+    let marginTop: Double? = nilOrValue(list[4])
+    let marginRight: Double? = nilOrValue(list[5])
+    let marginBottom: Double? = nilOrValue(list[6])
+    let clickable: Bool? = nilOrValue(list[7])
 
     return AttributionSettings(
+      enabled: enabled,
       iconColor: iconColor,
       position: position,
       marginLeft: marginLeft,
@@ -649,6 +654,7 @@ struct AttributionSettings {
   }
   func toList() -> [Any?] {
     return [
+      enabled,
       iconColor,
       position?.rawValue,
       marginLeft,
@@ -664,6 +670,9 @@ struct AttributionSettings {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct LogoSettings {
+  /// Whether the logo is visible on the map.
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  var enabled: Bool?
   /// Defines where the logo is positioned on the map
   var position: OrnamentPosition?
   /// Defines the margin to the left that the attribution icon honors. This property is specified in pixels.
@@ -676,17 +685,19 @@ struct LogoSettings {
   var marginBottom: Double?
 
   static func fromList(_ list: [Any?]) -> LogoSettings? {
+    let enabled: Bool? = nilOrValue(list[0])
     var position: OrnamentPosition?
-    let positionEnumVal: Int? = nilOrValue(list[0])
+    let positionEnumVal: Int? = nilOrValue(list[1])
     if let positionRawValue = positionEnumVal {
       position = OrnamentPosition(rawValue: positionRawValue)!
     }
-    let marginLeft: Double? = nilOrValue(list[1])
-    let marginTop: Double? = nilOrValue(list[2])
-    let marginRight: Double? = nilOrValue(list[3])
-    let marginBottom: Double? = nilOrValue(list[4])
+    let marginLeft: Double? = nilOrValue(list[2])
+    let marginTop: Double? = nilOrValue(list[3])
+    let marginRight: Double? = nilOrValue(list[4])
+    let marginBottom: Double? = nilOrValue(list[5])
 
     return LogoSettings(
+      enabled: enabled,
       position: position,
       marginLeft: marginLeft,
       marginTop: marginTop,
@@ -696,6 +707,7 @@ struct LogoSettings {
   }
   func toList() -> [Any?] {
     return [
+      enabled,
       position?.rawValue,
       marginLeft,
       marginTop,

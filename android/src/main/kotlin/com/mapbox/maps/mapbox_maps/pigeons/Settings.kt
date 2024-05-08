@@ -558,6 +558,11 @@ data class CompassSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class AttributionSettings(
+  /**
+   * Whether the attribution icon is visible on the map.
+   * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+   */
+  val enabled: Boolean? = null,
   /** Defines text color of the attribution icon. */
   val iconColor: Long? = null,
   /** Defines where the attribution icon is positioned on the map */
@@ -577,20 +582,22 @@ data class AttributionSettings(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): AttributionSettings {
-      val iconColor = list[0].let { if (it is Int) it.toLong() else it as Long? }
-      val position = (list[1] as Int?)?.let {
+      val enabled = list[0] as Boolean?
+      val iconColor = list[1].let { if (it is Int) it.toLong() else it as Long? }
+      val position = (list[2] as Int?)?.let {
         OrnamentPosition.ofRaw(it)
       }
-      val marginLeft = list[2] as Double?
-      val marginTop = list[3] as Double?
-      val marginRight = list[4] as Double?
-      val marginBottom = list[5] as Double?
-      val clickable = list[6] as Boolean?
-      return AttributionSettings(iconColor, position, marginLeft, marginTop, marginRight, marginBottom, clickable)
+      val marginLeft = list[3] as Double?
+      val marginTop = list[4] as Double?
+      val marginRight = list[5] as Double?
+      val marginBottom = list[6] as Double?
+      val clickable = list[7] as Boolean?
+      return AttributionSettings(enabled, iconColor, position, marginLeft, marginTop, marginRight, marginBottom, clickable)
     }
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
+      enabled,
       iconColor,
       position?.raw,
       marginLeft,
@@ -608,6 +615,11 @@ data class AttributionSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class LogoSettings(
+  /**
+   * Whether the logo is visible on the map.
+   * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+   */
+  val enabled: Boolean? = null,
   /** Defines where the logo is positioned on the map */
   val position: OrnamentPosition? = null,
   /** Defines the margin to the left that the attribution icon honors. This property is specified in pixels. */
@@ -623,18 +635,20 @@ data class LogoSettings(
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromList(list: List<Any?>): LogoSettings {
-      val position = (list[0] as Int?)?.let {
+      val enabled = list[0] as Boolean?
+      val position = (list[1] as Int?)?.let {
         OrnamentPosition.ofRaw(it)
       }
-      val marginLeft = list[1] as Double?
-      val marginTop = list[2] as Double?
-      val marginRight = list[3] as Double?
-      val marginBottom = list[4] as Double?
-      return LogoSettings(position, marginLeft, marginTop, marginRight, marginBottom)
+      val marginLeft = list[2] as Double?
+      val marginTop = list[3] as Double?
+      val marginRight = list[4] as Double?
+      val marginBottom = list[5] as Double?
+      return LogoSettings(enabled, position, marginLeft, marginTop, marginRight, marginBottom)
     }
   }
   fun toList(): List<Any?> {
     return listOf<Any?>(
+      enabled,
       position?.raw,
       marginLeft,
       marginTop,

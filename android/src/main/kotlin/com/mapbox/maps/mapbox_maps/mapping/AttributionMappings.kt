@@ -8,6 +8,7 @@ import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettingsInterface
 
 fun AttributionSettingsInterface.applyFromFLT(settings: AttributionSettings, context: Context) {
+  settings.enabled?.let { enabled = it }
   settings.iconColor?.let { iconColor = it.toInt() }
   settings.position?.let { position = it.toPosition() }
   settings.marginLeft?.let { marginLeft = it.toDevicePixels(context) }
@@ -18,6 +19,7 @@ fun AttributionSettingsInterface.applyFromFLT(settings: AttributionSettings, con
 }
 
 fun AttributionSettingsInterface.toFLT(context: Context) = AttributionSettings(
+  enabled = enabled,
   iconColor = iconColor.toUInt().toLong(),
   position = position.toOrnamentPosition(),
   marginLeft = marginLeft.toLogicalPixels(context),
