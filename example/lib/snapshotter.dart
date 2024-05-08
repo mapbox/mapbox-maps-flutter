@@ -91,7 +91,9 @@ class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
               color: Colors.amber,
             ),
           ),
-          Expanded(key: _snapshotKey, child: snapshotImage ?? ColoredBox(color: Colors.grey)),
+          Expanded(
+              key: _snapshotKey,
+              child: snapshotImage ?? ColoredBox(color: Colors.grey)),
         ],
       ),
     );

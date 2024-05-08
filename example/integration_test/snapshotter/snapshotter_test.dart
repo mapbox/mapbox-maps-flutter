@@ -46,10 +46,10 @@ void main() {
       pixelRatio: 1.5,
     );
     final snapshotter = await Snapshotter.create(
-        options: options,
-        onStyleLoadedListener: styleLoaded.complete,
-        onStyleDataLoadedListener: styleDataLoaded.complete,
-        );
+      options: options,
+      onStyleLoadedListener: styleLoaded.complete,
+      onStyleDataLoadedListener: styleDataLoaded.complete,
+    );
 
     await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
 
@@ -98,8 +98,10 @@ void main() {
       bearing: cameraOptions.bearing,
       pitch: cameraOptions.pitch,
     );
-    expect(camera.center?.coordinates.lat, closeTo(cameraOptions.center!.coordinates.lat, 0.001));
-    expect(camera.center?.coordinates.lng, closeTo(cameraOptions.center!.coordinates.lng, 0.001));
+    expect(camera.center?.coordinates.lat,
+        closeTo(cameraOptions.center!.coordinates.lat, 0.001));
+    expect(camera.center?.coordinates.lng,
+        closeTo(cameraOptions.center!.coordinates.lng, 0.001));
     expect(camera.bearing, closeTo(cameraOptions.bearing!, 0.001));
     expect(camera.pitch, closeTo(cameraOptions.pitch!, 0.001));
 

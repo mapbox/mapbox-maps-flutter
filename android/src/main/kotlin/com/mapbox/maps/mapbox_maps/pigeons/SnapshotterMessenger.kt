@@ -198,7 +198,7 @@ private object _SnapshotterInstanceManagerCodec : StandardMessageCodec() {
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _SnapshotterInstanceManager {
-  fun setupSnapshotterForSuffix(suffix: String, options: MapSnapshotOptions)
+  fun setupSnapshotterForSuffix(suffix: String, eventTypes: List<Long>, options: MapSnapshotOptions)
   fun tearDownSnapshotterForSuffix(suffix: String)
 
   companion object {
@@ -216,10 +216,11 @@ interface _SnapshotterInstanceManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val suffixArg = args[0] as String
-            val optionsArg = args[1] as MapSnapshotOptions
+            val eventTypesArg = args[1] as List<Long>
+            val optionsArg = args[2] as MapSnapshotOptions
             var wrapped: List<Any?>
             try {
-              api.setupSnapshotterForSuffix(suffixArg, optionsArg)
+              api.setupSnapshotterForSuffix(suffixArg, eventTypesArg, optionsArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

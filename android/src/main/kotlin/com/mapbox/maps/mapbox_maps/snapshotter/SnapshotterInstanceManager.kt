@@ -24,7 +24,11 @@ class SnapshotterInstanceManager(
   private var proxyMessengers = HashMap<String, ProxyBinaryMessenger>()
 
   @SuppressLint("RestrictedApi")
-  override fun setupSnapshotterForSuffix(suffix: String, options: MapSnapshotOptions) {
+  override fun setupSnapshotterForSuffix(
+    suffix: String,
+    eventTypes: List<Long>,
+    options: MapSnapshotOptions
+  ) {
     val snapshotter = Snapshotter(
       context,
       options = options.toSnapshotOptions(context),
@@ -32,7 +36,7 @@ class SnapshotterInstanceManager(
     )
     val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, suffix)
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
-    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger)
+    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger, eventTypes.map { it.toInt() })
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
     val mapboxStyleManager = MapboxStyleManager(
       styleManager,

@@ -45,7 +45,7 @@ final class MapboxEventHandler {
     private let channel: FlutterMethodChannel
     private var cancelables = Set<AnyCancelable>()
 
-    init(eventProvider: EventProvider, binaryMessenger: FlutterBinaryMessenger) {
+    init(eventProvider: EventProvider, binaryMessenger: FlutterBinaryMessenger, eventTypes: [Int]) {
         self.eventProvider = eventProvider
         self.binaryMessenger = binaryMessenger
 
@@ -56,6 +56,10 @@ final class MapboxEventHandler {
         channel.setMethodCallHandler { [weak self] methodCall, result in
             self?.handleMethodCall(methodCall, result: result)
         }
+
+        eventTypes
+            .compactMap(_MapEvent.init)
+            .forEach(subscribeToEvent)
     }
 
     private func handleMethodCall(_ methodCall: FlutterMethodCall, result: FlutterResult) {
