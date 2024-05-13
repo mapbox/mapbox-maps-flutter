@@ -67,15 +67,17 @@ final class Snapshotter {
         onStyleDataLoadedListener: onStyleDataLoadedListener,
         onStyleImageMissingListener: onStyleImageMissingListener);
 
-    await _snapshotterInstanceManager.setupSnapshotterForSuffix(
-        snapshotter._suffix.toString(), options);
+    snapshotter._mapEvents._onStyleLoadedListener = onStyleLoadedListener;
+    snapshotter._mapEvents._onMapLoadErrorListener = onMapLoadErrorListener;
+    snapshotter._mapEvents._onStyleDataLoadedListener =
+        onStyleDataLoadedListener;
+    snapshotter._mapEvents._onStyleImageMissingListener =
+        onStyleImageMissingListener;
 
-    snapshotter._mapEvents.updateSubscriptions(
-      onStyleLoadedListener: onStyleLoadedListener,
-      onMapLoadErrorListener: onMapLoadErrorListener,
-      onStyleDataLoadedListener: onStyleDataLoadedListener,
-      onStyleImageMissingListener: onStyleImageMissingListener,
-    );
+    await _snapshotterInstanceManager.setupSnapshotterForSuffix(
+        snapshotter._suffix.toString(),
+        snapshotter._mapEvents.eventTypes.map((e) => e.index).toList(),
+        options);
 
     Snapshotter._finalizer.attach(snapshotter, snapshotter._suffix);
     return snapshotter;

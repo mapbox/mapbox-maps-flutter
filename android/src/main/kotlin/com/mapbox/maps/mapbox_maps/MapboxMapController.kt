@@ -38,7 +38,8 @@ class MapboxMapController(
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   messenger: BinaryMessenger,
   channelSuffix: Int,
-  pluginVersion: String
+  pluginVersion: String,
+  eventTypes: List<Int>
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {
@@ -122,7 +123,7 @@ class MapboxMapController(
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
-    eventHandler = MapboxEventHandler(mapboxMap.styleManager, proxyBinaryMessenger)
+    eventHandler = MapboxEventHandler(mapboxMap.styleManager, proxyBinaryMessenger, eventTypes)
     styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
     projectionController = MapProjectionController(mapboxMap)

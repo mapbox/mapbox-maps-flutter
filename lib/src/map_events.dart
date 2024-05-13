@@ -16,51 +16,40 @@ final class _MapEvents {
   OnStyleImageUnusedListener? _onStyleImageUnusedListener;
   OnResourceRequestListener? _onResourceRequestListener;
   late final MethodChannel _channel;
-  List<_MapEvent> _eventTypes = [];
+  List<_MapEvent> _subscribedEventTypes = [];
 
-  _MapEvents({BinaryMessenger? binaryMessenger, String? suffix}) {
+  List<_MapEvent> get eventTypes {
+    final listenersMap = {
+      _onStyleLoadedListener: _MapEvent.styleLoaded,
+      _onCameraChangeListener: _MapEvent.cameraChanged,
+      _onMapIdleListener: _MapEvent.mapIdle,
+      _onMapLoadedListener: _MapEvent.mapLoaded,
+      _onMapLoadErrorListener: _MapEvent.mapLoadingError,
+      _onRenderFrameFinishedListener: _MapEvent.renderFrameFinished,
+      _onRenderFrameStartedListener: _MapEvent.renderFrameStarted,
+      _onSourceAddedListener: _MapEvent.sourceAdded,
+      _onSourceDataLoadedListener: _MapEvent.sourceDataLoaded,
+      _onSourceRemovedListener: _MapEvent.sourceRemoved,
+      _onStyleDataLoadedListener: _MapEvent.styleDataLoaded,
+      _onStyleImageMissingListener: _MapEvent.styleImageMissing,
+      _onStyleImageUnusedListener: _MapEvent.styleImageRemoveUnused,
+      _onResourceRequestListener: _MapEvent.resourceRequest,
+    };
+    listenersMap.remove(null);
+
+    return listenersMap.values.toList();
+  }
+
+  _MapEvents({BinaryMessenger? binaryMessenger}) {
     _channel = MethodChannel('com.mapbox.maps.flutter.map_events',
         const StandardMethodCodec(), binaryMessenger);
     _channel.setMethodCallHandler(_handleMethodCall);
   }
 
-  void updateSubscriptions({
-    OnStyleLoadedListener? onStyleLoadedListener,
-    OnCameraChangeListener? onCameraChangeListener,
-    OnMapIdleListener? onMapIdleListener,
-    OnMapLoadedListener? onMapLoadedListener,
-    OnMapLoadErrorListener? onMapLoadErrorListener,
-    OnRenderFrameFinishedListener? onRenderFrameFinishedListener,
-    OnRenderFrameStartedListener? onRenderFrameStartedListener,
-    OnSourceAddedListener? onSourceAddedListener,
-    OnSourceDataLoadedListener? onSourceDataLoadedListener,
-    OnSourceRemovedListener? onSourceRemovedListener,
-    OnStyleDataLoadedListener? onStyleDataLoadedListener,
-    OnStyleImageMissingListener? onStyleImageMissingListener,
-    OnStyleImageUnusedListener? onStyleImageUnusedListener,
-    OnResourceRequestListener? onResourceRequestListener,
-  }) {
-    final listenersMap = {
-      onStyleLoadedListener: _MapEvent.styleLoaded,
-      onCameraChangeListener: _MapEvent.cameraChanged,
-      onMapIdleListener: _MapEvent.mapIdle,
-      onMapLoadedListener: _MapEvent.mapLoaded,
-      onMapLoadErrorListener: _MapEvent.mapLoadingError,
-      onRenderFrameFinishedListener: _MapEvent.renderFrameFinished,
-      onRenderFrameStartedListener: _MapEvent.renderFrameStarted,
-      onSourceAddedListener: _MapEvent.sourceAdded,
-      onSourceDataLoadedListener: _MapEvent.sourceDataLoaded,
-      onSourceRemovedListener: _MapEvent.sourceRemoved,
-      onStyleDataLoadedListener: _MapEvent.styleDataLoaded,
-      onStyleImageMissingListener: _MapEvent.styleImageMissing,
-      onStyleImageUnusedListener: _MapEvent.styleImageRemoveUnused,
-      onResourceRequestListener: _MapEvent.resourceRequest,
-    };
-    listenersMap.remove(null);
+  void updateSubscriptions() {
+    final newEventTypes = eventTypes;
 
-    final newEventTypes = listenersMap.values.toList();
-
-    if (listEquals(newEventTypes, _eventTypes)) {
+    if (listEquals(newEventTypes, _subscribedEventTypes)) {
       return;
     }
 
@@ -68,22 +57,7 @@ final class _MapEvents {
     _channel.invokeMethod(
         "subscribeToEvents", newEventTypes.map((e) => e.index).toList());
 
-    _onStyleLoadedListener = onStyleLoadedListener;
-    _onCameraChangeListener = onCameraChangeListener;
-    _onMapIdleListener = onMapIdleListener;
-    _onMapLoadedListener = onMapLoadedListener;
-    _onMapLoadErrorListener = onMapLoadErrorListener;
-    _onRenderFrameFinishedListener = onRenderFrameFinishedListener;
-    _onRenderFrameStartedListener = onRenderFrameStartedListener;
-    _onSourceAddedListener = onSourceAddedListener;
-    _onSourceDataLoadedListener = onSourceDataLoadedListener;
-    _onSourceRemovedListener = onSourceRemovedListener;
-    _onStyleDataLoadedListener = onStyleDataLoadedListener;
-    _onStyleImageMissingListener = onStyleImageMissingListener;
-    _onStyleImageUnusedListener = onStyleImageUnusedListener;
-    _onResourceRequestListener = onResourceRequestListener;
-
-    _eventTypes = newEventTypes;
+    _subscribedEventTypes = newEventTypes;
   }
 
   void dispose() {

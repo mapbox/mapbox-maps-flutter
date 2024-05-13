@@ -226,7 +226,7 @@ class _SnapshotterInstanceManager {
   final String __pigeon_messageChannelSuffix;
 
   Future<void> setupSnapshotterForSuffix(
-      String suffix, MapSnapshotOptions options) async {
+      String suffix, List<int?> eventTypes, MapSnapshotOptions options) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.setupSnapshotterForSuffix$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -236,7 +236,7 @@ class _SnapshotterInstanceManager {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[suffix, options]) as List<Object?>?;
+        .send(<Object?>[suffix, eventTypes, options]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

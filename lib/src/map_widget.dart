@@ -187,7 +187,8 @@ class _MapWidgetState extends State<MapWidget> {
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'channelSuffix': _suffix,
-      'mapboxPluginVersion': '2.0.0-beta.1'
+      'mapboxPluginVersion': '2.0.0-beta.1',
+      'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
     };
 
     return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
@@ -199,6 +200,7 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
 
     _events = _MapEvents(binaryMessenger: _binaryMessenger);
+    _updateEventListeners();
   }
 
   @override
@@ -216,28 +218,29 @@ class _MapWidgetState extends State<MapWidget> {
   void didUpdateWidget(MapWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _updateSubscriptions();
+    _updateEventListeners();
+    _events.updateSubscriptions();
   }
 
-  void _updateSubscriptions() {
-    _events.updateSubscriptions(
-        onStyleLoadedListener: widget.onStyleLoadedListener,
-        onCameraChangeListener: widget.onCameraChangeListener,
-        onMapIdleListener: widget.onMapIdleListener,
-        onMapLoadedListener: widget.onMapLoadedListener,
-        onMapLoadErrorListener: widget.onMapLoadErrorListener,
-        onRenderFrameFinishedListener: widget.onRenderFrameFinishedListener,
-        onRenderFrameStartedListener: widget.onRenderFrameStartedListener,
-        onSourceAddedListener: widget.onSourceAddedListener,
-        onSourceDataLoadedListener: widget.onSourceDataLoadedListener,
-        onSourceRemovedListener: widget.onSourceRemovedListener,
-        onStyleDataLoadedListener: widget.onStyleDataLoadedListener,
-        onStyleImageMissingListener: widget.onStyleImageMissingListener,
-        onStyleImageUnusedListener: widget.onStyleImageUnusedListener,
-        onResourceRequestListener: widget.onResourceRequestListener);
+  void _updateEventListeners() {
+    _events._onStyleLoadedListener = widget.onStyleLoadedListener;
+    _events._onCameraChangeListener = widget.onCameraChangeListener;
+    _events._onMapIdleListener = widget.onMapIdleListener;
+    _events._onMapLoadedListener = widget.onMapLoadedListener;
+    _events._onMapLoadErrorListener = widget.onMapLoadErrorListener;
+    _events._onRenderFrameFinishedListener =
+        widget.onRenderFrameFinishedListener;
+    _events._onRenderFrameStartedListener = widget.onRenderFrameStartedListener;
+    _events._onSourceAddedListener = widget.onSourceAddedListener;
+    _events._onSourceDataLoadedListener = widget.onSourceDataLoadedListener;
+    _events._onSourceRemovedListener = widget.onSourceRemovedListener;
+    _events._onStyleDataLoadedListener = widget.onStyleDataLoadedListener;
+    _events._onStyleImageMissingListener = widget.onStyleImageMissingListener;
+    _events._onStyleImageUnusedListener = widget.onStyleImageUnusedListener;
+    _events._onResourceRequestListener = widget.onResourceRequestListener;
   }
 
-  void onPlatformViewCreated(int id) {
+  Future<void> onPlatformViewCreated(int id) async {
     final MapboxMap controller = MapboxMap(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onMapTapListener: widget.onTapListener,
@@ -249,6 +252,5 @@ class _MapWidgetState extends State<MapWidget> {
       widget.onMapCreated!(controller);
     }
     mapboxMap = controller;
-    _updateSubscriptions();
   }
 }

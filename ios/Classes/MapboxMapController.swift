@@ -49,13 +49,15 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         channelSuffix: Int,
         arguments args: Any?,
         registrar: FlutterPluginRegistrar,
-        pluginVersion: String
+        pluginVersion: String,
+        eventTypes: [Int]
     ) {
         self.proxyBinaryMessenger = ProxyBinaryMessenger(with: registrar.messenger(), channelSuffix: "\(channelSuffix)")
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+        mapView.debugOptions = [.camera]
         mapboxMap = mapView.mapboxMap
 
         self.registrar = registrar
@@ -64,7 +66,11 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             name: "plugins.flutter.io",
             binaryMessenger: proxyBinaryMessenger
         )
-        self.eventHandler = MapboxEventHandler(eventProvider: mapboxMap, binaryMessenger: proxyBinaryMessenger)
+        self.eventHandler = MapboxEventHandler(
+            eventProvider: mapboxMap,
+            binaryMessenger: proxyBinaryMessenger,
+            eventTypes: eventTypes
+        )
 
         let styleController = StyleController(styleManager: mapboxMap)
         StyleManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: styleController)

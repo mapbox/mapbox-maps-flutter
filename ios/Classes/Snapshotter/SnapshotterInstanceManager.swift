@@ -10,12 +10,13 @@ final class SnapshotterInstanceManager: _SnapshotterInstanceManager {
         self.binaryMessenger = binaryMessenger
     }
 
-    func setupSnapshotterForSuffix(suffix: String, options: MapSnapshotOptions) throws {
+    func setupSnapshotterForSuffix(suffix: String, eventTypes: [Int64], options: MapSnapshotOptions) throws {
         let snapshotter = Snapshotter(options: options.toMapSnapshotOptions())
 
         let proxyMessenger = ProxyBinaryMessenger(with: binaryMessenger, channelSuffix: suffix)
         let snapshotterController = SnapshotterController(
             snapshotter: snapshotter,
+            eventTypes: eventTypes.map(Int.init),
             binaryMessenger: proxyMessenger
         )
         let snapshotStyleController = StyleController(styleManager: snapshotter)

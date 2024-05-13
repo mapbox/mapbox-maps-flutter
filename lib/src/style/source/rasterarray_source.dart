@@ -6,7 +6,7 @@ part of mapbox_maps_flutter;
 @experimental
 class RasterArraySource extends Source {
   RasterArraySource({
-    required id,
+    required String id,
     String? url,
     List<String?>? tiles,
     List<double?>? bounds,
