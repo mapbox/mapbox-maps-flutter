@@ -40,16 +40,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Describes glyphs rasterization modes.
-enum GlyphsRasterizationMode: Int {
-  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
-  case nOGLYPHSRASTERIZEDLOCALLY = 0
-  /// Ideographs are rasterized locally, and they are not loaded from the server.
-  case iDEOGRAPHSRASTERIZEDLOCALLY = 1
-  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
-  case aLLGLYPHSRASTERIZEDLOCALLY = 2
-}
-
 /// Describes the map context mode.
 /// We can make some optimizations if we know that the drawing context is not shared with other code.
 enum ContextMode: Int {
@@ -692,43 +682,6 @@ struct MapDebugOptions {
   }
 }
 
-/// Describes the glyphs rasterization option values.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct GlyphsRasterizationOptions {
-  /// Glyphs rasterization mode for client-side text rendering.
-  var rasterizationMode: GlyphsRasterizationMode
-  /// Font family to use as font fallback for client-side text renderings.
-  ///
-  /// Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-  /// or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-  /// font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-  /// default font are varied in platforms:
-  /// - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-  ///   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-  /// - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-  ///
-  /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-  ///
-  var fontFamily: String?
-
-  static func fromList(_ list: [Any?]) -> GlyphsRasterizationOptions? {
-    let rasterizationMode = GlyphsRasterizationMode(rawValue: list[0] as! Int)!
-    let fontFamily: String? = nilOrValue(list[1])
-
-    return GlyphsRasterizationOptions(
-      rasterizationMode: rasterizationMode,
-      fontFamily: fontFamily
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      rasterizationMode.rawValue,
-      fontFamily,
-    ]
-  }
-}
-
 /// Map memory budget in megabytes.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -1182,106 +1135,6 @@ struct RenderedQueryGeometry {
     return [
       value,
       type.rawValue,
-    ]
-  }
-}
-
-/// An offline region definition is a geographic region defined by a style URL,
-/// a geometry, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
-/// and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
-/// the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
-/// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct OfflineRegionGeometryDefinition {
-  /// The style associated with the offline region
-  var styleURL: String
-  /// The geometry that defines the boundary of the offline region
-  var geometry: [String?: Any?]
-  /// Minimum zoom level for the offline region
-  var minZoom: Double
-  /// Maximum zoom level for the offline region
-  var maxZoom: Double
-  /// Pixel ratio to be accounted for when downloading assets
-  var pixelRatio: Double
-  /// Specifies glyphs rasterization mode. It defines which glyphs will be loaded from the server
-  var glyphsRasterizationMode: GlyphsRasterizationMode
-
-  static func fromList(_ list: [Any?]) -> OfflineRegionGeometryDefinition? {
-    let styleURL = list[0] as! String
-    let geometry = list[1] as! [String?: Any?]
-    let minZoom = list[2] as! Double
-    let maxZoom = list[3] as! Double
-    let pixelRatio = list[4] as! Double
-    let glyphsRasterizationMode = GlyphsRasterizationMode(rawValue: list[5] as! Int)!
-
-    return OfflineRegionGeometryDefinition(
-      styleURL: styleURL,
-      geometry: geometry,
-      minZoom: minZoom,
-      maxZoom: maxZoom,
-      pixelRatio: pixelRatio,
-      glyphsRasterizationMode: glyphsRasterizationMode
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      styleURL,
-      geometry,
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.rawValue,
-    ]
-  }
-}
-
-/// An offline region definition is a geographic region defined by a style URL,
-/// geographic bounding box, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
-/// and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
-/// the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
-/// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct OfflineRegionTilePyramidDefinition {
-  /// The style associated with the offline region.
-  var styleURL: String
-  /// The bounds covering the region.
-  var bounds: CoordinateBounds
-  /// Minimum zoom level for the offline region.
-  var minZoom: Double
-  /// Maximum zoom level for the offline region.
-  var maxZoom: Double
-  /// Pixel ratio to be accounted for when downloading assets.
-  var pixelRatio: Double
-  /// Specifies glyphs download mode.
-  var glyphsRasterizationMode: GlyphsRasterizationMode
-
-  static func fromList(_ list: [Any?]) -> OfflineRegionTilePyramidDefinition? {
-    let styleURL = list[0] as! String
-    let bounds = CoordinateBounds.fromList(list[1] as! [Any?])!
-    let minZoom = list[2] as! Double
-    let maxZoom = list[3] as! Double
-    let pixelRatio = list[4] as! Double
-    let glyphsRasterizationMode = GlyphsRasterizationMode(rawValue: list[5] as! Int)!
-
-    return OfflineRegionTilePyramidDefinition(
-      styleURL: styleURL,
-      bounds: bounds,
-      minZoom: minZoom,
-      maxZoom: maxZoom,
-      pixelRatio: pixelRatio,
-      glyphsRasterizationMode: glyphsRasterizationMode
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      styleURL,
-      bounds.toList(),
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.rawValue,
     ]
   }
 }
@@ -2017,44 +1870,40 @@ private class _CameraManagerCodecReader: FlutterStandardReader {
     case 148:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
+    case 150:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
+    case 151:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
+    case 152:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
+    case 153:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
+    case 154:
       return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
+    case 155:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
+    case 156:
       return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 157:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 158:
       return Size.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 159:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 160:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
+    case 161:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 162:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 163:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 164:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 165:
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2127,65 +1976,59 @@ private class _CameraManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MercatorCoordinate {
       super.writeByte(148)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
+    } else if let value = value as? Point {
       super.writeByte(149)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? Point {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? ScreenBox {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? Size {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? StyleProjection {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
-      super.writeByte(167)
-      super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
-      super.writeByte(168)
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2827,44 +2670,40 @@ private class _MapInterfaceCodecReader: FlutterStandardReader {
     case 148:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
+    case 150:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
+    case 151:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
+    case 152:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
+    case 153:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
+    case 154:
       return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
+    case 155:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
+    case 156:
       return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 157:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 158:
       return Size.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 159:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 160:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
+    case 161:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 162:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 163:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 164:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 165:
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2937,65 +2776,59 @@ private class _MapInterfaceCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MercatorCoordinate {
       super.writeByte(148)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
+    } else if let value = value as? Point {
       super.writeByte(149)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? Point {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? ScreenBox {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? Size {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? StyleProjection {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
-      super.writeByte(167)
-      super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
-      super.writeByte(168)
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3764,316 +3597,6 @@ class _MapInterfaceSetup {
     }
   }
 }
-private class OfflineRegionCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 128:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 129:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 130:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 131:
-      return Point.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
-}
-
-private class OfflineRegionCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? CoordinateBounds {
-      super.writeByte(128)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
-      super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
-      super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? Point {
-      super.writeByte(131)
-      super.writeValue(value.toList())
-    } else {
-      super.writeValue(value)
-    }
-  }
-}
-
-private class OfflineRegionCodecReaderWriter: FlutterStandardReaderWriter {
-  override func reader(with data: Data) -> FlutterStandardReader {
-    return OfflineRegionCodecReader(data: data)
-  }
-
-  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return OfflineRegionCodecWriter(data: data)
-  }
-}
-
-class OfflineRegionCodec: FlutterStandardMessageCodec {
-  static let shared = OfflineRegionCodec(readerWriter: OfflineRegionCodecReaderWriter())
-}
-
-/// An offline region represents an identifiable geographic region with optional metadata.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol OfflineRegion {
-  /// The regions identifier
-  func getIdentifier() throws -> Int64
-  /// The tile pyramid defining the region. Tile pyramid and geometry definitions are
-  /// mutually exclusive.
-  ///
-  /// @return A definition describing the tile pyramid including attributes, otherwise empty.
-  func getTilePyramidDefinition() throws -> OfflineRegionTilePyramidDefinition?
-  /// The geometry defining the region. Geometry and tile pyramid definitions are
-  /// mutually exclusive.
-  ///
-  /// @return A definition describing the geometry including attributes, otherwise empty.
-  func getGeometryDefinition() throws -> OfflineRegionGeometryDefinition?
-  /// Arbitrary binary region metadata.
-  ///
-  /// @return The metadata associated with the region.
-  func getMetadata() throws -> FlutterStandardTypedData
-  /// Sets arbitrary binary region metadata for the region.
-  ///
-  /// Note that this setter is asynchronous and the given metadata is applied only
-  /// after the resulting callback is invoked with no error.
-  ///
-  /// @param metadata The metadata associated with the region.
-  /// @param callback Called once the request is complete or an error occurred.
-  func setMetadata(metadata: FlutterStandardTypedData, completion: @escaping (Result<Void, Error>) -> Void)
-  /// Sets the download state of an offline region
-  /// A region is either inactive (not downloading, but previously-downloaded
-  /// resources are available for use), or active (resources are being downloaded
-  /// or will be downloaded, if necessary, when network access is available).
-  ///
-  /// If the region is already in the given state, this call is ignored.
-  ///
-  /// @param state The new state to set.
-  func setOfflineRegionDownloadState(state: OfflineRegionDownloadState) throws
-  /// Invalidate all the tiles for the region forcing to revalidate
-  /// the tiles with the server before using. This is more efficient than deleting the
-  /// offline region and downloading it again because if the data on the cache matches
-  /// the server, no new data gets transmitted.
-  ///
-  /// @param callback Called once the request is complete or an error occurred.
-  func invalidate(completion: @escaping (Result<Void, Error>) -> Void)
-  /// Remove an offline region from the database and perform any resources
-  /// evictions necessary as a result.
-  ///
-  /// @param callback Called once the request is complete or an error occurred.
-  func purge(completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class OfflineRegionSetup {
-  /// The codec used by OfflineRegion.
-  static var codec: FlutterStandardMessageCodec { OfflineRegionCodec.shared }
-  /// Sets up an instance of `OfflineRegion` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: OfflineRegion?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// The regions identifier
-    let getIdentifierChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getIdentifier\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getIdentifierChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getIdentifier()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getIdentifierChannel.setMessageHandler(nil)
-    }
-    /// The tile pyramid defining the region. Tile pyramid and geometry definitions are
-    /// mutually exclusive.
-    ///
-    /// @return A definition describing the tile pyramid including attributes, otherwise empty.
-    let getTilePyramidDefinitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getTilePyramidDefinition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getTilePyramidDefinitionChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getTilePyramidDefinition()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getTilePyramidDefinitionChannel.setMessageHandler(nil)
-    }
-    /// The geometry defining the region. Geometry and tile pyramid definitions are
-    /// mutually exclusive.
-    ///
-    /// @return A definition describing the geometry including attributes, otherwise empty.
-    let getGeometryDefinitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getGeometryDefinition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getGeometryDefinitionChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getGeometryDefinition()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getGeometryDefinitionChannel.setMessageHandler(nil)
-    }
-    /// Arbitrary binary region metadata.
-    ///
-    /// @return The metadata associated with the region.
-    let getMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getMetadataChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getMetadata()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getMetadataChannel.setMessageHandler(nil)
-    }
-    /// Sets arbitrary binary region metadata for the region.
-    ///
-    /// Note that this setter is asynchronous and the given metadata is applied only
-    /// after the resulting callback is invoked with no error.
-    ///
-    /// @param metadata The metadata associated with the region.
-    /// @param callback Called once the request is complete or an error occurred.
-    let setMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setMetadataChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let metadataArg = args[0] as! FlutterStandardTypedData
-        api.setMetadata(metadata: metadataArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setMetadataChannel.setMessageHandler(nil)
-    }
-    /// Sets the download state of an offline region
-    /// A region is either inactive (not downloading, but previously-downloaded
-    /// resources are available for use), or active (resources are being downloaded
-    /// or will be downloaded, if necessary, when network access is available).
-    ///
-    /// If the region is already in the given state, this call is ignored.
-    ///
-    /// @param state The new state to set.
-    let setOfflineRegionDownloadStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setOfflineRegionDownloadState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setOfflineRegionDownloadStateChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let stateArg = OfflineRegionDownloadState(rawValue: args[0] as! Int)!
-        do {
-          try api.setOfflineRegionDownloadState(state: stateArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setOfflineRegionDownloadStateChannel.setMessageHandler(nil)
-    }
-    /// Invalidate all the tiles for the region forcing to revalidate
-    /// the tiles with the server before using. This is more efficient than deleting the
-    /// offline region and downloading it again because if the data on the cache matches
-    /// the server, no new data gets transmitted.
-    ///
-    /// @param callback Called once the request is complete or an error occurred.
-    let invalidateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.invalidate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      invalidateChannel.setMessageHandler { _, reply in
-        api.invalidate { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      invalidateChannel.setMessageHandler(nil)
-    }
-    /// Remove an offline region from the database and perform any resources
-    /// evictions necessary as a result.
-    ///
-    /// @param callback Called once the request is complete or an error occurred.
-    let purgeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.purge\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      purgeChannel.setMessageHandler { _, reply in
-        api.purge { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      purgeChannel.setMessageHandler(nil)
-    }
-  }
-}
-/// The `offline region manager` that manages offline packs. All of the class’s instance methods are asynchronous
-/// reflecting the fact that offline resources are stored in a database. The offline manager maintains a canonical
-/// collection of offline packs.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol OfflineRegionManager {
-  /// Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
-  ///
-  /// By default, the limit is set to 6,000.
-  /// Once this limit is reached, `OfflineRegionObserver.mapboxTileCountLimitExceeded()`
-  /// fires every additional attempt to download additional tiles until already downloaded tiles are removed
-  /// by calling `OfflineRegion.purge()` API.
-  ///
-  /// @param limit the maximum number of tiles allowed to be downloaded
-  func setOfflineMapboxTileCountLimit(limit: Int64) throws
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class OfflineRegionManagerSetup {
-  /// The codec used by OfflineRegionManager.
-  /// Sets up an instance of `OfflineRegionManager` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: OfflineRegionManager?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
-    ///
-    /// By default, the limit is set to 6,000.
-    /// Once this limit is reached, `OfflineRegionObserver.mapboxTileCountLimitExceeded()`
-    /// fires every additional attempt to download additional tiles until already downloaded tiles are removed
-    /// by calling `OfflineRegion.purge()` API.
-    ///
-    /// @param limit the maximum number of tiles allowed to be downloaded
-    let setOfflineMapboxTileCountLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegionManager.setOfflineMapboxTileCountLimit\(channelSuffix)", binaryMessenger: binaryMessenger)
-    if let api = api {
-      setOfflineMapboxTileCountLimitChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let limitArg = args[0] is Int64 ? args[0] as! Int64 : Int64(args[0] as! Int32)
-        do {
-          try api.setOfflineMapboxTileCountLimit(limit: limitArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setOfflineMapboxTileCountLimitChannel.setMessageHandler(nil)
-    }
-  }
-}
 private class ProjectionCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -4637,44 +4160,40 @@ private class StyleManagerCodecReader: FlutterStandardReader {
     case 148:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 149:
-      return OfflineRegionGeometryDefinition.fromList(self.readValue() as! [Any?])
-    case 150:
-      return OfflineRegionTilePyramidDefinition.fromList(self.readValue() as! [Any?])
-    case 151:
       return Point.fromList(self.readValue() as! [Any?])
-    case 152:
+    case 150:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 153:
+    case 151:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 154:
+    case 152:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 155:
+    case 153:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 156:
+    case 154:
       return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 157:
+    case 155:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 158:
+    case 156:
       return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 159:
+    case 157:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 160:
+    case 158:
       return Size.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 159:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 160:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 163:
+    case 161:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 162:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 163:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 164:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 165:
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -4747,65 +4266,59 @@ private class StyleManagerCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MercatorCoordinate {
       super.writeByte(148)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionGeometryDefinition {
+    } else if let value = value as? Point {
       super.writeByte(149)
       super.writeValue(value.toList())
-    } else if let value = value as? OfflineRegionTilePyramidDefinition {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? Point {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? ScreenBox {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? Size {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? StyleProjection {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
-      super.writeByte(166)
-      super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
-      super.writeByte(167)
-      super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
-      super.writeByte(168)
+      super.writeByte(166)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
