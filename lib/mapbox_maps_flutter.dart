@@ -61,3 +61,4 @@ part 'src/turf_adapters.dart';
 part 'src/extensions.dart';
 part 'src/map_events.dart';
 part 'src/offline/offline_messenger.dart';
+part 'src/offline/offline_manager.dart';

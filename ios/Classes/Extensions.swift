@@ -786,3 +786,56 @@ extension Optional {
         lhs = rhs
     }
 }
+
+extension RawRepresentable {
+
+    init?<Other>(other: Other) where Other: RawRepresentable, Other.RawValue == RawValue {
+        self.init(rawValue: other.rawValue)
+    }
+}
+
+extension String {
+
+    init?(json: Any, encoding: String.Encoding = .utf8) {
+        do {
+            guard JSONSerialization.isValidJSONObject(json) else { return nil }
+            let data = try JSONSerialization.data(withJSONObject: json)
+            self.init(data: data, encoding: encoding)
+        } catch {
+            return nil
+        }
+    }
+}
+
+// MARK: Offline
+
+extension MapboxCoreMaps.StylePackLoadOptions {
+
+    convenience init?(fltValue: StylePackLoadOptions) {
+        self.init(
+            glyphsRasterizationMode: fltValue.glyphsRasterizationMode?.toGlyphsRasterizationMode(),
+            metadata: fltValue.metadata,
+            acceptExpired: fltValue.acceptExpired
+        )
+    }
+
+    func toFLTStylePackLoadOptions() -> StylePackLoadOptions {
+        StylePackLoadOptions(
+            glyphsRasterizationMode: glyphsRasterizationMode.flatMap(GlyphsRasterizationMode.init(other:)),
+            metadata: String(json: metadata as Any),
+            acceptExpired: acceptExpired
+        )
+    }
+}
+
+extension MapboxCoreMaps.StylePack {
+
+    func toFLTStylePack() -> StylePack {
+        StylePack(
+            styleURI: styleURI,
+            glyphsRasterizationMode: GlyphsRasterizationMode(rawValue: glyphsRasterizationMode.rawValue)!,
+            requiredResourceCount: Int64(requiredResourceCount),
+            completedResourceCount: Int64(completedResourceCount),
+            completedResourceSize: Int64(completedResourceSize))
+    }
+}

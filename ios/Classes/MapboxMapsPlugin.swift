@@ -10,15 +10,17 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
         setupStaticChannels(with: registrar.messenger())
     }
 
-    private static func setupStaticChannels(with binaryMessanger: FlutterBinaryMessenger) {
+    private static func setupStaticChannels(with binaryMessenger: FlutterBinaryMessenger) {
 
         let mapboxOptionsController = MapboxOptionsController()
-        let snapshotterInstanceManager = SnapshotterInstanceManager(binaryMessenger: binaryMessanger)
+        let snapshotterInstanceManager = SnapshotterInstanceManager(binaryMessenger: binaryMessenger)
+        let offlineMapInstanceManager = OfflineMapInstanceManager(binaryMessenger: binaryMessenger)
 
-        _MapboxOptionsSetup.setUp(binaryMessenger: binaryMessanger, api: mapboxOptionsController)
-        _MapboxMapsOptionsSetup.setUp(binaryMessenger: binaryMessanger, api: mapboxOptionsController)
-        _SnapshotterInstanceManagerSetup.setUp(binaryMessenger: binaryMessanger, api: snapshotterInstanceManager)
+        _MapboxOptionsSetup.setUp(binaryMessenger: binaryMessenger, api: mapboxOptionsController)
+        _MapboxMapsOptionsSetup.setUp(binaryMessenger: binaryMessenger, api: mapboxOptionsController)
+        _SnapshotterInstanceManagerSetup.setUp(binaryMessenger: binaryMessenger, api: snapshotterInstanceManager)
+        _OfflineMapInstanceManagerSetup.setUp(binaryMessenger: binaryMessenger, api: offlineMapInstanceManager)
 
-        LoggingController.setup(binaryMessanger)
+        LoggingController.setup(binaryMessenger)
     }
 }
