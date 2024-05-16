@@ -35,6 +35,7 @@ Contributions welcome!
 | Point Annotations | :white_check_mark:   | :white_check_mark: |
 | Line Annotations | :white_check_mark:   | :white_check_mark: |
 | Fill Annotations | :white_check_mark:   | :white_check_mark: |
+| Snapshotter | :white_check_mark: | :white_check_mark: |
 | Offline | :x: | :x: |
 | Viewport | :x: | :x: |
 | Style DSL   | :x:  | :x:  |

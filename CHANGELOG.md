@@ -1,5 +1,9 @@
 ### main
 
+### 2.0.0-rc.1
+
+* Update Maps SDK to 11.4.0-rc.2.
+
 ### 2.0.0-beta.1
 
 * Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property and cannot be set.
