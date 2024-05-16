@@ -839,3 +839,16 @@ extension MapboxCoreMaps.StylePack {
             completedResourceSize: Int64(completedResourceSize))
     }
 }
+
+extension MapboxCoreMaps.StylePackLoadProgress {
+
+    func toFLTStylePackLoadProgress() -> StylePackLoadProgress {
+        StylePackLoadProgress(
+            completedResourceCount: Int64(completedResourceCount),
+            completedResourceSize: Int64(completedResourceSize),
+            erroredResourceCount: Int64(erroredResourceCount),
+            requiredResourceCount: Int64(requiredResourceCount),
+            loadedResourceCount: Int64(loadedResourceCount),
+            loadedResourceSize: Int64(loadedResourceSize))
+    }
+}

@@ -88,7 +88,6 @@ final class MapboxMapsOptions {
 
   /// The tile store usage mode for the Maps API objects.
   static void setTileStoreUsageMode(TileStoreUsageMode mode) {
-
     _options.setTileStoreUsageMode(mode);
   }
 

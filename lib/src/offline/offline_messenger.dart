@@ -231,6 +231,9 @@ class _HolderCodec extends StandardMessageCodec {
     if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
+    } else if (value is StylePackLoadProgress) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -241,6 +244,8 @@ class _HolderCodec extends StandardMessageCodec {
     switch (type) {
       case 128:
         return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+      case 129:
+        return StylePackLoadProgress.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -289,72 +294,33 @@ class Holder {
       return (__pigeon_replyList[0] as GlyphsRasterizationOptions?)!;
     }
   }
-}
 
-class _StylePackLoadProgressListenerCodec extends StandardMessageCodec {
-  const _StylePackLoadProgressListenerCodec();
-  @override
-  void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is StylePackLoadProgress) {
-      buffer.putUint8(128);
-      writeValue(buffer, value.encode());
+  Future<StylePackLoadProgress> progress() async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.Holder.progress$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      super.writeValue(buffer, value);
-    }
-  }
-
-  @override
-  Object? readValueOfType(int type, ReadBuffer buffer) {
-    switch (type) {
-      case 128:
-        return StylePackLoadProgress.decode(readValue(buffer)!);
-      default:
-        return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-abstract class StylePackLoadProgressListener {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      _StylePackLoadProgressListenerCodec();
-
-  void onStylePackLoadProgressing(StylePackLoadProgress progress);
-
-  static void setUp(
-    StylePackLoadProgressListener? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.StylePackLoadProgressListener.onStylePackLoadProgressing$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        __pigeon_channel.setMessageHandler(null);
-      } else {
-        __pigeon_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.StylePackLoadProgressListener.onStylePackLoadProgressing was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final StylePackLoadProgress? arg_progress =
-              (args[0] as StylePackLoadProgress?);
-          assert(arg_progress != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.StylePackLoadProgressListener.onStylePackLoadProgressing was null, expected non-null StylePackLoadProgress.');
-          try {
-            api.onStylePackLoadProgressing(arg_progress!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
+      return (__pigeon_replyList[0] as StylePackLoadProgress?)!;
     }
   }
 }
@@ -459,6 +425,30 @@ class _OfflineManager {
       );
     } else {
       return (__pigeon_replyList[0] as StylePack?)!;
+    }
+  }
+
+  Future<void> addStylePackLoadProgressListener(String styleURI) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[styleURI]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 

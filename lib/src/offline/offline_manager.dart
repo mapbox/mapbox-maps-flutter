@@ -16,14 +16,14 @@ final class OfflineManager {
   });
 
   OfflineManager._() {
-    _api = _OfflineManager(
-        binaryMessenger: _instanceManager.__pigeon_binaryMessenger);
+    final messenger = ProxyBinaryMessenger(suffix: _suffix.toString());
+    _api = _OfflineManager(binaryMessenger: messenger);
   }
 
   /// Creates a new instance of [OfflineManager].
   static Future<OfflineManager> create() async {
     final manager = OfflineManager._();
-    _instanceManager.setupOfflineManager(manager._suffix.toString());
+    await _instanceManager.setupOfflineManager(manager._suffix.toString());
     _finalizer.attach(manager, manager._suffix, detach: manager);
 
     return manager;
@@ -31,8 +31,9 @@ final class OfflineManager {
 
   /// Loads a new style package or updates the existing one.
   ///
-  /// @param styleURI: The URI of the style package's associated style
+  /// @param styleURI: The URI of the style package's associated style.
   /// @param loadOptions: The style package load options.
+  /// @param progressListener: Invokes when loading progress is updated.
   ///
   /// If a style package with the given id already exists, it is updated with
   /// the values provided to the given load options. The missing resources get
@@ -55,7 +56,17 @@ final class OfflineManager {
   /// to change. Please contact Mapbox if you require a higher limit.
   /// Additional charges may apply.
   Future<StylePack> loadStylePack(
-      String styleURI, StylePackLoadOptions loadOptions) async {
+      String styleURI,
+      StylePackLoadOptions loadOptions,
+      OnStylePackLoadProgressListener? progressListener) async {
+    if (progressListener != null) {
+      await _api.addStylePackLoadProgressListener(styleURI);
+      final eventChannel = EventChannel(
+          "com.mapbox.maps.flutter/offline/${styleURI}");
+      eventChannel.receiveBroadcastStream().listen((event) {
+        progressListener(StylePackLoadProgress.decode(event));
+      });
+    }
     return _api.loadStylePack(styleURI, loadOptions);
   }
 

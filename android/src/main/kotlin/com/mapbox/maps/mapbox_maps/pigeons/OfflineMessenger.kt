@@ -31,10 +31,6 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-private fun createConnectionError(channelName: String): FlutterError {
-  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
-}
-
 /** Describes glyphs rasterization modes. */
 enum class GlyphsRasterizationMode(val raw: Int) {
   /** No glyphs are rasterized locally. All glyphs are loaded from the server. */
@@ -262,6 +258,11 @@ private object HolderCodec : StandardMessageCodec() {
           GlyphsRasterizationOptions.fromList(it)
         }
       }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePackLoadProgress.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -269,6 +270,10 @@ private object HolderCodec : StandardMessageCodec() {
     when (value) {
       is GlyphsRasterizationOptions -> {
         stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is StylePackLoadProgress -> {
+        stream.write(129)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -279,6 +284,7 @@ private object HolderCodec : StandardMessageCodec() {
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface Holder {
   fun options(): GlyphsRasterizationOptions
+  fun progress(): StylePackLoadProgress
 
   companion object {
     /** The codec used by Holder. */
@@ -305,54 +311,21 @@ interface Holder {
           channel.setMessageHandler(null)
         }
       }
-    }
-  }
-}
-@Suppress("UNCHECKED_CAST")
-private object StylePackLoadProgressListenerCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          StylePackLoadProgress.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    when (value) {
-      is StylePackLoadProgress -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
-/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-@Suppress("UNCHECKED_CAST")
-class StylePackLoadProgressListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
-  companion object {
-    /** The codec used by StylePackLoadProgressListener. */
-    val codec: MessageCodec<Any?> by lazy {
-      StylePackLoadProgressListenerCodec
-    }
-  }
-  fun onStylePackLoadProgressing(progressArg: StylePackLoadProgress, callback: (Result<Unit>) -> Unit) {
-    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.StylePackLoadProgressListener.onStylePackLoadProgressing$separatedMessageChannelSuffix"
-    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(progressArg)) {
-      if (it is List<*>) {
-        if (it.size > 1) {
-          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.Holder.progress$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.progress())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
         } else {
-          callback(Result.success(Unit))
+          channel.setMessageHandler(null)
         }
-      } else {
-        callback(Result.failure(createConnectionError(channelName)))
       }
     }
   }
@@ -393,6 +366,7 @@ private object _OfflineManagerCodec : StandardMessageCodec() {
 interface _OfflineManager {
   fun loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, callback: (Result<StylePack>) -> Unit)
   fun removeStylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
+  fun addStylePackLoadProgressListener(styleURI: String)
   fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
   fun stylePackMetadata(styleURI: String, callback: (Result<String?>) -> Unit)
 
@@ -441,6 +415,25 @@ interface _OfflineManager {
                 reply.reply(wrapResult(data))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val styleURIArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.addStylePackLoadProgressListener(styleURIArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

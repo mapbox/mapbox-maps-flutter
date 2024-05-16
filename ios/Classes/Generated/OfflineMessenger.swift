@@ -30,10 +30,6 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
-private func createConnectionError(withChannelName channelName: String) -> FlutterError {
-  return FlutterError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
-}
-
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -245,6 +241,8 @@ private class HolderCodecReader: FlutterStandardReader {
     switch type {
     case 128:
       return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+    case 129:
+      return StylePackLoadProgress.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -255,6 +253,9 @@ private class HolderCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePackLoadProgress {
+      super.writeByte(129)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -279,6 +280,7 @@ class HolderCodec: FlutterStandardMessageCodec {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol Holder {
   func options() throws -> GlyphsRasterizationOptions
+  func progress() throws -> StylePackLoadProgress
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -301,74 +303,18 @@ class HolderSetup {
     } else {
       optionsChannel.setMessageHandler(nil)
     }
-  }
-}
-private class StylePackLoadProgressListenerCodecReader: FlutterStandardReader {
-  override func readValue(ofType type: UInt8) -> Any? {
-    switch type {
-    case 128:
-      return StylePackLoadProgress.fromList(self.readValue() as! [Any?])
-    default:
-      return super.readValue(ofType: type)
-    }
-  }
-}
-
-private class StylePackLoadProgressListenerCodecWriter: FlutterStandardWriter {
-  override func writeValue(_ value: Any) {
-    if let value = value as? StylePackLoadProgress {
-      super.writeByte(128)
-      super.writeValue(value.toList())
+    let progressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Holder.progress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      progressChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.progress()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
     } else {
-      super.writeValue(value)
-    }
-  }
-}
-
-private class StylePackLoadProgressListenerCodecReaderWriter: FlutterStandardReaderWriter {
-  override func reader(with data: Data) -> FlutterStandardReader {
-    return StylePackLoadProgressListenerCodecReader(data: data)
-  }
-
-  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return StylePackLoadProgressListenerCodecWriter(data: data)
-  }
-}
-
-class StylePackLoadProgressListenerCodec: FlutterStandardMessageCodec {
-  static let shared = StylePackLoadProgressListenerCodec(readerWriter: StylePackLoadProgressListenerCodecReaderWriter())
-}
-
-/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol StylePackLoadProgressListenerProtocol {
-  func onStylePackLoadProgressing(progress progressArg: StylePackLoadProgress, completion: @escaping (Result<Void, FlutterError>) -> Void)
-}
-class StylePackLoadProgressListener: StylePackLoadProgressListenerProtocol {
-  private let binaryMessenger: FlutterBinaryMessenger
-  private let messageChannelSuffix: String
-  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
-    self.binaryMessenger = binaryMessenger
-    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-  }
-  var codec: FlutterStandardMessageCodec {
-    return StylePackLoadProgressListenerCodec.shared
-  }
-  func onStylePackLoadProgressing(progress progressArg: StylePackLoadProgress, completion: @escaping (Result<Void, FlutterError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.StylePackLoadProgressListener.onStylePackLoadProgressing\(messageChannelSuffix)"
-    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([progressArg] as [Any?]) { response in
-      guard let listResponse = response as? [Any?] else {
-        completion(.failure(createConnectionError(withChannelName: channelName)))
-        return
-      }
-      if listResponse.count > 1 {
-        let code: String = listResponse[0] as! String
-        let message: String? = nilOrValue(listResponse[1])
-        let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(FlutterError(code: code, message: message, details: details)))
-      } else {
-        completion(.success(Void()))
-      }
+      progressChannel.setMessageHandler(nil)
     }
   }
 }
@@ -417,6 +363,7 @@ class _OfflineManagerCodec: FlutterStandardMessageCodec {
 protocol _OfflineManager {
   func loadStylePack(styleURI: String, loadOptions: StylePackLoadOptions, completion: @escaping (Result<StylePack, Error>) -> Void)
   func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
+  func addStylePackLoadProgressListener(styleURI: String) throws
   func stylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
   func stylePackMetadata(styleURI: String, completion: @escaping (Result<String?, Error>) -> Void)
 }
@@ -462,6 +409,21 @@ class _OfflineManagerSetup {
       }
     } else {
       removeStylePackChannel.setMessageHandler(nil)
+    }
+    let addStylePackLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addStylePackLoadProgressListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let styleURIArg = args[0] as! String
+        do {
+          try api.addStylePackLoadProgressListener(styleURI: styleURIArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      addStylePackLoadProgressListenerChannel.setMessageHandler(nil)
     }
     let stylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
