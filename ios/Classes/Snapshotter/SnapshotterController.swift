@@ -10,10 +10,14 @@ final class SnapshotterController: _SnapshotterMessenger {
     private var snapshotter: Snapshotter!
     private let eventHandler: MapboxEventHandler
 
-    init(snapshotter: Snapshotter, binaryMessenger: FlutterBinaryMessenger) {
+    init(snapshotter: Snapshotter, eventTypes: [Int], binaryMessenger: FlutterBinaryMessenger) {
         self.snapshotter = snapshotter
 
-        eventHandler = MapboxEventHandler(eventProvider: snapshotter, binaryMessenger: binaryMessenger)
+        eventHandler = MapboxEventHandler(
+            eventProvider: snapshotter,
+            binaryMessenger: binaryMessenger,
+            eventTypes: eventTypes
+        )
     }
 
     func getCameraState() throws -> CameraState {

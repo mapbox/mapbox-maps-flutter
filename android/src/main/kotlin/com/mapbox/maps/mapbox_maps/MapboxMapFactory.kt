@@ -116,6 +116,8 @@ class MapboxMapFactory(
     val textureView = params["textureView"] as? Boolean ?: false
     val styleUri = params["styleUri"] as? String ?: Style.MAPBOX_STREETS
     val pluginVersion = params["mapboxPluginVersion"] as String
+    val eventTypes: List<Int> = params["eventTypes"] as List<Int>
+
     val mapInitOptions = MapInitOptions(
       context = context,
       mapOptions = mapOptionsBuilder.build(),
@@ -130,6 +132,7 @@ class MapboxMapFactory(
       messenger,
       channelSuffix,
       pluginVersion,
+      eventTypes
     )
   }
 

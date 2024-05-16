@@ -223,7 +223,7 @@ class _SnapshotterInstanceManagerCodec: FlutterStandardMessageCodec {
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _SnapshotterInstanceManager {
-  func setupSnapshotterForSuffix(suffix: String, options: MapSnapshotOptions) throws
+  func setupSnapshotterForSuffix(suffix: String, eventTypes: [Int64], options: MapSnapshotOptions) throws
   func tearDownSnapshotterForSuffix(suffix: String) throws
 }
 
@@ -239,9 +239,10 @@ class _SnapshotterInstanceManagerSetup {
       setupSnapshotterForSuffixChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let suffixArg = args[0] as! String
-        let optionsArg = args[1] as! MapSnapshotOptions
+        let eventTypesArg = args[1] as! [Int64]
+        let optionsArg = args[2] as! MapSnapshotOptions
         do {
-          try api.setupSnapshotterForSuffix(suffix: suffixArg, options: optionsArg)
+          try api.setupSnapshotterForSuffix(suffix: suffixArg, eventTypes: eventTypesArg, options: optionsArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))

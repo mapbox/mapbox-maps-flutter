@@ -131,7 +131,8 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 channelSuffix: channelSuffix,
                 arguments: args,
                 registrar: registrar,
-                pluginVersion: pluginVersion
+                pluginVersion: pluginVersion,
+                eventTypes: []
             )
         }
         var styleURI: StyleURI? = .streets
@@ -153,13 +154,16 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             channelSuffix = suffix
         }
 
+        var eventTypes = args["eventTypes"] as? [Int] ?? []
+
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
             channelSuffix: channelSuffix,
             arguments: args,
             registrar: registrar,
-            pluginVersion: pluginVersion
+            pluginVersion: pluginVersion,
+            eventTypes: eventTypes
         )
     }
 }

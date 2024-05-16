@@ -1,5 +1,9 @@
 ### main
 
+### 2.0.0-rc.1
+
+* Update Maps SDK to 11.4.0-rc.2.
+
 ### 2.0.0-beta.1
 
 * Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property and cannot be set.
@@ -162,6 +166,7 @@ PolylineAnnotationOptions(
 * Fix camera center not applied from map init options.
 * [iOS] Free up resources upon map widget disposal. This should help to reduce the amount of used memory when previously shown map widget is removed from the widget tree.
 * Fix multi-word enum cases decoding/encoding when being sent to/from the platform side.
+* [Android] Add Gradle 8 compatibility.
 
 ### 1.1.0
 

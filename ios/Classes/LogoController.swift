@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Restricted) import MapboxMaps
 
 final class LogoController: LogoSettingsInterface {
     func updateSettings(settings: LogoSettings) throws {
@@ -18,7 +18,7 @@ final class LogoController: LogoSettingsInterface {
             logo.position = .topTrailing
             logo.margins = CGPoint(x: settings.marginRight ?? 0, y: settings.marginTop ?? 0)
         }
-
+        logo.visibility = (settings.enabled ?? true) ? .visible : .hidden
         ornaments.options.logo = logo
     }
 
@@ -26,6 +26,7 @@ final class LogoController: LogoSettingsInterface {
         let options = ornaments.options.logo
         let position = getFLT_SETTINGSOrnamentPosition(position: options.position)
         return LogoSettings(
+            enabled: options.visibility != .hidden,
             position: position,
             marginLeft: options.margins.x,
             marginTop: options.margins.y,

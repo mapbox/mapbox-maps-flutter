@@ -14,6 +14,7 @@ void main() {
     final mapboxMap = await mapFuture;
     final logo = mapboxMap.logo;
     var settings = LogoSettings(
+        enabled: false,
         position: OrnamentPosition.BOTTOM_LEFT,
         marginLeft: 1,
         marginTop: 2,
@@ -22,6 +23,7 @@ void main() {
     await logo.updateSettings(settings);
     var getSettings = await logo.getSettings();
     expect(getSettings.position, OrnamentPosition.BOTTOM_LEFT);
+    expect(getSettings.enabled, isFalse);
     if (Platform.isIOS) {
       expect(getSettings.marginLeft, 1);
       expect(getSettings.marginBottom, 4);

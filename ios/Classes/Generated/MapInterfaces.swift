@@ -4144,7 +4144,7 @@ protocol Projection {
   ///
   /// @param projectedMeters Spherical Mercator ProjectedMeters coordinates for
   /// which to calculate a longitude-latitude pair.
-  /// 
+  ///
   /// @return Returns a longitude-latitude pair.
   func coordinateForProjectedMeters(projectedMeters: ProjectedMeters) throws -> Point
   /// Calculate a point on the map in Mercator Projection for a given
@@ -4224,7 +4224,7 @@ class ProjectionSetup {
     ///
     /// @param projectedMeters Spherical Mercator ProjectedMeters coordinates for
     /// which to calculate a longitude-latitude pair.
-    /// 
+    ///
     /// @return Returns a longitude-latitude pair.
     let coordinateForProjectedMetersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

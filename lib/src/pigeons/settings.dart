@@ -646,6 +646,7 @@ class CompassSettings {
 /// Shows the attribution icon on the map.
 class AttributionSettings {
   AttributionSettings({
+    this.enabled,
     this.iconColor,
     this.position,
     this.marginLeft,
@@ -654,6 +655,10 @@ class AttributionSettings {
     this.marginBottom,
     this.clickable,
   });
+
+  /// Whether the attribution icon is visible on the map.
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  bool? enabled;
 
   /// Defines text color of the attribution icon.
   int? iconColor;
@@ -678,6 +683,7 @@ class AttributionSettings {
 
   Object encode() {
     return <Object?>[
+      enabled,
       iconColor,
       position?.index,
       marginLeft,
@@ -691,14 +697,15 @@ class AttributionSettings {
   static AttributionSettings decode(Object result) {
     result as List<Object?>;
     return AttributionSettings(
-      iconColor: result[0] as int?,
+      enabled: result[0] as bool?,
+      iconColor: result[1] as int?,
       position:
-          result[1] != null ? OrnamentPosition.values[result[1]! as int] : null,
-      marginLeft: result[2] as double?,
-      marginTop: result[3] as double?,
-      marginRight: result[4] as double?,
-      marginBottom: result[5] as double?,
-      clickable: result[6] as bool?,
+          result[2] != null ? OrnamentPosition.values[result[2]! as int] : null,
+      marginLeft: result[3] as double?,
+      marginTop: result[4] as double?,
+      marginRight: result[5] as double?,
+      marginBottom: result[6] as double?,
+      clickable: result[7] as bool?,
     );
   }
 }
@@ -706,12 +713,17 @@ class AttributionSettings {
 /// Shows the Mapbox logo on the map.
 class LogoSettings {
   LogoSettings({
+    this.enabled,
     this.position,
     this.marginLeft,
     this.marginTop,
     this.marginRight,
     this.marginBottom,
   });
+
+  /// Whether the logo is visible on the map.
+  /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
+  bool? enabled;
 
   /// Defines where the logo is positioned on the map
   OrnamentPosition? position;
@@ -730,6 +742,7 @@ class LogoSettings {
 
   Object encode() {
     return <Object?>[
+      enabled,
       position?.index,
       marginLeft,
       marginTop,
@@ -741,12 +754,13 @@ class LogoSettings {
   static LogoSettings decode(Object result) {
     result as List<Object?>;
     return LogoSettings(
+      enabled: result[0] as bool?,
       position:
-          result[0] != null ? OrnamentPosition.values[result[0]! as int] : null,
-      marginLeft: result[1] as double?,
-      marginTop: result[2] as double?,
-      marginRight: result[3] as double?,
-      marginBottom: result[4] as double?,
+          result[1] != null ? OrnamentPosition.values[result[1]! as int] : null,
+      marginLeft: result[2] as double?,
+      marginTop: result[3] as double?,
+      marginRight: result[4] as double?,
+      marginBottom: result[5] as double?,
     );
   }
 }
