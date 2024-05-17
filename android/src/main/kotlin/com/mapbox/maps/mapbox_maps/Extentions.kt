@@ -553,3 +553,14 @@ fun com.mapbox.maps.StylePack.toFLTStylePack(): StylePack {
     expires = this.expires?.time
   )
 }
+
+fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress() : StylePackLoadProgress {
+  return StylePackLoadProgress(
+    this.completedResourceCount,
+    this.completedResourceSize,
+    this.erroredResourceCount,
+    this.requiredResourceCount,
+    this.loadedResourceCount,
+    this.loadedResourceSize
+  )
+}

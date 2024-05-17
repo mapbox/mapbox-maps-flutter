@@ -1,18 +1,13 @@
 package com.mapbox.maps.mapbox_maps.offline
 
 import com.mapbox.maps.OfflineManager
-import com.mapbox.maps.StylePackLoadProgress
-import com.mapbox.maps.StylePackLoadProgressCallback
-import com.mapbox.maps.mapbox_maps.ProxyBinaryMessenger
-import com.mapbox.maps.mapbox_maps.pigeons.StylePack
-import com.mapbox.maps.mapbox_maps.pigeons.StylePackLoadOptions
-import com.mapbox.maps.mapbox_maps.pigeons._OfflineManager
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
+import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
 import com.mapbox.maps.mapbox_maps.toStylePackLoadOptions
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.StreamHandler
-import kotlin.math.exp
 
 class OfflineController(
   private val messenger: BinaryMessenger
@@ -29,6 +24,7 @@ class OfflineController(
       styleURI,
       loadOptions.toStylePackLoadOptions(),
       { progress ->
+        progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
       },
       { expected ->
         progressHandlers[styleURI]?.endOfStream()
