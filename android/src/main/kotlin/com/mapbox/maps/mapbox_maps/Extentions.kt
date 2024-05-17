@@ -3,6 +3,7 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.gson.Gson
+import com.mapbox.bindgen.Value
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
@@ -24,6 +25,14 @@ fun GlyphsRasterizationMode.toGlyphsRasterizationMode(): com.mapbox.maps.GlyphsR
     GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
     GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
     GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+  }
+}
+
+fun com.mapbox.maps.GlyphsRasterizationMode.toFLTGlyphsRasterizationMode(): GlyphsRasterizationMode {
+  return when (this) {
+    com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
+    com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+    com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
   }
 }
 fun GlyphsRasterizationOptions.toGlyphsRasterizationOptions(): com.mapbox.maps.GlyphsRasterizationOptions {
@@ -524,4 +533,23 @@ fun Bitmap.toMbxImage(): MbxImage {
   val outputStream = ByteArrayOutputStream(byteCount)
   compress(Bitmap.CompressFormat.PNG, 100, outputStream)
   return MbxImage(width.toLong(), height.toLong(), outputStream.toByteArray())
+}
+
+fun StylePackLoadOptions.toStylePackLoadOptions(): com.mapbox.maps.StylePackLoadOptions {
+  return com.mapbox.maps.StylePackLoadOptions.Builder()
+    .glyphsRasterizationMode(glyphsRasterizationMode?.toGlyphsRasterizationMode())
+    .metadata(metadata?.let { Value(it) })
+    .acceptExpired(acceptExpired)
+    .build()
+}
+
+fun com.mapbox.maps.StylePack.toFLTStylePack(): StylePack {
+  return StylePack(
+    styleURI = this.styleURI,
+    glyphsRasterizationMode = this.glyphsRasterizationMode.toFLTGlyphsRasterizationMode(),
+    requiredResourceCount = this.requiredResourceCount,
+    completedResourceSize = this.completedResourceCount,
+    completedResourceCount = this.completedResourceCount,
+    expires = this.expires?.time
+  )
 }
