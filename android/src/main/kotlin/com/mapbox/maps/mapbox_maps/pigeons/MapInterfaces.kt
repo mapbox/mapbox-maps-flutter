@@ -5940,6 +5940,26 @@ interface StyleManager {
    */
   fun hasStyleImage(imageId: String, callback: (Result<Boolean>) -> Unit)
   /**
+   * Adds a model to be used in the style. This API can also be used for updating
+   * a model. If the model for a given `modelId` was already added, it gets replaced by the new model.
+   *
+   * The model can be used in `model-id` property in model layer.
+   *
+   * @param modelId An identifier of the model.
+   * @param modelUri A URI for the model.
+   *
+   * @return A string describing an error if the operation was not successful, empty otherwise.
+   */
+  fun addStyleModel(modelId: String, modelUri: String, callback: (Result<Unit>) -> Unit)
+  /**
+   * Removes a model from the style.
+   *
+   * @param modelId The identifier of the model to remove.
+   *
+   * @return A string describing an error if the operation was not successful, empty otherwise.
+   */
+  fun removeStyleModel(modelId: String, callback: (Result<Unit>) -> Unit)
+  /**
    * Set tile data of a custom geometry.
    *
    * @param sourceId A style source identifier.
@@ -6892,6 +6912,45 @@ interface StyleManager {
               } else {
                 val data = result.getOrNull()
                 reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val modelIdArg = args[0] as String
+            val modelUriArg = args[1] as String
+            api.addStyleModel(modelIdArg, modelUriArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val modelIdArg = args[0] as String
+            api.removeStyleModel(modelIdArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
               }
             }
           }

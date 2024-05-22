@@ -1,3 +1,7 @@
+### main
+
+* Add ModelLayer API.
+
 ### 2.0.0
 
 #### ⚠️ Breaking changes
@@ -68,7 +72,7 @@ PolygonAnnotationOptions(
 )
 PolylineAnnotationOptions(
   geometry: LineString(coordinates: [
-    Position(1.0, 2.0), 
+    Position(1.0, 2.0),
     Position(10.0, 20.0)
   ]).toJson()
 )
@@ -93,7 +97,7 @@ PolygonAnnotationOptions(
 )
 PolylineAnnotationOptions(
   geometry: LineString(coordinates: [
-    Position(1.0, 2.0), 
+    Position(1.0, 2.0),
     Position(10.0, 20.0)
   ])
 )
@@ -145,8 +149,8 @@ Please note that the `snapshot()` method works best if the Mapbox Map is fully l
 * Fix multi-word enum cases decoding/encoding when being sent to/from the platform side.
 * [Android] Add Gradle 8 compatibility.
 * Introduce experimental `RasterArraySource`, note that `rasterLayers` is a get-only property and cannot be set.
-* Introduce `TileCacheBudget`, a property to set per-source cache budgets in either megabytes or tiles. 
-* Expose `iconColorSaturation`, `rasterArrayBand`, `rasterElevation`, `rasterEmissiveStrength`, `hillshadeEmissiveStrength`, and `fillExtrusionEmissiveStrength` on their respective layers. 
+* Introduce `TileCacheBudget`, a property to set per-source cache budgets in either megabytes or tiles.
+* Expose `iconColorSaturation`, `rasterArrayBand`, `rasterElevation`, `rasterEmissiveStrength`, `hillshadeEmissiveStrength`, and `fillExtrusionEmissiveStrength` on their respective layers.
 * Mark `MapboxMapsOptions.get/setWorldview()` and `MapboxMapsOptions.get/setLanguage()` as experimental.
 * Bump Pigeon to 17.1.2
 * [iOS] Fix crash in `onStyleImageMissingListener`.
@@ -267,7 +271,7 @@ We have matched screen-related units expected by the maps plugin to the units th
 
 ## 0.4.3
 ### Common
-* Fix multiple memory leaks. 
+* Fix multiple memory leaks.
 
 ## 0.4.2
 ### Common
@@ -279,7 +283,7 @@ We have matched screen-related units expected by the maps plugin to the units th
 * Fix vertical scrollMode lock on gesture settings update.
 
 ### Android
-* Fix ImageStretches mapping. 
+* Fix ImageStretches mapping.
 
 ## 0.4.1
 
@@ -292,16 +296,16 @@ We have matched screen-related units expected by the maps plugin to the units th
 ### iOS
 * Fix `pixelsForCoordinates` implementation.
 
-## 0.4.0 
+## 0.4.0
 
 ### Common
-* Expose `style.localizeLabels`. 
+* Expose `style.localizeLabels`.
 * Expose `mapboxMap.attribution`, `mapboxMap.logo`, `mapboxMap.compass` and `mapboxMap.scaleBar` settings.
 
 ### iOS
 * Fix deployment target for iOS to 11.
 
-## 0.3.0 
+## 0.3.0
 
 ### Common
 * Rename library to `mapbox_maps_flutter` due to naming conflict to be able publish to `pub.dev`.

@@ -5140,6 +5140,22 @@ protocol StyleManager {
   ///
   /// @return True if image exists, false otherwise.
   func hasStyleImage(imageId: String, completion: @escaping (Result<Bool, Error>) -> Void)
+  /// Adds a model to be used in the style. This API can also be used for updating
+  /// a model. If the model for a given `modelId` was already added, it gets replaced by the new model.
+  ///
+  /// The model can be used in `model-id` property in model layer.
+  ///
+  /// @param modelId An identifier of the model.
+  /// @param modelUri A URI for the model.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  func addStyleModel(modelId: String, modelUri: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Removes a model from the style.
+  ///
+  /// @param modelId The identifier of the model to remove.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  func removeStyleModel(modelId: String, completion: @escaping (Result<Void, Error>) -> Void)
   /// Set tile data of a custom geometry.
   ///
   /// @param sourceId A style source identifier.
@@ -6225,6 +6241,55 @@ class StyleManagerSetup {
       }
     } else {
       hasStyleImageChannel.setMessageHandler(nil)
+    }
+    /// Adds a model to be used in the style. This API can also be used for updating
+    /// a model. If the model for a given `modelId` was already added, it gets replaced by the new model.
+    ///
+    /// The model can be used in `model-id` property in model layer.
+    ///
+    /// @param modelId An identifier of the model.
+    /// @param modelUri A URI for the model.
+    ///
+    /// @return A string describing an error if the operation was not successful, empty otherwise.
+    let addStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addStyleModelChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let modelIdArg = args[0] as! String
+        let modelUriArg = args[1] as! String
+        api.addStyleModel(modelId: modelIdArg, modelUri: modelUriArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      addStyleModelChannel.setMessageHandler(nil)
+    }
+    /// Removes a model from the style.
+    ///
+    /// @param modelId The identifier of the model to remove.
+    ///
+    /// @return A string describing an error if the operation was not successful, empty otherwise.
+    let removeStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      removeStyleModelChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let modelIdArg = args[0] as! String
+        api.removeStyleModel(modelId: modelIdArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      removeStyleModelChannel.setMessageHandler(nil)
     }
     /// Set tile data of a custom geometry.
     ///
