@@ -6,24 +6,38 @@ class CircleLayer extends Layer {
   CircleLayer({
     required String id,
     Visibility? visibility,
+    List<Object>? visibilityExpression,
     double? minZoom,
     double? maxZoom,
     String? slot,
-    required this.sourceId,
-    this.sourceLayer,
-    this.circleSortKey,
-    this.circleBlur,
-    this.circleColor,
-    this.circleEmissiveStrength,
-    this.circleOpacity,
-    this.circlePitchAlignment,
-    this.circlePitchScale,
-    this.circleRadius,
-    this.circleStrokeColor,
-    this.circleStrokeOpacity,
-    this.circleStrokeWidth,
-    this.circleTranslate,
-    this.circleTranslateAnchor,
+    required String this.sourceId,
+    String? this.sourceLayer,
+    double? this.circleSortKey,
+    List<Object>? this.circleSortKeyExpression,
+    double? this.circleBlur,
+    List<Object>? this.circleBlurExpression,
+    int? this.circleColor,
+    List<Object>? this.circleColorExpression,
+    double? this.circleEmissiveStrength,
+    List<Object>? this.circleEmissiveStrengthExpression,
+    double? this.circleOpacity,
+    List<Object>? this.circleOpacityExpression,
+    CirclePitchAlignment? this.circlePitchAlignment,
+    List<Object>? this.circlePitchAlignmentExpression,
+    CirclePitchScale? this.circlePitchScale,
+    List<Object>? this.circlePitchScaleExpression,
+    double? this.circleRadius,
+    List<Object>? this.circleRadiusExpression,
+    int? this.circleStrokeColor,
+    List<Object>? this.circleStrokeColorExpression,
+    double? this.circleStrokeOpacity,
+    List<Object>? this.circleStrokeOpacityExpression,
+    double? this.circleStrokeWidth,
+    List<Object>? this.circleStrokeWidthExpression,
+    List<double?>? this.circleTranslate,
+    List<Object>? this.circleTranslateExpression,
+    CircleTranslateAnchor? this.circleTranslateAnchor,
+    List<Object>? this.circleTranslateAnchorExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -43,41 +57,80 @@ class CircleLayer extends Layer {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? circleSortKey;
 
+  /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+  List<Object>? circleSortKeyExpression;
+
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
   double? circleBlur;
+
+  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  List<Object>? circleBlurExpression;
 
   /// The fill color of the circle.
   int? circleColor;
 
+  /// The fill color of the circle.
+  List<Object>? circleColorExpression;
+
   /// Controls the intensity of light emitted on the source features.
   double? circleEmissiveStrength;
+
+  /// Controls the intensity of light emitted on the source features.
+  List<Object>? circleEmissiveStrengthExpression;
 
   /// The opacity at which the circle will be drawn.
   double? circleOpacity;
 
+  /// The opacity at which the circle will be drawn.
+  List<Object>? circleOpacityExpression;
+
   /// Orientation of circle when map is pitched.
   CirclePitchAlignment? circlePitchAlignment;
+
+  /// Orientation of circle when map is pitched.
+  List<Object>? circlePitchAlignmentExpression;
 
   /// Controls the scaling behavior of the circle when the map is pitched.
   CirclePitchScale? circlePitchScale;
 
+  /// Controls the scaling behavior of the circle when the map is pitched.
+  List<Object>? circlePitchScaleExpression;
+
   /// Circle radius.
   double? circleRadius;
+
+  /// Circle radius.
+  List<Object>? circleRadiusExpression;
 
   /// The stroke color of the circle.
   int? circleStrokeColor;
 
+  /// The stroke color of the circle.
+  List<Object>? circleStrokeColorExpression;
+
   /// The opacity of the circle's stroke.
   double? circleStrokeOpacity;
+
+  /// The opacity of the circle's stroke.
+  List<Object>? circleStrokeOpacityExpression;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   double? circleStrokeWidth;
 
+  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  List<Object>? circleStrokeWidthExpression;
+
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   List<double?>? circleTranslate;
 
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  List<Object>? circleTranslateExpression;
+
   /// Controls the frame of reference for `circle-translate`.
   CircleTranslateAnchor? circleTranslateAnchor;
+
+  /// Controls the frame of reference for `circle-translate`.
+  List<Object>? circleTranslateAnchorExpression;
 
   @override
   String _encode() {
@@ -90,45 +143,93 @@ class CircleLayer extends Layer {
       layout["circle-sort-key"] = circleSortKey;
     }
     var paint = {};
+    if (circleBlurExpression != null) {
+      paint["circle-blur"] = circleBlurExpression;
+    }
     if (circleBlur != null) {
       paint["circle-blur"] = circleBlur;
+    }
+
+    if (circleColorExpression != null) {
+      paint["circle-color"] = circleColorExpression;
     }
     if (circleColor != null) {
       paint["circle-color"] = circleColor?.toRGBA();
     }
+
+    if (circleEmissiveStrengthExpression != null) {
+      paint["circle-emissive-strength"] = circleEmissiveStrengthExpression;
+    }
     if (circleEmissiveStrength != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrength;
     }
+
+    if (circleOpacityExpression != null) {
+      paint["circle-opacity"] = circleOpacityExpression;
+    }
     if (circleOpacity != null) {
       paint["circle-opacity"] = circleOpacity;
+    }
+
+    if (circlePitchAlignmentExpression != null) {
+      paint["circle-pitch-alignment"] = circlePitchAlignmentExpression;
     }
     if (circlePitchAlignment != null) {
       paint["circle-pitch-alignment"] =
           circlePitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (circlePitchScaleExpression != null) {
+      paint["circle-pitch-scale"] = circlePitchScaleExpression;
+    }
     if (circlePitchScale != null) {
       paint["circle-pitch-scale"] =
           circlePitchScale?.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (circleRadiusExpression != null) {
+      paint["circle-radius"] = circleRadiusExpression;
+    }
     if (circleRadius != null) {
       paint["circle-radius"] = circleRadius;
+    }
+
+    if (circleStrokeColorExpression != null) {
+      paint["circle-stroke-color"] = circleStrokeColorExpression;
     }
     if (circleStrokeColor != null) {
       paint["circle-stroke-color"] = circleStrokeColor?.toRGBA();
     }
+
+    if (circleStrokeOpacityExpression != null) {
+      paint["circle-stroke-opacity"] = circleStrokeOpacityExpression;
+    }
     if (circleStrokeOpacity != null) {
       paint["circle-stroke-opacity"] = circleStrokeOpacity;
+    }
+
+    if (circleStrokeWidthExpression != null) {
+      paint["circle-stroke-width"] = circleStrokeWidthExpression;
     }
     if (circleStrokeWidth != null) {
       paint["circle-stroke-width"] = circleStrokeWidth;
     }
+
+    if (circleTranslateExpression != null) {
+      paint["circle-translate"] = circleTranslateExpression;
+    }
     if (circleTranslate != null) {
       paint["circle-translate"] = circleTranslate;
+    }
+
+    if (circleTranslateAnchorExpression != null) {
+      paint["circle-translate-anchor"] = circleTranslateAnchorExpression;
     }
     if (circleTranslateAnchor != null) {
       paint["circle-translate-anchor"] =
           circleTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
+
     var properties = {
       "id": id,
       "source": sourceId,
@@ -173,51 +274,59 @@ class CircleLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      circleSortKey: map["layout"]["circle-sort-key"] is num?
-          ? (map["layout"]["circle-sort-key"] as num?)?.toDouble()
-          : null,
-      circleBlur: map["paint"]["circle-blur"] is num?
-          ? (map["paint"]["circle-blur"] as num?)?.toDouble()
-          : null,
+      circleSortKey: optionalCast(map["layout"]["circle-sort-key"]),
+      circleSortKeyExpression: optionalCast(map["layout"]["circle-sort-key"]),
+      circleBlur: optionalCast(map["paint"]["circle-blur"]),
+      circleBlurExpression: optionalCast(map["layout"]["circle-blur"]),
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
-      circleEmissiveStrength: map["paint"]["circle-emissive-strength"] is num?
-          ? (map["paint"]["circle-emissive-strength"] as num?)?.toDouble()
-          : null,
-      circleOpacity: map["paint"]["circle-opacity"] is num?
-          ? (map["paint"]["circle-opacity"] as num?)?.toDouble()
-          : null,
+      circleColorExpression: optionalCast(map["layout"]["circle-color"]),
+      circleEmissiveStrength:
+          optionalCast(map["paint"]["circle-emissive-strength"]),
+      circleEmissiveStrengthExpression:
+          optionalCast(map["layout"]["circle-emissive-strength"]),
+      circleOpacity: optionalCast(map["paint"]["circle-opacity"]),
+      circleOpacityExpression: optionalCast(map["layout"]["circle-opacity"]),
       circlePitchAlignment: map["paint"]["circle-pitch-alignment"] == null
           ? null
           : CirclePitchAlignment.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-pitch-alignment"])),
+      circlePitchAlignmentExpression:
+          optionalCast(map["layout"]["circle-pitch-alignment"]),
       circlePitchScale: map["paint"]["circle-pitch-scale"] == null
           ? null
           : CirclePitchScale.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-pitch-scale"])),
-      circleRadius: map["paint"]["circle-radius"] is num?
-          ? (map["paint"]["circle-radius"] as num?)?.toDouble()
-          : null,
+      circlePitchScaleExpression:
+          optionalCast(map["layout"]["circle-pitch-scale"]),
+      circleRadius: optionalCast(map["paint"]["circle-radius"]),
+      circleRadiusExpression: optionalCast(map["layout"]["circle-radius"]),
       circleStrokeColor:
           (map["paint"]["circle-stroke-color"] as List?)?.toRGBAInt(),
-      circleStrokeOpacity: map["paint"]["circle-stroke-opacity"] is num?
-          ? (map["paint"]["circle-stroke-opacity"] as num?)?.toDouble()
-          : null,
-      circleStrokeWidth: map["paint"]["circle-stroke-width"] is num?
-          ? (map["paint"]["circle-stroke-width"] as num?)?.toDouble()
-          : null,
+      circleStrokeColorExpression:
+          optionalCast(map["layout"]["circle-stroke-color"]),
+      circleStrokeOpacity: optionalCast(map["paint"]["circle-stroke-opacity"]),
+      circleStrokeOpacityExpression:
+          optionalCast(map["layout"]["circle-stroke-opacity"]),
+      circleStrokeWidth: optionalCast(map["paint"]["circle-stroke-width"]),
+      circleStrokeWidthExpression:
+          optionalCast(map["layout"]["circle-stroke-width"]),
       circleTranslate: (map["paint"]["circle-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
+      circleTranslateExpression:
+          optionalCast(map["layout"]["circle-translate"]),
       circleTranslateAnchor: map["paint"]["circle-translate-anchor"] == null
           ? null
           : CircleTranslateAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-translate-anchor"])),
+      circleTranslateAnchorExpression:
+          optionalCast(map["layout"]["circle-translate-anchor"]),
     );
   }
 }

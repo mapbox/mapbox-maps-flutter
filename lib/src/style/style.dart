@@ -176,9 +176,6 @@ class StyleTransition {
 
 /// Super class for all different types of layers.
 abstract class Layer {
-  static final List<String> _normalizedVisibilityNames =
-      Visibility.values.map((e) => e.name.toLowerCase()).toList();
-
   /// The ID of the Layer.
   String id;
 

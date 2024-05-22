@@ -6,18 +6,26 @@ class HillshadeLayer extends Layer {
   HillshadeLayer({
     required String id,
     Visibility? visibility,
+    List<Object>? visibilityExpression,
     double? minZoom,
     double? maxZoom,
     String? slot,
-    required this.sourceId,
-    this.sourceLayer,
-    this.hillshadeAccentColor,
-    this.hillshadeEmissiveStrength,
-    this.hillshadeExaggeration,
-    this.hillshadeHighlightColor,
-    this.hillshadeIlluminationAnchor,
-    this.hillshadeIlluminationDirection,
-    this.hillshadeShadowColor,
+    required String this.sourceId,
+    String? this.sourceLayer,
+    int? this.hillshadeAccentColor,
+    List<Object>? this.hillshadeAccentColorExpression,
+    double? this.hillshadeEmissiveStrength,
+    List<Object>? this.hillshadeEmissiveStrengthExpression,
+    double? this.hillshadeExaggeration,
+    List<Object>? this.hillshadeExaggerationExpression,
+    int? this.hillshadeHighlightColor,
+    List<Object>? this.hillshadeHighlightColorExpression,
+    HillshadeIlluminationAnchor? this.hillshadeIlluminationAnchor,
+    List<Object>? this.hillshadeIlluminationAnchorExpression,
+    double? this.hillshadeIlluminationDirection,
+    List<Object>? this.hillshadeIlluminationDirectionExpression,
+    int? this.hillshadeShadowColor,
+    List<Object>? this.hillshadeShadowColorExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -37,23 +45,44 @@ class HillshadeLayer extends Layer {
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
   int? hillshadeAccentColor;
 
+  /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
+  List<Object>? hillshadeAccentColorExpression;
+
   /// Controls the intensity of light emitted on the source features.
   double? hillshadeEmissiveStrength;
+
+  /// Controls the intensity of light emitted on the source features.
+  List<Object>? hillshadeEmissiveStrengthExpression;
 
   /// Intensity of the hillshade
   double? hillshadeExaggeration;
 
+  /// Intensity of the hillshade
+  List<Object>? hillshadeExaggerationExpression;
+
   /// The shading color of areas that faces towards the light source.
   int? hillshadeHighlightColor;
+
+  /// The shading color of areas that faces towards the light source.
+  List<Object>? hillshadeHighlightColorExpression;
 
   /// Direction of light source when map is rotated.
   HillshadeIlluminationAnchor? hillshadeIlluminationAnchor;
 
+  /// Direction of light source when map is rotated.
+  List<Object>? hillshadeIlluminationAnchorExpression;
+
   /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.
   double? hillshadeIlluminationDirection;
 
+  /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.
+  List<Object>? hillshadeIlluminationDirectionExpression;
+
   /// The shading color of areas that face away from the light source.
   int? hillshadeShadowColor;
+
+  /// The shading color of areas that face away from the light source.
+  List<Object>? hillshadeShadowColorExpression;
 
   @override
   String _encode() {
@@ -63,29 +92,60 @@ class HillshadeLayer extends Layer {
           visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
+    if (hillshadeAccentColorExpression != null) {
+      paint["hillshade-accent-color"] = hillshadeAccentColorExpression;
+    }
     if (hillshadeAccentColor != null) {
       paint["hillshade-accent-color"] = hillshadeAccentColor?.toRGBA();
+    }
+
+    if (hillshadeEmissiveStrengthExpression != null) {
+      paint["hillshade-emissive-strength"] =
+          hillshadeEmissiveStrengthExpression;
     }
     if (hillshadeEmissiveStrength != null) {
       paint["hillshade-emissive-strength"] = hillshadeEmissiveStrength;
     }
+
+    if (hillshadeExaggerationExpression != null) {
+      paint["hillshade-exaggeration"] = hillshadeExaggerationExpression;
+    }
     if (hillshadeExaggeration != null) {
       paint["hillshade-exaggeration"] = hillshadeExaggeration;
     }
+
+    if (hillshadeHighlightColorExpression != null) {
+      paint["hillshade-highlight-color"] = hillshadeHighlightColorExpression;
+    }
     if (hillshadeHighlightColor != null) {
       paint["hillshade-highlight-color"] = hillshadeHighlightColor?.toRGBA();
+    }
+
+    if (hillshadeIlluminationAnchorExpression != null) {
+      paint["hillshade-illumination-anchor"] =
+          hillshadeIlluminationAnchorExpression;
     }
     if (hillshadeIlluminationAnchor != null) {
       paint["hillshade-illumination-anchor"] =
           hillshadeIlluminationAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (hillshadeIlluminationDirectionExpression != null) {
+      paint["hillshade-illumination-direction"] =
+          hillshadeIlluminationDirectionExpression;
+    }
     if (hillshadeIlluminationDirection != null) {
       paint["hillshade-illumination-direction"] =
           hillshadeIlluminationDirection;
     }
+
+    if (hillshadeShadowColorExpression != null) {
+      paint["hillshade-shadow-color"] = hillshadeShadowColorExpression;
+    }
     if (hillshadeShadowColor != null) {
       paint["hillshade-shadow-color"] = hillshadeShadowColor?.toRGBA();
     }
+
     var properties = {
       "id": id,
       "source": sourceId,
@@ -132,15 +192,20 @@ class HillshadeLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       hillshadeAccentColor:
           (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
-      hillshadeEmissiveStrength: map["paint"]["hillshade-emissive-strength"]
-              is num?
-          ? (map["paint"]["hillshade-emissive-strength"] as num?)?.toDouble()
-          : null,
-      hillshadeExaggeration: map["paint"]["hillshade-exaggeration"] is num?
-          ? (map["paint"]["hillshade-exaggeration"] as num?)?.toDouble()
-          : null,
+      hillshadeAccentColorExpression:
+          optionalCast(map["layout"]["hillshade-accent-color"]),
+      hillshadeEmissiveStrength:
+          optionalCast(map["paint"]["hillshade-emissive-strength"]),
+      hillshadeEmissiveStrengthExpression:
+          optionalCast(map["layout"]["hillshade-emissive-strength"]),
+      hillshadeExaggeration:
+          optionalCast(map["paint"]["hillshade-exaggeration"]),
+      hillshadeExaggerationExpression:
+          optionalCast(map["layout"]["hillshade-exaggeration"]),
       hillshadeHighlightColor:
           (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
+      hillshadeHighlightColorExpression:
+          optionalCast(map["layout"]["hillshade-highlight-color"]),
       hillshadeIlluminationAnchor:
           map["paint"]["hillshade-illumination-anchor"] == null
               ? null
@@ -148,13 +213,16 @@ class HillshadeLayer extends Layer {
                   .toLowerCase()
                   .replaceAll("_", "-")
                   .contains(map["paint"]["hillshade-illumination-anchor"])),
+      hillshadeIlluminationAnchorExpression:
+          optionalCast(map["layout"]["hillshade-illumination-anchor"]),
       hillshadeIlluminationDirection:
-          map["paint"]["hillshade-illumination-direction"] is num?
-              ? (map["paint"]["hillshade-illumination-direction"] as num?)
-                  ?.toDouble()
-              : null,
+          optionalCast(map["paint"]["hillshade-illumination-direction"]),
+      hillshadeIlluminationDirectionExpression:
+          optionalCast(map["layout"]["hillshade-illumination-direction"]),
       hillshadeShadowColor:
           (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
+      hillshadeShadowColorExpression:
+          optionalCast(map["layout"]["hillshade-shadow-color"]),
     );
   }
 }

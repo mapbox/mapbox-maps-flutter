@@ -6,16 +6,22 @@ class HeatmapLayer extends Layer {
   HeatmapLayer({
     required String id,
     Visibility? visibility,
+    List<Object>? visibilityExpression,
     double? minZoom,
     double? maxZoom,
     String? slot,
-    required this.sourceId,
-    this.sourceLayer,
-    this.heatmapColor,
-    this.heatmapIntensity,
-    this.heatmapOpacity,
-    this.heatmapRadius,
-    this.heatmapWeight,
+    required String this.sourceId,
+    String? this.sourceLayer,
+    int? this.heatmapColor,
+    List<Object>? this.heatmapColorExpression,
+    double? this.heatmapIntensity,
+    List<Object>? this.heatmapIntensityExpression,
+    double? this.heatmapOpacity,
+    List<Object>? this.heatmapOpacityExpression,
+    double? this.heatmapRadius,
+    List<Object>? this.heatmapRadiusExpression,
+    double? this.heatmapWeight,
+    List<Object>? this.heatmapWeightExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -35,17 +41,32 @@ class HeatmapLayer extends Layer {
   /// Defines the color of each pixel based on its density value in a heatmap. Should be an expression that uses `["heatmap-density"]` as input.
   int? heatmapColor;
 
+  /// Defines the color of each pixel based on its density value in a heatmap. Should be an expression that uses `["heatmap-density"]` as input.
+  List<Object>? heatmapColorExpression;
+
   /// Similar to `heatmap-weight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
   double? heatmapIntensity;
+
+  /// Similar to `heatmap-weight` but controls the intensity of the heatmap globally. Primarily used for adjusting the heatmap based on zoom level.
+  List<Object>? heatmapIntensityExpression;
 
   /// The global opacity at which the heatmap layer will be drawn.
   double? heatmapOpacity;
 
+  /// The global opacity at which the heatmap layer will be drawn.
+  List<Object>? heatmapOpacityExpression;
+
   /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
   double? heatmapRadius;
 
+  /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
+  List<Object>? heatmapRadiusExpression;
+
   /// A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
   double? heatmapWeight;
+
+  /// A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.
+  List<Object>? heatmapWeightExpression;
 
   @override
   String _encode() {
@@ -55,21 +76,41 @@ class HeatmapLayer extends Layer {
           visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
+    if (heatmapColorExpression != null) {
+      paint["heatmap-color"] = heatmapColorExpression;
+    }
     if (heatmapColor != null) {
       paint["heatmap-color"] = heatmapColor?.toRGBA();
+    }
+
+    if (heatmapIntensityExpression != null) {
+      paint["heatmap-intensity"] = heatmapIntensityExpression;
     }
     if (heatmapIntensity != null) {
       paint["heatmap-intensity"] = heatmapIntensity;
     }
+
+    if (heatmapOpacityExpression != null) {
+      paint["heatmap-opacity"] = heatmapOpacityExpression;
+    }
     if (heatmapOpacity != null) {
       paint["heatmap-opacity"] = heatmapOpacity;
+    }
+
+    if (heatmapRadiusExpression != null) {
+      paint["heatmap-radius"] = heatmapRadiusExpression;
     }
     if (heatmapRadius != null) {
       paint["heatmap-radius"] = heatmapRadius;
     }
+
+    if (heatmapWeightExpression != null) {
+      paint["heatmap-weight"] = heatmapWeightExpression;
+    }
     if (heatmapWeight != null) {
       paint["heatmap-weight"] = heatmapWeight;
     }
+
     var properties = {
       "id": id,
       "source": sourceId,
@@ -115,18 +156,16 @@ class HeatmapLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
       heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
-      heatmapIntensity: map["paint"]["heatmap-intensity"] is num?
-          ? (map["paint"]["heatmap-intensity"] as num?)?.toDouble()
-          : null,
-      heatmapOpacity: map["paint"]["heatmap-opacity"] is num?
-          ? (map["paint"]["heatmap-opacity"] as num?)?.toDouble()
-          : null,
-      heatmapRadius: map["paint"]["heatmap-radius"] is num?
-          ? (map["paint"]["heatmap-radius"] as num?)?.toDouble()
-          : null,
-      heatmapWeight: map["paint"]["heatmap-weight"] is num?
-          ? (map["paint"]["heatmap-weight"] as num?)?.toDouble()
-          : null,
+      heatmapColorExpression: optionalCast(map["layout"]["heatmap-color"]),
+      heatmapIntensity: optionalCast(map["paint"]["heatmap-intensity"]),
+      heatmapIntensityExpression:
+          optionalCast(map["layout"]["heatmap-intensity"]),
+      heatmapOpacity: optionalCast(map["paint"]["heatmap-opacity"]),
+      heatmapOpacityExpression: optionalCast(map["layout"]["heatmap-opacity"]),
+      heatmapRadius: optionalCast(map["paint"]["heatmap-radius"]),
+      heatmapRadiusExpression: optionalCast(map["layout"]["heatmap-radius"]),
+      heatmapWeight: optionalCast(map["paint"]["heatmap-weight"]),
+      heatmapWeightExpression: optionalCast(map["layout"]["heatmap-weight"]),
     );
   }
 }

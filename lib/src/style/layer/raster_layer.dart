@@ -6,25 +6,40 @@ class RasterLayer extends Layer {
   RasterLayer({
     required String id,
     Visibility? visibility,
+    List<Object>? visibilityExpression,
     double? minZoom,
     double? maxZoom,
     String? slot,
-    required this.sourceId,
-    this.sourceLayer,
-    this.rasterArrayBand,
-    this.rasterBrightnessMax,
-    this.rasterBrightnessMin,
-    this.rasterColor,
-    this.rasterColorMix,
-    this.rasterColorRange,
-    this.rasterContrast,
-    this.rasterElevation,
-    this.rasterEmissiveStrength,
-    this.rasterFadeDuration,
-    this.rasterHueRotate,
-    this.rasterOpacity,
-    this.rasterResampling,
-    this.rasterSaturation,
+    required String this.sourceId,
+    String? this.sourceLayer,
+    String? this.rasterArrayBand,
+    List<Object>? this.rasterArrayBandExpression,
+    double? this.rasterBrightnessMax,
+    List<Object>? this.rasterBrightnessMaxExpression,
+    double? this.rasterBrightnessMin,
+    List<Object>? this.rasterBrightnessMinExpression,
+    int? this.rasterColor,
+    List<Object>? this.rasterColorExpression,
+    List<double?>? this.rasterColorMix,
+    List<Object>? this.rasterColorMixExpression,
+    List<double?>? this.rasterColorRange,
+    List<Object>? this.rasterColorRangeExpression,
+    double? this.rasterContrast,
+    List<Object>? this.rasterContrastExpression,
+    double? this.rasterElevation,
+    List<Object>? this.rasterElevationExpression,
+    double? this.rasterEmissiveStrength,
+    List<Object>? this.rasterEmissiveStrengthExpression,
+    double? this.rasterFadeDuration,
+    List<Object>? this.rasterFadeDurationExpression,
+    double? this.rasterHueRotate,
+    List<Object>? this.rasterHueRotateExpression,
+    double? this.rasterOpacity,
+    List<Object>? this.rasterOpacityExpression,
+    RasterResampling? this.rasterResampling,
+    List<Object>? this.rasterResamplingExpression,
+    double? this.rasterSaturation,
+    List<Object>? this.rasterSaturationExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -44,44 +59,86 @@ class RasterLayer extends Layer {
   /// Displayed band of raster array source layer
   String? rasterArrayBand;
 
+  /// Displayed band of raster array source layer
+  List<Object>? rasterArrayBandExpression;
+
   /// Increase or reduce the brightness of the image. The value is the maximum brightness.
   double? rasterBrightnessMax;
+
+  /// Increase or reduce the brightness of the image. The value is the maximum brightness.
+  List<Object>? rasterBrightnessMaxExpression;
 
   /// Increase or reduce the brightness of the image. The value is the minimum brightness.
   double? rasterBrightnessMin;
 
+  /// Increase or reduce the brightness of the image. The value is the minimum brightness.
+  List<Object>? rasterBrightnessMinExpression;
+
   /// Defines a color map by which to colorize a raster layer, parameterized by the `["raster-value"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-color-range`.
   int? rasterColor;
+
+  /// Defines a color map by which to colorize a raster layer, parameterized by the `["raster-value"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-color-range`.
+  List<Object>? rasterColorExpression;
 
   /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
   List<double?>? rasterColorMix;
 
+  /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r * src.r + mix.g * src.g + mix.b * src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is *not* multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
+  List<Object>? rasterColorMixExpression;
+
   /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`.
   List<double?>? rasterColorRange;
+
+  /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`.
+  List<Object>? rasterColorRangeExpression;
 
   /// Increase or reduce the contrast of the image.
   double? rasterContrast;
 
+  /// Increase or reduce the contrast of the image.
+  List<Object>? rasterContrastExpression;
+
   /// Specifies an uniform elevation from the ground, in meters. Only supported with image sources.
   double? rasterElevation;
+
+  /// Specifies an uniform elevation from the ground, in meters. Only supported with image sources.
+  List<Object>? rasterElevationExpression;
 
   /// Controls the intensity of light emitted on the source features.
   double? rasterEmissiveStrength;
 
+  /// Controls the intensity of light emitted on the source features.
+  List<Object>? rasterEmissiveStrengthExpression;
+
   /// Fade duration when a new tile is added.
   double? rasterFadeDuration;
+
+  /// Fade duration when a new tile is added.
+  List<Object>? rasterFadeDurationExpression;
 
   /// Rotates hues around the color wheel.
   double? rasterHueRotate;
 
+  /// Rotates hues around the color wheel.
+  List<Object>? rasterHueRotateExpression;
+
   /// The opacity at which the image will be drawn.
   double? rasterOpacity;
+
+  /// The opacity at which the image will be drawn.
+  List<Object>? rasterOpacityExpression;
 
   /// The resampling/interpolation method to use for overscaling, also known as texture magnification filter
   RasterResampling? rasterResampling;
 
+  /// The resampling/interpolation method to use for overscaling, also known as texture magnification filter
+  List<Object>? rasterResamplingExpression;
+
   /// Increase or reduce the saturation of the image.
   double? rasterSaturation;
+
+  /// Increase or reduce the saturation of the image.
+  List<Object>? rasterSaturationExpression;
 
   @override
   String _encode() {
@@ -91,49 +148,105 @@ class RasterLayer extends Layer {
           visibility?.name.toLowerCase().replaceAll("_", "-");
     }
     var paint = {};
+    if (rasterArrayBandExpression != null) {
+      paint["raster-array-band"] = rasterArrayBandExpression;
+    }
     if (rasterArrayBand != null) {
       paint["raster-array-band"] = rasterArrayBand;
+    }
+
+    if (rasterBrightnessMaxExpression != null) {
+      paint["raster-brightness-max"] = rasterBrightnessMaxExpression;
     }
     if (rasterBrightnessMax != null) {
       paint["raster-brightness-max"] = rasterBrightnessMax;
     }
+
+    if (rasterBrightnessMinExpression != null) {
+      paint["raster-brightness-min"] = rasterBrightnessMinExpression;
+    }
     if (rasterBrightnessMin != null) {
       paint["raster-brightness-min"] = rasterBrightnessMin;
+    }
+
+    if (rasterColorExpression != null) {
+      paint["raster-color"] = rasterColorExpression;
     }
     if (rasterColor != null) {
       paint["raster-color"] = rasterColor?.toRGBA();
     }
+
+    if (rasterColorMixExpression != null) {
+      paint["raster-color-mix"] = rasterColorMixExpression;
+    }
     if (rasterColorMix != null) {
       paint["raster-color-mix"] = rasterColorMix;
+    }
+
+    if (rasterColorRangeExpression != null) {
+      paint["raster-color-range"] = rasterColorRangeExpression;
     }
     if (rasterColorRange != null) {
       paint["raster-color-range"] = rasterColorRange;
     }
+
+    if (rasterContrastExpression != null) {
+      paint["raster-contrast"] = rasterContrastExpression;
+    }
     if (rasterContrast != null) {
       paint["raster-contrast"] = rasterContrast;
+    }
+
+    if (rasterElevationExpression != null) {
+      paint["raster-elevation"] = rasterElevationExpression;
     }
     if (rasterElevation != null) {
       paint["raster-elevation"] = rasterElevation;
     }
+
+    if (rasterEmissiveStrengthExpression != null) {
+      paint["raster-emissive-strength"] = rasterEmissiveStrengthExpression;
+    }
     if (rasterEmissiveStrength != null) {
       paint["raster-emissive-strength"] = rasterEmissiveStrength;
+    }
+
+    if (rasterFadeDurationExpression != null) {
+      paint["raster-fade-duration"] = rasterFadeDurationExpression;
     }
     if (rasterFadeDuration != null) {
       paint["raster-fade-duration"] = rasterFadeDuration;
     }
+
+    if (rasterHueRotateExpression != null) {
+      paint["raster-hue-rotate"] = rasterHueRotateExpression;
+    }
     if (rasterHueRotate != null) {
       paint["raster-hue-rotate"] = rasterHueRotate;
     }
+
+    if (rasterOpacityExpression != null) {
+      paint["raster-opacity"] = rasterOpacityExpression;
+    }
     if (rasterOpacity != null) {
       paint["raster-opacity"] = rasterOpacity;
+    }
+
+    if (rasterResamplingExpression != null) {
+      paint["raster-resampling"] = rasterResamplingExpression;
     }
     if (rasterResampling != null) {
       paint["raster-resampling"] =
           rasterResampling?.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (rasterSaturationExpression != null) {
+      paint["raster-saturation"] = rasterSaturationExpression;
+    }
     if (rasterSaturation != null) {
       paint["raster-saturation"] = rasterSaturation;
     }
+
     var properties = {
       "id": id,
       "source": sourceId,
@@ -178,49 +291,54 @@ class RasterLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      rasterArrayBand: map["paint"]["raster-array-band"] is String?
-          ? map["paint"]["raster-array-band"] as String?
-          : null,
-      rasterBrightnessMax: map["paint"]["raster-brightness-max"] is num?
-          ? (map["paint"]["raster-brightness-max"] as num?)?.toDouble()
-          : null,
-      rasterBrightnessMin: map["paint"]["raster-brightness-min"] is num?
-          ? (map["paint"]["raster-brightness-min"] as num?)?.toDouble()
-          : null,
+      rasterArrayBand: optionalCast(map["paint"]["raster-array-band"]),
+      rasterArrayBandExpression:
+          optionalCast(map["layout"]["raster-array-band"]),
+      rasterBrightnessMax: optionalCast(map["paint"]["raster-brightness-max"]),
+      rasterBrightnessMaxExpression:
+          optionalCast(map["layout"]["raster-brightness-max"]),
+      rasterBrightnessMin: optionalCast(map["paint"]["raster-brightness-min"]),
+      rasterBrightnessMinExpression:
+          optionalCast(map["layout"]["raster-brightness-min"]),
       rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
+      rasterColorExpression: optionalCast(map["layout"]["raster-color"]),
       rasterColorMix: (map["paint"]["raster-color-mix"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
+      rasterColorMixExpression: optionalCast(map["layout"]["raster-color-mix"]),
       rasterColorRange: (map["paint"]["raster-color-range"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      rasterContrast: map["paint"]["raster-contrast"] is num?
-          ? (map["paint"]["raster-contrast"] as num?)?.toDouble()
-          : null,
-      rasterElevation: map["paint"]["raster-elevation"] is num?
-          ? (map["paint"]["raster-elevation"] as num?)?.toDouble()
-          : null,
-      rasterEmissiveStrength: map["paint"]["raster-emissive-strength"] is num?
-          ? (map["paint"]["raster-emissive-strength"] as num?)?.toDouble()
-          : null,
-      rasterFadeDuration: map["paint"]["raster-fade-duration"] is num?
-          ? (map["paint"]["raster-fade-duration"] as num?)?.toDouble()
-          : null,
-      rasterHueRotate: map["paint"]["raster-hue-rotate"] is num?
-          ? (map["paint"]["raster-hue-rotate"] as num?)?.toDouble()
-          : null,
-      rasterOpacity: map["paint"]["raster-opacity"] is num?
-          ? (map["paint"]["raster-opacity"] as num?)?.toDouble()
-          : null,
+      rasterColorRangeExpression:
+          optionalCast(map["layout"]["raster-color-range"]),
+      rasterContrast: optionalCast(map["paint"]["raster-contrast"]),
+      rasterContrastExpression: optionalCast(map["layout"]["raster-contrast"]),
+      rasterElevation: optionalCast(map["paint"]["raster-elevation"]),
+      rasterElevationExpression:
+          optionalCast(map["layout"]["raster-elevation"]),
+      rasterEmissiveStrength:
+          optionalCast(map["paint"]["raster-emissive-strength"]),
+      rasterEmissiveStrengthExpression:
+          optionalCast(map["layout"]["raster-emissive-strength"]),
+      rasterFadeDuration: optionalCast(map["paint"]["raster-fade-duration"]),
+      rasterFadeDurationExpression:
+          optionalCast(map["layout"]["raster-fade-duration"]),
+      rasterHueRotate: optionalCast(map["paint"]["raster-hue-rotate"]),
+      rasterHueRotateExpression:
+          optionalCast(map["layout"]["raster-hue-rotate"]),
+      rasterOpacity: optionalCast(map["paint"]["raster-opacity"]),
+      rasterOpacityExpression: optionalCast(map["layout"]["raster-opacity"]),
       rasterResampling: map["paint"]["raster-resampling"] == null
           ? null
           : RasterResampling.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["paint"]["raster-resampling"])),
-      rasterSaturation: map["paint"]["raster-saturation"] is num?
-          ? (map["paint"]["raster-saturation"] as num?)?.toDouble()
-          : null,
+      rasterResamplingExpression:
+          optionalCast(map["layout"]["raster-resampling"]),
+      rasterSaturation: optionalCast(map["paint"]["raster-saturation"]),
+      rasterSaturationExpression:
+          optionalCast(map["layout"]["raster-saturation"]),
     );
   }
 }
