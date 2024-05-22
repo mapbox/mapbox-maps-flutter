@@ -1,8 +1,11 @@
 import Flutter
 import MapboxMaps
 import MapboxCommon
+import MapboxCommon_Private
 
-class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
+final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
+    private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
+
     var registrar: FlutterPluginRegistrar
 
     deinit {
@@ -156,6 +159,7 @@ class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
 
         var eventTypes = args["eventTypes"] as? [Int] ?? []
 
+        Self.mapCounter.increment()
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
