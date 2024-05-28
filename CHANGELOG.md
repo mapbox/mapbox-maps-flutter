@@ -1,5 +1,7 @@
 ### main
 
+* Update Maps SDK to 11.4.0.
+
 ### 2.0.0-rc.1
 
 * Update Maps SDK to 11.4.0-rc.2.
