@@ -183,7 +183,11 @@ abstract class Layer {
   Visibility? visibility;
 
   /// The visibility of the layer.
-  List<Object>? visibilityAsExpression;
+  List<Object>? visibilityExpression;
+
+  /// An expression specifying conditions on source features.
+  /// Only features that match the filter are displayed.
+  List<Object>? filter;
 
   /// The minimum zoom level for the layer. At zoom levels less than the minzoom, the layer will be hidden.
   ///
@@ -208,12 +212,13 @@ abstract class Layer {
   String _encode();
 
   Layer(
-      {required this.id,
-      this.visibility,
-      this.visibilityAsExpression,
-      this.maxZoom,
-      this.minZoom,
-      this.slot});
+      {required String this.id,
+      Visibility? this.visibility,
+      List<Object>? this.visibilityExpression,
+      List<Object>? this.filter,
+      double? this.maxZoom,
+      double? this.minZoom,
+      String? this.slot});
 }
 
 /// Super class for all different types of sources.
