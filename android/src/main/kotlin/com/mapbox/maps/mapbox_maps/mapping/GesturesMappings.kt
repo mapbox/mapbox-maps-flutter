@@ -9,25 +9,27 @@ import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.gestures.generated.GesturesSettingsInterface
 
 fun GesturesSettingsInterface.applyFromFLT(settings: GesturesSettings, context: Context) {
-  settings.rotateEnabled?.let { rotateEnabled = it }
-  settings.pinchToZoomEnabled?.let { pinchToZoomEnabled = it }
-  settings.scrollEnabled?.let { scrollEnabled = it }
-  settings.simultaneousRotateAndPinchToZoomEnabled?.let { simultaneousRotateAndPinchToZoomEnabled = it }
-  settings.pitchEnabled?.let { pitchEnabled = it }
-  settings.scrollMode?.let {
-    scrollMode = com.mapbox.maps.plugin.ScrollMode.values()[it.ordinal]
+  updateSettings {
+    settings.rotateEnabled?.let { this.rotateEnabled = it }
+    settings.pinchToZoomEnabled?.let { this.pinchToZoomEnabled = it }
+    settings.scrollEnabled?.let { this.scrollEnabled = it }
+    settings.simultaneousRotateAndPinchToZoomEnabled?.let { this.simultaneousRotateAndPinchToZoomEnabled = it }
+    settings.pitchEnabled?.let { this.pitchEnabled = it }
+    settings.scrollMode?.let {
+      this.scrollMode = com.mapbox.maps.plugin.ScrollMode.values()[it.ordinal]
+    }
+    settings.doubleTapToZoomInEnabled?.let { this.doubleTapToZoomInEnabled = it }
+    settings.doubleTouchToZoomOutEnabled?.let { this.doubleTouchToZoomOutEnabled = it }
+    settings.quickZoomEnabled?.let { this.quickZoomEnabled = it }
+    settings.focalPoint?.let { this.focalPoint = ScreenCoordinate(it.x.toDevicePixels(context).toDouble(), it.y.toDevicePixels(context).toDouble()) }
+    settings.pinchToZoomDecelerationEnabled?.let { this.pinchToZoomDecelerationEnabled = it }
+    settings.rotateDecelerationEnabled?.let { this.rotateDecelerationEnabled = it }
+    settings.scrollDecelerationEnabled?.let { this.scrollDecelerationEnabled = it }
+    settings.increaseRotateThresholdWhenPinchingToZoom?.let { this.increaseRotateThresholdWhenPinchingToZoom = it }
+    settings.increasePinchToZoomThresholdWhenRotating?.let { this.increasePinchToZoomThresholdWhenRotating = it }
+    settings.zoomAnimationAmount?.let { this.zoomAnimationAmount = it.toFloat() }
+    settings.pinchPanEnabled?.let { this.pinchScrollEnabled = it }
   }
-  settings.doubleTapToZoomInEnabled?.let { doubleTapToZoomInEnabled = it }
-  settings.doubleTouchToZoomOutEnabled?.let { doubleTouchToZoomOutEnabled = it }
-  settings.quickZoomEnabled?.let { quickZoomEnabled = it }
-  settings.focalPoint?.let { focalPoint = ScreenCoordinate(it.x.toDevicePixels(context).toDouble(), it.y.toDevicePixels(context).toDouble()) }
-  settings.pinchToZoomDecelerationEnabled?.let { pinchToZoomDecelerationEnabled = it }
-  settings.rotateDecelerationEnabled?.let { rotateDecelerationEnabled = it }
-  settings.scrollDecelerationEnabled?.let { scrollDecelerationEnabled = it }
-  settings.increaseRotateThresholdWhenPinchingToZoom?.let { increaseRotateThresholdWhenPinchingToZoom = it }
-  settings.increasePinchToZoomThresholdWhenRotating?.let { increasePinchToZoomThresholdWhenRotating = it }
-  settings.zoomAnimationAmount?.let { zoomAnimationAmount = it.toFloat() }
-  settings.pinchPanEnabled?.let { pinchScrollEnabled = it }
 }
 
 fun GesturesSettingsInterface.toFLT(context: Context) = GesturesSettings(
