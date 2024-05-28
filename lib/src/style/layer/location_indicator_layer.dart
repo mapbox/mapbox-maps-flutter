@@ -7,6 +7,7 @@ class LocationIndicatorLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -45,6 +46,8 @@ class LocationIndicatorLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -151,16 +154,32 @@ class LocationIndicatorLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (bearingImageExpression != null) {
+      layout["bearing-image"] = bearingImageExpression;
+    }
+
     if (bearingImage != null) {
       layout["bearing-image"] = bearingImage;
     }
+    if (shadowImageExpression != null) {
+      layout["shadow-image"] = shadowImageExpression;
+    }
+
     if (shadowImage != null) {
       layout["shadow-image"] = shadowImage;
     }
+    if (topImageExpression != null) {
+      layout["top-image"] = topImageExpression;
+    }
+
     if (topImage != null) {
       layout["top-image"] = topImage;
     }
@@ -273,6 +292,9 @@ class LocationIndicatorLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -296,56 +318,59 @@ class LocationIndicatorLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      bearingImage: optionalCast(map["layout"]["bearing-image"]),
-      bearingImageExpression: optionalCast(map["layout"]["bearing-image"]),
-      shadowImage: optionalCast(map["layout"]["shadow-image"]),
-      shadowImageExpression: optionalCast(map["layout"]["shadow-image"]),
-      topImage: optionalCast(map["layout"]["top-image"]),
-      topImageExpression: optionalCast(map["layout"]["top-image"]),
-      accuracyRadius: optionalCast(map["paint"]["accuracy-radius"]),
-      accuracyRadiusExpression: optionalCast(map["layout"]["accuracy-radius"]),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      bearingImage: _optionalCast(map["layout"]["bearing-image"]),
+      bearingImageExpression: _optionalCastList(map["layout"]["bearing-image"]),
+      shadowImage: _optionalCast(map["layout"]["shadow-image"]),
+      shadowImageExpression: _optionalCastList(map["layout"]["shadow-image"]),
+      topImage: _optionalCast(map["layout"]["top-image"]),
+      topImageExpression: _optionalCastList(map["layout"]["top-image"]),
+      accuracyRadius: _optionalCast(map["paint"]["accuracy-radius"]),
+      accuracyRadiusExpression:
+          _optionalCastList(map["paint"]["accuracy-radius"]),
       accuracyRadiusBorderColor:
           (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
       accuracyRadiusBorderColorExpression:
-          optionalCast(map["layout"]["accuracy-radius-border-color"]),
+          _optionalCastList(map["paint"]["accuracy-radius-border-color"]),
       accuracyRadiusColor:
           (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
       accuracyRadiusColorExpression:
-          optionalCast(map["layout"]["accuracy-radius-color"]),
-      bearing: optionalCast(map["paint"]["bearing"]),
-      bearingExpression: optionalCast(map["layout"]["bearing"]),
-      bearingImageSize: optionalCast(map["paint"]["bearing-image-size"]),
+          _optionalCastList(map["paint"]["accuracy-radius-color"]),
+      bearing: _optionalCast(map["paint"]["bearing"]),
+      bearingExpression: _optionalCastList(map["paint"]["bearing"]),
+      bearingImageSize: _optionalCast(map["paint"]["bearing-image-size"]),
       bearingImageSizeExpression:
-          optionalCast(map["layout"]["bearing-image-size"]),
+          _optionalCastList(map["paint"]["bearing-image-size"]),
       emphasisCircleColor:
           (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
       emphasisCircleColorExpression:
-          optionalCast(map["layout"]["emphasis-circle-color"]),
+          _optionalCastList(map["paint"]["emphasis-circle-color"]),
       emphasisCircleRadius:
-          optionalCast(map["paint"]["emphasis-circle-radius"]),
+          _optionalCast(map["paint"]["emphasis-circle-radius"]),
       emphasisCircleRadiusExpression:
-          optionalCast(map["layout"]["emphasis-circle-radius"]),
+          _optionalCastList(map["paint"]["emphasis-circle-radius"]),
       imagePitchDisplacement:
-          optionalCast(map["paint"]["image-pitch-displacement"]),
+          _optionalCast(map["paint"]["image-pitch-displacement"]),
       imagePitchDisplacementExpression:
-          optionalCast(map["layout"]["image-pitch-displacement"]),
+          _optionalCastList(map["paint"]["image-pitch-displacement"]),
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      locationExpression: optionalCast(map["layout"]["location"]),
+      locationExpression: _optionalCastList(map["paint"]["location"]),
       locationIndicatorOpacity:
-          optionalCast(map["paint"]["location-indicator-opacity"]),
+          _optionalCast(map["paint"]["location-indicator-opacity"]),
       locationIndicatorOpacityExpression:
-          optionalCast(map["layout"]["location-indicator-opacity"]),
+          _optionalCastList(map["paint"]["location-indicator-opacity"]),
       perspectiveCompensation:
-          optionalCast(map["paint"]["perspective-compensation"]),
+          _optionalCast(map["paint"]["perspective-compensation"]),
       perspectiveCompensationExpression:
-          optionalCast(map["layout"]["perspective-compensation"]),
-      shadowImageSize: optionalCast(map["paint"]["shadow-image-size"]),
+          _optionalCastList(map["paint"]["perspective-compensation"]),
+      shadowImageSize: _optionalCast(map["paint"]["shadow-image-size"]),
       shadowImageSizeExpression:
-          optionalCast(map["layout"]["shadow-image-size"]),
-      topImageSize: optionalCast(map["paint"]["top-image-size"]),
-      topImageSizeExpression: optionalCast(map["layout"]["top-image-size"]),
+          _optionalCastList(map["paint"]["shadow-image-size"]),
+      topImageSize: _optionalCast(map["paint"]["top-image-size"]),
+      topImageSizeExpression: _optionalCastList(map["paint"]["top-image-size"]),
     );
   }
 }

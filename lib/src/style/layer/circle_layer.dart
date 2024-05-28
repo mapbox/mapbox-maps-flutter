@@ -7,6 +7,7 @@ class CircleLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -41,6 +42,8 @@ class CircleLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -135,10 +138,18 @@ class CircleLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (circleSortKeyExpression != null) {
+      layout["circle-sort-key"] = circleSortKeyExpression;
+    }
+
     if (circleSortKey != null) {
       layout["circle-sort-key"] = circleSortKey;
     }
@@ -249,6 +260,9 @@ class CircleLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -274,18 +288,22 @@ class CircleLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      circleSortKey: optionalCast(map["layout"]["circle-sort-key"]),
-      circleSortKeyExpression: optionalCast(map["layout"]["circle-sort-key"]),
-      circleBlur: optionalCast(map["paint"]["circle-blur"]),
-      circleBlurExpression: optionalCast(map["layout"]["circle-blur"]),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      circleSortKey: _optionalCast(map["layout"]["circle-sort-key"]),
+      circleSortKeyExpression:
+          _optionalCastList(map["layout"]["circle-sort-key"]),
+      circleBlur: _optionalCast(map["paint"]["circle-blur"]),
+      circleBlurExpression: _optionalCastList(map["paint"]["circle-blur"]),
       circleColor: (map["paint"]["circle-color"] as List?)?.toRGBAInt(),
-      circleColorExpression: optionalCast(map["layout"]["circle-color"]),
+      circleColorExpression: _optionalCastList(map["paint"]["circle-color"]),
       circleEmissiveStrength:
-          optionalCast(map["paint"]["circle-emissive-strength"]),
+          _optionalCast(map["paint"]["circle-emissive-strength"]),
       circleEmissiveStrengthExpression:
-          optionalCast(map["layout"]["circle-emissive-strength"]),
-      circleOpacity: optionalCast(map["paint"]["circle-opacity"]),
-      circleOpacityExpression: optionalCast(map["layout"]["circle-opacity"]),
+          _optionalCastList(map["paint"]["circle-emissive-strength"]),
+      circleOpacity: _optionalCast(map["paint"]["circle-opacity"]),
+      circleOpacityExpression:
+          _optionalCastList(map["paint"]["circle-opacity"]),
       circlePitchAlignment: map["paint"]["circle-pitch-alignment"] == null
           ? null
           : CirclePitchAlignment.values.firstWhere((e) => e.name
@@ -293,7 +311,7 @@ class CircleLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-pitch-alignment"])),
       circlePitchAlignmentExpression:
-          optionalCast(map["layout"]["circle-pitch-alignment"]),
+          _optionalCastList(map["paint"]["circle-pitch-alignment"]),
       circlePitchScale: map["paint"]["circle-pitch-scale"] == null
           ? null
           : CirclePitchScale.values.firstWhere((e) => e.name
@@ -301,24 +319,24 @@ class CircleLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-pitch-scale"])),
       circlePitchScaleExpression:
-          optionalCast(map["layout"]["circle-pitch-scale"]),
-      circleRadius: optionalCast(map["paint"]["circle-radius"]),
-      circleRadiusExpression: optionalCast(map["layout"]["circle-radius"]),
+          _optionalCastList(map["paint"]["circle-pitch-scale"]),
+      circleRadius: _optionalCast(map["paint"]["circle-radius"]),
+      circleRadiusExpression: _optionalCastList(map["paint"]["circle-radius"]),
       circleStrokeColor:
           (map["paint"]["circle-stroke-color"] as List?)?.toRGBAInt(),
       circleStrokeColorExpression:
-          optionalCast(map["layout"]["circle-stroke-color"]),
-      circleStrokeOpacity: optionalCast(map["paint"]["circle-stroke-opacity"]),
+          _optionalCastList(map["paint"]["circle-stroke-color"]),
+      circleStrokeOpacity: _optionalCast(map["paint"]["circle-stroke-opacity"]),
       circleStrokeOpacityExpression:
-          optionalCast(map["layout"]["circle-stroke-opacity"]),
-      circleStrokeWidth: optionalCast(map["paint"]["circle-stroke-width"]),
+          _optionalCastList(map["paint"]["circle-stroke-opacity"]),
+      circleStrokeWidth: _optionalCast(map["paint"]["circle-stroke-width"]),
       circleStrokeWidthExpression:
-          optionalCast(map["layout"]["circle-stroke-width"]),
+          _optionalCastList(map["paint"]["circle-stroke-width"]),
       circleTranslate: (map["paint"]["circle-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       circleTranslateExpression:
-          optionalCast(map["layout"]["circle-translate"]),
+          _optionalCastList(map["paint"]["circle-translate"]),
       circleTranslateAnchor: map["paint"]["circle-translate-anchor"] == null
           ? null
           : CircleTranslateAnchor.values.firstWhere((e) => e.name
@@ -326,7 +344,7 @@ class CircleLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["circle-translate-anchor"])),
       circleTranslateAnchorExpression:
-          optionalCast(map["layout"]["circle-translate-anchor"]),
+          _optionalCastList(map["paint"]["circle-translate-anchor"]),
     );
   }
 }

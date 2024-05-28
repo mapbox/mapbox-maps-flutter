@@ -7,6 +7,7 @@ class BackgroundLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -21,6 +22,8 @@ class BackgroundLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -55,10 +58,14 @@ class BackgroundLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
     var paint = {};
     if (backgroundColorExpression != null) {
       paint["background-color"] = backgroundColorExpression;
@@ -104,6 +111,9 @@ class BackgroundLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -127,19 +137,21 @@ class BackgroundLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
       backgroundColor: (map["paint"]["background-color"] as List?)?.toRGBAInt(),
       backgroundColorExpression:
-          optionalCast(map["layout"]["background-color"]),
+          _optionalCastList(map["paint"]["background-color"]),
       backgroundEmissiveStrength:
-          optionalCast(map["paint"]["background-emissive-strength"]),
+          _optionalCast(map["paint"]["background-emissive-strength"]),
       backgroundEmissiveStrengthExpression:
-          optionalCast(map["layout"]["background-emissive-strength"]),
-      backgroundOpacity: optionalCast(map["paint"]["background-opacity"]),
+          _optionalCastList(map["paint"]["background-emissive-strength"]),
+      backgroundOpacity: _optionalCast(map["paint"]["background-opacity"]),
       backgroundOpacityExpression:
-          optionalCast(map["layout"]["background-opacity"]),
-      backgroundPattern: optionalCast(map["paint"]["background-pattern"]),
+          _optionalCastList(map["paint"]["background-opacity"]),
+      backgroundPattern: _optionalCast(map["paint"]["background-pattern"]),
       backgroundPatternExpression:
-          optionalCast(map["layout"]["background-pattern"]),
+          _optionalCastList(map["paint"]["background-pattern"]),
     );
   }
 }

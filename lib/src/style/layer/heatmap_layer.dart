@@ -7,6 +7,7 @@ class HeatmapLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -25,6 +26,8 @@ class HeatmapLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -71,10 +74,14 @@ class HeatmapLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
     var paint = {};
     if (heatmapColorExpression != null) {
       paint["heatmap-color"] = heatmapColorExpression;
@@ -130,6 +137,9 @@ class HeatmapLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -155,17 +165,22 @@ class HeatmapLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
       heatmapColor: (map["paint"]["heatmap-color"] as List?)?.toRGBAInt(),
-      heatmapColorExpression: optionalCast(map["layout"]["heatmap-color"]),
-      heatmapIntensity: optionalCast(map["paint"]["heatmap-intensity"]),
+      heatmapColorExpression: _optionalCastList(map["paint"]["heatmap-color"]),
+      heatmapIntensity: _optionalCast(map["paint"]["heatmap-intensity"]),
       heatmapIntensityExpression:
-          optionalCast(map["layout"]["heatmap-intensity"]),
-      heatmapOpacity: optionalCast(map["paint"]["heatmap-opacity"]),
-      heatmapOpacityExpression: optionalCast(map["layout"]["heatmap-opacity"]),
-      heatmapRadius: optionalCast(map["paint"]["heatmap-radius"]),
-      heatmapRadiusExpression: optionalCast(map["layout"]["heatmap-radius"]),
-      heatmapWeight: optionalCast(map["paint"]["heatmap-weight"]),
-      heatmapWeightExpression: optionalCast(map["layout"]["heatmap-weight"]),
+          _optionalCastList(map["paint"]["heatmap-intensity"]),
+      heatmapOpacity: _optionalCast(map["paint"]["heatmap-opacity"]),
+      heatmapOpacityExpression:
+          _optionalCastList(map["paint"]["heatmap-opacity"]),
+      heatmapRadius: _optionalCast(map["paint"]["heatmap-radius"]),
+      heatmapRadiusExpression:
+          _optionalCastList(map["paint"]["heatmap-radius"]),
+      heatmapWeight: _optionalCast(map["paint"]["heatmap-weight"]),
+      heatmapWeightExpression:
+          _optionalCastList(map["paint"]["heatmap-weight"]),
     );
   }
 }

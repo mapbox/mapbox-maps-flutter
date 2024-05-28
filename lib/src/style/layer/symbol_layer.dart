@@ -7,6 +7,7 @@ class SymbolLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -135,6 +136,8 @@ class SymbolLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -511,144 +514,316 @@ class SymbolLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (iconAllowOverlapExpression != null) {
+      layout["icon-allow-overlap"] = iconAllowOverlapExpression;
+    }
+
     if (iconAllowOverlap != null) {
       layout["icon-allow-overlap"] = iconAllowOverlap;
     }
+    if (iconAnchorExpression != null) {
+      layout["icon-anchor"] = iconAnchorExpression;
+    }
+
     if (iconAnchor != null) {
       layout["icon-anchor"] =
           iconAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (iconIgnorePlacementExpression != null) {
+      layout["icon-ignore-placement"] = iconIgnorePlacementExpression;
+    }
+
     if (iconIgnorePlacement != null) {
       layout["icon-ignore-placement"] = iconIgnorePlacement;
     }
+    if (iconImageExpression != null) {
+      layout["icon-image"] = iconImageExpression;
+    }
+
     if (iconImage != null) {
       layout["icon-image"] = iconImage;
     }
+    if (iconKeepUprightExpression != null) {
+      layout["icon-keep-upright"] = iconKeepUprightExpression;
+    }
+
     if (iconKeepUpright != null) {
       layout["icon-keep-upright"] = iconKeepUpright;
     }
+    if (iconOffsetExpression != null) {
+      layout["icon-offset"] = iconOffsetExpression;
+    }
+
     if (iconOffset != null) {
       layout["icon-offset"] = iconOffset;
     }
+    if (iconOptionalExpression != null) {
+      layout["icon-optional"] = iconOptionalExpression;
+    }
+
     if (iconOptional != null) {
       layout["icon-optional"] = iconOptional;
     }
+    if (iconPaddingExpression != null) {
+      layout["icon-padding"] = iconPaddingExpression;
+    }
+
     if (iconPadding != null) {
       layout["icon-padding"] = iconPadding;
     }
+    if (iconPitchAlignmentExpression != null) {
+      layout["icon-pitch-alignment"] = iconPitchAlignmentExpression;
+    }
+
     if (iconPitchAlignment != null) {
       layout["icon-pitch-alignment"] =
           iconPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (iconRotateExpression != null) {
+      layout["icon-rotate"] = iconRotateExpression;
+    }
+
     if (iconRotate != null) {
       layout["icon-rotate"] = iconRotate;
     }
+    if (iconRotationAlignmentExpression != null) {
+      layout["icon-rotation-alignment"] = iconRotationAlignmentExpression;
+    }
+
     if (iconRotationAlignment != null) {
       layout["icon-rotation-alignment"] =
           iconRotationAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (iconSizeExpression != null) {
+      layout["icon-size"] = iconSizeExpression;
+    }
+
     if (iconSize != null) {
       layout["icon-size"] = iconSize;
     }
+    if (iconTextFitExpression != null) {
+      layout["icon-text-fit"] = iconTextFitExpression;
+    }
+
     if (iconTextFit != null) {
       layout["icon-text-fit"] =
           iconTextFit?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (iconTextFitPaddingExpression != null) {
+      layout["icon-text-fit-padding"] = iconTextFitPaddingExpression;
+    }
+
     if (iconTextFitPadding != null) {
       layout["icon-text-fit-padding"] = iconTextFitPadding;
     }
+    if (symbolAvoidEdgesExpression != null) {
+      layout["symbol-avoid-edges"] = symbolAvoidEdgesExpression;
+    }
+
     if (symbolAvoidEdges != null) {
       layout["symbol-avoid-edges"] = symbolAvoidEdges;
     }
+    if (symbolPlacementExpression != null) {
+      layout["symbol-placement"] = symbolPlacementExpression;
+    }
+
     if (symbolPlacement != null) {
       layout["symbol-placement"] =
           symbolPlacement?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (symbolSortKeyExpression != null) {
+      layout["symbol-sort-key"] = symbolSortKeyExpression;
+    }
+
     if (symbolSortKey != null) {
       layout["symbol-sort-key"] = symbolSortKey;
     }
+    if (symbolSpacingExpression != null) {
+      layout["symbol-spacing"] = symbolSpacingExpression;
+    }
+
     if (symbolSpacing != null) {
       layout["symbol-spacing"] = symbolSpacing;
     }
+    if (symbolZElevateExpression != null) {
+      layout["symbol-z-elevate"] = symbolZElevateExpression;
+    }
+
     if (symbolZElevate != null) {
       layout["symbol-z-elevate"] = symbolZElevate;
     }
+    if (symbolZOrderExpression != null) {
+      layout["symbol-z-order"] = symbolZOrderExpression;
+    }
+
     if (symbolZOrder != null) {
       layout["symbol-z-order"] =
           symbolZOrder?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textAllowOverlapExpression != null) {
+      layout["text-allow-overlap"] = textAllowOverlapExpression;
+    }
+
     if (textAllowOverlap != null) {
       layout["text-allow-overlap"] = textAllowOverlap;
     }
+    if (textAnchorExpression != null) {
+      layout["text-anchor"] = textAnchorExpression;
+    }
+
     if (textAnchor != null) {
       layout["text-anchor"] =
           textAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textFieldExpression != null) {
+      layout["text-field"] = textFieldExpression;
+    }
+
     if (textField != null) {
       layout["text-field"] = textField;
     }
+    if (textFontExpression != null) {
+      layout["text-font"] = textFontExpression;
+    }
+
     if (textFont != null) {
       layout["text-font"] = textFont;
     }
+    if (textIgnorePlacementExpression != null) {
+      layout["text-ignore-placement"] = textIgnorePlacementExpression;
+    }
+
     if (textIgnorePlacement != null) {
       layout["text-ignore-placement"] = textIgnorePlacement;
     }
+    if (textJustifyExpression != null) {
+      layout["text-justify"] = textJustifyExpression;
+    }
+
     if (textJustify != null) {
       layout["text-justify"] =
           textJustify?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textKeepUprightExpression != null) {
+      layout["text-keep-upright"] = textKeepUprightExpression;
+    }
+
     if (textKeepUpright != null) {
       layout["text-keep-upright"] = textKeepUpright;
     }
+    if (textLetterSpacingExpression != null) {
+      layout["text-letter-spacing"] = textLetterSpacingExpression;
+    }
+
     if (textLetterSpacing != null) {
       layout["text-letter-spacing"] = textLetterSpacing;
     }
+    if (textLineHeightExpression != null) {
+      layout["text-line-height"] = textLineHeightExpression;
+    }
+
     if (textLineHeight != null) {
       layout["text-line-height"] = textLineHeight;
     }
+    if (textMaxAngleExpression != null) {
+      layout["text-max-angle"] = textMaxAngleExpression;
+    }
+
     if (textMaxAngle != null) {
       layout["text-max-angle"] = textMaxAngle;
     }
+    if (textMaxWidthExpression != null) {
+      layout["text-max-width"] = textMaxWidthExpression;
+    }
+
     if (textMaxWidth != null) {
       layout["text-max-width"] = textMaxWidth;
     }
+    if (textOffsetExpression != null) {
+      layout["text-offset"] = textOffsetExpression;
+    }
+
     if (textOffset != null) {
       layout["text-offset"] = textOffset;
     }
+    if (textOptionalExpression != null) {
+      layout["text-optional"] = textOptionalExpression;
+    }
+
     if (textOptional != null) {
       layout["text-optional"] = textOptional;
     }
+    if (textPaddingExpression != null) {
+      layout["text-padding"] = textPaddingExpression;
+    }
+
     if (textPadding != null) {
       layout["text-padding"] = textPadding;
     }
+    if (textPitchAlignmentExpression != null) {
+      layout["text-pitch-alignment"] = textPitchAlignmentExpression;
+    }
+
     if (textPitchAlignment != null) {
       layout["text-pitch-alignment"] =
           textPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textRadialOffsetExpression != null) {
+      layout["text-radial-offset"] = textRadialOffsetExpression;
+    }
+
     if (textRadialOffset != null) {
       layout["text-radial-offset"] = textRadialOffset;
     }
+    if (textRotateExpression != null) {
+      layout["text-rotate"] = textRotateExpression;
+    }
+
     if (textRotate != null) {
       layout["text-rotate"] = textRotate;
     }
+    if (textRotationAlignmentExpression != null) {
+      layout["text-rotation-alignment"] = textRotationAlignmentExpression;
+    }
+
     if (textRotationAlignment != null) {
       layout["text-rotation-alignment"] =
           textRotationAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textSizeExpression != null) {
+      layout["text-size"] = textSizeExpression;
+    }
+
     if (textSize != null) {
       layout["text-size"] = textSize;
     }
+    if (textTransformExpression != null) {
+      layout["text-transform"] = textTransformExpression;
+    }
+
     if (textTransform != null) {
       layout["text-transform"] =
           textTransform?.name.toLowerCase().replaceAll("_", "-");
     }
+    if (textVariableAnchorExpression != null) {
+      layout["text-variable-anchor"] = textVariableAnchorExpression;
+    }
+
     if (textVariableAnchor != null) {
       layout["text-variable-anchor"] = textVariableAnchor;
     }
+    if (textWritingModeExpression != null) {
+      layout["text-writing-mode"] = textWritingModeExpression;
+    }
+
     if (textWritingMode != null) {
       layout["text-writing-mode"] = textWritingMode;
     }
@@ -800,6 +975,9 @@ class SymbolLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -825,32 +1003,35 @@ class SymbolLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      iconAllowOverlap: optionalCast(map["layout"]["icon-allow-overlap"]),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      iconAllowOverlap: _optionalCast(map["layout"]["icon-allow-overlap"]),
       iconAllowOverlapExpression:
-          optionalCast(map["layout"]["icon-allow-overlap"]),
+          _optionalCastList(map["layout"]["icon-allow-overlap"]),
       iconAnchor: map["layout"]["icon-anchor"] == null
           ? null
           : IconAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["icon-anchor"])),
-      iconAnchorExpression: optionalCast(map["layout"]["icon-anchor"]),
-      iconIgnorePlacement: optionalCast(map["layout"]["icon-ignore-placement"]),
+      iconAnchorExpression: _optionalCastList(map["layout"]["icon-anchor"]),
+      iconIgnorePlacement:
+          _optionalCast(map["layout"]["icon-ignore-placement"]),
       iconIgnorePlacementExpression:
-          optionalCast(map["layout"]["icon-ignore-placement"]),
-      iconImage: optionalCast(map["layout"]["icon-image"]),
-      iconImageExpression: optionalCast(map["layout"]["icon-image"]),
-      iconKeepUpright: optionalCast(map["layout"]["icon-keep-upright"]),
+          _optionalCastList(map["layout"]["icon-ignore-placement"]),
+      iconImage: _optionalCast(map["layout"]["icon-image"]),
+      iconImageExpression: _optionalCastList(map["layout"]["icon-image"]),
+      iconKeepUpright: _optionalCast(map["layout"]["icon-keep-upright"]),
       iconKeepUprightExpression:
-          optionalCast(map["layout"]["icon-keep-upright"]),
+          _optionalCastList(map["layout"]["icon-keep-upright"]),
       iconOffset: (map["layout"]["icon-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      iconOffsetExpression: optionalCast(map["layout"]["icon-offset"]),
-      iconOptional: optionalCast(map["layout"]["icon-optional"]),
-      iconOptionalExpression: optionalCast(map["layout"]["icon-optional"]),
-      iconPadding: optionalCast(map["layout"]["icon-padding"]),
-      iconPaddingExpression: optionalCast(map["layout"]["icon-padding"]),
+      iconOffsetExpression: _optionalCastList(map["layout"]["icon-offset"]),
+      iconOptional: _optionalCast(map["layout"]["icon-optional"]),
+      iconOptionalExpression: _optionalCastList(map["layout"]["icon-optional"]),
+      iconPadding: _optionalCast(map["layout"]["icon-padding"]),
+      iconPaddingExpression: _optionalCastList(map["layout"]["icon-padding"]),
       iconPitchAlignment: map["layout"]["icon-pitch-alignment"] == null
           ? null
           : IconPitchAlignment.values.firstWhere((e) => e.name
@@ -858,9 +1039,9 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["icon-pitch-alignment"])),
       iconPitchAlignmentExpression:
-          optionalCast(map["layout"]["icon-pitch-alignment"]),
-      iconRotate: optionalCast(map["layout"]["icon-rotate"]),
-      iconRotateExpression: optionalCast(map["layout"]["icon-rotate"]),
+          _optionalCastList(map["layout"]["icon-pitch-alignment"]),
+      iconRotate: _optionalCast(map["layout"]["icon-rotate"]),
+      iconRotateExpression: _optionalCastList(map["layout"]["icon-rotate"]),
       iconRotationAlignment: map["layout"]["icon-rotation-alignment"] == null
           ? null
           : IconRotationAlignment.values.firstWhere((e) => e.name
@@ -868,24 +1049,24 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["icon-rotation-alignment"])),
       iconRotationAlignmentExpression:
-          optionalCast(map["layout"]["icon-rotation-alignment"]),
-      iconSize: optionalCast(map["layout"]["icon-size"]),
-      iconSizeExpression: optionalCast(map["layout"]["icon-size"]),
+          _optionalCastList(map["layout"]["icon-rotation-alignment"]),
+      iconSize: _optionalCast(map["layout"]["icon-size"]),
+      iconSizeExpression: _optionalCastList(map["layout"]["icon-size"]),
       iconTextFit: map["layout"]["icon-text-fit"] == null
           ? null
           : IconTextFit.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["icon-text-fit"])),
-      iconTextFitExpression: optionalCast(map["layout"]["icon-text-fit"]),
+      iconTextFitExpression: _optionalCastList(map["layout"]["icon-text-fit"]),
       iconTextFitPadding: (map["layout"]["icon-text-fit-padding"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       iconTextFitPaddingExpression:
-          optionalCast(map["layout"]["icon-text-fit-padding"]),
-      symbolAvoidEdges: optionalCast(map["layout"]["symbol-avoid-edges"]),
+          _optionalCastList(map["layout"]["icon-text-fit-padding"]),
+      symbolAvoidEdges: _optionalCast(map["layout"]["symbol-avoid-edges"]),
       symbolAvoidEdgesExpression:
-          optionalCast(map["layout"]["symbol-avoid-edges"]),
+          _optionalCastList(map["layout"]["symbol-avoid-edges"]),
       symbolPlacement: map["layout"]["symbol-placement"] == null
           ? null
           : SymbolPlacement.values.firstWhere((e) => e.name
@@ -893,66 +1074,74 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["symbol-placement"])),
       symbolPlacementExpression:
-          optionalCast(map["layout"]["symbol-placement"]),
-      symbolSortKey: optionalCast(map["layout"]["symbol-sort-key"]),
-      symbolSortKeyExpression: optionalCast(map["layout"]["symbol-sort-key"]),
-      symbolSpacing: optionalCast(map["layout"]["symbol-spacing"]),
-      symbolSpacingExpression: optionalCast(map["layout"]["symbol-spacing"]),
-      symbolZElevate: optionalCast(map["layout"]["symbol-z-elevate"]),
-      symbolZElevateExpression: optionalCast(map["layout"]["symbol-z-elevate"]),
+          _optionalCastList(map["layout"]["symbol-placement"]),
+      symbolSortKey: _optionalCast(map["layout"]["symbol-sort-key"]),
+      symbolSortKeyExpression:
+          _optionalCastList(map["layout"]["symbol-sort-key"]),
+      symbolSpacing: _optionalCast(map["layout"]["symbol-spacing"]),
+      symbolSpacingExpression:
+          _optionalCastList(map["layout"]["symbol-spacing"]),
+      symbolZElevate: _optionalCast(map["layout"]["symbol-z-elevate"]),
+      symbolZElevateExpression:
+          _optionalCastList(map["layout"]["symbol-z-elevate"]),
       symbolZOrder: map["layout"]["symbol-z-order"] == null
           ? null
           : SymbolZOrder.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["symbol-z-order"])),
-      symbolZOrderExpression: optionalCast(map["layout"]["symbol-z-order"]),
-      textAllowOverlap: optionalCast(map["layout"]["text-allow-overlap"]),
+      symbolZOrderExpression:
+          _optionalCastList(map["layout"]["symbol-z-order"]),
+      textAllowOverlap: _optionalCast(map["layout"]["text-allow-overlap"]),
       textAllowOverlapExpression:
-          optionalCast(map["layout"]["text-allow-overlap"]),
+          _optionalCastList(map["layout"]["text-allow-overlap"]),
       textAnchor: map["layout"]["text-anchor"] == null
           ? null
           : TextAnchor.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["text-anchor"])),
-      textAnchorExpression: optionalCast(map["layout"]["text-anchor"]),
-      textField: optionalCast(map["layout"]["text-field"]),
-      textFieldExpression: optionalCast(map["layout"]["text-field"]),
+      textAnchorExpression: _optionalCastList(map["layout"]["text-anchor"]),
+      textField: _optionalCast(map["layout"]["text-field"]),
+      textFieldExpression: _optionalCastList(map["layout"]["text-field"]),
       textFont: (map["layout"]["text-font"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
-      textFontExpression: optionalCast(map["layout"]["text-font"]),
-      textIgnorePlacement: optionalCast(map["layout"]["text-ignore-placement"]),
+      textFontExpression: _optionalCastList(map["layout"]["text-font"]),
+      textIgnorePlacement:
+          _optionalCast(map["layout"]["text-ignore-placement"]),
       textIgnorePlacementExpression:
-          optionalCast(map["layout"]["text-ignore-placement"]),
+          _optionalCastList(map["layout"]["text-ignore-placement"]),
       textJustify: map["layout"]["text-justify"] == null
           ? null
           : TextJustify.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["text-justify"])),
-      textJustifyExpression: optionalCast(map["layout"]["text-justify"]),
-      textKeepUpright: optionalCast(map["layout"]["text-keep-upright"]),
+      textJustifyExpression: _optionalCastList(map["layout"]["text-justify"]),
+      textKeepUpright: _optionalCast(map["layout"]["text-keep-upright"]),
       textKeepUprightExpression:
-          optionalCast(map["layout"]["text-keep-upright"]),
-      textLetterSpacing: optionalCast(map["layout"]["text-letter-spacing"]),
+          _optionalCastList(map["layout"]["text-keep-upright"]),
+      textLetterSpacing: _optionalCast(map["layout"]["text-letter-spacing"]),
       textLetterSpacingExpression:
-          optionalCast(map["layout"]["text-letter-spacing"]),
-      textLineHeight: optionalCast(map["layout"]["text-line-height"]),
-      textLineHeightExpression: optionalCast(map["layout"]["text-line-height"]),
-      textMaxAngle: optionalCast(map["layout"]["text-max-angle"]),
-      textMaxAngleExpression: optionalCast(map["layout"]["text-max-angle"]),
-      textMaxWidth: optionalCast(map["layout"]["text-max-width"]),
-      textMaxWidthExpression: optionalCast(map["layout"]["text-max-width"]),
+          _optionalCastList(map["layout"]["text-letter-spacing"]),
+      textLineHeight: _optionalCast(map["layout"]["text-line-height"]),
+      textLineHeightExpression:
+          _optionalCastList(map["layout"]["text-line-height"]),
+      textMaxAngle: _optionalCast(map["layout"]["text-max-angle"]),
+      textMaxAngleExpression:
+          _optionalCastList(map["layout"]["text-max-angle"]),
+      textMaxWidth: _optionalCast(map["layout"]["text-max-width"]),
+      textMaxWidthExpression:
+          _optionalCastList(map["layout"]["text-max-width"]),
       textOffset: (map["layout"]["text-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      textOffsetExpression: optionalCast(map["layout"]["text-offset"]),
-      textOptional: optionalCast(map["layout"]["text-optional"]),
-      textOptionalExpression: optionalCast(map["layout"]["text-optional"]),
-      textPadding: optionalCast(map["layout"]["text-padding"]),
-      textPaddingExpression: optionalCast(map["layout"]["text-padding"]),
+      textOffsetExpression: _optionalCastList(map["layout"]["text-offset"]),
+      textOptional: _optionalCast(map["layout"]["text-optional"]),
+      textOptionalExpression: _optionalCastList(map["layout"]["text-optional"]),
+      textPadding: _optionalCast(map["layout"]["text-padding"]),
+      textPaddingExpression: _optionalCastList(map["layout"]["text-padding"]),
       textPitchAlignment: map["layout"]["text-pitch-alignment"] == null
           ? null
           : TextPitchAlignment.values.firstWhere((e) => e.name
@@ -960,12 +1149,12 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["text-pitch-alignment"])),
       textPitchAlignmentExpression:
-          optionalCast(map["layout"]["text-pitch-alignment"]),
-      textRadialOffset: optionalCast(map["layout"]["text-radial-offset"]),
+          _optionalCastList(map["layout"]["text-pitch-alignment"]),
+      textRadialOffset: _optionalCast(map["layout"]["text-radial-offset"]),
       textRadialOffsetExpression:
-          optionalCast(map["layout"]["text-radial-offset"]),
-      textRotate: optionalCast(map["layout"]["text-rotate"]),
-      textRotateExpression: optionalCast(map["layout"]["text-rotate"]),
+          _optionalCastList(map["layout"]["text-radial-offset"]),
+      textRotate: _optionalCast(map["layout"]["text-rotate"]),
+      textRotateExpression: _optionalCastList(map["layout"]["text-rotate"]),
       textRotationAlignment: map["layout"]["text-rotation-alignment"] == null
           ? null
           : TextRotationAlignment.values.firstWhere((e) => e.name
@@ -973,50 +1162,54 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["layout"]["text-rotation-alignment"])),
       textRotationAlignmentExpression:
-          optionalCast(map["layout"]["text-rotation-alignment"]),
-      textSize: optionalCast(map["layout"]["text-size"]),
-      textSizeExpression: optionalCast(map["layout"]["text-size"]),
+          _optionalCastList(map["layout"]["text-rotation-alignment"]),
+      textSize: _optionalCast(map["layout"]["text-size"]),
+      textSizeExpression: _optionalCastList(map["layout"]["text-size"]),
       textTransform: map["layout"]["text-transform"] == null
           ? null
           : TextTransform.values.firstWhere((e) => e.name
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["text-transform"])),
-      textTransformExpression: optionalCast(map["layout"]["text-transform"]),
+      textTransformExpression:
+          _optionalCastList(map["layout"]["text-transform"]),
       textVariableAnchor: (map["layout"]["text-variable-anchor"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
       textVariableAnchorExpression:
-          optionalCast(map["layout"]["text-variable-anchor"]),
+          _optionalCastList(map["layout"]["text-variable-anchor"]),
       textWritingMode: (map["layout"]["text-writing-mode"] as List?)
           ?.map<String?>((e) => e.toString())
           .toList(),
       textWritingModeExpression:
-          optionalCast(map["layout"]["text-writing-mode"]),
+          _optionalCastList(map["layout"]["text-writing-mode"]),
       iconColor: (map["paint"]["icon-color"] as List?)?.toRGBAInt(),
-      iconColorExpression: optionalCast(map["layout"]["icon-color"]),
-      iconColorSaturation: optionalCast(map["paint"]["icon-color-saturation"]),
+      iconColorExpression: _optionalCastList(map["paint"]["icon-color"]),
+      iconColorSaturation: _optionalCast(map["paint"]["icon-color-saturation"]),
       iconColorSaturationExpression:
-          optionalCast(map["layout"]["icon-color-saturation"]),
+          _optionalCastList(map["paint"]["icon-color-saturation"]),
       iconEmissiveStrength:
-          optionalCast(map["paint"]["icon-emissive-strength"]),
+          _optionalCast(map["paint"]["icon-emissive-strength"]),
       iconEmissiveStrengthExpression:
-          optionalCast(map["layout"]["icon-emissive-strength"]),
-      iconHaloBlur: optionalCast(map["paint"]["icon-halo-blur"]),
-      iconHaloBlurExpression: optionalCast(map["layout"]["icon-halo-blur"]),
+          _optionalCastList(map["paint"]["icon-emissive-strength"]),
+      iconHaloBlur: _optionalCast(map["paint"]["icon-halo-blur"]),
+      iconHaloBlurExpression: _optionalCastList(map["paint"]["icon-halo-blur"]),
       iconHaloColor: (map["paint"]["icon-halo-color"] as List?)?.toRGBAInt(),
-      iconHaloColorExpression: optionalCast(map["layout"]["icon-halo-color"]),
-      iconHaloWidth: optionalCast(map["paint"]["icon-halo-width"]),
-      iconHaloWidthExpression: optionalCast(map["layout"]["icon-halo-width"]),
-      iconImageCrossFade: optionalCast(map["paint"]["icon-image-cross-fade"]),
+      iconHaloColorExpression:
+          _optionalCastList(map["paint"]["icon-halo-color"]),
+      iconHaloWidth: _optionalCast(map["paint"]["icon-halo-width"]),
+      iconHaloWidthExpression:
+          _optionalCastList(map["paint"]["icon-halo-width"]),
+      iconImageCrossFade: _optionalCast(map["paint"]["icon-image-cross-fade"]),
       iconImageCrossFadeExpression:
-          optionalCast(map["layout"]["icon-image-cross-fade"]),
-      iconOpacity: optionalCast(map["paint"]["icon-opacity"]),
-      iconOpacityExpression: optionalCast(map["layout"]["icon-opacity"]),
+          _optionalCastList(map["paint"]["icon-image-cross-fade"]),
+      iconOpacity: _optionalCast(map["paint"]["icon-opacity"]),
+      iconOpacityExpression: _optionalCastList(map["paint"]["icon-opacity"]),
       iconTranslate: (map["paint"]["icon-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      iconTranslateExpression: optionalCast(map["layout"]["icon-translate"]),
+      iconTranslateExpression:
+          _optionalCastList(map["paint"]["icon-translate"]),
       iconTranslateAnchor: map["paint"]["icon-translate-anchor"] == null
           ? null
           : IconTranslateAnchor.values.firstWhere((e) => e.name
@@ -1024,25 +1217,28 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["icon-translate-anchor"])),
       iconTranslateAnchorExpression:
-          optionalCast(map["layout"]["icon-translate-anchor"]),
+          _optionalCastList(map["paint"]["icon-translate-anchor"]),
       textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
-      textColorExpression: optionalCast(map["layout"]["text-color"]),
+      textColorExpression: _optionalCastList(map["paint"]["text-color"]),
       textEmissiveStrength:
-          optionalCast(map["paint"]["text-emissive-strength"]),
+          _optionalCast(map["paint"]["text-emissive-strength"]),
       textEmissiveStrengthExpression:
-          optionalCast(map["layout"]["text-emissive-strength"]),
-      textHaloBlur: optionalCast(map["paint"]["text-halo-blur"]),
-      textHaloBlurExpression: optionalCast(map["layout"]["text-halo-blur"]),
+          _optionalCastList(map["paint"]["text-emissive-strength"]),
+      textHaloBlur: _optionalCast(map["paint"]["text-halo-blur"]),
+      textHaloBlurExpression: _optionalCastList(map["paint"]["text-halo-blur"]),
       textHaloColor: (map["paint"]["text-halo-color"] as List?)?.toRGBAInt(),
-      textHaloColorExpression: optionalCast(map["layout"]["text-halo-color"]),
-      textHaloWidth: optionalCast(map["paint"]["text-halo-width"]),
-      textHaloWidthExpression: optionalCast(map["layout"]["text-halo-width"]),
-      textOpacity: optionalCast(map["paint"]["text-opacity"]),
-      textOpacityExpression: optionalCast(map["layout"]["text-opacity"]),
+      textHaloColorExpression:
+          _optionalCastList(map["paint"]["text-halo-color"]),
+      textHaloWidth: _optionalCast(map["paint"]["text-halo-width"]),
+      textHaloWidthExpression:
+          _optionalCastList(map["paint"]["text-halo-width"]),
+      textOpacity: _optionalCast(map["paint"]["text-opacity"]),
+      textOpacityExpression: _optionalCastList(map["paint"]["text-opacity"]),
       textTranslate: (map["paint"]["text-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      textTranslateExpression: optionalCast(map["layout"]["text-translate"]),
+      textTranslateExpression:
+          _optionalCastList(map["paint"]["text-translate"]),
       textTranslateAnchor: map["paint"]["text-translate-anchor"] == null
           ? null
           : TextTranslateAnchor.values.firstWhere((e) => e.name
@@ -1050,7 +1246,7 @@ class SymbolLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["text-translate-anchor"])),
       textTranslateAnchorExpression:
-          optionalCast(map["layout"]["text-translate-anchor"]),
+          _optionalCastList(map["paint"]["text-translate-anchor"]),
     );
   }
 }

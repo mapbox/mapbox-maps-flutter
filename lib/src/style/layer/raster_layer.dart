@@ -7,6 +7,7 @@ class RasterLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -43,6 +44,8 @@ class RasterLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -143,10 +146,14 @@ class RasterLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
     var paint = {};
     if (rasterArrayBandExpression != null) {
       paint["raster-array-band"] = rasterArrayBandExpression;
@@ -266,6 +273,9 @@ class RasterLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -291,43 +301,48 @@ class RasterLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      rasterArrayBand: optionalCast(map["paint"]["raster-array-band"]),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      rasterArrayBand: _optionalCast(map["paint"]["raster-array-band"]),
       rasterArrayBandExpression:
-          optionalCast(map["layout"]["raster-array-band"]),
-      rasterBrightnessMax: optionalCast(map["paint"]["raster-brightness-max"]),
+          _optionalCastList(map["paint"]["raster-array-band"]),
+      rasterBrightnessMax: _optionalCast(map["paint"]["raster-brightness-max"]),
       rasterBrightnessMaxExpression:
-          optionalCast(map["layout"]["raster-brightness-max"]),
-      rasterBrightnessMin: optionalCast(map["paint"]["raster-brightness-min"]),
+          _optionalCastList(map["paint"]["raster-brightness-max"]),
+      rasterBrightnessMin: _optionalCast(map["paint"]["raster-brightness-min"]),
       rasterBrightnessMinExpression:
-          optionalCast(map["layout"]["raster-brightness-min"]),
+          _optionalCastList(map["paint"]["raster-brightness-min"]),
       rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
-      rasterColorExpression: optionalCast(map["layout"]["raster-color"]),
+      rasterColorExpression: _optionalCastList(map["paint"]["raster-color"]),
       rasterColorMix: (map["paint"]["raster-color-mix"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      rasterColorMixExpression: optionalCast(map["layout"]["raster-color-mix"]),
+      rasterColorMixExpression:
+          _optionalCastList(map["paint"]["raster-color-mix"]),
       rasterColorRange: (map["paint"]["raster-color-range"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
       rasterColorRangeExpression:
-          optionalCast(map["layout"]["raster-color-range"]),
-      rasterContrast: optionalCast(map["paint"]["raster-contrast"]),
-      rasterContrastExpression: optionalCast(map["layout"]["raster-contrast"]),
-      rasterElevation: optionalCast(map["paint"]["raster-elevation"]),
+          _optionalCastList(map["paint"]["raster-color-range"]),
+      rasterContrast: _optionalCast(map["paint"]["raster-contrast"]),
+      rasterContrastExpression:
+          _optionalCastList(map["paint"]["raster-contrast"]),
+      rasterElevation: _optionalCast(map["paint"]["raster-elevation"]),
       rasterElevationExpression:
-          optionalCast(map["layout"]["raster-elevation"]),
+          _optionalCastList(map["paint"]["raster-elevation"]),
       rasterEmissiveStrength:
-          optionalCast(map["paint"]["raster-emissive-strength"]),
+          _optionalCast(map["paint"]["raster-emissive-strength"]),
       rasterEmissiveStrengthExpression:
-          optionalCast(map["layout"]["raster-emissive-strength"]),
-      rasterFadeDuration: optionalCast(map["paint"]["raster-fade-duration"]),
+          _optionalCastList(map["paint"]["raster-emissive-strength"]),
+      rasterFadeDuration: _optionalCast(map["paint"]["raster-fade-duration"]),
       rasterFadeDurationExpression:
-          optionalCast(map["layout"]["raster-fade-duration"]),
-      rasterHueRotate: optionalCast(map["paint"]["raster-hue-rotate"]),
+          _optionalCastList(map["paint"]["raster-fade-duration"]),
+      rasterHueRotate: _optionalCast(map["paint"]["raster-hue-rotate"]),
       rasterHueRotateExpression:
-          optionalCast(map["layout"]["raster-hue-rotate"]),
-      rasterOpacity: optionalCast(map["paint"]["raster-opacity"]),
-      rasterOpacityExpression: optionalCast(map["layout"]["raster-opacity"]),
+          _optionalCastList(map["paint"]["raster-hue-rotate"]),
+      rasterOpacity: _optionalCast(map["paint"]["raster-opacity"]),
+      rasterOpacityExpression:
+          _optionalCastList(map["paint"]["raster-opacity"]),
       rasterResampling: map["paint"]["raster-resampling"] == null
           ? null
           : RasterResampling.values.firstWhere((e) => e.name
@@ -335,10 +350,10 @@ class RasterLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["raster-resampling"])),
       rasterResamplingExpression:
-          optionalCast(map["layout"]["raster-resampling"]),
-      rasterSaturation: optionalCast(map["paint"]["raster-saturation"]),
+          _optionalCastList(map["paint"]["raster-resampling"]),
+      rasterSaturation: _optionalCast(map["paint"]["raster-saturation"]),
       rasterSaturationExpression:
-          optionalCast(map["layout"]["raster-saturation"]),
+          _optionalCastList(map["paint"]["raster-saturation"]),
     );
   }
 }

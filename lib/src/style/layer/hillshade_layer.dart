@@ -7,6 +7,7 @@ class HillshadeLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -29,6 +30,8 @@ class HillshadeLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -87,10 +90,14 @@ class HillshadeLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
     var paint = {};
     if (hillshadeAccentColorExpression != null) {
       paint["hillshade-accent-color"] = hillshadeAccentColorExpression;
@@ -165,6 +172,9 @@ class HillshadeLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -190,22 +200,24 @@ class HillshadeLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
       hillshadeAccentColor:
           (map["paint"]["hillshade-accent-color"] as List?)?.toRGBAInt(),
       hillshadeAccentColorExpression:
-          optionalCast(map["layout"]["hillshade-accent-color"]),
+          _optionalCastList(map["paint"]["hillshade-accent-color"]),
       hillshadeEmissiveStrength:
-          optionalCast(map["paint"]["hillshade-emissive-strength"]),
+          _optionalCast(map["paint"]["hillshade-emissive-strength"]),
       hillshadeEmissiveStrengthExpression:
-          optionalCast(map["layout"]["hillshade-emissive-strength"]),
+          _optionalCastList(map["paint"]["hillshade-emissive-strength"]),
       hillshadeExaggeration:
-          optionalCast(map["paint"]["hillshade-exaggeration"]),
+          _optionalCast(map["paint"]["hillshade-exaggeration"]),
       hillshadeExaggerationExpression:
-          optionalCast(map["layout"]["hillshade-exaggeration"]),
+          _optionalCastList(map["paint"]["hillshade-exaggeration"]),
       hillshadeHighlightColor:
           (map["paint"]["hillshade-highlight-color"] as List?)?.toRGBAInt(),
       hillshadeHighlightColorExpression:
-          optionalCast(map["layout"]["hillshade-highlight-color"]),
+          _optionalCastList(map["paint"]["hillshade-highlight-color"]),
       hillshadeIlluminationAnchor:
           map["paint"]["hillshade-illumination-anchor"] == null
               ? null
@@ -214,15 +226,15 @@ class HillshadeLayer extends Layer {
                   .replaceAll("_", "-")
                   .contains(map["paint"]["hillshade-illumination-anchor"])),
       hillshadeIlluminationAnchorExpression:
-          optionalCast(map["layout"]["hillshade-illumination-anchor"]),
+          _optionalCastList(map["paint"]["hillshade-illumination-anchor"]),
       hillshadeIlluminationDirection:
-          optionalCast(map["paint"]["hillshade-illumination-direction"]),
+          _optionalCast(map["paint"]["hillshade-illumination-direction"]),
       hillshadeIlluminationDirectionExpression:
-          optionalCast(map["layout"]["hillshade-illumination-direction"]),
+          _optionalCastList(map["paint"]["hillshade-illumination-direction"]),
       hillshadeShadowColor:
           (map["paint"]["hillshade-shadow-color"] as List?)?.toRGBAInt(),
       hillshadeShadowColorExpression:
-          optionalCast(map["layout"]["hillshade-shadow-color"]),
+          _optionalCastList(map["paint"]["hillshade-shadow-color"]),
     );
   }
 }

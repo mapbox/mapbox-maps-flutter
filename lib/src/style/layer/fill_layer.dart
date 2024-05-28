@@ -7,6 +7,7 @@ class FillLayer extends Layer {
     required String id,
     Visibility? visibility,
     List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
@@ -33,6 +34,8 @@ class FillLayer extends Layer {
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -103,10 +106,18 @@ class FillLayer extends Layer {
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (fillSortKeyExpression != null) {
+      layout["fill-sort-key"] = fillSortKeyExpression;
+    }
+
     if (fillSortKey != null) {
       layout["fill-sort-key"] = fillSortKey;
     }
@@ -187,6 +198,9 @@ class FillLayer extends Layer {
     if (slot != null) {
       properties["slot"] = slot!;
     }
+    if (filter != null) {
+      properties["filter"] = filter!;
+    }
 
     return json.encode(properties);
   }
@@ -212,28 +226,32 @@ class FillLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      fillSortKey: optionalCast(map["layout"]["fill-sort-key"]),
-      fillSortKeyExpression: optionalCast(map["layout"]["fill-sort-key"]),
-      fillAntialias: optionalCast(map["paint"]["fill-antialias"]),
-      fillAntialiasExpression: optionalCast(map["layout"]["fill-antialias"]),
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      fillSortKey: _optionalCast(map["layout"]["fill-sort-key"]),
+      fillSortKeyExpression: _optionalCastList(map["layout"]["fill-sort-key"]),
+      fillAntialias: _optionalCast(map["paint"]["fill-antialias"]),
+      fillAntialiasExpression:
+          _optionalCastList(map["paint"]["fill-antialias"]),
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
-      fillColorExpression: optionalCast(map["layout"]["fill-color"]),
+      fillColorExpression: _optionalCastList(map["paint"]["fill-color"]),
       fillEmissiveStrength:
-          optionalCast(map["paint"]["fill-emissive-strength"]),
+          _optionalCast(map["paint"]["fill-emissive-strength"]),
       fillEmissiveStrengthExpression:
-          optionalCast(map["layout"]["fill-emissive-strength"]),
-      fillOpacity: optionalCast(map["paint"]["fill-opacity"]),
-      fillOpacityExpression: optionalCast(map["layout"]["fill-opacity"]),
+          _optionalCastList(map["paint"]["fill-emissive-strength"]),
+      fillOpacity: _optionalCast(map["paint"]["fill-opacity"]),
+      fillOpacityExpression: _optionalCastList(map["paint"]["fill-opacity"]),
       fillOutlineColor:
           (map["paint"]["fill-outline-color"] as List?)?.toRGBAInt(),
       fillOutlineColorExpression:
-          optionalCast(map["layout"]["fill-outline-color"]),
-      fillPattern: optionalCast(map["paint"]["fill-pattern"]),
-      fillPatternExpression: optionalCast(map["layout"]["fill-pattern"]),
+          _optionalCastList(map["paint"]["fill-outline-color"]),
+      fillPattern: _optionalCast(map["paint"]["fill-pattern"]),
+      fillPatternExpression: _optionalCastList(map["paint"]["fill-pattern"]),
       fillTranslate: (map["paint"]["fill-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
-      fillTranslateExpression: optionalCast(map["layout"]["fill-translate"]),
+      fillTranslateExpression:
+          _optionalCastList(map["paint"]["fill-translate"]),
       fillTranslateAnchor: map["paint"]["fill-translate-anchor"] == null
           ? null
           : FillTranslateAnchor.values.firstWhere((e) => e.name
@@ -241,7 +259,7 @@ class FillLayer extends Layer {
               .replaceAll("_", "-")
               .contains(map["paint"]["fill-translate-anchor"])),
       fillTranslateAnchorExpression:
-          optionalCast(map["layout"]["fill-translate-anchor"]),
+          _optionalCastList(map["paint"]["fill-translate-anchor"]),
     );
   }
 }
