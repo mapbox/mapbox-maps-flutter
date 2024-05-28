@@ -242,16 +242,6 @@ enum HttpMethod: Int {
   case pOST = 2
 }
 
-/// Classify network types based on cost.
-enum NetworkRestriction: Int {
-  /// Allow access to all network types.
-  case nONE = 0
-  /// Forbid network access to expensive networks, such as cellular.
-  case dISALLOWEXPENSIVE = 1
-  /// Forbid access to all network types.
-  case dISALLOWALL = 2
-}
-
 /// Enum which describes possible error types which could happen during HTTP request/download calls.
 enum HttpRequestErrorType: Int {
   /// Establishing connection related error.
@@ -5987,21 +5977,5 @@ class OfflineSwitchSetup {
     } else {
       resetChannel.setMessageHandler(nil)
     }
-  }
-}
-/// A bundle that encapsulates tilesets creation for the tile store implementation.
-///
-/// Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol TilesetDescriptor {
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class TilesetDescriptorSetup {
-  /// The codec used by TilesetDescriptor.
-  /// Sets up an instance of `TilesetDescriptor` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: TilesetDescriptor?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
   }
 }

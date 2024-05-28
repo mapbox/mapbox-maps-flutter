@@ -266,18 +266,6 @@ enum HttpMethod {
   POST,
 }
 
-/// Classify network types based on cost.
-enum NetworkRestriction {
-  /// Allow access to all network types.
-  NONE,
-
-  /// Forbid network access to expensive networks, such as cellular.
-  DISALLOW_EXPENSIVE,
-
-  /// Forbid access to all network types.
-  DISALLOW_ALL,
-}
-
 /// Enum which describes possible error types which could happen during HTTP request/download calls.
 enum HttpRequestErrorType {
   /// Establishing connection related error.
@@ -6828,24 +6816,4 @@ class OfflineSwitch {
       return;
     }
   }
-}
-
-/// A bundle that encapsulates tilesets creation for the tile store implementation.
-///
-/// Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
-class TilesetDescriptor {
-  /// Constructor for [TilesetDescriptor].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  TilesetDescriptor(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      StandardMessageCodec();
-
-  final String __pigeon_messageChannelSuffix;
 }

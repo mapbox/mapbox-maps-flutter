@@ -357,22 +357,6 @@ enum class HttpMethod(val raw: Int) {
   }
 }
 
-/** Classify network types based on cost. */
-enum class NetworkRestriction(val raw: Int) {
-  /** Allow access to all network types. */
-  NONE(0),
-  /** Forbid network access to expensive networks, such as cellular. */
-  DISALLOW_EXPENSIVE(1),
-  /** Forbid access to all network types. */
-  DISALLOW_ALL(2);
-
-  companion object {
-    fun ofRaw(raw: Int): NetworkRestriction? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Enum which describes possible error types which could happen during HTTP request/download calls. */
 enum class HttpRequestErrorType(val raw: Int) {
   /** Establishing connection related error. */
@@ -6626,27 +6610,6 @@ interface OfflineSwitch {
           channel.setMessageHandler(null)
         }
       }
-    }
-  }
-}
-/**
- * A bundle that encapsulates tilesets creation for the tile store implementation.
- *
- * Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface TilesetDescriptor {
-
-  companion object {
-    /** The codec used by TilesetDescriptor. */
-    val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
-    }
-    /** Sets up an instance of `TilesetDescriptor` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: TilesetDescriptor?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     }
   }
 }

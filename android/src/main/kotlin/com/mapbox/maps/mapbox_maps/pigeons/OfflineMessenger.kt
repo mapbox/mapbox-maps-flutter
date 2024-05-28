@@ -4,6 +4,8 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Point
+import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
@@ -42,6 +44,22 @@ enum class GlyphsRasterizationMode(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): GlyphsRasterizationMode? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Classify network types based on cost. */
+enum class NetworkRestriction(val raw: Int) {
+  /** Allow access to all network types. */
+  NONE(0),
+  /** Forbid network access to expensive networks, such as cellular. */
+  DISALLOW_EXPENSIVE(1),
+  /** Forbid access to all network types. */
+  DISALLOW_ALL(2);
+
+  companion object {
+    fun ofRaw(raw: Int): NetworkRestriction? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -112,7 +130,7 @@ data class StylePackLoadOptions(
    *
    * Developers can use this field to store custom metadata associated with a style package.
    */
-  val metadata: String? = null,
+  val metadata: Map<String?, Any?>? = null,
   /**
    * Accepts expired data when loading style resources.
    *
@@ -129,7 +147,7 @@ data class StylePackLoadOptions(
       val glyphsRasterizationMode = (list[0] as Int?)?.let {
         GlyphsRasterizationMode.ofRaw(it)
       }
-      val metadata = list[1] as String?
+      val metadata = list[1] as Map<String?, Any?>?
       val acceptExpired = list[2] as Boolean
       return StylePackLoadOptions(glyphsRasterizationMode, metadata, acceptExpired)
     }
@@ -249,8 +267,440 @@ data class StylePackLoadProgress(
     )
   }
 }
+
+/**
+ * Describes the tileset descriptor option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TilesetDescriptorOptions(
+  /** The style associated with the tileset descriptor. */
+  val styleURI: String,
+  /**
+   * Minimum zoom level for the tile package.
+   * Note: the implementation loads and stores the loaded tiles
+   * in batches, each batch has a pre-defined zoom range and it contains
+   * all child tiles within the range. The zoom leveling scheme for the tile
+   * batches can be defined in Tile JSON, otherwise the default scheme is used:
+   * - Global coverage: 0 - 5
+   * - Regional information: 6 - 10
+   * - Local information: 11 - 14
+   * - Streets detail: 15 - 16
+   * Internally, the implementation maps the given tile pack zoom range
+   * and geometry to a set of pre-defined batches to load, therefore
+   * it is highly recommended to choose the `minZoom` and `maxZoom` values
+   * in accordance with the tile batches zoom ranges (see the list above).
+   */
+  val minZoom: Long,
+  /**
+   * Maximum zoom level for the tile package.
+   * maxZoom value cannot exceed the maximum allowed tile batch zoom value.
+   */
+  val maxZoom: Long,
+  /**
+   * Pixel ratio to be accounted for when downloading raster tiles.
+   * The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
+   */
+  val pixelRatio: Double? = null,
+  /**
+   * The tilesets associated with the tileset descriptor.
+   * Contains an array, each element of which must be either a URI to a TileJSON
+   * resource or a JSON string representing the inline tileset.
+   * This property can be used to resolve extra tilesets that are not part of the original style
+   * represented by `styleURL`, it can be used also with the empty `styleURL`.
+   * The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
+   */
+  val tilesets: List<String?>? = null,
+  /**
+   * Style package load options, associated with the tileset descriptor.
+   * If provided, `offline manager` will create a style package while resolving the corresponding
+   * tileset descriptor and load all the resources as defined in the provided style package options,
+   * i.e. resolving of corresponding the tileset descriptor will be equivalent to calling the `loadStylePack`
+   * method of `offline manager`.
+   * If not provided, resolving of the corresponding tileset descriptor will not cause creating of a new style
+   * package but the loaded resources will be stored in the disk cache.
+   *
+   * Style package creation requires nonempty `styleURL`, which will be the created style package identifier.
+   */
+  val stylePackOptions: StylePackLoadOptions? = null,
+  /** Extra tileset descriptor options. */
+  val extraOptions: Map<String?, Any?>? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TilesetDescriptorOptions {
+      val styleURI = list[0] as String
+      val minZoom = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val maxZoom = list[2].let { if (it is Int) it.toLong() else it as Long }
+      val pixelRatio = list[3] as Double?
+      val tilesets = list[4] as List<String?>?
+      val stylePackOptions = (list[5] as List<Any?>?)?.let {
+        StylePackLoadOptions.fromList(it)
+      }
+      val extraOptions = list[6] as Map<String?, Any?>?
+      return TilesetDescriptorOptions(styleURI, minZoom, maxZoom, pixelRatio, tilesets, stylePackOptions, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      styleURI,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      tilesets,
+      stylePackOptions?.toList(),
+      extraOptions,
+    )
+  }
+}
+
+/**
+ * Describes the tile region load option values.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionLoadOptions(
+  /**
+   * The tile region's associated geometry.
+   *
+   * If provided, updates the tile region's associated geometry i.e. geometry,
+   * which is used in the tile cover algorithm to find out a set of tiles to be loaded
+   * for the tile region.
+   *
+   * Providing an empty geometry list is equivalent to removeTileRegion() call.
+   */
+  val geometry: Map<String?, Any?>? = null,
+  /**
+   * The tile region's tileset descriptors.
+   *
+   * If provided, updates the tile region's tileset descriptors that define
+   * the tilesets and zoom ranges of the tiles for the tile region.
+   *
+   * Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
+   */
+  val descriptorsOptions: List<TilesetDescriptorOptions?>? = null,
+  /**
+   * A custom Mapbox Value associated with this tile region for storing metadata.
+   *
+   * If provided, the custom value value will be stored alongside the tile region. Previous values will
+   * be replaced with the new value.
+   *
+   * Developers can use this field to store custom metadata associated with a tile region. This value
+   * can be retrieved with getTileRegionMetadata().
+   */
+  val metadata: Map<String?, Any?>? = null,
+  /**
+   * Accepts expired data when loading tiles.
+   *
+   * This flag should be set to true to accept expired responses. When a tile is already loaded but expired, no
+   * attempt will be made to refresh the data. This may lead to outdated data. Set to false to ensure that data
+   * for a tile is up-to-date. Set to true to continue loading a group without updating expired data for tiles that
+   * are already downloaded.
+   */
+  val acceptExpired: Boolean,
+  /**
+   * Controls which networks may be used to load the tile.
+   *
+   * By default, all networks are allowed. However, in some situations, it's useful to limit the kind of networks
+   * that are allowed, e.g. to ensure that data is only transferred over a connection that doesn't incur cost to
+   * the user, like a WiFi connection, and prohibit data transfer over expensive connections like cellular.
+   */
+  val networkRestriction: NetworkRestriction,
+  /**
+   * Starts loading the tile region at the given location and then proceeds to tiles that are further away
+   * from it.
+   *
+   * Note that this functionality is not currently implemented.
+   */
+  val startLocation: Point? = null,
+  /**
+   * Limits the download speed of the tile region.
+   *
+   * Note that this is not a strict bandwidth limit, but only limits the average download speed. tile regions may
+   * be temporarily downloaded with higher speed, then pause downloading until the rolling average has dropped below
+   * this value.
+   *
+   * If unspecified, the download speed will not be restricted.
+   *
+   * Note that this functionality is not currently implemented.
+   */
+  val averageBytesPerSecond: Long? = null,
+  /**
+   * Extra tile region load options.
+   *
+   * If provided, contains an object value with extra tile region load options.
+   *
+   * There are currently no extra options.
+   */
+  val extraOptions: Map<String?, Any?>? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegionLoadOptions {
+      val geometry = list[0] as Map<String?, Any?>?
+      val descriptorsOptions = list[1] as List<TilesetDescriptorOptions?>?
+      val metadata = list[2] as Map<String?, Any?>?
+      val acceptExpired = list[3] as Boolean
+      val networkRestriction = NetworkRestriction.ofRaw(list[4] as Int)!!
+      val startLocation = (list[5] as List<Any?>?)?.let {
+        PointDecoder.fromList(it)
+      }
+      val averageBytesPerSecond = list[6].let { if (it is Int) it.toLong() else it as Long? }
+      val extraOptions = list[7] as Map<String?, Any?>?
+      return TileRegionLoadOptions(geometry, descriptorsOptions, metadata, acceptExpired, networkRestriction, startLocation, averageBytesPerSecond, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      geometry,
+      descriptorsOptions,
+      metadata,
+      acceptExpired,
+      networkRestriction.raw,
+      startLocation?.toList(),
+      averageBytesPerSecond,
+      extraOptions,
+    )
+  }
+}
+
+/**
+ * TileRegion represents an identifiable geographic tile region with metadata
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegion(
+  /** The id of the tile region */
+  val id: String,
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /**
+   * The number of resources that have been fully downloaded and are ready for
+   * offline access.
+   *
+   * The tile region is complete if `completedResourceCount` is equal to `requiredResourceCount`.
+   */
+  val completedResourceCount: Long,
+  /**
+   * The cumulative size, in bytes, of all resources (inclusive of tiles) that have
+   * been fully downloaded.
+   */
+  val completedResourceSize: Long,
+  /**
+   * The earliest point in time when any of the region resources gets expired.
+   *
+   * Unitialized for incomplete tile regions or for complete tile regions with all immutable resources.
+   */
+  val expires: Long? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegion {
+      val id = list[0] as String
+      val requiredResourceCount = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val completedResourceCount = list[2].let { if (it is Int) it.toLong() else it as Long }
+      val completedResourceSize = list[3].let { if (it is Int) it.toLong() else it as Long }
+      val expires = list[4].let { if (it is Int) it.toLong() else it as Long? }
+      return TileRegion(id, requiredResourceCount, completedResourceCount, completedResourceSize, expires)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      id,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    )
+  }
+}
+
+/**
+ * The result of tile region estimation.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateResult(
+  /**
+   * Error margin of the estimate, given a fixed confidence level of 99.9%, represented by
+   * a value between 0 and 1. There is a 99.9% probability that the real value is contained
+   * in the interval [ (1 - errorMargin) * estimated value, (1 + errorMargin) * estimated value].
+   *
+   * Note: the assumptions used to calculate the error margin may not hold true for sparce
+   * datasets.
+   */
+  val errorMargin: Double,
+  /**
+   * Estimated number of bytes that would have to be transferred from the network in order
+   * to download the estimated tile region.
+   */
+  val transferSize: Long,
+  /**
+   * Estimated number of bytes required to store the tile region on disk after the download
+   * is complete.
+   */
+  val storageSize: Long,
+  /** Reserved for future use. */
+  val extraOptions: Map<String?, Any?>? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegionEstimateResult {
+      val errorMargin = list[0] as Double
+      val transferSize = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val storageSize = list[2].let { if (it is Int) it.toLong() else it as Long }
+      val extraOptions = list[3] as Map<String?, Any?>?
+      return TileRegionEstimateResult(errorMargin, transferSize, storageSize, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      errorMargin,
+      transferSize,
+      storageSize,
+      extraOptions,
+    )
+  }
+}
+
+/**
+ * Holds options for the tile region estimation operation.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateOptions(
+  /** Accepted error margin. */
+  val errorMargin: Double,
+  /**
+   * If after this timeout the estimate is within the error margin, the operation
+   * will be completed without attempting to reduce the error margin to 0.
+   * A value of 0 means no timeout. If unspecified, defaults to 5 seconds.
+   */
+  val preciseEstimationTimeout: Double,
+  /**
+   * Timeout after which the operation will be interrupted, regardless of the
+   * current error margin.
+   * A value of 0 means no timeout. If unspecified, defaults to 0.
+   */
+  val timeout: Double,
+  /** Reserved for future use. */
+  val extraOptions: Map<String?, Any?>? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegionEstimateOptions {
+      val errorMargin = list[0] as Double
+      val preciseEstimationTimeout = list[1] as Double
+      val timeout = list[2] as Double
+      val extraOptions = list[3] as Map<String?, Any?>?
+      return TileRegionEstimateOptions(errorMargin, preciseEstimationTimeout, timeout, extraOptions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      errorMargin,
+      preciseEstimationTimeout,
+      timeout,
+      extraOptions,
+    )
+  }
+}
+
+/**
+ * A tile region's load progress includes counts
+ * of the number of resources that have completed downloading
+ * and the total number of resources that are required.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionLoadProgress(
+  /** The number of resources that are ready for offline access. */
+  val completedResourceCount: Long,
+  /**
+   * The cumulative size, in bytes, of all resources (inclusive of tiles) that
+   * are ready for offline access.
+   */
+  val completedResourceSize: Long,
+  /** The number of resources that have failed to download due to an error. */
+  val erroredResourceCount: Long,
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /**
+   * The number of resources that are ready for offline use and that (at least partially)
+   * have been downloaded from the network.
+   */
+  val loadedResourceCount: Long,
+  /**
+   * The cumulative size, in bytes, of all resources (inclusive of tiles) that have
+   * been downloaded from the network.
+   */
+  val loadedResourceSize: Long
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegionLoadProgress {
+      val completedResourceCount = list[0].let { if (it is Int) it.toLong() else it as Long }
+      val completedResourceSize = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val erroredResourceCount = list[2].let { if (it is Int) it.toLong() else it as Long }
+      val requiredResourceCount = list[3].let { if (it is Int) it.toLong() else it as Long }
+      val loadedResourceCount = list[4].let { if (it is Int) it.toLong() else it as Long }
+      val loadedResourceSize = list[5].let { if (it is Int) it.toLong() else it as Long }
+      return TileRegionLoadProgress(completedResourceCount, completedResourceSize, erroredResourceCount, requiredResourceCount, loadedResourceCount, loadedResourceSize)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    )
+  }
+}
+
+/**
+ * A tile region's estimate progress includes counts of the number of resources that have
+ * been estimated and the total number of resources as well as a partial result with the
+ * current estimate, calculated using the data available at the moment.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class TileRegionEstimateProgress(
+  /** The number of resources that are known to be required for this tile region. */
+  val requiredResourceCount: Long,
+  /** The number of resources that are ready for offline access. */
+  val completedResourceCount: Long,
+  /** The number of resources that have failed to download due to an error. */
+  val erroredResourceCount: Long
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): TileRegionEstimateProgress {
+      val requiredResourceCount = list[0].let { if (it is Int) it.toLong() else it as Long }
+      val completedResourceCount = list[1].let { if (it is Int) it.toLong() else it as Long }
+      val erroredResourceCount = list[2].let { if (it is Int) it.toLong() else it as Long }
+      return TileRegionEstimateProgress(requiredResourceCount, completedResourceCount, erroredResourceCount)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      requiredResourceCount,
+      completedResourceCount,
+      erroredResourceCount,
+    )
+  }
+}
 @Suppress("UNCHECKED_CAST")
-private object HolderCodec : StandardMessageCodec() {
+private object _HolderCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       128.toByte() -> {
@@ -261,6 +711,16 @@ private object HolderCodec : StandardMessageCodec() {
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePackLoadProgress.fromList(it)
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateProgress.fromList(it)
+        }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionLoadProgress.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -276,27 +736,37 @@ private object HolderCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.toList())
       }
+      is TileRegionEstimateProgress -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionLoadProgress -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface Holder {
+interface _Holder {
   fun options(): GlyphsRasterizationOptions
-  fun progress(): StylePackLoadProgress
+  fun stylePackLoadProgress(): StylePackLoadProgress
+  fun tileRegionLoadProgress(): TileRegionLoadProgress
+  fun tileRegionEstimateProgress(): TileRegionEstimateProgress
 
   companion object {
-    /** The codec used by Holder. */
+    /** The codec used by _Holder. */
     val codec: MessageCodec<Any?> by lazy {
-      HolderCodec
+      _HolderCodec
     }
-    /** Sets up an instance of `Holder` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `_Holder` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: Holder?, messageChannelSuffix: String = "") {
+    fun setUp(binaryMessenger: BinaryMessenger, api: _Holder?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.Holder.options$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._Holder.options$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             var wrapped: List<Any?>
@@ -312,12 +782,44 @@ interface Holder {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.Holder.progress$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._Holder.stylePackLoadProgress$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             var wrapped: List<Any?>
             try {
-              wrapped = listOf<Any?>(api.progress())
+              wrapped = listOf<Any?>(api.stylePackLoadProgress())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._Holder.tileRegionLoadProgress$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.tileRegionLoadProgress())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._Holder.tileRegionEstimateProgress$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.tileRegionEstimateProgress())
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -482,6 +984,310 @@ interface _OfflineManager {
     }
   }
 }
+@Suppress("UNCHECKED_CAST")
+private object _TileStoreCodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          GlyphsRasterizationOptions.fromList(it)
+        }
+      }
+      129.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePack.fromList(it)
+        }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePackLoadOptions.fromList(it)
+        }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePackLoadProgress.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegion.fromList(it)
+        }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateOptions.fromList(it)
+        }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateProgress.fromList(it)
+        }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateResult.fromList(it)
+        }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionLoadOptions.fromList(it)
+        }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionLoadProgress.fromList(it)
+        }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TilesetDescriptorOptions.fromList(it)
+        }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
+    when (value) {
+      is GlyphsRasterizationOptions -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      is Point -> {
+        stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is StylePack -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is StylePackLoadOptions -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is StylePackLoadProgress -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is TileRegion -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateOptions -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateProgress -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateResult -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionLoadOptions -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionLoadProgress -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is TilesetDescriptorOptions -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _TileStore {
+  fun loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, callback: (Result<TileRegion>) -> Unit)
+  fun addTileRegionLoadProgressListener(id: String)
+  fun estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, callback: (Result<TileRegionEstimateResult>) -> Unit)
+  fun addTileRegionEstimateProgressListener(id: String)
+  fun tileRegionMetadata(id: String, callback: (Result<Map<String?, Any?>>) -> Unit)
+  fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit)
+  fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit)
+  fun removeRegion(id: String, callback: (Result<TileRegion>) -> Unit)
+
+  companion object {
+    /** The codec used by _TileStore. */
+    val codec: MessageCodec<Any?> by lazy {
+      _TileStoreCodec
+    }
+    /** Sets up an instance of `_TileStore` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: _TileStore?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            val loadOptionsArg = args[1] as TileRegionLoadOptions
+            api.loadTileRegion(idArg, loadOptionsArg) { result: Result<TileRegion> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.addTileRegionLoadProgressListener(idArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            val loadOptionsArg = args[1] as TileRegionLoadOptions
+            val estimateOptionsArg = args[2] as TileRegionEstimateOptions?
+            api.estimateTileRegion(idArg, loadOptionsArg, estimateOptionsArg) { result: Result<TileRegionEstimateResult> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.addTileRegionEstimateProgressListener(idArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionMetadata$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            api.tileRegionMetadata(idArg) { result: Result<Map<String?, Any?>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.allTileRegions() { result: Result<List<TileRegion>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegion$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            api.tileRegion(idArg) { result: Result<TileRegion> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.removeRegion$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            api.removeRegion(idArg) { result: Result<TileRegion> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface _OfflineMapInstanceManager {
   fun setupOfflineManager(channelSuffix: String)
@@ -524,6 +1330,62 @@ interface _OfflineMapInstanceManager {
             var wrapped: List<Any?>
             try {
               api.tearDownOfflineManager(channelSuffixArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _TileStoreInstanceManager {
+  fun setupTileStore(channelSuffix: String, filePath: String?)
+  fun tearDownTileStore(channelSuffix: String)
+
+  companion object {
+    /** The codec used by _TileStoreInstanceManager. */
+    val codec: MessageCodec<Any?> by lazy {
+      StandardMessageCodec()
+    }
+    /** Sets up an instance of `_TileStoreInstanceManager` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: _TileStoreInstanceManager?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.setupTileStore$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val channelSuffixArg = args[0] as String
+            val filePathArg = args[1] as String?
+            var wrapped: List<Any?>
+            try {
+              api.setupTileStore(channelSuffixArg, filePathArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.tearDownTileStore$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val channelSuffixArg = args[0] as String
+            var wrapped: List<Any?>
+            try {
+              api.tearDownTileStore(channelSuffixArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 private func wrapResult(_ result: Any?) -> [Any?] {
   return [result]
@@ -47,6 +48,16 @@ enum GlyphsRasterizationMode: Int {
   case iDEOGRAPHSRASTERIZEDLOCALLY = 1
   /// All glyphs are rasterized locally. No glyphs are loaded from the server.
   case aLLGLYPHSRASTERIZEDLOCALLY = 2
+}
+
+/// Classify network types based on cost.
+enum NetworkRestriction: Int {
+  /// Allow access to all network types.
+  case nONE = 0
+  /// Forbid network access to expensive networks, such as cellular.
+  case dISALLOWEXPENSIVE = 1
+  /// Forbid access to all network types.
+  case dISALLOWALL = 2
 }
 
 /// Describes the glyphs rasterization option values.
@@ -104,7 +115,7 @@ struct StylePackLoadOptions {
   /// be replaced with the new value.
   ///
   /// Developers can use this field to store custom metadata associated with a style package.
-  var metadata: String?
+  var metadata: [String?: Any?]?
   /// Accepts expired data when loading style resources.
   ///
   /// This flag should be set to true to accept expired responses. When a style resource is already loaded but expired,
@@ -118,7 +129,7 @@ struct StylePackLoadOptions {
     if let glyphsRasterizationModeRawValue = glyphsRasterizationModeEnumVal {
       glyphsRasterizationMode = GlyphsRasterizationMode(rawValue: glyphsRasterizationModeRawValue)!
     }
-    let metadata: String? = nilOrValue(list[1])
+    let metadata: [String?: Any?]? = nilOrValue(list[1])
     let acceptExpired = list[2] as! Bool
 
     return StylePackLoadOptions(
@@ -236,20 +247,419 @@ struct StylePackLoadProgress {
     ]
   }
 }
-private class HolderCodecReader: FlutterStandardReader {
+
+/// Describes the tileset descriptor option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TilesetDescriptorOptions {
+  /// The style associated with the tileset descriptor.
+  var styleURI: String
+  /// Minimum zoom level for the tile package.
+  /// Note: the implementation loads and stores the loaded tiles
+  /// in batches, each batch has a pre-defined zoom range and it contains
+  /// all child tiles within the range. The zoom leveling scheme for the tile
+  /// batches can be defined in Tile JSON, otherwise the default scheme is used:
+  /// - Global coverage: 0 - 5
+  /// - Regional information: 6 - 10
+  /// - Local information: 11 - 14
+  /// - Streets detail: 15 - 16
+  /// Internally, the implementation maps the given tile pack zoom range
+  /// and geometry to a set of pre-defined batches to load, therefore
+  /// it is highly recommended to choose the `minZoom` and `maxZoom` values
+  /// in accordance with the tile batches zoom ranges (see the list above).
+  var minZoom: Int64
+  /// Maximum zoom level for the tile package.
+  /// maxZoom value cannot exceed the maximum allowed tile batch zoom value.
+  var maxZoom: Int64
+  /// Pixel ratio to be accounted for when downloading raster tiles.
+  /// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
+  var pixelRatio: Double?
+  /// The tilesets associated with the tileset descriptor.
+  /// Contains an array, each element of which must be either a URI to a TileJSON
+  /// resource or a JSON string representing the inline tileset.
+  /// This property can be used to resolve extra tilesets that are not part of the original style
+  /// represented by `styleURL`, it can be used also with the empty `styleURL`.
+  /// The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
+  var tilesets: [String?]?
+  /// Style package load options, associated with the tileset descriptor.
+  /// If provided, `offline manager` will create a style package while resolving the corresponding
+  /// tileset descriptor and load all the resources as defined in the provided style package options,
+  /// i.e. resolving of corresponding the tileset descriptor will be equivalent to calling the `loadStylePack`
+  /// method of `offline manager`.
+  /// If not provided, resolving of the corresponding tileset descriptor will not cause creating of a new style
+  /// package but the loaded resources will be stored in the disk cache.
+  ///
+  /// Style package creation requires nonempty `styleURL`, which will be the created style package identifier.
+  var stylePackOptions: StylePackLoadOptions?
+  /// Extra tileset descriptor options.
+  var extraOptions: [String?: Any?]?
+
+  static func fromList(_ list: [Any?]) -> TilesetDescriptorOptions? {
+    let styleURI = list[0] as! String
+    let minZoom = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let maxZoom = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+    let pixelRatio: Double? = nilOrValue(list[3])
+    let tilesets: [String?]? = nilOrValue(list[4])
+    var stylePackOptions: StylePackLoadOptions?
+    if let stylePackOptionsList: [Any?] = nilOrValue(list[5]) {
+      stylePackOptions = StylePackLoadOptions.fromList(stylePackOptionsList)
+    }
+    let extraOptions: [String?: Any?]? = nilOrValue(list[6])
+
+    return TilesetDescriptorOptions(
+      styleURI: styleURI,
+      minZoom: minZoom,
+      maxZoom: maxZoom,
+      pixelRatio: pixelRatio,
+      tilesets: tilesets,
+      stylePackOptions: stylePackOptions,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      styleURI,
+      minZoom,
+      maxZoom,
+      pixelRatio,
+      tilesets,
+      stylePackOptions?.toList(),
+      extraOptions,
+    ]
+  }
+}
+
+/// Describes the tile region load option values.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionLoadOptions {
+  /// The tile region's associated geometry.
+  ///
+  /// If provided, updates the tile region's associated geometry i.e. geometry,
+  /// which is used in the tile cover algorithm to find out a set of tiles to be loaded
+  /// for the tile region.
+  ///
+  /// Providing an empty geometry list is equivalent to removeTileRegion() call.
+  var geometry: [String?: Any?]?
+  /// The tile region's tileset descriptors.
+  ///
+  /// If provided, updates the tile region's tileset descriptors that define
+  /// the tilesets and zoom ranges of the tiles for the tile region.
+  ///
+  /// Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
+  var descriptorsOptions: [TilesetDescriptorOptions?]?
+  /// A custom Mapbox Value associated with this tile region for storing metadata.
+  ///
+  /// If provided, the custom value value will be stored alongside the tile region. Previous values will
+  /// be replaced with the new value.
+  ///
+  /// Developers can use this field to store custom metadata associated with a tile region. This value
+  /// can be retrieved with getTileRegionMetadata().
+  var metadata: [String?: Any?]?
+  /// Accepts expired data when loading tiles.
+  ///
+  /// This flag should be set to true to accept expired responses. When a tile is already loaded but expired, no
+  /// attempt will be made to refresh the data. This may lead to outdated data. Set to false to ensure that data
+  /// for a tile is up-to-date. Set to true to continue loading a group without updating expired data for tiles that
+  /// are already downloaded.
+  var acceptExpired: Bool
+  /// Controls which networks may be used to load the tile.
+  ///
+  /// By default, all networks are allowed. However, in some situations, it's useful to limit the kind of networks
+  /// that are allowed, e.g. to ensure that data is only transferred over a connection that doesn't incur cost to
+  /// the user, like a WiFi connection, and prohibit data transfer over expensive connections like cellular.
+  var networkRestriction: NetworkRestriction
+  /// Starts loading the tile region at the given location and then proceeds to tiles that are further away
+  /// from it.
+  ///
+  /// Note that this functionality is not currently implemented.
+  var startLocation: Point?
+  /// Limits the download speed of the tile region.
+  ///
+  /// Note that this is not a strict bandwidth limit, but only limits the average download speed. tile regions may
+  /// be temporarily downloaded with higher speed, then pause downloading until the rolling average has dropped below
+  /// this value.
+  ///
+  /// If unspecified, the download speed will not be restricted.
+  ///
+  /// Note that this functionality is not currently implemented.
+  var averageBytesPerSecond: Int64?
+  /// Extra tile region load options.
+  ///
+  /// If provided, contains an object value with extra tile region load options.
+  ///
+  /// There are currently no extra options.
+  var extraOptions: [String?: Any?]?
+
+  static func fromList(_ list: [Any?]) -> TileRegionLoadOptions? {
+    let geometry: [String?: Any?]? = nilOrValue(list[0])
+    let descriptorsOptions: [TilesetDescriptorOptions?]? = nilOrValue(list[1])
+    let metadata: [String?: Any?]? = nilOrValue(list[2])
+    let acceptExpired = list[3] as! Bool
+    let networkRestriction = NetworkRestriction(rawValue: list[4] as! Int)!
+    var startLocation: Point?
+    if let startLocationList: [Any?] = nilOrValue(list[5]) {
+      startLocation = Point.fromList(startLocationList)
+    }
+    let averageBytesPerSecond: Int64? = isNullish(list[6]) ? nil : (list[6] is Int64? ? list[6] as! Int64? : Int64(list[6] as! Int32))
+    let extraOptions: [String?: Any?]? = nilOrValue(list[7])
+
+    return TileRegionLoadOptions(
+      geometry: geometry,
+      descriptorsOptions: descriptorsOptions,
+      metadata: metadata,
+      acceptExpired: acceptExpired,
+      networkRestriction: networkRestriction,
+      startLocation: startLocation,
+      averageBytesPerSecond: averageBytesPerSecond,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      geometry,
+      descriptorsOptions,
+      metadata,
+      acceptExpired,
+      networkRestriction.rawValue,
+      startLocation?.toList(),
+      averageBytesPerSecond,
+      extraOptions,
+    ]
+  }
+}
+
+/// TileRegion represents an identifiable geographic tile region with metadata
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegion {
+  /// The id of the tile region
+  var id: String
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources that have been fully downloaded and are ready for
+  /// offline access.
+  ///
+  /// The tile region is complete if `completedResourceCount` is equal to `requiredResourceCount`.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources (inclusive of tiles) that have
+  /// been fully downloaded.
+  var completedResourceSize: Int64
+  /// The earliest point in time when any of the region resources gets expired.
+  ///
+  /// Unitialized for incomplete tile regions or for complete tile regions with all immutable resources.
+  var expires: Int64?
+
+  static func fromList(_ list: [Any?]) -> TileRegion? {
+    let id = list[0] as! String
+    let requiredResourceCount = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let completedResourceCount = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+    let completedResourceSize = list[3] is Int64 ? list[3] as! Int64 : Int64(list[3] as! Int32)
+    let expires: Int64? = isNullish(list[4]) ? nil : (list[4] is Int64? ? list[4] as! Int64? : Int64(list[4] as! Int32))
+
+    return TileRegion(
+      id: id,
+      requiredResourceCount: requiredResourceCount,
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      expires: expires
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      requiredResourceCount,
+      completedResourceCount,
+      completedResourceSize,
+      expires,
+    ]
+  }
+}
+
+/// The result of tile region estimation.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateResult {
+  /// Error margin of the estimate, given a fixed confidence level of 99.9%, represented by
+  /// a value between 0 and 1. There is a 99.9% probability that the real value is contained
+  /// in the interval [ (1 - errorMargin) * estimated value, (1 + errorMargin) * estimated value].
+  ///
+  /// Note: the assumptions used to calculate the error margin may not hold true for sparce
+  /// datasets.
+  var errorMargin: Double
+  /// Estimated number of bytes that would have to be transferred from the network in order
+  /// to download the estimated tile region.
+  var transferSize: Int64
+  /// Estimated number of bytes required to store the tile region on disk after the download
+  /// is complete.
+  var storageSize: Int64
+  /// Reserved for future use.
+  var extraOptions: [String?: Any?]?
+
+  static func fromList(_ list: [Any?]) -> TileRegionEstimateResult? {
+    let errorMargin = list[0] as! Double
+    let transferSize = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let storageSize = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+    let extraOptions: [String?: Any?]? = nilOrValue(list[3])
+
+    return TileRegionEstimateResult(
+      errorMargin: errorMargin,
+      transferSize: transferSize,
+      storageSize: storageSize,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      errorMargin,
+      transferSize,
+      storageSize,
+      extraOptions,
+    ]
+  }
+}
+
+/// Holds options for the tile region estimation operation.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateOptions {
+  /// Accepted error margin.
+  var errorMargin: Double
+  /// If after this timeout the estimate is within the error margin, the operation
+  /// will be completed without attempting to reduce the error margin to 0.
+  /// A value of 0 means no timeout. If unspecified, defaults to 5 seconds.
+  var preciseEstimationTimeout: Double
+  /// Timeout after which the operation will be interrupted, regardless of the
+  /// current error margin.
+  /// A value of 0 means no timeout. If unspecified, defaults to 0.
+  var timeout: Double
+  /// Reserved for future use.
+  var extraOptions: [String?: Any?]?
+
+  static func fromList(_ list: [Any?]) -> TileRegionEstimateOptions? {
+    let errorMargin = list[0] as! Double
+    let preciseEstimationTimeout = list[1] as! Double
+    let timeout = list[2] as! Double
+    let extraOptions: [String?: Any?]? = nilOrValue(list[3])
+
+    return TileRegionEstimateOptions(
+      errorMargin: errorMargin,
+      preciseEstimationTimeout: preciseEstimationTimeout,
+      timeout: timeout,
+      extraOptions: extraOptions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      errorMargin,
+      preciseEstimationTimeout,
+      timeout,
+      extraOptions,
+    ]
+  }
+}
+
+/// A tile region's load progress includes counts
+/// of the number of resources that have completed downloading
+/// and the total number of resources that are required.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionLoadProgress {
+  /// The number of resources that are ready for offline access.
+  var completedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources (inclusive of tiles) that
+  /// are ready for offline access.
+  var completedResourceSize: Int64
+  /// The number of resources that have failed to download due to an error.
+  var erroredResourceCount: Int64
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources that are ready for offline use and that (at least partially)
+  /// have been downloaded from the network.
+  var loadedResourceCount: Int64
+  /// The cumulative size, in bytes, of all resources (inclusive of tiles) that have
+  /// been downloaded from the network.
+  var loadedResourceSize: Int64
+
+  static func fromList(_ list: [Any?]) -> TileRegionLoadProgress? {
+    let completedResourceCount = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
+    let completedResourceSize = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let erroredResourceCount = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+    let requiredResourceCount = list[3] is Int64 ? list[3] as! Int64 : Int64(list[3] as! Int32)
+    let loadedResourceCount = list[4] is Int64 ? list[4] as! Int64 : Int64(list[4] as! Int32)
+    let loadedResourceSize = list[5] is Int64 ? list[5] as! Int64 : Int64(list[5] as! Int32)
+
+    return TileRegionLoadProgress(
+      completedResourceCount: completedResourceCount,
+      completedResourceSize: completedResourceSize,
+      erroredResourceCount: erroredResourceCount,
+      requiredResourceCount: requiredResourceCount,
+      loadedResourceCount: loadedResourceCount,
+      loadedResourceSize: loadedResourceSize
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      completedResourceCount,
+      completedResourceSize,
+      erroredResourceCount,
+      requiredResourceCount,
+      loadedResourceCount,
+      loadedResourceSize,
+    ]
+  }
+}
+
+/// A tile region's estimate progress includes counts of the number of resources that have
+/// been estimated and the total number of resources as well as a partial result with the
+/// current estimate, calculated using the data available at the moment.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct TileRegionEstimateProgress {
+  /// The number of resources that are known to be required for this tile region.
+  var requiredResourceCount: Int64
+  /// The number of resources that are ready for offline access.
+  var completedResourceCount: Int64
+  /// The number of resources that have failed to download due to an error.
+  var erroredResourceCount: Int64
+
+  static func fromList(_ list: [Any?]) -> TileRegionEstimateProgress? {
+    let requiredResourceCount = list[0] is Int64 ? list[0] as! Int64 : Int64(list[0] as! Int32)
+    let completedResourceCount = list[1] is Int64 ? list[1] as! Int64 : Int64(list[1] as! Int32)
+    let erroredResourceCount = list[2] is Int64 ? list[2] as! Int64 : Int64(list[2] as! Int32)
+
+    return TileRegionEstimateProgress(
+      requiredResourceCount: requiredResourceCount,
+      completedResourceCount: completedResourceCount,
+      erroredResourceCount: erroredResourceCount
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      requiredResourceCount,
+      completedResourceCount,
+      erroredResourceCount,
+    ]
+  }
+}
+private class _HolderCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
       return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 129:
       return StylePackLoadProgress.fromList(self.readValue() as! [Any?])
+    case 130:
+      return TileRegionEstimateProgress.fromList(self.readValue() as! [Any?])
+    case 131:
+      return TileRegionLoadProgress.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
   }
 }
 
-private class HolderCodecWriter: FlutterStandardWriter {
+private class _HolderCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
     if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(128)
@@ -257,40 +667,48 @@ private class HolderCodecWriter: FlutterStandardWriter {
     } else if let value = value as? StylePackLoadProgress {
       super.writeByte(129)
       super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateProgress {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionLoadProgress {
+      super.writeByte(131)
+      super.writeValue(value.toList())
     } else {
       super.writeValue(value)
     }
   }
 }
 
-private class HolderCodecReaderWriter: FlutterStandardReaderWriter {
+private class _HolderCodecReaderWriter: FlutterStandardReaderWriter {
   override func reader(with data: Data) -> FlutterStandardReader {
-    return HolderCodecReader(data: data)
+    return _HolderCodecReader(data: data)
   }
 
   override func writer(with data: NSMutableData) -> FlutterStandardWriter {
-    return HolderCodecWriter(data: data)
+    return _HolderCodecWriter(data: data)
   }
 }
 
-class HolderCodec: FlutterStandardMessageCodec {
-  static let shared = HolderCodec(readerWriter: HolderCodecReaderWriter())
+class _HolderCodec: FlutterStandardMessageCodec {
+  static let shared = _HolderCodec(readerWriter: _HolderCodecReaderWriter())
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol Holder {
+protocol _Holder {
   func options() throws -> GlyphsRasterizationOptions
-  func progress() throws -> StylePackLoadProgress
+  func stylePackLoadProgress() throws -> StylePackLoadProgress
+  func tileRegionLoadProgress() throws -> TileRegionLoadProgress
+  func tileRegionEstimateProgress() throws -> TileRegionEstimateProgress
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class HolderSetup {
-  /// The codec used by Holder.
-  static var codec: FlutterStandardMessageCodec { HolderCodec.shared }
-  /// Sets up an instance of `Holder` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: Holder?, messageChannelSuffix: String = "") {
+class _HolderSetup {
+  /// The codec used by _Holder.
+  static var codec: FlutterStandardMessageCodec { _HolderCodec.shared }
+  /// Sets up an instance of `_Holder` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _Holder?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let optionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Holder.options\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let optionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._Holder.options\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       optionsChannel.setMessageHandler { _, reply in
         do {
@@ -303,18 +721,44 @@ class HolderSetup {
     } else {
       optionsChannel.setMessageHandler(nil)
     }
-    let progressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Holder.progress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let stylePackLoadProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._Holder.stylePackLoadProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      progressChannel.setMessageHandler { _, reply in
+      stylePackLoadProgressChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.progress()
+          let result = try api.stylePackLoadProgress()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      progressChannel.setMessageHandler(nil)
+      stylePackLoadProgressChannel.setMessageHandler(nil)
+    }
+    let tileRegionLoadProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._Holder.tileRegionLoadProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileRegionLoadProgressChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.tileRegionLoadProgress()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      tileRegionLoadProgressChannel.setMessageHandler(nil)
+    }
+    let tileRegionEstimateProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._Holder.tileRegionEstimateProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileRegionEstimateProgressChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.tileRegionEstimateProgress()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      tileRegionEstimateProgressChannel.setMessageHandler(nil)
     }
   }
 }
@@ -461,6 +905,251 @@ class _OfflineManagerSetup {
     }
   }
 }
+private class _TileStoreCodecReader: FlutterStandardReader {
+  override func readValue(ofType type: UInt8) -> Any? {
+    switch type {
+    case 128:
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+    case 129:
+      return Point.fromList(self.readValue() as! [Any?])
+    case 130:
+      return StylePack.fromList(self.readValue() as! [Any?])
+    case 131:
+      return StylePackLoadOptions.fromList(self.readValue() as! [Any?])
+    case 132:
+      return StylePackLoadProgress.fromList(self.readValue() as! [Any?])
+    case 133:
+      return TileRegion.fromList(self.readValue() as! [Any?])
+    case 134:
+      return TileRegionEstimateOptions.fromList(self.readValue() as! [Any?])
+    case 135:
+      return TileRegionEstimateProgress.fromList(self.readValue() as! [Any?])
+    case 136:
+      return TileRegionEstimateResult.fromList(self.readValue() as! [Any?])
+    case 137:
+      return TileRegionLoadOptions.fromList(self.readValue() as! [Any?])
+    case 138:
+      return TileRegionLoadProgress.fromList(self.readValue() as! [Any?])
+    case 139:
+      return TilesetDescriptorOptions.fromList(self.readValue() as! [Any?])
+    default:
+      return super.readValue(ofType: type)
+    }
+  }
+}
+
+private class _TileStoreCodecWriter: FlutterStandardWriter {
+  override func writeValue(_ value: Any) {
+    if let value = value as? GlyphsRasterizationOptions {
+      super.writeByte(128)
+      super.writeValue(value.toList())
+    } else if let value = value as? Point {
+      super.writeByte(129)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePack {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePackLoadOptions {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePackLoadProgress {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegion {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateOptions {
+      super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateProgress {
+      super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateResult {
+      super.writeByte(136)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionLoadOptions {
+      super.writeByte(137)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionLoadProgress {
+      super.writeByte(138)
+      super.writeValue(value.toList())
+    } else if let value = value as? TilesetDescriptorOptions {
+      super.writeByte(139)
+      super.writeValue(value.toList())
+    } else {
+      super.writeValue(value)
+    }
+  }
+}
+
+private class _TileStoreCodecReaderWriter: FlutterStandardReaderWriter {
+  override func reader(with data: Data) -> FlutterStandardReader {
+    return _TileStoreCodecReader(data: data)
+  }
+
+  override func writer(with data: NSMutableData) -> FlutterStandardWriter {
+    return _TileStoreCodecWriter(data: data)
+  }
+}
+
+class _TileStoreCodec: FlutterStandardMessageCodec {
+  static let shared = _TileStoreCodec(readerWriter: _TileStoreCodecReaderWriter())
+}
+
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _TileStore {
+  func loadTileRegion(id: String, loadOptions: TileRegionLoadOptions, completion: @escaping (Result<TileRegion, Error>) -> Void)
+  func addTileRegionLoadProgressListener(id: String) throws
+  func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, completion: @escaping (Result<TileRegionEstimateResult, Error>) -> Void)
+  func addTileRegionEstimateProgressListener(id: String) throws
+  func tileRegionMetadata(id: String, completion: @escaping (Result<[String?: Any?], Error>) -> Void)
+  func allTileRegions(completion: @escaping (Result<[TileRegion], Error>) -> Void)
+  func tileRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
+  func removeRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _TileStoreSetup {
+  /// The codec used by _TileStore.
+  static var codec: FlutterStandardMessageCodec { _TileStoreCodec.shared }
+  /// Sets up an instance of `_TileStore` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _TileStore?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let loadTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      loadTileRegionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        let loadOptionsArg = args[1] as! TileRegionLoadOptions
+        api.loadTileRegion(id: idArg, loadOptions: loadOptionsArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      loadTileRegionChannel.setMessageHandler(nil)
+    }
+    let addTileRegionLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addTileRegionLoadProgressListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        do {
+          try api.addTileRegionLoadProgressListener(id: idArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      addTileRegionLoadProgressListenerChannel.setMessageHandler(nil)
+    }
+    let estimateTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      estimateTileRegionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        let loadOptionsArg = args[1] as! TileRegionLoadOptions
+        let estimateOptionsArg: TileRegionEstimateOptions? = nilOrValue(args[2])
+        api.estimateTileRegion(id: idArg, loadOptions: loadOptionsArg, estimateOptions: estimateOptionsArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      estimateTileRegionChannel.setMessageHandler(nil)
+    }
+    let addTileRegionEstimateProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addTileRegionEstimateProgressListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        do {
+          try api.addTileRegionEstimateProgressListener(id: idArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      addTileRegionEstimateProgressListenerChannel.setMessageHandler(nil)
+    }
+    let tileRegionMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileRegionMetadataChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        api.tileRegionMetadata(id: idArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      tileRegionMetadataChannel.setMessageHandler(nil)
+    }
+    let allTileRegionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      allTileRegionsChannel.setMessageHandler { _, reply in
+        api.allTileRegions { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      allTileRegionsChannel.setMessageHandler(nil)
+    }
+    let tileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileRegionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        api.tileRegion(id: idArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      tileRegionChannel.setMessageHandler(nil)
+    }
+    let removeRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.removeRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      removeRegionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        api.removeRegion(id: idArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      removeRegionChannel.setMessageHandler(nil)
+    }
+  }
+}
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _OfflineMapInstanceManager {
   func setupOfflineManager(channelSuffix: String) throws
@@ -502,6 +1191,51 @@ class _OfflineMapInstanceManagerSetup {
       }
     } else {
       tearDownOfflineManagerChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _TileStoreInstanceManager {
+  func setupTileStore(channelSuffix: String, filePath: String?) throws
+  func tearDownTileStore(channelSuffix: String) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _TileStoreInstanceManagerSetup {
+  /// The codec used by _TileStoreInstanceManager.
+  /// Sets up an instance of `_TileStoreInstanceManager` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _TileStoreInstanceManager?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let setupTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.setupTileStore\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      setupTileStoreChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let channelSuffixArg = args[0] as! String
+        let filePathArg: String? = nilOrValue(args[1])
+        do {
+          try api.setupTileStore(channelSuffix: channelSuffixArg, filePath: filePathArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setupTileStoreChannel.setMessageHandler(nil)
+    }
+    let tearDownTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.tearDownTileStore\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      tearDownTileStoreChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let channelSuffixArg = args[0] as! String
+        do {
+          try api.tearDownTileStore(channelSuffix: channelSuffixArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      tearDownTileStoreChannel.setMessageHandler(nil)
     }
   }
 }

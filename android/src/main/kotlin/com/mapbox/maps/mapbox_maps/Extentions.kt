@@ -3,9 +3,9 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.gson.Gson
-import com.mapbox.bindgen.Value
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
@@ -538,7 +538,7 @@ fun Bitmap.toMbxImage(): MbxImage {
 fun StylePackLoadOptions.toStylePackLoadOptions(): com.mapbox.maps.StylePackLoadOptions {
   return com.mapbox.maps.StylePackLoadOptions.Builder()
     .glyphsRasterizationMode(glyphsRasterizationMode?.toGlyphsRasterizationMode())
-    .metadata(metadata?.let { Value(it) })
+    .metadata(metadata?.toValue())
     .acceptExpired(acceptExpired)
     .build()
 }
@@ -554,7 +554,7 @@ fun com.mapbox.maps.StylePack.toFLTStylePack(): StylePack {
   )
 }
 
-fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress() : StylePackLoadProgress {
+fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress(): StylePackLoadProgress {
   return StylePackLoadProgress(
     this.completedResourceCount,
     this.completedResourceSize,
@@ -562,5 +562,66 @@ fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress() : StylePa
     this.requiredResourceCount,
     this.loadedResourceCount,
     this.loadedResourceSize
+  )
+}
+
+fun TilesetDescriptorOptions.toTilesetDescriptorOptions(): com.mapbox.maps.TilesetDescriptorOptions {
+  val builder = com.mapbox.maps.TilesetDescriptorOptions.Builder()
+    .styleURI(styleURI)
+    .minZoom(minZoom.toByte())
+    .maxZoom(maxZoom.toByte())
+  pixelRatio?.let { builder.pixelRatio(it.toFloat()) }
+  tilesets?.let { builder.tilesets(it) }
+  stylePackOptions?.let { builder.stylePackOptions(it.toStylePackLoadOptions()) }
+  extraOptions?.let { builder.extraOptions(it.toValue()) }
+  return builder.build()
+}
+
+fun NetworkRestriction.toNetworkRestriction(): com.mapbox.common.NetworkRestriction {
+  return when (this) {
+    NetworkRestriction.DISALLOW_ALL -> com.mapbox.common.NetworkRestriction.DISALLOW_ALL
+    NetworkRestriction.DISALLOW_EXPENSIVE -> com.mapbox.common.NetworkRestriction.DISALLOW_EXPENSIVE
+    NetworkRestriction.NONE -> com.mapbox.common.NetworkRestriction.NONE
+  }
+}
+
+fun com.mapbox.common.TileRegion.toFLTTileRegion(): TileRegion {
+  return TileRegion(
+    this.id,
+    this.requiredResourceCount,
+    this.completedResourceCount,
+    this.completedResourceSize
+  )
+}
+
+fun TileRegionEstimateOptions.toTileRegionEstimateOptions(): com.mapbox.common.TileRegionEstimateOptions {
+  return com.mapbox.common.TileRegionEstimateOptions(
+    this.errorMargin.toFloat(),
+    this.preciseEstimationTimeout.toLong(),
+    this.preciseEstimationTimeout.toLong(),
+    this.extraOptions?.toValue()
+  )
+}
+
+fun com.mapbox.common.TileRegionEstimateResult.toFLTTileRegionEstimateResult(): TileRegionEstimateResult {
+  return TileRegionEstimateResult(
+    this.errorMargin, this.transferSize, this.storageSize,
+  )
+}
+
+fun com.mapbox.common.TileRegionLoadProgress.toFLTTileRegionLoadProgress(): TileRegionLoadProgress {
+  return TileRegionLoadProgress(
+    this.completedResourceCount,
+    this.completedResourceSize,
+    this.erroredResourceCount,
+    this.requiredResourceCount,
+    this.loadedResourceCount,
+    this.loadedResourceSize
+  )
+}
+
+fun com.mapbox.common.TileRegionEstimateProgress.toFLTTileRegionEstimateProgress(): TileRegionEstimateProgress {
+  return TileRegionEstimateProgress(
+    this.requiredResourceCount, this.completedResourceCount, this.erroredResourceCount
   )
 }

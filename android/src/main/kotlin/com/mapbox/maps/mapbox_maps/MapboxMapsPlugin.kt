@@ -7,6 +7,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import com.mapbox.maps.mapbox_maps.pigeons._OfflineMapInstanceManager
 import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterInstanceManager
+import com.mapbox.maps.mapbox_maps.pigeons._TileStoreInstanceManager
 import com.mapbox.maps.mapbox_maps.snapshot.SnapshotterInstanceManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -39,13 +40,14 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger) {
     val optionsController = MapboxOptionsController()
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
-    val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger)
+    val offlineMapInstanceManager = OfflineMapInstanceManager(binaryMessenger)
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
     _MapboxMapsOptions.setUp(binaryMessenger, optionsController)
     _MapboxOptions.setUp(binaryMessenger, optionsController)
     _SnapshotterInstanceManager.setUp(binaryMessenger, snapshotterInstanceManager)
     _OfflineMapInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
+    _TileStoreInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     LoggingController.setup(binaryMessenger)
   }
 

@@ -27,16 +27,37 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+    await _downloadStylePack();
+    await _downloadTileRegion();
+  }
+
+  _downloadStylePack() async {
     final offlineManager = await OfflineManager.create();
     final stylePackLoadOptions = StylePackLoadOptions(
         glyphsRasterizationMode:
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
         acceptExpired: false);
-    offlineManager.loadStylePack(
-        MapboxStyles.STANDARD, StylePackLoadOptions(acceptExpired: false),
+    offlineManager.loadStylePack(MapboxStyles.STANDARD, stylePackLoadOptions,
         (progress) {
       print("Progressing...${progress.loadedResourceSize}");
-    }).then((value) => print("MMM downloaded"));
+    }).then((value) => print("MMM Style pack downloaded"));
+  }
+
+  _downloadTileRegion() async {
+    print("MMM Start download tile region");
+    final tileStore = await TileStore.createDefault();
+    final tileRegionLoadOptions = TileRegionLoadOptions(
+        geometry: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
+        descriptorsOptions: [
+          TilesetDescriptorOptions(
+              styleURI: MapboxStyles.OUTDOORS, minZoom: 0, maxZoom: 16)
+        ],
+        acceptExpired: true,
+        networkRestriction: NetworkRestriction.NONE);
+    tileStore.loadTileRegion("my-tile-region", tileRegionLoadOptions,
+        (progress) {
+      print("Tile region progressing...${progress.completedResourceCount}");
+    }).then((value) => print("Tile region downloaded"));
   }
 
   @override
