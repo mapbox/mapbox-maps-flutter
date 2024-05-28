@@ -82,6 +82,7 @@ void main() {
   vector_source_test.main();
   rasterdem_source_test.main();
   raster_source_test.main();
+  rasterarray_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
 
