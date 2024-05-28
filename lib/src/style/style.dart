@@ -372,13 +372,13 @@ extension StyleColorList on List {
   /// Example input: `[rgba, $R, $G, $B, $A]`.
   int toRGBAInt() {
     switch ((firstOrNull, length)) {
-      case ("rgb", 3):
+      case ("rgb", 4):
         return _decodeRGBColor().value;
-      case ("rgba", 4):
+      case ("rgba", 5):
         return _decodeRGBAColor().value;
-      case ("hsl", 3):
+      case ("hsl", 4):
         return _decodeHSLColor().value;
-      case ("hsla", 3):
+      case ("hsla", 5):
         return _decodeHSLAColor().value;
       default:
         return 0;
