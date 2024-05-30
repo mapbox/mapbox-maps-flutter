@@ -28,7 +28,7 @@ class ModelLayerWidget extends StatefulWidget {
 class _ModelLayerState extends State<ModelLayerWidget> {
   MapboxMap? mapboxMap;
 
-  var position = Position(24.9458, 60.17185);
+  var position = Position(24.9458, 60.17180);
   var modelPosition = Position(24.94457012371287, 60.171958417023674);
 
   @override
@@ -53,7 +53,6 @@ class _ModelLayerState extends State<ModelLayerWidget> {
   }
 
   addModelLayer() async {
-    print("addModelLayer call");
     var value = Point(coordinates: modelPosition);
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");

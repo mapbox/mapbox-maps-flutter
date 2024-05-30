@@ -604,6 +604,16 @@ class StyleController(private val context: Context, private val styleManager: Ma
       callback(Result.success(Unit))
     }
   }
+
+  override fun addStyleModel(modelId: String, modelUri: String, callback: (Result<Unit>) -> Unit) {
+    styleManager.addStyleModel(modelId, modelUri)
+      .handleResult(callback)
+  }
+
+  override fun removeStyleModel(modelId: String, callback: (Result<Unit>) -> Unit) {
+    styleManager.removeStyleModel(modelId)
+      .handleResult(callback)
+  }
 }
 
 fun Any.toValue(): Value {
