@@ -1,6 +1,8 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
+import com.mapbox.common.FeatureTelemetryCounter
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.ConstrainMode
 import com.mapbox.maps.ContextMode
@@ -26,6 +28,7 @@ class MapboxMapFactory(
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
+  @SuppressLint("RestrictedApi")
   override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
     if (context == null) {
       throw RuntimeException("Context is null, can't create MapView!")
@@ -125,6 +128,7 @@ class MapboxMapFactory(
       textureView = textureView,
       styleUri = styleUri
     )
+    mapCounter.increment()
     return MapboxMapController(
       context,
       mapInitOptions,
@@ -137,6 +141,7 @@ class MapboxMapFactory(
   }
 
   companion object {
-    private const val TAG = "MapBoxFactory"
+    @SuppressLint("RestrictedApi")
+    private val mapCounter = FeatureTelemetryCounter.create("maps-mobile/flutter/map")
   }
 }
