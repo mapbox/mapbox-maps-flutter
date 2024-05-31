@@ -1,6 +1,6 @@
 version: 2.1
 
-orbs: 
+orbs:
   flutter: circleci/flutter@2.0.2
   macos: circleci/macos@2.4.1
   gcp-cli: circleci/gcp-cli@3.1.1
@@ -14,7 +14,7 @@ commands:
           command: |
             echo "machine api.mapbox.com login mapbox password ${SDK_REGISTRY_TOKEN}" >> ~/.netrc
             chmod 0600 ~/.netrc
-  
+
   setup-gcloud:
     steps:
       - gcp-cli/setup:
@@ -86,7 +86,7 @@ jobs:
               --num-flaky-test-attempts 3 \
               --no-record-video \
               --no-performance-metrics
-                         
+
   build-ios:
     parameters:
       workspace-path:
@@ -145,7 +145,23 @@ jobs:
               --test << parameters.workspace-path >>/build_products.zip \
               --device model=iphone13pro,version=15.7 \
               --timeout 5m \
-              --num-flaky-test-attempts 3
+              --num-flaky-test-attempts 3 2>&1 | tee firebase_test_lab_run.log
+      - run:
+          name: Download XCResults
+          command: |
+            TEST_LAB_PATH=$(cat firebase_test_lab_run.log | grep -o "test-lab.*/")
+
+            mkdir testlab_results
+            gsutil -m cp -r "gs://${TEST_LAB_PATH}i*" testlab_results
+            zip -r testlab_results.zip testlab_results
+          when: always
+      - store_artifacts:
+          path: firebase_test_lab_run.log
+      - store_artifacts:
+          path: testlab_results.zip
+      - store_test_results:
+          path: testlab_results
+
 
 
 
