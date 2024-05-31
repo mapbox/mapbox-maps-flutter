@@ -786,3 +786,16 @@ extension Optional {
         lhs = rhs
     }
 }
+
+// MARK: Result
+extension Result where Failure == any Error {
+    init(code: String, catchingFlutter body: () throws -> Success) {
+        self.init {
+            do {
+                return try body()
+            } catch {
+                throw FlutterError(code: code, message: error.localizedDescription, details: [NSUnderlyingErrorKey: error])
+            }
+        }
+    }
+}
