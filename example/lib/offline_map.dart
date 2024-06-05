@@ -36,15 +36,17 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
     final stylePackLoadOptions = StylePackLoadOptions(
         glyphsRasterizationMode:
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
+        metadata: {"tag": "mai"},
         acceptExpired: false);
-    offlineManager.loadStylePack(MapboxStyles.STANDARD, stylePackLoadOptions,
-        (progress) {
-      print("Progressing...${progress.loadedResourceSize}");
-    }).then((value) => print("MMM Style pack downloaded"));
+    offlineManager
+        .loadStylePack(MapboxStyles.STANDARD, stylePackLoadOptions, (progress) {
+          print("Progressing...${progress.loadedResourceSize}");
+        })
+        .then((value) => offlineManager.stylePackMetadata(MapboxStyles.STANDARD))
+        .then((value) => print(value));
   }
 
   _downloadTileRegion() async {
-    print("MMM Start download tile region");
     final tileStore = await TileStore.createDefault();
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),

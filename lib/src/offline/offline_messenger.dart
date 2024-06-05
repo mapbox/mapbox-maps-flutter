@@ -850,11 +850,41 @@ class __OfflineManagerCodec extends StandardMessageCodec {
   const __OfflineManagerCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is StylePack) {
+    if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is StylePackLoadOptions) {
+    } else if (value is Point) {
       buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePack) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePackLoadOptions) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePackLoadProgress) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegion) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegionEstimateOptions) {
+      buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegionEstimateProgress) {
+      buffer.putUint8(135);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegionEstimateResult) {
+      buffer.putUint8(136);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegionLoadOptions) {
+      buffer.putUint8(137);
+      writeValue(buffer, value.encode());
+    } else if (value is TileRegionLoadProgress) {
+      buffer.putUint8(138);
+      writeValue(buffer, value.encode());
+    } else if (value is TilesetDescriptorOptions) {
+      buffer.putUint8(139);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -865,9 +895,29 @@ class __OfflineManagerCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return StylePack.decode(readValue(buffer)!);
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
       case 129:
+        return Point.decode(readValue(buffer)!);
+      case 130:
+        return StylePack.decode(readValue(buffer)!);
+      case 131:
         return StylePackLoadOptions.decode(readValue(buffer)!);
+      case 132:
+        return StylePackLoadProgress.decode(readValue(buffer)!);
+      case 133:
+        return TileRegion.decode(readValue(buffer)!);
+      case 134:
+        return TileRegionEstimateOptions.decode(readValue(buffer)!);
+      case 135:
+        return TileRegionEstimateProgress.decode(readValue(buffer)!);
+      case 136:
+        return TileRegionEstimateResult.decode(readValue(buffer)!);
+      case 137:
+        return TileRegionLoadOptions.decode(readValue(buffer)!);
+      case 138:
+        return TileRegionLoadProgress.decode(readValue(buffer)!);
+      case 139:
+        return TilesetDescriptorOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1002,7 +1052,7 @@ class _OfflineManager {
     }
   }
 
-  Future<String?> stylePackMetadata(String styleURI) async {
+  Future<Map<String?, Object?>?> stylePackMetadata(String styleURI) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePackMetadata$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -1022,7 +1072,8 @@ class _OfflineManager {
         details: __pigeon_replyList[2],
       );
     } else {
-      return (__pigeon_replyList[0] as String?);
+      return (__pigeon_replyList[0] as Map<Object?, Object?>?)
+          ?.cast<String?, Object?>();
     }
   }
 }

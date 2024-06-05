@@ -28,7 +28,6 @@ class TileStoreController(
   private val offlineManager = OfflineManager()
   private var tileRegionLoadProgressHandlers = HashMap<String, EventChannel.EventSink>()
   private var tileRegionEstimateProgressHandlers = HashMap<String, EventChannel.EventSink>()
-  private val mainHandler = Handler(Looper.getMainLooper())
 
   override fun loadTileRegion(
     id: String,
@@ -38,7 +37,7 @@ class TileStoreController(
     tileStore.loadTileRegion(
       id, offlineManager.tileRegionLoadOptions(loadOptions),
       { progress ->
-        mainHandler.post {
+        Handler(Looper.getMainLooper()).post {
           tileRegionLoadProgressHandlers[id]?.success(progress.toFLTTileRegionLoadProgress().toList())
         }
       },
@@ -78,7 +77,11 @@ class TileStoreController(
       offlineManager.tileRegionLoadOptions(loadOptions),
       estimateOptions?.toTileRegionEstimateOptions() ?: com.mapbox.common.TileRegionEstimateOptions(null),
       { progress ->
-        tileRegionEstimateProgressHandlers[id]?.success(progress.toFLTTileRegionEstimateProgress().toList())
+        Handler(Looper.getMainLooper()).post {
+          tileRegionEstimateProgressHandlers[id]?.success(
+            progress.toFLTTileRegionEstimateProgress().toList()
+          )
+        }
       },
       { expected ->
         expected.value?.let {

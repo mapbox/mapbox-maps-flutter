@@ -8,6 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/polyline.dart';
 
+extension City on Point {
+  static var helsinki = Point(coordinates: Position(24.945831, 60.192059));
+}
+
 Point createRandomPoint() {
   return Point(coordinates: createRandomPosition());
 }

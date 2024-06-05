@@ -1,6 +1,9 @@
 package com.mapbox.maps.mapbox_maps.offline
 
+import android.os.Handler
+import android.os.Looper
 import com.mapbox.maps.OfflineManager
+import com.mapbox.maps.extension.style.utils.unwrapToTyped
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
 import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
@@ -26,7 +29,9 @@ class OfflineController(
       styleURI,
       loadOptions.toStylePackLoadOptions(),
       { progress ->
-        progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
+        Handler(Looper.getMainLooper()).post {
+          progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
+        }
       },
       { expected ->
         expected.value?.let {
@@ -78,10 +83,10 @@ class OfflineController(
     }
   }
 
-  override fun stylePackMetadata(styleURI: String, callback: (Result<String?>) -> Unit) {
+  override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String?, Any?>?>) -> Unit) {
     offlineManager.getStylePackMetadata(styleURI) { expected ->
       expected.value?.let {
-        callback(Result.success(it.toString()))
+        callback(Result.success(it.unwrapToTyped()))
       }
       expected.error?.let {
         callback(Result.failure(Throwable(it.message ?: "Unknown error")))

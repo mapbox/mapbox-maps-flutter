@@ -2,14 +2,13 @@ import MapboxMaps
 import Flutter
 
 final class OfflineController: _OfflineManager {
-
     enum `Error`: Swift.Error {
         case invalidStyleURI
         case invalidStylePackLoadOptions
     }
 
     private lazy var offlineManager = MapboxCoreMaps.OfflineManager()
-    private var progressHandlers: [String: StylePackLoadProgressHandler] = [:]
+    private var progressHandlers: [String: AnyFlutterStreamHandler] = [:]
     private let messenger: FlutterBinaryMessenger
 
     init(messenger: FlutterBinaryMessenger) {
@@ -34,7 +33,7 @@ final class OfflineController: _OfflineManager {
             for: styleURI,
             loadOptions: loadOptions,
             progress: { [weak self] progress in
-                self?.progressHandlers[uri]?.progress = progress.toFLTStylePackLoadProgress()
+                self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
             }) { [weak self] result in
                 completion(result.map { $0.toFLTStylePack() })
                 self?.progressHandlers.removeValue(forKey: uri)
@@ -42,13 +41,13 @@ final class OfflineController: _OfflineManager {
     }
 
     func addStylePackLoadProgressListener(styleURI: String) {
-        let handler = StylePackLoadProgressHandler()
+        let handler = AnyFlutterStreamHandler()
         let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/offline/\(styleURI)", binaryMessenger: messenger)
         eventChannel.setStreamHandler(handler)
         progressHandlers[styleURI] = handler
     }
 
-    func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, any Swift.Error>) -> Void) {
+    func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Swift.Error>) -> Void) {
         guard let styleURI = StyleURI(rawValue: styleURI) else {
             completion(.failure(Error.invalidStyleURI))
             return
@@ -58,7 +57,7 @@ final class OfflineController: _OfflineManager {
         }
     }
 
-    func stylePack(styleURI: String, completion: @escaping (Result<StylePack, any Swift.Error>) -> Void) {
+    func stylePack(styleURI: String, completion: @escaping (Result<StylePack, Swift.Error>) -> Void) {
         guard let styleURI = StyleURI(rawValue: styleURI) else {
             completion(.failure(Error.invalidStyleURI))
             return
@@ -68,33 +67,13 @@ final class OfflineController: _OfflineManager {
         }
     }
 
-    func stylePackMetadata(styleURI: String, completion: @escaping (Result<String?, any Swift.Error>) -> Void) {
+    func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String?: Any?]?, Swift.Error>) -> Void) {
         guard let styleURI = StyleURI(rawValue: styleURI) else {
             completion(.failure(Error.invalidStyleURI))
             return
         }
         offlineManager.stylePackMetadata(for: styleURI) { result in
-            completion(result.map { String(json: $0) })
+            completion(result.map { $0 as? [String: Any] })
         }
-    }
-}
-
-private class StylePackLoadProgressHandler: NSObject, FlutterStreamHandler {
-    private var eventSink: FlutterEventSink?
-    var progress: StylePackLoadProgress! {
-        didSet {
-            guard let progress else { return }
-            eventSink?(progress.toList())
-        }
-    }
-
-    func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        self.eventSink = events
-        return nil
-    }
-
-    func onCancel(withArguments arguments: Any?) -> FlutterError? {
-        eventSink = nil
-        return nil
     }
 }

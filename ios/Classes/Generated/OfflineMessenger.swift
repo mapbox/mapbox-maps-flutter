@@ -766,9 +766,29 @@ private class _OfflineManagerCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 128:
-      return StylePack.fromList(self.readValue() as! [Any?])
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 129:
+      return Point.fromList(self.readValue() as! [Any?])
+    case 130:
+      return StylePack.fromList(self.readValue() as! [Any?])
+    case 131:
       return StylePackLoadOptions.fromList(self.readValue() as! [Any?])
+    case 132:
+      return StylePackLoadProgress.fromList(self.readValue() as! [Any?])
+    case 133:
+      return TileRegion.fromList(self.readValue() as! [Any?])
+    case 134:
+      return TileRegionEstimateOptions.fromList(self.readValue() as! [Any?])
+    case 135:
+      return TileRegionEstimateProgress.fromList(self.readValue() as! [Any?])
+    case 136:
+      return TileRegionEstimateResult.fromList(self.readValue() as! [Any?])
+    case 137:
+      return TileRegionLoadOptions.fromList(self.readValue() as! [Any?])
+    case 138:
+      return TileRegionLoadProgress.fromList(self.readValue() as! [Any?])
+    case 139:
+      return TilesetDescriptorOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -777,11 +797,41 @@ private class _OfflineManagerCodecReader: FlutterStandardReader {
 
 private class _OfflineManagerCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? StylePack {
+    if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(128)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePackLoadOptions {
+    } else if let value = value as? Point {
       super.writeByte(129)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePack {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePackLoadOptions {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePackLoadProgress {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegion {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateOptions {
+      super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateProgress {
+      super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionEstimateResult {
+      super.writeByte(136)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionLoadOptions {
+      super.writeByte(137)
+      super.writeValue(value.toList())
+    } else if let value = value as? TileRegionLoadProgress {
+      super.writeByte(138)
+      super.writeValue(value.toList())
+    } else if let value = value as? TilesetDescriptorOptions {
+      super.writeByte(139)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -809,7 +859,7 @@ protocol _OfflineManager {
   func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
   func addStylePackLoadProgressListener(styleURI: String) throws
   func stylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
-  func stylePackMetadata(styleURI: String, completion: @escaping (Result<String?, Error>) -> Void)
+  func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String?: Any?]?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.

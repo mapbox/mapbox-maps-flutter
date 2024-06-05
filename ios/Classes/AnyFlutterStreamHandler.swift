@@ -5,7 +5,11 @@ final class AnyFlutterStreamHandler: NSObject, FlutterStreamHandler {
     var onCancelled: (() -> Void)?
 
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        eventSink = events
+        eventSink = { value in
+            DispatchQueue.main.async {
+                events(value)
+            }
+        }
         return nil
     }
 

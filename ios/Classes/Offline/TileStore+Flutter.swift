@@ -28,8 +28,9 @@ final class TileStoreController: _TileStore {
         tileStore.loadTileRegion(forId: id, loadOptions: loadOptions) { [weak self] progress in
             guard let self else { return }
             self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
-        } completion: { result in
+        } completion: { [weak self] result in
             completion(result.map { $0.toFLTTileRegion() })
+            self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
         }
     }
 
@@ -53,8 +54,9 @@ final class TileStoreController: _TileStore {
             estimateOptions: estimateOptions.map(MapboxCommon.TileRegionEstimateOptions.init(fltValue:))) { [weak self] progress in
                 guard let self else { return }
                 self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
-            } completion: { result in
+            } completion: { [weak self] result in
                 completion(result.map { $0.toFLTTileRegionEstimateResult() })
+                self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
             }
     }
 
@@ -62,10 +64,6 @@ final class TileStoreController: _TileStore {
         let handler = AnyFlutterStreamHandler()
         let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/tilestore/tile-region-estimate-\(id)", binaryMessenger: proxy.messenger)
         eventChannel.setStreamHandler(handler)
-//        handler.onCancelled = { [weak self] in
-//            eventChannel.setStreamHandler(nil)
-//            self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
-//        }
         tileRegionEstimateProgressHandlers[id] = handler
     }
 

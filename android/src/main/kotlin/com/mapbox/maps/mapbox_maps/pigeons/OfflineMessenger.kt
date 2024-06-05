@@ -838,12 +838,62 @@ private object _OfflineManagerCodec : StandardMessageCodec() {
     return when (type) {
       128.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePack.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          PointDecoder.fromList(it)
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePack.fromList(it)
+        }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           StylePackLoadOptions.fromList(it)
+        }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePackLoadProgress.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegion.fromList(it)
+        }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateOptions.fromList(it)
+        }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateProgress.fromList(it)
+        }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionEstimateResult.fromList(it)
+        }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionLoadOptions.fromList(it)
+        }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TileRegionLoadProgress.fromList(it)
+        }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TilesetDescriptorOptions.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -851,12 +901,52 @@ private object _OfflineManagerCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is StylePack -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(128)
         writeValue(stream, value.toList())
       }
-      is StylePackLoadOptions -> {
+      is Point -> {
         stream.write(129)
+        writeValue(stream, value.toList())
+      }
+      is StylePack -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is StylePackLoadOptions -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is StylePackLoadProgress -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is TileRegion -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateOptions -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateProgress -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionEstimateResult -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionLoadOptions -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is TileRegionLoadProgress -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is TilesetDescriptorOptions -> {
+        stream.write(139)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -870,7 +960,7 @@ interface _OfflineManager {
   fun removeStylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
   fun addStylePackLoadProgressListener(styleURI: String)
   fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
-  fun stylePackMetadata(styleURI: String, callback: (Result<String?>) -> Unit)
+  fun stylePackMetadata(styleURI: String, callback: (Result<Map<String?, Any?>?>) -> Unit)
 
   companion object {
     /** The codec used by _OfflineManager. */
@@ -967,7 +1057,7 @@ interface _OfflineManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val styleURIArg = args[0] as String
-            api.stylePackMetadata(styleURIArg) { result: Result<String?> ->
+            api.stylePackMetadata(styleURIArg) { result: Result<Map<String?, Any?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
