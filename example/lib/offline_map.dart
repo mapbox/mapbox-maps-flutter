@@ -42,7 +42,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
         .loadStylePack(MapboxStyles.STANDARD, stylePackLoadOptions, (progress) {
           print("Progressing...${progress.loadedResourceSize}");
         })
-        .then((value) => offlineManager.stylePackMetadata(MapboxStyles.STANDARD))
+        .then(
+            (value) => offlineManager.stylePackMetadata(MapboxStyles.STANDARD))
         .then((value) => print(value));
   }
 

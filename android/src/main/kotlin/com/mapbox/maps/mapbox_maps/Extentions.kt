@@ -626,6 +626,7 @@ fun com.mapbox.common.TileRegionEstimateProgress.toFLTTileRegionEstimateProgress
   return TileRegionEstimateProgress(
     this.requiredResourceCount, this.completedResourceCount, this.erroredResourceCount
   )
+}
 
 fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
   if (this.isError) {
