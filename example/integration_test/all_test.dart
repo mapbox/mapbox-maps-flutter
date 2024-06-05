@@ -55,42 +55,42 @@ void main() {
 
   // offline_test
   offline_test.main();
-  //
-  // // annotation tests
-  // circle_annotation_manager_test.main();
-  // circle_annotation_test.main();
-  // point_annotation_manager_test.main();
-  // point_annotation_test.main();
-  // polygon_annotation_manager_test.main();
-  // polygon_annotation_test.main();
-  // polyline_annotation_manager_test.main();
-  // polyline_annotation_test.main();
-  //
-  // // style tests
-  // style_test.main();
-  //
-  // // layer tests
-  // background_layer_test.main();
-  // circle_layer_test.main();
-  // fill_extrusion_layer_test.main();
-  // symbol_layer_test.main();
-  // sky_layer_test.main();
-  // raster_layer_test.main();
-  // location_indicator_layer_test.main();
-  // line_layer_test.main();
-  // hillshade_layer_test.main();
-  // heatmap_layer_test.main();
-  // fill_layer_test.main();
-  //
-  // // source tests
-  // vector_source_test.main();
-  // rasterdem_source_test.main();
-  // raster_source_test.main();
-  // image_source_test.main();
-  // geojson_source_test.main();
+  // annotation tests
+  circle_annotation_manager_test.main();
+  circle_annotation_test.main();
+  point_annotation_manager_test.main();
+  point_annotation_test.main();
+  polygon_annotation_manager_test.main();
+  polygon_annotation_test.main();
+  polyline_annotation_manager_test.main();
+  polyline_annotation_test.main();
+
+  // style tests
+  style_test.main();
+
+  // layer tests
+  background_layer_test.main();
+  circle_layer_test.main();
+  fill_extrusion_layer_test.main();
+  symbol_layer_test.main();
+  sky_layer_test.main();
+  raster_layer_test.main();
+  location_indicator_layer_test.main();
+  line_layer_test.main();
+  hillshade_layer_test.main();
+  heatmap_layer_test.main();
+  fill_layer_test.main();
+
+  // source tests
+  vector_source_test.main();
+  rasterdem_source_test.main();
+  raster_source_test.main();
+  rasterarray_source_test.main();
+  image_source_test.main();
+  geojson_source_test.main();
 
   // location test has to be at the bottom as on iOS it triggers location permission dialog
   // to be shown which makes tests that rely on QRF/QSF fail
   // TODO: address this properly by granting the location permission somehow
-  // location_test.main();
+  location_test.main();
 }

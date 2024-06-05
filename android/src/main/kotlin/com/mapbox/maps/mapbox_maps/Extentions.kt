@@ -3,6 +3,8 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.gson.Gson
+import com.mapbox.bindgen.Expected
+import com.mapbox.bindgen.None
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
@@ -624,4 +626,11 @@ fun com.mapbox.common.TileRegionEstimateProgress.toFLTTileRegionEstimateProgress
   return TileRegionEstimateProgress(
     this.requiredResourceCount, this.completedResourceCount, this.erroredResourceCount
   )
+
+fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
+  if (this.isError) {
+    callback(Result.failure(Throwable(this.error)))
+  } else {
+    callback(Result.success(Unit))
+  }
 }

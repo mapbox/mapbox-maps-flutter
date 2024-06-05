@@ -43,6 +43,7 @@ part 'src/style/layer/heatmap_layer.dart';
 part 'src/style/layer/hillshade_layer.dart';
 part 'src/style/layer/line_layer.dart';
 part 'src/style/layer/location_indicator_layer.dart';
+part 'src/style/layer/model_layer.dart';
 part 'src/style/layer/raster_layer.dart';
 part 'src/style/layer/sky_layer.dart';
 part 'src/style/layer/symbol_layer.dart';

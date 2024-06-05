@@ -947,3 +947,15 @@ extension MapboxCommon.TileRegionEstimateProgress {
             erroredResourceCount: Int64(erroredResourceCount))
     }
 }
+// MARK: Result
+extension Result where Failure == any Error {
+    init(code: String, catchingFlutter body: () throws -> Success) {
+        self.init {
+            do {
+                return try body()
+            } catch {
+                throw FlutterError(code: code, message: error.localizedDescription, details: [NSUnderlyingErrorKey: error])
+            }
+        }
+    }
+}

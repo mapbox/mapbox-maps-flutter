@@ -462,4 +462,18 @@ final class StyleController: StyleManager {
             throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
         }
     }
+
+    // MARK: Model
+    func addStyleModel(modelId: String, modelUri: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        completion(.init(code: StyleController.errorCode, catchingFlutter: {
+            try styleManager.addStyleModel(modelId: modelId, modelUri: modelUri)
+        }))
+    }
+
+    func removeStyleModel(modelId: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        completion(.init(code: StyleController.errorCode, catchingFlutter: {
+            try styleManager.removeStyleModel(modelId: modelId)
+        }))
+    }
+
 }
