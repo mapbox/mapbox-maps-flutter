@@ -95,6 +95,24 @@ Future<MapboxMap> runFixedSizeMap() {
   return completer.future;
 }
 
+Future<MapboxMap> runMapWithCustomCamera(CameraOptions camera) {
+  final completer = Completer<MapboxMap>();
+
+  const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
+  MapboxOptions.setAccessToken(ACCESS_TOKEN);
+
+  runApp(MaterialApp(
+      home: MapWidget(
+              key: ValueKey("mapWidget"),
+              cameraOptions: camera,
+              onMapCreated: (MapboxMap mapboxMap) {
+                completer.complete(mapboxMap);
+              }),
+        ));
+
+  return completer.future;
+}
+
 void runEmpty() {
   const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
   MapboxOptions.setAccessToken(ACCESS_TOKEN);

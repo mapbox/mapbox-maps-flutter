@@ -8,7 +8,6 @@ environment:
   flutter: ">=3.10.0"
 
 dependencies:
-  enum_to_string: ^2.0.1
   flutter:
     sdk: flutter
   flutter_plugin_android_lifecycle: ^2.0.5
