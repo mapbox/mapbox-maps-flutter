@@ -2,7 +2,6 @@ import Flutter
 
 final class AnyFlutterStreamHandler: NSObject, FlutterStreamHandler {
     private(set) var eventSink: FlutterEventSink?
-    var onCancelled: (() -> Void)?
 
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = { value in
@@ -15,8 +14,6 @@ final class AnyFlutterStreamHandler: NSObject, FlutterStreamHandler {
 
     func onCancel(withArguments arguments: Any?) -> FlutterError? {
         eventSink = nil
-        onCancelled?()
-        onCancelled = nil
         return nil
     }
 }

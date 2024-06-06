@@ -43,15 +43,15 @@ import 'scale_bar_test.dart' as scale_bar_test;
 import 'offline_test.dart' as offline_test;
 
 void main() {
-  // animation_test.main();
-  // camera_test.main();
-  // map_interface_test.main();
-  // projection_test.main();
-  // gestures_test.main();
-  // logo_test.main();
-  // attribution_test.main();
-  // compass_test.main();
-  // scale_bar_test.main();
+  animation_test.main();
+  camera_test.main();
+  map_interface_test.main();
+  projection_test.main();
+  gestures_test.main();
+  logo_test.main();
+  attribution_test.main();
+  compass_test.main();
+  scale_bar_test.main();
 
   // offline_test
   offline_test.main();

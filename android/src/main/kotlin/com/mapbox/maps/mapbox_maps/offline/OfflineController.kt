@@ -31,6 +31,9 @@ class OfflineController(
       { progress ->
         Handler(Looper.getMainLooper()).post {
           progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
+          if (progress.completedResourceCount == progress.requiredResourceCount) {
+            progressHandlers[styleURI]?.endOfStream()
+          }
         }
       },
       { expected ->

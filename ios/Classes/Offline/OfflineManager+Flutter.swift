@@ -31,10 +31,9 @@ final class OfflineController: _OfflineManager {
 
         offlineManager.loadStylePack(
             for: styleURI,
-            loadOptions: loadOptions,
-            progress: { [weak self] progress in
+            loadOptions: loadOptions) { [weak self] progress in
                 self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
-            }) { [weak self] result in
+            } completion: { [weak self] result in
                 completion(result.map { $0.toFLTStylePack() })
                 self?.progressHandlers.removeValue(forKey: uri)
             }

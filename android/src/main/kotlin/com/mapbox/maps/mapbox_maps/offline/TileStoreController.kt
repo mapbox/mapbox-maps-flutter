@@ -39,6 +39,9 @@ class TileStoreController(
       { progress ->
         Handler(Looper.getMainLooper()).post {
           tileRegionLoadProgressHandlers[id]?.success(progress.toFLTTileRegionLoadProgress().toList())
+          if (progress.completedResourceCount == progress.requiredResourceCount) {
+            tileRegionLoadProgressHandlers[id]?.endOfStream()
+          }
         }
       },
       { expected ->
@@ -81,6 +84,9 @@ class TileStoreController(
           tileRegionEstimateProgressHandlers[id]?.success(
             progress.toFLTTileRegionEstimateProgress().toList()
           )
+          if (progress.completedResourceCount == progress.requiredResourceCount) {
+            tileRegionEstimateProgressHandlers[id]?.endOfStream()
+          }
         }
       },
       { expected ->
