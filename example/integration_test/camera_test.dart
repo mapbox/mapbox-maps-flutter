@@ -8,6 +8,12 @@ import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  final initialCamera = CameraOptions(
+    center: Point(coordinates: Position(0, 0)),
+    zoom: 15,
+    pitch: 60,
+    bearing: 12,
+  );
 
   testWidgets('cameraForCoordinatesPadding', (WidgetTester tester) async {
     final mapFuture = app.main();
@@ -321,17 +327,17 @@ void main() {
   });
 
   testWidgets('getCameraState', (WidgetTester tester) async {
-    final mapFuture = app.main();
+    final mapFuture = app.runMapWithCustomCamera(initialCamera);
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
     var cameraState = await mapboxMap.getCameraState();
-    expect(cameraState.zoom.floor(), 15);
-    expect(cameraState.pitch.floor(), 60);
-    expect(cameraState.bearing.floor(), 12);
+    expect(cameraState.zoom, closeTo(15, 0.1));
+    expect(cameraState.pitch, closeTo(60, 1));
+    expect(cameraState.bearing, closeTo(12, 0.1));
     final position = cameraState.center;
-    expect(position.coordinates.lng.floor(), -88);
-    expect(position.coordinates.lat.floor(), 41);
+    expect(position.coordinates.lng, 0);
+    expect(position.coordinates.lat, 0);
     expect(cameraState.padding.top, 0);
     expect(cameraState.padding.right, 0);
     expect(cameraState.padding.bottom, 0);
