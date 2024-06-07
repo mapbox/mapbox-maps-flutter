@@ -1052,7 +1052,7 @@ class _OfflineManager {
     }
   }
 
-  Future<Map<String?, Object?>?> stylePackMetadata(String styleURI) async {
+  Future<Map<String?, Object?>> stylePackMetadata(String styleURI) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePackMetadata$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -1071,9 +1071,43 @@ class _OfflineManager {
         message: __pigeon_replyList[1] as String?,
         details: __pigeon_replyList[2],
       );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return (__pigeon_replyList[0] as Map<Object?, Object?>?)
-          ?.cast<String?, Object?>();
+      return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
+          .cast<String?, Object?>();
+    }
+  }
+
+  Future<List<StylePack?>> allStylePacks() async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)!.cast<StylePack?>();
     }
   }
 }
@@ -1308,6 +1342,36 @@ class _TileStore {
     } else {
       return (__pigeon_replyList[0] as Map<Object?, Object?>?)!
           .cast<String?, Object?>();
+    }
+  }
+
+  Future<bool> tileRegionContainsDescriptor(
+      String id, List<TilesetDescriptorOptions?> options) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[id, options]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as bool?)!;
     }
   }
 

@@ -40,7 +40,13 @@ void main() {
 
     final metadata =
         await offlineManager.stylePackMetadata(MapboxStyles.OUTDOORS);
-    expect(metadata?["tag"], "my-test-style-pack");
+    expect(metadata["tag"], "my-test-style-pack");
+
+    final allStylePacks = await offlineManager.allStylePacks();
+    expect(
+        allStylePacks
+            .any((element) => element.styleURI == downloadedStylePack.styleURI),
+        true);
   });
 
   testWidgets("test downloading tile region", (widgetTester) async {
@@ -57,5 +63,17 @@ void main() {
 
     final metadata = await tileStore.tileRegionMetadata("my-tile-region-id");
     expect(metadata["tag"], "my-test-tile-region");
+
+    final allTileRegions = await tileStore.allTileRegions();
+    expect(
+        allTileRegions.any((element) => element.id == downloadedTileRegion.id),
+        true);
+
+    expect(
+        await tileStore.tileRegionContainsDescriptor("my-tile-region-id", [
+          TilesetDescriptorOptions(
+              styleURI: MapboxStyles.OUTDOORS, minZoom: 0, maxZoom: 16)
+        ]),
+        true);
   });
 }

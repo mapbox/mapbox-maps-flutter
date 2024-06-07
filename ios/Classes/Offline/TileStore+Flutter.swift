@@ -67,10 +67,18 @@ final class TileStoreController: _TileStore {
         tileRegionEstimateProgressHandlers[id] = handler
     }
 
-    func tileRegionMetadata(id: String, completion: @escaping (Result<[String?: Any?], Swift.Error>) -> Void) {
+    func tileRegionMetadata(id: String, completion: @escaping (Result<[String: Any], Swift.Error>) -> Void) {
         tileStore.tileRegionMetadata(forId: id) { result in
             completion(result.map { $0 as? [String: Any] ?? [:] })
         }
+    }
+
+    func tileRegionContainsDescriptor(id: String, options: [TilesetDescriptorOptions], completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
+        let descriptors = options
+            .map(MapboxCoreMaps.TilesetDescriptorOptions.init(fltValue:))
+            .map(offlineManager.createTilesetDescriptor(for:))
+
+        tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors, completion: completion)
     }
 
     func allTileRegions(completion: @escaping (Result<[TileRegion], Swift.Error>) -> Void) {

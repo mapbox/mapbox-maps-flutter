@@ -960,7 +960,8 @@ interface _OfflineManager {
   fun removeStylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
   fun addStylePackLoadProgressListener(styleURI: String)
   fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit)
-  fun stylePackMetadata(styleURI: String, callback: (Result<Map<String?, Any?>?>) -> Unit)
+  fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit)
+  fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit)
 
   companion object {
     /** The codec used by _OfflineManager. */
@@ -1057,7 +1058,25 @@ interface _OfflineManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val styleURIArg = args[0] as String
-            api.stylePackMetadata(styleURIArg) { result: Result<Map<String?, Any?>?> ->
+            api.stylePackMetadata(styleURIArg) { result: Result<Map<String, Any>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.allStylePacks() { result: Result<List<StylePack>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1202,7 +1221,8 @@ interface _TileStore {
   fun addTileRegionLoadProgressListener(id: String)
   fun estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, callback: (Result<TileRegionEstimateResult>) -> Unit)
   fun addTileRegionEstimateProgressListener(id: String)
-  fun tileRegionMetadata(id: String, callback: (Result<Map<String?, Any?>>) -> Unit)
+  fun tileRegionMetadata(id: String, callback: (Result<Map<String, Any>>) -> Unit)
+  fun tileRegionContainsDescriptor(id: String, options: List<TilesetDescriptorOptions>, callback: (Result<Boolean>) -> Unit)
   fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit)
   fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit)
   fun removeRegion(id: String, callback: (Result<TileRegion>) -> Unit)
@@ -1303,7 +1323,28 @@ interface _TileStore {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val idArg = args[0] as String
-            api.tileRegionMetadata(idArg) { result: Result<Map<String?, Any?>> ->
+            api.tileRegionMetadata(idArg) { result: Result<Map<String, Any>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val idArg = args[0] as String
+            val optionsArg = args[1] as List<TilesetDescriptorOptions>
+            api.tileRegionContainsDescriptor(idArg, optionsArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

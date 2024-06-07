@@ -128,9 +128,7 @@ final class TileStore {
 
   /// Fetch the array of the existing tile regions.
   Future<List<TileRegion>> allTileRegions() {
-    return _api.allTileRegions().then((regionsOrNull) {
-      return regionsOrNull.whereType<TileRegion>().toList();
-    });
+    return _api.allTileRegions().then((value) => value.nonNulls.toList());
   }
 
   /// Returns a tile region given its id.
@@ -140,14 +138,22 @@ final class TileStore {
     return _api.tileRegion(id);
   }
 
+  /// Checks if a tile region with the given id contains all tilesets from all
+  /// of the given tileset descriptors.
+  ///
+  /// @param id: The tile region identifier.
+  /// @param descriptors: The array of [TilesetDescriptorOptions].
+  Future<bool> tileRegionContainsDescriptor(
+      String id, List<TilesetDescriptorOptions> options) {
+    return _api.tileRegionContainsDescriptor(id, options);
+  }
+
   /// Fetch a tile region's associated metadata
   ///
   /// The region's associated metadata that a user previously set for this region.
   /// @param id: The tile region id.
   Future<Map<String, Object>> tileRegionMetadata(String id) {
-    return _api.tileRegionMetadata(id).then((metadata) {
-      return Map<String, Object>.from(metadata);
-    });
+    return _api.tileRegionMetadata(id).then((value) => Map.from(value));
   }
 
   /// On successful tile region removal, this will complete with the removed tile region.

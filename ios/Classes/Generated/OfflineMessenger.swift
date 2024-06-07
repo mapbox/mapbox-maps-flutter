@@ -859,7 +859,8 @@ protocol _OfflineManager {
   func removeStylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
   func addStylePackLoadProgressListener(styleURI: String) throws
   func stylePack(styleURI: String, completion: @escaping (Result<StylePack, Error>) -> Void)
-  func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String?: Any?]?, Error>) -> Void)
+  func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String: Any], Error>) -> Void)
+  func allStylePacks(completion: @escaping (Result<[StylePack], Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -952,6 +953,21 @@ class _OfflineManagerSetup {
       }
     } else {
       stylePackMetadataChannel.setMessageHandler(nil)
+    }
+    let allStylePacksChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      allStylePacksChannel.setMessageHandler { _, reply in
+        api.allStylePacks { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      allStylePacksChannel.setMessageHandler(nil)
     }
   }
 }
@@ -1052,7 +1068,8 @@ protocol _TileStore {
   func addTileRegionLoadProgressListener(id: String) throws
   func estimateTileRegion(id: String, loadOptions: TileRegionLoadOptions, estimateOptions: TileRegionEstimateOptions?, completion: @escaping (Result<TileRegionEstimateResult, Error>) -> Void)
   func addTileRegionEstimateProgressListener(id: String) throws
-  func tileRegionMetadata(id: String, completion: @escaping (Result<[String?: Any?], Error>) -> Void)
+  func tileRegionMetadata(id: String, completion: @escaping (Result<[String: Any], Error>) -> Void)
+  func tileRegionContainsDescriptor(id: String, options: [TilesetDescriptorOptions], completion: @escaping (Result<Bool, Error>) -> Void)
   func allTileRegions(completion: @escaping (Result<[TileRegion], Error>) -> Void)
   func tileRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
   func removeRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
@@ -1148,6 +1165,24 @@ class _TileStoreSetup {
       }
     } else {
       tileRegionMetadataChannel.setMessageHandler(nil)
+    }
+    let tileRegionContainsDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      tileRegionContainsDescriptorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let idArg = args[0] as! String
+        let optionsArg = args[1] as! [TilesetDescriptorOptions]
+        api.tileRegionContainsDescriptor(id: idArg, options: optionsArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      tileRegionContainsDescriptorChannel.setMessageHandler(nil)
     }
     let allTileRegionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

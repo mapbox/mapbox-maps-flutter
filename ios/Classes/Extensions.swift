@@ -959,3 +959,12 @@ extension Result where Failure == any Error {
         }
     }
 }
+
+extension Result {
+
+    func mapElement<Element, NewElement>(
+        _ transform: (Element) -> NewElement
+    ) -> Result<[NewElement], Failure> where Success == [Element] {
+        return map { success in success.map(transform) }
+    }
+}

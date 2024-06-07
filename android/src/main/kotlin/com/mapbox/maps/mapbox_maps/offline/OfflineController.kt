@@ -86,10 +86,21 @@ class OfflineController(
     }
   }
 
-  override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String?, Any?>?>) -> Unit) {
+  override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit) {
     offlineManager.getStylePackMetadata(styleURI) { expected ->
       expected.value?.let {
         callback(Result.success(it.unwrapToTyped()))
+      }
+      expected.error?.let {
+        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
+      }
+    }
+  }
+
+  override fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit) {
+    offlineManager.getAllStylePacks { expected ->
+      expected.value?.let {
+        callback(Result.success(it.map { it.toFLTStylePack() }))
       }
       expected.error?.let {
         callback(Result.failure(Throwable(it.message ?: "Unknown error")))

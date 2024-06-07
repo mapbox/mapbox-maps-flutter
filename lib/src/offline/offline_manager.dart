@@ -94,7 +94,12 @@ final class OfflineManager {
   /// Returns a style package's associated metadata.
   ///
   /// @param styleURI: The URI of the style package's associated style
-  Future<Map<String?, Object?>?> stylePackMetadata(String styleURI) async {
-    return _api.stylePackMetadata(styleURI);
+  Future<Map<String, Object>> stylePackMetadata(String styleURI) async {
+    return _api.stylePackMetadata(styleURI).then((value) => Map.from(value));
+  }
+
+  /// Fetch an array of the existing style packages.
+  Future<List<StylePack>> allStylePacks() async {
+    return _api.allStylePacks().then((value) => value.nonNulls.toList());
   }
 }

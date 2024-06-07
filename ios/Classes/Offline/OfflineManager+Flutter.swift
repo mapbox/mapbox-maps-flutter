@@ -66,13 +66,19 @@ final class OfflineController: _OfflineManager {
         }
     }
 
-    func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String?: Any?]?, Swift.Error>) -> Void) {
+    func stylePackMetadata(styleURI: String, completion: @escaping (Result<[String: Any], Swift.Error>) -> Void) {
         guard let styleURI = StyleURI(rawValue: styleURI) else {
             completion(.failure(Error.invalidStyleURI))
             return
         }
         offlineManager.stylePackMetadata(for: styleURI) { result in
-            completion(result.map { $0 as? [String: Any] })
+            completion(result.map { $0 as? [String: Any] ?? [:] })
+        }
+    }
+
+    func allStylePacks(completion: @escaping (Result<[StylePack], Swift.Error>) -> Void) {
+        offlineManager.allStylePacks { result in
+            completion(result.mapElement { $0.toFLTStylePack() })
         }
     }
 }

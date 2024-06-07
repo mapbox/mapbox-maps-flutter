@@ -27,8 +27,10 @@ class OfflineMapWidget extends StatefulWidget {
 
 class OfflineMapWidgetState extends State<OfflineMapWidget> {
   MapboxMap? mapboxMap;
-  final StreamController<double> _stylePackProgress = StreamController.broadcast();
-  final StreamController<double> _tileRegionLoadProgress = StreamController.broadcast();
+  final StreamController<double> _stylePackProgress =
+      StreamController.broadcast();
+  final StreamController<double> _tileRegionLoadProgress =
+      StreamController.broadcast();
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -45,7 +47,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
         acceptExpired: false);
     offlineManager.loadStylePack(MapboxStyles.OUTDOORS, stylePackLoadOptions,
         (progress) {
-      final percentage = progress.completedResourceCount / progress.requiredResourceCount;
+      final percentage =
+          progress.completedResourceCount / progress.requiredResourceCount;
       if (!_stylePackProgress.isClosed) {
         _stylePackProgress.sink.add(percentage);
       }
@@ -69,7 +72,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
 
     tileStore.loadTileRegion("my-tile-region", tileRegionLoadOptions,
         (progress) {
-      final percentage = progress.completedResourceCount / progress.requiredResourceCount;
+      final percentage =
+          progress.completedResourceCount / progress.requiredResourceCount;
       if (!_tileRegionLoadProgress.isClosed) {
         _tileRegionLoadProgress.sink.add(percentage);
       }
@@ -84,56 +88,53 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
     final mapWidget = MapWidget(
       key: ValueKey("mapWidget"),
       styleUri: MapboxStyles.OUTDOORS,
-      cameraOptions: CameraOptions(
-          center: City.helsinki, zoom: 2.0),
+      cameraOptions: CameraOptions(center: City.helsinki, zoom: 2.0),
       onMapCreated: _onMapCreated,
     );
 
     return new Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: mapWidget,
-            ),
-            SizedBox(
-              height: 100,
-              child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    StreamBuilder(
-                        stream: _stylePackProgress.stream,
-                        initialData: 0.0,
-                        builder: (context, snapshot) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Style pack ${snapshot.requireData}"),
-                              LinearProgressIndicator(
-                                value: snapshot.requireData,
-                              )
-                            ],
-                          );
-                        }),
-                    StreamBuilder(
-                        stream: _tileRegionLoadProgress.stream,
-                        initialData: 0.0,
-                        builder: (context, snapshot) {
-                          return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: mapWidget,
+        ),
+        SizedBox(
+            height: 100,
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StreamBuilder(
+                      stream: _stylePackProgress.stream,
+                      initialData: 0.0,
+                      builder: (context, snapshot) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("Style pack ${snapshot.requireData}"),
+                            LinearProgressIndicator(
+                              value: snapshot.requireData,
+                            )
+                          ],
+                        );
+                      }),
+                  StreamBuilder(
+                      stream: _tileRegionLoadProgress.stream,
+                      initialData: 0.0,
+                      builder: (context, snapshot) {
+                        return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text("Tile region ${snapshot.requireData}"),
                               LinearProgressIndicator(
                                 value: snapshot.requireData,
                               )
-                            ]
-                          );
-                        }),
-                  ],
-                ),
-              )
-            )
-          ],
+                            ]);
+                      }),
+                ],
+              ),
+            ))
+      ],
     );
   }
 }
