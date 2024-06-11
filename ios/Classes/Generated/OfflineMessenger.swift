@@ -1324,3 +1324,61 @@ class _TileStoreInstanceManagerSetup {
     }
   }
 }
+/// Instance that allows connecting or disconnecting the Mapbox stack to the network.
+///
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _OfflineSwitch {
+  /// Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
+  /// with HttpRequestErrorType#ConnectionError.
+  ///
+  /// @param connected Set false to disconnect the Mapbox stack
+  func setMapboxStackConnected(connected: Bool) throws
+  /// Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
+  ///
+  /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
+  func isMapboxStackConnected() throws -> Bool
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _OfflineSwitchSetup {
+  /// The codec used by _OfflineSwitch.
+  /// Sets up an instance of `_OfflineSwitch` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _OfflineSwitch?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    /// Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
+    /// with HttpRequestErrorType#ConnectionError.
+    ///
+    /// @param connected Set false to disconnect the Mapbox stack
+    let setMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.setMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      setMapboxStackConnectedChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let connectedArg = args[0] as! Bool
+        do {
+          try api.setMapboxStackConnected(connected: connectedArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setMapboxStackConnectedChannel.setMessageHandler(nil)
+    }
+    /// Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
+    ///
+    /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
+    let isMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.isMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      isMapboxStackConnectedChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.isMapboxStackConnected()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      isMapboxStackConnectedChannel.setMessageHandler(nil)
+    }
+  }
+}

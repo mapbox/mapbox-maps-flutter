@@ -82,3 +82,15 @@ final class OfflineController: _OfflineManager {
         }
     }
 }
+
+extension OfflineSwitch: _OfflineSwitch {
+    func setMapboxStackConnected(connected: Bool) throws {
+        isMapboxStackConnected = connected
+    }
+
+    func isMapboxStackConnected() throws -> Bool {
+        return isMapboxStackConnected
+    }
+
+    func reset() throws {}
+}

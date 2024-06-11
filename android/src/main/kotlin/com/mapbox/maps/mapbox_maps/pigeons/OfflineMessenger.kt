@@ -1530,3 +1530,70 @@ interface _TileStoreInstanceManager {
     }
   }
 }
+/**
+ * Instance that allows connecting or disconnecting the Mapbox stack to the network.
+ *
+ * Generated interface from Pigeon that represents a handler of messages from Flutter.
+ */
+interface _OfflineSwitch {
+  /**
+   * Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
+   * with HttpRequestErrorType#ConnectionError.
+   *
+   * @param connected Set false to disconnect the Mapbox stack
+   */
+  fun setMapboxStackConnected(connected: Boolean)
+  /**
+   * Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
+   *
+   * @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
+   */
+  fun isMapboxStackConnected(): Boolean
+
+  companion object {
+    /** The codec used by _OfflineSwitch. */
+    val codec: MessageCodec<Any?> by lazy {
+      StandardMessageCodec()
+    }
+    /** Sets up an instance of `_OfflineSwitch` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: _OfflineSwitch?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.setMapboxStackConnected$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val connectedArg = args[0] as Boolean
+            var wrapped: List<Any?>
+            try {
+              api.setMapboxStackConnected(connectedArg)
+              wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.isMapboxStackConnected$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.isMapboxStackConnected())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}

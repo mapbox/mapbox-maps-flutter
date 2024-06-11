@@ -3,9 +3,11 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import com.mapbox.maps.mapbox_maps.offline.OfflineMapInstanceManager
+import com.mapbox.maps.mapbox_maps.offline.OfflineSwitch
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons._MapboxOptions
 import com.mapbox.maps.mapbox_maps.pigeons._OfflineMapInstanceManager
+import com.mapbox.maps.mapbox_maps.pigeons._OfflineSwitch
 import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterInstanceManager
 import com.mapbox.maps.mapbox_maps.pigeons._TileStoreInstanceManager
 import com.mapbox.maps.mapbox_maps.snapshot.SnapshotterInstanceManager
@@ -41,6 +43,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     val optionsController = MapboxOptionsController()
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
     val offlineMapInstanceManager = OfflineMapInstanceManager(binaryMessenger)
+    val offlineSwitch = OfflineSwitch()
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
     _MapboxMapsOptions.setUp(binaryMessenger, optionsController)
@@ -48,6 +51,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
     _SnapshotterInstanceManager.setUp(binaryMessenger, snapshotterInstanceManager)
     _OfflineMapInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
     _TileStoreInstanceManager.setUp(binaryMessenger, offlineMapInstanceManager)
+    _OfflineSwitch.setUp(binaryMessenger, offlineSwitch)
     LoggingController.setup(binaryMessenger)
   }
 
