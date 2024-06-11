@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
+import com.mapbox.bindgen.Value
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
@@ -15,6 +16,7 @@ import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
+import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -633,5 +635,78 @@ fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
     callback(Result.failure(Throwable(this.error)))
   } else {
     callback(Result.success(Unit))
+  }
+}
+
+fun Value.toFLTValue(): Any? {
+  return when (contents) {
+    is List<*> -> {
+      (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
+    }
+
+    is Map<*, *> -> {
+      (contents as Map<*, *>)
+        .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
+        .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
+    }
+
+    else -> {
+      contents
+    }
+  }
+}
+
+fun Any.toValue(): Value {
+  return if (this is String) {
+    if (this.startsWith("{") || this.startsWith("[")) {
+      Value.fromJson(this).value!!
+    } else {
+      val number = this.toDoubleOrNull()
+      if (number != null) {
+        Value.valueOf(number)
+      } else {
+        Value.valueOf(this)
+      }
+    }
+  } else if (this is Double) {
+    Value.valueOf(this)
+  } else if (this is Long) {
+    Value.valueOf(this)
+  } else if (this is Int) {
+    Value.valueOf(this.toLong())
+  } else if (this is Boolean) {
+    Value.valueOf(this)
+  } else if (this is IntArray) {
+    val valueArray = this.map { Value(it.toLong()) }
+    Value(valueArray)
+  } else if (this is BooleanArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is DoubleArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is FloatArray) {
+    val valueArray = this.map { Value(it.toDouble()) }
+    Value(valueArray)
+  } else if (this is LongArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is Array<*>) {
+    val valueArray = this.map { it?.toValue() }
+    Value(valueArray)
+  } else if (this is List<*>) {
+    val valueArray = this.map { it?.toValue() }
+    Value(valueArray)
+  } else if (this is HashMap<*, *>) {
+    val valueMap = this
+      .mapKeys { it.key as? String }
+      .mapValues { it.value.toValue() }
+    Value.valueOf(kotlin.collections.HashMap(valueMap))
+  } else {
+    logE(
+      "StyleController",
+      "Can not map value, type is not supported: ${this::class.java.canonicalName}"
+    )
+    Value.valueOf("")
   }
 }

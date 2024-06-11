@@ -4,12 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import com.mapbox.common.TileStore
 import com.mapbox.maps.OfflineManager
-import com.mapbox.maps.extension.style.utils.unwrapToTyped
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTTileRegion
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionEstimateProgress
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionEstimateResult
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionLoadProgress
+import com.mapbox.maps.mapbox_maps.toFLTValue
 import com.mapbox.maps.mapbox_maps.toGeometry
 import com.mapbox.maps.mapbox_maps.toNetworkRestriction
 import com.mapbox.maps.mapbox_maps.toTileRegionEstimateOptions
@@ -117,7 +117,7 @@ class TileStoreController(
   override fun tileRegionMetadata(id: String, callback: (Result<Map<String, Any>>) -> Unit) {
     tileStore.getTileRegionMetadata(id) { expected ->
       expected.value?.let {
-        callback(Result.success(it.unwrapToTyped()))
+        callback(Result.success(it.toFLTValue() as? Map<String, Any> ?: emptyMap()))
       }
       expected.error?.let {
         callback(Result.failure(Throwable(it.message)))

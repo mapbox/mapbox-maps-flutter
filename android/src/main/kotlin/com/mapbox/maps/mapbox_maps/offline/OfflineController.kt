@@ -3,10 +3,10 @@ package com.mapbox.maps.mapbox_maps.offline
 import android.os.Handler
 import android.os.Looper
 import com.mapbox.maps.OfflineManager
-import com.mapbox.maps.extension.style.utils.unwrapToTyped
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
 import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
+import com.mapbox.maps.mapbox_maps.toFLTValue
 import com.mapbox.maps.mapbox_maps.toStylePackLoadOptions
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -89,7 +89,7 @@ class OfflineController(
   override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit) {
     offlineManager.getStylePackMetadata(styleURI) { expected ->
       expected.value?.let {
-        callback(Result.success(it.unwrapToTyped()))
+        callback(Result.success(it.toFLTValue() as? Map<String, Any> ?: emptyMap()))
       }
       expected.error?.let {
         callback(Result.failure(Throwable(it.message ?: "Unknown error")))
@@ -99,8 +99,8 @@ class OfflineController(
 
   override fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit) {
     offlineManager.getAllStylePacks { expected ->
-      expected.value?.let {
-        callback(Result.success(it.map { it.toFLTStylePack() }))
+      expected.value?.let { stylePacks ->
+        callback(Result.success(stylePacks.map { it.toFLTStylePack() }))
       }
       expected.error?.let {
         callback(Result.failure(Throwable(it.message ?: "Unknown error")))
