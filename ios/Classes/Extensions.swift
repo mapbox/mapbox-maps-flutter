@@ -968,3 +968,11 @@ extension Result {
         return map { success in success.map(transform) }
     }
 }
+
+func executeOnMainThread<T>(_ execute: @escaping (T) -> Void) -> (T) -> Void {
+    return { t in
+        DispatchQueue.main.async {
+            execute(t)
+        }
+    }
+}

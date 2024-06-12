@@ -1,7 +1,7 @@
 package com.mapbox.maps.mapbox_maps.offline
 
+import android.content.Context
 import android.os.Handler
-import android.os.Looper
 import com.mapbox.maps.OfflineManager
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
@@ -16,11 +16,14 @@ import io.flutter.plugin.common.EventChannel.StreamHandler
 private const val EVENT_CHANNEL_PREFIX = "com.mapbox.maps.flutter/offline"
 
 class OfflineController(
+  private val context: Context,
   private val messenger: BinaryMessenger
 ) : _OfflineManager {
 
   private val offlineManager = OfflineManager()
   private var progressHandlers = HashMap<String, EventChannel.EventSink>()
+  private val mainHandler = Handler(context.mainLooper)
+
   override fun loadStylePack(
     styleURI: String,
     loadOptions: StylePackLoadOptions,
@@ -30,15 +33,15 @@ class OfflineController(
       styleURI,
       loadOptions.toStylePackLoadOptions(),
       { progress ->
-        Handler(Looper.getMainLooper()).post {
+        mainHandler.post {
           progressHandlers[styleURI]?.success(progress.toFLTStylePackLoadProgress().toList())
-          if (progress.completedResourceCount == progress.requiredResourceCount) {
-            progressHandlers[styleURI]?.endOfStream()
-          }
         }
       },
       { expected ->
-        callback(expected.toResult { it.toFLTStylePack() })
+        mainHandler.post {
+          callback(expected.toResult { it.toFLTStylePack() })
+        }
+        progressHandlers.remove(styleURI)?.endOfStream()
       }
     )
   }
@@ -47,7 +50,9 @@ class OfflineController(
     offlineManager.removeStylePack(
       styleURI
     ) { expected ->
-      callback(expected.toResult { it.toFLTStylePack() })
+      mainHandler.post {
+        callback(expected.toResult { it.toFLTStylePack() })
+      }
     }
   }
 
@@ -68,19 +73,25 @@ class OfflineController(
 
   override fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit) {
     offlineManager.getStylePack(styleURI) { expected ->
-      callback(expected.toResult { it.toFLTStylePack() })
+      mainHandler.post {
+        callback(expected.toResult { it.toFLTStylePack() })
+      }
     }
   }
 
   override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit) {
     offlineManager.getStylePackMetadata(styleURI) { expected ->
-      callback(expected.toResult { it.toFLTValue() as? kotlin.collections.Map<kotlin.String, kotlin.Any> ?: kotlin.collections.emptyMap() })
+      mainHandler.post {
+        callback(expected.toResult { it.toFLTValue() as? kotlin.collections.Map<kotlin.String, kotlin.Any> ?: kotlin.collections.emptyMap() })
+      }
     }
   }
 
   override fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit) {
     offlineManager.getAllStylePacks { expected ->
-      callback(expected.toResult { it.map { stylePack -> stylePack.toFLTStylePack() } })
+      mainHandler.post {
+        callback(expected.toResult { it.map { stylePack -> stylePack.toFLTStylePack() } })
+      }
     }
   }
 }

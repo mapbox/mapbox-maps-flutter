@@ -29,7 +29,7 @@ final class TileStoreController: _TileStore {
             guard let self else { return }
             self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
         } completion: { [weak self] result in
-            completion(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
             self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
         }
     }
@@ -55,7 +55,7 @@ final class TileStoreController: _TileStore {
                 guard let self else { return }
                 self.tileRegionEstimateProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionEstimateProgress().toList())
             } completion: { [weak self] result in
-                completion(result.map { $0.toFLTTileRegionEstimateResult() })
+                executeOnMainThread(completion)(result.map { $0.toFLTTileRegionEstimateResult() })
                 self?.tileRegionEstimateProgressHandlers.removeValue(forKey: id)
             }
     }
@@ -78,7 +78,7 @@ final class TileStoreController: _TileStore {
             .map(MapboxCoreMaps.TilesetDescriptorOptions.init(fltValue:))
             .map(offlineManager.createTilesetDescriptor(for:))
 
-        tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors, completion: completion)
+        tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors, completion: executeOnMainThread(completion))
     }
 
     func allTileRegions(completion: @escaping (Result<[TileRegion], Swift.Error>) -> Void) {
@@ -92,13 +92,13 @@ final class TileStoreController: _TileStore {
 
     func tileRegion(id: String, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
         tileStore.tileRegion(forId: id) { result in
-            completion(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
         }
     }
 
     func removeRegion(id: String, completion: @escaping (Result<TileRegion, Swift.Error>) -> Void) {
         tileStore.removeRegion(forId: id) { result in
-            completion(result.map { $0.toFLTTileRegion() })
+            executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
         }
     }
 }

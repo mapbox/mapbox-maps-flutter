@@ -1,7 +1,7 @@
 package com.mapbox.maps.mapbox_maps.offline
 
+import android.content.Context
 import android.os.Handler
-import android.os.Looper
 import com.mapbox.common.TileStore
 import com.mapbox.maps.OfflineManager
 import com.mapbox.maps.mapbox_maps.pigeons.*
@@ -22,6 +22,7 @@ import io.flutter.plugin.common.EventChannel
 private const val EVENT_CHANNEL_PREFIX = "com.mapbox.maps.flutter/tilestore"
 
 class TileStoreController(
+  private val context: Context,
   private val binaryMessenger: BinaryMessenger,
   private val tileStore: TileStore
 ) : _TileStore {
@@ -29,6 +30,7 @@ class TileStoreController(
   private val offlineManager = OfflineManager()
   private var tileRegionLoadProgressHandlers = HashMap<String, EventChannel.EventSink>()
   private var tileRegionEstimateProgressHandlers = HashMap<String, EventChannel.EventSink>()
+  private val mainHandler = Handler(context.mainLooper)
 
   override fun loadTileRegion(
     id: String,
@@ -38,15 +40,15 @@ class TileStoreController(
     tileStore.loadTileRegion(
       id, offlineManager.tileRegionLoadOptions(loadOptions),
       { progress ->
-        Handler(Looper.getMainLooper()).post {
+        mainHandler.post {
           tileRegionLoadProgressHandlers[id]?.success(progress.toFLTTileRegionLoadProgress().toList())
-          if (progress.completedResourceCount == progress.requiredResourceCount) {
-            tileRegionLoadProgressHandlers[id]?.endOfStream()
-          }
         }
       },
       { expected ->
-        callback(expected.toResult { it.toFLTTileRegion() })
+        mainHandler.post {
+          callback(expected.toResult { it.toFLTTileRegion() })
+        }
+        tileRegionLoadProgressHandlers.remove(id)?.endOfStream()
       }
     )
   }
@@ -76,17 +78,17 @@ class TileStoreController(
       offlineManager.tileRegionLoadOptions(loadOptions),
       estimateOptions?.toTileRegionEstimateOptions() ?: com.mapbox.common.TileRegionEstimateOptions(null),
       { progress ->
-        Handler(Looper.getMainLooper()).post {
+        mainHandler.post {
           tileRegionEstimateProgressHandlers[id]?.success(
             progress.toFLTTileRegionEstimateProgress().toList()
           )
-          if (progress.completedResourceCount == progress.requiredResourceCount) {
-            tileRegionEstimateProgressHandlers[id]?.endOfStream()
-          }
         }
       },
       { expected ->
-        callback(expected.toResult { it.toFLTTileRegionEstimateResult() })
+        mainHandler.post {
+          callback(expected.toResult { it.toFLTTileRegionEstimateResult() })
+        }
+        tileRegionEstimateProgressHandlers.remove(id)?.endOfStream()
       }
     )
   }
@@ -107,26 +109,34 @@ class TileStoreController(
 
   override fun tileRegionMetadata(id: String, callback: (Result<Map<String, Any>>) -> Unit) {
     tileStore.getTileRegionMetadata(id) { expected ->
-      callback(expected.toResult { it.toFLTValue() as? Map<String, Any> ?: emptyMap() })
+      mainHandler.post {
+        callback(expected.toResult { it.toFLTValue() as? Map<String, Any> ?: emptyMap() })
+      }
     }
   }
 
   override fun tileRegionContainsDescriptor(id: String, options: List<TilesetDescriptorOptions>, callback: (Result<Boolean>) -> Unit) {
     val descriptors = options.map { offlineManager.createTilesetDescriptor(it.toTilesetDescriptorOptions()) }
     tileStore.tileRegionContainsDescriptors(id, descriptors) { expected ->
-      callback(expected.toResult { it })
+      mainHandler.post {
+        callback(expected.toResult { it })
+      }
     }
   }
 
   override fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit) {
     tileStore.getAllTileRegions { expected ->
-      callback(expected.toResult { it.map { region -> region.toFLTTileRegion() } })
+      mainHandler.post {
+        callback(expected.toResult { it.map { region -> region.toFLTTileRegion() } })
+      }
     }
   }
 
   override fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit) {
     tileStore.getTileRegion(id) { expected ->
-      callback(expected.toResult { it.toFLTTileRegion() })
+      mainHandler.post {
+        callback(expected.toResult { it.toFLTTileRegion() })
+      }
     }
   }
 
@@ -134,7 +144,9 @@ class TileStoreController(
     tileStore.removeTileRegion(
       id,
       { expected ->
-        callback(expected.toResult { it.toFLTTileRegion() })
+        mainHandler.post {
+          callback(expected.toResult { it.toFLTTileRegion() })
+        }
       }
     )
   }

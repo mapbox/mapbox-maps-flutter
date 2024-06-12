@@ -42,7 +42,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
   private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger) {
     val optionsController = MapboxOptionsController()
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
-    val offlineMapInstanceManager = OfflineMapInstanceManager(binaryMessenger)
+    val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger)
     val offlineSwitch = OfflineSwitch()
     // static options handling should be setup upon attachment,
     // as options can before configured before the map view is setup
