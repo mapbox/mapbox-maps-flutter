@@ -57,6 +57,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+        mapView.isOpaque = false
         mapboxMap = mapView.mapboxMap
 
         self.registrar = registrar
