@@ -5,17 +5,13 @@ final class OfflineSwitch {
   final _OfflineSwitch _api = _OfflineSwitch();
   OfflineSwitch._() {}
 
-  static final OfflineSwitch _shared = OfflineSwitch._();
-
-  factory OfflineSwitch() {
-    return _shared;
-  }
+  static final OfflineSwitch shared = OfflineSwitch._();
 
   Future<bool> get isMapboxStackConnected {
     return _api.isMapboxStackConnected();
   }
 
-  void setMapboxStackConnected(bool isConnected) {
-    _api.setMapboxStackConnected(isConnected);
+  Future<void> setMapboxStackConnected(bool isConnected) {
+    return _api.setMapboxStackConnected(isConnected);
   }
 }
