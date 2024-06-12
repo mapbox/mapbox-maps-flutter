@@ -7,6 +7,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
 import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
 import com.mapbox.maps.mapbox_maps.toFLTValue
+import com.mapbox.maps.mapbox_maps.toResult
 import com.mapbox.maps.mapbox_maps.toStylePackLoadOptions
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
@@ -37,12 +38,7 @@ class OfflineController(
         }
       },
       { expected ->
-        expected.value?.let {
-          callback(Result.success(it.toFLTStylePack()))
-        }
-        expected.error?.let {
-          callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-        }
+        callback(expected.toResult { it.toFLTStylePack() })
       }
     )
   }
@@ -51,12 +47,7 @@ class OfflineController(
     offlineManager.removeStylePack(
       styleURI
     ) { expected ->
-      expected.value?.let {
-        callback(Result.success(it.toFLTStylePack()))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.toFLTStylePack() })
     }
   }
 
@@ -77,34 +68,19 @@ class OfflineController(
 
   override fun stylePack(styleURI: String, callback: (Result<StylePack>) -> Unit) {
     offlineManager.getStylePack(styleURI) { expected ->
-      expected.value?.let {
-        callback(Result.success(it.toFLTStylePack()))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.toFLTStylePack() })
     }
   }
 
   override fun stylePackMetadata(styleURI: String, callback: (Result<Map<String, Any>>) -> Unit) {
     offlineManager.getStylePackMetadata(styleURI) { expected ->
-      expected.value?.let {
-        callback(Result.success(it.toFLTValue() as? Map<String, Any> ?: emptyMap()))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.toFLTValue() as? kotlin.collections.Map<kotlin.String, kotlin.Any> ?: kotlin.collections.emptyMap() })
     }
   }
 
   override fun allStylePacks(callback: (Result<List<StylePack>>) -> Unit) {
     offlineManager.getAllStylePacks { expected ->
-      expected.value?.let { stylePacks ->
-        callback(Result.success(stylePacks.map { it.toFLTStylePack() }))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.map { stylePack -> stylePack.toFLTStylePack() } })
     }
   }
 }

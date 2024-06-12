@@ -12,6 +12,7 @@ import com.mapbox.maps.mapbox_maps.toFLTTileRegionLoadProgress
 import com.mapbox.maps.mapbox_maps.toFLTValue
 import com.mapbox.maps.mapbox_maps.toGeometry
 import com.mapbox.maps.mapbox_maps.toNetworkRestriction
+import com.mapbox.maps.mapbox_maps.toResult
 import com.mapbox.maps.mapbox_maps.toTileRegionEstimateOptions
 import com.mapbox.maps.mapbox_maps.toTilesetDescriptorOptions
 import com.mapbox.maps.mapbox_maps.toValue
@@ -45,12 +46,7 @@ class TileStoreController(
         }
       },
       { expected ->
-        expected.value?.let {
-          callback(Result.success(it.toFLTTileRegion()))
-        }
-        expected.error?.let {
-          callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-        }
+        callback(expected.toResult { it.toFLTTileRegion() })
       }
     )
   }
@@ -90,12 +86,7 @@ class TileStoreController(
         }
       },
       { expected ->
-        expected.value?.let {
-          callback(Result.success(it.toFLTTileRegionEstimateResult()))
-        }
-        expected.error?.let {
-          callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-        }
+        callback(expected.toResult { it.toFLTTileRegionEstimateResult() })
       }
     )
   }
@@ -116,42 +107,26 @@ class TileStoreController(
 
   override fun tileRegionMetadata(id: String, callback: (Result<Map<String, Any>>) -> Unit) {
     tileStore.getTileRegionMetadata(id) { expected ->
-      expected.value?.let {
-        callback(Result.success(it.toFLTValue() as? Map<String, Any> ?: emptyMap()))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message)))
-      }
+      callback(expected.toResult { it.toFLTValue() as? Map<String, Any> ?: emptyMap() })
     }
   }
 
   override fun tileRegionContainsDescriptor(id: String, options: List<TilesetDescriptorOptions>, callback: (Result<Boolean>) -> Unit) {
     val descriptors = options.map { offlineManager.createTilesetDescriptor(it.toTilesetDescriptorOptions()) }
     tileStore.tileRegionContainsDescriptors(id, descriptors) { expected ->
-      expected.value?.let { callback(Result.success(it)) }
-      expected.error?.let { callback(Result.failure(Throwable(it.message))) }
+      callback(expected.toResult { it })
     }
   }
 
   override fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit) {
     tileStore.getAllTileRegions { expected ->
-      expected.value?.let { tileRegions ->
-        callback(Result.success(tileRegions.map { it.toFLTTileRegion() }))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.map { region -> region.toFLTTileRegion() } })
     }
   }
 
   override fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit) {
     tileStore.getTileRegion(id) { expected ->
-      expected.value?.let {
-        callback(Result.success(it.toFLTTileRegion()))
-      }
-      expected.error?.let {
-        callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-      }
+      callback(expected.toResult { it.toFLTTileRegion() })
     }
   }
 
@@ -159,12 +134,7 @@ class TileStoreController(
     tileStore.removeTileRegion(
       id,
       { expected ->
-        expected.value?.let {
-          callback(Result.success(it.toFLTTileRegion()))
-        }
-        expected.error?.let {
-          callback(Result.failure(Throwable(it.message ?: "Unknown error")))
-        }
+        callback(expected.toResult { it.toFLTTileRegion() })
       }
     )
   }

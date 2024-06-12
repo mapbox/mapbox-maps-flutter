@@ -6,8 +6,10 @@ import com.google.gson.Gson
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.bindgen.Value
+import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.StylePackError
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
@@ -636,6 +638,30 @@ fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
   } else {
     callback(Result.success(Unit))
   }
+}
+
+@JvmName("toStylePackResult")
+fun <V : Any, NewValue> Expected<StylePackError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
+  return fold(
+    {
+      Result.failure(Throwable(it.message))
+    },
+    {
+      Result.success(valueTransform(it))
+    }
+  )
+}
+
+@JvmName("toTileRegionResult")
+fun <V : Any, NewValue> Expected<TileRegionError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
+  return fold(
+    {
+      Result.failure(Throwable(it.message))
+    },
+    {
+      Result.success(valueTransform(it))
+    }
+  )
 }
 
 fun Value.toFLTValue(): Any? {
