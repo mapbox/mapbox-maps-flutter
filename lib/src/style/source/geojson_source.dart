@@ -6,7 +6,7 @@ part of mapbox_maps_flutter;
 class GeoJsonSource extends Source {
   GeoJsonSource({
     required String id,
-    String? data,
+    String? data = "",
     double? maxzoom,
     String? attribution,
     double? buffer,

@@ -6,28 +6,48 @@ class LocationIndicatorLayer extends Layer {
   LocationIndicatorLayer({
     required String id,
     Visibility? visibility,
+    List<Object>? visibilityExpression,
+    List<Object>? filter,
     double? minZoom,
     double? maxZoom,
     String? slot,
-    this.bearingImage,
-    this.shadowImage,
-    this.topImage,
-    this.accuracyRadius,
-    this.accuracyRadiusBorderColor,
-    this.accuracyRadiusColor,
-    this.bearing,
-    this.bearingImageSize,
-    this.emphasisCircleColor,
-    this.emphasisCircleRadius,
-    this.imagePitchDisplacement,
-    this.location,
-    this.locationIndicatorOpacity,
-    this.perspectiveCompensation,
-    this.shadowImageSize,
-    this.topImageSize,
+    String? this.bearingImage,
+    List<Object>? this.bearingImageExpression,
+    String? this.shadowImage,
+    List<Object>? this.shadowImageExpression,
+    String? this.topImage,
+    List<Object>? this.topImageExpression,
+    double? this.accuracyRadius,
+    List<Object>? this.accuracyRadiusExpression,
+    int? this.accuracyRadiusBorderColor,
+    List<Object>? this.accuracyRadiusBorderColorExpression,
+    int? this.accuracyRadiusColor,
+    List<Object>? this.accuracyRadiusColorExpression,
+    double? this.bearing,
+    List<Object>? this.bearingExpression,
+    double? this.bearingImageSize,
+    List<Object>? this.bearingImageSizeExpression,
+    int? this.emphasisCircleColor,
+    List<Object>? this.emphasisCircleColorExpression,
+    double? this.emphasisCircleRadius,
+    List<Object>? this.emphasisCircleRadiusExpression,
+    double? this.imagePitchDisplacement,
+    List<Object>? this.imagePitchDisplacementExpression,
+    List<double?>? this.location,
+    List<Object>? this.locationExpression,
+    double? this.locationIndicatorOpacity,
+    List<Object>? this.locationIndicatorOpacityExpression,
+    double? this.perspectiveCompensation,
+    List<Object>? this.perspectiveCompensationExpression,
+    double? this.shadowImageSize,
+    List<Object>? this.shadowImageSizeExpression,
+    double? this.topImageSize,
+    List<Object>? this.topImageSizeExpression,
   }) : super(
             id: id,
             visibility: visibility,
+            visibilityExpression: visibilityExpression,
+            filter: filter,
             maxZoom: maxZoom,
             minZoom: minZoom,
             slot: slot);
@@ -38,108 +58,225 @@ class LocationIndicatorLayer extends Layer {
   /// Name of image in sprite to use as the middle of the location indicator.
   String? bearingImage;
 
+  /// Name of image in sprite to use as the middle of the location indicator.
+  List<Object>? bearingImageExpression;
+
   /// Name of image in sprite to use as the background of the location indicator.
   String? shadowImage;
+
+  /// Name of image in sprite to use as the background of the location indicator.
+  List<Object>? shadowImageExpression;
 
   /// Name of image in sprite to use as the top of the location indicator.
   String? topImage;
 
+  /// Name of image in sprite to use as the top of the location indicator.
+  List<Object>? topImageExpression;
+
   /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
   double? accuracyRadius;
+
+  /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
+  List<Object>? accuracyRadiusExpression;
 
   /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
   int? accuracyRadiusBorderColor;
 
+  /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+  List<Object>? accuracyRadiusBorderColorExpression;
+
   /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
   int? accuracyRadiusColor;
+
+  /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+  List<Object>? accuracyRadiusColorExpression;
 
   /// The bearing of the location indicator.
   double? bearing;
 
+  /// The bearing of the location indicator.
+  List<Object>? bearingExpression;
+
   /// The size of the bearing image, as a scale factor applied to the size of the specified image.
   double? bearingImageSize;
+
+  /// The size of the bearing image, as a scale factor applied to the size of the specified image.
+  List<Object>? bearingImageSizeExpression;
 
   /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
   int? emphasisCircleColor;
 
+  /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
+  List<Object>? emphasisCircleColorExpression;
+
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
   double? emphasisCircleRadius;
+
+  /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
+  List<Object>? emphasisCircleRadiusExpression;
 
   /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
   double? imagePitchDisplacement;
 
+  /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+  List<Object>? imagePitchDisplacementExpression;
+
   /// An array of [latitude, longitude, altitude] position of the location indicator.
   List<double?>? location;
+
+  /// An array of [latitude, longitude, altitude] position of the location indicator.
+  List<Object>? locationExpression;
 
   /// The opacity of the entire location indicator layer.
   double? locationIndicatorOpacity;
 
+  /// The opacity of the entire location indicator layer.
+  List<Object>? locationIndicatorOpacityExpression;
+
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
   double? perspectiveCompensation;
+
+  /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
+  List<Object>? perspectiveCompensationExpression;
 
   /// The size of the shadow image, as a scale factor applied to the size of the specified image.
   double? shadowImageSize;
 
+  /// The size of the shadow image, as a scale factor applied to the size of the specified image.
+  List<Object>? shadowImageSizeExpression;
+
   /// The size of the top image, as a scale factor applied to the size of the specified image.
   double? topImageSize;
+
+  /// The size of the top image, as a scale factor applied to the size of the specified image.
+  List<Object>? topImageSizeExpression;
 
   @override
   String _encode() {
     var layout = {};
+    if (visibilityExpression != null) {
+      layout["visibility"] = visibilityExpression!;
+    }
     if (visibility != null) {
       layout["visibility"] =
-          visibility?.name.toLowerCase().replaceAll("_", "-");
+          visibility!.name.toLowerCase().replaceAll("_", "-");
     }
+
+    if (bearingImageExpression != null) {
+      layout["bearing-image"] = bearingImageExpression;
+    }
+
     if (bearingImage != null) {
       layout["bearing-image"] = bearingImage;
     }
+    if (shadowImageExpression != null) {
+      layout["shadow-image"] = shadowImageExpression;
+    }
+
     if (shadowImage != null) {
       layout["shadow-image"] = shadowImage;
     }
+    if (topImageExpression != null) {
+      layout["top-image"] = topImageExpression;
+    }
+
     if (topImage != null) {
       layout["top-image"] = topImage;
     }
     var paint = {};
+    if (accuracyRadiusExpression != null) {
+      paint["accuracy-radius"] = accuracyRadiusExpression;
+    }
     if (accuracyRadius != null) {
       paint["accuracy-radius"] = accuracyRadius;
+    }
+
+    if (accuracyRadiusBorderColorExpression != null) {
+      paint["accuracy-radius-border-color"] =
+          accuracyRadiusBorderColorExpression;
     }
     if (accuracyRadiusBorderColor != null) {
       paint["accuracy-radius-border-color"] =
           accuracyRadiusBorderColor?.toRGBA();
     }
+
+    if (accuracyRadiusColorExpression != null) {
+      paint["accuracy-radius-color"] = accuracyRadiusColorExpression;
+    }
     if (accuracyRadiusColor != null) {
       paint["accuracy-radius-color"] = accuracyRadiusColor?.toRGBA();
+    }
+
+    if (bearingExpression != null) {
+      paint["bearing"] = bearingExpression;
     }
     if (bearing != null) {
       paint["bearing"] = bearing;
     }
+
+    if (bearingImageSizeExpression != null) {
+      paint["bearing-image-size"] = bearingImageSizeExpression;
+    }
     if (bearingImageSize != null) {
       paint["bearing-image-size"] = bearingImageSize;
+    }
+
+    if (emphasisCircleColorExpression != null) {
+      paint["emphasis-circle-color"] = emphasisCircleColorExpression;
     }
     if (emphasisCircleColor != null) {
       paint["emphasis-circle-color"] = emphasisCircleColor?.toRGBA();
     }
+
+    if (emphasisCircleRadiusExpression != null) {
+      paint["emphasis-circle-radius"] = emphasisCircleRadiusExpression;
+    }
     if (emphasisCircleRadius != null) {
       paint["emphasis-circle-radius"] = emphasisCircleRadius;
+    }
+
+    if (imagePitchDisplacementExpression != null) {
+      paint["image-pitch-displacement"] = imagePitchDisplacementExpression;
     }
     if (imagePitchDisplacement != null) {
       paint["image-pitch-displacement"] = imagePitchDisplacement;
     }
+
+    if (locationExpression != null) {
+      paint["location"] = locationExpression;
+    }
     if (location != null) {
       paint["location"] = location;
+    }
+
+    if (locationIndicatorOpacityExpression != null) {
+      paint["location-indicator-opacity"] = locationIndicatorOpacityExpression;
     }
     if (locationIndicatorOpacity != null) {
       paint["location-indicator-opacity"] = locationIndicatorOpacity;
     }
+
+    if (perspectiveCompensationExpression != null) {
+      paint["perspective-compensation"] = perspectiveCompensationExpression;
+    }
     if (perspectiveCompensation != null) {
       paint["perspective-compensation"] = perspectiveCompensation;
+    }
+
+    if (shadowImageSizeExpression != null) {
+      paint["shadow-image-size"] = shadowImageSizeExpression;
     }
     if (shadowImageSize != null) {
       paint["shadow-image-size"] = shadowImageSize;
     }
+
+    if (topImageSizeExpression != null) {
+      paint["top-image-size"] = topImageSizeExpression;
+    }
     if (topImageSize != null) {
       paint["top-image-size"] = topImageSize;
     }
+
     var properties = {
       "id": id,
       "type": getType(),
@@ -154,6 +291,9 @@ class LocationIndicatorLayer extends Layer {
     }
     if (slot != null) {
       properties["slot"] = slot!;
+    }
+    if (filter != null) {
+      properties["filter"] = filter!;
     }
 
     return json.encode(properties);
@@ -178,52 +318,59 @@ class LocationIndicatorLayer extends Layer {
               .toLowerCase()
               .replaceAll("_", "-")
               .contains(map["layout"]["visibility"])),
-      bearingImage: map["layout"]["bearing-image"] is String?
-          ? map["layout"]["bearing-image"] as String?
-          : null,
-      shadowImage: map["layout"]["shadow-image"] is String?
-          ? map["layout"]["shadow-image"] as String?
-          : null,
-      topImage: map["layout"]["top-image"] is String?
-          ? map["layout"]["top-image"] as String?
-          : null,
-      accuracyRadius: map["paint"]["accuracy-radius"] is num?
-          ? (map["paint"]["accuracy-radius"] as num?)?.toDouble()
-          : null,
+      visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
+      filter: _optionalCastList(map["filter"]),
+      bearingImage: _optionalCast(map["layout"]["bearing-image"]),
+      bearingImageExpression: _optionalCastList(map["layout"]["bearing-image"]),
+      shadowImage: _optionalCast(map["layout"]["shadow-image"]),
+      shadowImageExpression: _optionalCastList(map["layout"]["shadow-image"]),
+      topImage: _optionalCast(map["layout"]["top-image"]),
+      topImageExpression: _optionalCastList(map["layout"]["top-image"]),
+      accuracyRadius: _optionalCast(map["paint"]["accuracy-radius"]),
+      accuracyRadiusExpression:
+          _optionalCastList(map["paint"]["accuracy-radius"]),
       accuracyRadiusBorderColor:
           (map["paint"]["accuracy-radius-border-color"] as List?)?.toRGBAInt(),
+      accuracyRadiusBorderColorExpression:
+          _optionalCastList(map["paint"]["accuracy-radius-border-color"]),
       accuracyRadiusColor:
           (map["paint"]["accuracy-radius-color"] as List?)?.toRGBAInt(),
-      bearing: map["paint"]["bearing"] is num?
-          ? (map["paint"]["bearing"] as num?)?.toDouble()
-          : null,
-      bearingImageSize: map["paint"]["bearing-image-size"] is num?
-          ? (map["paint"]["bearing-image-size"] as num?)?.toDouble()
-          : null,
+      accuracyRadiusColorExpression:
+          _optionalCastList(map["paint"]["accuracy-radius-color"]),
+      bearing: _optionalCast(map["paint"]["bearing"]),
+      bearingExpression: _optionalCastList(map["paint"]["bearing"]),
+      bearingImageSize: _optionalCast(map["paint"]["bearing-image-size"]),
+      bearingImageSizeExpression:
+          _optionalCastList(map["paint"]["bearing-image-size"]),
       emphasisCircleColor:
           (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
-      emphasisCircleRadius: map["paint"]["emphasis-circle-radius"] is num?
-          ? (map["paint"]["emphasis-circle-radius"] as num?)?.toDouble()
-          : null,
-      imagePitchDisplacement: map["paint"]["image-pitch-displacement"] is num?
-          ? (map["paint"]["image-pitch-displacement"] as num?)?.toDouble()
-          : null,
+      emphasisCircleColorExpression:
+          _optionalCastList(map["paint"]["emphasis-circle-color"]),
+      emphasisCircleRadius:
+          _optionalCast(map["paint"]["emphasis-circle-radius"]),
+      emphasisCircleRadiusExpression:
+          _optionalCastList(map["paint"]["emphasis-circle-radius"]),
+      imagePitchDisplacement:
+          _optionalCast(map["paint"]["image-pitch-displacement"]),
+      imagePitchDisplacementExpression:
+          _optionalCastList(map["paint"]["image-pitch-displacement"]),
       location: (map["paint"]["location"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
+      locationExpression: _optionalCastList(map["paint"]["location"]),
       locationIndicatorOpacity:
-          map["paint"]["location-indicator-opacity"] is num?
-              ? (map["paint"]["location-indicator-opacity"] as num?)?.toDouble()
-              : null,
-      perspectiveCompensation: map["paint"]["perspective-compensation"] is num?
-          ? (map["paint"]["perspective-compensation"] as num?)?.toDouble()
-          : null,
-      shadowImageSize: map["paint"]["shadow-image-size"] is num?
-          ? (map["paint"]["shadow-image-size"] as num?)?.toDouble()
-          : null,
-      topImageSize: map["paint"]["top-image-size"] is num?
-          ? (map["paint"]["top-image-size"] as num?)?.toDouble()
-          : null,
+          _optionalCast(map["paint"]["location-indicator-opacity"]),
+      locationIndicatorOpacityExpression:
+          _optionalCastList(map["paint"]["location-indicator-opacity"]),
+      perspectiveCompensation:
+          _optionalCast(map["paint"]["perspective-compensation"]),
+      perspectiveCompensationExpression:
+          _optionalCastList(map["paint"]["perspective-compensation"]),
+      shadowImageSize: _optionalCast(map["paint"]["shadow-image-size"]),
+      shadowImageSizeExpression:
+          _optionalCastList(map["paint"]["shadow-image-size"]),
+      topImageSize: _optionalCast(map["paint"]["top-image-size"]),
+      topImageSizeExpression: _optionalCastList(map["paint"]["top-image-size"]),
     );
   }
 }

@@ -29,15 +29,25 @@ class AnimatedRoute extends StatefulWidget {
 }
 
 class AnimatedRouteState extends State<AnimatedRoute>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin
+    implements OnPointAnnotationClickListener {
   final defaultEdgeInsets =
       MbxEdgeInsets(top: 100, left: 100, bottom: 100, right: 100);
 
   late MapboxMap mapboxMap;
-  late PointAnnotationManager pointAnnotationManager;
+  PointAnnotationManager? pointAnnotationManager;
   Timer? timer;
+  Animation<double>? animation;
+  AnimationController? controller;
   var trackLocation = true;
   var showAnnotations = false;
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    controller?.dispose();
+    super.dispose();
+  }
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -52,6 +62,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
+    _addRouteLineLayerAndSource();
     setLocationComponent();
     refreshTrackLocation();
     refreshCarAnnotations();
@@ -111,12 +122,46 @@ class AnimatedRouteState extends State<AnimatedRoute>
     );
   }
 
+  void _addRouteLineLayerAndSource() async {
+    await mapboxMap.style.addLayer(LineLayer(
+      id: 'layer',
+      sourceId: 'source',
+      lineCap: LineCap.ROUND,
+      lineJoin: LineJoin.ROUND,
+      lineBlur: 1.0,
+      lineColor: Colors.deepOrangeAccent.value,
+      lineDasharray: [1.0, 2.0],
+      lineWidth: 5.0,
+      // draw layer with gradient
+      lineGradientExpression: [
+        "interpolate",
+        ["linear"],
+        ["line-progress"],
+        0.0,
+        ["rgb", 255, 0, 0],
+        0.4,
+        ["rgb", 0, 255, 0],
+        1.0,
+        ["rgb", 0, 0, 255]
+      ],
+    ));
+
+    await mapboxMap.style
+        .addSource(GeoJsonSource(id: "source", lineMetrics: true));
+  }
+
   refreshTrackLocation() async {
     timer?.cancel();
     if (trackLocation) {
       timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-        final position = await mapboxMap.style.getPuckPosition();
-        setCameraPosition(position);
+        try {
+          final position = await mapboxMap.style.getPuckPosition();
+          if (position != null) {
+            setCameraPosition(position);
+          }
+        } catch (e) {
+          print(e);
+        }
       });
     }
   }
@@ -125,6 +170,10 @@ class AnimatedRouteState extends State<AnimatedRoute>
   refreshCarAnnotations() async {
     if (showAnnotations) {
       final myCoordinate = await mapboxMap.style.getPuckPosition();
+
+      if (myCoordinate == null) {
+        return;
+      }
       // shows bunch of random points around puck position
       List<Point> coordinates = [
         Point(coordinates: createRandomPositionAround(myCoordinate)),
@@ -138,11 +187,10 @@ class AnimatedRouteState extends State<AnimatedRoute>
       final Uint8List imageData = bytes.buffer.asUint8List();
 
       for (Point coordinate in coordinates) {
-        pointAnnotationManager.addAnnotation(imageData, coordinate);
+        pointAnnotationManager?.addAnnotation(imageData, coordinate);
       }
 
-      pointAnnotationManager
-          .addOnPointAnnotationClickListener(AnnotationClickListener(this));
+      pointAnnotationManager?.addOnPointAnnotationClickListener(this);
 
       // animate camera to view annotations + puck position
       final camera = await mapboxMap.cameraForCoordinates(
@@ -152,7 +200,7 @@ class AnimatedRouteState extends State<AnimatedRoute>
           null);
       mapboxMap.flyTo(camera, null);
     } else {
-      pointAnnotationManager.deleteAll();
+      pointAnnotationManager?.deleteAll();
     }
   }
 
@@ -165,25 +213,16 @@ class AnimatedRouteState extends State<AnimatedRoute>
         ),
         null);
   }
-}
-
-class AnnotationClickListener extends OnPointAnnotationClickListener {
-  AnimatedRouteState mapState;
-
-  Animation<double>? animation;
-  AnimationController? controller;
-
-  AnnotationClickListener(this.mapState);
 
   @override
   void onPointAnnotationClick(PointAnnotation annotation) async {
-    if (await mapState.mapboxMap.style.styleSourceExists("source")) {
-      await mapState.mapboxMap.style.removeStyleLayer("layer");
-      await mapState.mapboxMap.style.removeStyleSource("source");
+    // build route from puck position to the clicked annotation
+    final start = await mapboxMap.style.getPuckPosition();
+
+    if (start == null) {
+      return;
     }
 
-    // build route from puck position to the clicked annotation
-    final start = await mapState.mapboxMap.style.getPuckPosition();
     final end = annotation.geometry;
 
     final coordinates = await fetchRouteCoordinates(
@@ -194,47 +233,19 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
 
   drawRouteLowLevel(List<Position> polyline) async {
     final line = LineString(coordinates: polyline);
-    mapState.mapboxMap.style.styleSourceExists("source").then((exists) async {
-      if (exists) {
-        // if source exists - just update it
-        final source = await mapState.mapboxMap.style.getSource("source");
-        (source as GeoJsonSource).updateGeoJSON(json.encode(line));
-      } else {
-        await mapState.mapboxMap.style.addSource(GeoJsonSource(
-            id: "source", data: json.encode(line), lineMetrics: true));
+    final source = await mapboxMap.style.getSource("source");
+    (source as GeoJsonSource).updateGeoJSON(json.encode(line));
 
-        await mapState.mapboxMap.style.addLayer(LineLayer(
-          id: 'layer',
-          sourceId: 'source',
-          lineCap: LineCap.ROUND,
-          lineJoin: LineJoin.ROUND,
-          lineBlur: 1.0,
-          lineColor: Colors.deepOrangeAccent.value,
-          lineDasharray: [1.0, 2.0],
-          lineTrimOffset: [0.0, 0.0],
-          lineWidth: 5.0,
-        ));
-      }
-
-      // query line layer
-      final lineLayer =
-          await mapState.mapboxMap.style.getLayer('layer') as LineLayer;
-
-      // draw layer with gradient
-      mapState.mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
-          '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
-
-      // animate layer to reveal it from start to end
-      controller?.stop();
-      controller = AnimationController(
-          duration: const Duration(seconds: 2), vsync: mapState);
-      animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
-        ..addListener(() async {
-          // set the animated value of lineTrim and update the layer
-          lineLayer.lineTrimOffset = [animation?.value, 1.0];
-          mapState.mapboxMap.style.updateLayer(lineLayer);
-        });
-      controller?.forward();
-    });
+    // animate layer to reveal it from start to end
+    controller?.stop();
+    controller =
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
+    animation = Tween<double>(begin: 0, end: 1.0).animate(controller!)
+      ..addListener(() async {
+        // set the animated value of lineTrim and update the layer
+        mapboxMap.style.setStyleLayerProperty(
+            "layer", "line-trim-offset", [animation?.value, 1.0]);
+      });
+    controller?.forward();
   }
 }

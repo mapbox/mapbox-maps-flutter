@@ -65,3 +65,4 @@ part 'src/offline/offline_messenger.dart';
 part 'src/offline/offline_manager.dart';
 part 'src/offline/tile_store.dart';
 part 'src/offline/offline_switch.dart';
+part 'src/utils.dart';

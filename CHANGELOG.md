@@ -2,6 +2,30 @@
 
 * Add ModelLayer API.
 * Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
+* Layer expressions support. Specify expressions when constructing a layer with all new expression support for layers.
+*Before:*
+```dart
+mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+    '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
+
+```
+*After:*
+```dart
+LineLayer(
+  ...
+  lineGradientExpression: [
+    "interpolate",
+    ["linear"],
+    ["line-progress"],
+    0.0,
+    ["rgb", 255, 0, 0],
+    0.4,
+    ["rgb", 0, 255, 0],
+    1.0,
+    ["rgb", 0, 0, 255]
+  ],
+);
+```
 
 ### 2.0.0
 
