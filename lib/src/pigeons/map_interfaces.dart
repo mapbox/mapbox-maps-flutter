@@ -7035,6 +7035,68 @@ class StyleManager {
     }
   }
 
+  /// Adds a model to be used in the style. This API can also be used for updating
+  /// a model. If the model for a given `modelId` was already added, it gets replaced by the new model.
+  ///
+  /// The model can be used in `model-id` property in model layer.
+  ///
+  /// @param modelId An identifier of the model.
+  /// @param modelUri A URI for the model.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  Future<void> addStyleModel(String modelId, String modelUri) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[modelId, modelUri]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Removes a model from the style.
+  ///
+  /// @param modelId The identifier of the model to remove.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  Future<void> removeStyleModel(String modelId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[modelId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   /// Set tile data of a custom geometry.
   ///
   /// @param sourceId A style source identifier.

@@ -3,6 +3,8 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.gson.Gson
+import com.mapbox.bindgen.Expected
+import com.mapbox.bindgen.None
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
@@ -524,4 +526,12 @@ fun Bitmap.toMbxImage(): MbxImage {
   val outputStream = ByteArrayOutputStream(byteCount)
   compress(Bitmap.CompressFormat.PNG, 100, outputStream)
   return MbxImage(width.toLong(), height.toLong(), outputStream.toByteArray())
+}
+
+fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
+  if (this.isError) {
+    callback(Result.failure(Throwable(this.error)))
+  } else {
+    callback(Result.success(Unit))
+  }
 }
