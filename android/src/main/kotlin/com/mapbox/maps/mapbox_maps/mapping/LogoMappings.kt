@@ -8,7 +8,7 @@ import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.logo.generated.LogoSettingsInterface
 
 fun LogoSettingsInterface.applyFromFLT(settings: LogoSettings, context: Context) {
-  this.updateSettings {
+  updateSettings {
     settings.enabled?.let { this.enabled = it }
     settings.position?.let { this.position = it.toPosition() }
     settings.marginLeft?.let { this.marginLeft = it.toDevicePixels(context) }
