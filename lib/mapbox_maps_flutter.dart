@@ -61,3 +61,4 @@ part 'src/log_configuration.dart';
 part 'src/turf_adapters.dart';
 part 'src/extensions.dart';
 part 'src/map_events.dart';
+part 'src/utils.dart';
