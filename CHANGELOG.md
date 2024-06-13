@@ -1,6 +1,7 @@
 ### main
 
 * Add ModelLayer API.
+* Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
 * Layer expressions support. Specify expressions when constructing a layer with all new expression support for layers.
 *Before:*
 ```dart

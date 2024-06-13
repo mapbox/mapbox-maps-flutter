@@ -5,8 +5,12 @@ import android.graphics.Bitmap
 import com.google.gson.Gson
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
+import com.mapbox.bindgen.Value
+import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.StylePackError
+import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
@@ -14,6 +18,7 @@ import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
+import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -26,6 +31,14 @@ fun GlyphsRasterizationMode.toGlyphsRasterizationMode(): com.mapbox.maps.GlyphsR
     GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
     GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
     GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+  }
+}
+
+fun com.mapbox.maps.GlyphsRasterizationMode.toFLTGlyphsRasterizationMode(): GlyphsRasterizationMode {
+  return when (this) {
+    com.mapbox.maps.GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.NO_GLYPHS_RASTERIZED_LOCALLY
+    com.mapbox.maps.GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY
+    com.mapbox.maps.GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY -> GlyphsRasterizationMode.ALL_GLYPHS_RASTERIZED_LOCALLY
   }
 }
 fun GlyphsRasterizationOptions.toGlyphsRasterizationOptions(): com.mapbox.maps.GlyphsRasterizationOptions {
@@ -528,10 +541,198 @@ fun Bitmap.toMbxImage(): MbxImage {
   return MbxImage(width.toLong(), height.toLong(), outputStream.toByteArray())
 }
 
+fun StylePackLoadOptions.toStylePackLoadOptions(): com.mapbox.maps.StylePackLoadOptions {
+  return com.mapbox.maps.StylePackLoadOptions.Builder()
+    .glyphsRasterizationMode(glyphsRasterizationMode?.toGlyphsRasterizationMode())
+    .metadata(metadata?.toValue())
+    .acceptExpired(acceptExpired)
+    .build()
+}
+
+fun com.mapbox.maps.StylePack.toFLTStylePack(): StylePack {
+  return StylePack(
+    styleURI = this.styleURI,
+    glyphsRasterizationMode = this.glyphsRasterizationMode.toFLTGlyphsRasterizationMode(),
+    requiredResourceCount = this.requiredResourceCount,
+    completedResourceSize = this.completedResourceCount,
+    completedResourceCount = this.completedResourceCount,
+    expires = this.expires?.time
+  )
+}
+
+fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress(): StylePackLoadProgress {
+  return StylePackLoadProgress(
+    this.completedResourceCount,
+    this.completedResourceSize,
+    this.erroredResourceCount,
+    this.requiredResourceCount,
+    this.loadedResourceCount,
+    this.loadedResourceSize
+  )
+}
+
+fun TilesetDescriptorOptions.toTilesetDescriptorOptions(): com.mapbox.maps.TilesetDescriptorOptions {
+  val builder = com.mapbox.maps.TilesetDescriptorOptions.Builder()
+    .styleURI(styleURI)
+    .minZoom(minZoom.toByte())
+    .maxZoom(maxZoom.toByte())
+  pixelRatio?.let { builder.pixelRatio(it.toFloat()) }
+  tilesets?.let { builder.tilesets(it) }
+  stylePackOptions?.let { builder.stylePackOptions(it.toStylePackLoadOptions()) }
+  extraOptions?.let { builder.extraOptions(it.toValue()) }
+  return builder.build()
+}
+
+fun NetworkRestriction.toNetworkRestriction(): com.mapbox.common.NetworkRestriction {
+  return when (this) {
+    NetworkRestriction.DISALLOW_ALL -> com.mapbox.common.NetworkRestriction.DISALLOW_ALL
+    NetworkRestriction.DISALLOW_EXPENSIVE -> com.mapbox.common.NetworkRestriction.DISALLOW_EXPENSIVE
+    NetworkRestriction.NONE -> com.mapbox.common.NetworkRestriction.NONE
+  }
+}
+
+fun com.mapbox.common.TileRegion.toFLTTileRegion(): TileRegion {
+  return TileRegion(
+    this.id,
+    this.requiredResourceCount,
+    this.completedResourceCount,
+    this.completedResourceSize
+  )
+}
+
+fun TileRegionEstimateOptions.toTileRegionEstimateOptions(): com.mapbox.common.TileRegionEstimateOptions {
+  return com.mapbox.common.TileRegionEstimateOptions(
+    this.errorMargin.toFloat(),
+    this.preciseEstimationTimeout.toLong(),
+    this.preciseEstimationTimeout.toLong(),
+    this.extraOptions?.toValue()
+  )
+}
+
+fun com.mapbox.common.TileRegionEstimateResult.toFLTTileRegionEstimateResult(): TileRegionEstimateResult {
+  return TileRegionEstimateResult(
+    this.errorMargin, this.transferSize, this.storageSize,
+  )
+}
+
+fun com.mapbox.common.TileRegionLoadProgress.toFLTTileRegionLoadProgress(): TileRegionLoadProgress {
+  return TileRegionLoadProgress(
+    this.completedResourceCount,
+    this.completedResourceSize,
+    this.erroredResourceCount,
+    this.requiredResourceCount,
+    this.loadedResourceCount,
+    this.loadedResourceSize
+  )
+}
+
+fun com.mapbox.common.TileRegionEstimateProgress.toFLTTileRegionEstimateProgress(): TileRegionEstimateProgress {
+  return TileRegionEstimateProgress(
+    this.requiredResourceCount, this.completedResourceCount, this.erroredResourceCount
+  )
+}
+
 fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
   if (this.isError) {
     callback(Result.failure(Throwable(this.error)))
   } else {
     callback(Result.success(Unit))
+  }
+}
+
+@JvmName("toStylePackResult")
+fun <V : Any, NewValue> Expected<StylePackError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
+  return fold(
+    {
+      Result.failure(Throwable(it.message))
+    },
+    {
+      Result.success(valueTransform(it))
+    }
+  )
+}
+
+@JvmName("toTileRegionResult")
+fun <V : Any, NewValue> Expected<TileRegionError, V>.toResult(valueTransform: (V) -> NewValue): Result<NewValue> {
+  return fold(
+    {
+      Result.failure(Throwable(it.message))
+    },
+    {
+      Result.success(valueTransform(it))
+    }
+  )
+}
+
+fun Value.toFLTValue(): Any? {
+  return when (contents) {
+    is List<*> -> {
+      (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
+    }
+
+    is Map<*, *> -> {
+      (contents as Map<*, *>)
+        .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
+        .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
+    }
+
+    else -> {
+      contents
+    }
+  }
+}
+
+fun Any.toValue(): Value {
+  return if (this is String) {
+    if (this.startsWith("{") || this.startsWith("[")) {
+      Value.fromJson(this).value!!
+    } else {
+      val number = this.toDoubleOrNull()
+      if (number != null) {
+        Value.valueOf(number)
+      } else {
+        Value.valueOf(this)
+      }
+    }
+  } else if (this is Double) {
+    Value.valueOf(this)
+  } else if (this is Long) {
+    Value.valueOf(this)
+  } else if (this is Int) {
+    Value.valueOf(this.toLong())
+  } else if (this is Boolean) {
+    Value.valueOf(this)
+  } else if (this is IntArray) {
+    val valueArray = this.map { Value(it.toLong()) }
+    Value(valueArray)
+  } else if (this is BooleanArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is DoubleArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is FloatArray) {
+    val valueArray = this.map { Value(it.toDouble()) }
+    Value(valueArray)
+  } else if (this is LongArray) {
+    val valueArray = this.map(::Value)
+    Value(valueArray)
+  } else if (this is Array<*>) {
+    val valueArray = this.map { it?.toValue() }
+    Value(valueArray)
+  } else if (this is List<*>) {
+    val valueArray = this.map { it?.toValue() }
+    Value(valueArray)
+  } else if (this is HashMap<*, *>) {
+    val valueMap = this
+      .mapKeys { it.key as? String }
+      .mapValues { it.value.toValue() }
+    Value.valueOf(kotlin.collections.HashMap(valueMap))
+  } else {
+    logE(
+      "StyleController",
+      "Can not map value, type is not supported: ${this::class.java.canonicalName}"
+    )
+    Value.valueOf("")
   }
 }

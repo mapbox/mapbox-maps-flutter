@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - mapbox_maps_flutter (2.0.0-rc.1):
+  - mapbox_maps_flutter (2.0.0):
     - Flutter
     - MapboxMaps (~> 11.4.0)
     - Turf (= 2.8.0)
@@ -13,6 +13,9 @@ PODS:
     - MapboxCommon (= 24.4.0)
     - MapboxCoreMaps (= 11.4.0)
     - Turf (= 2.8.0)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
   - Turf (2.8.0)
@@ -21,6 +24,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - mapbox_maps_flutter (from `.symlinks/plugins/mapbox_maps_flutter/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 SPEC REPOS:
@@ -37,16 +41,19 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   mapbox_maps_flutter:
     :path: ".symlinks/plugins/mapbox_maps_flutter/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  mapbox_maps_flutter: 2ef4455f071d3c707c30d37fc2990c7c927fb844
+  mapbox_maps_flutter: 6b7ea767ed02514e0b796d5a2e48ba83b71bac01
   MapboxCommon: 6acbd8ff41d66abf498e1558b0739f25c562945a
   MapboxCoreMaps: f306bb1b10ebe995a2247b40e99322ab7f9b8071
   MapboxMaps: 82044383ae19ec124ff444ec4b5d3ce82cb36ba5
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
 

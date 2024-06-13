@@ -102,13 +102,13 @@ Future<MapboxMap> runMapWithCustomCamera(CameraOptions camera) {
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 
   runApp(MaterialApp(
-      home: MapWidget(
-              key: ValueKey("mapWidget"),
-              cameraOptions: camera,
-              onMapCreated: (MapboxMap mapboxMap) {
-                completer.complete(mapboxMap);
-              }),
-        ));
+    home: MapWidget(
+        key: ValueKey("mapWidget"),
+        cameraOptions: camera,
+        onMapCreated: (MapboxMap mapboxMap) {
+          completer.complete(mapboxMap);
+        }),
+  ));
 
   return completer.future;
 }
