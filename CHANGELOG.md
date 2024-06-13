@@ -25,6 +25,7 @@ LineLayer(
   ],
 );
 ```
+* Bump Maps SDK to 11.5.0-beta.1
 
 ### 2.0.0
 
