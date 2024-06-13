@@ -13,7 +13,6 @@ import com.mapbox.maps.extension.localization.localizeLabels
 import com.mapbox.maps.extension.style.light.setLight
 import com.mapbox.maps.extension.style.projection.generated.getProjection
 import com.mapbox.maps.extension.style.projection.generated.setProjection
-import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons.AmbientLight
 import com.mapbox.maps.mapbox_maps.pigeons.CameraOptions
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
@@ -613,73 +612,5 @@ class StyleController(private val context: Context, private val styleManager: Ma
   override fun removeStyleModel(modelId: String, callback: (Result<Unit>) -> Unit) {
     styleManager.removeStyleModel(modelId)
       .handleResult(callback)
-  }
-}
-
-fun Any.toValue(): Value {
-  return if (this is String) {
-    if (this.startsWith("{") || this.startsWith("[")) {
-      Value.fromJson(this).value!!
-    } else {
-      val number = this.toDoubleOrNull()
-      if (number != null) {
-        Value.valueOf(number)
-      } else {
-        Value.valueOf(this)
-      }
-    }
-  } else if (this is Double) {
-    Value.valueOf(this)
-  } else if (this is Long) {
-    Value.valueOf(this)
-  } else if (this is Int) {
-    Value.valueOf(this.toLong())
-  } else if (this is Boolean) {
-    Value.valueOf(this)
-  } else if (this is IntArray) {
-    val valueArray = this.map { Value(it.toLong()) }
-    Value(valueArray)
-  } else if (this is BooleanArray) {
-    val valueArray = this.map(::Value)
-    Value(valueArray)
-  } else if (this is DoubleArray) {
-    val valueArray = this.map(::Value)
-    Value(valueArray)
-  } else if (this is FloatArray) {
-    val valueArray = this.map { Value(it.toDouble()) }
-    Value(valueArray)
-  } else if (this is LongArray) {
-    val valueArray = this.map(::Value)
-    Value(valueArray)
-  } else if (this is Array<*>) {
-    val valueArray = this.map { it?.toValue() }
-    Value(valueArray)
-  } else if (this is List<*>) {
-    val valueArray = this.map { it?.toValue() }
-    Value(valueArray)
-  } else {
-    logE(
-      "StyleController",
-      "Can not map value, type is not supported: ${this::class.java.canonicalName}"
-    )
-    Value.valueOf("")
-  }
-}
-
-fun Value.toFLTValue(): Any? {
-  return when (contents) {
-    is List<*> -> {
-      (contents as List<*>).map { (it as? Value)?.toFLTValue() ?: it }
-    }
-
-    is Map<*, *> -> {
-      (contents as Map<*, *>)
-        .mapKeys { (it.key as? Value)?.toFLTValue() ?: it.key }
-        .mapValues { (it.value as? Value)?.toFLTValue() ?: it.value }
-    }
-
-    else -> {
-      contents
-    }
   }
 }

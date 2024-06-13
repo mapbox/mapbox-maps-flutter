@@ -45,22 +45,6 @@ class FlutterError(
   val details: Any? = null
 ) : Throwable()
 
-/** Describes glyphs rasterization modes. */
-enum class GlyphsRasterizationMode(val raw: Int) {
-  /** No glyphs are rasterized locally. All glyphs are loaded from the server. */
-  NO_GLYPHS_RASTERIZED_LOCALLY(0),
-  /** Ideographs are rasterized locally, and they are not loaded from the server. */
-  IDEOGRAPHS_RASTERIZED_LOCALLY(1),
-  /** All glyphs are rasterized locally. No glyphs are loaded from the server. */
-  ALL_GLYPHS_RASTERIZED_LOCALLY(2);
-
-  companion object {
-    fun ofRaw(raw: Int): GlyphsRasterizationMode? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /**
  * Describes the map context mode.
  * We can make some optimizations if we know that the drawing context is not shared with other code.
@@ -368,22 +352,6 @@ enum class HttpMethod(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): HttpMethod? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/** Classify network types based on cost. */
-enum class NetworkRestriction(val raw: Int) {
-  /** Allow access to all network types. */
-  NONE(0),
-  /** Forbid network access to expensive networks, such as cellular. */
-  DISALLOW_EXPENSIVE(1),
-  /** Forbid access to all network types. */
-  DISALLOW_ALL(2);
-
-  companion object {
-    fun ofRaw(raw: Int): NetworkRestriction? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -877,47 +845,6 @@ data class MapDebugOptions(
 }
 
 /**
- * Describes the glyphs rasterization option values.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class GlyphsRasterizationOptions(
-  /** Glyphs rasterization mode for client-side text rendering. */
-  val rasterizationMode: GlyphsRasterizationMode,
-  /**
-   * Font family to use as font fallback for client-side text renderings.
-   *
-   * Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-   * or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-   * font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-   * default font are varied in platforms:
-   * - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-   *   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-   * - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-   *
-   * Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-   *
-   */
-  val fontFamily: String? = null
-
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): GlyphsRasterizationOptions {
-      val rasterizationMode = GlyphsRasterizationMode.ofRaw(list[0] as Int)!!
-      val fontFamily = list[1] as String?
-      return GlyphsRasterizationOptions(rasterizationMode, fontFamily)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      rasterizationMode.raw,
-      fontFamily,
-    )
-  }
-}
-
-/**
  * Map memory budget in megabytes.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -1402,102 +1329,6 @@ data class RenderedQueryGeometry(
     return listOf<Any?>(
       value,
       type.raw,
-    )
-  }
-}
-
-/**
- * An offline region definition is a geographic region defined by a style URL,
- * a geometry, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
- * and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
- * the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
- * The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class OfflineRegionGeometryDefinition(
-  /** The style associated with the offline region */
-  val styleURL: String,
-  /** The geometry that defines the boundary of the offline region */
-  val geometry: Map<String?, Any?>,
-  /** Minimum zoom level for the offline region */
-  val minZoom: Double,
-  /** Maximum zoom level for the offline region */
-  val maxZoom: Double,
-  /** Pixel ratio to be accounted for when downloading assets */
-  val pixelRatio: Double,
-  /** Specifies glyphs rasterization mode. It defines which glyphs will be loaded from the server */
-  val glyphsRasterizationMode: GlyphsRasterizationMode
-
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): OfflineRegionGeometryDefinition {
-      val styleURL = list[0] as String
-      val geometry = list[1] as Map<String?, Any?>
-      val minZoom = list[2] as Double
-      val maxZoom = list[3] as Double
-      val pixelRatio = list[4] as Double
-      val glyphsRasterizationMode = GlyphsRasterizationMode.ofRaw(list[5] as Int)!!
-      return OfflineRegionGeometryDefinition(styleURL, geometry, minZoom, maxZoom, pixelRatio, glyphsRasterizationMode)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      styleURL,
-      geometry,
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.raw,
-    )
-  }
-}
-
-/**
- * An offline region definition is a geographic region defined by a style URL,
- * geographic bounding box, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
- * and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
- * the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
- * The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class OfflineRegionTilePyramidDefinition(
-  /** The style associated with the offline region. */
-  val styleURL: String,
-  /** The bounds covering the region. */
-  val bounds: CoordinateBounds,
-  /** Minimum zoom level for the offline region. */
-  val minZoom: Double,
-  /** Maximum zoom level for the offline region. */
-  val maxZoom: Double,
-  /** Pixel ratio to be accounted for when downloading assets. */
-  val pixelRatio: Double,
-  /** Specifies glyphs download mode. */
-  val glyphsRasterizationMode: GlyphsRasterizationMode
-
-) {
-  companion object {
-    @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): OfflineRegionTilePyramidDefinition {
-      val styleURL = list[0] as String
-      val bounds = CoordinateBounds.fromList(list[1] as List<Any?>)
-      val minZoom = list[2] as Double
-      val maxZoom = list[3] as Double
-      val pixelRatio = list[4] as Double
-      val glyphsRasterizationMode = GlyphsRasterizationMode.ofRaw(list[5] as Int)!!
-      return OfflineRegionTilePyramidDefinition(styleURL, bounds, minZoom, maxZoom, pixelRatio, glyphsRasterizationMode)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf<Any?>(
-      styleURL,
-      bounds.toList(),
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.raw,
     )
   }
 }
@@ -2331,100 +2162,90 @@ private object _CameraManagerCodec : StandardMessageCodec() {
       }
       149.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          RenderedQueryGeometry.fromList(it)
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          Size.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          StylePropertyValue.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           TileCoverOptions.fromList(it)
         }
       }
-      168.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
@@ -2518,84 +2339,76 @@ private object _CameraManagerCodec : StandardMessageCodec() {
         stream.write(148)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionGeometryDefinition -> {
+      is Point -> {
         stream.write(149)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionTilePyramidDefinition -> {
+      is ProjectedMeters -> {
         stream.write(150)
         writeValue(stream, value.toList())
       }
-      is Point -> {
+      is QueriedFeature -> {
         stream.write(151)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is QueriedRenderedFeature -> {
         stream.write(152)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is RenderedQueryGeometry -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is RenderedQueryOptions -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryGeometry -> {
+      is ScreenBox -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is ScreenCoordinate -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is Size -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is SourceQueryOptions -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is StyleObjectInfo -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is StyleProjection -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is StylePropertyValue -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is TileCoverOptions -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TileCoverOptions -> {
-        stream.write(167)
-        writeValue(stream, value.toList())
-      }
       is TransitionOptions -> {
-        stream.write(168)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3242,100 +3055,90 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
       }
       149.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          RenderedQueryGeometry.fromList(it)
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          Size.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          StylePropertyValue.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           TileCoverOptions.fromList(it)
         }
       }
-      168.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
@@ -3429,84 +3232,76 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
         stream.write(148)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionGeometryDefinition -> {
+      is Point -> {
         stream.write(149)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionTilePyramidDefinition -> {
+      is ProjectedMeters -> {
         stream.write(150)
         writeValue(stream, value.toList())
       }
-      is Point -> {
+      is QueriedFeature -> {
         stream.write(151)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is QueriedRenderedFeature -> {
         stream.write(152)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is RenderedQueryGeometry -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is RenderedQueryOptions -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryGeometry -> {
+      is ScreenBox -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is ScreenCoordinate -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is Size -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is SourceQueryOptions -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is StyleObjectInfo -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is StyleProjection -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is StylePropertyValue -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is TileCoverOptions -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TileCoverOptions -> {
-        stream.write(167)
-        writeValue(stream, value.toList())
-      }
       is TransitionOptions -> {
-        stream.write(168)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -4273,321 +4068,6 @@ interface _MapInterface {
   }
 }
 @Suppress("UNCHECKED_CAST")
-private object OfflineRegionCodec : StandardMessageCodec() {
-  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
-    return when (type) {
-      128.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
-        }
-      }
-      129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
-        }
-      }
-      130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
-        }
-      }
-      131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
-        }
-      }
-      else -> super.readValueOfType(type, buffer)
-    }
-  }
-  override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    when (value) {
-      is CoordinateBounds -> {
-        stream.write(128)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionGeometryDefinition -> {
-        stream.write(129)
-        writeValue(stream, value.toList())
-      }
-      is OfflineRegionTilePyramidDefinition -> {
-        stream.write(130)
-        writeValue(stream, value.toList())
-      }
-      is Point -> {
-        stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      else -> super.writeValue(stream, value)
-    }
-  }
-}
-
-/**
- * An offline region represents an identifiable geographic region with optional metadata.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface OfflineRegion {
-  /** The regions identifier */
-  fun getIdentifier(): Long
-  /**
-   * The tile pyramid defining the region. Tile pyramid and geometry definitions are
-   * mutually exclusive.
-   *
-   * @return A definition describing the tile pyramid including attributes, otherwise empty.
-   */
-  fun getTilePyramidDefinition(): OfflineRegionTilePyramidDefinition?
-  /**
-   * The geometry defining the region. Geometry and tile pyramid definitions are
-   * mutually exclusive.
-   *
-   * @return A definition describing the geometry including attributes, otherwise empty.
-   */
-  fun getGeometryDefinition(): OfflineRegionGeometryDefinition?
-  /**
-   * Arbitrary binary region metadata.
-   *
-   * @return The metadata associated with the region.
-   */
-  fun getMetadata(): ByteArray
-  /**
-   * Sets arbitrary binary region metadata for the region.
-   *
-   * Note that this setter is asynchronous and the given metadata is applied only
-   * after the resulting callback is invoked with no error.
-   *
-   * @param metadata The metadata associated with the region.
-   * @param callback Called once the request is complete or an error occurred.
-   */
-  fun setMetadata(metadata: ByteArray, callback: (Result<Unit>) -> Unit)
-  /**
-   * Sets the download state of an offline region
-   * A region is either inactive (not downloading, but previously-downloaded
-   * resources are available for use), or active (resources are being downloaded
-   * or will be downloaded, if necessary, when network access is available).
-   *
-   * If the region is already in the given state, this call is ignored.
-   *
-   * @param state The new state to set.
-   */
-  fun setOfflineRegionDownloadState(state: OfflineRegionDownloadState)
-  /**
-   * Invalidate all the tiles for the region forcing to revalidate
-   * the tiles with the server before using. This is more efficient than deleting the
-   * offline region and downloading it again because if the data on the cache matches
-   * the server, no new data gets transmitted.
-   *
-   * @param callback Called once the request is complete or an error occurred.
-   */
-  fun invalidate(callback: (Result<Unit>) -> Unit)
-  /**
-   * Remove an offline region from the database and perform any resources
-   * evictions necessary as a result.
-   *
-   * @param callback Called once the request is complete or an error occurred.
-   */
-  fun purge(callback: (Result<Unit>) -> Unit)
-
-  companion object {
-    /** The codec used by OfflineRegion. */
-    val codec: MessageCodec<Any?> by lazy {
-      OfflineRegionCodec
-    }
-    /** Sets up an instance of `OfflineRegion` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: OfflineRegion?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getIdentifier$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getIdentifier())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getTilePyramidDefinition$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getTilePyramidDefinition())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getGeometryDefinition$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getGeometryDefinition())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getMetadata$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.getMetadata())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setMetadata$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val metadataArg = args[0] as ByteArray
-            api.setMetadata(metadataArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setOfflineRegionDownloadState$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val stateArg = OfflineRegionDownloadState.ofRaw(args[0] as Int)!!
-            var wrapped: List<Any?>
-            try {
-              api.setOfflineRegionDownloadState(stateArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.invalidate$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            api.invalidate() { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.purge$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            api.purge() { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-/**
- * The `offline region manager` that manages offline packs. All of the class’s instance methods are asynchronous
- * reflecting the fact that offline resources are stored in a database. The offline manager maintains a canonical
- * collection of offline packs.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface OfflineRegionManager {
-  /**
-   * Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
-   *
-   * By default, the limit is set to 6,000.
-   * Once this limit is reached, `OfflineRegionObserver.mapboxTileCountLimitExceeded()`
-   * fires every additional attempt to download additional tiles until already downloaded tiles are removed
-   * by calling `OfflineRegion.purge()` API.
-   *
-   * @param limit the maximum number of tiles allowed to be downloaded
-   */
-  fun setOfflineMapboxTileCountLimit(limit: Long)
-
-  companion object {
-    /** The codec used by OfflineRegionManager. */
-    val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
-    }
-    /** Sets up an instance of `OfflineRegionManager` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: OfflineRegionManager?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegionManager.setOfflineMapboxTileCountLimit$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val limitArg = args[0].let { if (it is Int) it.toLong() else it as Long }
-            var wrapped: List<Any?>
-            try {
-              api.setOfflineMapboxTileCountLimit(limitArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-@Suppress("UNCHECKED_CAST")
 private object ProjectionCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -5264,100 +4744,90 @@ private object StyleManagerCodec : StandardMessageCodec() {
       }
       149.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionGeometryDefinition.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          OfflineRegionTilePyramidDefinition.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          RenderedQueryGeometry.fromList(it)
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          Size.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          StylePropertyValue.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
-        }
-      }
-      166.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
-        }
-      }
-      167.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           TileCoverOptions.fromList(it)
         }
       }
-      168.toByte() -> {
+      166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           TransitionOptions.fromList(it)
         }
@@ -5451,84 +4921,76 @@ private object StyleManagerCodec : StandardMessageCodec() {
         stream.write(148)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionGeometryDefinition -> {
+      is Point -> {
         stream.write(149)
         writeValue(stream, value.toList())
       }
-      is OfflineRegionTilePyramidDefinition -> {
+      is ProjectedMeters -> {
         stream.write(150)
         writeValue(stream, value.toList())
       }
-      is Point -> {
+      is QueriedFeature -> {
         stream.write(151)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is QueriedRenderedFeature -> {
         stream.write(152)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is RenderedQueryGeometry -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is RenderedQueryOptions -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryGeometry -> {
+      is ScreenBox -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is ScreenCoordinate -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is Size -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is SourceQueryOptions -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is StyleObjectInfo -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is StyleProjection -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is StylePropertyValue -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is TileCoverOptions -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
-        stream.write(166)
-        writeValue(stream, value.toList())
-      }
-      is TileCoverOptions -> {
-        stream.write(167)
-        writeValue(stream, value.toList())
-      }
       is TransitionOptions -> {
-        stream.write(168)
+        stream.write(166)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -7116,118 +6578,6 @@ interface Cancelable {
           channel.setMessageHandler(null)
         }
       }
-    }
-  }
-}
-/**
- * Instance that allows connecting or disconnecting the Mapbox stack to the network.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface OfflineSwitch {
-  /**
-   * Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
-   * with HttpRequestErrorType#ConnectionError.
-   *
-   * @param connected Set false to disconnect the Mapbox stack
-   */
-  fun setMapboxStackConnected(connected: Boolean)
-  /**
-   * Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
-   *
-   * @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
-   */
-  fun isMapboxStackConnected(): Boolean
-  /**
-   * Releases the OfflineSwitch singleton instance.
-   *
-   * Users can call this method if they want to do manual cleanup of the resources allocated by Mapbox services.
-   * If the user calls getInstance() after reset, a new instance of the OfflineSwitch singleton will be allocated.
-   */
-  fun reset()
-
-  companion object {
-    /** The codec used by OfflineSwitch. */
-    val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
-    }
-    /** Sets up an instance of `OfflineSwitch` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: OfflineSwitch?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.setMapboxStackConnected$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val connectedArg = args[0] as Boolean
-            var wrapped: List<Any?>
-            try {
-              api.setMapboxStackConnected(connectedArg)
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.isMapboxStackConnected$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              wrapped = listOf<Any?>(api.isMapboxStackConnected())
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.reset$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            var wrapped: List<Any?>
-            try {
-              api.reset()
-              wrapped = listOf<Any?>(null)
-            } catch (exception: Throwable) {
-              wrapped = wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-/**
- * A bundle that encapsulates tilesets creation for the tile store implementation.
- *
- * Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface TilesetDescriptor {
-
-  companion object {
-    /** The codec used by TilesetDescriptor. */
-    val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
-    }
-    /** Sets up an instance of `TilesetDescriptor` to handle messages through the `binaryMessenger`. */
-    @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: TilesetDescriptor?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     }
   }
 }

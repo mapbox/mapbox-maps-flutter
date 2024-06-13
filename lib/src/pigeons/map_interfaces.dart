@@ -22,18 +22,6 @@ List<Object?> wrapResponse(
   return <Object?>[error.code, error.message, error.details];
 }
 
-/// Describes glyphs rasterization modes.
-enum GlyphsRasterizationMode {
-  /// No glyphs are rasterized locally. All glyphs are loaded from the server.
-  NO_GLYPHS_RASTERIZED_LOCALLY,
-
-  /// Ideographs are rasterized locally, and they are not loaded from the server.
-  IDEOGRAPHS_RASTERIZED_LOCALLY,
-
-  /// All glyphs are rasterized locally. No glyphs are loaded from the server.
-  ALL_GLYPHS_RASTERIZED_LOCALLY,
-}
-
 /// Describes the map context mode.
 /// We can make some optimizations if we know that the drawing context is not shared with other code.
 enum ContextMode {
@@ -276,18 +264,6 @@ enum HttpMethod {
 
   /// The POST method sends data (stored in the request body) to a server to create or update a given resource.
   POST,
-}
-
-/// Classify network types based on cost.
-enum NetworkRestriction {
-  /// Allow access to all network types.
-  NONE,
-
-  /// Forbid network access to expensive networks, such as cellular.
-  DISALLOW_EXPENSIVE,
-
-  /// Forbid access to all network types.
-  DISALLOW_ALL,
 }
 
 /// Enum which describes possible error types which could happen during HTTP request/download calls.
@@ -773,46 +749,6 @@ class MapDebugOptions {
     result as List<Object?>;
     return MapDebugOptions(
       data: MapDebugOptionsData.values[result[0]! as int],
-    );
-  }
-}
-
-/// Describes the glyphs rasterization option values.
-class GlyphsRasterizationOptions {
-  GlyphsRasterizationOptions({
-    required this.rasterizationMode,
-    this.fontFamily,
-  });
-
-  /// Glyphs rasterization mode for client-side text rendering.
-  GlyphsRasterizationMode rasterizationMode;
-
-  /// Font family to use as font fallback for client-side text renderings.
-  ///
-  /// Note: `GlyphsRasterizationMode` has precedence over font family. If `AllGlyphsRasterizedLocally`
-  /// or `IdeographsRasterizedLocally` is set, local glyphs will be generated based on the provided font family. If no
-  /// font family is provided, the map will fall back to use the system default font. The mechanisms of choosing the
-  /// default font are varied in platforms:
-  /// - For darwin(iOS/macOS) platform, the default font family is created from the <a href="https://developer.apple.com/documentation/uikit/uifont/1619027-systemfontofsize?language=objc">systemFont</a>.
-  ///   If provided fonts are not supported on darwin platform, the map will fall back to use the first available font from the global fallback list.
-  /// - For Android platform: the default font <a href="https://developer.android.com/reference/android/graphics/Typeface#DEFAULT">Typeface.DEFAULT</a> will be used.
-  ///
-  /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
-  ///
-  String? fontFamily;
-
-  Object encode() {
-    return <Object?>[
-      rasterizationMode.index,
-      fontFamily,
-    ];
-  }
-
-  static GlyphsRasterizationOptions decode(Object result) {
-    result as List<Object?>;
-    return GlyphsRasterizationOptions(
-      rasterizationMode: GlyphsRasterizationMode.values[result[0]! as int],
-      fontFamily: result[1] as String?,
     );
   }
 }
@@ -1308,122 +1244,6 @@ class RenderedQueryGeometry {
     return RenderedQueryGeometry(
       value: result[0]! as String,
       type: Type.values[result[1]! as int],
-    );
-  }
-}
-
-/// An offline region definition is a geographic region defined by a style URL,
-/// a geometry, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
-/// and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
-/// the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
-/// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
-class OfflineRegionGeometryDefinition {
-  OfflineRegionGeometryDefinition({
-    required this.styleURL,
-    required this.geometry,
-    required this.minZoom,
-    required this.maxZoom,
-    required this.pixelRatio,
-    required this.glyphsRasterizationMode,
-  });
-
-  /// The style associated with the offline region
-  String styleURL;
-
-  /// The geometry that defines the boundary of the offline region
-  Map<String?, Object?> geometry;
-
-  /// Minimum zoom level for the offline region
-  double minZoom;
-
-  /// Maximum zoom level for the offline region
-  double maxZoom;
-
-  /// Pixel ratio to be accounted for when downloading assets
-  double pixelRatio;
-
-  /// Specifies glyphs rasterization mode. It defines which glyphs will be loaded from the server
-  GlyphsRasterizationMode glyphsRasterizationMode;
-
-  Object encode() {
-    return <Object?>[
-      styleURL,
-      geometry,
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.index,
-    ];
-  }
-
-  static OfflineRegionGeometryDefinition decode(Object result) {
-    result as List<Object?>;
-    return OfflineRegionGeometryDefinition(
-      styleURL: result[0]! as String,
-      geometry: (result[1] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
-      minZoom: result[2]! as double,
-      maxZoom: result[3]! as double,
-      pixelRatio: result[4]! as double,
-      glyphsRasterizationMode:
-          GlyphsRasterizationMode.values[result[5]! as int],
-    );
-  }
-}
-
-/// An offline region definition is a geographic region defined by a style URL,
-/// geographic bounding box, zoom range, and device pixel ratio. Both `minZoom` and `maxZoom` must be ≥ 0,
-/// and `maxZoom` must be ≥ `minZoom`. The `maxZoom` may be ∞, in which case for each tile source,
-/// the region will include tiles from `minZoom` up to the maximum zoom level provided by that source.
-/// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
-class OfflineRegionTilePyramidDefinition {
-  OfflineRegionTilePyramidDefinition({
-    required this.styleURL,
-    required this.bounds,
-    required this.minZoom,
-    required this.maxZoom,
-    required this.pixelRatio,
-    required this.glyphsRasterizationMode,
-  });
-
-  /// The style associated with the offline region.
-  String styleURL;
-
-  /// The bounds covering the region.
-  CoordinateBounds bounds;
-
-  /// Minimum zoom level for the offline region.
-  double minZoom;
-
-  /// Maximum zoom level for the offline region.
-  double maxZoom;
-
-  /// Pixel ratio to be accounted for when downloading assets.
-  double pixelRatio;
-
-  /// Specifies glyphs download mode.
-  GlyphsRasterizationMode glyphsRasterizationMode;
-
-  Object encode() {
-    return <Object?>[
-      styleURL,
-      bounds.encode(),
-      minZoom,
-      maxZoom,
-      pixelRatio,
-      glyphsRasterizationMode.index,
-    ];
-  }
-
-  static OfflineRegionTilePyramidDefinition decode(Object result) {
-    result as List<Object?>;
-    return OfflineRegionTilePyramidDefinition(
-      styleURL: result[0]! as String,
-      bounds: CoordinateBounds.decode(result[1]! as List<Object?>),
-      minZoom: result[2]! as double,
-      maxZoom: result[3]! as double,
-      pixelRatio: result[4]! as double,
-      glyphsRasterizationMode:
-          GlyphsRasterizationMode.values[result[5]! as int],
     );
   }
 }
@@ -2277,65 +2097,59 @@ class __CameraManagerCodec extends StandardMessageCodec {
     } else if (value is MercatorCoordinate) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
+    } else if (value is Point) {
       buffer.putUint8(149);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is Point) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is Size) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
-      buffer.putUint8(167);
-      writeValue(buffer, value.encode());
     } else if (value is TransitionOptions) {
-      buffer.putUint8(168);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2388,44 +2202,40 @@ class __CameraManagerCodec extends StandardMessageCodec {
       case 148:
         return MercatorCoordinate.decode(readValue(buffer)!);
       case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
         return Point.decode(readValue(buffer)!);
-      case 152:
+      case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
+      case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
+      case 152:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
+      case 153:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
+      case 154:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
+      case 155:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
+      case 156:
         return ScreenBox.decode(readValue(buffer)!);
-      case 159:
+      case 157:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
+      case 158:
         return Size.decode(readValue(buffer)!);
-      case 161:
+      case 159:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
+      case 160:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
+      case 161:
         return StyleProjection.decode(readValue(buffer)!);
-      case 164:
+      case 162:
         return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
+      case 163:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
+      case 164:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
+      case 165:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 168:
+      case 166:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3162,65 +2972,59 @@ class __MapInterfaceCodec extends StandardMessageCodec {
     } else if (value is MercatorCoordinate) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
+    } else if (value is Point) {
       buffer.putUint8(149);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is Point) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is Size) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
-      buffer.putUint8(167);
-      writeValue(buffer, value.encode());
     } else if (value is TransitionOptions) {
-      buffer.putUint8(168);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3273,44 +3077,40 @@ class __MapInterfaceCodec extends StandardMessageCodec {
       case 148:
         return MercatorCoordinate.decode(readValue(buffer)!);
       case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
         return Point.decode(readValue(buffer)!);
-      case 152:
+      case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
+      case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
+      case 152:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
+      case 153:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
+      case 154:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
+      case 155:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
+      case 156:
         return ScreenBox.decode(readValue(buffer)!);
-      case 159:
+      case 157:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
+      case 158:
         return Size.decode(readValue(buffer)!);
-      case 161:
+      case 159:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
+      case 160:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
+      case 161:
         return StyleProjection.decode(readValue(buffer)!);
-      case 164:
+      case 162:
         return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
+      case 163:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
+      case 164:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
+      case 165:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 168:
+      case 166:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -4238,353 +4038,6 @@ class _MapInterface {
   }
 }
 
-class _OfflineRegionCodec extends StandardMessageCodec {
-  const _OfflineRegionCodec();
-  @override
-  void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is CoordinateBounds) {
-      buffer.putUint8(128);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
-      buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
-      buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is Point) {
-      buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else {
-      super.writeValue(buffer, value);
-    }
-  }
-
-  @override
-  Object? readValueOfType(int type, ReadBuffer buffer) {
-    switch (type) {
-      case 128:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 129:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 130:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 131:
-        return Point.decode(readValue(buffer)!);
-      default:
-        return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-/// An offline region represents an identifiable geographic region with optional metadata.
-class OfflineRegion {
-  /// Constructor for [OfflineRegion].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  OfflineRegion(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec = _OfflineRegionCodec();
-
-  final String __pigeon_messageChannelSuffix;
-
-  /// The regions identifier
-  Future<int> getIdentifier() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getIdentifier$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as int?)!;
-    }
-  }
-
-  /// The tile pyramid defining the region. Tile pyramid and geometry definitions are
-  /// mutually exclusive.
-  ///
-  /// @return A definition describing the tile pyramid including attributes, otherwise empty.
-  Future<OfflineRegionTilePyramidDefinition?> getTilePyramidDefinition() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getTilePyramidDefinition$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return (__pigeon_replyList[0] as OfflineRegionTilePyramidDefinition?);
-    }
-  }
-
-  /// The geometry defining the region. Geometry and tile pyramid definitions are
-  /// mutually exclusive.
-  ///
-  /// @return A definition describing the geometry including attributes, otherwise empty.
-  Future<OfflineRegionGeometryDefinition?> getGeometryDefinition() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getGeometryDefinition$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return (__pigeon_replyList[0] as OfflineRegionGeometryDefinition?);
-    }
-  }
-
-  /// Arbitrary binary region metadata.
-  ///
-  /// @return The metadata associated with the region.
-  Future<Uint8List> getMetadata() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.getMetadata$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as Uint8List?)!;
-    }
-  }
-
-  /// Sets arbitrary binary region metadata for the region.
-  ///
-  /// Note that this setter is asynchronous and the given metadata is applied only
-  /// after the resulting callback is invoked with no error.
-  ///
-  /// @param metadata The metadata associated with the region.
-  /// @param callback Called once the request is complete or an error occurred.
-  Future<void> setMetadata(Uint8List metadata) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setMetadata$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[metadata]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Sets the download state of an offline region
-  /// A region is either inactive (not downloading, but previously-downloaded
-  /// resources are available for use), or active (resources are being downloaded
-  /// or will be downloaded, if necessary, when network access is available).
-  ///
-  /// If the region is already in the given state, this call is ignored.
-  ///
-  /// @param state The new state to set.
-  Future<void> setOfflineRegionDownloadState(
-      OfflineRegionDownloadState state) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.setOfflineRegionDownloadState$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[state.index]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Invalidate all the tiles for the region forcing to revalidate
-  /// the tiles with the server before using. This is more efficient than deleting the
-  /// offline region and downloading it again because if the data on the cache matches
-  /// the server, no new data gets transmitted.
-  ///
-  /// @param callback Called once the request is complete or an error occurred.
-  Future<void> invalidate() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.invalidate$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Remove an offline region from the database and perform any resources
-  /// evictions necessary as a result.
-  ///
-  /// @param callback Called once the request is complete or an error occurred.
-  Future<void> purge() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegion.purge$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
-/// The `offline region manager` that manages offline packs. All of the class’s instance methods are asynchronous
-/// reflecting the fact that offline resources are stored in a database. The offline manager maintains a canonical
-/// collection of offline packs.
-class OfflineRegionManager {
-  /// Constructor for [OfflineRegionManager].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  OfflineRegionManager(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      StandardMessageCodec();
-
-  final String __pigeon_messageChannelSuffix;
-
-  /// Sets the maximum number of Mapbox-hosted tiles that may be downloaded and stored on the current device.
-  ///
-  /// By default, the limit is set to 6,000.
-  /// Once this limit is reached, `OfflineRegionObserver.mapboxTileCountLimitExceeded()`
-  /// fires every additional attempt to download additional tiles until already downloaded tiles are removed
-  /// by calling `OfflineRegion.purge()` API.
-  ///
-  /// @param limit the maximum number of tiles allowed to be downloaded
-  Future<void> setOfflineMapboxTileCountLimit(int limit) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineRegionManager.setOfflineMapboxTileCountLimit$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[limit]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
 class _ProjectionCodec extends StandardMessageCodec {
   const _ProjectionCodec();
   @override
@@ -5361,65 +4814,59 @@ class _StyleManagerCodec extends StandardMessageCodec {
     } else if (value is MercatorCoordinate) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionGeometryDefinition) {
+    } else if (value is Point) {
       buffer.putUint8(149);
       writeValue(buffer, value.encode());
-    } else if (value is OfflineRegionTilePyramidDefinition) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is Point) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is Size) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
-      buffer.putUint8(166);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
-      buffer.putUint8(167);
-      writeValue(buffer, value.encode());
     } else if (value is TransitionOptions) {
-      buffer.putUint8(168);
+      buffer.putUint8(166);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -5472,44 +4919,40 @@ class _StyleManagerCodec extends StandardMessageCodec {
       case 148:
         return MercatorCoordinate.decode(readValue(buffer)!);
       case 149:
-        return OfflineRegionGeometryDefinition.decode(readValue(buffer)!);
-      case 150:
-        return OfflineRegionTilePyramidDefinition.decode(readValue(buffer)!);
-      case 151:
         return Point.decode(readValue(buffer)!);
-      case 152:
+      case 150:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 153:
+      case 151:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 154:
+      case 152:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 155:
+      case 153:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 156:
+      case 154:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 157:
+      case 155:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 158:
+      case 156:
         return ScreenBox.decode(readValue(buffer)!);
-      case 159:
+      case 157:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 160:
+      case 158:
         return Size.decode(readValue(buffer)!);
-      case 161:
+      case 159:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 162:
+      case 160:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 163:
+      case 161:
         return StyleProjection.decode(readValue(buffer)!);
-      case 164:
+      case 162:
         return StylePropertyValue.decode(readValue(buffer)!);
-      case 165:
+      case 163:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 166:
+      case 164:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 167:
+      case 165:
         return TileCoverOptions.decode(readValue(buffer)!);
-      case 168:
+      case 166:
         return TransitionOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -7329,130 +6772,4 @@ class Cancelable {
       return;
     }
   }
-}
-
-/// Instance that allows connecting or disconnecting the Mapbox stack to the network.
-class OfflineSwitch {
-  /// Constructor for [OfflineSwitch].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  OfflineSwitch(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      StandardMessageCodec();
-
-  final String __pigeon_messageChannelSuffix;
-
-  /// Connects or disconnects the Mapbox stack. If set to false, current and new HTTP requests will fail
-  /// with HttpRequestErrorType#ConnectionError.
-  ///
-  /// @param connected Set false to disconnect the Mapbox stack
-  Future<void> setMapboxStackConnected(bool connected) async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.setMapboxStackConnected$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[connected]) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  /// Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
-  ///
-  /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
-  Future<bool> isMapboxStackConnected() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.isMapboxStackConnected$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else if (__pigeon_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (__pigeon_replyList[0] as bool?)!;
-    }
-  }
-
-  /// Releases the OfflineSwitch singleton instance.
-  ///
-  /// Users can call this method if they want to do manual cleanup of the resources allocated by Mapbox services.
-  /// If the user calls getInstance() after reset, a new instance of the OfflineSwitch singleton will be allocated.
-  Future<void> reset() async {
-    final String __pigeon_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.OfflineSwitch.reset$__pigeon_messageChannelSuffix';
-    final BasicMessageChannel<Object?> __pigeon_channel =
-        BasicMessageChannel<Object?>(
-      __pigeon_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: __pigeon_binaryMessenger,
-    );
-    final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(null) as List<Object?>?;
-    if (__pigeon_replyList == null) {
-      throw _createConnectionError(__pigeon_channelName);
-    } else if (__pigeon_replyList.length > 1) {
-      throw PlatformException(
-        code: __pigeon_replyList[0]! as String,
-        message: __pigeon_replyList[1] as String?,
-        details: __pigeon_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
-/// A bundle that encapsulates tilesets creation for the tile store implementation.
-///
-/// Tileset descriptors describe the type of data that should be part of the Offline Region, like the routing profile for Navigation and the Tilesets of the Map style.
-class TilesetDescriptor {
-  /// Constructor for [TilesetDescriptor].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  TilesetDescriptor(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : __pigeon_binaryMessenger = binaryMessenger,
-        __pigeon_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? __pigeon_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      StandardMessageCodec();
-
-  final String __pigeon_messageChannelSuffix;
 }

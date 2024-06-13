@@ -25,7 +25,7 @@ final class Snapshotter {
   /// by calling StyleManager#addStyleImage method.
   final OnStyleImageMissingListener? onStyleImageMissingListener;
 
-  late _SnapshotterMessenger _snapshotterMessager;
+  late _SnapshotterMessenger _snapshotterMessenger;
   late _MapEvents _mapEvents;
   final int _suffix = _suffixesRegistry.getSuffix();
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
@@ -46,7 +46,7 @@ final class Snapshotter {
     this.onStyleImageMissingListener,
   }) {
     final messenger = ProxyBinaryMessenger(suffix: _suffix.toString());
-    _snapshotterMessager = _SnapshotterMessenger(binaryMessenger: messenger);
+    _snapshotterMessenger = _SnapshotterMessenger(binaryMessenger: messenger);
     style = StyleManager(binaryMessenger: messenger);
     _mapEvents = _MapEvents(binaryMessenger: messenger);
   }
@@ -93,29 +93,30 @@ final class Snapshotter {
   }
 
   /// The current state of the snapshotter camera.
-  Future<CameraState> getCameraState() => _snapshotterMessager.getCameraState();
+  Future<CameraState> getCameraState() =>
+      _snapshotterMessenger.getCameraState();
 
   /// Set the current state of the snapshotter camera.
   Future<void> setCamera(CameraOptions cameraOptions) =>
-      _snapshotterMessager.setCamera(cameraOptions);
+      _snapshotterMessenger.setCamera(cameraOptions);
 
   /// The size of the snapshot image.
-  Future<Size?> getSize() async => _snapshotterMessager.getSize();
+  Future<Size?> getSize() async => _snapshotterMessenger.getSize();
 
   /// Set the size of the snapshot image.
-  Future<void> setSize(Size size) => _snapshotterMessager.setSize(size);
+  Future<void> setSize(Size size) => _snapshotterMessenger.setSize(size);
 
   /// Request a new snapshot. If there is a pending snapshot request, it is cancelled automatically.
   /// Throws an error if the snapshot is cancelled.
-  Future<Uint8List?> start() async => _snapshotterMessager.start();
+  Future<Uint8List?> start() async => _snapshotterMessenger.start();
 
   /// Cancel the current snapshot operation, if any. The callback passed to the start method
   /// is called with error parameter set.
-  Future<void> cancel() async => _snapshotterMessager.cancel();
+  Future<void> cancel() async => _snapshotterMessenger.cancel();
 
   /// Returns the coordinate bounds corresponding to a given `CameraOptions`
   Future<CoordinateBounds> coordinateBounds(CameraOptions camera) =>
-      _snapshotterMessager.coordinateBounds(camera);
+      _snapshotterMessenger.coordinateBounds(camera);
 
   /// Calculates a `CameraOptions` to fit a list of coordinates.
   Future<CameraOptions> camera(
@@ -123,7 +124,7 @@ final class Snapshotter {
           MbxEdgeInsets? padding,
           double? bearing,
           double? pitch}) =>
-      _snapshotterMessager.camera(
+      _snapshotterMessenger.camera(
           coordinates: coordinates,
           padding: padding,
           bearing: bearing,
@@ -131,7 +132,7 @@ final class Snapshotter {
 
   /// Returns array of tile identifiers that cover current map camera.
   Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
-      _snapshotterMessager.tileCover(options);
+      _snapshotterMessenger.tileCover(options);
 
   /// Clears temporary map data.
   ///
@@ -141,5 +142,5 @@ final class Snapshotter {
   ///
   /// Note: Calling this API will affect all maps that use the same data path
   ///       and does not affect persistent map data like offline style packages.
-  Future<void> clearData() async => _snapshotterMessager.clearData();
+  Future<void> clearData() async => _snapshotterMessenger.clearData();
 }
