@@ -1,6 +1,7 @@
 ### main
 
 * Add ModelLayer API.
+* Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
 
 ### 2.0.0
 
