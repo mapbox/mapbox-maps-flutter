@@ -414,7 +414,6 @@ extension StyleColorList on List {
   }
 
   Color _decodeRGBColor() {
-    // final int red = this[1].optionalCast<num>().toInt();
     final red = this[1] is num ? (this[1] as num).toInt() : null;
     final green = this[2] is num ? (this[2] as num).toInt() : null;
     final blue = this[3] is num ? (this[3] as num).toInt() : null;

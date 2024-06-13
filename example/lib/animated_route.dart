@@ -131,7 +131,6 @@ class AnimatedRouteState extends State<AnimatedRoute>
       lineBlur: 1.0,
       lineColor: Colors.deepOrangeAccent.value,
       lineDasharray: [1.0, 2.0],
-      // lineTrimOffset: [0.0, 0.0],
       lineWidth: 5.0,
       // draw layer with gradient
       lineGradientExpression: [
