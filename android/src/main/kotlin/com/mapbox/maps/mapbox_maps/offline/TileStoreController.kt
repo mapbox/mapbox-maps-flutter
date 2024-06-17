@@ -47,8 +47,8 @@ class TileStoreController(
       { expected ->
         mainHandler.post {
           callback(expected.toResult { it.toFLTTileRegion() })
+          tileRegionLoadProgressHandlers.remove(id)?.endOfStream()
         }
-        tileRegionLoadProgressHandlers.remove(id)?.endOfStream()
       }
     )
   }
@@ -87,8 +87,8 @@ class TileStoreController(
       { expected ->
         mainHandler.post {
           callback(expected.toResult { it.toFLTTileRegionEstimateResult() })
+          tileRegionEstimateProgressHandlers.remove(id)?.endOfStream()
         }
-        tileRegionEstimateProgressHandlers.remove(id)?.endOfStream()
       }
     )
   }

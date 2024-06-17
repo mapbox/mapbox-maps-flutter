@@ -40,8 +40,8 @@ class OfflineController(
       { expected ->
         mainHandler.post {
           callback(expected.toResult { it.toFLTStylePack() })
+          progressHandlers.remove(styleURI)?.endOfStream()
         }
-        progressHandlers.remove(styleURI)?.endOfStream()
       }
     )
   }
