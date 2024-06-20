@@ -102,12 +102,10 @@ void main() {
     var generateId = await source.generateId;
     expect(generateId, true);
 
-    // TODO: Investigate why this check is susceptible to fail on iOS
+    await Future.delayed(const Duration(seconds: 1), (){});
     // https://mapbox.atlassian.net/browse/MAPSFLT-141
-    if (Platform.isAndroid) {
       var prefetchZoomDelta = await source.prefetchZoomDelta;
       expect(prefetchZoomDelta, 1.0);
-    }
 
     var tileCacheBudget = await source.tileCacheBudget;
     expect(tileCacheBudget?.size,
