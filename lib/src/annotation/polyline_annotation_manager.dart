@@ -37,70 +37,78 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messenger.deleteAll(id);
 
-  /// The display of line endings.
+  /// The display of line endings. Default value: "butt".
   Future<void> setLineCap(LineCap lineCap) => messenger.setLineCap(id, lineCap);
 
-  /// The display of line endings.
+  /// The display of line endings. Default value: "butt".
   Future<LineCap?> getLineCap() => messenger.getLineCap(id);
 
-  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Used to automatically convert miter joins to bevel joins for sharp angles. Default value: 2.
   Future<void> setLineMiterLimit(double lineMiterLimit) =>
       messenger.setLineMiterLimit(id, lineMiterLimit);
 
-  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Used to automatically convert miter joins to bevel joins for sharp angles. Default value: 2.
   Future<double?> getLineMiterLimit() => messenger.getLineMiterLimit(id);
 
-  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Used to automatically convert round joins to miter joins for shallow angles. Default value: 1.05.
   Future<void> setLineRoundLimit(double lineRoundLimit) =>
       messenger.setLineRoundLimit(id, lineRoundLimit);
 
-  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Used to automatically convert round joins to miter joins for shallow angles. Default value: 1.05.
   Future<double?> getLineRoundLimit() => messenger.getLineRoundLimit(id);
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
   Future<void> setLineDasharray(List<double?> lineDasharray) =>
       messenger.setLineDasharray(id, lineDasharray);
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
   Future<List<double?>?> getLineDasharray() => messenger.getLineDasharray(id);
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<void> setLineDepthOcclusionFactor(double lineDepthOcclusionFactor) =>
       messenger.setLineDepthOcclusionFactor(id, lineDepthOcclusionFactor);
 
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<double?> getLineDepthOcclusionFactor() =>
       messenger.getLineDepthOcclusionFactor(id);
 
-  /// Controls the intensity of light emitted on the source features.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<void> setLineEmissiveStrength(double lineEmissiveStrength) =>
       messenger.setLineEmissiveStrength(id, lineEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<double?> getLineEmissiveStrength() =>
       messenger.getLineEmissiveStrength(id);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling. Default value: 0. Value range: [0, 1]
+  Future<void> setLineOcclusionOpacity(double lineOcclusionOpacity) =>
+      messenger.setLineOcclusionOpacity(id, lineOcclusionOpacity);
+
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling. Default value: 0. Value range: [0, 1]
+  Future<double?> getLineOcclusionOpacity() =>
+      messenger.getLineOcclusionOpacity(id);
+
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
   Future<void> setLineTranslate(List<double?> lineTranslate) =>
       messenger.setLineTranslate(id, lineTranslate);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
   Future<List<double?>?> getLineTranslate() => messenger.getLineTranslate(id);
 
-  /// Controls the frame of reference for `line-translate`.
+  /// Controls the frame of reference for `line-translate`. Default value: "map".
   Future<void> setLineTranslateAnchor(
           LineTranslateAnchor lineTranslateAnchor) =>
       messenger.setLineTranslateAnchor(id, lineTranslateAnchor);
 
-  /// Controls the frame of reference for `line-translate`.
+  /// Controls the frame of reference for `line-translate`. Default value: "map".
   Future<LineTranslateAnchor?> getLineTranslateAnchor() =>
       messenger.getLineTranslateAnchor(id);
 
-  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0]. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   Future<void> setLineTrimOffset(List<double?> lineTrimOffset) =>
       messenger.setLineTrimOffset(id, lineTrimOffset);
 
-  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0]. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   Future<List<double?>?> getLineTrimOffset() => messenger.getLineTrimOffset(id);
 }
 // End of generated file.

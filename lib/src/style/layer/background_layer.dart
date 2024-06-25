@@ -32,21 +32,27 @@ class BackgroundLayer extends Layer {
   String getType() => "background";
 
   /// The color with which the background will be drawn.
+  /// Default value: "#000000".
   int? backgroundColor;
 
   /// The color with which the background will be drawn.
+  /// Default value: "#000000".
   List<Object>? backgroundColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? backgroundEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? backgroundEmissiveStrengthExpression;
 
   /// The opacity at which the background will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? backgroundOpacity;
 
   /// The opacity at which the background will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? backgroundOpacityExpression;
 
   /// Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.

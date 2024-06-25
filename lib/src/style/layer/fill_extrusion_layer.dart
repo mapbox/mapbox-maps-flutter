@@ -78,105 +78,148 @@ class FillExtrusionLayer extends Layer {
   String? sourceLayer;
 
   /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+  /// Default value: 0. Value range: [0, 1]
+  @experimental
   double? fillExtrusionEdgeRadius;
 
   /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? fillExtrusionEdgeRadiusExpression;
 
   /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+  /// Default value: 0.69. Value range: [0, 1]
+  @experimental
   double? fillExtrusionAmbientOcclusionGroundAttenuation;
 
   /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+  /// Default value: 0.69. Value range: [0, 1]
   List<Object>? fillExtrusionAmbientOcclusionGroundAttenuationExpression;
 
   /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
+  /// Default value: 3. Minimum value: 0.
+  @experimental
   double? fillExtrusionAmbientOcclusionGroundRadius;
 
   /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
+  /// Default value: 3. Minimum value: 0.
   List<Object>? fillExtrusionAmbientOcclusionGroundRadiusExpression;
 
   /// Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+  /// Default value: 0. Value range: [0, 1]
   double? fillExtrusionAmbientOcclusionIntensity;
 
   /// Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? fillExtrusionAmbientOcclusionIntensityExpression;
 
   /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fill-extrusion-ambient-occlusion-wall-radius` and `fill-extrusion-ambient-occlusion-ground-radius` are used instead.
+  /// Default value: 3. Minimum value: 0.
   double? fillExtrusionAmbientOcclusionRadius;
 
   /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings. This property works only with legacy light. When 3D lights are enabled `fill-extrusion-ambient-occlusion-wall-radius` and `fill-extrusion-ambient-occlusion-ground-radius` are used instead.
+  /// Default value: 3. Minimum value: 0.
   List<Object>? fillExtrusionAmbientOcclusionRadiusExpression;
 
   /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
+  /// Default value: 3. Minimum value: 0.
+  @experimental
   double? fillExtrusionAmbientOcclusionWallRadius;
 
   /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
+  /// Default value: 3. Minimum value: 0.
   List<Object>? fillExtrusionAmbientOcclusionWallRadiusExpression;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
+  /// Default value: 0. Minimum value: 0.
   double? fillExtrusionBase;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? fillExtrusionBaseExpression;
 
   /// The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.
+  /// Default value: "#000000".
   int? fillExtrusionColor;
 
   /// The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.
+  /// Default value: "#000000".
   List<Object>? fillExtrusionColorExpression;
 
-  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// Default value: 0. Value range: [0, 1]
   double? fillExtrusionCutoffFadeRange;
 
-  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// This parameter defines the range for the fade-out effect before an automatic content cutoff on pitched map views. Fade out is implemented by scaling down and removing buildings in the fade range in a staggered fashion. Opacity is not changed. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? fillExtrusionCutoffFadeRangeExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? fillExtrusionEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? fillExtrusionEmissiveStrengthExpression;
 
   /// The color of the flood light effect on the walls of the extruded buildings.
+  /// Default value: "#ffffff".
+  @experimental
   int? fillExtrusionFloodLightColor;
 
   /// The color of the flood light effect on the walls of the extruded buildings.
+  /// Default value: "#ffffff".
   List<Object>? fillExtrusionFloodLightColorExpression;
 
   /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+  /// Default value: 0.69. Value range: [0, 1]
+  @experimental
   double? fillExtrusionFloodLightGroundAttenuation;
 
   /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
+  /// Default value: 0.69. Value range: [0, 1]
   List<Object>? fillExtrusionFloodLightGroundAttenuationExpression;
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters.
+  /// Default value: 0.
+  @experimental
   double? fillExtrusionFloodLightGroundRadius;
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters.
+  /// Default value: 0.
   List<Object>? fillExtrusionFloodLightGroundRadiusExpression;
 
   /// The intensity of the flood light color.
+  /// Default value: 0. Value range: [0, 1]
+  @experimental
   double? fillExtrusionFloodLightIntensity;
 
   /// The intensity of the flood light color.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? fillExtrusionFloodLightIntensityExpression;
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
   double? fillExtrusionFloodLightWallRadius;
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? fillExtrusionFloodLightWallRadiusExpression;
 
   /// The height with which to extrude this layer.
+  /// Default value: 0. Minimum value: 0.
   double? fillExtrusionHeight;
 
   /// The height with which to extrude this layer.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? fillExtrusionHeightExpression;
 
   /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
+  /// Default value: 1. Value range: [0, 1]
   double? fillExtrusionOpacity;
 
   /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? fillExtrusionOpacityExpression;
 
   /// Name of image in sprite to use for drawing images on extruded fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
@@ -186,33 +229,45 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionPatternExpression;
 
   /// Indicates whether top edges should be rounded when fill-extrusion-edge-radius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.
+  /// Default value: true.
+  @experimental
   bool? fillExtrusionRoundedRoof;
 
   /// Indicates whether top edges should be rounded when fill-extrusion-edge-radius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.
+  /// Default value: true.
   List<Object>? fillExtrusionRoundedRoofExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
+  /// Default value: [0,0].
   List<double?>? fillExtrusionTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
+  /// Default value: [0,0].
   List<Object>? fillExtrusionTranslateExpression;
 
   /// Controls the frame of reference for `fill-extrusion-translate`.
+  /// Default value: "map".
   FillExtrusionTranslateAnchor? fillExtrusionTranslateAnchor;
 
   /// Controls the frame of reference for `fill-extrusion-translate`.
+  /// Default value: "map".
   List<Object>? fillExtrusionTranslateAnchorExpression;
 
   /// Whether to apply a vertical gradient to the sides of a fill-extrusion layer. If true, sides will be shaded slightly darker farther down.
+  /// Default value: true.
   bool? fillExtrusionVerticalGradient;
 
   /// Whether to apply a vertical gradient to the sides of a fill-extrusion layer. If true, sides will be shaded slightly darker farther down.
+  /// Default value: true.
   List<Object>? fillExtrusionVerticalGradientExpression;
 
   /// A global multiplier that can be used to scale base, height, AO, and flood light of the fill extrusions.
+  /// Default value: 1. Minimum value: 0.
+  @experimental
   double? fillExtrusionVerticalScale;
 
   /// A global multiplier that can be used to scale base, height, AO, and flood light of the fill extrusions.
+  /// Default value: 1. Minimum value: 0.
   List<Object>? fillExtrusionVerticalScaleExpression;
 
   @override

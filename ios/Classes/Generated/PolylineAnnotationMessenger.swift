@@ -45,6 +45,7 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
 }
 
 /// The display of line endings.
+/// Default value: "butt".
 enum LineCap: Int {
   /// A cap with a squared-off end which is drawn to the exact endpoint of the line.
   case bUTT = 0
@@ -55,6 +56,7 @@ enum LineCap: Int {
 }
 
 /// The display of lines when joining.
+/// Default value: "miter".
 enum LineJoin: Int {
   /// A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
   case bEVEL = 0
@@ -65,6 +67,7 @@ enum LineJoin: Int {
 }
 
 /// Controls the frame of reference for `line-translate`.
+/// Default value: "map".
 enum LineTranslateAnchor: Int {
   /// The line is translated relative to the map.
   case mAP = 0
@@ -79,26 +82,37 @@ struct PolylineAnnotation {
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
   /// The display of lines when joining.
+  /// Default value: "miter".
   var lineJoin: LineJoin?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  var lineZOffset: Double?
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   var lineBlur: Double?
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   var lineBorderColor: Int64?
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   var lineBorderWidth: Double?
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   var lineColor: Int64?
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   var lineGapWidth: Double?
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   var lineOffset: Double?
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var lineOpacity: Double?
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var linePattern: String?
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   var lineWidth: Double?
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotation? {
@@ -110,21 +124,23 @@ struct PolylineAnnotation {
       lineJoin = LineJoin(rawValue: lineJoinRawValue)!
     }
     let lineSortKey: Double? = nilOrValue(list[3])
-    let lineBlur: Double? = nilOrValue(list[4])
-    let lineBorderColor: Int64? = isNullish(list[5]) ? nil : (list[5] is Int64? ? list[5] as! Int64? : Int64(list[5] as! Int32))
-    let lineBorderWidth: Double? = nilOrValue(list[6])
-    let lineColor: Int64? = isNullish(list[7]) ? nil : (list[7] is Int64? ? list[7] as! Int64? : Int64(list[7] as! Int32))
-    let lineGapWidth: Double? = nilOrValue(list[8])
-    let lineOffset: Double? = nilOrValue(list[9])
-    let lineOpacity: Double? = nilOrValue(list[10])
-    let linePattern: String? = nilOrValue(list[11])
-    let lineWidth: Double? = nilOrValue(list[12])
+    let lineZOffset: Double? = nilOrValue(list[4])
+    let lineBlur: Double? = nilOrValue(list[5])
+    let lineBorderColor: Int64? = isNullish(list[6]) ? nil : (list[6] is Int64? ? list[6] as! Int64? : Int64(list[6] as! Int32))
+    let lineBorderWidth: Double? = nilOrValue(list[7])
+    let lineColor: Int64? = isNullish(list[8]) ? nil : (list[8] is Int64? ? list[8] as! Int64? : Int64(list[8] as! Int32))
+    let lineGapWidth: Double? = nilOrValue(list[9])
+    let lineOffset: Double? = nilOrValue(list[10])
+    let lineOpacity: Double? = nilOrValue(list[11])
+    let linePattern: String? = nilOrValue(list[12])
+    let lineWidth: Double? = nilOrValue(list[13])
 
     return PolylineAnnotation(
       id: id,
       geometry: geometry,
       lineJoin: lineJoin,
       lineSortKey: lineSortKey,
+      lineZOffset: lineZOffset,
       lineBlur: lineBlur,
       lineBorderColor: lineBorderColor,
       lineBorderWidth: lineBorderWidth,
@@ -142,6 +158,7 @@ struct PolylineAnnotation {
       geometry.toList(),
       lineJoin?.rawValue,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -160,26 +177,37 @@ struct PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
   /// The display of lines when joining.
+  /// Default value: "miter".
   var lineJoin: LineJoin?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  var lineZOffset: Double?
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   var lineBlur: Double?
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   var lineBorderColor: Int64?
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   var lineBorderWidth: Double?
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   var lineColor: Int64?
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   var lineGapWidth: Double?
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   var lineOffset: Double?
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var lineOpacity: Double?
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var linePattern: String?
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   var lineWidth: Double?
 
   static func fromList(_ list: [Any?]) -> PolylineAnnotationOptions? {
@@ -190,20 +218,22 @@ struct PolylineAnnotationOptions {
       lineJoin = LineJoin(rawValue: lineJoinRawValue)!
     }
     let lineSortKey: Double? = nilOrValue(list[2])
-    let lineBlur: Double? = nilOrValue(list[3])
-    let lineBorderColor: Int64? = isNullish(list[4]) ? nil : (list[4] is Int64? ? list[4] as! Int64? : Int64(list[4] as! Int32))
-    let lineBorderWidth: Double? = nilOrValue(list[5])
-    let lineColor: Int64? = isNullish(list[6]) ? nil : (list[6] is Int64? ? list[6] as! Int64? : Int64(list[6] as! Int32))
-    let lineGapWidth: Double? = nilOrValue(list[7])
-    let lineOffset: Double? = nilOrValue(list[8])
-    let lineOpacity: Double? = nilOrValue(list[9])
-    let linePattern: String? = nilOrValue(list[10])
-    let lineWidth: Double? = nilOrValue(list[11])
+    let lineZOffset: Double? = nilOrValue(list[3])
+    let lineBlur: Double? = nilOrValue(list[4])
+    let lineBorderColor: Int64? = isNullish(list[5]) ? nil : (list[5] is Int64? ? list[5] as! Int64? : Int64(list[5] as! Int32))
+    let lineBorderWidth: Double? = nilOrValue(list[6])
+    let lineColor: Int64? = isNullish(list[7]) ? nil : (list[7] is Int64? ? list[7] as! Int64? : Int64(list[7] as! Int32))
+    let lineGapWidth: Double? = nilOrValue(list[8])
+    let lineOffset: Double? = nilOrValue(list[9])
+    let lineOpacity: Double? = nilOrValue(list[10])
+    let linePattern: String? = nilOrValue(list[11])
+    let lineWidth: Double? = nilOrValue(list[12])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
       lineJoin: lineJoin,
       lineSortKey: lineSortKey,
+      lineZOffset: lineZOffset,
       lineBlur: lineBlur,
       lineBorderColor: lineBorderColor,
       lineBorderWidth: lineBorderWidth,
@@ -220,6 +250,7 @@ struct PolylineAnnotationOptions {
       geometry.toList(),
       lineJoin?.rawValue,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -381,6 +412,8 @@ protocol _PolylineAnnotationMessenger {
   func getLineDepthOcclusionFactor(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineOcclusionOpacity(managerId: String, lineOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineTranslate(managerId: String, lineTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -694,6 +727,41 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let setLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineOcclusionOpacityArg = args[1] as! Double
+        api.setLineOcclusionOpacity(managerId: managerIdArg, lineOcclusionOpacity: lineOcclusionOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let getLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineOcclusionOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineOcclusionOpacityChannel.setMessageHandler(nil)
     }
     let setLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

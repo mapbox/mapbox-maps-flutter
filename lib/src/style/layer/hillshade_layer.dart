@@ -46,45 +46,59 @@ class HillshadeLayer extends Layer {
   String? sourceLayer;
 
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
+  /// Default value: "#000000".
   int? hillshadeAccentColor;
 
   /// The shading color used to accentuate rugged terrain like sharp cliffs and gorges.
+  /// Default value: "#000000".
   List<Object>? hillshadeAccentColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? hillshadeEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? hillshadeEmissiveStrengthExpression;
 
   /// Intensity of the hillshade
+  /// Default value: 0.5. Value range: [0, 1]
   double? hillshadeExaggeration;
 
   /// Intensity of the hillshade
+  /// Default value: 0.5. Value range: [0, 1]
   List<Object>? hillshadeExaggerationExpression;
 
   /// The shading color of areas that faces towards the light source.
+  /// Default value: "#FFFFFF".
   int? hillshadeHighlightColor;
 
   /// The shading color of areas that faces towards the light source.
+  /// Default value: "#FFFFFF".
   List<Object>? hillshadeHighlightColorExpression;
 
   /// Direction of light source when map is rotated.
+  /// Default value: "viewport".
   HillshadeIlluminationAnchor? hillshadeIlluminationAnchor;
 
   /// Direction of light source when map is rotated.
+  /// Default value: "viewport".
   List<Object>? hillshadeIlluminationAnchorExpression;
 
   /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.
+  /// Default value: 335. Value range: [0, 359]
   double? hillshadeIlluminationDirection;
 
   /// The direction of the light source used to generate the hillshading with 0 as the top of the viewport if `hillshade-illumination-anchor` is set to `viewport` and due north if `hillshade-illumination-anchor` is set to `map` and no 3d lights enabled. If `hillshade-illumination-anchor` is set to `map` and 3d lights enabled, the direction from 3d lights is used instead.
+  /// Default value: 335. Value range: [0, 359]
   List<Object>? hillshadeIlluminationDirectionExpression;
 
   /// The shading color of areas that face away from the light source.
+  /// Default value: "#000000".
   int? hillshadeShadowColor;
 
   /// The shading color of areas that face away from the light source.
+  /// Default value: "#000000".
   List<Object>? hillshadeShadowColorExpression;
 
   @override

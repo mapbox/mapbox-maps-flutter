@@ -27,6 +27,7 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
     settings.puckBearing?.let {
       this.puckBearing = com.mapbox.maps.plugin.PuckBearing.values()[it.ordinal]
     }
+    settings.slot?.let { this.slot = it }
     settings.locationPuck?.let {
       val puck2D = it.locationPuck2D
       val puck3D = it.locationPuck3D
@@ -73,6 +74,7 @@ fun LocationComponentSettingsInterface.toFLT(context: Context) = LocationCompone
   layerBelow = layerBelow,
   puckBearingEnabled = puckBearingEnabled,
   puckBearing = PuckBearing.values()[puckBearing.ordinal],
+  slot = slot,
   locationPuck = LocationPuck(
     locationPuck2D = (locationPuck as? com.mapbox.maps.plugin.LocationPuck2D)?.let { puck2D ->
       LocationPuck2D(

@@ -32,6 +32,7 @@ void main() {
       lineMiterLimit: 1.0,
       lineRoundLimit: 1.0,
       lineSortKey: 1.0,
+      lineZOffset: 1.0,
       lineBlur: 1.0,
       lineBorderColor: Colors.red.value,
       lineBorderWidth: 1.0,
@@ -41,6 +42,7 @@ void main() {
       lineEmissiveStrength: 1.0,
       lineGapWidth: 1.0,
       lineGradient: Colors.red.value,
+      lineOcclusionOpacity: 1.0,
       lineOffset: 1.0,
       lineOpacity: 1.0,
       linePattern: "abc",
@@ -60,6 +62,7 @@ void main() {
     expect(layer.lineMiterLimit, 1.0);
     expect(layer.lineRoundLimit, 1.0);
     expect(layer.lineSortKey, 1.0);
+    expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColor, Colors.red.value);
     expect(layer.lineBorderWidth, 1.0);
@@ -69,6 +72,7 @@ void main() {
     expect(layer.lineEmissiveStrength, 1.0);
     expect(layer.lineGapWidth, 1.0);
     expect(layer.lineGradient, Colors.red.value);
+    expect(layer.lineOcclusionOpacity, 1.0);
     expect(layer.lineOffset, 1.0);
     expect(layer.lineOpacity, 1.0);
     expect(layer.linePattern, "abc");
@@ -105,6 +109,7 @@ void main() {
       lineMiterLimitExpression: ['number', 1.0],
       lineRoundLimitExpression: ['number', 1.0],
       lineSortKeyExpression: ['number', 1.0],
+      lineZOffsetExpression: ['number', 1.0],
       lineBlurExpression: ['number', 1.0],
       lineBorderColorExpression: ['rgba', 255, 0, 0, 1],
       lineBorderWidthExpression: ['number', 1.0],
@@ -117,6 +122,7 @@ void main() {
       lineEmissiveStrengthExpression: ['number', 1.0],
       lineGapWidthExpression: ['number', 1.0],
       lineGradientExpression: ['rgba', 255, 0, 0, 1],
+      lineOcclusionOpacityExpression: ['number', 1.0],
       lineOffsetExpression: ['number', 1.0],
       lineOpacityExpression: ['number', 1.0],
       linePatternExpression: ['image', "abc"],
@@ -147,6 +153,7 @@ void main() {
     expect(layer.lineMiterLimit, 1.0);
     expect(layer.lineRoundLimit, 1.0);
     expect(layer.lineSortKey, 1.0);
+    expect(layer.lineZOffset, 1.0);
     expect(layer.lineBlur, 1.0);
     expect(layer.lineBorderColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.lineBorderWidth, 1.0);
@@ -156,6 +163,7 @@ void main() {
     expect(layer.lineEmissiveStrength, 1.0);
     expect(layer.lineGapWidth, 1.0);
     expect(layer.lineGradientExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.lineOcclusionOpacity, 1.0);
     expect(layer.lineOffset, 1.0);
     expect(layer.lineOpacity, 1.0);
     expect(layer.linePatternExpression, ['image', "abc"]);

@@ -44,7 +44,7 @@ class RasterSource extends Source {
 
   String? _url;
 
-  /// A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`.
+  /// A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`. Required if `tiles` is not provided.
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
       if (value.value != null) {
@@ -57,7 +57,7 @@ class RasterSource extends Source {
 
   List<String?>? _tiles;
 
-  /// An array of one or more tile source URLs, as in the TileJSON spec.
+  /// An array of one or more tile source URLs, as in the TileJSON spec. Required if `url` is not provided.
   Future<List<String?>?> get tiles async {
     return _style?.getStyleSourceProperty(id, "tiles").then((value) {
       if (value.value != null) {
@@ -71,6 +71,7 @@ class RasterSource extends Source {
   List<double?>? _bounds;
 
   /// An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
+  /// Default value: [-180,-85.051129,180,85.051129].
   Future<List<double?>?> get bounds async {
     return _style?.getStyleSourceProperty(id, "bounds").then((value) {
       if (value.value != null) {
@@ -84,6 +85,7 @@ class RasterSource extends Source {
   double? _minzoom;
 
   /// Minimum zoom level for which tiles are available, as in the TileJSON spec.
+  /// Default value: 0.
   Future<double?> get minzoom async {
     return _style?.getStyleSourceProperty(id, "minzoom").then((value) {
       if (value.value != null) {
@@ -97,6 +99,7 @@ class RasterSource extends Source {
   double? _maxzoom;
 
   /// Maximum zoom level for which tiles are available, as in the TileJSON spec. Data from tiles at the maxzoom are used when displaying the map at higher zoom levels.
+  /// Default value: 22.
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
       if (value.value != null) {
@@ -110,6 +113,7 @@ class RasterSource extends Source {
   double? _tileSize;
 
   /// The minimum visual size to display tiles for this layer. Only configurable for raster layers.
+  /// Default value: 512.
   Future<double?> get tileSize async {
     return _style?.getStyleSourceProperty(id, "tileSize").then((value) {
       if (value.value != null) {
@@ -123,6 +127,7 @@ class RasterSource extends Source {
   Scheme? _scheme;
 
   /// Influences the y direction of the tile coordinates. The global-mercator (aka Spherical Mercator) profile is assumed.
+  /// Default value: "xyz".
   Future<Scheme?> get scheme async {
     return _style?.getStyleSourceProperty(id, "scheme").then((value) {
       if (value.value != null) {
@@ -154,6 +159,7 @@ class RasterSource extends Source {
   bool? _volatile;
 
   /// A setting to determine whether a source's tiles are cached locally.
+  /// Default value: false.
   Future<bool?> get volatile async {
     return _style?.getStyleSourceProperty(id, "volatile").then((value) {
       if (value.value != null) {
@@ -166,7 +172,8 @@ class RasterSource extends Source {
 
   double? _prefetchZoomDelta;
 
-  /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom. The default delta is 4.
+  /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom.
+  /// Default value: 4.
   Future<double?> get prefetchZoomDelta async {
     return _style
         ?.getStyleSourceProperty(id, "prefetch-zoom-delta")
@@ -197,6 +204,7 @@ class RasterSource extends Source {
   double? _minimumTileUpdateInterval;
 
   /// Minimum tile update interval in seconds, which is used to throttle the tile update network requests. If the given source supports loading tiles from a server, sets the minimum tile update interval. Update network requests that are more frequent than the minimum tile update interval are suppressed.
+  /// Default value: 0.
   Future<double?> get minimumTileUpdateInterval async {
     return _style
         ?.getStyleSourceProperty(id, "minimum-tile-update-interval")
@@ -227,6 +235,7 @@ class RasterSource extends Source {
   double? _tileRequestsDelay;
 
   /// For the tiled sources, this property sets the tile requests delay. The given delay comes in action only during an ongoing animation or gestures. It helps to avoid loading, parsing and rendering of the transient tiles and thus to improve the rendering performance, especially on low-end devices.
+  /// Default value: 0.
   Future<double?> get tileRequestsDelay async {
     return _style
         ?.getStyleSourceProperty(id, "tile-requests-delay")
@@ -242,6 +251,7 @@ class RasterSource extends Source {
   double? _tileNetworkRequestsDelay;
 
   /// For the tiled sources, this property sets the tile network requests delay. The given delay comes in action only during an ongoing animation or gestures. It helps to avoid loading the transient tiles from the network and thus to avoid redundant network requests. Note that tile-network-requests-delay value is superseded with tile-requests-delay property value, if both are provided.
+  /// Default value: 0.
   Future<double?> get tileNetworkRequestsDelay async {
     return _style
         ?.getStyleSourceProperty(id, "tile-network-requests-delay")

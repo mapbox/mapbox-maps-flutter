@@ -75,6 +75,7 @@ void main() {
       iconHaloColor: Colors.red.value,
       iconHaloWidth: 1.0,
       iconImageCrossFade: 1.0,
+      iconOcclusionOpacity: 1.0,
       iconOpacity: 1.0,
       iconTranslate: [0.0, 1.0],
       iconTranslateAnchor: IconTranslateAnchor.MAP,
@@ -83,6 +84,7 @@ void main() {
       textHaloBlur: 1.0,
       textHaloColor: Colors.red.value,
       textHaloWidth: 1.0,
+      textOcclusionOpacity: 1.0,
       textOpacity: 1.0,
       textTranslate: [0.0, 1.0],
       textTranslateAnchor: TextTranslateAnchor.MAP,
@@ -142,6 +144,7 @@ void main() {
     expect(layer.iconHaloColor, Colors.red.value);
     expect(layer.iconHaloWidth, 1.0);
     expect(layer.iconImageCrossFade, 1.0);
+    expect(layer.iconOcclusionOpacity, 1.0);
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
@@ -150,6 +153,7 @@ void main() {
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColor, Colors.red.value);
     expect(layer.textHaloWidth, 1.0);
+    expect(layer.textOcclusionOpacity, 1.0);
     expect(layer.textOpacity, 1.0);
     expect(layer.textTranslate, [0.0, 1.0]);
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);
@@ -243,6 +247,7 @@ void main() {
       iconHaloColorExpression: ['rgba', 255, 0, 0, 1],
       iconHaloWidthExpression: ['number', 1.0],
       iconImageCrossFadeExpression: ['number', 1.0],
+      iconOcclusionOpacityExpression: ['number', 1.0],
       iconOpacityExpression: ['number', 1.0],
       iconTranslateExpression: [
         'literal',
@@ -254,6 +259,7 @@ void main() {
       textHaloBlurExpression: ['number', 1.0],
       textHaloColorExpression: ['rgba', 255, 0, 0, 1],
       textHaloWidthExpression: ['number', 1.0],
+      textOcclusionOpacityExpression: ['number', 1.0],
       textOpacityExpression: ['number', 1.0],
       textTranslateExpression: [
         'literal',
@@ -321,6 +327,7 @@ void main() {
     expect(layer.iconHaloColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.iconHaloWidth, 1.0);
     expect(layer.iconImageCrossFade, 1.0);
+    expect(layer.iconOcclusionOpacity, 1.0);
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
@@ -329,6 +336,7 @@ void main() {
     expect(layer.textHaloBlur, 1.0);
     expect(layer.textHaloColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.textHaloWidth, 1.0);
+    expect(layer.textOcclusionOpacity, 1.0);
     expect(layer.textOpacity, 1.0);
     expect(layer.textTranslate, [0.0, 1.0]);
     expect(layer.textTranslateAnchor, TextTranslateAnchor.MAP);

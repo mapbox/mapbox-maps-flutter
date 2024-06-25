@@ -37,45 +37,45 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messenger.deleteAll(id);
 
-  /// Controls the intensity of light emitted on the source features.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
       messenger.setCircleEmissiveStrength(id, circleEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<double?> getCircleEmissiveStrength() =>
       messenger.getCircleEmissiveStrength(id);
 
-  /// Orientation of circle when map is pitched.
+  /// Orientation of circle when map is pitched. Default value: "viewport".
   Future<void> setCirclePitchAlignment(
           CirclePitchAlignment circlePitchAlignment) =>
       messenger.setCirclePitchAlignment(id, circlePitchAlignment);
 
-  /// Orientation of circle when map is pitched.
+  /// Orientation of circle when map is pitched. Default value: "viewport".
   Future<CirclePitchAlignment?> getCirclePitchAlignment() =>
       messenger.getCirclePitchAlignment(id);
 
-  /// Controls the scaling behavior of the circle when the map is pitched.
+  /// Controls the scaling behavior of the circle when the map is pitched. Default value: "map".
   Future<void> setCirclePitchScale(CirclePitchScale circlePitchScale) =>
       messenger.setCirclePitchScale(id, circlePitchScale);
 
-  /// Controls the scaling behavior of the circle when the map is pitched.
+  /// Controls the scaling behavior of the circle when the map is pitched. Default value: "map".
   Future<CirclePitchScale?> getCirclePitchScale() =>
       messenger.getCirclePitchScale(id);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
   Future<void> setCircleTranslate(List<double?> circleTranslate) =>
       messenger.setCircleTranslate(id, circleTranslate);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
   Future<List<double?>?> getCircleTranslate() =>
       messenger.getCircleTranslate(id);
 
-  /// Controls the frame of reference for `circle-translate`.
+  /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<void> setCircleTranslateAnchor(
           CircleTranslateAnchor circleTranslateAnchor) =>
       messenger.setCircleTranslateAnchor(id, circleTranslateAnchor);
 
-  /// Controls the frame of reference for `circle-translate`.
+  /// Controls the frame of reference for `circle-translate`. Default value: "map".
   Future<CircleTranslateAnchor?> getCircleTranslateAnchor() =>
       messenger.getCircleTranslateAnchor(id);
 }

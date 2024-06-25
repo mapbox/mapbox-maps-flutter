@@ -120,6 +120,10 @@ void main() {
     var iconColorSaturation = await manager.getIconColorSaturation();
     expect(1.0, iconColorSaturation);
 
+    await manager.setIconOcclusionOpacity(1.0);
+    var iconOcclusionOpacity = await manager.getIconOcclusionOpacity();
+    expect(1.0, iconOcclusionOpacity);
+
     await manager.setIconTranslate([0.0, 1.0]);
     var iconTranslate = await manager.getIconTranslate();
     expect([0.0, 1.0], iconTranslate);
@@ -127,6 +131,10 @@ void main() {
     await manager.setIconTranslateAnchor(IconTranslateAnchor.MAP);
     var iconTranslateAnchor = await manager.getIconTranslateAnchor();
     expect(IconTranslateAnchor.MAP, iconTranslateAnchor);
+
+    await manager.setTextOcclusionOpacity(1.0);
+    var textOcclusionOpacity = await manager.getTextOcclusionOpacity();
+    expect(1.0, textOcclusionOpacity);
 
     await manager.setTextTranslate([0.0, 1.0]);
     var textTranslate = await manager.getTextTranslate();
