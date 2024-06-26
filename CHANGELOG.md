@@ -1,4 +1,4 @@
-### main
+### 2.1.0-rc.1
 
 * Bump Maps SDK to 11.5.0-rc.1
 * Expose `text-occlusion-opacity`, `icon-occlusion-opacity`, `line-occlusion-opacity`, `model-front-cutoff`, `lineZOffset` as experimental.
