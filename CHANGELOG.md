@@ -1,7 +1,7 @@
 ### main
 
 * Bump Maps SDK to 11.5.0-rc.1
-* Expose text-occlusion-opacity, icon-occlusion-opacity, line-occlusion-opacity, model-front-cutoff, lineZOffset as experimental.
+* Expose `text-occlusion-opacity`, `icon-occlusion-opacity`, `line-occlusion-opacity`, `model-front-cutoff`, `lineZOffset` as experimental.
 * Add min/max/default values for most of the style properties.
 * Expose `clusterMinPoints` property for `GeoJSONSource`.
 * Expose `SlotLayer` and `RasterParticleLayer`.
