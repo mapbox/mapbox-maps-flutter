@@ -58,6 +58,10 @@ void main() {
     var lineEmissiveStrength = await manager.getLineEmissiveStrength();
     expect(1.0, lineEmissiveStrength);
 
+    await manager.setLineOcclusionOpacity(1.0);
+    var lineOcclusionOpacity = await manager.getLineOcclusionOpacity();
+    expect(1.0, lineOcclusionOpacity);
+
     await manager.setLineTranslate([0.0, 1.0]);
     var lineTranslate = await manager.getLineTranslate();
     expect([0.0, 1.0], lineTranslate);

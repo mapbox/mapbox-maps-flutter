@@ -45,6 +45,7 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
 }
 
 /// Orientation of circle when map is pitched.
+/// Default value: "viewport".
 enum CirclePitchAlignment: Int {
   /// The circle is aligned to the plane of the map.
   case mAP = 0
@@ -53,6 +54,7 @@ enum CirclePitchAlignment: Int {
 }
 
 /// Controls the scaling behavior of the circle when the map is pitched.
+/// Default value: "map".
 enum CirclePitchScale: Int {
   /// Circles are scaled according to their apparent distance to the camera.
   case mAP = 0
@@ -61,6 +63,7 @@ enum CirclePitchScale: Int {
 }
 
 /// Controls the frame of reference for `circle-translate`.
+/// Default value: "map".
 enum CircleTranslateAnchor: Int {
   /// The circle is translated relative to the map.
   case mAP = 0
@@ -77,18 +80,25 @@ struct CircleAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   var circleBlur: Double?
   /// The fill color of the circle.
+  /// Default value: "#000000".
   var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double?
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   var circleRadius: Double?
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   var circleStrokeWidth: Double?
 
   static func fromList(_ list: [Any?]) -> CircleAnnotation? {
@@ -139,18 +149,25 @@ struct CircleAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   var circleBlur: Double?
   /// The fill color of the circle.
+  /// Default value: "#000000".
   var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double?
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   var circleRadius: Double?
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   var circleStrokeWidth: Double?
 
   static func fromList(_ list: [Any?]) -> CircleAnnotationOptions? {

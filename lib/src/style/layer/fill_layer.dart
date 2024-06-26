@@ -56,27 +56,35 @@ class FillLayer extends Layer {
   List<Object>? fillSortKeyExpression;
 
   /// Whether or not the fill should be antialiased.
+  /// Default value: true.
   bool? fillAntialias;
 
   /// Whether or not the fill should be antialiased.
+  /// Default value: true.
   List<Object>? fillAntialiasExpression;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+  /// Default value: "#000000".
   int? fillColor;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+  /// Default value: "#000000".
   List<Object>? fillColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? fillEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? fillEmissiveStrengthExpression;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+  /// Default value: 1. Value range: [0, 1]
   double? fillOpacity;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? fillOpacityExpression;
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
@@ -92,15 +100,19 @@ class FillLayer extends Layer {
   List<Object>? fillPatternExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<double?>? fillTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<Object>? fillTranslateExpression;
 
   /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
   FillTranslateAnchor? fillTranslateAnchor;
 
   /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
   List<Object>? fillTranslateAnchorExpression;
 
   @override

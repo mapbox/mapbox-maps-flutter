@@ -5,6 +5,7 @@
 part of mapbox_maps_flutter;
 
 /// Controls the frame of reference for `fill-translate`.
+/// Default value: "map".
 enum FillTranslateAnchor {
   /// The fill is translated relative to the map.
   MAP,
@@ -34,9 +35,11 @@ class PolygonAnnotation {
   double? fillSortKey;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+  /// Default value: "#000000".
   int? fillColor;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+  /// Default value: 1. Value range: [0, 1]
   double? fillOpacity;
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
@@ -88,9 +91,11 @@ class PolygonAnnotationOptions {
   double? fillSortKey;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+  /// Default value: "#000000".
   int? fillColor;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+  /// Default value: 1. Value range: [0, 1]
   double? fillOpacity;
 
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.

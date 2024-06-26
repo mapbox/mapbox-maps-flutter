@@ -37,7 +37,10 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/** Orientation of circle when map is pitched. */
+/**
+ * Orientation of circle when map is pitched.
+ * Default value: "viewport".
+ */
 enum class CirclePitchAlignment(val raw: Int) {
   /** The circle is aligned to the plane of the map. */
   MAP(0),
@@ -51,7 +54,10 @@ enum class CirclePitchAlignment(val raw: Int) {
   }
 }
 
-/** Controls the scaling behavior of the circle when the map is pitched. */
+/**
+ * Controls the scaling behavior of the circle when the map is pitched.
+ * Default value: "map".
+ */
 enum class CirclePitchScale(val raw: Int) {
   /** Circles are scaled according to their apparent distance to the camera. */
   MAP(0),
@@ -65,7 +71,10 @@ enum class CirclePitchScale(val raw: Int) {
   }
 }
 
-/** Controls the frame of reference for `circle-translate`. */
+/**
+ * Controls the frame of reference for `circle-translate`.
+ * Default value: "map".
+ */
 enum class CircleTranslateAnchor(val raw: Int) {
   /** The circle is translated relative to the map. */
   MAP(0),
@@ -87,19 +96,40 @@ data class CircleAnnotation(
   val geometry: Point,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
-  /** Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. */
+  /**
+   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+   * Default value: 0.
+   */
   val circleBlur: Double? = null,
-  /** The fill color of the circle. */
+  /**
+   * The fill color of the circle.
+   * Default value: "#000000".
+   */
   val circleColor: Long? = null,
-  /** The opacity at which the circle will be drawn. */
+  /**
+   * The opacity at which the circle will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val circleOpacity: Double? = null,
-  /** Circle radius. */
+  /**
+   * Circle radius.
+   * Default value: 5. Minimum value: 0.
+   */
   val circleRadius: Double? = null,
-  /** The stroke color of the circle. */
+  /**
+   * The stroke color of the circle.
+   * Default value: "#000000".
+   */
   val circleStrokeColor: Long? = null,
-  /** The opacity of the circle's stroke. */
+  /**
+   * The opacity of the circle's stroke.
+   * Default value: 1. Value range: [0, 1]
+   */
   val circleStrokeOpacity: Double? = null,
-  /** The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. */
+  /**
+   * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+   * Default value: 0. Minimum value: 0.
+   */
   val circleStrokeWidth: Double? = null
 
 ) {
@@ -141,19 +171,40 @@ data class CircleAnnotationOptions(
   val geometry: Point,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
-  /** Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. */
+  /**
+   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+   * Default value: 0.
+   */
   val circleBlur: Double? = null,
-  /** The fill color of the circle. */
+  /**
+   * The fill color of the circle.
+   * Default value: "#000000".
+   */
   val circleColor: Long? = null,
-  /** The opacity at which the circle will be drawn. */
+  /**
+   * The opacity at which the circle will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val circleOpacity: Double? = null,
-  /** Circle radius. */
+  /**
+   * Circle radius.
+   * Default value: 5. Minimum value: 0.
+   */
   val circleRadius: Double? = null,
-  /** The stroke color of the circle. */
+  /**
+   * The stroke color of the circle.
+   * Default value: "#000000".
+   */
   val circleStrokeColor: Long? = null,
-  /** The opacity of the circle's stroke. */
+  /**
+   * The opacity of the circle's stroke.
+   * Default value: 1. Value range: [0, 1]
+   */
   val circleStrokeOpacity: Double? = null,
-  /** The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. */
+  /**
+   * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+   * Default value: 0. Minimum value: 0.
+   */
   val circleStrokeWidth: Double? = null
 
 ) {

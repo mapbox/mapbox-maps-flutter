@@ -555,6 +555,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
+    func getIconOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.iconOcclusionOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconOcclusionOpacity(managerId: String, iconOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.iconOcclusionOpacity = iconOcclusionOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -588,6 +608,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.iconTranslateAnchor = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getTextOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.textOcclusionOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setTextOcclusionOpacity(managerId: String, textOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.textOcclusionOpacity = textOcclusionOpacity
 
             completion(.success(()))
         } catch {

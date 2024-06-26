@@ -74,81 +74,107 @@ class LocationIndicatorLayer extends Layer {
   List<Object>? topImageExpression;
 
   /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
+  /// Default value: 0.
   double? accuracyRadius;
 
   /// The accuracy, in meters, of the position source used to retrieve the position of the location indicator.
+  /// Default value: 0.
   List<Object>? accuracyRadiusExpression;
 
   /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   int? accuracyRadiusBorderColor;
 
   /// The color for drawing the accuracy radius border. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   List<Object>? accuracyRadiusBorderColorExpression;
 
   /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   int? accuracyRadiusColor;
 
   /// The color for drawing the accuracy radius, as a circle. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   List<Object>? accuracyRadiusColorExpression;
 
   /// The bearing of the location indicator.
+  /// Default value: 0.
   double? bearing;
 
   /// The bearing of the location indicator.
+  /// Default value: 0.
   List<Object>? bearingExpression;
 
   /// The size of the bearing image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   double? bearingImageSize;
 
   /// The size of the bearing image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   List<Object>? bearingImageSizeExpression;
 
   /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   int? emphasisCircleColor;
 
   /// The color of the circle emphasizing the indicator. To adjust transparency, set the alpha component of the color accordingly.
+  /// Default value: "#ffffff".
   List<Object>? emphasisCircleColorExpression;
 
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
+  /// Default value: 0.
   double? emphasisCircleRadius;
 
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
+  /// Default value: 0.
   List<Object>? emphasisCircleRadiusExpression;
 
   /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+  /// Default value: "0".
   double? imagePitchDisplacement;
 
   /// The displacement off the center of the top image and the shadow image when the pitch of the map is greater than 0. This helps producing a three-dimensional appearence.
+  /// Default value: "0".
   List<Object>? imagePitchDisplacementExpression;
 
   /// An array of [latitude, longitude, altitude] position of the location indicator.
+  /// Default value: [0,0,0].
   List<double?>? location;
 
   /// An array of [latitude, longitude, altitude] position of the location indicator.
+  /// Default value: [0,0,0].
   List<Object>? locationExpression;
 
   /// The opacity of the entire location indicator layer.
+  /// Default value: 1. Value range: [0, 1]
   double? locationIndicatorOpacity;
 
   /// The opacity of the entire location indicator layer.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? locationIndicatorOpacityExpression;
 
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
+  /// Default value: "0.85".
   double? perspectiveCompensation;
 
   /// The amount of the perspective compensation, between 0 and 1. A value of 1 produces a location indicator of constant width across the screen. A value of 0 makes it scale naturally according to the viewing projection.
+  /// Default value: "0.85".
   List<Object>? perspectiveCompensationExpression;
 
   /// The size of the shadow image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   double? shadowImageSize;
 
   /// The size of the shadow image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   List<Object>? shadowImageSizeExpression;
 
   /// The size of the top image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   double? topImageSize;
 
   /// The size of the top image, as a scale factor applied to the size of the specified image.
+  /// Default value: 1.
   List<Object>? topImageSizeExpression;
 
   @override

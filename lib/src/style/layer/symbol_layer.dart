@@ -111,6 +111,8 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconHaloWidthExpression,
     double? this.iconImageCrossFade,
     List<Object>? this.iconImageCrossFadeExpression,
+    double? this.iconOcclusionOpacity,
+    List<Object>? this.iconOcclusionOpacityExpression,
     double? this.iconOpacity,
     List<Object>? this.iconOpacityExpression,
     List<double?>? this.iconTranslate,
@@ -127,6 +129,8 @@ class SymbolLayer extends Layer {
     List<Object>? this.textHaloColorExpression,
     double? this.textHaloWidth,
     List<Object>? this.textHaloWidthExpression,
+    double? this.textOcclusionOpacity,
+    List<Object>? this.textOcclusionOpacityExpression,
     double? this.textOpacity,
     List<Object>? this.textOpacityExpression,
     List<double?>? this.textTranslate,
@@ -152,21 +156,27 @@ class SymbolLayer extends Layer {
   String? sourceLayer;
 
   /// If true, the icon will be visible even if it collides with other previously drawn symbols.
+  /// Default value: false.
   bool? iconAllowOverlap;
 
   /// If true, the icon will be visible even if it collides with other previously drawn symbols.
+  /// Default value: false.
   List<Object>? iconAllowOverlapExpression;
 
   /// Part of the icon placed closest to the anchor.
+  /// Default value: "center".
   IconAnchor? iconAnchor;
 
   /// Part of the icon placed closest to the anchor.
+  /// Default value: "center".
   List<Object>? iconAnchorExpression;
 
   /// If true, other symbols can be visible even if they collide with the icon.
+  /// Default value: false.
   bool? iconIgnorePlacement;
 
   /// If true, other symbols can be visible even if they collide with the icon.
+  /// Default value: false.
   List<Object>? iconIgnorePlacementExpression;
 
   /// Name of image in sprite to use for drawing an image background.
@@ -176,75 +186,99 @@ class SymbolLayer extends Layer {
   List<Object>? iconImageExpression;
 
   /// If true, the icon may be flipped to prevent it from being rendered upside-down.
+  /// Default value: false.
   bool? iconKeepUpright;
 
   /// If true, the icon may be flipped to prevent it from being rendered upside-down.
+  /// Default value: false.
   List<Object>? iconKeepUprightExpression;
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+  /// Default value: [0,0].
   List<double?>? iconOffset;
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+  /// Default value: [0,0].
   List<Object>? iconOffsetExpression;
 
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
+  /// Default value: false.
   bool? iconOptional;
 
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
+  /// Default value: false.
   List<Object>? iconOptionalExpression;
 
   /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
+  /// Default value: 2. Minimum value: 0.
   double? iconPadding;
 
   /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
+  /// Default value: 2. Minimum value: 0.
   List<Object>? iconPaddingExpression;
 
   /// Orientation of icon when map is pitched.
+  /// Default value: "auto".
   IconPitchAlignment? iconPitchAlignment;
 
   /// Orientation of icon when map is pitched.
+  /// Default value: "auto".
   List<Object>? iconPitchAlignmentExpression;
 
   /// Rotates the icon clockwise.
+  /// Default value: 0.
   double? iconRotate;
 
   /// Rotates the icon clockwise.
+  /// Default value: 0.
   List<Object>? iconRotateExpression;
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons.
+  /// Default value: "auto".
   IconRotationAlignment? iconRotationAlignment;
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons.
+  /// Default value: "auto".
   List<Object>? iconRotationAlignmentExpression;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+  /// Default value: 1. Minimum value: 0.
   double? iconSize;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+  /// Default value: 1. Minimum value: 0.
   List<Object>? iconSizeExpression;
 
   /// Scales the icon to fit around the associated text.
+  /// Default value: "none".
   IconTextFit? iconTextFit;
 
   /// Scales the icon to fit around the associated text.
+  /// Default value: "none".
   List<Object>? iconTextFitExpression;
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  /// Default value: [0,0,0,0].
   List<double?>? iconTextFitPadding;
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  /// Default value: [0,0,0,0].
   List<Object>? iconTextFitPaddingExpression;
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
+  /// Default value: false.
   bool? symbolAvoidEdges;
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
+  /// Default value: false.
   List<Object>? symbolAvoidEdgesExpression;
 
   /// Label placement relative to its geometry.
+  /// Default value: "point".
   SymbolPlacement? symbolPlacement;
 
   /// Label placement relative to its geometry.
+  /// Default value: "point".
   List<Object>? symbolPlacementExpression;
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
@@ -254,39 +288,51 @@ class SymbolLayer extends Layer {
   List<Object>? symbolSortKeyExpression;
 
   /// Distance between two symbol anchors.
+  /// Default value: 250. Minimum value: 1.
   double? symbolSpacing;
 
   /// Distance between two symbol anchors.
+  /// Default value: 250. Minimum value: 1.
   List<Object>? symbolSpacingExpression;
 
   /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Default value: false.
   bool? symbolZElevate;
 
   /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
+  /// Default value: false.
   List<Object>? symbolZElevateExpression;
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+  /// Default value: "auto".
   SymbolZOrder? symbolZOrder;
 
   /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+  /// Default value: "auto".
   List<Object>? symbolZOrderExpression;
 
   /// If true, the text will be visible even if it collides with other previously drawn symbols.
+  /// Default value: false.
   bool? textAllowOverlap;
 
   /// If true, the text will be visible even if it collides with other previously drawn symbols.
+  /// Default value: false.
   List<Object>? textAllowOverlapExpression;
 
   /// Part of the text placed closest to the anchor.
+  /// Default value: "center".
   TextAnchor? textAnchor;
 
   /// Part of the text placed closest to the anchor.
+  /// Default value: "center".
   List<Object>? textAnchorExpression;
 
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+  /// Default value: "".
   String? textField;
 
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+  /// Default value: "".
   List<Object>? textFieldExpression;
 
   /// Font stack to use for displaying text.
@@ -296,99 +342,131 @@ class SymbolLayer extends Layer {
   List<Object>? textFontExpression;
 
   /// If true, other symbols can be visible even if they collide with the text.
+  /// Default value: false.
   bool? textIgnorePlacement;
 
   /// If true, other symbols can be visible even if they collide with the text.
+  /// Default value: false.
   List<Object>? textIgnorePlacementExpression;
 
   /// Text justification options.
+  /// Default value: "center".
   TextJustify? textJustify;
 
   /// Text justification options.
+  /// Default value: "center".
   List<Object>? textJustifyExpression;
 
   /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
+  /// Default value: true.
   bool? textKeepUpright;
 
   /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
+  /// Default value: true.
   List<Object>? textKeepUprightExpression;
 
   /// Text tracking amount.
+  /// Default value: 0.
   double? textLetterSpacing;
 
   /// Text tracking amount.
+  /// Default value: 0.
   List<Object>? textLetterSpacingExpression;
 
   /// Text leading value for multi-line text.
+  /// Default value: 1.2.
   double? textLineHeight;
 
   /// Text leading value for multi-line text.
+  /// Default value: 1.2.
   List<Object>? textLineHeightExpression;
 
   /// Maximum angle change between adjacent characters.
+  /// Default value: 45.
   double? textMaxAngle;
 
   /// Maximum angle change between adjacent characters.
+  /// Default value: 45.
   List<Object>? textMaxAngleExpression;
 
   /// The maximum line width for text wrapping.
+  /// Default value: 10. Minimum value: 0.
   double? textMaxWidth;
 
   /// The maximum line width for text wrapping.
+  /// Default value: 10. Minimum value: 0.
   List<Object>? textMaxWidthExpression;
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+  /// Default value: [0,0].
   List<double?>? textOffset;
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+  /// Default value: [0,0].
   List<Object>? textOffsetExpression;
 
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
+  /// Default value: false.
   bool? textOptional;
 
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
+  /// Default value: false.
   List<Object>? textOptionalExpression;
 
   /// Size of the additional area around the text bounding box used for detecting symbol collisions.
+  /// Default value: 2. Minimum value: 0.
   double? textPadding;
 
   /// Size of the additional area around the text bounding box used for detecting symbol collisions.
+  /// Default value: 2. Minimum value: 0.
   List<Object>? textPaddingExpression;
 
   /// Orientation of text when map is pitched.
+  /// Default value: "auto".
   TextPitchAlignment? textPitchAlignment;
 
   /// Orientation of text when map is pitched.
+  /// Default value: "auto".
   List<Object>? textPitchAlignmentExpression;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+  /// Default value: 0.
   double? textRadialOffset;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+  /// Default value: 0.
   List<Object>? textRadialOffsetExpression;
 
   /// Rotates the text clockwise.
+  /// Default value: 0.
   double? textRotate;
 
   /// Rotates the text clockwise.
+  /// Default value: 0.
   List<Object>? textRotateExpression;
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+  /// Default value: "auto".
   TextRotationAlignment? textRotationAlignment;
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+  /// Default value: "auto".
   List<Object>? textRotationAlignmentExpression;
 
   /// Font size.
+  /// Default value: 16. Minimum value: 0.
   double? textSize;
 
   /// Font size.
+  /// Default value: 16. Minimum value: 0.
   List<Object>? textSizeExpression;
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+  /// Default value: "none".
   TextTransform? textTransform;
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+  /// Default value: "none".
   List<Object>? textTransformExpression;
 
   /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
@@ -404,111 +482,165 @@ class SymbolLayer extends Layer {
   List<Object>? textWritingModeExpression;
 
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "#000000".
   int? iconColor;
 
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "#000000".
   List<Object>? iconColorExpression;
 
-  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  /// Increase or reduce the saturation of the symbol icon.
+  /// Default value: 0. Value range: [-1, 1]
   double? iconColorSaturation;
 
-  /// Controls saturation level of the symbol icon. With the default value of 1 the icon color is preserved while with a value of 0 it is fully desaturated and looks black and white.
+  /// Increase or reduce the saturation of the symbol icon.
+  /// Default value: 0. Value range: [-1, 1]
   List<Object>? iconColorSaturationExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   double? iconEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   List<Object>? iconEmissiveStrengthExpression;
 
   /// Fade out the halo towards the outside.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloBlur;
 
   /// Fade out the halo towards the outside.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? iconHaloBlurExpression;
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "rgba(0, 0, 0, 0)".
   int? iconHaloColor;
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? iconHaloColorExpression;
 
   /// Distance of halo to the icon outline.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloWidth;
 
   /// Distance of halo to the icon outline.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? iconHaloWidthExpression;
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Default value: 0. Value range: [0, 1]
   double? iconImageCrossFade;
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? iconImageCrossFadeExpression;
 
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Not supported on globe zoom levels.
+  /// Default value: 1. Value range: [0, 1]
+  @experimental
+  double? iconOcclusionOpacity;
+
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Not supported on globe zoom levels.
+  /// Default value: 1. Value range: [0, 1]
+  List<Object>? iconOcclusionOpacityExpression;
+
   /// The opacity at which the icon will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
 
   /// The opacity at which the icon will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? iconOpacityExpression;
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
+  /// Default value: [0,0].
   List<double?>? iconTranslate;
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
+  /// Default value: [0,0].
   List<Object>? iconTranslateExpression;
 
   /// Controls the frame of reference for `icon-translate`.
+  /// Default value: "map".
   IconTranslateAnchor? iconTranslateAnchor;
 
   /// Controls the frame of reference for `icon-translate`.
+  /// Default value: "map".
   List<Object>? iconTranslateAnchorExpression;
 
   /// The color with which the text will be drawn.
+  /// Default value: "#000000".
   int? textColor;
 
   /// The color with which the text will be drawn.
+  /// Default value: "#000000".
   List<Object>? textColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   double? textEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   List<Object>? textEmissiveStrengthExpression;
 
   /// The halo's fadeout distance towards the outside.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloBlur;
 
   /// The halo's fadeout distance towards the outside.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? textHaloBlurExpression;
 
   /// The color of the text's halo, which helps it stand out from backgrounds.
+  /// Default value: "rgba(0, 0, 0, 0)".
   int? textHaloColor;
 
   /// The color of the text's halo, which helps it stand out from backgrounds.
+  /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? textHaloColorExpression;
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloWidth;
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? textHaloWidthExpression;
 
+  /// The opacity at which the text will be drawn in case of being depth occluded. Not supported on globe zoom levels.
+  /// Default value: 1. Value range: [0, 1]
+  @experimental
+  double? textOcclusionOpacity;
+
+  /// The opacity at which the text will be drawn in case of being depth occluded. Not supported on globe zoom levels.
+  /// Default value: 1. Value range: [0, 1]
+  List<Object>? textOcclusionOpacityExpression;
+
   /// The opacity at which the text will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
   /// The opacity at which the text will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? textOpacityExpression;
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
+  /// Default value: [0,0].
   List<double?>? textTranslate;
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
+  /// Default value: [0,0].
   List<Object>? textTranslateExpression;
 
   /// Controls the frame of reference for `text-translate`.
+  /// Default value: "map".
   TextTranslateAnchor? textTranslateAnchor;
 
   /// Controls the frame of reference for `text-translate`.
+  /// Default value: "map".
   List<Object>? textTranslateAnchorExpression;
 
   @override
@@ -877,6 +1009,13 @@ class SymbolLayer extends Layer {
       paint["icon-image-cross-fade"] = iconImageCrossFade;
     }
 
+    if (iconOcclusionOpacityExpression != null) {
+      paint["icon-occlusion-opacity"] = iconOcclusionOpacityExpression;
+    }
+    if (iconOcclusionOpacity != null) {
+      paint["icon-occlusion-opacity"] = iconOcclusionOpacity;
+    }
+
     if (iconOpacityExpression != null) {
       paint["icon-opacity"] = iconOpacityExpression;
     }
@@ -932,6 +1071,13 @@ class SymbolLayer extends Layer {
     }
     if (textHaloWidth != null) {
       paint["text-halo-width"] = textHaloWidth;
+    }
+
+    if (textOcclusionOpacityExpression != null) {
+      paint["text-occlusion-opacity"] = textOcclusionOpacityExpression;
+    }
+    if (textOcclusionOpacity != null) {
+      paint["text-occlusion-opacity"] = textOcclusionOpacity;
     }
 
     if (textOpacityExpression != null) {
@@ -1203,6 +1349,10 @@ class SymbolLayer extends Layer {
       iconImageCrossFade: _optionalCast(map["paint"]["icon-image-cross-fade"]),
       iconImageCrossFadeExpression:
           _optionalCastList(map["paint"]["icon-image-cross-fade"]),
+      iconOcclusionOpacity:
+          _optionalCast(map["paint"]["icon-occlusion-opacity"]),
+      iconOcclusionOpacityExpression:
+          _optionalCastList(map["paint"]["icon-occlusion-opacity"]),
       iconOpacity: _optionalCast(map["paint"]["icon-opacity"]),
       iconOpacityExpression: _optionalCastList(map["paint"]["icon-opacity"]),
       iconTranslate: (map["paint"]["icon-translate"] as List?)
@@ -1232,6 +1382,10 @@ class SymbolLayer extends Layer {
       textHaloWidth: _optionalCast(map["paint"]["text-halo-width"]),
       textHaloWidthExpression:
           _optionalCastList(map["paint"]["text-halo-width"]),
+      textOcclusionOpacity:
+          _optionalCast(map["paint"]["text-occlusion-opacity"]),
+      textOcclusionOpacityExpression:
+          _optionalCastList(map["paint"]["text-occlusion-opacity"]),
       textOpacity: _optionalCast(map["paint"]["text-opacity"]),
       textOpacityExpression: _optionalCastList(map["paint"]["text-opacity"]),
       textTranslate: (map["paint"]["text-translate"] as List?)

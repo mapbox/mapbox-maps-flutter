@@ -64,75 +64,99 @@ class CircleLayer extends Layer {
   List<Object>? circleSortKeyExpression;
 
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   double? circleBlur;
 
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   List<Object>? circleBlurExpression;
 
   /// The fill color of the circle.
+  /// Default value: "#000000".
   int? circleColor;
 
   /// The fill color of the circle.
+  /// Default value: "#000000".
   List<Object>? circleColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? circleEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? circleEmissiveStrengthExpression;
 
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? circleOpacity;
 
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? circleOpacityExpression;
 
   /// Orientation of circle when map is pitched.
+  /// Default value: "viewport".
   CirclePitchAlignment? circlePitchAlignment;
 
   /// Orientation of circle when map is pitched.
+  /// Default value: "viewport".
   List<Object>? circlePitchAlignmentExpression;
 
   /// Controls the scaling behavior of the circle when the map is pitched.
+  /// Default value: "map".
   CirclePitchScale? circlePitchScale;
 
   /// Controls the scaling behavior of the circle when the map is pitched.
+  /// Default value: "map".
   List<Object>? circlePitchScaleExpression;
 
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   double? circleRadius;
 
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   List<Object>? circleRadiusExpression;
 
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   int? circleStrokeColor;
 
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   List<Object>? circleStrokeColorExpression;
 
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   double? circleStrokeOpacity;
 
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? circleStrokeOpacityExpression;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? circleStrokeWidthExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<double?>? circleTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<Object>? circleTranslateExpression;
 
   /// Controls the frame of reference for `circle-translate`.
+  /// Default value: "map".
   CircleTranslateAnchor? circleTranslateAnchor;
 
   /// Controls the frame of reference for `circle-translate`.
+  /// Default value: "map".
   List<Object>? circleTranslateAnchorExpression;
 
   @override

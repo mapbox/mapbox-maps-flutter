@@ -45,6 +45,7 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
 }
 
 /// Part of the icon placed closest to the anchor.
+/// Default value: "center".
 enum IconAnchor: Int {
   /// The center of the icon is placed closest to the anchor.
   case cENTER = 0
@@ -67,26 +68,29 @@ enum IconAnchor: Int {
 }
 
 /// Orientation of icon when map is pitched.
+/// Default value: "auto".
 enum IconPitchAlignment: Int {
   /// The icon is aligned to the plane of the map.
   case mAP = 0
   /// The icon is aligned to the plane of the viewport.
   case vIEWPORT = 1
-  /// Automatically matches the value of {@link ICON_ROTATION_ALIGNMENT}.
+  /// Automatically matches the value of `icon-rotation-alignment`.
   case aUTO = 2
 }
 
 /// In combination with `symbol-placement`, determines the rotation behavior of icons.
+/// Default value: "auto".
 enum IconRotationAlignment: Int {
-  /// When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, aligns icons east-west. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, aligns icon x-axes with the line.
+  /// When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line.
   case mAP = 0
-  /// Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of {@link SYMBOL_PLACEMENT}.
+  /// Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.
   case vIEWPORT = 1
-  /// When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, this is equivalent to {@link Property#ICON_ROTATION_ALIGNMENT_VIEWPORT}. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, this is equivalent to {@link Property#ICON_ROTATION_ALIGNMENT_MAP}.
+  /// When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.
   case aUTO = 2
 }
 
 /// Scales the icon to fit around the associated text.
+/// Default value: "none".
 enum IconTextFit: Int {
   /// The icon is displayed at its intrinsic aspect ratio.
   case nONE = 0
@@ -99,26 +103,29 @@ enum IconTextFit: Int {
 }
 
 /// Label placement relative to its geometry.
+/// Default value: "point".
 enum SymbolPlacement: Int {
   /// The label is placed at the point where the geometry is located.
   case pOINT = 0
-  /// The label is placed along the line of the geometry. Can only be used on LineString and Polygon geometries.
+  /// The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries.
   case lINE = 1
-  /// The label is placed at the center of the line of the geometry. Can only be used on LineString and Polygon geometries. Note that a single feature in a vector tile may contain multiple line geometries.
+  /// The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries.
   case lINECENTER = 2
 }
 
 /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+/// Default value: "auto".
 enum SymbolZOrder: Int {
-  /// Sorts symbols by symbol sort key if set. Otherwise, sorts symbols by their y-position relative to the viewport if {@link ICON_ALLOW_OVERLAP} or {@link TEXT_ALLOW_OVERLAP} is set to {@link TRUE} or {@link ICON_IGNORE_PLACEMENT} or {@link TEXT_IGNORE_PLACEMENT} is {@link FALSE}.
+  /// Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   case aUTO = 0
-  /// Sorts symbols by their y-position relative to the viewport if {@link ICON_ALLOW_OVERLAP} or {@link TEXT_ALLOW_OVERLAP} is set to {@link TRUE} or {@link ICON_IGNORE_PLACEMENT} or {@link TEXT_IGNORE_PLACEMENT} is {@link FALSE}.
+  /// Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   case vIEWPORTY = 1
-  /// Sorts symbols by symbol sort key if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.
+  /// Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.
   case sOURCE = 2
 }
 
 /// Part of the text placed closest to the anchor.
+/// Default value: "center".
 enum TextAnchor: Int {
   /// The center of the text is placed closest to the anchor.
   case cENTER = 0
@@ -141,6 +148,7 @@ enum TextAnchor: Int {
 }
 
 /// Text justification options.
+/// Default value: "center".
 enum TextJustify: Int {
   /// The text is aligned towards the anchor position.
   case aUTO = 0
@@ -153,26 +161,29 @@ enum TextJustify: Int {
 }
 
 /// Orientation of text when map is pitched.
+/// Default value: "auto".
 enum TextPitchAlignment: Int {
   /// The text is aligned to the plane of the map.
   case mAP = 0
   /// The text is aligned to the plane of the viewport.
   case vIEWPORT = 1
-  /// Automatically matches the value of {@link TEXT_ROTATION_ALIGNMENT}.
+  /// Automatically matches the value of `text-rotation-alignment`.
   case aUTO = 2
 }
 
 /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+/// Default value: "auto".
 enum TextRotationAlignment: Int {
-  /// When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, aligns text east-west. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, aligns text x-axes with the line.
+  /// When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line.
   case mAP = 0
-  /// Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of {@link SYMBOL_PLACEMENT}.
+  /// Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`.
   case vIEWPORT = 1
-  /// When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, this is equivalent to {@link Property#TEXT_ROTATION_ALIGNMENT_VIEWPORT}. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, this is equivalent to {@link Property#TEXT_ROTATION_ALIGNMENT_MAP}.
+  /// When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`.
   case aUTO = 2
 }
 
 /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+/// Default value: "none".
 enum TextTransform: Int {
   /// The text is not altered.
   case nONE = 0
@@ -213,6 +224,7 @@ enum TextWritingMode: Int {
 }
 
 /// Controls the frame of reference for `icon-translate`.
+/// Default value: "map".
 enum IconTranslateAnchor: Int {
   /// Icons are translated relative to the map.
   case mAP = 0
@@ -221,6 +233,7 @@ enum IconTranslateAnchor: Int {
 }
 
 /// Controls the frame of reference for `text-translate`.
+/// Default value: "map".
 enum TextTranslateAnchor: Int {
   /// The text is translated relative to the map.
   case mAP = 0
@@ -238,68 +251,98 @@ struct PointAnnotation {
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
   /// Part of the icon placed closest to the anchor.
+  /// Default value: "center".
   var iconAnchor: IconAnchor?
   /// Name of image in sprite to use for drawing an image background.
   var iconImage: String?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+  /// Default value: [0,0].
   var iconOffset: [Double?]?
   /// Rotates the icon clockwise.
+  /// Default value: 0.
   var iconRotate: Double?
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+  /// Default value: 1. Minimum value: 0.
   var iconSize: Double?
   /// Scales the icon to fit around the associated text.
+  /// Default value: "none".
   var iconTextFit: IconTextFit?
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  /// Default value: [0,0,0,0].
   var iconTextFitPadding: [Double?]?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
   /// Part of the text placed closest to the anchor.
+  /// Default value: "center".
   var textAnchor: TextAnchor?
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+  /// Default value: "".
   var textField: String?
   /// Text justification options.
+  /// Default value: "center".
   var textJustify: TextJustify?
   /// Text tracking amount.
+  /// Default value: 0.
   var textLetterSpacing: Double?
   /// Text leading value for multi-line text.
+  /// Default value: 1.2.
   var textLineHeight: Double?
   /// The maximum line width for text wrapping.
+  /// Default value: 10. Minimum value: 0.
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+  /// Default value: [0,0].
   var textOffset: [Double?]?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+  /// Default value: 0.
   var textRadialOffset: Double?
   /// Rotates the text clockwise.
+  /// Default value: 0.
   var textRotate: Double?
   /// Font size.
+  /// Default value: 16. Minimum value: 0.
   var textSize: Double?
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+  /// Default value: "none".
   var textTransform: TextTransform?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "#000000".
   var iconColor: Int64?
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   var iconEmissiveStrength: Double?
   /// Fade out the halo towards the outside.
+  /// Default value: 0. Minimum value: 0.
   var iconHaloBlur: Double?
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "rgba(0, 0, 0, 0)".
   var iconHaloColor: Int64?
   /// Distance of halo to the icon outline.
+  /// Default value: 0. Minimum value: 0.
   var iconHaloWidth: Double?
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Default value: 0. Value range: [0, 1]
   var iconImageCrossFade: Double?
   /// The opacity at which the icon will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
   /// The color with which the text will be drawn.
+  /// Default value: "#000000".
   var textColor: Int64?
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   var textEmissiveStrength: Double?
   /// The halo's fadeout distance towards the outside.
+  /// Default value: 0. Minimum value: 0.
   var textHaloBlur: Double?
   /// The color of the text's halo, which helps it stand out from backgrounds.
+  /// Default value: "rgba(0, 0, 0, 0)".
   var textHaloColor: Int64?
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+  /// Default value: 0. Minimum value: 0.
   var textHaloWidth: Double?
   /// The opacity at which the text will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
 
   static func fromList(_ list: [Any?]) -> PointAnnotation? {
@@ -446,68 +489,98 @@ struct PointAnnotationOptions {
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
   /// Part of the icon placed closest to the anchor.
+  /// Default value: "center".
   var iconAnchor: IconAnchor?
   /// Name of image in sprite to use for drawing an image background.
   var iconImage: String?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+  /// Default value: [0,0].
   var iconOffset: [Double?]?
   /// Rotates the icon clockwise.
+  /// Default value: 0.
   var iconRotate: Double?
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+  /// Default value: 1. Minimum value: 0.
   var iconSize: Double?
   /// Scales the icon to fit around the associated text.
+  /// Default value: "none".
   var iconTextFit: IconTextFit?
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+  /// Default value: [0,0,0,0].
   var iconTextFitPadding: [Double?]?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
   /// Part of the text placed closest to the anchor.
+  /// Default value: "center".
   var textAnchor: TextAnchor?
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+  /// Default value: "".
   var textField: String?
   /// Text justification options.
+  /// Default value: "center".
   var textJustify: TextJustify?
   /// Text tracking amount.
+  /// Default value: 0.
   var textLetterSpacing: Double?
   /// Text leading value for multi-line text.
+  /// Default value: 1.2.
   var textLineHeight: Double?
   /// The maximum line width for text wrapping.
+  /// Default value: 10. Minimum value: 0.
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+  /// Default value: [0,0].
   var textOffset: [Double?]?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+  /// Default value: 0.
   var textRadialOffset: Double?
   /// Rotates the text clockwise.
+  /// Default value: 0.
   var textRotate: Double?
   /// Font size.
+  /// Default value: 16. Minimum value: 0.
   var textSize: Double?
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
+  /// Default value: "none".
   var textTransform: TextTransform?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "#000000".
   var iconColor: Int64?
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   var iconEmissiveStrength: Double?
   /// Fade out the halo towards the outside.
+  /// Default value: 0. Minimum value: 0.
   var iconHaloBlur: Double?
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+  /// Default value: "rgba(0, 0, 0, 0)".
   var iconHaloColor: Int64?
   /// Distance of halo to the icon outline.
+  /// Default value: 0. Minimum value: 0.
   var iconHaloWidth: Double?
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Default value: 0. Value range: [0, 1]
   var iconImageCrossFade: Double?
   /// The opacity at which the icon will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
   /// The color with which the text will be drawn.
+  /// Default value: "#000000".
   var textColor: Int64?
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 1. Minimum value: 0.
   var textEmissiveStrength: Double?
   /// The halo's fadeout distance towards the outside.
+  /// Default value: 0. Minimum value: 0.
   var textHaloBlur: Double?
   /// The color of the text's halo, which helps it stand out from backgrounds.
+  /// Default value: "rgba(0, 0, 0, 0)".
   var textHaloColor: Int64?
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+  /// Default value: 0. Minimum value: 0.
   var textHaloWidth: Double?
   /// The opacity at which the text will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
 
   static func fromList(_ list: [Any?]) -> PointAnnotationOptions? {
@@ -823,10 +896,14 @@ protocol _PointAnnotationMessenger {
   func getTextRotationAlignment(managerId: String, completion: @escaping (Result<TextRotationAlignment?, Error>) -> Void)
   func setIconColorSaturation(managerId: String, iconColorSaturation: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconOcclusionOpacity(managerId: String, iconOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void)
+  func setTextOcclusionOpacity(managerId: String, textOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextTranslate(managerId: String, textTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1699,6 +1776,41 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconColorSaturationChannel.setMessageHandler(nil)
     }
+    let setIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconOcclusionOpacityArg = args[1] as! Double
+        api.setIconOcclusionOpacity(managerId: managerIdArg, iconOcclusionOpacity: iconOcclusionOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let getIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconOcclusionOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconOcclusionOpacityChannel.setMessageHandler(nil)
+    }
     let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTranslateChannel.setMessageHandler { message, reply in
@@ -1768,6 +1880,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textOcclusionOpacityArg = args[1] as! Double
+        api.setTextOcclusionOpacity(managerId: managerIdArg, textOcclusionOpacity: textOcclusionOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let getTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextOcclusionOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextOcclusionOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextOcclusionOpacityChannel.setMessageHandler(nil)
     }
     let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

@@ -44,7 +44,10 @@ enum class OrnamentPosition(val raw: Int) {
   }
 }
 
-/** Configures the directions in which the map is allowed to move during a scroll gesture. */
+/**
+ * Configures the directions in which the map is allowed to move during a scroll gesture.
+ * Default value: "horizontal-and-vertical".
+ */
 enum class ScrollMode(val raw: Int) {
   /** The map may only move horizontally. */
   HORIZONTAL(0),
@@ -60,7 +63,10 @@ enum class ScrollMode(val raw: Int) {
   }
 }
 
-/** The enum controls how the puck is oriented */
+/**
+ * The enum controls how the puck is oriented
+ * Default value: "heading".
+ */
 enum class PuckBearing(val raw: Int) {
   /** Orients the puck to match the direction in which the device is facing. */
   HEADING(0),
@@ -74,7 +80,10 @@ enum class PuckBearing(val raw: Int) {
   }
 }
 
-/** Defines scaling mode. Only applies to location-indicator type layers. */
+/**
+ * Defines scaling mode. Only applies to location-indicator type layers.
+ * Default value: "map".
+ */
 enum class ModelScaleMode(val raw: Int) {
   /** Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover. */
   MAP(0),
@@ -94,39 +103,87 @@ enum class ModelScaleMode(val raw: Int) {
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class GesturesSettings(
-  /** Whether the rotate gesture is enabled. */
+  /**
+   * Whether the rotate gesture is enabled.
+   * Default value: true.
+   */
   val rotateEnabled: Boolean? = null,
-  /** Whether the pinch to zoom gesture is enabled. */
+  /**
+   * Whether the pinch to zoom gesture is enabled.
+   * Default value: true.
+   */
   val pinchToZoomEnabled: Boolean? = null,
-  /** Whether the single-touch scroll gesture is enabled. */
+  /**
+   * Whether the single-touch scroll gesture is enabled.
+   * Default value: true.
+   */
   val scrollEnabled: Boolean? = null,
-  /** Whether rotation is enabled for the pinch to zoom gesture. */
+  /**
+   * Whether rotation is enabled for the pinch to zoom gesture.
+   * Default value: true.
+   */
   val simultaneousRotateAndPinchToZoomEnabled: Boolean? = null,
-  /** Whether the pitch gesture is enabled. */
+  /**
+   * Whether the pitch gesture is enabled.
+   * Default value: true.
+   */
   val pitchEnabled: Boolean? = null,
-  /** Configures the directions in which the map is allowed to move during a scroll gesture. */
+  /**
+   * Configures the directions in which the map is allowed to move during a scroll gesture.
+   * Default value: "horizontal-and-vertical".
+   */
   val scrollMode: ScrollMode? = null,
-  /** Whether double tapping the map with one touch results in a zoom-in animation. */
+  /**
+   * Whether double tapping the map with one touch results in a zoom-in animation.
+   * Default value: true.
+   */
   val doubleTapToZoomInEnabled: Boolean? = null,
-  /** Whether single tapping the map with two touches results in a zoom-out animation. */
+  /**
+   * Whether single tapping the map with two touches results in a zoom-out animation.
+   * Default value: true.
+   */
   val doubleTouchToZoomOutEnabled: Boolean? = null,
-  /** Whether the quick zoom gesture is enabled. */
+  /**
+   * Whether the quick zoom gesture is enabled.
+   * Default value: true.
+   */
   val quickZoomEnabled: Boolean? = null,
   /** By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead. */
   val focalPoint: ScreenCoordinate? = null,
-  /** Whether a deceleration animation following a pinch-to-zoom gesture is enabled. True by default. */
+  /**
+   * Whether a deceleration animation following a pinch-to-zoom gesture is enabled. True by default.
+   * Default value: true.
+   */
   val pinchToZoomDecelerationEnabled: Boolean? = null,
-  /** Whether a deceleration animation following a rotate gesture is enabled. True by default. */
+  /**
+   * Whether a deceleration animation following a rotate gesture is enabled. True by default.
+   * Default value: true.
+   */
   val rotateDecelerationEnabled: Boolean? = null,
-  /** Whether a deceleration animation following a scroll gesture is enabled. True by default. */
+  /**
+   * Whether a deceleration animation following a scroll gesture is enabled. True by default.
+   * Default value: true.
+   */
   val scrollDecelerationEnabled: Boolean? = null,
-  /** Whether rotate threshold increases when pinching to zoom. true by default. */
+  /**
+   * Whether rotate threshold increases when pinching to zoom. true by default.
+   * Default value: true.
+   */
   val increaseRotateThresholdWhenPinchingToZoom: Boolean? = null,
-  /** Whether pinch to zoom threshold increases when rotating. true by default. */
+  /**
+   * Whether pinch to zoom threshold increases when rotating. true by default.
+   * Default value: true.
+   */
   val increasePinchToZoomThresholdWhenRotating: Boolean? = null,
-  /** The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive. */
+  /**
+   * The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+   * Default value: 1.
+   */
   val zoomAnimationAmount: Double? = null,
-  /** Whether pan is enabled for the pinch gesture. */
+  /**
+   * Whether pan is enabled for the pinch gesture.
+   * Default value: true.
+   */
   val pinchPanEnabled: Boolean? = null
 
 ) {
@@ -190,7 +247,10 @@ data class LocationPuck2D(
   val shadowImage: ByteArray? = null,
   /** The scale expression of the images. If defined, it will be applied to all the three images. */
   val scaleExpression: String? = null,
-  /** The opacity of the entire location puck */
+  /**
+   * The opacity of the entire location puck
+   * Default value: 1. Value range: [0, 1]
+   */
   val opacity: Double? = null
 
 ) {
@@ -218,27 +278,57 @@ data class LocationPuck2D(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class LocationPuck3D(
-  /** An URL for the model file in gltf format. */
+  /**
+   * An URL for the model file in gltf format.
+   * Default value: null.
+   */
   val modelUri: String? = null,
-  /** The position of the model. */
+  /**
+   * The position of the model.
+   * Default value: [0,0].
+   */
   val position: List<Double?>? = null,
-  /** The opacity of the model. */
+  /**
+   * The opacity of the model.
+   * Default value: 1. Value range: [0, 1]
+   */
   val modelOpacity: Double? = null,
-  /** The scale of the model. */
+  /**
+   * The scale of the model.
+   * Default value: [1,1,1].
+   */
   val modelScale: List<Double?>? = null,
   /** The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom. */
   val modelScaleExpression: String? = null,
-  /** The translation of the model [lon, lat, z] */
+  /**
+   * The translation of the model [lon, lat, z]
+   * Default value: [0,0,0].
+   */
   val modelTranslation: List<Double?>? = null,
-  /** The rotation of the model. */
+  /**
+   * The rotation of the model.
+   * Default value: [0,0,90].
+   */
   val modelRotation: List<Double?>? = null,
-  /** Enable/Disable shadow casting for the 3D location puck. */
+  /**
+   * Enable/Disable shadow casting for the 3D location puck.
+   * Default value: true.
+   */
   val modelCastShadows: Boolean? = null,
-  /** Enable/Disable shadow receiving for the 3D location puck. */
+  /**
+   * Enable/Disable shadow receiving for the 3D location puck.
+   * Default value: true.
+   */
   val modelReceiveShadows: Boolean? = null,
-  /** Defines scaling mode. Only applies to location-indicator type layers. */
+  /**
+   * Defines scaling mode. Only applies to location-indicator type layers.
+   * Default value: "map".
+   */
   val modelScaleMode: ModelScaleMode? = null,
-  /** Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). */
+  /**
+   * Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+   * Default value: 1. Value range: [0, 5]
+   */
   val modelEmissiveStrength: Double? = null,
   /** Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). */
   val modelEmissiveStrengthExpression: String? = null
@@ -318,28 +408,57 @@ data class LocationPuck(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class LocationComponentSettings(
-  /** Whether the user location is visible on the map. */
+  /**
+   * Whether the user location is visible on the map.
+   * Default value: false.
+   */
   val enabled: Boolean? = null,
-  /** Whether the location puck is pulsing on the map. Works for 2D location puck only. */
+  /**
+   * Whether the location puck is pulsing on the map. Works for 2D location puck only.
+   * Default value: false.
+   */
   val pulsingEnabled: Boolean? = null,
-  /** The color of the pulsing circle. Works for 2D location puck only. */
+  /**
+   * The color of the pulsing circle. Works for 2D location puck only.
+   * Default value: "#4A90E2".
+   */
   val pulsingColor: Long? = null,
-  /** The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle. This property is specified in pixels. */
+  /**
+   * The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle.
+   * Default value: 10.
+   */
   val pulsingMaxRadius: Double? = null,
-  /** Whether show accuracy ring with location puck. Works for 2D location puck only. */
+  /**
+   * Whether show accuracy ring with location puck. Works for 2D location puck only.
+   * Default value: false.
+   */
   val showAccuracyRing: Boolean? = null,
-  /** The color of the accuracy ring. Works for 2D location puck only. */
+  /**
+   * The color of the accuracy ring. Works for 2D location puck only.
+   * Default value: "#4d89cff0".
+   */
   val accuracyRingColor: Long? = null,
-  /** The color of the accuracy ring border. Works for 2D location puck only. */
+  /**
+   * The color of the accuracy ring border. Works for 2D location puck only.
+   * Default value: "#4d89cff0".
+   */
   val accuracyRingBorderColor: Long? = null,
   /** Sets the id of the layer that's added above to when placing the component on the map. */
   val layerAbove: String? = null,
   /** Sets the id of the layer that's added below to when placing the component on the map. */
   val layerBelow: String? = null,
-  /** Whether the puck rotates to track the bearing source. */
+  /**
+   * Whether the puck rotates to track the bearing source.
+   * Default value: false.
+   */
   val puckBearingEnabled: Boolean? = null,
-  /** The enum controls how the puck is oriented */
+  /**
+   * The enum controls how the puck is oriented
+   * Default value: "heading".
+   */
   val puckBearing: PuckBearing? = null,
+  /** The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order. */
+  val slot: String? = null,
   /** Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time. */
   val locationPuck: LocationPuck? = null
 
@@ -360,10 +479,11 @@ data class LocationComponentSettings(
       val puckBearing = (list[10] as Int?)?.let {
         PuckBearing.ofRaw(it)
       }
-      val locationPuck = (list[11] as List<Any?>?)?.let {
+      val slot = list[11] as String?
+      val locationPuck = (list[12] as List<Any?>?)?.let {
         LocationPuck.fromList(it)
       }
-      return LocationComponentSettings(enabled, pulsingEnabled, pulsingColor, pulsingMaxRadius, showAccuracyRing, accuracyRingColor, accuracyRingBorderColor, layerAbove, layerBelow, puckBearingEnabled, puckBearing, locationPuck)
+      return LocationComponentSettings(enabled, pulsingEnabled, pulsingColor, pulsingMaxRadius, showAccuracyRing, accuracyRingColor, accuracyRingBorderColor, layerAbove, layerBelow, puckBearingEnabled, puckBearing, slot, locationPuck)
     }
   }
   fun toList(): List<Any?> {
@@ -379,6 +499,7 @@ data class LocationComponentSettings(
       layerBelow,
       puckBearingEnabled,
       puckBearing?.raw,
+      slot,
       locationPuck?.toList(),
     )
   }
@@ -390,43 +511,100 @@ data class LocationComponentSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class ScaleBarSettings(
-  /** Whether the scale is visible on the map. */
+  /**
+   * Whether the scale is visible on the map.
+   * Default value: true.
+   */
   val enabled: Boolean? = null,
-  /** Defines where the scale bar is positioned on the map */
+  /**
+   * Defines where the scale bar is positioned on the map
+   * Default value: "top-left".
+   */
   val position: OrnamentPosition? = null,
-  /** Defines the margin to the left that the scale bar honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the left that the scale bar honors.
+   * Default value: 4.
+   */
   val marginLeft: Double? = null,
-  /** Defines the margin to the top that the scale bar honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the top that the scale bar honors.
+   * Default value: 4.
+   */
   val marginTop: Double? = null,
-  /** Defines the margin to the right that the scale bar honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the right that the scale bar honors.
+   * Default value: 4.
+   */
   val marginRight: Double? = null,
-  /** Defines the margin to the bottom that the scale bar honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the bottom that the scale bar honors.
+   * Default value: 4.
+   */
   val marginBottom: Double? = null,
-  /** Defines text color of the scale bar. */
+  /**
+   * Defines text color of the scale bar.
+   * Default value: "black".
+   */
   val textColor: Long? = null,
-  /** Defines primary color of the scale bar. */
+  /**
+   * Defines primary color of the scale bar.
+   * Default value: "black".
+   */
   val primaryColor: Long? = null,
-  /** Defines secondary color of the scale bar. */
+  /**
+   * Defines secondary color of the scale bar.
+   * Default value: "white".
+   */
   val secondaryColor: Long? = null,
-  /** Defines width of the border for the scale bar. This property is specified in pixels. */
+  /**
+   * Defines width of the border for the scale bar.
+   * Default value: 2.
+   */
   val borderWidth: Double? = null,
-  /** Defines height of the scale bar. This property is specified in pixels. */
+  /**
+   * Defines height of the scale bar.
+   * Default value: 2.
+   */
   val height: Double? = null,
-  /** Defines margin of the text bar of the scale bar. This property is specified in pixels. */
+  /**
+   * Defines margin of the text bar of the scale bar.
+   * Default value: 8.
+   */
   val textBarMargin: Double? = null,
-  /** Defines text border width of the scale bar. This property is specified in pixels. */
+  /**
+   * Defines text border width of the scale bar.
+   * Default value: 2.
+   */
   val textBorderWidth: Double? = null,
-  /** Defines text size of the scale bar. This property is specified in pixels. */
+  /**
+   * Defines text size of the scale bar.
+   * Default value: 8.
+   */
   val textSize: Double? = null,
-  /** Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units. */
+  /**
+   * Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.
+   * Default value: true.
+   */
   val isMetricUnits: Boolean? = null,
-  /** Configures minimum refresh interval, in millisecond, default is 15. */
+  /**
+   * Configures minimum refresh interval, in millisecond, default is 15.
+   * Default value: 15.
+   */
   val refreshInterval: Long? = null,
-  /** Configures whether to show the text border or not, default is true. */
+  /**
+   * Configures whether to show the text border or not, default is true.
+   * Default value: true.
+   */
   val showTextBorder: Boolean? = null,
-  /** configures ratio of scale bar max width compared with MapView width, default is 0.5. */
+  /**
+   * configures ratio of scale bar max width compared with MapView width, default is 0.5.
+   * Default value: 0.5.
+   */
   val ratio: Double? = null,
-  /** If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command. */
+  /**
+   * If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.
+   * Default value: false.
+   */
   val useContinuousRendering: Boolean? = null
 
 ) {
@@ -488,27 +666,60 @@ data class ScaleBarSettings(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class CompassSettings(
-  /** Whether the compass is visible on the map. */
+  /**
+   * Whether the compass is visible on the map.
+   * Default value: true.
+   */
   val enabled: Boolean? = null,
-  /** Defines where the compass is positioned on the map */
+  /**
+   * Defines where the compass is positioned on the map
+   * Default value: "top-right".
+   */
   val position: OrnamentPosition? = null,
-  /** Defines the margin to the left that the compass icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the left that the compass icon honors.
+   * Default value: 4.
+   */
   val marginLeft: Double? = null,
-  /** Defines the margin to the top that the compass icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the top that the compass icon honors.
+   * Default value: 4.
+   */
   val marginTop: Double? = null,
-  /** Defines the margin to the right that the compass icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the right that the compass icon honors.
+   * Default value: 4.
+   */
   val marginRight: Double? = null,
-  /** Defines the margin to the bottom that the compass icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the bottom that the compass icon honors.
+   * Default value: 4.
+   */
   val marginBottom: Double? = null,
-  /** The alpha channel value of the compass image */
+  /**
+   * The alpha channel value of the compass image
+   * Default value: 1.
+   */
   val opacity: Double? = null,
-  /** The clockwise rotation value in degrees of the compass. */
+  /**
+   * The clockwise rotation value in degrees of the compass.
+   * Default value: 0.
+   */
   val rotation: Double? = null,
-  /** Whether the compass is displayed. */
+  /**
+   * Whether the compass is displayed.
+   * Default value: true.
+   */
   val visibility: Boolean? = null,
-  /** Whether the compass fades out to invisible when facing north direction. */
+  /**
+   * Whether the compass fades out to invisible when facing north direction.
+   * Default value: true.
+   */
   val fadeWhenFacingNorth: Boolean? = null,
-  /** Whether the compass can be clicked and click events can be registered. */
+  /**
+   * Whether the compass can be clicked and click events can be registered.
+   * Default value: true.
+   */
   val clickable: Boolean? = null,
   /** The compass image, the visual representation of the compass. */
   val image: ByteArray? = null
@@ -560,22 +771,44 @@ data class CompassSettings(
 data class AttributionSettings(
   /**
    * Whether the attribution icon is visible on the map.
+   * Default value: true.
    * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
    */
   val enabled: Boolean? = null,
-  /** Defines text color of the attribution icon. */
+  /**
+   * Defines text color of the attribution icon.
+   * Default value: "#FF1E8CAB".
+   */
   val iconColor: Long? = null,
-  /** Defines where the attribution icon is positioned on the map */
+  /**
+   * Defines where the attribution icon is positioned on the map
+   * Default value: "bottom-left".
+   */
   val position: OrnamentPosition? = null,
-  /** Defines the margin to the left that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the left that the attribution icon honors.
+   * Default value: 92.
+   */
   val marginLeft: Double? = null,
-  /** Defines the margin to the top that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the top that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginTop: Double? = null,
-  /** Defines the margin to the right that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the right that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginRight: Double? = null,
-  /** Defines the margin to the bottom that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the bottom that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginBottom: Double? = null,
-  /** Whether the attribution can be clicked and click events can be registered. */
+  /**
+   * Whether the attribution can be clicked and click events can be registered.
+   * Default value: true.
+   */
   val clickable: Boolean? = null
 
 ) {
@@ -617,18 +850,34 @@ data class AttributionSettings(
 data class LogoSettings(
   /**
    * Whether the logo is visible on the map.
+   * Default value: true.
    * Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
    */
   val enabled: Boolean? = null,
-  /** Defines where the logo is positioned on the map */
+  /**
+   * Defines where the logo is positioned on the map
+   * Default value: "bottom-left".
+   */
   val position: OrnamentPosition? = null,
-  /** Defines the margin to the left that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the left that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginLeft: Double? = null,
-  /** Defines the margin to the top that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the top that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginTop: Double? = null,
-  /** Defines the margin to the right that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the right that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginRight: Double? = null,
-  /** Defines the margin to the bottom that the attribution icon honors. This property is specified in pixels. */
+  /**
+   * Defines the margin to the bottom that the attribution icon honors.
+   * Default value: 4.
+   */
   val marginBottom: Double? = null
 
 ) {

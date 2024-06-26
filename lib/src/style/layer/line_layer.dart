@@ -23,6 +23,8 @@ class LineLayer extends Layer {
     List<Object>? this.lineRoundLimitExpression,
     double? this.lineSortKey,
     List<Object>? this.lineSortKeyExpression,
+    double? this.lineZOffset,
+    List<Object>? this.lineZOffsetExpression,
     double? this.lineBlur,
     List<Object>? this.lineBlurExpression,
     int? this.lineBorderColor,
@@ -41,6 +43,8 @@ class LineLayer extends Layer {
     List<Object>? this.lineGapWidthExpression,
     int? this.lineGradient,
     List<Object>? this.lineGradientExpression,
+    double? this.lineOcclusionOpacity,
+    List<Object>? this.lineOcclusionOpacityExpression,
     double? this.lineOffset,
     List<Object>? this.lineOffsetExpression,
     double? this.lineOpacity,
@@ -74,27 +78,35 @@ class LineLayer extends Layer {
   String? sourceLayer;
 
   /// The display of line endings.
+  /// Default value: "butt".
   LineCap? lineCap;
 
   /// The display of line endings.
+  /// Default value: "butt".
   List<Object>? lineCapExpression;
 
   /// The display of lines when joining.
+  /// Default value: "miter".
   LineJoin? lineJoin;
 
   /// The display of lines when joining.
+  /// Default value: "miter".
   List<Object>? lineJoinExpression;
 
   /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
   double? lineMiterLimit;
 
   /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
   List<Object>? lineMiterLimitExpression;
 
   /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
   double? lineRoundLimit;
 
   /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
   List<Object>? lineRoundLimitExpression;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
@@ -103,52 +115,75 @@ class LineLayer extends Layer {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   List<Object>? lineSortKeyExpression;
 
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  @experimental
+  double? lineZOffset;
+
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  List<Object>? lineZOffsetExpression;
+
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineBlur;
 
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? lineBlurExpression;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   int? lineBorderColor;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   List<Object>? lineBorderColorExpression;
 
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   double? lineBorderWidth;
 
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? lineBorderWidthExpression;
 
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   int? lineColor;
 
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   List<Object>? lineColorExpression;
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
   List<double?>? lineDasharray;
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
   List<Object>? lineDasharrayExpression;
 
   /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
   double? lineDepthOcclusionFactor;
 
   /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? lineDepthOcclusionFactorExpression;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   double? lineEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? lineEmissiveStrengthExpression;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   List<Object>? lineGapWidthExpression;
 
   /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
@@ -157,16 +192,29 @@ class LineLayer extends Layer {
   /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
   List<Object>? lineGradientExpression;
 
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  @experimental
+  double? lineOcclusionOpacity;
+
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? lineOcclusionOpacityExpression;
+
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   double? lineOffset;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   List<Object>? lineOffsetExpression;
 
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? lineOpacity;
 
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   List<Object>? lineOpacityExpression;
 
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
@@ -176,27 +224,35 @@ class LineLayer extends Layer {
   List<Object>? linePatternExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<double?>? lineTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
   List<Object>? lineTranslateExpression;
 
   /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
   LineTranslateAnchor? lineTranslateAnchor;
 
   /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
   List<Object>? lineTranslateAnchorExpression;
 
   /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   List<double?>? lineTrimOffset;
 
   /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   List<Object>? lineTrimOffsetExpression;
 
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   double? lineWidth;
 
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   List<Object>? lineWidthExpression;
 
   @override
@@ -244,6 +300,13 @@ class LineLayer extends Layer {
 
     if (lineSortKey != null) {
       layout["line-sort-key"] = lineSortKey;
+    }
+    if (lineZOffsetExpression != null) {
+      layout["line-z-offset"] = lineZOffsetExpression;
+    }
+
+    if (lineZOffset != null) {
+      layout["line-z-offset"] = lineZOffset;
     }
     var paint = {};
     if (lineBlurExpression != null) {
@@ -307,6 +370,13 @@ class LineLayer extends Layer {
     }
     if (lineGradient != null) {
       paint["line-gradient"] = lineGradient?.toRGBA();
+    }
+
+    if (lineOcclusionOpacityExpression != null) {
+      paint["line-occlusion-opacity"] = lineOcclusionOpacityExpression;
+    }
+    if (lineOcclusionOpacity != null) {
+      paint["line-occlusion-opacity"] = lineOcclusionOpacity;
     }
 
     if (lineOffsetExpression != null) {
@@ -430,6 +500,8 @@ class LineLayer extends Layer {
           _optionalCastList(map["layout"]["line-round-limit"]),
       lineSortKey: _optionalCast(map["layout"]["line-sort-key"]),
       lineSortKeyExpression: _optionalCastList(map["layout"]["line-sort-key"]),
+      lineZOffset: _optionalCast(map["layout"]["line-z-offset"]),
+      lineZOffsetExpression: _optionalCastList(map["layout"]["line-z-offset"]),
       lineBlur: _optionalCast(map["paint"]["line-blur"]),
       lineBlurExpression: _optionalCastList(map["paint"]["line-blur"]),
       lineBorderColor:
@@ -458,6 +530,10 @@ class LineLayer extends Layer {
       lineGapWidthExpression: _optionalCastList(map["paint"]["line-gap-width"]),
       lineGradient: (map["paint"]["line-gradient"] as List?)?.toRGBAInt(),
       lineGradientExpression: _optionalCastList(map["paint"]["line-gradient"]),
+      lineOcclusionOpacity:
+          _optionalCast(map["paint"]["line-occlusion-opacity"]),
+      lineOcclusionOpacityExpression:
+          _optionalCastList(map["paint"]["line-occlusion-opacity"]),
       lineOffset: _optionalCast(map["paint"]["line-offset"]),
       lineOffsetExpression: _optionalCastList(map["paint"]["line-offset"]),
       lineOpacity: _optionalCast(map["paint"]["line-opacity"]),

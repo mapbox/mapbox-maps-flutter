@@ -733,6 +733,28 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
   }
 
+  override fun setIconOcclusionOpacity(
+    managerId: String,
+    iconOcclusionOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconOcclusionOpacity = iconOcclusionOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconOcclusionOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    if (manager.iconOcclusionOpacity != null) {
+      callback(Result.success(manager.iconOcclusionOpacity!!))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setIconTranslate(
     managerId: String,
     iconTranslate: List<Double?>,
@@ -772,6 +794,28 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     if (manager.iconTranslateAnchor != null) {
       callback(Result.success(manager.iconTranslateAnchor!!.toFLTIconTranslateAnchor()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setTextOcclusionOpacity(
+    managerId: String,
+    textOcclusionOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.textOcclusionOpacity = textOcclusionOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getTextOcclusionOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    if (manager.textOcclusionOpacity != null) {
+      callback(Result.success(manager.textOcclusionOpacity!!))
     } else {
       callback(Result.success(null))
     }

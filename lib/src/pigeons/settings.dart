@@ -12,6 +12,7 @@ enum OrnamentPosition {
 }
 
 /// Configures the directions in which the map is allowed to move during a scroll gesture.
+/// Default value: "horizontal-and-vertical".
 enum ScrollMode {
   /// The map may only move horizontally.
   HORIZONTAL,
@@ -24,6 +25,7 @@ enum ScrollMode {
 }
 
 /// The enum controls how the puck is oriented
+/// Default value: "heading".
 enum PuckBearing {
   /// Orients the puck to match the direction in which the device is facing.
   HEADING,
@@ -33,6 +35,7 @@ enum PuckBearing {
 }
 
 /// Defines scaling mode. Only applies to location-indicator type layers.
+/// Default value: "map".
 enum ModelScaleMode {
   /// Model is scaled so that it's always the same size relative to other map features. The property model-scale specifies how many meters each unit in the model file should cover.
   MAP,
@@ -64,54 +67,70 @@ class GesturesSettings {
   });
 
   /// Whether the rotate gesture is enabled.
+  /// Default value: true.
   bool? rotateEnabled;
 
   /// Whether the pinch to zoom gesture is enabled.
+  /// Default value: true.
   bool? pinchToZoomEnabled;
 
   /// Whether the single-touch scroll gesture is enabled.
+  /// Default value: true.
   bool? scrollEnabled;
 
   /// Whether rotation is enabled for the pinch to zoom gesture.
+  /// Default value: true.
   bool? simultaneousRotateAndPinchToZoomEnabled;
 
   /// Whether the pitch gesture is enabled.
+  /// Default value: true.
   bool? pitchEnabled;
 
   /// Configures the directions in which the map is allowed to move during a scroll gesture.
+  /// Default value: "horizontal-and-vertical".
   ScrollMode? scrollMode;
 
   /// Whether double tapping the map with one touch results in a zoom-in animation.
+  /// Default value: true.
   bool? doubleTapToZoomInEnabled;
 
   /// Whether single tapping the map with two touches results in a zoom-out animation.
+  /// Default value: true.
   bool? doubleTouchToZoomOutEnabled;
 
   /// Whether the quick zoom gesture is enabled.
+  /// Default value: true.
   bool? quickZoomEnabled;
 
   /// By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.
   ScreenCoordinate? focalPoint;
 
   /// Whether a deceleration animation following a pinch-to-zoom gesture is enabled. True by default.
+  /// Default value: true.
   bool? pinchToZoomDecelerationEnabled;
 
   /// Whether a deceleration animation following a rotate gesture is enabled. True by default.
+  /// Default value: true.
   bool? rotateDecelerationEnabled;
 
   /// Whether a deceleration animation following a scroll gesture is enabled. True by default.
+  /// Default value: true.
   bool? scrollDecelerationEnabled;
 
   /// Whether rotate threshold increases when pinching to zoom. true by default.
+  /// Default value: true.
   bool? increaseRotateThresholdWhenPinchingToZoom;
 
   /// Whether pinch to zoom threshold increases when rotating. true by default.
+  /// Default value: true.
   bool? increasePinchToZoomThresholdWhenRotating;
 
   /// The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
+  /// Default value: 1.
   double? zoomAnimationAmount;
 
   /// Whether pan is enabled for the pinch gesture.
+  /// Default value: true.
   bool? pinchPanEnabled;
 
   Object encode() {
@@ -185,6 +204,7 @@ class LocationPuck2D {
   String? scaleExpression;
 
   /// The opacity of the entire location puck
+  /// Default value: 1. Value range: [0, 1]
   double? opacity;
 
   Object encode() {
@@ -226,36 +246,46 @@ class LocationPuck3D {
   });
 
   /// An URL for the model file in gltf format.
+  /// Default value: null.
   String? modelUri;
 
   /// The position of the model.
+  /// Default value: [0,0].
   List<double?>? position;
 
   /// The opacity of the model.
+  /// Default value: 1. Value range: [0, 1]
   double? modelOpacity;
 
   /// The scale of the model.
+  /// Default value: [1,1,1].
   List<double?>? modelScale;
 
   /// The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom.
   String? modelScaleExpression;
 
   /// The translation of the model [lon, lat, z]
+  /// Default value: [0,0,0].
   List<double?>? modelTranslation;
 
   /// The rotation of the model.
+  /// Default value: [0,0,90].
   List<double?>? modelRotation;
 
   /// Enable/Disable shadow casting for the 3D location puck.
+  /// Default value: true.
   bool? modelCastShadows;
 
   /// Enable/Disable shadow receiving for the 3D location puck.
+  /// Default value: true.
   bool? modelReceiveShadows;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
+  /// Default value: "map".
   ModelScaleMode? modelScaleMode;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+  /// Default value: 1. Value range: [0, 5]
   double? modelEmissiveStrength;
 
   /// Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
@@ -343,28 +373,36 @@ class LocationComponentSettings {
     this.layerBelow,
     this.puckBearingEnabled,
     this.puckBearing,
+    this.slot,
     this.locationPuck,
   });
 
   /// Whether the user location is visible on the map.
+  /// Default value: false.
   bool? enabled;
 
   /// Whether the location puck is pulsing on the map. Works for 2D location puck only.
+  /// Default value: false.
   bool? pulsingEnabled;
 
   /// The color of the pulsing circle. Works for 2D location puck only.
+  /// Default value: "#4A90E2".
   int? pulsingColor;
 
-  /// The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle. This property is specified in pixels.
+  /// The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle.
+  /// Default value: 10.
   double? pulsingMaxRadius;
 
   /// Whether show accuracy ring with location puck. Works for 2D location puck only.
+  /// Default value: false.
   bool? showAccuracyRing;
 
   /// The color of the accuracy ring. Works for 2D location puck only.
+  /// Default value: "#4d89cff0".
   int? accuracyRingColor;
 
   /// The color of the accuracy ring border. Works for 2D location puck only.
+  /// Default value: "#4d89cff0".
   int? accuracyRingBorderColor;
 
   /// Sets the id of the layer that's added above to when placing the component on the map.
@@ -374,10 +412,15 @@ class LocationComponentSettings {
   String? layerBelow;
 
   /// Whether the puck rotates to track the bearing source.
+  /// Default value: false.
   bool? puckBearingEnabled;
 
   /// The enum controls how the puck is oriented
+  /// Default value: "heading".
   PuckBearing? puckBearing;
+
+  /// The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.
+  String? slot;
 
   /// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
   LocationPuck? locationPuck;
@@ -395,6 +438,7 @@ class LocationComponentSettings {
       layerBelow,
       puckBearingEnabled,
       puckBearing?.index,
+      slot,
       locationPuck?.encode(),
     ];
   }
@@ -414,8 +458,9 @@ class LocationComponentSettings {
       puckBearingEnabled: result[9] as bool?,
       puckBearing:
           result[10] != null ? PuckBearing.values[result[10]! as int] : null,
-      locationPuck: result[11] != null
-          ? LocationPuck.decode(result[11]! as List<Object?>)
+      slot: result[11] as String?,
+      locationPuck: result[12] != null
+          ? LocationPuck.decode(result[12]! as List<Object?>)
           : null,
     );
   }
@@ -446,60 +491,79 @@ class ScaleBarSettings {
   });
 
   /// Whether the scale is visible on the map.
+  /// Default value: true.
   bool? enabled;
 
   /// Defines where the scale bar is positioned on the map
+  /// Default value: "top-left".
   OrnamentPosition? position;
 
-  /// Defines the margin to the left that the scale bar honors. This property is specified in pixels.
+  /// Defines the margin to the left that the scale bar honors.
+  /// Default value: 4.
   double? marginLeft;
 
-  /// Defines the margin to the top that the scale bar honors. This property is specified in pixels.
+  /// Defines the margin to the top that the scale bar honors.
+  /// Default value: 4.
   double? marginTop;
 
-  /// Defines the margin to the right that the scale bar honors. This property is specified in pixels.
+  /// Defines the margin to the right that the scale bar honors.
+  /// Default value: 4.
   double? marginRight;
 
-  /// Defines the margin to the bottom that the scale bar honors. This property is specified in pixels.
+  /// Defines the margin to the bottom that the scale bar honors.
+  /// Default value: 4.
   double? marginBottom;
 
   /// Defines text color of the scale bar.
+  /// Default value: "black".
   int? textColor;
 
   /// Defines primary color of the scale bar.
+  /// Default value: "black".
   int? primaryColor;
 
   /// Defines secondary color of the scale bar.
+  /// Default value: "white".
   int? secondaryColor;
 
-  /// Defines width of the border for the scale bar. This property is specified in pixels.
+  /// Defines width of the border for the scale bar.
+  /// Default value: 2.
   double? borderWidth;
 
-  /// Defines height of the scale bar. This property is specified in pixels.
+  /// Defines height of the scale bar.
+  /// Default value: 2.
   double? height;
 
-  /// Defines margin of the text bar of the scale bar. This property is specified in pixels.
+  /// Defines margin of the text bar of the scale bar.
+  /// Default value: 8.
   double? textBarMargin;
 
-  /// Defines text border width of the scale bar. This property is specified in pixels.
+  /// Defines text border width of the scale bar.
+  /// Default value: 2.
   double? textBorderWidth;
 
-  /// Defines text size of the scale bar. This property is specified in pixels.
+  /// Defines text size of the scale bar.
+  /// Default value: 8.
   double? textSize;
 
   /// Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.
+  /// Default value: true.
   bool? isMetricUnits;
 
   /// Configures minimum refresh interval, in millisecond, default is 15.
+  /// Default value: 15.
   int? refreshInterval;
 
   /// Configures whether to show the text border or not, default is true.
+  /// Default value: true.
   bool? showTextBorder;
 
   /// configures ratio of scale bar max width compared with MapView width, default is 0.5.
+  /// Default value: 0.5.
   double? ratio;
 
   /// If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.
+  /// Default value: false.
   bool? useContinuousRendering;
 
   Object encode() {
@@ -571,36 +635,47 @@ class CompassSettings {
   });
 
   /// Whether the compass is visible on the map.
+  /// Default value: true.
   bool? enabled;
 
   /// Defines where the compass is positioned on the map
+  /// Default value: "top-right".
   OrnamentPosition? position;
 
-  /// Defines the margin to the left that the compass icon honors. This property is specified in pixels.
+  /// Defines the margin to the left that the compass icon honors.
+  /// Default value: 4.
   double? marginLeft;
 
-  /// Defines the margin to the top that the compass icon honors. This property is specified in pixels.
+  /// Defines the margin to the top that the compass icon honors.
+  /// Default value: 4.
   double? marginTop;
 
-  /// Defines the margin to the right that the compass icon honors. This property is specified in pixels.
+  /// Defines the margin to the right that the compass icon honors.
+  /// Default value: 4.
   double? marginRight;
 
-  /// Defines the margin to the bottom that the compass icon honors. This property is specified in pixels.
+  /// Defines the margin to the bottom that the compass icon honors.
+  /// Default value: 4.
   double? marginBottom;
 
   /// The alpha channel value of the compass image
+  /// Default value: 1.
   double? opacity;
 
   /// The clockwise rotation value in degrees of the compass.
+  /// Default value: 0.
   double? rotation;
 
   /// Whether the compass is displayed.
+  /// Default value: true.
   bool? visibility;
 
   /// Whether the compass fades out to invisible when facing north direction.
+  /// Default value: true.
   bool? fadeWhenFacingNorth;
 
   /// Whether the compass can be clicked and click events can be registered.
+  /// Default value: true.
   bool? clickable;
 
   /// The compass image, the visual representation of the compass.
@@ -657,28 +732,36 @@ class AttributionSettings {
   });
 
   /// Whether the attribution icon is visible on the map.
+  /// Default value: true.
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
   bool? enabled;
 
   /// Defines text color of the attribution icon.
+  /// Default value: "#FF1E8CAB".
   int? iconColor;
 
   /// Defines where the attribution icon is positioned on the map
+  /// Default value: "bottom-left".
   OrnamentPosition? position;
 
-  /// Defines the margin to the left that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the left that the attribution icon honors.
+  /// Default value: 92.
   double? marginLeft;
 
-  /// Defines the margin to the top that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the top that the attribution icon honors.
+  /// Default value: 4.
   double? marginTop;
 
-  /// Defines the margin to the right that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the right that the attribution icon honors.
+  /// Default value: 4.
   double? marginRight;
 
-  /// Defines the margin to the bottom that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the bottom that the attribution icon honors.
+  /// Default value: 4.
   double? marginBottom;
 
   /// Whether the attribution can be clicked and click events can be registered.
+  /// Default value: true.
   bool? clickable;
 
   Object encode() {
@@ -722,22 +805,28 @@ class LogoSettings {
   });
 
   /// Whether the logo is visible on the map.
+  /// Default value: true.
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
   bool? enabled;
 
   /// Defines where the logo is positioned on the map
+  /// Default value: "bottom-left".
   OrnamentPosition? position;
 
-  /// Defines the margin to the left that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the left that the attribution icon honors.
+  /// Default value: 4.
   double? marginLeft;
 
-  /// Defines the margin to the top that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the top that the attribution icon honors.
+  /// Default value: 4.
   double? marginTop;
 
-  /// Defines the margin to the right that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the right that the attribution icon honors.
+  /// Default value: 4.
   double? marginRight;
 
-  /// Defines the margin to the bottom that the attribution icon honors. This property is specified in pixels.
+  /// Defines the margin to the bottom that the attribution icon honors.
+  /// Default value: 4.
   double? marginBottom;
 
   Object encode() {

@@ -58,6 +58,9 @@ extension LocationOptions {
                 if let rotation = puck3D.modelRotation {
                     configuration.modelRotation = .constant(rotation.compactMap { $0 })
                 }
+                if let slot = settings.slot {
+                    configuration.slot = Slot(rawValue: slot)
+                }
                 options.puckType = .puck3D(configuration)
         } else if let puck2D = settings.locationPuck?.locationPuck2D {
             var configuration = useDefaultPuck2DIfNeeded
@@ -102,6 +105,9 @@ extension LocationOptions {
             if let opacity = puck2D.opacity {
                 configuration.opacity = opacity
             }
+            if let slot = settings.slot {
+                configuration.slot = Slot(rawValue: slot)
+            }
 
             options.puckType = .puck2D(configuration)
         }
@@ -115,6 +121,7 @@ extension LocationOptions {
         var pulsingEnabled: Bool?
         var pulsingRadius: Double?
         var pulsingColor: Int64?
+        var slot: String?
         var locationPuck2D = LocationPuck2D()
         var locationPuck3D = LocationPuck3D()
 
@@ -146,6 +153,7 @@ extension LocationOptions {
                 }
                 pulsingColor = Int64(pulsing.color.rgb())
             }
+            slot = oldConfiguration.slot?.rawValue
         }
         if case .puck3D(let oldConfiguration) = self.puckType {
             locationPuck3D.modelUri = oldConfiguration.model.uri?.absoluteString
@@ -163,6 +171,7 @@ extension LocationOptions {
             if case .constant(let rotationData) = oldConfiguration.modelRotation {
                 locationPuck3D.modelRotation = rotationData.compactMap { $0 }
             }
+            slot = oldConfiguration.slot?.rawValue
         }
 
         return LocationComponentSettings(
@@ -177,6 +186,7 @@ extension LocationOptions {
             layerBelow: nil,
             puckBearingEnabled: puckBearingEnabled,
             puckBearing: puckBearing.toFLTPuckBearing(),
+            slot: slot,
             locationPuck: LocationPuck(locationPuck2D: locationPuck2D, locationPuck3D: locationPuck3D)
         )
     }
