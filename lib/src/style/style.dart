@@ -129,6 +129,14 @@ class TileCacheBudget {
         size = budget.size;
 
   TileCacheBudget(this.type, this.size);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TileCacheBudget &&
+          runtimeType == other.runtimeType &&
+          type == other.type &&
+          size == other.size;
 }
 
 /// The description of the raster data layers and the bands contained within the tiles.
