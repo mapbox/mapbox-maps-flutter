@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
+import '../../utils/retry.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -31,15 +32,15 @@ void main() {
 
     var source = await mapboxMap.style.getSource('source') as ImageSource;
     expect(source.id, 'source');
-    var coordinates = await source.coordinates;
+
+    final coordinates = await source.coordinates;
     expect(coordinates, [
       [0.0, 1.0],
       [0.0, 1.0],
       [0.0, 1.0],
       [0.0, 1.0]
     ]);
-
-    var prefetchZoomDelta = await source.prefetchZoomDelta;
+    final prefetchZoomDelta = await source.prefetchZoomDelta;
     expect(prefetchZoomDelta, 1.0);
   });
 }

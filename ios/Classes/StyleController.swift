@@ -170,7 +170,8 @@ final class StyleController: StyleManager {
 
     func addStyleSource(sourceId: String, properties: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            try styleManager.addSource(createStyleSource(id: sourceId, data: convertStringToDictionary(properties: properties)))
+            try styleManager.addSource(withId: sourceId,
+                                          properties: convertStringToDictionary(properties: properties))
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: StyleController.errorCode, message: error.localizedDescription, details: nil)))
@@ -475,12 +476,4 @@ final class StyleController: StyleManager {
         }))
     }
 
-}
-
-private func createStyleSource(id: String, data: [String: Any]) throws -> MapboxMaps.Source {
-    guard let rawType = data["type"] as? String, let sourceType = SourceType(rawValue: rawType).sourceType else {
-        throw FlutterError(code: "0", message: "Invalid style source type", details: nil)
-    }
-
-    return try sourceType.init(jsonObject: data)
 }

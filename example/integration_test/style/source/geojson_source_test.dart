@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/empty_map_widget.dart' as app;
+import '../../utils/retry.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -54,31 +55,24 @@ void main() {
 
     var source = await mapboxMap.style.getSource('source') as GeoJsonSource;
     expect(source.id, 'source');
-    var maxzoom = await source.maxzoom;
+
+    final maxzoom = await source.maxzoom;
     expect(maxzoom, 1.0);
-
-    var attribution = await source.attribution;
+    final attribution = await source.attribution;
     expect(attribution, "abc");
-
-    var buffer = await source.buffer;
+    final buffer = await source.buffer;
     expect(buffer, 1.0);
-
-    var tolerance = await source.tolerance;
+    final tolerance = await source.tolerance;
     expect(tolerance, 1.0);
-
-    var cluster = await source.cluster;
+    final cluster = await source.cluster;
     expect(cluster, true);
-
-    var clusterRadius = await source.clusterRadius;
+    final clusterRadius = await source.clusterRadius;
     expect(clusterRadius, 1.0);
-
-    var clusterMaxZoom = await source.clusterMaxZoom;
+    final clusterMaxZoom = await source.clusterMaxZoom;
     expect(clusterMaxZoom, 1.0);
-
-    var clusterMinPoints = await source.clusterMinPoints;
+    final clusterMinPoints = await source.clusterMinPoints;
     expect(clusterMinPoints, 1.0);
-
-    var clusterProperties = await source.clusterProperties;
+    final clusterProperties = await source.clusterProperties;
     expect(clusterProperties, {
       "sum": [
         [
@@ -95,23 +89,19 @@ void main() {
         1.0
       ]
     });
-
-    var lineMetrics = await source.lineMetrics;
+    final lineMetrics = await source.lineMetrics;
     expect(lineMetrics, true);
-
-    var generateId = await source.generateId;
+    final generateId = await source.generateId;
     expect(generateId, true);
-
-    await Future.delayed(const Duration(seconds: 1), (){});
-    // https://mapbox.atlassian.net/browse/MAPSFLT-141
-      var prefetchZoomDelta = await source.prefetchZoomDelta;
-      expect(prefetchZoomDelta, 1.0);
-
-    var tileCacheBudget = await source.tileCacheBudget;
-    expect(tileCacheBudget?.size,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).size);
-    expect(tileCacheBudget?.type,
-        TileCacheBudget.inMegabytes(TileCacheBudgetInMegabytes(size: 3)).type);
+    await retry(2, () async {
+      await expectLater(source.prefetchZoomDelta, completion(1.0));
+    });
+    await retry(2, () async {
+      await expectLater(
+          source.tileCacheBudget,
+          completion(TileCacheBudget.inMegabytes(
+              TileCacheBudgetInMegabytes(size: 3))));
+    });
   });
 }
 // End of generated file.
