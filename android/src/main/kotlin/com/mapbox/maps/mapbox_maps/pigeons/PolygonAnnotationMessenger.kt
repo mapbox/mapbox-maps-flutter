@@ -37,7 +37,10 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/** Controls the frame of reference for `fill-translate`. */
+/**
+ * Controls the frame of reference for `fill-translate`.
+ * Default value: "map".
+ */
 enum class FillTranslateAnchor(val raw: Int) {
   /** The fill is translated relative to the map. */
   MAP(0),
@@ -59,9 +62,15 @@ data class PolygonAnnotation(
   val geometry: Polygon,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
-  /** The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. */
+  /**
+   * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+   * Default value: "#000000".
+   */
   val fillColor: Long? = null,
-  /** The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used. */
+  /**
+   * The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+   * Default value: 1. Value range: [0, 1]
+   */
   val fillOpacity: Double? = null,
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,
@@ -101,9 +110,15 @@ data class PolygonAnnotationOptions(
   val geometry: Polygon,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
-  /** The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. */
+  /**
+   * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
+   * Default value: "#000000".
+   */
   val fillColor: Long? = null,
-  /** The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used. */
+  /**
+   * The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
+   * Default value: 1. Value range: [0, 1]
+   */
   val fillOpacity: Double? = null,
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,

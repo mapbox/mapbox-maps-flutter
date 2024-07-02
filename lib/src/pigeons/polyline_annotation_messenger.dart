@@ -5,6 +5,7 @@
 part of mapbox_maps_flutter;
 
 /// The display of line endings.
+/// Default value: "butt".
 enum LineCap {
   /// A cap with a squared-off end which is drawn to the exact endpoint of the line.
   BUTT,
@@ -17,6 +18,7 @@ enum LineCap {
 }
 
 /// The display of lines when joining.
+/// Default value: "miter".
 enum LineJoin {
   /// A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width.
   BEVEL,
@@ -29,6 +31,7 @@ enum LineJoin {
 }
 
 /// Controls the frame of reference for `line-translate`.
+/// Default value: "map".
 enum LineTranslateAnchor {
   /// The line is translated relative to the map.
   MAP,
@@ -43,6 +46,7 @@ class PolylineAnnotation {
     required this.geometry,
     this.lineJoin,
     this.lineSortKey,
+    this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
@@ -61,36 +65,48 @@ class PolylineAnnotation {
   LineString geometry;
 
   /// The display of lines when joining.
+  /// Default value: "miter".
   LineJoin? lineJoin;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  double? lineZOffset;
+
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineBlur;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   int? lineBorderColor;
 
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   int? lineColor;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   double? lineOffset;
 
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? lineOpacity;
 
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
 
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   double? lineWidth;
 
   Object encode() {
@@ -99,6 +115,7 @@ class PolylineAnnotation {
       geometry.encode(),
       lineJoin?.index,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -118,15 +135,16 @@ class PolylineAnnotation {
       geometry: LineString.decode(result[1]! as List<Object?>),
       lineJoin: result[2] != null ? LineJoin.values[result[2]! as int] : null,
       lineSortKey: result[3] as double?,
-      lineBlur: result[4] as double?,
-      lineBorderColor: result[5] as int?,
-      lineBorderWidth: result[6] as double?,
-      lineColor: result[7] as int?,
-      lineGapWidth: result[8] as double?,
-      lineOffset: result[9] as double?,
-      lineOpacity: result[10] as double?,
-      linePattern: result[11] as String?,
-      lineWidth: result[12] as double?,
+      lineZOffset: result[4] as double?,
+      lineBlur: result[5] as double?,
+      lineBorderColor: result[6] as int?,
+      lineBorderWidth: result[7] as double?,
+      lineColor: result[8] as int?,
+      lineGapWidth: result[9] as double?,
+      lineOffset: result[10] as double?,
+      lineOpacity: result[11] as double?,
+      linePattern: result[12] as String?,
+      lineWidth: result[13] as double?,
     );
   }
 }
@@ -136,6 +154,7 @@ class PolylineAnnotationOptions {
     required this.geometry,
     this.lineJoin,
     this.lineSortKey,
+    this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
@@ -151,36 +170,48 @@ class PolylineAnnotationOptions {
   LineString geometry;
 
   /// The display of lines when joining.
+  /// Default value: "miter".
   LineJoin? lineJoin;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  double? lineZOffset;
+
   /// Blur applied to the line, in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineBlur;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+  /// Default value: "rgba(0, 0, 0, 0)".
   int? lineBorderColor;
 
   /// The width of the line border. A value of zero means no border.
+  /// Default value: 0. Minimum value: 0.
   double? lineBorderWidth;
 
   /// The color with which the line will be drawn.
+  /// Default value: "#000000".
   int? lineColor;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+  /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+  /// Default value: 0.
   double? lineOffset;
 
   /// The opacity at which the line will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? lineOpacity;
 
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
 
   /// Stroke thickness.
+  /// Default value: 1. Minimum value: 0.
   double? lineWidth;
 
   Object encode() {
@@ -188,6 +219,7 @@ class PolylineAnnotationOptions {
       geometry.encode(),
       lineJoin?.index,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -206,15 +238,16 @@ class PolylineAnnotationOptions {
       geometry: LineString.decode(result[0]! as List<Object?>),
       lineJoin: result[1] != null ? LineJoin.values[result[1]! as int] : null,
       lineSortKey: result[2] as double?,
-      lineBlur: result[3] as double?,
-      lineBorderColor: result[4] as int?,
-      lineBorderWidth: result[5] as double?,
-      lineColor: result[6] as int?,
-      lineGapWidth: result[7] as double?,
-      lineOffset: result[8] as double?,
-      lineOpacity: result[9] as double?,
-      linePattern: result[10] as String?,
-      lineWidth: result[11] as double?,
+      lineZOffset: result[3] as double?,
+      lineBlur: result[4] as double?,
+      lineBorderColor: result[5] as int?,
+      lineBorderWidth: result[6] as double?,
+      lineColor: result[7] as int?,
+      lineGapWidth: result[8] as double?,
+      lineOffset: result[9] as double?,
+      lineOpacity: result[10] as double?,
+      linePattern: result[11] as String?,
+      lineWidth: result[12] as double?,
     );
   }
 }
@@ -758,6 +791,55 @@ class _PolylineAnnotationMessenger {
   Future<double?> getLineEmissiveStrength(String managerId) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineOcclusionOpacity(
+      String managerId, double lineOcclusionOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineOcclusionOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineOcclusionOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOcclusionOpacity$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

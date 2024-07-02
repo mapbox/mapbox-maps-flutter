@@ -37,7 +37,10 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/** The display of line endings. */
+/**
+ * The display of line endings.
+ * Default value: "butt".
+ */
 enum class LineCap(val raw: Int) {
   /** A cap with a squared-off end which is drawn to the exact endpoint of the line. */
   BUTT(0),
@@ -53,7 +56,10 @@ enum class LineCap(val raw: Int) {
   }
 }
 
-/** The display of lines when joining. */
+/**
+ * The display of lines when joining.
+ * Default value: "miter".
+ */
 enum class LineJoin(val raw: Int) {
   /** A join with a squared-off end which is drawn beyond the endpoint of the line at a distance of one-half of the line's width. */
   BEVEL(0),
@@ -69,7 +75,10 @@ enum class LineJoin(val raw: Int) {
   }
 }
 
-/** Controls the frame of reference for `line-translate`. */
+/**
+ * Controls the frame of reference for `line-translate`.
+ * Default value: "map".
+ */
 enum class LineTranslateAnchor(val raw: Int) {
   /** The line is translated relative to the map. */
   MAP(0),
@@ -89,27 +98,56 @@ data class PolylineAnnotation(
   val id: String,
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
-  /** The display of lines when joining. */
+  /**
+   * The display of lines when joining.
+   * Default value: "miter".
+   */
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
-  /** Blur applied to the line, in pixels. */
+  /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
+  val lineZOffset: Double? = null,
+  /**
+   * Blur applied to the line, in pixels.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineBlur: Double? = null,
-  /** The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. */
+  /**
+   * The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val lineBorderColor: Long? = null,
-  /** The width of the line border. A value of zero means no border. */
+  /**
+   * The width of the line border. A value of zero means no border.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineBorderWidth: Double? = null,
-  /** The color with which the line will be drawn. */
+  /**
+   * The color with which the line will be drawn.
+   * Default value: "#000000".
+   */
   val lineColor: Long? = null,
-  /** Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. */
+  /**
+   * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineGapWidth: Double? = null,
-  /** The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. */
+  /**
+   * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+   * Default value: 0.
+   */
   val lineOffset: Double? = null,
-  /** The opacity at which the line will be drawn. */
+  /**
+   * The opacity at which the line will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val lineOpacity: Double? = null,
   /** Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val linePattern: String? = null,
-  /** Stroke thickness. */
+  /**
+   * Stroke thickness.
+   * Default value: 1. Minimum value: 0.
+   */
   val lineWidth: Double? = null
 
 ) {
@@ -122,16 +160,17 @@ data class PolylineAnnotation(
         LineJoin.ofRaw(it)
       }
       val lineSortKey = list[3] as Double?
-      val lineBlur = list[4] as Double?
-      val lineBorderColor = list[5].let { if (it is Int) it.toLong() else it as Long? }
-      val lineBorderWidth = list[6] as Double?
-      val lineColor = list[7].let { if (it is Int) it.toLong() else it as Long? }
-      val lineGapWidth = list[8] as Double?
-      val lineOffset = list[9] as Double?
-      val lineOpacity = list[10] as Double?
-      val linePattern = list[11] as String?
-      val lineWidth = list[12] as Double?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val lineZOffset = list[4] as Double?
+      val lineBlur = list[5] as Double?
+      val lineBorderColor = list[6].let { if (it is Int) it.toLong() else it as Long? }
+      val lineBorderWidth = list[7] as Double?
+      val lineColor = list[8].let { if (it is Int) it.toLong() else it as Long? }
+      val lineGapWidth = list[9] as Double?
+      val lineOffset = list[10] as Double?
+      val lineOpacity = list[11] as Double?
+      val linePattern = list[12] as String?
+      val lineWidth = list[13] as Double?
+      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
     }
   }
   fun toList(): List<Any?> {
@@ -140,6 +179,7 @@ data class PolylineAnnotation(
       geometry.toList(),
       lineJoin?.raw,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -157,27 +197,56 @@ data class PolylineAnnotation(
 data class PolylineAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
-  /** The display of lines when joining. */
+  /**
+   * The display of lines when joining.
+   * Default value: "miter".
+   */
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
-  /** Blur applied to the line, in pixels. */
+  /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
+  val lineZOffset: Double? = null,
+  /**
+   * Blur applied to the line, in pixels.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineBlur: Double? = null,
-  /** The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. */
+  /**
+   * The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val lineBorderColor: Long? = null,
-  /** The width of the line border. A value of zero means no border. */
+  /**
+   * The width of the line border. A value of zero means no border.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineBorderWidth: Double? = null,
-  /** The color with which the line will be drawn. */
+  /**
+   * The color with which the line will be drawn.
+   * Default value: "#000000".
+   */
   val lineColor: Long? = null,
-  /** Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. */
+  /**
+   * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
+   * Default value: 0. Minimum value: 0.
+   */
   val lineGapWidth: Double? = null,
-  /** The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. */
+  /**
+   * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
+   * Default value: 0.
+   */
   val lineOffset: Double? = null,
-  /** The opacity at which the line will be drawn. */
+  /**
+   * The opacity at which the line will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val lineOpacity: Double? = null,
   /** Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val linePattern: String? = null,
-  /** Stroke thickness. */
+  /**
+   * Stroke thickness.
+   * Default value: 1. Minimum value: 0.
+   */
   val lineWidth: Double? = null
 
 ) {
@@ -189,16 +258,17 @@ data class PolylineAnnotationOptions(
         LineJoin.ofRaw(it)
       }
       val lineSortKey = list[2] as Double?
-      val lineBlur = list[3] as Double?
-      val lineBorderColor = list[4].let { if (it is Int) it.toLong() else it as Long? }
-      val lineBorderWidth = list[5] as Double?
-      val lineColor = list[6].let { if (it is Int) it.toLong() else it as Long? }
-      val lineGapWidth = list[7] as Double?
-      val lineOffset = list[8] as Double?
-      val lineOpacity = list[9] as Double?
-      val linePattern = list[10] as String?
-      val lineWidth = list[11] as Double?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val lineZOffset = list[3] as Double?
+      val lineBlur = list[4] as Double?
+      val lineBorderColor = list[5].let { if (it is Int) it.toLong() else it as Long? }
+      val lineBorderWidth = list[6] as Double?
+      val lineColor = list[7].let { if (it is Int) it.toLong() else it as Long? }
+      val lineGapWidth = list[8] as Double?
+      val lineOffset = list[9] as Double?
+      val lineOpacity = list[10] as Double?
+      val linePattern = list[11] as String?
+      val lineWidth = list[12] as Double?
+      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
     }
   }
   fun toList(): List<Any?> {
@@ -206,6 +276,7 @@ data class PolylineAnnotationOptions(
       geometry.toList(),
       lineJoin?.raw,
       lineSortKey,
+      lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
@@ -354,6 +425,8 @@ interface _PolylineAnnotationMessenger {
   fun getLineDepthOcclusionFactor(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
   fun getLineEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineOcclusionOpacity(managerId: String, lineOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineTranslate(managerId: String, lineTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getLineTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -698,6 +771,46 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineEmissiveStrength(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineOcclusionOpacityArg = args[1] as Double
+            api.setLineOcclusionOpacity(managerIdArg, lineOcclusionOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

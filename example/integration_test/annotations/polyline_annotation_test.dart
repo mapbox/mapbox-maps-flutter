@@ -21,6 +21,7 @@ void main() {
       geometry: geometry,
       lineJoin: LineJoin.BEVEL,
       lineSortKey: 1.0,
+      lineZOffset: 1.0,
       lineBlur: 1.0,
       lineBorderColor: Colors.red.value,
       lineBorderWidth: 1.0,
@@ -41,6 +42,7 @@ void main() {
     expect(20.0, points.last.lat);
     expect(LineJoin.BEVEL, annotation.lineJoin);
     expect(1.0, annotation.lineSortKey);
+    expect(1.0, annotation.lineZOffset);
     expect(1.0, annotation.lineBlur);
     expect(Colors.red.value, annotation.lineBorderColor);
     expect(1.0, annotation.lineBorderWidth);

@@ -13,48 +13,51 @@ import com.mapbox.maps.plugin.locationcomponent.generated.LocationComponentSetti
 import java.io.ByteArrayOutputStream
 
 fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean, context: Context) {
-  settings.enabled?.let { enabled = it }
-  settings.pulsingEnabled?.let { pulsingEnabled = it }
-  settings.pulsingColor?.let { pulsingColor = it.toInt() }
-  settings.pulsingMaxRadius?.let { pulsingMaxRadius = it.toFloat() }
-  settings.showAccuracyRing?.let { showAccuracyRing = it }
-  settings.accuracyRingColor?.let { accuracyRingColor = it.toInt() }
-  settings.accuracyRingBorderColor?.let { accuracyRingBorderColor = it.toInt() }
-  settings.layerAbove?.let { layerAbove = it }
-  settings.layerBelow?.let { layerBelow = it }
-  settings.puckBearingEnabled?.let { puckBearingEnabled = it }
-  settings.puckBearing?.let {
-    puckBearing = com.mapbox.maps.plugin.PuckBearing.values()[it.ordinal]
-  }
-  settings.locationPuck?.let {
-    val puck2D = it.locationPuck2D
-    val puck3D = it.locationPuck3D
-    locationPuck = if (puck3D != null) {
-      com.mapbox.maps.plugin.LocationPuck3D(
-        puck3D.modelUri!!
-      ).apply {
-        puck3D.modelUri?.let { modelUri = it }
-        puck3D.position?.let { position = it.mapNotNull { it?.toFloat() } }
-        puck3D.modelOpacity?.let { modelOpacity = it.toFloat() }
-        puck3D.modelScale?.let { modelScale = it.mapNotNull { it?.toFloat() } }
-        puck3D.modelScaleExpression?.let { modelScaleExpression = it }
-        puck3D.modelTranslation?.let { modelTranslation = it.mapNotNull { it?.toFloat() } }
-        puck3D.modelRotation?.let { modelRotation = it.mapNotNull { it?.toFloat() } }
-        puck3D.modelCastShadows?.let { modelCastShadows = it }
-        puck3D.modelReceiveShadows?.let { modelReceiveShadows = it }
-        puck3D.modelScaleMode?.let { modelScaleMode = it.toModelScaleMode() }
-        puck3D.modelEmissiveStrength?.let { modelEmissiveStrength = it.toFloat() }
-        puck3D.modelEmissiveStrengthExpression?.let { modelEmissiveStrengthExpression = it }
-      }
-    } else {
-      (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
-        .apply {
-          puck2D?.topImage?.let { topImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
-          puck2D?.bearingImage?.let { bearingImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
-          puck2D?.shadowImage?.let { shadowImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
-          puck2D?.scaleExpression?.let { scaleExpression = it }
-          puck2D?.opacity?.let { opacity = it.toFloat() }
+  updateSettings {
+    settings.enabled?.let { this.enabled = it }
+    settings.pulsingEnabled?.let { this.pulsingEnabled = it }
+    settings.pulsingColor?.let { this.pulsingColor = it.toInt() }
+    settings.pulsingMaxRadius?.let { this.pulsingMaxRadius = it.toFloat() }
+    settings.showAccuracyRing?.let { this.showAccuracyRing = it }
+    settings.accuracyRingColor?.let { this.accuracyRingColor = it.toInt() }
+    settings.accuracyRingBorderColor?.let { this.accuracyRingBorderColor = it.toInt() }
+    settings.layerAbove?.let { this.layerAbove = it }
+    settings.layerBelow?.let { this.layerBelow = it }
+    settings.puckBearingEnabled?.let { this.puckBearingEnabled = it }
+    settings.puckBearing?.let {
+      this.puckBearing = com.mapbox.maps.plugin.PuckBearing.values()[it.ordinal]
+    }
+    settings.slot?.let { this.slot = it }
+    settings.locationPuck?.let {
+      val puck2D = it.locationPuck2D
+      val puck3D = it.locationPuck3D
+      this.locationPuck = if (puck3D != null) {
+        com.mapbox.maps.plugin.LocationPuck3D(
+          puck3D.modelUri!!
+        ).apply {
+          puck3D.modelUri?.let { this.modelUri = it }
+          puck3D.position?.let { this.position = it.mapNotNull { it?.toFloat() } }
+          puck3D.modelOpacity?.let { this.modelOpacity = it.toFloat() }
+          puck3D.modelScale?.let { this.modelScale = it.mapNotNull { it?.toFloat() } }
+          puck3D.modelScaleExpression?.let { this.modelScaleExpression = it }
+          puck3D.modelTranslation?.let { this.modelTranslation = it.mapNotNull { it?.toFloat() } }
+          puck3D.modelRotation?.let { this.modelRotation = it.mapNotNull { it?.toFloat() } }
+          puck3D.modelCastShadows?.let { this.modelCastShadows = it }
+          puck3D.modelReceiveShadows?.let { this.modelReceiveShadows = it }
+          puck3D.modelScaleMode?.let { this.modelScaleMode = it.toModelScaleMode() }
+          puck3D.modelEmissiveStrength?.let { this.modelEmissiveStrength = it.toFloat() }
+          puck3D.modelEmissiveStrengthExpression?.let { this.modelEmissiveStrengthExpression = it }
         }
+      } else {
+        (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
+          .apply {
+            puck2D?.topImage?.let { this.topImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+            puck2D?.bearingImage?.let { this.bearingImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+            puck2D?.shadowImage?.let { this.shadowImage = if (it.isNotEmpty()) ImageHolder.from(BitmapFactory.decodeByteArray(it, 0, it.size)) else null }
+            puck2D?.scaleExpression?.let { this.scaleExpression = it }
+            puck2D?.opacity?.let { this.opacity = it.toFloat() }
+          }
+      }
     }
   }
 }
@@ -71,6 +74,7 @@ fun LocationComponentSettingsInterface.toFLT(context: Context) = LocationCompone
   layerBelow = layerBelow,
   puckBearingEnabled = puckBearingEnabled,
   puckBearing = PuckBearing.values()[puckBearing.ordinal],
+  slot = slot,
   locationPuck = LocationPuck(
     locationPuck2D = (locationPuck as? com.mapbox.maps.plugin.LocationPuck2D)?.let { puck2D ->
       LocationPuck2D(

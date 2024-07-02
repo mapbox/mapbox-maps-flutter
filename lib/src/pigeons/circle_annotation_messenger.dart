@@ -5,6 +5,7 @@
 part of mapbox_maps_flutter;
 
 /// Orientation of circle when map is pitched.
+/// Default value: "viewport".
 enum CirclePitchAlignment {
   /// The circle is aligned to the plane of the map.
   MAP,
@@ -14,6 +15,7 @@ enum CirclePitchAlignment {
 }
 
 /// Controls the scaling behavior of the circle when the map is pitched.
+/// Default value: "map".
 enum CirclePitchScale {
   /// Circles are scaled according to their apparent distance to the camera.
   MAP,
@@ -23,6 +25,7 @@ enum CirclePitchScale {
 }
 
 /// Controls the frame of reference for `circle-translate`.
+/// Default value: "map".
 enum CircleTranslateAnchor {
   /// The circle is translated relative to the map.
   MAP,
@@ -55,24 +58,31 @@ class CircleAnnotation {
   double? circleSortKey;
 
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   double? circleBlur;
 
   /// The fill color of the circle.
+  /// Default value: "#000000".
   int? circleColor;
 
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? circleOpacity;
 
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   double? circleRadius;
 
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   int? circleStrokeColor;
 
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
 
   Object encode() {
@@ -127,24 +137,31 @@ class CircleAnnotationOptions {
   double? circleSortKey;
 
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Default value: 0.
   double? circleBlur;
 
   /// The fill color of the circle.
+  /// Default value: "#000000".
   int? circleColor;
 
   /// The opacity at which the circle will be drawn.
+  /// Default value: 1. Value range: [0, 1]
   double? circleOpacity;
 
   /// Circle radius.
+  /// Default value: 5. Minimum value: 0.
   double? circleRadius;
 
   /// The stroke color of the circle.
+  /// Default value: "#000000".
   int? circleStrokeColor;
 
   /// The opacity of the circle's stroke.
+  /// Default value: 1. Value range: [0, 1]
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
+  /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
 
   Object encode() {

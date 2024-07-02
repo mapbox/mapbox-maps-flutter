@@ -28,6 +28,7 @@ void main() {
       cluster: true,
       clusterRadius: 1.0,
       clusterMaxZoom: 1.0,
+      clusterMinPoints: 1.0,
       clusterProperties: {
         "sum": [
           [
@@ -73,6 +74,9 @@ void main() {
 
     var clusterMaxZoom = await source.clusterMaxZoom;
     expect(clusterMaxZoom, 1.0);
+
+    var clusterMinPoints = await source.clusterMinPoints;
+    expect(clusterMinPoints, 1.0);
 
     var clusterProperties = await source.clusterProperties;
     expect(clusterProperties, {

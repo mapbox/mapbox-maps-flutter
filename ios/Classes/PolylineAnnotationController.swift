@@ -235,6 +235,26 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
+    func getLineOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineOcclusionOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineOcclusionOpacity(managerId: String, lineOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineOcclusionOpacity = lineOcclusionOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -306,6 +326,9 @@ extension PolylineAnnotationOptions {
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
         }
+        if let lineZOffset {
+            annotation.lineZOffset = lineZOffset
+        }
         if let lineBlur {
             annotation.lineBlur = lineBlur
         }
@@ -347,6 +370,9 @@ extension PolylineAnnotation {
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
         }
+        if let lineZOffset {
+            annotation.lineZOffset = lineZOffset
+        }
         if let lineBlur {
             annotation.lineBlur = lineBlur
         }
@@ -385,6 +411,7 @@ extension MapboxMaps.PolylineAnnotation {
             geometry: lineString,
             lineJoin: lineJoin?.toFLTLineJoin(),
             lineSortKey: lineSortKey,
+            lineZOffset: lineZOffset,
             lineBlur: lineBlur,
             lineBorderColor: lineBorderColor?.intValue,
             lineBorderWidth: lineBorderWidth,

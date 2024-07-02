@@ -130,6 +130,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.lineSortKey?.let {
       originalAnnotation.lineSortKey = it
     }
+    annotation.lineZOffset?.let {
+      originalAnnotation.lineZOffset = it
+    }
     annotation.lineBlur?.let {
       originalAnnotation.lineBlur = it
     }
@@ -292,6 +295,28 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     }
   }
 
+  override fun setLineOcclusionOpacity(
+    managerId: String,
+    lineOcclusionOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineOcclusionOpacity = lineOcclusionOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineOcclusionOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    if (manager.lineOcclusionOpacity != null) {
+      callback(Result.success(manager.lineOcclusionOpacity!!))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setLineTranslate(
     managerId: String,
     lineTranslate: List<Double?>,
@@ -365,6 +390,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
     geometry = geometry,
     lineJoin = lineJoin?.toFLTLineJoin(),
     lineSortKey = lineSortKey,
+    lineZOffset = lineZOffset,
     lineBlur = lineBlur,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     lineBorderColor = lineBorderColorInt?.toUInt()?.toLong(),
@@ -389,6 +415,9 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.lineSortKey?.let {
     options.withLineSortKey(it)
+  }
+  this.lineZOffset?.let {
+    options.withLineZOffset(it)
   }
   this.lineBlur?.let {
     options.withLineBlur(it)

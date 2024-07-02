@@ -34,6 +34,8 @@ final class Polygon extends turf.Polygon {
     final polygon = turf.Polygon.fromJson(json);
     return Polygon(bbox: polygon.bbox, coordinates: polygon.coordinates);
   }
+
+    Polygon.fromPoints({turf.BBox? bbox, required List<List<Point>> points}) : super.fromPoints(bbox: bbox, points: points);
 }
 
 final class LineString extends turf.LineString {
@@ -52,4 +54,6 @@ final class LineString extends turf.LineString {
     final line = turf.LineString.fromJson(json);
     return LineString(bbox: line.bbox, coordinates: line.coordinates);
   }
+
+  LineString.fromPoints({turf.BBox? bbox, required List<Point> points}) : super.fromPoints(bbox: bbox, points: points);
 }

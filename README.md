@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter Plugin
 
-The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.2.0). The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.5.0). The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -8,39 +8,39 @@ Contributions welcome!
 
 ## Supported API
 
-| Feature | Android | iOS |
-| ------ | ------ | ----- |
-| Style | :white_check_mark:   | :white_check_mark: |
-| Camera position | :white_check_mark:   | :white_check_mark: |
-| Camera animations | :white_check_mark:   | :white_check_mark: |
-| Events | :white_check_mark:   | :white_check_mark: |
-| Gestures | :white_check_mark:   | :white_check_mark: |
+| Feature | Android            | iOS |
+| ------ |--------------------| -- |
+| Style | :white_check_mark: | :white_check_mark: |
+| Camera position | :white_check_mark: | :white_check_mark: |
+| Camera animations | :white_check_mark: | :white_check_mark: |
+| Events | :white_check_mark: | :white_check_mark: |
+| Gestures | :white_check_mark: | :white_check_mark: |
 | User Location | :white_check_mark: | :white_check_mark: |
-| Circle Layer | :white_check_mark:   | :white_check_mark: |
-| Fill Layer | :white_check_mark:   | :white_check_mark: |
-| Fill extrusion Layer | :white_check_mark:   | :white_check_mark: |
-| Line Layer | :white_check_mark:   | :white_check_mark: |
-| Circle Layer | :white_check_mark:   | :white_check_mark: |
-| Raster Layer  | :white_check_mark:  | :white_check_mark:  |
-| Symbol Layer | :white_check_mark:   | :white_check_mark: |
-| Hillshade Layer | :white_check_mark:   | :white_check_mark: |
-| Heatmap Layer   | :white_check_mark:  | :white_check_mark:  |
-| Sky Layer | :white_check_mark:   | :white_check_mark: |
-| GeoJson Source  | :white_check_mark:   | :white_check_mark: |
-| Image Source   | :white_check_mark:   | :white_check_mark: |
-| Vector Source   |  :white_check_mark:  | :white_check_mark:  |
-| Raster Source  |  :white_check_mark:  | :white_check_mark:  |
-| Rasterdem Source  |  :white_check_mark:  | :white_check_mark:  |
-| Circle Annotations | :white_check_mark:   | :white_check_mark: |
-| Point Annotations | :white_check_mark:   | :white_check_mark: |
-| Line Annotations | :white_check_mark:   | :white_check_mark: |
-| Fill Annotations | :white_check_mark:   | :white_check_mark: |
+| Circle Layer | :white_check_mark: | :white_check_mark: |
+| Fill Layer | :white_check_mark: | :white_check_mark: |
+| Fill extrusion Layer | :white_check_mark: | :white_check_mark: |
+| Line Layer | :white_check_mark: | :white_check_mark: |
+| Circle Layer | :white_check_mark: | :white_check_mark: |
+| Raster Layer  | :white_check_mark: | :white_check_mark: |
+| Symbol Layer | :white_check_mark: | :white_check_mark: |
+| Hillshade Layer | :white_check_mark: | :white_check_mark: |
+| Heatmap Layer   | :white_check_mark: | :white_check_mark: |
+| Sky Layer | :white_check_mark: | :white_check_mark: |
+| GeoJson Source  | :white_check_mark: | :white_check_mark: |
+| Image Source   | :white_check_mark: | :white_check_mark: |
+| Vector Source   | :white_check_mark: | :white_check_mark: |
+| Raster Source  | :white_check_mark: | :white_check_mark: |
+| Rasterdem Source  | :white_check_mark: | :white_check_mark: |
+| Circle Annotations | :white_check_mark: | :white_check_mark: |
+| Point Annotations | :white_check_mark: | :white_check_mark: |
+| Line Annotations | :white_check_mark: | :white_check_mark: |
+| Fill Annotations | :white_check_mark: | :white_check_mark: |
 | Snapshotter | :white_check_mark: | :white_check_mark: |
-| Offline | :x: | :x: |
-| Viewport | :x: | :x: |
-| Style DSL   | :x:  | :x:  |
-| Expression DSL   | :x:  | :x:  |
-| View Annotations   | :x:  | :x:  |
+| Offline | :white_check_mark: | :white_check_mark: |
+| Viewport | :x:                | :x: |
+| Style DSL   | :x:                | :x: |
+| Expression DSL   | :x:                | :x: |
+| View Annotations   | :x:                | :x: |
 
 ## Requirements
 
@@ -111,7 +111,7 @@ To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^2.0.0
+  mapbox_maps_flutter: ^2.1.0-rc.1
 ```
 
 ### Configure permissions

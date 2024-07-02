@@ -31,7 +31,7 @@ class RasterArraySource extends Source {
 
   String? _url;
 
-  /// A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`.
+  /// A URL to a TileJSON resource. Supported protocols are `http:`, `https:`, and `mapbox://<Tileset ID>`. Required if `tiles` is not provided.
   Future<String?> get url async {
     return _style?.getStyleSourceProperty(id, "url").then((value) {
       if (value.value != null) {
@@ -44,7 +44,7 @@ class RasterArraySource extends Source {
 
   List<String?>? _tiles;
 
-  /// An array of one or more tile source URLs, as in the TileJSON spec.
+  /// An array of one or more tile source URLs, as in the TileJSON spec. Required if `url` is not provided.
   Future<List<String?>?> get tiles async {
     return _style?.getStyleSourceProperty(id, "tiles").then((value) {
       if (value.value != null) {
@@ -58,6 +58,7 @@ class RasterArraySource extends Source {
   List<double?>? _bounds;
 
   /// An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
+  /// Default value: [-180,-85.051129,180,85.051129].
   Future<List<double?>?> get bounds async {
     return _style?.getStyleSourceProperty(id, "bounds").then((value) {
       if (value.value != null) {
@@ -71,6 +72,7 @@ class RasterArraySource extends Source {
   double? _minzoom;
 
   /// Minimum zoom level for which tiles are available, as in the TileJSON spec.
+  /// Default value: 0.
   Future<double?> get minzoom async {
     return _style?.getStyleSourceProperty(id, "minzoom").then((value) {
       if (value.value != null) {
@@ -84,6 +86,7 @@ class RasterArraySource extends Source {
   double? _maxzoom;
 
   /// Maximum zoom level for which tiles are available, as in the TileJSON spec. Data from tiles at the maxzoom are used when displaying the map at higher zoom levels.
+  /// Default value: 22.
   Future<double?> get maxzoom async {
     return _style?.getStyleSourceProperty(id, "maxzoom").then((value) {
       if (value.value != null) {
@@ -97,6 +100,7 @@ class RasterArraySource extends Source {
   double? _tileSize;
 
   /// The minimum visual size to display tiles for this layer. Only configurable for raster layers.
+  /// Default value: 512.
   Future<double?> get tileSize async {
     return _style?.getStyleSourceProperty(id, "tileSize").then((value) {
       if (value.value != null) {

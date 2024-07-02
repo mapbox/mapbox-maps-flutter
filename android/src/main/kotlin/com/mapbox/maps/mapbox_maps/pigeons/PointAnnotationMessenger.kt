@@ -37,7 +37,10 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/** Part of the icon placed closest to the anchor. */
+/**
+ * Part of the icon placed closest to the anchor.
+ * Default value: "center".
+ */
 enum class IconAnchor(val raw: Int) {
   /** The center of the icon is placed closest to the anchor. */
   CENTER(0),
@@ -65,13 +68,16 @@ enum class IconAnchor(val raw: Int) {
   }
 }
 
-/** Orientation of icon when map is pitched. */
+/**
+ * Orientation of icon when map is pitched.
+ * Default value: "auto".
+ */
 enum class IconPitchAlignment(val raw: Int) {
   /** The icon is aligned to the plane of the map. */
   MAP(0),
   /** The icon is aligned to the plane of the viewport. */
   VIEWPORT(1),
-  /** Automatically matches the value of {@link ICON_ROTATION_ALIGNMENT}. */
+  /** Automatically matches the value of `icon-rotation-alignment`. */
   AUTO(2);
 
   companion object {
@@ -81,13 +87,16 @@ enum class IconPitchAlignment(val raw: Int) {
   }
 }
 
-/** In combination with `symbol-placement`, determines the rotation behavior of icons. */
+/**
+ * In combination with `symbol-placement`, determines the rotation behavior of icons.
+ * Default value: "auto".
+ */
 enum class IconRotationAlignment(val raw: Int) {
-  /** When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, aligns icons east-west. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, aligns icon x-axes with the line. */
+  /** When `symbol-placement` is set to `point`, aligns icons east-west. When `symbol-placement` is set to `line` or `line-center`, aligns icon x-axes with the line. */
   MAP(0),
-  /** Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of {@link SYMBOL_PLACEMENT}. */
+  /** Produces icons whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`. */
   VIEWPORT(1),
-  /** When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, this is equivalent to {@link Property#ICON_ROTATION_ALIGNMENT_VIEWPORT}. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, this is equivalent to {@link Property#ICON_ROTATION_ALIGNMENT_MAP}. */
+  /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
   AUTO(2);
 
   companion object {
@@ -97,7 +106,10 @@ enum class IconRotationAlignment(val raw: Int) {
   }
 }
 
-/** Scales the icon to fit around the associated text. */
+/**
+ * Scales the icon to fit around the associated text.
+ * Default value: "none".
+ */
 enum class IconTextFit(val raw: Int) {
   /** The icon is displayed at its intrinsic aspect ratio. */
   NONE(0),
@@ -115,13 +127,16 @@ enum class IconTextFit(val raw: Int) {
   }
 }
 
-/** Label placement relative to its geometry. */
+/**
+ * Label placement relative to its geometry.
+ * Default value: "point".
+ */
 enum class SymbolPlacement(val raw: Int) {
   /** The label is placed at the point where the geometry is located. */
   POINT(0),
-  /** The label is placed along the line of the geometry. Can only be used on LineString and Polygon geometries. */
+  /** The label is placed along the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. */
   LINE(1),
-  /** The label is placed at the center of the line of the geometry. Can only be used on LineString and Polygon geometries. Note that a single feature in a vector tile may contain multiple line geometries. */
+  /** The label is placed at the center of the line of the geometry. Can only be used on `LineString` and `Polygon` geometries. Note that a single feature in a vector tile may contain multiple line geometries. */
   LINE_CENTER(2);
 
   companion object {
@@ -131,13 +146,16 @@ enum class SymbolPlacement(val raw: Int) {
   }
 }
 
-/** Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`. */
+/**
+ * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
+ * Default value: "auto".
+ */
 enum class SymbolZOrder(val raw: Int) {
-  /** Sorts symbols by symbol sort key if set. Otherwise, sorts symbols by their y-position relative to the viewport if {@link ICON_ALLOW_OVERLAP} or {@link TEXT_ALLOW_OVERLAP} is set to {@link TRUE} or {@link ICON_IGNORE_PLACEMENT} or {@link TEXT_IGNORE_PLACEMENT} is {@link FALSE}. */
+  /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   AUTO(0),
-  /** Sorts symbols by their y-position relative to the viewport if {@link ICON_ALLOW_OVERLAP} or {@link TEXT_ALLOW_OVERLAP} is set to {@link TRUE} or {@link ICON_IGNORE_PLACEMENT} or {@link TEXT_IGNORE_PLACEMENT} is {@link FALSE}. */
+  /** Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   VIEWPORT_Y(1),
-  /** Sorts symbols by symbol sort key if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
+  /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
   SOURCE(2);
 
   companion object {
@@ -147,7 +165,10 @@ enum class SymbolZOrder(val raw: Int) {
   }
 }
 
-/** Part of the text placed closest to the anchor. */
+/**
+ * Part of the text placed closest to the anchor.
+ * Default value: "center".
+ */
 enum class TextAnchor(val raw: Int) {
   /** The center of the text is placed closest to the anchor. */
   CENTER(0),
@@ -175,7 +196,10 @@ enum class TextAnchor(val raw: Int) {
   }
 }
 
-/** Text justification options. */
+/**
+ * Text justification options.
+ * Default value: "center".
+ */
 enum class TextJustify(val raw: Int) {
   /** The text is aligned towards the anchor position. */
   AUTO(0),
@@ -193,13 +217,16 @@ enum class TextJustify(val raw: Int) {
   }
 }
 
-/** Orientation of text when map is pitched. */
+/**
+ * Orientation of text when map is pitched.
+ * Default value: "auto".
+ */
 enum class TextPitchAlignment(val raw: Int) {
   /** The text is aligned to the plane of the map. */
   MAP(0),
   /** The text is aligned to the plane of the viewport. */
   VIEWPORT(1),
-  /** Automatically matches the value of {@link TEXT_ROTATION_ALIGNMENT}. */
+  /** Automatically matches the value of `text-rotation-alignment`. */
   AUTO(2);
 
   companion object {
@@ -209,13 +236,16 @@ enum class TextPitchAlignment(val raw: Int) {
   }
 }
 
-/** In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. */
+/**
+ * In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
+ * Default value: "auto".
+ */
 enum class TextRotationAlignment(val raw: Int) {
-  /** When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, aligns text east-west. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, aligns text x-axes with the line. */
+  /** When `symbol-placement` is set to `point`, aligns text east-west. When `symbol-placement` is set to `line` or `line-center`, aligns text x-axes with the line. */
   MAP(0),
-  /** Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of {@link SYMBOL_PLACEMENT}. */
+  /** Produces glyphs whose x-axes are aligned with the x-axis of the viewport, regardless of the value of `symbol-placement`. */
   VIEWPORT(1),
-  /** When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_POINT}, this is equivalent to {@link Property#TEXT_ROTATION_ALIGNMENT_VIEWPORT}. When {@link SYMBOL_PLACEMENT} is set to {@link Property#SYMBOL_PLACEMENT_LINE} or {@link Property#SYMBOL_PLACEMENT_LINE_CENTER}, this is equivalent to {@link Property#TEXT_ROTATION_ALIGNMENT_MAP}. */
+  /** When `symbol-placement` is set to `point`, this is equivalent to `viewport`. When `symbol-placement` is set to `line` or `line-center`, this is equivalent to `map`. */
   AUTO(2);
 
   companion object {
@@ -225,7 +255,10 @@ enum class TextRotationAlignment(val raw: Int) {
   }
 }
 
-/** Specifies how to capitalize text, similar to the CSS `text-transform` property. */
+/**
+ * Specifies how to capitalize text, similar to the CSS `text-transform` property.
+ * Default value: "none".
+ */
 enum class TextTransform(val raw: Int) {
   /** The text is not altered. */
   NONE(0),
@@ -283,7 +316,10 @@ enum class TextWritingMode(val raw: Int) {
   }
 }
 
-/** Controls the frame of reference for `icon-translate`. */
+/**
+ * Controls the frame of reference for `icon-translate`.
+ * Default value: "map".
+ */
 enum class IconTranslateAnchor(val raw: Int) {
   /** Icons are translated relative to the map. */
   MAP(0),
@@ -297,7 +333,10 @@ enum class IconTranslateAnchor(val raw: Int) {
   }
 }
 
-/** Controls the frame of reference for `text-translate`. */
+/**
+ * Controls the frame of reference for `text-translate`.
+ * Default value: "map".
+ */
 enum class TextTranslateAnchor(val raw: Int) {
   /** The text is translated relative to the map. */
   MAP(0),
@@ -322,69 +361,159 @@ data class PointAnnotation(
    * Will not take effect if [iconImage] has been set.
    */
   val image: ByteArray? = null,
-  /** Part of the icon placed closest to the anchor. */
+  /**
+   * Part of the icon placed closest to the anchor.
+   * Default value: "center".
+   */
   val iconAnchor: IconAnchor? = null,
   /** Name of image in sprite to use for drawing an image background. */
   val iconImage: String? = null,
-  /** Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. */
+  /**
+   * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+   * Default value: [0,0].
+   */
   val iconOffset: List<Double?>? = null,
-  /** Rotates the icon clockwise. */
+  /**
+   * Rotates the icon clockwise.
+   * Default value: 0.
+   */
   val iconRotate: Double? = null,
-  /** Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. */
+  /**
+   * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+   * Default value: 1. Minimum value: 0.
+   */
   val iconSize: Double? = null,
-  /** Scales the icon to fit around the associated text. */
+  /**
+   * Scales the icon to fit around the associated text.
+   * Default value: "none".
+   */
   val iconTextFit: IconTextFit? = null,
-  /** Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. */
+  /**
+   * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+   * Default value: [0,0,0,0].
+   */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
-  /** Part of the text placed closest to the anchor. */
+  /**
+   * Part of the text placed closest to the anchor.
+   * Default value: "center".
+   */
   val textAnchor: TextAnchor? = null,
-  /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. */
+  /**
+   * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+   * Default value: "".
+   */
   val textField: String? = null,
-  /** Text justification options. */
+  /**
+   * Text justification options.
+   * Default value: "center".
+   */
   val textJustify: TextJustify? = null,
-  /** Text tracking amount. */
+  /**
+   * Text tracking amount.
+   * Default value: 0.
+   */
   val textLetterSpacing: Double? = null,
-  /** Text leading value for multi-line text. */
+  /**
+   * Text leading value for multi-line text.
+   * Default value: 1.2.
+   */
   val textLineHeight: Double? = null,
-  /** The maximum line width for text wrapping. */
+  /**
+   * The maximum line width for text wrapping.
+   * Default value: 10. Minimum value: 0.
+   */
   val textMaxWidth: Double? = null,
-  /** Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. */
+  /**
+   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+   * Default value: [0,0].
+   */
   val textOffset: List<Double?>? = null,
-  /** Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. */
+  /**
+   * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+   * Default value: 0.
+   */
   val textRadialOffset: Double? = null,
-  /** Rotates the text clockwise. */
+  /**
+   * Rotates the text clockwise.
+   * Default value: 0.
+   */
   val textRotate: Double? = null,
-  /** Font size. */
+  /**
+   * Font size.
+   * Default value: 16. Minimum value: 0.
+   */
   val textSize: Double? = null,
-  /** Specifies how to capitalize text, similar to the CSS `text-transform` property. */
+  /**
+   * Specifies how to capitalize text, similar to the CSS `text-transform` property.
+   * Default value: "none".
+   */
   val textTransform: TextTransform? = null,
-  /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
+  /**
+   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+   * Default value: "#000000".
+   */
   val iconColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. */
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 1. Minimum value: 0.
+   */
   val iconEmissiveStrength: Double? = null,
-  /** Fade out the halo towards the outside. */
+  /**
+   * Fade out the halo towards the outside.
+   * Default value: 0. Minimum value: 0.
+   */
   val iconHaloBlur: Double? = null,
-  /** The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
+  /**
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val iconHaloColor: Long? = null,
-  /** Distance of halo to the icon outline. */
+  /**
+   * Distance of halo to the icon outline.
+   * Default value: 0. Minimum value: 0.
+   */
   val iconHaloWidth: Double? = null,
-  /** Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. */
+  /**
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Default value: 0. Value range: [0, 1]
+   */
   val iconImageCrossFade: Double? = null,
-  /** The opacity at which the icon will be drawn. */
+  /**
+   * The opacity at which the icon will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val iconOpacity: Double? = null,
-  /** The color with which the text will be drawn. */
+  /**
+   * The color with which the text will be drawn.
+   * Default value: "#000000".
+   */
   val textColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. */
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 1. Minimum value: 0.
+   */
   val textEmissiveStrength: Double? = null,
-  /** The halo's fadeout distance towards the outside. */
+  /**
+   * The halo's fadeout distance towards the outside.
+   * Default value: 0. Minimum value: 0.
+   */
   val textHaloBlur: Double? = null,
-  /** The color of the text's halo, which helps it stand out from backgrounds. */
+  /**
+   * The color of the text's halo, which helps it stand out from backgrounds.
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val textHaloColor: Long? = null,
-  /** Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. */
+  /**
+   * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+   * Default value: 0. Minimum value: 0.
+   */
   val textHaloWidth: Double? = null,
-  /** The opacity at which the text will be drawn. */
+  /**
+   * The opacity at which the text will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val textOpacity: Double? = null
 
 ) {
@@ -489,69 +618,159 @@ data class PointAnnotationOptions(
    * Will not take effect if [iconImage] has been set.
    */
   val image: ByteArray? = null,
-  /** Part of the icon placed closest to the anchor. */
+  /**
+   * Part of the icon placed closest to the anchor.
+   * Default value: "center".
+   */
   val iconAnchor: IconAnchor? = null,
   /** Name of image in sprite to use for drawing an image background. */
   val iconImage: String? = null,
-  /** Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. */
+  /**
+   * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
+   * Default value: [0,0].
+   */
   val iconOffset: List<Double?>? = null,
-  /** Rotates the icon clockwise. */
+  /**
+   * Rotates the icon clockwise.
+   * Default value: 0.
+   */
   val iconRotate: Double? = null,
-  /** Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. */
+  /**
+   * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
+   * Default value: 1. Minimum value: 0.
+   */
   val iconSize: Double? = null,
-  /** Scales the icon to fit around the associated text. */
+  /**
+   * Scales the icon to fit around the associated text.
+   * Default value: "none".
+   */
   val iconTextFit: IconTextFit? = null,
-  /** Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. */
+  /**
+   * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
+   * Default value: [0,0,0,0].
+   */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
-  /** Part of the text placed closest to the anchor. */
+  /**
+   * Part of the text placed closest to the anchor.
+   * Default value: "center".
+   */
   val textAnchor: TextAnchor? = null,
-  /** Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored. */
+  /**
+   * Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
+   * Default value: "".
+   */
   val textField: String? = null,
-  /** Text justification options. */
+  /**
+   * Text justification options.
+   * Default value: "center".
+   */
   val textJustify: TextJustify? = null,
-  /** Text tracking amount. */
+  /**
+   * Text tracking amount.
+   * Default value: 0.
+   */
   val textLetterSpacing: Double? = null,
-  /** Text leading value for multi-line text. */
+  /**
+   * Text leading value for multi-line text.
+   * Default value: 1.2.
+   */
   val textLineHeight: Double? = null,
-  /** The maximum line width for text wrapping. */
+  /**
+   * The maximum line width for text wrapping.
+   * Default value: 10. Minimum value: 0.
+   */
   val textMaxWidth: Double? = null,
-  /** Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. */
+  /**
+   * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
+   * Default value: [0,0].
+   */
   val textOffset: List<Double?>? = null,
-  /** Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. */
+  /**
+   * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
+   * Default value: 0.
+   */
   val textRadialOffset: Double? = null,
-  /** Rotates the text clockwise. */
+  /**
+   * Rotates the text clockwise.
+   * Default value: 0.
+   */
   val textRotate: Double? = null,
-  /** Font size. */
+  /**
+   * Font size.
+   * Default value: 16. Minimum value: 0.
+   */
   val textSize: Double? = null,
-  /** Specifies how to capitalize text, similar to the CSS `text-transform` property. */
+  /**
+   * Specifies how to capitalize text, similar to the CSS `text-transform` property.
+   * Default value: "none".
+   */
   val textTransform: TextTransform? = null,
-  /** The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
+  /**
+   * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+   * Default value: "#000000".
+   */
   val iconColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. */
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 1. Minimum value: 0.
+   */
   val iconEmissiveStrength: Double? = null,
-  /** Fade out the halo towards the outside. */
+  /**
+   * Fade out the halo towards the outside.
+   * Default value: 0. Minimum value: 0.
+   */
   val iconHaloBlur: Double? = null,
-  /** The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). */
+  /**
+   * The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val iconHaloColor: Long? = null,
-  /** Distance of halo to the icon outline. */
+  /**
+   * Distance of halo to the icon outline.
+   * Default value: 0. Minimum value: 0.
+   */
   val iconHaloWidth: Double? = null,
-  /** Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. */
+  /**
+   * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+   * Default value: 0. Value range: [0, 1]
+   */
   val iconImageCrossFade: Double? = null,
-  /** The opacity at which the icon will be drawn. */
+  /**
+   * The opacity at which the icon will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val iconOpacity: Double? = null,
-  /** The color with which the text will be drawn. */
+  /**
+   * The color with which the text will be drawn.
+   * Default value: "#000000".
+   */
   val textColor: Long? = null,
-  /** Controls the intensity of light emitted on the source features. */
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 1. Minimum value: 0.
+   */
   val textEmissiveStrength: Double? = null,
-  /** The halo's fadeout distance towards the outside. */
+  /**
+   * The halo's fadeout distance towards the outside.
+   * Default value: 0. Minimum value: 0.
+   */
   val textHaloBlur: Double? = null,
-  /** The color of the text's halo, which helps it stand out from backgrounds. */
+  /**
+   * The color of the text's halo, which helps it stand out from backgrounds.
+   * Default value: "rgba(0, 0, 0, 0)".
+   */
   val textHaloColor: Long? = null,
-  /** Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. */
+  /**
+   * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
+   * Default value: 0. Minimum value: 0.
+   */
   val textHaloWidth: Double? = null,
-  /** The opacity at which the text will be drawn. */
+  /**
+   * The opacity at which the text will be drawn.
+   * Default value: 1. Value range: [0, 1]
+   */
   val textOpacity: Double? = null
 
 ) {
@@ -812,10 +1031,14 @@ interface _PointAnnotationMessenger {
   fun getTextRotationAlignment(managerId: String, callback: (Result<TextRotationAlignment?>) -> Unit)
   fun setIconColorSaturation(managerId: String, iconColorSaturation: Double, callback: (Result<Unit>) -> Unit)
   fun getIconColorSaturation(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconOcclusionOpacity(managerId: String, iconOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconTranslate(managerId: String, iconTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
+  fun setTextOcclusionOpacity(managerId: String, textOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextTranslate(managerId: String, textTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getTextTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -1812,6 +2035,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconOcclusionOpacityArg = args[1] as Double
+            api.setIconOcclusionOpacity(managerIdArg, iconOcclusionOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1884,6 +2147,46 @@ interface _PointAnnotationMessenger {
               } else {
                 val data = result.getOrNull()
                 reply.reply(wrapResult(data?.raw))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textOcclusionOpacityArg = args[1] as Double
+            api.setTextOcclusionOpacity(managerIdArg, textOcclusionOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOcclusionOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

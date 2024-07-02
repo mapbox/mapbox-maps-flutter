@@ -8,6 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:turf/polyline.dart';
 
+extension City on Point {
+  static var helsinki = Point(coordinates: Position(24.945831, 60.192059));
+}
+
 Point createRandomPoint() {
   return Point(coordinates: createRandomPosition());
 }
@@ -80,7 +84,7 @@ extension AnnotationCreation on PointAnnotationManager {
 }
 
 extension PuckPosition on StyleManager {
-  Future<Position> getPuckPosition() async {
+  Future<Position?> getPuckPosition() async {
     Layer? layer;
     if (Platform.isAndroid) {
       layer = await getLayer("mapbox-location-indicator-layer");
@@ -88,7 +92,10 @@ extension PuckPosition on StyleManager {
       layer = await getLayer("puck");
     }
     final location = (layer as LocationIndicatorLayer).location;
-    return Future.value(Position(location![1]!, location[0]!));
+    if (location == null) {
+      return null;
+    }
+    return Future.value(Position(location[1]!, location[0]!));
   }
 }
 
