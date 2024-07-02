@@ -8,7 +8,10 @@ import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.gestures.generated.GesturesSettingsInterface
 
-fun GesturesSettingsInterface.applyFromFLT(settings: GesturesSettings, context: Context) {
+fun GesturesSettingsInterface.applyFromFLT(
+  settings: GesturesSettings,
+  context: Context
+) {
   updateSettings {
     settings.rotateEnabled?.let { this.rotateEnabled = it }
     settings.pinchToZoomEnabled?.let { this.pinchToZoomEnabled = it }

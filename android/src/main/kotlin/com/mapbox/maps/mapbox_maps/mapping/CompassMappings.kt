@@ -11,7 +11,10 @@ import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.compass.generated.CompassSettingsInterface
 import java.io.ByteArrayOutputStream
 
-fun CompassSettingsInterface.applyFromFLT(settings: CompassSettings, context: Context) {
+fun CompassSettingsInterface.applyFromFLT(
+  settings: CompassSettings,
+  context: Context
+) {
   updateSettings {
     settings.enabled?.let { this.enabled = it }
     settings.position?.let { this.position = it.toPosition() }

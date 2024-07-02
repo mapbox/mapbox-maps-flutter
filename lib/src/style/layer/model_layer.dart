@@ -235,7 +235,7 @@ class ModelLayer extends Layer {
     }
 
     if (modelId != null) {
-      layout["model-id"] = modelId;
+      layout["model-id"] = MapboxMapsOptions._getFlutterAssetPath(modelId);
     }
     var paint = {};
     if (modelAmbientOcclusionIntensityExpression != null) {

@@ -12,6 +12,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._SnapshotterInstanceManager
 import com.mapbox.maps.mapbox_maps.pigeons._TileStoreInstanceManager
 import com.mapbox.maps.mapbox_maps.snapshot.SnapshotterInstanceManager
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterAssets
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
@@ -28,6 +29,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
         "plugins.flutter.io/mapbox_maps",
         MapboxMapFactory(
           flutterPluginBinding.binaryMessenger,
+          flutterPluginBinding.flutterAssets,
           object : LifecycleProvider {
             override fun getLifecycle(): Lifecycle? {
               return lifecycle
@@ -35,12 +37,11 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
           }
         )
       )
-
-    setupStaticChannels(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger)
+    setupStaticChannels(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger, flutterPluginBinding.flutterAssets)
   }
 
-  private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger) {
-    val optionsController = MapboxOptionsController()
+  private fun setupStaticChannels(context: Context, binaryMessenger: BinaryMessenger, flutterAssets: FlutterAssets) {
+    val optionsController = MapboxOptionsController(flutterAssets)
     val snapshotterInstanceManager = SnapshotterInstanceManager(context, binaryMessenger)
     val offlineMapInstanceManager = OfflineMapInstanceManager(context, binaryMessenger)
     val offlineSwitch = OfflineSwitch()

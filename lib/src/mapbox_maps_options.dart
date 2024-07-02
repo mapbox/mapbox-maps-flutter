@@ -81,6 +81,10 @@ final class MapboxMapsOptions {
     _options.setAssetPath(path);
   }
 
+  static Future<String?> _getFlutterAssetPath(String? flutterAssetUri) {
+    return _options.getFlutterAssetPath(flutterAssetUri);
+  }
+
   /// The tile store usage mode for the Maps API objects. Default is `readOnly`.
   static Future<TileStoreUsageMode> getTileStoreUsageMode() {
     return _options.getTileStoreUsageMode();

@@ -4518,6 +4518,30 @@ class _MapboxMapsOptions {
     }
   }
 
+  Future<String?> getFlutterAssetPath(String? flutterAssetUri) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[flutterAssetUri]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
+    }
+  }
+
   Future<TileStoreUsageMode> getTileStoreUsageMode() async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode$__pigeon_messageChannelSuffix';
@@ -6722,6 +6746,50 @@ class StyleManager {
       );
     } else {
       return;
+    }
+  }
+}
+
+class _FlutterAssetManager {
+  /// Constructor for [_FlutterAssetManager].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  _FlutterAssetManager(
+      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+      : __pigeon_binaryMessenger = binaryMessenger,
+        __pigeon_messageChannelSuffix =
+            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  final BinaryMessenger? __pigeon_binaryMessenger;
+
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      StandardMessageCodec();
+
+  final String __pigeon_messageChannelSuffix;
+
+  /// When the asset is a local asset (i.e a local glb file), we may first look it up
+  /// in the main application's bundle and pass the correct path
+  /// relative to the app's bundle to our renderer.
+  Future<String?> resolveAssetUri(String? assetUri) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._FlutterAssetManager.resolveAssetUri$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[assetUri]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
     }
   }
 }

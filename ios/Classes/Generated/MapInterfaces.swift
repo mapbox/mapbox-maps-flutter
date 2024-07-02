@@ -3855,6 +3855,7 @@ protocol _MapboxMapsOptions {
   func setDataPath(path: String) throws
   func getAssetPath() throws -> String
   func setAssetPath(path: String) throws
+  func getFlutterAssetPath(flutterAssetUri: String?) throws -> String?
   func getTileStoreUsageMode() throws -> TileStoreUsageMode
   func setTileStoreUsageMode(mode: TileStoreUsageMode) throws
   func getWorldview() throws -> String?
@@ -3952,6 +3953,21 @@ class _MapboxMapsOptionsSetup {
       }
     } else {
       setAssetPathChannel.setMessageHandler(nil)
+    }
+    let getFlutterAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      getFlutterAssetPathChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let flutterAssetUriArg: String? = nilOrValue(args[0])
+        do {
+          let result = try api.getFlutterAssetPath(flutterAssetUri: flutterAssetUriArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getFlutterAssetPathChannel.setMessageHandler(nil)
     }
     let getTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger)
     if let api = api {
@@ -5924,6 +5940,40 @@ class StyleManagerSetup {
       }
     } else {
       localizeLabelsChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _FlutterAssetManager {
+  /// When the asset is a local asset (i.e a local glb file), we may first look it up
+  /// in the main application's bundle and pass the correct path
+  /// relative to the app's bundle to our renderer.
+  func resolveAssetUri(assetUri: String?) throws -> String?
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _FlutterAssetManagerSetup {
+  /// The codec used by _FlutterAssetManager.
+  /// Sets up an instance of `_FlutterAssetManager` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _FlutterAssetManager?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    /// When the asset is a local asset (i.e a local glb file), we may first look it up
+    /// in the main application's bundle and pass the correct path
+    /// relative to the app's bundle to our renderer.
+    let resolveAssetUriChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._FlutterAssetManager.resolveAssetUri\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      resolveAssetUriChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let assetUriArg: String? = nilOrValue(args[0])
+        do {
+          let result = try api.resolveAssetUri(assetUri: assetUriArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      resolveAssetUriChannel.setMessageHandler(nil)
     }
   }
 }

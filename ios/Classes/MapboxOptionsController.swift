@@ -6,6 +6,11 @@ final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
     private static let errorCode = "0"
 
     private let settingsService = SettingsServiceFactory.getInstanceFor(.persistent)
+    private let assetKeyLookup: (String) -> String
+
+    init(assetKeyLookup: @escaping (String) -> String) {
+        self.assetKeyLookup = assetKeyLookup
+    }
 
     func getBaseUrl() throws -> String {
         MapboxMapsOptions.baseURL.absoluteString
@@ -38,6 +43,11 @@ final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
             throw FlutterError(code: MapboxOptionsController.errorCode, message: "Invalid url", details: nil)
         }
         MapboxMapsOptions.assetPath = url
+    }
+
+    func getFlutterAssetPath(flutterAssetUri: String?) throws -> String? {
+        let flutterAssetRegex = "^asset://(.*?)"
+        return flutterAssetUri?.replacingOccurrences(of: flutterAssetRegex, with: "$0\(assetKeyLookup("$1"))", options: .regularExpression)
     }
 
     func getTileStoreUsageMode() throws -> TileStoreUsageMode {

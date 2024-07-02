@@ -4332,6 +4332,7 @@ interface _MapboxMapsOptions {
   fun setDataPath(path: String)
   fun getAssetPath(): String
   fun setAssetPath(path: String)
+  fun getFlutterAssetPath(flutterAssetUri: String?): String?
   fun getTileStoreUsageMode(): TileStoreUsageMode
   fun setTileStoreUsageMode(mode: TileStoreUsageMode)
   fun getWorldview(): String?
@@ -4444,6 +4445,24 @@ interface _MapboxMapsOptions {
             try {
               api.setAssetPath(pathArg)
               wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val flutterAssetUriArg = args[0] as String?
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getFlutterAssetPath(flutterAssetUriArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -6528,6 +6547,45 @@ interface StyleManager {
                 reply.reply(wrapResult(null))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _FlutterAssetManager {
+  /**
+   * When the asset is a local asset (i.e a local glb file), we may first look it up
+   * in the main application's bundle and pass the correct path
+   * relative to the app's bundle to our renderer.
+   */
+  fun resolveAssetUri(assetUri: String?): String?
+
+  companion object {
+    /** The codec used by _FlutterAssetManager. */
+    val codec: MessageCodec<Any?> by lazy {
+      StandardMessageCodec()
+    }
+    /** Sets up an instance of `_FlutterAssetManager` to handle messages through the `binaryMessenger`. */
+    @Suppress("UNCHECKED_CAST")
+    fun setUp(binaryMessenger: BinaryMessenger, api: _FlutterAssetManager?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._FlutterAssetManager.resolveAssetUri$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val assetUriArg = args[0] as String?
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.resolveAssetUri(assetUriArg))
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

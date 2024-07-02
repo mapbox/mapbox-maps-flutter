@@ -7,9 +7,13 @@ import com.mapbox.maps.mapbox_maps.mapping.toFLT
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.locationcomponent.createDefault2DPuck
 import com.mapbox.maps.plugin.locationcomponent.location
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
-class LocationComponentController(private val mapView: MapView, private val context: Context) :
-  _LocationComponentSettingsInterface {
+class LocationComponentController(
+  private val mapView: MapView,
+  private val flutterAssets: FlutterPlugin.FlutterAssets,
+  private val context: Context
+) : _LocationComponentSettingsInterface {
   override fun getSettings(): LocationComponentSettings = mapView.location.toFLT(context)
 
   override fun updateSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Boolean) {
