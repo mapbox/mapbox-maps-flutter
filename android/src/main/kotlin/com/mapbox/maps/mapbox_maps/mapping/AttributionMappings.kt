@@ -7,10 +7,7 @@ import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.attribution.generated.AttributionSettingsInterface
 
-fun AttributionSettingsInterface.applyFromFLT(
-  settings: AttributionSettings,
-  context: Context
-) {
+fun AttributionSettingsInterface.applyFromFLT(settings: AttributionSettings, context: Context) {
   updateSettings {
     settings.enabled?.let { this.enabled = it }
     settings.iconColor?.let { this.iconColor = it.toInt() }

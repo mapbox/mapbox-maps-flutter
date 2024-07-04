@@ -168,7 +168,7 @@ class RasterLayer extends Layer {
   List<Object>? rasterSaturationExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;

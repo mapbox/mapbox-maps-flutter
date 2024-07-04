@@ -7,10 +7,7 @@ import com.mapbox.maps.mapbox_maps.toDevicePixels
 import com.mapbox.maps.mapbox_maps.toLogicalPixels
 import com.mapbox.maps.plugin.scalebar.generated.ScaleBarSettingsInterface
 
-fun ScaleBarSettingsInterface.applyFromFLT(
-  settings: ScaleBarSettings,
-  context: Context
-) {
+fun ScaleBarSettingsInterface.applyFromFLT(settings: ScaleBarSettings, context: Context) {
   updateSettings {
     settings.enabled?.let { this.enabled = it }
     settings.position?.let { this.position = it.toPosition() }

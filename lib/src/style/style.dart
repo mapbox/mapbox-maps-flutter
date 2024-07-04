@@ -209,7 +209,7 @@ abstract class Layer {
   /// Get the type of current layer as a String.
   String getType();
 
-  String _encode();
+  Future<String> _encode();
 
   Layer(
       {required String this.id,
@@ -241,20 +241,20 @@ abstract class Source {
 /// Extension for StyleManager to add/update/get layers from the current style.
 extension StyleLayer on StyleManager {
   /// Add a layer the the current style.
-  Future<void> addLayer(Layer layer) {
-    var encode = layer._encode();
+  Future<void> addLayer(Layer layer) async {
+    var encode = await layer._encode();
     return addStyleLayer(encode, null);
   }
 
   /// Add a layer to the current style in a specific position.
-  Future<void> addLayerAt(Layer layer, LayerPosition position) {
-    var encode = layer._encode();
+  Future<void> addLayerAt(Layer layer, LayerPosition position) async {
+    var encode = await layer._encode();
     return addStyleLayer(encode, position);
   }
 
   /// Update an existing layer in the style.
-  Future<void> updateLayer(Layer layer) {
-    var encode = layer._encode();
+  Future<void> updateLayer(Layer layer) async {
+    var encode = await layer._encode();
     return setStyleLayerProperties(layer.id, encode);
   }
 

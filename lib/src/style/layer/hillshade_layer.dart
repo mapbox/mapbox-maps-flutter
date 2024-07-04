@@ -102,7 +102,7 @@ class HillshadeLayer extends Layer {
   List<Object>? hillshadeShadowColorExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;

@@ -32,7 +32,7 @@ class SlotLayer extends Layer {
   String? sourceLayer;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;
