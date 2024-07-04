@@ -136,7 +136,6 @@ class MapboxMapFactory(
       mapInitOptions,
       lifecycleProvider,
       messenger,
-      flutterAssets,
       channelSuffix,
       pluginVersion,
       eventTypes

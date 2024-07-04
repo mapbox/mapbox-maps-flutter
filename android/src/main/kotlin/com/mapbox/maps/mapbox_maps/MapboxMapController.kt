@@ -26,7 +26,6 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
-import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterAssets
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -38,7 +37,6 @@ class MapboxMapController(
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   messenger: BinaryMessenger,
-  flutterAssets: FlutterAssets,
   channelSuffix: Int,
   pluginVersion: String,
   eventTypes: List<Int>
@@ -132,7 +130,7 @@ class MapboxMapController(
     mapInterfaceController = MapInterfaceController(mapboxMap, context)
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView)
-    locationComponentController = LocationComponentController(mapView, flutterAssets, context)
+    locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
     logoController = LogoController(mapView)
     attributionController = AttributionController(mapView)
