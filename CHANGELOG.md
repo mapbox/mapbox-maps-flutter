@@ -1,3 +1,8 @@
+### main
+
+* Bump Maps SDK to 11.5.0.
+
+
 ### 2.1.0-rc.1
 
 * Bump Maps SDK to 11.5.0-rc.1

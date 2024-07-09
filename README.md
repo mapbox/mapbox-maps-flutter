@@ -158,7 +158,7 @@ The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` ca
 `MapboxMap` exposes an entry point to the most of the APIs Maps Flutter Plugin provides. It allows to control the map, camera, styles, observe map events, 
 query rendered features, etc.
 
-It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.2.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.2.0/documentation/mapboxmaps/mapboxmap) counterparts.
+It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.5.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.5.0/documentation/mapboxmaps/mapboxmap) counterparts.
 
 To interact with the map after it's created store the MapboxMap object somewhere : 
 ```
