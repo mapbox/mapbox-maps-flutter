@@ -33,7 +33,7 @@ LineLayer(
 * Expose `LocationComponentSettings.slot`.
 * Add `@experimental` annotation to relevant APIs.
 * Expose `LineJoin.NONE`.
-* Bump Maps SDK to 11.5.0.
+* Bump Maps SDK to 11.5.0 for Android and 11.5.1 for iOS.
 
 ### 2.1.0-rc.1
 
