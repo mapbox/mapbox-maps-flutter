@@ -50,6 +50,7 @@ extension MapboxMaps.LineJoin {
         case .bEVEL: self = .bevel
         case .rOUND: self = .round
         case .mITER: self = .miter
+        case .nONE: self = .none
         }
     }
 
@@ -58,6 +59,7 @@ extension MapboxMaps.LineJoin {
         case .bevel: return .bEVEL
         case .round: return .rOUND
         case .miter: return .mITER
+        case .none: return .nONE
         default: return nil
         }
     }
