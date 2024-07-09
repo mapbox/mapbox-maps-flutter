@@ -17,6 +17,7 @@ fun LineJoin.toLineJoin(): com.mapbox.maps.extension.style.layers.properties.gen
     LineJoin.BEVEL -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.BEVEL
     LineJoin.ROUND -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.ROUND
     LineJoin.MITER -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.MITER
+    LineJoin.NONE -> com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.NONE
     else -> throw(RuntimeException("Unsupported LineJoin: $this"))
   }
 }
@@ -43,6 +44,7 @@ fun com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.toFLTLi
     com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.BEVEL -> LineJoin.BEVEL
     com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.ROUND -> LineJoin.ROUND
     com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.MITER -> LineJoin.MITER
+    com.mapbox.maps.extension.style.layers.properties.generated.LineJoin.NONE -> LineJoin.NONE
     else -> throw(RuntimeException("Unsupported LineJoin: $this"))
   }
 }

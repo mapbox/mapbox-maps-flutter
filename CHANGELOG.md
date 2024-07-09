@@ -1,7 +1,7 @@
 ### main
 
 * Bump Maps SDK to 11.5.0.
-
+* Expose `LineJoin.NONE`.
 
 ### 2.1.0-rc.1
 

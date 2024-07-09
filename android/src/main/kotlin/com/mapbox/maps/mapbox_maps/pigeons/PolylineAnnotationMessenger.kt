@@ -66,7 +66,9 @@ enum class LineJoin(val raw: Int) {
   /** A join with a rounded end which is drawn beyond the endpoint of the line at a radius of one-half of the line's width and centered on the endpoint of the line. */
   ROUND(1),
   /** A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet. */
-  MITER(2);
+  MITER(2),
+  /** Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling. */
+  NONE(3);
 
   companion object {
     fun ofRaw(raw: Int): LineJoin? {
