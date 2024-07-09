@@ -1,6 +1,6 @@
 # mapbox_maps_example
 
-Demonstrates how to use the mapbox_maps plugin.
+Demonstrates how to use the Mapbox Maps Flutter SDK.
 
 ## Getting Started
 
