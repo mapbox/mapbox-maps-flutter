@@ -1,3 +1,7 @@
+### main
+
+* Fix map view crashing upon host activity destruction when using a cached Flutter engine.
+
 ### 2.1.0
 
 * Add ModelLayer API.
