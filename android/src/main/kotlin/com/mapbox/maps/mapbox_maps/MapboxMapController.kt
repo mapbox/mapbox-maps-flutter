@@ -105,15 +105,18 @@ class MapboxMapController(
       lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
+    override fun onDestroy(owner: LifecycleOwner) = propagateDestroyEvent()
+
+    fun dispose() {
+      parentLifecycle.removeObserver(this)
+      propagateDestroyEvent()
+    }
+
+    private fun propagateDestroyEvent() {
       lifecycleRegistry.currentState = when (shouldDestroyOnDestroy) {
         true -> Lifecycle.State.DESTROYED
         false -> Lifecycle.State.CREATED
       }
-    }
-
-    fun dispose() {
-      parentLifecycle.removeObserver(this)
     }
   }
 
