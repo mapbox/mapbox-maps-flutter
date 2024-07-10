@@ -3855,6 +3855,7 @@ protocol _MapboxMapsOptions {
   func setDataPath(path: String) throws
   func getAssetPath() throws -> String
   func setAssetPath(path: String) throws
+  func getFlutterAssetPath(flutterAssetUri: String?) throws -> String?
   func getTileStoreUsageMode() throws -> TileStoreUsageMode
   func setTileStoreUsageMode(mode: TileStoreUsageMode) throws
   func getWorldview() throws -> String?
@@ -3952,6 +3953,21 @@ class _MapboxMapsOptionsSetup {
       }
     } else {
       setAssetPathChannel.setMessageHandler(nil)
+    }
+    let getFlutterAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger)
+    if let api = api {
+      getFlutterAssetPathChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let flutterAssetUriArg: String? = nilOrValue(args[0])
+        do {
+          let result = try api.getFlutterAssetPath(flutterAssetUri: flutterAssetUriArg)
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getFlutterAssetPathChannel.setMessageHandler(nil)
     }
     let getTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger)
     if let api = api {

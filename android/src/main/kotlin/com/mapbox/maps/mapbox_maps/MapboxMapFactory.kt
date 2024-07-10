@@ -18,6 +18,7 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.ViewportMode
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.mapbox_maps.mapping.turf.PointDecoder
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
@@ -25,6 +26,7 @@ import io.flutter.plugin.platform.PlatformViewFactory
 
 class MapboxMapFactory(
   private val messenger: BinaryMessenger,
+  private val flutterAssets: FlutterPlugin.FlutterAssets,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider
 ) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 

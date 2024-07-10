@@ -17,15 +17,19 @@ final class LocationController: _LocationComponentSettingsInterface {
         return mapView.location.options.toFLT_SETTINGSLocationComponentSettings()
     }
 
-    private var mapView: MapView
-    private var cancelable: Cancelable?
+    private let mapView: MapView
+
     init(withMapView mapView: MapView) {
         self.mapView = mapView
     }
 }
 
 extension LocationOptions {
-    func fromFLT_SETTINGSLocationComponentSettings(settings: LocationComponentSettings, useDefaultPuck2DIfNeeded: Bool) throws -> LocationOptions {
+
+    func fromFLT_SETTINGSLocationComponentSettings(
+        settings: LocationComponentSettings,
+        useDefaultPuck2DIfNeeded: Bool
+    ) throws -> LocationOptions {
         var options = LocationOptions()
         if let puckBearingEnabled = settings.puckBearingEnabled {
             options.puckBearingEnabled = puckBearingEnabled
@@ -38,30 +42,30 @@ extension LocationOptions {
         if settings.enabled == false {
             options.puckType = nil
         } else if let puck3D = settings.locationPuck?.locationPuck3D {
-                var model = Model(uri: URL(string: puck3D.modelUri!))
-                if let position = puck3D.position {
-                    model.position = position.compactMap { $0 }
-                }
-                var configuration: Puck3DConfiguration = Puck3DConfiguration(
-                    model: model
-                )
-                if let opacity = puck3D.modelOpacity {
-                    configuration.modelOpacity = .constant(opacity)
-                }
-                if let scale = puck3D.modelScale {
-                    configuration.modelScale = .constant(scale.compactMap { $0 })
-                }
-                if let scaleExpressionData = puck3D.modelScaleExpression?.data(using: .utf8) {
-                    let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
-                    configuration.modelScale = .expression(decodedExpression)
-                }
-                if let rotation = puck3D.modelRotation {
-                    configuration.modelRotation = .constant(rotation.compactMap { $0 })
-                }
-                if let slot = settings.slot {
-                    configuration.slot = Slot(rawValue: slot)
-                }
-                options.puckType = .puck3D(configuration)
+            let model = Model(
+                uri: puck3D.modelUri.flatMap(URL.init(string:)),
+                position: puck3D.position?.compacted()
+            )
+            var configuration = Puck3DConfiguration(
+                model: model
+            )
+            if let opacity = puck3D.modelOpacity {
+                configuration.modelOpacity = .constant(opacity)
+            }
+            if let scale = puck3D.modelScale {
+                configuration.modelScale = .constant(scale.compactMap { $0 })
+            }
+            if let scaleExpressionData = puck3D.modelScaleExpression?.data(using: .utf8) {
+                let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
+                configuration.modelScale = .expression(decodedExpression)
+            }
+            if let rotation = puck3D.modelRotation {
+                configuration.modelRotation = .constant(rotation.compactMap { $0 })
+            }
+            if let slot = settings.slot {
+                configuration.slot = Slot(rawValue: slot)
+            }
+            options.puckType = .puck3D(configuration)
         } else if let puck2D = settings.locationPuck?.locationPuck2D {
             var configuration = useDefaultPuck2DIfNeeded
             ? Puck2DConfiguration.makeDefault(showBearing: options.puckBearingEnabled)
