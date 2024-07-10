@@ -168,8 +168,6 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  final Completer<MapboxMap> _controller = Completer<MapboxMap>();
-
   late final _MapboxMapsPlatform _mapboxMapsPlatform =
       _MapboxMapsPlatform(binaryMessenger: _binaryMessenger);
   final int _suffix = _suffixesRegistry.getSuffix();
@@ -204,11 +202,8 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   @override
-  void dispose() async {
-    if (_controller.isCompleted) {
-      final controller = await _controller.future;
-      controller.dispose();
-    }
+  void dispose() {
+    mapboxMap?.dispose();
     _suffixesRegistry.releaseSuffix(_suffix);
     _events.dispose();
 
@@ -248,7 +243,6 @@ class _MapWidgetState extends State<MapWidget> {
       onMapLongTapListener: widget.onLongTapListener,
       onMapScrollListener: widget.onScrollListener,
     );
-    _controller.complete(controller);
     if (widget.onMapCreated != null) {
       widget.onMapCreated!(controller);
     }
