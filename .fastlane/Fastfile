@@ -14,7 +14,7 @@ platform :ios do
       team_id: "GJZR2MEM28", # Developer Portal Team ID,
       profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterMapsExample"],
       targets: ["Runner"],
-      code_sign_identity: "Apple Development: Machiney McMachineface",
+      code_sign_identity: "Apple Development: Created via API",
     )
     update_code_signing_settings(
       use_automatic_signing: false,
@@ -22,7 +22,7 @@ platform :ios do
       team_id: "GJZR2MEM28", # Developer Portal Team ID,
       profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterRunnerTests"],
       targets: ["RunnerTests"],
-      code_sign_identity: "Apple Development: Machiney McMachineface",
+      code_sign_identity: "Apple Development: Created via API",
     )
     # build tests archive in the `output_directory` to launch on firebase
     run_tests(
