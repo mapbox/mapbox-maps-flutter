@@ -28,6 +28,9 @@ enum LineJoin {
 
   /// A join with a sharp, angled corner which is drawn with the outer sides beyond the endpoint of the path until they meet.
   MITER,
+
+  /// Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling.
+  NONE,
 }
 
 /// Controls the frame of reference for `line-translate`.

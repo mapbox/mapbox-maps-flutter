@@ -1,6 +1,6 @@
-# Mapbox Maps SDK Flutter Plugin
+# Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter Plugin is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.5.0). The plugin allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.5.0). The SDK allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -44,7 +44,7 @@ Contributions welcome!
 
 ## Requirements
 
-The Maps Flutter Plugin is compatible with applications:
+The Maps Flutter SDK is compatible with applications:
 
 - Deployed on iOS 12 or higher
 - Built using the Android SDK 21 or higher
@@ -53,7 +53,7 @@ The Maps Flutter Plugin is compatible with applications:
 ## Installation
 
 ### Configure credentials
-To run the Maps Flutter Plugin you will need to configure the Mapbox Access Tokens. 
+To run the Maps Flutter SDK you will need to configure the Mapbox Access Tokens. 
 Read more about access tokens and public/secret scopes at the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) docs.
 
 #### Secret token
@@ -70,7 +70,7 @@ To access platform SDKs you will need to create a secret access token with the `
 ```
 
 #### Public token
-You can set the access token for Mapbox Maps Flutter Plugin(as well as for every Mapbox SDK) via `MapboxOptions`:
+You can set the access token for Mapbox Maps Flutter SDK(as well as for every Mapbox SDK) via `MapboxOptions`:
 ```
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
@@ -107,15 +107,15 @@ String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 ```
 
 ### Add the dependency
-To use the Maps Flutter Plugin add the git dependency to the pubspec.yaml:
+To use the Maps Flutter SDK add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^2.1.0-rc.1
+  mapbox_maps_flutter: ^2.1.0
 ```
 
 ### Configure permissions
-You will need to grant location permission in order to use the location component of the Maps Flutter Plugin.
+You will need to grant location permission in order to use the location component of the Maps Flutter SDK.
 
 You can use an existing library to request location permission, e.g. with [permission_handler](https://pub.dev/packages/permission_handler) `await Permission.locationWhenInUse.request();` will trigger permission request. 
 
@@ -155,10 +155,10 @@ It also allows or add listeners for various events - related to style loading, m
 #### MapboxMap controller
 The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` callback.
 
-`MapboxMap` exposes an entry point to the most of the APIs Maps Flutter Plugin provides. It allows to control the map, camera, styles, observe map events, 
+`MapboxMap` exposes an entry point to the most of the APIs Maps Flutter SDK provides. It allows to control the map, camera, styles, observe map events, 
 query rendered features, etc.
 
-It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.2.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.2.0/documentation/mapboxmaps/mapboxmap) counterparts.
+It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.5.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.5.0/documentation/mapboxmaps/mapboxmap) counterparts.
 
 To interact with the map after it's created store the MapboxMap object somewhere : 
 ```
@@ -237,7 +237,7 @@ You can find more examples of the AnnotationManagers usage in the sample app : [
 ## Map styles
 Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/styles/), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/).
 
-The Mapbox Maps Flutter Plugin allows full customization of the look of the map used in your application. 
+The Mapbox Maps Flutter SDK allows full customization of the look of the map used in your application. 
 
 ### Set a style
 You can specify the initial style uri at `MapWidget.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson` : 
@@ -276,7 +276,7 @@ To apply an expression to interpolate gradient color to a line layer:
 
 ## Camera and animations
 Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/camera-and-animation/), [iOS](https://docs.mapbox.com/ios/maps/guides/camera-and-animation/). 
-The camera is the user's viewpoint above the map. The Maps Flutter Plugin provides you with options to set and adjust the camera position, listen for camera changes, get the camera position, and restrict the camera position to set bounds.
+The camera is the user's viewpoint above the map. The Maps Flutter SDK provides you with options to set and adjust the camera position, listen for camera changes, get the camera position, and restrict the camera position to set bounds.
 
 ### Camera position
 You can set the starting camera position using `MapWidget.cameraOptions` :

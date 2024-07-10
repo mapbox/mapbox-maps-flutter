@@ -1,5 +1,5 @@
 name: mapbox_maps_example
-description: Demonstrates how to use the mapbox_maps_flutter plugin.
+description: Demonstrates how to use the Mapbox Maps Flutter SDK.
 version: "1.0.0-beta.1"
 
 # The following line prevents the package from being accidentally published to
