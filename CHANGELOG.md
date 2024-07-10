@@ -1,6 +1,7 @@
 ### main
 
 * Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
+* Fix a rare crash happening when map widget is being disposed.
 
 ### 2.1.0
 
