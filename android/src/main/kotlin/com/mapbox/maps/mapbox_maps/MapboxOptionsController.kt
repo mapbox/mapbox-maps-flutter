@@ -7,8 +7,11 @@ import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.maps.MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons.*
+import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterAssets
 
-class MapboxOptionsController : _MapboxMapsOptions, _MapboxOptions {
+class MapboxOptionsController(
+  private val flutterAssets: FlutterAssets
+) : _MapboxMapsOptions, _MapboxOptions {
   private val settingsService = SettingsServiceFactory.getInstance(SettingsServiceStorageType.PERSISTENT)
 
   override fun getAccessToken(): String {
@@ -37,6 +40,10 @@ class MapboxOptionsController : _MapboxMapsOptions, _MapboxOptions {
 
   override fun getAssetPath(): String {
     return ""
+  }
+
+  override fun getFlutterAssetPath(flutterAssetUri: String?): String? {
+    return flutterAssetUri?.replace("""^asset://(.+)""".toRegex(), "asset://${flutterAssets.getAssetFilePathBySubpath("$1")}")
   }
 
   override fun setAssetPath(path: String) {

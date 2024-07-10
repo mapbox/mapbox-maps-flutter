@@ -1,3 +1,7 @@
+### main
+
+* Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
+
 ### 2.1.0
 
 * Add ModelLayer API.

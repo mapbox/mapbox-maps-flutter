@@ -220,7 +220,7 @@ class ModelLayer extends Layer {
   List<Object>? modelTypeExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;
@@ -235,7 +235,8 @@ class ModelLayer extends Layer {
     }
 
     if (modelId != null) {
-      layout["model-id"] = modelId;
+      layout["model-id"] =
+          await MapboxMapsOptions._getFlutterAssetPath(modelId);
     }
     var paint = {};
     if (modelAmbientOcclusionIntensityExpression != null) {

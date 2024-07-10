@@ -106,7 +106,7 @@ class RasterParticleLayer extends Layer {
   List<Object>? rasterParticleSpeedFactorExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;

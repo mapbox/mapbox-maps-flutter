@@ -82,7 +82,7 @@ class HeatmapLayer extends Layer {
   List<Object>? heatmapWeightExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;

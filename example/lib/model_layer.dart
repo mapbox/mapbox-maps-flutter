@@ -58,19 +58,30 @@ class _ModelLayerState extends State<ModelLayerWidget> {
       throw Exception("MapboxMap is not ready yet");
     }
 
-    var modelId = "model-test-id";
-    var uri =
+    final buggyModelId = "model-test-id";
+    final buggyModelUri =
         "https://github.com/KhronosGroup/glTF-Sample-Models/raw/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
-    await mapboxMap?.style.addStyleModel(modelId, uri);
+    await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
+
+    final carModelId = "model-car-id";
+    final carModelUri = "asset://assets/sportcar.glb";
+    await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
 
     await mapboxMap?.style
         .addSource(GeoJsonSource(id: "sourceId", data: json.encode(value)));
 
-    var modelLayer = ModelLayer(id: "modelLayer", sourceId: "sourceId");
-    modelLayer.modelId = modelId;
+    var modelLayer = ModelLayer(id: "modelLayer-buggy", sourceId: "sourceId");
+    modelLayer.modelId = buggyModelId;
     modelLayer.modelScale = [0.15, 0.15, 0.15];
     modelLayer.modelRotation = [0, 0, 90];
     modelLayer.modelType = ModelType.COMMON_3D;
     mapboxMap?.style.addLayer(modelLayer);
+
+    var modelLayer1 = ModelLayer(id: "modelLayer-car", sourceId: "sourceId");
+    modelLayer1.modelId = carModelId;
+    modelLayer1.modelScale = [0.15, 0.15, 0.15];
+    modelLayer1.modelRotation = [0, 0, 90];
+    modelLayer1.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(modelLayer1);
   }
 }

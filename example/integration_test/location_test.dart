@@ -115,7 +115,7 @@ void main() {
                 modelTranslation: [0.0, 1.0, 2.0],
                 modelScaleExpression: expression)));
 
-    location.updateSettings(settings);
+    await location.updateSettings(settings);
 
     final updatedSettings = await location.getSettings();
     expect(updatedSettings.enabled, settings.enabled);

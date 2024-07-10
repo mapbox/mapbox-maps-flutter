@@ -114,7 +114,7 @@ class SkyLayer extends Layer {
   List<Object>? skyTypeExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;
