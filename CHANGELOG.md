@@ -2,6 +2,7 @@
 
 * Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
 * Fix map view crashing upon host activity destruction when using a cached Flutter engine.
+* Fix a rare crash happening when map widget is being disposed.
 
 ### 2.1.0
 

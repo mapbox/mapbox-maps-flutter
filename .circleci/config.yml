@@ -121,6 +121,7 @@ jobs:
 
             popd # to repo root
 
+            bundle install
             bundle exec fastlane build_examples_tests
       - persist_to_workspace:
           root: << parameters.workspace-path >>

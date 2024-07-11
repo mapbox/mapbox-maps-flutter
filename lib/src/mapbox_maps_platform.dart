@@ -99,7 +99,11 @@ class _MapboxMapsPlatform {
   }
 
   void dispose() async {
-    await _channel.invokeMethod('platform#releaseMethodChannels');
+    try {
+      await _channel.invokeMethod('platform#releaseMethodChannels');
+    } catch (e) {
+      print("Error releasing method channels: $e");
+    }
 
     _channel.setMethodCallHandler(null);
   }
