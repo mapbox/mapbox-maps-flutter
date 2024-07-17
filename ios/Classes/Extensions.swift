@@ -374,6 +374,14 @@ extension CGPoint {
         return ScreenCoordinate(x: x, y: y)
     }
 }
+
+extension MapboxMaps.MapContentGestureContext {
+
+    func toFLTMapContentGestureContext() -> MapContentGestureContext {
+        MapContentGestureContext(touchPosition: point.toFLTScreenCoordinate(), point: Point(coordinate))
+    }
+}
+
 extension MapboxMaps.CoordinateBoundsZoom {
     func toFLTCoordinateBoundsZoom() -> CoordinateBoundsZoom {
         return CoordinateBoundsZoom(bounds: self.bounds.toFLTCoordinateBounds(), zoom: zoom)
