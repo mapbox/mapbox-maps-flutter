@@ -71,6 +71,23 @@ enum NorthOrientation {
   LEFTWARDS,
 }
 
+enum _MapWidgetDebugOptions {
+  tileBorders,
+  parseStatus,
+  timestamps,
+  collision,
+  overdraw,
+  stencilClip,
+  depthBuffer,
+  modelBounds,
+  terrainWireframe,
+  layers2DWireframe,
+  layers3DWireframe,
+  light,
+  camera,
+  padding,
+}
+
 /// Options for enabling debugging features in a map.
 enum MapDebugOptionsData {
   /// Edges of tile boundaries are shown as thick, red lines to help diagnose
@@ -727,6 +744,28 @@ class CoordinateBounds {
       southwest: Point.decode(result[0]! as List<Object?>),
       northeast: Point.decode(result[1]! as List<Object?>),
       infiniteBounds: result[2]! as bool,
+    );
+  }
+}
+
+/// This class is needed because Pigeon does not encode properly arrays of enums.
+class _MapWidgetDebugOptionsBox {
+  _MapWidgetDebugOptionsBox({
+    required this.option,
+  });
+
+  _MapWidgetDebugOptions option;
+
+  Object encode() {
+    return <Object?>[
+      option.index,
+    ];
+  }
+
+  static _MapWidgetDebugOptionsBox decode(Object result) {
+    result as List<Object?>;
+    return _MapWidgetDebugOptionsBox(
+      option: _MapWidgetDebugOptions.values[result[0]! as int],
     );
   }
 }
@@ -2151,6 +2190,9 @@ class __CameraManagerCodec extends StandardMessageCodec {
     } else if (value is TransitionOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
+    } else if (value is _MapWidgetDebugOptionsBox) {
+      buffer.putUint8(167);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -2237,6 +2279,8 @@ class __CameraManagerCodec extends StandardMessageCodec {
         return TileCoverOptions.decode(readValue(buffer)!);
       case 166:
         return TransitionOptions.decode(readValue(buffer)!);
+      case 167:
+        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -3026,6 +3070,9 @@ class __MapInterfaceCodec extends StandardMessageCodec {
     } else if (value is TransitionOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
+    } else if (value is _MapWidgetDebugOptionsBox) {
+      buffer.putUint8(167);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -3112,6 +3159,8 @@ class __MapInterfaceCodec extends StandardMessageCodec {
         return TileCoverOptions.decode(readValue(buffer)!);
       case 166:
         return TransitionOptions.decode(readValue(buffer)!);
+      case 167:
+        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -3578,6 +3627,61 @@ class _MapInterface {
       );
     } else {
       return (__pigeon_replyList[0] as MapOptions?)!;
+    }
+  }
+
+  Future<List<_MapWidgetDebugOptionsBox?>> getDebugOptions() async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else if (__pigeon_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)!
+          .cast<_MapWidgetDebugOptionsBox?>();
+    }
+  }
+
+  Future<void> setDebugOptions(
+      List<_MapWidgetDebugOptionsBox?> debugOptions) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[debugOptions]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 
@@ -4892,6 +4996,9 @@ class _StyleManagerCodec extends StandardMessageCodec {
     } else if (value is TransitionOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
+    } else if (value is _MapWidgetDebugOptionsBox) {
+      buffer.putUint8(167);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -4978,6 +5085,8 @@ class _StyleManagerCodec extends StandardMessageCodec {
         return TileCoverOptions.decode(readValue(buffer)!);
       case 166:
         return TransitionOptions.decode(readValue(buffer)!);
+      case 167:
+        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
