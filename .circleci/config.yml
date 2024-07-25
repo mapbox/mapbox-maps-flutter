@@ -54,8 +54,8 @@ jobs:
           working_directory: example/android
           command: |
             flutter build apk
-            ./gradlew app:assembleAndroidTest
-            ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n "ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" | base64 -w 0)"
+            ./gradlew app:assembleAndroidTest --stacktrace
+            ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n "ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" | base64 -w 0)" --stacktrace
       - persist_to_workspace:
           root: << parameters.workspace-path >>
           paths:
