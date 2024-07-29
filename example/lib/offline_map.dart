@@ -10,7 +10,7 @@ import 'page.dart';
 import 'utils.dart';
 
 class OfflineMapPage extends ExamplePage {
-  OfflineMapPage() : super(const Icon(Icons.map), 'Offline Map');
+  OfflineMapPage() : super(const Icon(Icons.wifi_off), 'Offline Map');
 
   @override
   Widget build(BuildContext context) {
