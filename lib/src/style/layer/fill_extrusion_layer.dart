@@ -271,7 +271,7 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionVerticalScaleExpression;
 
   @override
-  String _encode() {
+  Future<String> _encode() async {
     var layout = {};
     if (visibilityExpression != null) {
       layout["visibility"] = visibilityExpression!;

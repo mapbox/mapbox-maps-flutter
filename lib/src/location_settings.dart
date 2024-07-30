@@ -12,7 +12,7 @@ class LocationSettings {
     return _api.getSettings();
   }
 
-  /// Assepts an instance of [LocationComponentSettings] allowing to apply location.
+  /// Accepts an instance of [LocationComponentSettings] allowing to apply location.
   /// indicator configuration changes.
   ///
   /// Note: By default [DefaultLocationPuck2D] is used if no [LocationComponentSettings.locationPuck] specified.
@@ -21,6 +21,10 @@ class LocationSettings {
       // If locationPuck is not set, fallback to use DefaultLocationPuck2D.
       settings.locationPuck =
           LocationPuck(locationPuck2D: DefaultLocationPuck2D());
+    } else {
+      settings.locationPuck?.locationPuck3D?.modelUri =
+          await MapboxMapsOptions._getFlutterAssetPath(
+              settings.locationPuck?.locationPuck3D?.modelUri);
     }
     _api.updateSettings(settings,
         settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D);

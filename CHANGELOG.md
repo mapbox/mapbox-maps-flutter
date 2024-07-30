@@ -1,3 +1,50 @@
+### main
+
+* Expose `MapboxStyles.STANDARD_SATELLITE` style.
+
+### 2.2.0-beta.1
+
+* Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
+* Fix map view crashing upon host activity destruction when using a cached Flutter engine.
+* Fix a rare crash happening when map widget is being disposed.
+
+### 2.1.0
+
+* Add ModelLayer API.
+* Support for offline map, allowing users to download and store map data on their devices for use in environments with limited or no internet connectivity.
+* Layer expressions support. Specify expressions when constructing a layer with all new expression support for layers.
+*Before:*
+```dart
+mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
+    '["interpolate",["linear"],["line-progress"],0.0,["rgb",255,0,0],0.4,["rgb",0,255,0],1.0,["rgb",0,0,255]]');
+
+```
+*After:*
+```dart
+LineLayer(
+  ...
+  lineGradientExpression: [
+    "interpolate",
+    ["linear"],
+    ["line-progress"],
+    0.0,
+    ["rgb", 255, 0, 0],
+    0.4,
+    ["rgb", 0, 255, 0],
+    1.0,
+    ["rgb", 0, 0, 255]
+  ],
+);
+```
+* Expose `text-occlusion-opacity`, `icon-occlusion-opacity`, `line-occlusion-opacity`, `model-front-cutoff`, `lineZOffset` as experimental.
+* Add min/max/default values for most of the style properties.
+* Expose `clusterMinPoints` property for `GeoJSONSource`.
+* Expose `SlotLayer` and `RasterParticleLayer`.
+* Expose `LocationComponentSettings.slot`.
+* Add `@experimental` annotation to relevant APIs.
+* Expose `LineJoin.NONE`.
+* Bump Maps SDK to 11.5.0 for Android and 11.5.1 for iOS.
+
 ### 2.1.0-rc.1
 
 * Bump Maps SDK to 11.5.0-rc.1

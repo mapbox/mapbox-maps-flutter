@@ -4332,6 +4332,7 @@ interface _MapboxMapsOptions {
   fun setDataPath(path: String)
   fun getAssetPath(): String
   fun setAssetPath(path: String)
+  fun getFlutterAssetPath(flutterAssetUri: String?): String?
   fun getTileStoreUsageMode(): TileStoreUsageMode
   fun setTileStoreUsageMode(mode: TileStoreUsageMode)
   fun getWorldview(): String?
@@ -4444,6 +4445,24 @@ interface _MapboxMapsOptions {
             try {
               api.setAssetPath(pathArg)
               wrapped = listOf<Any?>(null)
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val flutterAssetUriArg = args[0] as String?
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getFlutterAssetPath(flutterAssetUriArg))
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -180,15 +181,28 @@ class LocationPageBodyState extends State<LocationPageBody> {
     );
   }
 
-  Widget _switchLocationPuck3D() {
+  Widget _switchLocationPuck3D_duck() {
     return TextButton(
-      child: Text('switch to 3d puck'),
+      child: Text('switch to 3d puck with duck model'),
       onPressed: () {
         mapboxMap?.location.updateSettings(LocationComponentSettings(
             locationPuck: LocationPuck(
                 locationPuck3D: LocationPuck3D(
                     modelUri:
                         "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",
+                    modelScale: [_puckScale, _puckScale, _puckScale]))));
+      },
+    );
+  }
+
+  Widget _switchLocationPuck3D_car() {
+    return TextButton(
+      child: Text('switch to 3d puck with car model'),
+      onPressed: () {
+        mapboxMap?.location.updateSettings(LocationComponentSettings(
+            locationPuck: LocationPuck(
+                locationPuck3D: LocationPuck3D(
+                    modelUri: "asset://assets/sportcar.glb",
                     modelScale: [_puckScale, _puckScale, _puckScale]))));
       },
     );
@@ -262,7 +276,8 @@ class LocationPageBodyState extends State<LocationPageBody> {
         _show(),
         _hide(),
         _switchLocationPuck2D(),
-        _switchLocationPuck3D(),
+        _switchLocationPuck3D_duck(),
+        _switchLocationPuck3D_car(),
         _switchPuckScale(),
         _showBearing(),
         _hideBearing(),

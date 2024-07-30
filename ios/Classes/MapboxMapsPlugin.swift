@@ -7,12 +7,13 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
         let instance = MapboxMapFactory(withRegistrar: registrar)
         registrar.register(instance, withId: "plugins.flutter.io/mapbox_maps")
 
-        setupStaticChannels(with: registrar.messenger())
+        setupStaticChannels(with: registrar)
     }
 
-    private static func setupStaticChannels(with binaryMessenger: FlutterBinaryMessenger) {
+    private static func setupStaticChannels(with registrar: FlutterPluginRegistrar) {
+        let binaryMessenger = registrar.messenger()
 
-        let mapboxOptionsController = MapboxOptionsController()
+        let mapboxOptionsController = MapboxOptionsController(assetKeyLookup: registrar.lookupKey(forAsset:))
         let snapshotterInstanceManager = SnapshotterInstanceManager(binaryMessenger: binaryMessenger)
         let offlineMapInstanceManager = OfflineMapInstanceManager(binaryMessenger: binaryMessenger)
 
