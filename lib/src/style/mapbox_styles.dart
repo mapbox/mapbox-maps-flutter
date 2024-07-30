@@ -6,6 +6,9 @@ class MapboxStyles {
   /// Mapbox Standard is a general-purpose style with 3D visualization.
   static const String STANDARD = "mapbox://styles/mapbox/standard";
 
+  /// Mapbox Standard Satellite
+  static const String STANDARD_SATELLITE = "mapbox://styles/mapbox/standard-satellite";
+
   /// Mapbox Streets: A complete base map, perfect for incorporating your own data. Using this
   /// constant means your map style will always use the latest version and may change as we
   /// improve the style.

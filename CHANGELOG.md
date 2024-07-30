@@ -1,5 +1,7 @@
 ### main
 
+* Expose `MapboxStyles.STANDARD_SATELLITE` style.
+
 ### 2.2.0-beta.1
 
 * Support local assets for 3D puck and `ModelLayer`. To use a local assets, please specify it with `asset://` scheme in the uri.
