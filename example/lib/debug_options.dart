@@ -39,21 +39,24 @@ class DebugOptionsPageBodyState extends State<DebugOptionsPageBody> {
         key: const ValueKey<String>('mapWidget'),
         onMapCreated: _onMapCreated,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.construction),
-        onPressed: () async {
-          if (mapboxMap == null) {
-            return;
-          }
-          showModalBottomSheet(
-            context: context,
-            useSafeArea: true,
-            showDragHandle: true,
-            builder: (context) {
-              return DebugOptionsList(mapboxMap!);
-            },
-          );
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 32.0),
+        child: FloatingActionButton(
+          child: const Icon(Icons.construction),
+          onPressed: () async {
+            if (mapboxMap == null) {
+              return;
+            }
+            showModalBottomSheet(
+              context: context,
+              useSafeArea: true,
+              showDragHandle: true,
+              builder: (context) {
+                return DebugOptionsList(mapboxMap!);
+              },
+            );
+          },
+        ),
       ),
     );
   }
