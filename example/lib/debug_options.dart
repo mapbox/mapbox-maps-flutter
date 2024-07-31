@@ -25,11 +25,16 @@ class DebugOptionsPageBodyState extends State<DebugOptionsPageBody> {
   DebugOptionsPageBodyState();
 
   MapboxMap? mapboxMap;
-  List<MapWidgetDebugOptions> enabledOptions = [];
+  int enabledOptions = 0;
 
   _onMapCreated(MapboxMap mapboxMap) async {
-    enabledOptions = await mapboxMap.getDebugOptions();
     this.mapboxMap = mapboxMap;
+  }
+
+  void _onOptionsUpdate(int value) {
+    setState(() {
+      enabledOptions = value;
+    });
   }
 
   @override
@@ -41,21 +46,25 @@ class DebugOptionsPageBodyState extends State<DebugOptionsPageBody> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 32.0),
-        child: FloatingActionButton(
-          child: const Icon(Icons.construction),
-          onPressed: () async {
-            if (mapboxMap == null) {
-              return;
-            }
-            showModalBottomSheet(
-              context: context,
-              useSafeArea: true,
-              showDragHandle: true,
-              builder: (context) {
-                return DebugOptionsList(mapboxMap!);
-              },
-            );
-          },
+        child: Badge(
+          label: Text(enabledOptions.toString()),
+          isLabelVisible: enabledOptions > 0,
+          child: FloatingActionButton(
+            child: const Icon(Icons.construction),
+            onPressed: () async {
+              if (mapboxMap == null) {
+                return;
+              }
+              showModalBottomSheet(
+                context: context,
+                useSafeArea: true,
+                showDragHandle: true,
+                builder: (context) {
+                  return DebugOptionsList(mapboxMap!, _onOptionsUpdate);
+                },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -64,7 +73,9 @@ class DebugOptionsPageBodyState extends State<DebugOptionsPageBody> {
 
 class DebugOptionsList extends StatefulWidget {
   final MapboxMap mapController;
-  const DebugOptionsList(this.mapController);
+  final ValueChanged<int> optionsUpdate;
+
+  const DebugOptionsList(this.mapController, this.optionsUpdate);
 
   @override
   State createState() => DebugOptionsListState();
@@ -77,6 +88,7 @@ class DebugOptionsListState extends State<DebugOptionsList> {
   void initState() {
     super.initState();
     widget.mapController.getDebugOptions().then((value) {
+      widget.optionsUpdate.call(value.length);
       setState(() {
         enabledOptions = value;
       });
@@ -105,6 +117,7 @@ class DebugOptionsListState extends State<DebugOptionsList> {
                       } else {
                         enabledOptions.remove(e);
                       }
+                      widget.optionsUpdate.call(enabledOptions.length);
                       setState(() {
                         widget.mapController.setDebugOptions(enabledOptions);
                       });
