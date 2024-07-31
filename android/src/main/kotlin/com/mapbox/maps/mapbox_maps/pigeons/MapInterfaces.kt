@@ -117,6 +117,29 @@ enum class NorthOrientation(val raw: Int) {
   }
 }
 
+enum class _MapWidgetDebugOptions(val raw: Int) {
+  TILE_BORDERS(0),
+  PARSE_STATUS(1),
+  TIMESTAMPS(2),
+  COLLISION(3),
+  OVERDRAW(4),
+  STENCIL_CLIP(5),
+  DEPTH_BUFFER(6),
+  MODEL_BOUNDS(7),
+  TERRAIN_WIREFRAME(8),
+  LAYERS2DWIREFRAME(9),
+  LAYERS3DWIREFRAME(10),
+  LIGHT(11),
+  CAMERA(12),
+  PADDING(13);
+
+  companion object {
+    fun ofRaw(raw: Int): _MapWidgetDebugOptions? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Options for enabling debugging features in a map. */
 enum class MapDebugOptionsData(val raw: Int) {
   /**
@@ -817,6 +840,29 @@ data class CoordinateBounds(
       southwest.toList(),
       northeast.toList(),
       infiniteBounds,
+    )
+  }
+}
+
+/**
+ * This class is needed because Pigeon does not encode properly arrays of enums.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class _MapWidgetDebugOptionsBox(
+  val option: _MapWidgetDebugOptions
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): _MapWidgetDebugOptionsBox {
+      val option = _MapWidgetDebugOptions.ofRaw(list[0] as Int)!!
+      return _MapWidgetDebugOptionsBox(option)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      option.raw,
     )
   }
 }
@@ -2250,6 +2296,11 @@ private object _CameraManagerCodec : StandardMessageCodec() {
           TransitionOptions.fromList(it)
         }
       }
+      167.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _MapWidgetDebugOptionsBox.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -2409,6 +2460,10 @@ private object _CameraManagerCodec : StandardMessageCodec() {
       }
       is TransitionOptions -> {
         stream.write(166)
+        writeValue(stream, value.toList())
+      }
+      is _MapWidgetDebugOptionsBox -> {
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3143,6 +3198,11 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
           TransitionOptions.fromList(it)
         }
       }
+      167.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _MapWidgetDebugOptionsBox.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -3304,6 +3364,10 @@ private object _MapInterfaceCodec : StandardMessageCodec() {
         stream.write(166)
         writeValue(stream, value.toList())
       }
+      is _MapWidgetDebugOptionsBox -> {
+        stream.write(167)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
@@ -3382,6 +3446,8 @@ interface _MapInterface {
    * @return The map's `map options`.
    */
   fun getMapOptions(): MapOptions
+  fun getDebugOptions(): List<_MapWidgetDebugOptionsBox?>
+  fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptionsBox>)
   /**
    * Returns the `map debug options`.
    *
@@ -3793,6 +3859,41 @@ interface _MapInterface {
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.getMapOptions())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            var wrapped: List<Any?>
+            try {
+              wrapped = listOf<Any?>(api.getDebugOptions())
+            } catch (exception: Throwable) {
+              wrapped = wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val debugOptionsArg = args[0] as List<_MapWidgetDebugOptionsBox>
+            var wrapped: List<Any?>
+            try {
+              api.setDebugOptions(debugOptionsArg)
+              wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -4851,6 +4952,11 @@ private object StyleManagerCodec : StandardMessageCodec() {
           TransitionOptions.fromList(it)
         }
       }
+      167.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _MapWidgetDebugOptionsBox.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -5010,6 +5116,10 @@ private object StyleManagerCodec : StandardMessageCodec() {
       }
       is TransitionOptions -> {
         stream.write(166)
+        writeValue(stream, value.toList())
+      }
+      is _MapWidgetDebugOptionsBox -> {
+        stream.write(167)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
