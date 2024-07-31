@@ -7,7 +7,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
@@ -173,14 +173,14 @@ class MapboxMapController(
     }
     lifecycleHelper = LifecycleHelper(lifecycleProvider.getLifecycle()!!, shouldDestroyOnDestroy)
 
-    mapView?.let { ViewTreeLifecycleOwner.set(it, lifecycleHelper) }
+    mapView?.setViewTreeLifecycleOwner(lifecycleHelper)
   }
 
   override fun onFlutterViewDetached() {
     super.onFlutterViewDetached()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
-    ViewTreeLifecycleOwner.set(mapView!!, null)
+    mapView!!.setViewTreeLifecycleOwner(null)
   }
 
   override fun dispose() {
