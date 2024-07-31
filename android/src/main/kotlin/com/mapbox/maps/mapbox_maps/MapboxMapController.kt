@@ -81,7 +81,7 @@ class MapboxMapController(
       lifecycle.addObserver(this)
     }
 
-    fun getLifecycle(): Lifecycle {
+    override fun getLifecycle(): Lifecycle {
       return lifecycleRegistry
     }
 
