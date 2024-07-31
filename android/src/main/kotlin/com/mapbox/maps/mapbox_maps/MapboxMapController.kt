@@ -81,10 +81,6 @@ class MapboxMapController(
       lifecycle.addObserver(this)
     }
 
-    override fun getLifecycle(): Lifecycle {
-      return lifecycleRegistry
-    }
-
     override fun onCreate(owner: LifecycleOwner) {
       lifecycleRegistry.currentState = Lifecycle.State.CREATED
     }
