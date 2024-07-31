@@ -70,7 +70,7 @@ class MapboxMapController(
     `parentLifecycle` is the lifecycle of the Flutter activity, which may live much longer then
     the MapView attached.
   */
-  private class LifecycleHelper(
+  private abstract class LifecycleHelper(
     val parentLifecycle: Lifecycle,
     val shouldDestroyOnDestroy: Boolean,
   ) : LifecycleOwner, DefaultLifecycleObserver {
