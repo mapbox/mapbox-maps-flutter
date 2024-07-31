@@ -67,21 +67,21 @@ class MapboxMapController(
   /*
     Mirrors lifecycle of the parent, with one addition - switches to DESTROYED state
     when `dispose` is called.
-    `parentLifecycle` is the lifecycle of the Flutter activity, which may live much longer then
+    `lifecycle` is the lifecycle of the Flutter activity, which may live much longer then
     the MapView attached.
   */
-  private abstract class LifecycleHelper(
-    val parentLifecycle: Lifecycle,
+  private class LifecycleHelper(
+    override val lifecycle: Lifecycle,
     val shouldDestroyOnDestroy: Boolean,
   ) : LifecycleOwner, DefaultLifecycleObserver {
 
     val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
 
     init {
-      parentLifecycle.addObserver(this)
+      lifecycle.addObserver(this)
     }
 
-    override fun getLifecycle(): Lifecycle {
+    fun getLifecycle(): Lifecycle {
       return lifecycleRegistry
     }
 
@@ -108,7 +108,7 @@ class MapboxMapController(
     override fun onDestroy(owner: LifecycleOwner) = propagateDestroyEvent()
 
     fun dispose() {
-      parentLifecycle.removeObserver(this)
+      lifecycle.removeObserver(this)
       propagateDestroyEvent()
     }
 
