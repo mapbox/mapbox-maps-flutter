@@ -10,8 +10,8 @@ import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.StylePackError
-import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.applyDefaultParams
+import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
