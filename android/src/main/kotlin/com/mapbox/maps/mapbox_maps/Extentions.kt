@@ -237,48 +237,26 @@ fun SourceQueryOptions.toSourceQueryOptions(): com.mapbox.maps.SourceQueryOption
 
 fun RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): com.mapbox.maps.RenderedQueryGeometry {
   return when (type) {
-    Type.SCREEN_BOX -> {
-      val screenBoxArray = Gson().fromJson(
+    Type.SCREEN_BOX -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
         value,
-        Array<Array<Double>>::class.java
-      )
-      val minCoord = screenBoxArray[0]
-      val maxCoord = screenBoxArray[1]
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        com.mapbox.maps.ScreenBox(
-          com.mapbox.maps.ScreenCoordinate(
-            minCoord[0].toDevicePixels(context).toDouble(),
-            minCoord[1].toDevicePixels(context).toDouble()
-          ),
-          com.mapbox.maps.ScreenCoordinate(
-            maxCoord[0].toDevicePixels(context).toDouble(),
-            maxCoord[1].toDevicePixels(context).toDouble()
-          )
-        )
-      )
-    }
-    Type.LIST -> {
-      val array: Array<Array<Double>> =
-        Gson().fromJson(value, Array<Array<Double>>::class.java)
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        array.map {
-          com.mapbox.maps.ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
-        }.toList()
-      )
-    }
-    Type.SCREEN_COORDINATE -> {
-      val pointArray = Gson().fromJson(
-        value,
-        Array<Double>::class.java
-      )
+        ScreenBox::class.java
+      ).toScreenBox(context)
+    )
 
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        com.mapbox.maps.ScreenCoordinate(
-          pointArray[0].toDevicePixels(context).toDouble(),
-          pointArray[1].toDevicePixels(context).toDouble()
-        )
-      )
-    }
+    Type.LIST -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
+        value,
+        Array<ScreenCoordinate>::class.java
+      ).map { it.toScreenCoordinate(context) }
+    )
+
+    Type.SCREEN_COORDINATE -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
+        value,
+        ScreenCoordinate::class.java
+      ).toScreenCoordinate(context)
+    )
   }
 }
 
