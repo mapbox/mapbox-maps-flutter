@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
@@ -24,9 +25,14 @@ import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInTiles
 import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
 import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptionsBox
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
-class MapInterfaceController(private val mapboxMap: MapboxMap, private val context: Context) : _MapInterface {
+class MapInterfaceController(
+  private val mapboxMap: MapboxMap,
+  private val mapView: MapView,
+  private val context: Context
+) : _MapInterface {
   override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
       styleURI,
@@ -109,6 +115,16 @@ class MapInterfaceController(private val mapboxMap: MapboxMap, private val conte
 
   override fun getMapOptions(): MapOptions {
     return mapboxMap.getMapOptions().toFLTMapOptions(context)
+  }
+
+  override fun getDebugOptions(): List<_MapWidgetDebugOptionsBox?> {
+    return mapView.debugOptions.mapNotNull { nativeOption ->
+      nativeOption.toFLTDebugOptions()?.let { _MapWidgetDebugOptionsBox(it) }
+    }
+  }
+
+  override fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptionsBox>) {
+    mapView.debugOptions = debugOptions.map { it.option.toMapViewDebugOptions() }.toSet()
   }
 
   override fun getDebug(): List<MapDebugOptions> {

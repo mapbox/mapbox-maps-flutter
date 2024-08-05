@@ -10,6 +10,7 @@ import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.StylePackError
+import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
@@ -25,6 +26,25 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
 // FLT to Android
+
+fun _MapWidgetDebugOptions.toMapViewDebugOptions(): MapViewDebugOptions {
+  return when (this) {
+    _MapWidgetDebugOptions.TILE_BORDERS -> MapViewDebugOptions.TILE_BORDERS
+    _MapWidgetDebugOptions.PARSE_STATUS -> MapViewDebugOptions.PARSE_STATUS
+    _MapWidgetDebugOptions.TIMESTAMPS -> MapViewDebugOptions.TIMESTAMPS
+    _MapWidgetDebugOptions.COLLISION -> MapViewDebugOptions.COLLISION
+    _MapWidgetDebugOptions.OVERDRAW -> MapViewDebugOptions.OVERDRAW
+    _MapWidgetDebugOptions.STENCIL_CLIP -> MapViewDebugOptions.STENCIL_CLIP
+    _MapWidgetDebugOptions.DEPTH_BUFFER -> MapViewDebugOptions.DEPTH_BUFFER
+    _MapWidgetDebugOptions.MODEL_BOUNDS -> MapViewDebugOptions.MODEL_BOUNDS
+    _MapWidgetDebugOptions.TERRAIN_WIREFRAME -> MapViewDebugOptions.TERRAIN_WIREFRAME
+    _MapWidgetDebugOptions.LAYERS2DWIREFRAME -> MapViewDebugOptions.LAYERS2_DWIREFRAME
+    _MapWidgetDebugOptions.LAYERS3DWIREFRAME -> MapViewDebugOptions.LAYERS3_DWIREFRAME
+    _MapWidgetDebugOptions.LIGHT -> MapViewDebugOptions.LIGHT
+    _MapWidgetDebugOptions.CAMERA -> MapViewDebugOptions.CAMERA
+    _MapWidgetDebugOptions.PADDING -> MapViewDebugOptions.PADDING
+  }
+}
 
 fun GlyphsRasterizationMode.toGlyphsRasterizationMode(): com.mapbox.maps.GlyphsRasterizationMode {
   return when (this) {
@@ -375,6 +395,26 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun MapViewDebugOptions.toFLTDebugOptions(): _MapWidgetDebugOptions? {
+  return when (this) {
+    MapViewDebugOptions.TILE_BORDERS -> _MapWidgetDebugOptions.TILE_BORDERS
+    MapViewDebugOptions.PARSE_STATUS -> _MapWidgetDebugOptions.PARSE_STATUS
+    MapViewDebugOptions.TIMESTAMPS -> _MapWidgetDebugOptions.TIMESTAMPS
+    MapViewDebugOptions.COLLISION -> _MapWidgetDebugOptions.COLLISION
+    MapViewDebugOptions.OVERDRAW -> _MapWidgetDebugOptions.OVERDRAW
+    MapViewDebugOptions.STENCIL_CLIP -> _MapWidgetDebugOptions.STENCIL_CLIP
+    MapViewDebugOptions.DEPTH_BUFFER -> _MapWidgetDebugOptions.DEPTH_BUFFER
+    MapViewDebugOptions.MODEL_BOUNDS -> _MapWidgetDebugOptions.MODEL_BOUNDS
+    MapViewDebugOptions.TERRAIN_WIREFRAME -> _MapWidgetDebugOptions.TERRAIN_WIREFRAME
+    MapViewDebugOptions.LAYERS2_DWIREFRAME -> _MapWidgetDebugOptions.LAYERS2DWIREFRAME
+    MapViewDebugOptions.LAYERS3_DWIREFRAME -> _MapWidgetDebugOptions.LAYERS3DWIREFRAME
+    MapViewDebugOptions.LIGHT -> _MapWidgetDebugOptions.LIGHT
+    MapViewDebugOptions.CAMERA -> _MapWidgetDebugOptions.CAMERA
+    MapViewDebugOptions.PADDING -> _MapWidgetDebugOptions.PADDING
+    else -> null
+  }
+}
 
 fun com.mapbox.maps.CanonicalTileID.toFLTCanonicalTileID(): CanonicalTileID {
   return CanonicalTileID(z = z.toLong(), x = x.toLong(), y = y.toLong())

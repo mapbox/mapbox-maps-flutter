@@ -9,6 +9,27 @@ extension FlutterError: Error { }
 
 // FLT to Mapbox
 
+extension [_MapWidgetDebugOptions] {
+    func toDebugOptions() -> MapViewDebugOptions {
+        return reduce(into: []) { partialResult, option in
+            switch option {
+            case .tileBorders: partialResult.insert(.tileBorders)
+            case .parseStatus: partialResult.insert(.parseStatus)
+            case .timestamps: partialResult.insert(.timestamps)
+            case .collision: partialResult.insert(.collision)
+            case .overdraw: partialResult.insert(.overdraw)
+            case .stencilClip: partialResult.insert(.stencilClip)
+            case .depthBuffer: partialResult.insert(.depthBuffer)
+            case .modelBounds: partialResult.insert(.modelBounds)
+            case .light: partialResult.insert(.light)
+            case .camera: partialResult.insert(.camera)
+            case .padding: partialResult.insert(.padding)
+            case .terrainWireframe, .layers2DWireframe, .layers3DWireframe: break
+            }
+        }
+    }
+}
+
 extension GlyphsRasterizationMode {
     func toGlyphsRasterizationMode() -> MapboxMaps.GlyphsRasterizationMode {
         switch self {
@@ -221,6 +242,25 @@ extension MbxEdgeInsets {
 }
 
 // Mapbox to FLT
+
+extension MapViewDebugOptions {
+    func toFLTDebugOptions() -> [_MapWidgetDebugOptions] {
+        var debugOptions = [_MapWidgetDebugOptions]()
+        if contains(.tileBorders) { debugOptions.append(.tileBorders) }
+        if contains(.tileBorders) { debugOptions.append(.tileBorders) }
+        if contains(.parseStatus) { debugOptions.append(.parseStatus) }
+        if contains(.timestamps) { debugOptions.append(.timestamps) }
+        if contains(.collision) { debugOptions.append(.collision) }
+        if contains(.overdraw) { debugOptions.append(.overdraw) }
+        if contains(.stencilClip) { debugOptions.append(.stencilClip) }
+        if contains(.depthBuffer) { debugOptions.append(.depthBuffer) }
+        if contains(.modelBounds) { debugOptions.append(.modelBounds) }
+        if contains(.light) { debugOptions.append(.light) }
+        if contains(.camera) { debugOptions.append(.camera) }
+        if contains(.padding) { debugOptions.append(.padding) }
+        return debugOptions
+    }
+}
 
 extension MapboxMaps.CanonicalTileID {
     func toFLTCanonicalTileID() -> CanonicalTileID {

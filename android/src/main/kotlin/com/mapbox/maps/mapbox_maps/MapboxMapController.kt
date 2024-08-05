@@ -127,7 +127,7 @@ class MapboxMapController(
     styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
     projectionController = MapProjectionController(mapboxMap)
-    mapInterfaceController = MapInterfaceController(mapboxMap, context)
+    mapInterfaceController = MapInterfaceController(mapboxMap, mapView, context)
     animationController = AnimationController(mapboxMap, context)
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)

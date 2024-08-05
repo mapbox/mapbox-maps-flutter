@@ -5,7 +5,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'page.dart';
 
 class ModelLayerPage extends ExamplePage {
-  ModelLayerPage() : super(const Icon(Icons.map), 'Model layer');
+  ModelLayerPage() : super(const Icon(Icons.view_in_ar), 'Model layer');
 
   @override
   Widget build(BuildContext context) {

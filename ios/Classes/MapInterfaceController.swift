@@ -6,9 +6,12 @@ import Turf
 
 final class MapInterfaceController: _MapInterface {
     private static let errorCode = "0"
-    private var mapboxMap: MapboxMap
-    init(withMapboxMap mapboxMap: MapboxMap) {
+    private let mapboxMap: MapboxMap
+    private let mapView: MapView
+
+    init(withMapboxMap mapboxMap: MapboxMap, mapView: MapView) {
         self.mapboxMap = mapboxMap
+        self.mapView = mapView
     }
 
     func loadStyleURI(styleURI: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -115,6 +118,14 @@ final class MapInterfaceController: _MapInterface {
 
     func getMapOptions() throws -> MapOptions {
         return self.mapboxMap.options.toFLTMapOptions()
+    }
+
+    func getDebugOptions() throws -> [_MapWidgetDebugOptionsBox?] {
+        return mapView.debugOptions.toFLTDebugOptions().map(_MapWidgetDebugOptionsBox.init)
+    }
+
+    func setDebugOptions(debugOptions: [_MapWidgetDebugOptionsBox]) throws {
+        mapView.debugOptions = debugOptions.map(\.option).toDebugOptions()
     }
 
     func getDebug() throws -> [MapDebugOptions?] {

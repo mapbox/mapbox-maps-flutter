@@ -82,6 +82,23 @@ enum NorthOrientation: Int {
   case lEFTWARDS = 3
 }
 
+enum _MapWidgetDebugOptions: Int {
+  case tileBorders = 0
+  case parseStatus = 1
+  case timestamps = 2
+  case collision = 3
+  case overdraw = 4
+  case stencilClip = 5
+  case depthBuffer = 6
+  case modelBounds = 7
+  case terrainWireframe = 8
+  case layers2DWireframe = 9
+  case layers3DWireframe = 10
+  case light = 11
+  case camera = 12
+  case padding = 13
+}
+
 /// Options for enabling debugging features in a map.
 enum MapDebugOptionsData: Int {
   /// Edges of tile boundaries are shown as thick, red lines to help diagnose
@@ -648,6 +665,26 @@ struct CoordinateBounds {
       southwest.toList(),
       northeast.toList(),
       infiniteBounds,
+    ]
+  }
+}
+
+/// This class is needed because Pigeon does not encode properly arrays of enums.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct _MapWidgetDebugOptionsBox {
+  var option: _MapWidgetDebugOptions
+
+  static func fromList(_ list: [Any?]) -> _MapWidgetDebugOptionsBox? {
+    let option = _MapWidgetDebugOptions(rawValue: list[0] as! Int)!
+
+    return _MapWidgetDebugOptionsBox(
+      option: option
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      option.rawValue
     ]
   }
 }
@@ -1895,6 +1932,8 @@ private class _CameraManagerCodecReader: FlutterStandardReader {
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
+    case 167:
+      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -2019,6 +2058,9 @@ private class _CameraManagerCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? _MapWidgetDebugOptionsBox {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2695,6 +2737,8 @@ private class _MapInterfaceCodecReader: FlutterStandardReader {
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
+    case 167:
+      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -2820,6 +2864,9 @@ private class _MapInterfaceCodecWriter: FlutterStandardWriter {
     } else if let value = value as? TransitionOptions {
       super.writeByte(166)
       super.writeValue(value.toList())
+    } else if let value = value as? _MapWidgetDebugOptionsBox {
+      super.writeByte(167)
+      super.writeValue(value.toList())
     } else {
       super.writeValue(value)
     }
@@ -2895,6 +2942,8 @@ protocol _MapInterface {
   ///
   /// @return The map's `map options`.
   func getMapOptions() throws -> MapOptions
+  func getDebugOptions() throws -> [_MapWidgetDebugOptionsBox?]
+  func setDebugOptions(debugOptions: [_MapWidgetDebugOptionsBox]) throws
   /// Returns the `map debug options`.
   ///
   /// @return An array of `map debug options` flags currently set to the map.
@@ -3272,6 +3321,34 @@ class _MapInterfaceSetup {
       }
     } else {
       getMapOptionsChannel.setMessageHandler(nil)
+    }
+    let getDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getDebugOptionsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getDebugOptions()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getDebugOptionsChannel.setMessageHandler(nil)
+    }
+    let setDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setDebugOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let debugOptionsArg = args[0] as! [_MapWidgetDebugOptionsBox]
+        do {
+          try api.setDebugOptions(debugOptions: debugOptionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setDebugOptionsChannel.setMessageHandler(nil)
     }
     /// Returns the `map debug options`.
     ///
@@ -4201,6 +4278,8 @@ private class StyleManagerCodecReader: FlutterStandardReader {
       return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 166:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
+    case 167:
+      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -4325,6 +4404,9 @@ private class StyleManagerCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? TransitionOptions {
       super.writeByte(166)
+      super.writeValue(value.toList())
+    } else if let value = value as? _MapWidgetDebugOptionsBox {
+      super.writeByte(167)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
