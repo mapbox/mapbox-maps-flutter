@@ -25,7 +25,7 @@ void main() {
       acceptExpired: true,
       networkRestriction: NetworkRestriction.NONE);
 
-  testWidgets("test downloading style pack", (widgetTester) async {
+  testWidgets("test downloading style pack", timeout: Timeout(Duration(minutes: 1)), (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
     final offlineManager = await OfflineManager.create();
@@ -49,7 +49,7 @@ void main() {
         true);
   });
 
-  testWidgets("test downloading tile region", (widgetTester) async {
+  testWidgets("test downloading tile region", timeout: Timeout(Duration(minutes: 1)), (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
 
