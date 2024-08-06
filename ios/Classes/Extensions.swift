@@ -917,25 +917,15 @@ extension MapboxCoreMaps.StylePackLoadProgress {
 
 extension MapboxCoreMaps.TilesetDescriptorOptions {
 
-    convenience init(fltValue: TilesetDescriptorOptions) {
-        if let pixelRatio = fltValue.pixelRatio {
-            self.init(
-                styleURI: fltValue.styleURI,
-                minZoom: UInt8(fltValue.minZoom),
-                maxZoom: UInt8(fltValue.maxZoom),
-                pixelRatio: Float(pixelRatio),
-                tilesets: fltValue.tilesets?.compacted(),
-                stylePack: fltValue.stylePackOptions.flatMap(MapboxCoreMaps.StylePackLoadOptions.init(fltValue:)),
-                extraOptions: fltValue.extraOptions)
-        } else {
-            self.init(
-                styleURI: fltValue.styleURI,
-                minZoom: UInt8(fltValue.minZoom),
-                maxZoom: UInt8(fltValue.maxZoom),
-                tilesets: fltValue.tilesets?.compacted(),
-                stylePack: fltValue.stylePackOptions.flatMap(MapboxCoreMaps.StylePackLoadOptions.init(fltValue:)),
-                extraOptions: fltValue.extraOptions)
-        }
+    convenience init?(fltValue: TilesetDescriptorOptions) {
+        guard let styleURI = StyleURI(rawValue: fltValue.styleURI) else { return nil }
+        self.init(
+            styleURI: styleURI,
+            zoomRange: UInt8(fltValue.minZoom)...UInt8(fltValue.maxZoom),
+            pixelRatio: fltValue.pixelRatio.map(Float.init),
+            tilesets: fltValue.tilesets?.compacted(),
+            stylePackOptions: fltValue.stylePackOptions.flatMap(MapboxCoreMaps.StylePackLoadOptions.init(fltValue:)),
+            extraOptions: fltValue.extraOptions)
     }
 }
 
@@ -993,6 +983,20 @@ extension MapboxCommon.TileRegionEstimateProgress {
             requiredResourceCount: Int64(requiredResourceCount),
             completedResourceCount: Int64(completedResourceCount),
             erroredResourceCount: Int64(erroredResourceCount))
+    }
+}
+
+extension MapboxCommon.NetworkRestriction {
+
+    init(fltValue: NetworkRestriction) {
+        switch fltValue {
+        case .nONE:
+            self = .none
+        case .dISALLOWEXPENSIVE:
+            self = .disallowExpensive
+        case .dISALLOWALL:
+            self = .disallowAll
+        }
     }
 }
 // MARK: Result

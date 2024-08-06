@@ -75,7 +75,7 @@ final class TileStoreController: _TileStore {
 
     func tileRegionContainsDescriptor(id: String, options: [TilesetDescriptorOptions], completion: @escaping (Result<Bool, Swift.Error>) -> Void) {
         let descriptors = options
-            .map(MapboxCoreMaps.TilesetDescriptorOptions.init(fltValue:))
+            .compactMap(MapboxCoreMaps.TilesetDescriptorOptions.init(fltValue:))
             .map(offlineManager.createTilesetDescriptor(for:))
 
         tileStore.tileRegionContainsDescriptors(forId: id, descriptors: descriptors, completion: executeOnMainThread(completion))
@@ -110,11 +110,11 @@ extension OfflineManager {
             geometry: convertDictionaryToGeometry(dict: fltValue.geometry),
             descriptors: fltValue.descriptorsOptions?.compactMap { descriptorOptions in
                 guard let descriptorOptions else { return nil }
-                return createTilesetDescriptor(for: MapboxCoreMaps.TilesetDescriptorOptions(fltValue: descriptorOptions))
+                return MapboxCoreMaps.TilesetDescriptorOptions(fltValue: descriptorOptions).map(createTilesetDescriptor(for:))
             },
             metadata: fltValue.metadata,
             acceptExpired: fltValue.acceptExpired,
-            networkRestriction: MapboxCommon.NetworkRestriction(other: fltValue.networkRestriction) ?? .none,
+            networkRestriction: MapboxCommon.NetworkRestriction(fltValue: fltValue.networkRestriction),
             averageBytesPerSecond: fltValue.averageBytesPerSecond.map(Int.init),
             extraOptions: fltValue.extraOptions
         )

@@ -38,7 +38,7 @@ class TileStoreController(
     callback: (Result<TileRegion>) -> Unit
   ) {
     tileStore.loadTileRegion(
-      id, offlineManager.tileRegionLoadOptions(loadOptions),
+      id, offlineManager.tileRegionLoadOptions(loadOptions, context),
       { progress ->
         mainHandler.post {
           tileRegionLoadProgressHandlers[id]?.success(progress.toFLTTileRegionLoadProgress().toList())
@@ -75,7 +75,7 @@ class TileStoreController(
   ) {
     tileStore.estimateTileRegion(
       id,
-      offlineManager.tileRegionLoadOptions(loadOptions),
+      offlineManager.tileRegionLoadOptions(loadOptions, context),
       estimateOptions?.toTileRegionEstimateOptions() ?: com.mapbox.common.TileRegionEstimateOptions(null),
       { progress ->
         mainHandler.post {
@@ -116,7 +116,7 @@ class TileStoreController(
   }
 
   override fun tileRegionContainsDescriptor(id: String, options: List<TilesetDescriptorOptions>, callback: (Result<Boolean>) -> Unit) {
-    val descriptors = options.map { offlineManager.createTilesetDescriptor(it.toTilesetDescriptorOptions()) }
+    val descriptors = options.map { offlineManager.createTilesetDescriptor(it.toTilesetDescriptorOptions(context)) }
     tileStore.tileRegionContainsDescriptors(id, descriptors) { expected ->
       mainHandler.post {
         callback(expected.toResult { it })
@@ -152,7 +152,7 @@ class TileStoreController(
   }
 }
 
-private fun OfflineManager.tileRegionLoadOptions(fltValue: TileRegionLoadOptions): com.mapbox.common.TileRegionLoadOptions {
+private fun OfflineManager.tileRegionLoadOptions(fltValue: TileRegionLoadOptions, context: Context): com.mapbox.common.TileRegionLoadOptions {
   val builder = com.mapbox.common.TileRegionLoadOptions.Builder()
     .geometry(fltValue.geometry?.toGeometry())
     .metadata(fltValue.metadata?.toValue())
@@ -165,7 +165,7 @@ private fun OfflineManager.tileRegionLoadOptions(fltValue: TileRegionLoadOptions
   fltValue.descriptorsOptions?.let { options ->
     val descriptors: List<TilesetDescriptorOptions> = options.filterNotNull()
     builder.descriptors(
-      descriptors.map { createTilesetDescriptor(it.toTilesetDescriptorOptions()) }
+      descriptors.map { createTilesetDescriptor(it.toTilesetDescriptorOptions(context)) }
     )
   }
 
