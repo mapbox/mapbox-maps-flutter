@@ -53,10 +53,13 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final tileStore = await TileStore.createDefault();
+    final path = await getTemporaryDirectory();
+    final tileStore = await TileStore.createAt(path.uri);
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: City.helsinki.toJson(),
         descriptorsOptions: [
+          // If you are using a raster tileset you may need to set a different pixelRatio.
+          // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
           TilesetDescriptorOptions(
               styleURI: MapboxStyles.SATELLITE_STREETS, minZoom: 0, maxZoom: 16)
         ],

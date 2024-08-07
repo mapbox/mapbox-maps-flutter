@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps.offline
 
 import android.content.Context
 import com.mapbox.common.TileStore
+import com.mapbox.maps.MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.ProxyBinaryMessenger
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import io.flutter.plugin.common.BinaryMessenger
@@ -27,6 +28,7 @@ class OfflineMapInstanceManager(
   override fun setupTileStore(channelSuffix: String, filePath: String?) {
     val proxy = ProxyBinaryMessenger(messenger, channelSuffix)
     val tileStore = filePath?.let { TileStore.create(it) } ?: TileStore.create()
+    MapboxMapsOptions.tileStore = tileStore
     val tileStoreController = TileStoreController(context, messenger, tileStore)
     _TileStore.setUp(proxy, tileStoreController)
     proxies["tilestore/$channelSuffix"] = proxy
@@ -35,5 +37,6 @@ class OfflineMapInstanceManager(
   override fun tearDownTileStore(channelSuffix: String) {
     val proxy = proxies["tilestore/$channelSuffix"] ?: return
     _TileStore.setUp(proxy, null)
+    MapboxMapsOptions.tileStore = null
   }
 }
