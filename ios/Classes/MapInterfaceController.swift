@@ -139,12 +139,15 @@ final class MapInterfaceController: _MapInterface {
     func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {
         do {
             if geometry.type == .sCREENBOX {
-                let screenBoxArray = convertStringToArray(properties: geometry.value)
-                guard let minCoord = screenBoxArray[0] as? [Double] else {return}
-                guard let maxCoord = screenBoxArray[1] as? [Double] else {return}
-
-                let screenBox = ScreenBox(min: ScreenCoordinate(x: minCoord[0], y: minCoord[1]),
-                                          max: ScreenCoordinate(x: maxCoord[0], y: maxCoord[1]))
+                let screenBoxArray = convertStringToDictionary(properties: geometry.value)
+                guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return }
+                guard let maxCoord = screenBoxArray["max"] as? [String: Double] else { return }
+                guard let minX = minCoord["x"], let minY = minCoord["y"],
+                      let maxX = maxCoord["x"], let maxY = maxCoord["y"] else {
+                    return
+                }
+                let screenBox = ScreenBox(min: ScreenCoordinate(x: minX, y: minY),
+                                          max: ScreenCoordinate(x: maxX, y: maxY))
                 let cgRect = screenBox.toCGRect()
                 let queryOptions = try options.toRenderedQueryOptions()
                 self.mapboxMap.queryRenderedFeatures(with: cgRect, options: queryOptions) { result in
@@ -156,8 +159,11 @@ final class MapInterfaceController: _MapInterface {
                     }
                 }
             } else if geometry.type == .sCREENCOORDINATE {
-                guard let pointArray = convertStringToArray(properties: geometry.value) as? [Double] else {return}
-                let cgPoint = CGPoint(x: pointArray[0], y: pointArray[1])
+                guard let pointDict = convertStringToDictionary(properties: geometry.value) as? [String: Double],
+                      let x = pointDict["x"], let y = pointDict["y"] else {
+                    return
+                }
+                let cgPoint = CGPoint(x: x, y: y)
 
                 try self.mapboxMap.queryRenderedFeatures(with: cgPoint, options: options.toRenderedQueryOptions()) { result in
                     switch result {
@@ -168,9 +174,12 @@ final class MapInterfaceController: _MapInterface {
                     }
                 }
             } else {
-                let cgPoints = try JSONDecoder().decode([[Double]].self, from: geometry.value.data(using: String.Encoding.utf8)!)
-
-                try self.mapboxMap.queryRenderedFeatures(with: cgPoints.map({CGPoint(x: $0[0], y: $0[1])}), options: options.toRenderedQueryOptions()) { result in
+                let rawPoints = try JSONDecoder().decode([[String: Double]].self, from: geometry.value.data(using: String.Encoding.utf8)!)
+                let cgPoints = rawPoints.compactMap {
+                    guard let x = $0["x"], let y = $0["y"] else { return Optional<CGPoint>.none }
+                    return CGPoint(x: x, y: y)
+                }
+                try self.mapboxMap.queryRenderedFeatures(with: cgPoints, options: options.toRenderedQueryOptions()) { result in
                     switch result {
                     case .success(let features):
                         completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))

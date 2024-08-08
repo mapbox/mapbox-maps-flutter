@@ -10,6 +10,7 @@ import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.StylePackError
+import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
@@ -236,48 +237,26 @@ fun SourceQueryOptions.toSourceQueryOptions(): com.mapbox.maps.SourceQueryOption
 
 fun RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): com.mapbox.maps.RenderedQueryGeometry {
   return when (type) {
-    Type.SCREEN_BOX -> {
-      val screenBoxArray = Gson().fromJson(
+    Type.SCREEN_BOX -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
         value,
-        Array<Array<Double>>::class.java
-      )
-      val minCoord = screenBoxArray[0]
-      val maxCoord = screenBoxArray[1]
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        com.mapbox.maps.ScreenBox(
-          com.mapbox.maps.ScreenCoordinate(
-            minCoord[0].toDevicePixels(context).toDouble(),
-            minCoord[1].toDevicePixels(context).toDouble()
-          ),
-          com.mapbox.maps.ScreenCoordinate(
-            maxCoord[0].toDevicePixels(context).toDouble(),
-            maxCoord[1].toDevicePixels(context).toDouble()
-          )
-        )
-      )
-    }
-    Type.LIST -> {
-      val array: Array<Array<Double>> =
-        Gson().fromJson(value, Array<Array<Double>>::class.java)
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        array.map {
-          com.mapbox.maps.ScreenCoordinate(it[0].toDevicePixels(context).toDouble(), it[1].toDevicePixels(context).toDouble())
-        }.toList()
-      )
-    }
-    Type.SCREEN_COORDINATE -> {
-      val pointArray = Gson().fromJson(
-        value,
-        Array<Double>::class.java
-      )
+        ScreenBox::class.java
+      ).toScreenBox(context)
+    )
 
-      com.mapbox.maps.RenderedQueryGeometry.valueOf(
-        com.mapbox.maps.ScreenCoordinate(
-          pointArray[0].toDevicePixels(context).toDouble(),
-          pointArray[1].toDevicePixels(context).toDouble()
-        )
-      )
-    }
+    Type.LIST -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
+        value,
+        Array<ScreenCoordinate>::class.java
+      ).map { it.toScreenCoordinate(context) }
+    )
+
+    Type.SCREEN_COORDINATE -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
+      Gson().fromJson(
+        value,
+        ScreenCoordinate::class.java
+      ).toScreenCoordinate(context)
+    )
   }
 }
 
@@ -343,6 +322,51 @@ fun CameraOptions.toCameraOptions(context: Context): com.mapbox.maps.CameraOptio
   .zoom(zoom)
   .pitch(pitch)
   .build()
+
+fun ContextMode.toContextMode(): com.mapbox.maps.ContextMode {
+  return when (this) {
+    ContextMode.SHARED -> com.mapbox.maps.ContextMode.SHARED
+    ContextMode.UNIQUE -> com.mapbox.maps.ContextMode.UNIQUE
+  }
+}
+
+fun ConstrainMode.toConstrainMode(): com.mapbox.maps.ConstrainMode {
+  return when (this) {
+    ConstrainMode.NONE -> com.mapbox.maps.ConstrainMode.NONE
+    ConstrainMode.HEIGHT_ONLY -> com.mapbox.maps.ConstrainMode.HEIGHT_ONLY
+    ConstrainMode.WIDTH_AND_HEIGHT -> com.mapbox.maps.ConstrainMode.WIDTH_AND_HEIGHT
+  }
+}
+
+fun ViewportMode.toViewportMode(): com.mapbox.maps.ViewportMode {
+  return when (this) {
+    ViewportMode.DEFAULT -> com.mapbox.maps.ViewportMode.DEFAULT
+    ViewportMode.FLIPPED_Y -> com.mapbox.maps.ViewportMode.FLIPPED_Y
+  }
+}
+
+fun NorthOrientation.toNorthOrientation(): com.mapbox.maps.NorthOrientation {
+  return when (this) {
+    NorthOrientation.UPWARDS -> com.mapbox.maps.NorthOrientation.UPWARDS
+    NorthOrientation.DOWNWARDS -> com.mapbox.maps.NorthOrientation.DOWNWARDS
+    NorthOrientation.LEFTWARDS -> com.mapbox.maps.NorthOrientation.LEFTWARDS
+    NorthOrientation.RIGHTWARDS -> com.mapbox.maps.NorthOrientation.RIGHTWARDS
+  }
+}
+fun MapOptions.toMapOptions(context: Context): com.mapbox.maps.MapOptions {
+  val builder = com.mapbox.maps.MapOptions.Builder().applyDefaultParams(context)
+
+  contextMode?.let { builder.contextMode(it.toContextMode()) }
+  constrainMode?.let { builder.constrainMode(it.toConstrainMode()) }
+  viewportMode?.let { builder.viewportMode(it.toViewportMode()) }
+  orientation?.let { builder.orientation(it.toNorthOrientation()) }
+  crossSourceCollisions?.let { builder.crossSourceCollisions(it) }
+  size?.let { builder.size(it.toSize(context)) }
+  builder.pixelRatio(pixelRatio.toFloat())
+  glyphsRasterizationOptions?.let { builder.glyphsRasterizationOptions(it.toGlyphsRasterizationOptions()) }
+
+  return builder.build()
+}
 
 fun ScreenBox.toScreenBox(context: Context): com.mapbox.maps.ScreenBox =
   com.mapbox.maps.ScreenBox(min.toScreenCoordinate(context), max.toScreenCoordinate(context))

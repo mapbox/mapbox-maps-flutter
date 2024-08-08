@@ -369,7 +369,9 @@ class MapboxMap extends ChangeNotifier {
 
   /// Set debug options for the widget associated with the map.
   Future<void> setDebugOptions(List<MapWidgetDebugOptions> debugOptions) {
-    return _mapInterface.setDebugOptions(debugOptions.map((e) => _MapWidgetDebugOptionsBox(option: e.option)).toList());
+    return _mapInterface.setDebugOptions(debugOptions
+        .map((e) => _MapWidgetDebugOptionsBox(option: e.option))
+        .toList());
   }
 
   /// Returns the `map debug options`.

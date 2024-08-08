@@ -41,7 +41,7 @@ class _MapboxMapsPlatform {
                 viewType: 'plugins.flutter.io/mapbox_maps',
                 layoutDirection: TextDirection.ltr,
                 creationParams: creationParams,
-                creationParamsCodec: const StandardMessageCodec(),
+                creationParamsCodec: const MapInterfaces_PigeonCodec(),
                 onFocus: () => params.onFocusChanged(true),
               );
               controller.addOnPlatformViewCreatedListener(
@@ -61,7 +61,7 @@ class _MapboxMapsPlatform {
             onPlatformViewCreated: onPlatformViewCreated,
             gestureRecognizers: gestureRecognizers,
             creationParams: creationParams,
-            creationParamsCodec: const StandardMessageCodec(),
+            creationParamsCodec: const MapInterfaces_PigeonCodec(),
           );
       }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -70,7 +70,7 @@ class _MapboxMapsPlatform {
         onPlatformViewCreated: onPlatformViewCreated,
         gestureRecognizers: gestureRecognizers,
         creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
+        creationParamsCodec: const MapInterfaces_PigeonCodec(),
       );
     }
     return Text(

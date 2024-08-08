@@ -180,8 +180,8 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> creationParams = <String, dynamic>{
-      'mapOptions': widget.mapOptions?.encode(),
-      'cameraOptions': widget.cameraOptions?.encode(),
+      'mapOptions': widget.mapOptions,
+      'cameraOptions': widget.cameraOptions,
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'channelSuffix': _suffix,
