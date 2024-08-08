@@ -81,5 +81,5 @@ dependencies {
     implementation "com.mapbox.maps:android:11.6.0-rc.1"
 
     implementation "androidx.annotation:annotation:1.7.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.4"
 }

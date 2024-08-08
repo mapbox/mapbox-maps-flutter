@@ -7,7 +7,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.ViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
@@ -67,22 +67,18 @@ class MapboxMapController(
   /*
     Mirrors lifecycle of the parent, with one addition - switches to DESTROYED state
     when `dispose` is called.
-    `parentLifecycle` is the lifecycle of the Flutter activity, which may live much longer then
+    `lifecycle` is the lifecycle of the Flutter activity, which may live much longer then
     the MapView attached.
   */
   private class LifecycleHelper(
-    val parentLifecycle: Lifecycle,
+    override val lifecycle: Lifecycle,
     val shouldDestroyOnDestroy: Boolean,
   ) : LifecycleOwner, DefaultLifecycleObserver {
 
     val lifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
 
     init {
-      parentLifecycle.addObserver(this)
-    }
-
-    override fun getLifecycle(): Lifecycle {
-      return lifecycleRegistry
+      lifecycle.addObserver(this)
     }
 
     override fun onCreate(owner: LifecycleOwner) {
@@ -108,7 +104,7 @@ class MapboxMapController(
     override fun onDestroy(owner: LifecycleOwner) = propagateDestroyEvent()
 
     fun dispose() {
-      parentLifecycle.removeObserver(this)
+      lifecycle.removeObserver(this)
       propagateDestroyEvent()
     }
 
@@ -173,14 +169,14 @@ class MapboxMapController(
     }
     lifecycleHelper = LifecycleHelper(lifecycleProvider.getLifecycle()!!, shouldDestroyOnDestroy)
 
-    mapView?.let { ViewTreeLifecycleOwner.set(it, lifecycleHelper) }
+    mapView?.setViewTreeLifecycleOwner(lifecycleHelper)
   }
 
   override fun onFlutterViewDetached() {
     super.onFlutterViewDetached()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
-    ViewTreeLifecycleOwner.set(mapView!!, null)
+    mapView!!.setViewTreeLifecycleOwner(null)
   }
 
   override fun dispose() {
