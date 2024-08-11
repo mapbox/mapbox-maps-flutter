@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.6.0-beta.1). The SDK allows developers to embed highly customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.6.0-rc.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -54,7 +54,7 @@ The Maps Flutter SDK is compatible with applications:
 
 ### Configure credentials
 To run the Maps Flutter SDK you will need to configure the Mapbox Access Tokens. 
-Read more about access tokens and public/secret scopes at the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#configure-credentials) docs.
+Read more about access tokens and public/secret scopes in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
 
 #### Secret token
 To access platform SDKs you will need to create a secret access token with the `Downloads:Read` scope and then:
@@ -68,6 +68,8 @@ To access platform SDKs you will need to create a secret access token with the `
   login mapbox
   password YOUR_SECRET_MAPBOX_ACCESS_TOKEN
 ```
+
+To learn more about configuring your secret tokens for iOS, please see step 3 of the [configure credentials section](https://docs.mapbox.com/ios/maps/guides/install/#step-3-configure-your-secret-token) of the iOS Installation Guide.
 
 #### Public token
 You can set the access token for Mapbox Maps Flutter SDK(as well as for every Mapbox SDK) via `MapboxOptions`:
@@ -129,7 +131,7 @@ Add the following permissions to the manifest:
 ```
 
 #### iOS
-Add the following to the `Runner/Info.plist` to explain why you need access to the location data:
+Add the following key/value pair to the `Runner/Info.plist`. In the value field, explain why you need access to location:
 
 ```
     <key>NSLocationWhenInUseUsageDescription</key>
@@ -148,9 +150,9 @@ void main() {
 ```
 
 #### MapWidget widget
-The `MapWidget` widget provides options to customize the map - you can set `MapOptions`, `CameraOptions`, `styleURL` etc.
+The `MapWidget` widget provides options to customize the map - you can set `MapOptions`, `CameraOptions`, `styleURL`, etc.
 
-It also allows or add listeners for various events - related to style loading, map rendering, map loading. 
+You can also add listeners for various events related to style loading, map rendering, map loading. 
 
 #### MapboxMap controller
 The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` callback.
@@ -188,16 +190,16 @@ class FullMapState extends State<FullMap> {
 ```
 
 ## User location
-Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/user-location/), [iOS](https://docs.mapbox.com/ios/maps/guides/user-location/).
+To observe the user's location and show the location indicator on the map use `LocationComponentSettingsInterface` accessible via `MapboxMap.location`. 
 
-To observe the user's location and show the location indicator on the map use `LocationComponentSettingsInterface` accessible via `MapboxMap.location`.
+For more information, please see the User Location guides in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/user-location), [Android](https://docs.mapbox.com/android/maps/guides/user-location/), and [iOS](https://docs.mapbox.com/ios/maps/guides/user-location/) documentation.
 
 You need to grant location permission prior to using location component (as explained [before](#configure-permissions)).
 
 ### Location puck
 To customize the appearance of the location puck call `MapboxMap.location.updateSettings` method.
 
-To use the 3D puck with model downloaded from Uri instead of the default 2D puck :
+To use the 3D puck with model downloaded from Uri instead of the default 2D puck:
 
 ```
   mapboxMap.location.updateSettings(LocationComponentSettings(
@@ -210,11 +212,11 @@ To use the 3D puck with model downloaded from Uri instead of the default 2D puck
 You can find more examples of customization in the sample [app](example/lib/location.dart).
 
 ## Markers and annotations
-Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/annotations/), [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/).
+Additional information is available in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/markers-and-annotations/), [Android](https://docs.mapbox.com/android/maps/guides/annotations/), and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/) documentation.
 
 You have several options to add annotations on the map.
 
-1. Use the AnnotationManager APIs to create circle/point/polygon/polyline annotations. 
+1. Use the AnnotationManager APIs to create circle, point, polygon, and polyline annotations. 
 
 To create 5 point annotations using custom icon: 
 ```
@@ -235,21 +237,21 @@ You can find more examples of the AnnotationManagers usage in the sample app : [
 1. Use style layers. This will require writing more code but is more flexible and provides better performance for the large amount of annotations (e.g. hundreds and thousands of them). More about adding style layers in the [Map styles section](#map-styles).
 
 ## Map styles
-Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/styles/), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/).
+Additional information is available in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/), [Android](https://docs.mapbox.com/android/maps/guides/styles/), and [iOS](https://docs.mapbox.com/ios/maps/guides/styles/) documentation.
 
 The Mapbox Maps Flutter SDK allows full customization of the look of the map used in your application. 
 
 ### Set a style
-You can specify the initial style uri at `MapWidget.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson` : 
+You can specify the initial style uri at `MapWidget.styleUri`, or load it at runtime using `MapboxMap.loadStyleURI` / `MapboxMap.loadStyleJson`: 
 
 ```
-  mapboxMap.loadStyleURI(Styles.LIGHT);
+mapboxMap.loadStyleURI(Styles.LIGHT);
 ```
 
 ### Work with layers
-You can familiarize with the concept of sources, layers and their supported types in the platform documentation.
+You can familiarize with the concept of sources, layers and their supported types in the documentation for [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/work-with-layers), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/work-with-layers/), and [Android](https://docs.mapbox.com/android/maps/guides/styles/work-with-layers/).
 
-To add, remove or change a source or a layer use the `MapboxMap.style` object. 
+To add, remove or change a source or a layer, use the `MapboxMap.style` object.
 
 To add a `GeoJsonSource` and a `LineLayer` using the source : 
 ```
@@ -267,7 +269,8 @@ To add a `GeoJsonSource` and a `LineLayer` using the source :
 
 ### Using expressions
 You can change the appearance of a layer based on properties in the layer's data source or zoom level.
-Refer to the [documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/) for the description of supported expressions.
+Refer to the [documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/) for the description of supported expressions. You can also learn more in the documentation for [Flutter](https://docs.mapbox.com/flutter/maps/guides/styles/style-layers#work-with-expressions), [iOS](https://docs.mapbox.com/ios/maps/guides/styles/style-layers/#work-with-expressions), and [Android](https://docs.mapbox.com/android/maps/guides/styles/style-layers/#work-with-expressions). 
+
 To apply an expression to interpolate gradient color to a line layer:
 ```
   mapboxMap.style.setStyleLayerProperty("layer", "line-gradient",
@@ -275,11 +278,12 @@ To apply an expression to interpolate gradient color to a line layer:
 ```
 
 ## Camera and animations
-Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/camera-and-animation/), [iOS](https://docs.mapbox.com/ios/maps/guides/camera-and-animation/). 
+Platform docs: [Android](https://docs.mapbox.com/android/maps/guides/camera-and-animation/), [iOS](https://docs.mapbox.com/ios/maps/guides/camera-and-animation/). 
+
 The camera is the user's viewpoint above the map. The Maps Flutter SDK provides you with options to set and adjust the camera position, listen for camera changes, get the camera position, and restrict the camera position to set bounds.
 
 ### Camera position
-You can set the starting camera position using `MapWidget.cameraOptions` :
+You can set the starting camera position using `MapWidget.cameraOptions`:
 
 ```
 MapWidget(
@@ -316,7 +320,7 @@ To start a `flyTo` animation to the specific camera options :
 You can find more examples of animations in the sample [app](example/lib/animation.dart).
 
 ## User interaction
-Platform docs : [Android](https://docs.mapbox.com/android/maps/guides/user-interaction/), [iOS](https://docs.mapbox.com/ios/maps/guides/user-interaction/).
+Platform docs: [Android](https://docs.mapbox.com/android/maps/guides/user-interaction/), [iOS](https://docs.mapbox.com/ios/maps/guides/user-interaction/).
 
 Users interacting with the map in your application can explore the map by performing standard gestures. 
 

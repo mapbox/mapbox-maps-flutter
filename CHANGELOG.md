@@ -1,6 +1,8 @@
-### main
+### 2.2.0-rc.1
 
 * Expose `MapboxStyles.STANDARD_SATELLITE` style.
+* `MapDebugOptions` is superseded by `MapWidgetDebugOptions`, expanding existing debug options with the new `light`, `camera`, and `padding` debug options in addition to the new Android-specific options: `layers2DWireframe` and `layers3DWireframe`.
+* Bump Maps SDK to 11.6.0-rc.1
 
 ### 2.2.0-beta.1
 

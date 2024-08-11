@@ -5,7 +5,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class TrafficRouteLinePage extends ExamplePage {
   TrafficRouteLinePage()
-      : super(const Icon(Icons.map), 'Style a route showing traffic');
+      : super(const Icon(Icons.turn_sharp_left), 'Style a route showing traffic');
 
   @override
   Widget build(BuildContext context) {

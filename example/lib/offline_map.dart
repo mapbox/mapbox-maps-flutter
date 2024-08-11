@@ -10,7 +10,7 @@ import 'page.dart';
 import 'utils.dart';
 
 class OfflineMapPage extends ExamplePage {
-  OfflineMapPage() : super(const Icon(Icons.map), 'Offline Map');
+  OfflineMapPage() : super(const Icon(Icons.wifi_off), 'Offline Map');
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +32,6 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   final StreamController<double> _tileRegionLoadProgress =
       StreamController.broadcast();
 
-  _onMapCreated(MapboxMap mapboxMap) async {
-    this.mapboxMap = mapboxMap;
-    await _downloadStylePack();
-    await _downloadTileRegion();
-  }
-
   _downloadStylePack() async {
     final offlineManager = await OfflineManager.create();
     final stylePackLoadOptions = StylePackLoadOptions(
@@ -45,7 +39,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
         metadata: {"tag": "test"},
         acceptExpired: false);
-    offlineManager.loadStylePack(MapboxStyles.OUTDOORS, stylePackLoadOptions,
+    offlineManager.loadStylePack(MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions,
         (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
@@ -59,13 +53,15 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final tmpDir = await getTemporaryDirectory();
-    final tileStore = await TileStore.createAt(await tmpDir.uri);
+    final path = await getTemporaryDirectory();
+    final tileStore = await TileStore.createAt(path.uri);
     final tileRegionLoadOptions = TileRegionLoadOptions(
-        geometry: Point(coordinates: Position(-80.1263, 25.7845)).toJson(),
+        geometry: City.helsinki.toJson(),
         descriptorsOptions: [
+          // If you are using a raster tileset you may need to set a different pixelRatio.
+          // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.
           TilesetDescriptorOptions(
-              styleURI: MapboxStyles.OUTDOORS, minZoom: 0, maxZoom: 16)
+              styleURI: MapboxStyles.SATELLITE_STREETS, minZoom: 0, maxZoom: 16)
         ],
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
@@ -85,18 +81,40 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final mapWidget = MapWidget(
-      key: ValueKey("mapWidget"),
-      styleUri: MapboxStyles.OUTDOORS,
-      cameraOptions: CameraOptions(center: City.helsinki, zoom: 2.0),
-      onMapCreated: _onMapCreated,
-    );
+    String downloadButtonText = "Download Map";
+    final mapIsDownloaded = Future
+        .wait([_tileRegionLoadProgress.sink.done, _stylePackProgress.sink.done])
+        .whenComplete(() async {
+          await OfflineSwitch.shared.setMapboxStackConnected(false);
+        });
 
     return new Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: mapWidget,
+          child: FutureBuilder(future: mapIsDownloaded, builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return MapWidget(
+                key: ValueKey("mapWidget"),
+                styleUri: MapboxStyles.SATELLITE_STREETS,
+                cameraOptions: CameraOptions(center: City.helsinki, zoom: 12.0),
+              );
+            } else {
+              return TextButton(
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    downloadButtonText = "Downloading";
+                  });
+                  await _downloadStylePack();
+                  await _downloadTileRegion();
+                },
+                child: Text(downloadButtonText),
+              );
+            }
+          }),
         ),
         SizedBox(
             height: 100,

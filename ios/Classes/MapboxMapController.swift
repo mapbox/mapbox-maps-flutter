@@ -78,7 +78,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         let cameraController = CameraController(withMapboxMap: mapboxMap)
         _CameraManagerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: cameraController)
 
-        let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap)
+        let mapInterfaceController = MapInterfaceController(withMapboxMap: mapboxMap, mapView: mapView)
         _MapInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: mapInterfaceController)
 
         let mapProjectionController = MapProjectionController()
