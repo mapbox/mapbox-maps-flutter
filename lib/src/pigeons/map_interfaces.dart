@@ -816,6 +816,7 @@ class _MapWidgetDebugOptionsBox {
 }
 
 /// Options for enabling debugging features in a map.
+@Deprecated("Use 'MapWidgetDebugOptions' instead")
 class MapDebugOptions {
   MapDebugOptions({
     required this.data,
@@ -3582,6 +3583,7 @@ class _MapInterface {
   /// Returns the `map debug options`.
   ///
   /// @return An array of `map debug options` flags currently set to the map.
+  @Deprecated("Use [MapboxMap.debugOptions] instead")
   Future<List<MapDebugOptions?>> getDebug() async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$__pigeon_messageChannelSuffix';
@@ -3617,6 +3619,7 @@ class _MapInterface {
   /// @param debugOptions An array of `map debug options` to be set.
   /// @param value A `boolean` value representing the state for a given `map debug options`.
   ///
+  @Deprecated("Use [MapboxMap.debugOptions] instead")
   Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$__pigeon_messageChannelSuffix';
