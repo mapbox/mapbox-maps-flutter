@@ -11,3 +11,23 @@ extension Conversion on CameraState {
     );
   }
 }
+
+extension ScreenBoxToJson on ScreenBox {
+
+  dynamic toJson() {
+    return <String, dynamic>{
+      'min': min.toJson(),
+      'max': max.toJson(),
+    };
+  }
+}
+
+extension ScreenCoordinateToJson on ScreenCoordinate {
+
+  dynamic toJson() {
+    return <String, dynamic>{
+      'x': x,
+      'y': y,
+    };
+  }
+}
