@@ -1,4 +1,5 @@
 import Flutter
+import MapboxMaps
 
 final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreInstanceManager {
     enum `Error`: Swift.Error {
@@ -25,13 +26,16 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
     }
 
     func setupTileStore(channelSuffix: String, filePath: String?) throws {
-        let tileStoreController: TileStoreController
         let proxy = ProxyBinaryMessenger(with: binaryMessenger, channelSuffix: channelSuffix)
+        let tileStore: TileStore
         if let filePath {
-            tileStoreController = TileStoreController(proxy: proxy, tileStore: .shared(for: URL(fileURLWithPath: filePath)))
+            tileStore = .shared(for: URL(fileURLWithPath: filePath))
         } else {
-            tileStoreController = TileStoreController(proxy: proxy, tileStore: .default)
+            tileStore = .default
         }
+
+        MapboxMapsOptions.tileStore = tileStore
+        let tileStoreController = TileStoreController(proxy: proxy, tileStore: tileStore)
 
         _TileStoreSetup.setUp(binaryMessenger: proxy, api: tileStoreController)
         proxies["tilestore/\(channelSuffix)"] = proxy
@@ -40,5 +44,6 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
     func tearDownTileStore(channelSuffix: String) throws {
         guard let proxy = proxies.removeValue(forKey: "tilestore/\(channelSuffix)") else { return }
         _TileStoreSetup.setUp(binaryMessenger: proxy, api: nil)
+        MapboxMapsOptions.tileStore = nil
     }
 }

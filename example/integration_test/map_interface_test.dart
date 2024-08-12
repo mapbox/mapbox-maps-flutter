@@ -326,7 +326,7 @@ void main() {
         min: ScreenCoordinate(x: 0.0, y: 0.0),
         max: ScreenCoordinate(x: 500.0, y: 1000.0));
     var renderedQueryGeometry = RenderedQueryGeometry(
-        value: json.encode(screenBox.encode()), type: Type.SCREEN_BOX);
+        value: json.encode(screenBox.toJson()), type: Type.SCREEN_BOX);
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, greaterThan(0));
@@ -335,15 +335,15 @@ void main() {
 
     query = await mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(
-            value: json.encode(ScreenCoordinate(x: 0.0, y: 0.0).encode()),
+            value: json.encode(ScreenCoordinate(x: 0.0, y: 0.0).toJson()),
             type: Type.SCREEN_COORDINATE),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 0);
     query = await mapboxMap.queryRenderedFeatures(
         RenderedQueryGeometry(
             value: json.encode([
-              ScreenCoordinate(x: 0.0, y: 0.0).encode(),
-              ScreenCoordinate(x: 1.0, y: 1.0).encode()
+              ScreenCoordinate(x: 0.0, y: 0.0).toJson(),
+              ScreenCoordinate(x: 1.0, y: 1.0).toJson()
             ]),
             type: Type.LIST),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
