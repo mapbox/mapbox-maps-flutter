@@ -25,6 +25,11 @@ void main() {
       acceptExpired: true,
       networkRestriction: NetworkRestriction.NONE);
 
+  tearDownAll(() {
+    // Reset tile store back to default after the test
+    TileStore.createDefault();
+  });
+
   testWidgets("test downloading style pack", (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
@@ -52,7 +57,6 @@ void main() {
   testWidgets("test downloading tile region", (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
-
     final tmpDir = await getTemporaryDirectory();
     final tileStore = await TileStore.createAt(tmpDir.uri);
     final downloadedTileRegion = await tileStore.loadTileRegion(
