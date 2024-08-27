@@ -1,9 +1,9 @@
 version: 2.1
 
 orbs:
-  flutter: circleci/flutter@2.0.2
-  macos: circleci/macos@2.4.1
-  gcp-cli: circleci/gcp-cli@3.1.1
+  flutter: circleci/flutter@2.0.4
+  macos: circleci/macos@2.5.2
+  gcp-cli: circleci/gcp-cli@3.2.1
 
 commands:
 
@@ -18,7 +18,7 @@ commands:
   setup-gcloud:
     steps:
       - gcp-cli/setup:
-          version: 466.0.0
+          version: 489.0.0
           gcloud_service_key: GCLOUD_SERVICE_ACCOUNT_JSON
 
   add-mapbox-submodules-key:
@@ -35,7 +35,7 @@ jobs:
         type: string
         default: example/build/app/outputs/apk
     docker:
-      - image: cimg/android:2024.04
+      - image: cimg/android:2024.08
     resource_class: 2xlarge
     steps:
       - checkout
