@@ -40,7 +40,7 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.19.6
+          version: 3.24.1
           app-dir: example
       - run:
           name: ktlint
@@ -99,7 +99,7 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.19.6
+          version: 3.24.1
           app-dir: example
       - flutter/install_ios_pod:
           app-dir: example
