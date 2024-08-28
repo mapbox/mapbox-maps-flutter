@@ -1,3 +1,12 @@
+### main
+
+* Fix build errors when using Flutter SDK 3.24.
+
+### 2.2.0
+
+* Bump Maps SDK to 11.6.0
+* Update Pigeon to `21.1.0`
+
 ### 2.2.0-rc.1
 
 * Expose `MapboxStyles.STANDARD_SATELLITE` style.

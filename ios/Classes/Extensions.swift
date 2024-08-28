@@ -30,6 +30,22 @@ extension [_MapWidgetDebugOptions] {
     }
 }
 
+extension MapOptions {
+    func toMapOptions() -> MapboxMaps.MapOptions {
+        let defaultOptions = MapboxMaps.MapOptions()
+        return MapboxMaps.MapOptions(
+            constrainMode: constrainMode?.toConstrainMode() ?? .heightOnly,
+            viewportMode: viewportMode?.toViewportMode() ?? .default,
+            orientation: orientation?.toNorthOrientation() ?? .upwards,
+            crossSourceCollisions: crossSourceCollisions ?? defaultOptions.crossSourceCollisions,
+            size: size?.toCGSize() ?? defaultOptions.size,
+            pixelRatio: pixelRatio,
+            glyphsRasterizationOptions: glyphsRasterizationOptions?.toGlyphsRasterizationOptions() ?? MapboxMaps.GlyphsRasterizationOptions()
+        )
+    }
+
+}
+
 extension GlyphsRasterizationMode {
     func toGlyphsRasterizationMode() -> MapboxMaps.GlyphsRasterizationMode {
         switch self {
