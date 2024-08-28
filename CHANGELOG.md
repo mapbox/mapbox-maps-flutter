@@ -1,3 +1,7 @@
+### 2.2.1
+
+* Fix build errors when using Flutter SDK 3.24.
+
 ### 2.2.0
 
 * Bump Maps SDK to 11.6.0

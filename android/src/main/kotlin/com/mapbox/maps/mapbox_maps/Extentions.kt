@@ -611,12 +611,12 @@ fun com.mapbox.maps.StylePackLoadProgress.toFLTStylePackLoadProgress(): StylePac
   )
 }
 
-fun TilesetDescriptorOptions.toTilesetDescriptorOptions(): com.mapbox.maps.TilesetDescriptorOptions {
+fun TilesetDescriptorOptions.toTilesetDescriptorOptions(context: Context): com.mapbox.maps.TilesetDescriptorOptions {
   val builder = com.mapbox.maps.TilesetDescriptorOptions.Builder()
     .styleURI(styleURI)
     .minZoom(minZoom.toByte())
     .maxZoom(maxZoom.toByte())
-  pixelRatio?.let { builder.pixelRatio(it.toFloat()) }
+    .pixelRatio(pixelRatio?.toFloat() ?: context.resources.displayMetrics.density)
   tilesets?.let { builder.tilesets(it) }
   stylePackOptions?.let { builder.stylePackOptions(it.toStylePackLoadOptions()) }
   extraOptions?.let { builder.extraOptions(it.toValue()) }
