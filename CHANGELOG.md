@@ -1,4 +1,4 @@
-### main
+### 2.2.1
 
 * Fix build errors when using Flutter SDK 3.24.
 
