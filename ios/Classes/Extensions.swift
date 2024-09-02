@@ -434,7 +434,11 @@ extension CGPoint {
 extension MapboxMaps.MapContentGestureContext {
 
     func toFLTMapContentGestureContext() -> MapContentGestureContext {
-        MapContentGestureContext(touchPosition: point.toFLTScreenCoordinate(), point: Point(coordinate))
+        MapContentGestureContext(
+            touchPosition: point.toFLTScreenCoordinate(),
+            point: Point(coordinate),
+            gestureState: .ended
+        )
     }
 }
 
@@ -882,6 +886,21 @@ extension Date {
 
     var miliSecondsSince1970: TimeInterval {
         timeIntervalSince1970 * 1000
+    }
+}
+
+extension UIGestureRecognizer.State {
+    func toFLTGestureState() -> GestureState {
+        switch self {
+        case .possible, .began:
+            return .started
+        case .changed:
+            return .changed
+        case .ended, .cancelled, .failed, .recognized:
+            return .ended
+        @unknown default:
+            return .ended
+        }
     }
 }
 
