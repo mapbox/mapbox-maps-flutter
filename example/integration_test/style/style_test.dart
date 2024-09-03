@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -169,10 +168,10 @@ void main() {
     style.addStyleLayer(layer, null);
     await style.setStyleLayerProperties('custom', json.encode(properties));
     var styleLayerProperties = await style.getStyleLayerProperties('custom');
-    var formatedProperties =
+    var formattedProperties =
         json.decode(styleLayerProperties) as Map<String, dynamic>;
-    expect(formatedProperties['paint']['circle-radius'], 10);
-    expect(formatedProperties['paint']['circle-color'],
+    expect(formattedProperties['paint']['circle-radius'], 10);
+    expect(formattedProperties['paint']['circle-color'],
         ['rgba', 255, 255, 255, 1]);
   });
 
