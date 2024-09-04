@@ -263,7 +263,6 @@ extension MapViewDebugOptions {
     func toFLTDebugOptions() -> [_MapWidgetDebugOptions] {
         var debugOptions = [_MapWidgetDebugOptions]()
         if contains(.tileBorders) { debugOptions.append(.tileBorders) }
-        if contains(.tileBorders) { debugOptions.append(.tileBorders) }
         if contains(.parseStatus) { debugOptions.append(.parseStatus) }
         if contains(.timestamps) { debugOptions.append(.timestamps) }
         if contains(.collision) { debugOptions.append(.collision) }
