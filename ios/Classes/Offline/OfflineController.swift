@@ -29,9 +29,11 @@ final class OfflineController: _OfflineManager {
             return
         }
 
+        print("MMM starting loading style packs")
         offlineManager.loadStylePack(
             for: styleURI,
             loadOptions: loadOptions) { [weak self] progress in
+                print("MMM style pack progress \(progress.completedResourceCount)/\(progress.requiredResourceCount)")
                 self?.progressHandlers[uri]?.eventSink?(progress.toFLTStylePackLoadProgress().toList())
             } completion: { [weak self] result in
                 executeOnMainThread(completion)(result.map { $0.toFLTStylePack() })

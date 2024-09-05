@@ -9,44 +9,44 @@ import 'package:path_provider/path_provider.dart';
 import 'page.dart';
 import 'utils.dart';
 
-class OfflineMapPage extends ExamplePage {
-  OfflineMapPage() : super(const Icon(Icons.wifi_off), 'Offline Map');
+class TmpOfflineMapPage extends ExamplePage {
+  TmpOfflineMapPage() : super(const Icon(Icons.wifi_off), 'Offline Map [temp cache]');
 
   @override
   Widget build(BuildContext context) {
-    return const OfflineMapWidget();
+    return const TmpOfflineMapWidget();
   }
 }
 
-class OfflineMapWidget extends StatefulWidget {
-  const OfflineMapWidget();
+class TmpOfflineMapWidget extends StatefulWidget {
+  const TmpOfflineMapWidget();
 
   @override
-  State createState() => OfflineMapWidgetState();
+  State createState() => TmpOfflineMapWidgetState();
 }
 
-class OfflineMapWidgetState extends State<OfflineMapWidget> {
+class TmpOfflineMapWidgetState extends State<TmpOfflineMapWidget> {
   MapboxMap? mapboxMap;
   final StreamController<double> _stylePackProgress =
-      StreamController.broadcast();
+  StreamController.broadcast();
   final StreamController<double> _tileRegionLoadProgress =
-      StreamController.broadcast();
+  StreamController.broadcast();
 
   _downloadStylePack() async {
     final offlineManager = await OfflineManager.create();
     final stylePackLoadOptions = StylePackLoadOptions(
         glyphsRasterizationMode:
-            GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
+        GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
         metadata: {"tag": "test"},
         acceptExpired: false);
     offlineManager.loadStylePack(MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions,
-        (progress) {
-      final percentage =
-          progress.completedResourceCount / progress.requiredResourceCount;
-      if (!_stylePackProgress.isClosed) {
-        _stylePackProgress.sink.add(percentage);
-      }
-    }).then((value) {
+            (progress) {
+          final percentage =
+              progress.completedResourceCount / progress.requiredResourceCount;
+          if (!_stylePackProgress.isClosed) {
+            _stylePackProgress.sink.add(percentage);
+          }
+        }).then((value) {
       print("MMM style downloaded");
       _stylePackProgress.sink.add(1);
       _stylePackProgress.sink.close();
@@ -55,7 +55,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final tileStore = await TileStore.createDefault();
+    final path = await getTemporaryDirectory();
+    final tileStore = await TileStore.createAt(path.uri);
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: City.helsinki.toJson(),
         descriptorsOptions: [
@@ -68,13 +69,13 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
         networkRestriction: NetworkRestriction.NONE);
 
     tileStore.loadTileRegion("my-tile-region", tileRegionLoadOptions,
-        (progress) {
-      final percentage =
-          progress.completedResourceCount / progress.requiredResourceCount;
-      if (!_tileRegionLoadProgress.isClosed) {
-        _tileRegionLoadProgress.sink.add(percentage);
-      }
-    }).then((value) {
+            (progress) {
+          final percentage =
+              progress.completedResourceCount / progress.requiredResourceCount;
+          if (!_tileRegionLoadProgress.isClosed) {
+            _tileRegionLoadProgress.sink.add(percentage);
+          }
+        }).then((value) {
       print("MMM tile region downloaded");
       _tileRegionLoadProgress.sink.add(1);
       _tileRegionLoadProgress.sink.close();
@@ -91,8 +92,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
     final mapIsDownloaded = Future
         .wait([_tileRegionLoadProgress.sink.done, _stylePackProgress.sink.done])
         .whenComplete(() async {
-          await OfflineSwitch.shared.setMapboxStackConnected(false);
-        });
+      await OfflineSwitch.shared.setMapboxStackConnected(false);
+    });
 
     return new Column(
       mainAxisSize: MainAxisSize.min,

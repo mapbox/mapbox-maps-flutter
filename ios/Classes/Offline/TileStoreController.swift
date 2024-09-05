@@ -25,10 +25,18 @@ final class TileStoreController: _TileStore {
             return
         }
 
+        print("MMM start downloading tile regions")
         tileStore.loadTileRegion(forId: id, loadOptions: loadOptions) { [weak self] progress in
             guard let self else { return }
+            print("MMM tile region progress \(progress.completedResourceCount)/\(progress.requiredResourceCount)")
             self.tileRegionLoadProgressHandlers[id]?.eventSink?(progress.toFLTTileRegionLoadProgress().toList())
         } completion: { [weak self] result in
+            if case .success(let tileRegion) = result {
+                print("[ios] tile region id \(tileRegion.id)")
+                print("[ios] tile region expires \(tileRegion.expires)")
+                print("[ios] tile region completed \(tileRegion.completedResourceCount)")
+                print("[ios] tile region required \(tileRegion.requiredResourceCount)")
+            }
             executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
             self?.tileRegionLoadProgressHandlers.removeValue(forKey: id)
         }
