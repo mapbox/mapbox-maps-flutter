@@ -1,6 +1,7 @@
 ### main
 
 * Fix build errors when using Flutter SDK 3.24.
+* Add `GestureState` to `MapContentGestureContext` to indicate whether gesture has been started, its touches have changed or it has ended.
 
 ### 2.2.0
 

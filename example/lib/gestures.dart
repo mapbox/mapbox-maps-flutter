@@ -28,17 +28,20 @@ class GesturesPageBodyState extends State<GesturesPageBody> {
 
   _onTap(MapContentGestureContext context) {
     print("OnTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+        " state: ${context.gestureState}");
   }
 
   _onLongTap(MapContentGestureContext context) {
     print("OnLongTap coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+        " state: ${context.gestureState}");
   }
 
   _onMove(MapContentGestureContext context) {
     print("OnMove coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
-        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}");
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+        " state: ${context.gestureState}");
   }
 
   _onMapCreated(MapboxMap mapboxMap) {

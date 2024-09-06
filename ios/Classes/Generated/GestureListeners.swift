@@ -43,6 +43,16 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Enumeration of gesture states.
+enum GestureState: Int {
+  /// Gesture has started.
+  case started = 0
+  /// Gesture is in progress.
+  case changed = 1
+  /// Gesture has ended.
+  case ended = 2
+}
+
 /// A structure that defines additional information about map content gesture.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -51,21 +61,26 @@ struct MapContentGestureContext {
   var touchPosition: ScreenCoordinate
   /// Geographical coordinate of the map gesture.
   var point: Point
+  /// The state of the gesture.
+  var gestureState: GestureState
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> MapContentGestureContext? {
     let touchPosition = __pigeon_list[0] as! ScreenCoordinate
     let point = __pigeon_list[1] as! Point
+    let gestureState = __pigeon_list[2] as! GestureState
 
     return MapContentGestureContext(
       touchPosition: touchPosition,
-      point: point
+      point: point,
+      gestureState: gestureState
     )
   }
   func toList() -> [Any?] {
     return [
       touchPosition,
       point,
+      gestureState,
     ]
   }
 }
@@ -78,6 +93,13 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 131:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+    case 132:
+      var enumResult: GestureState?
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
+      if let enumResultAsInt = enumResultAsInt {
+        enumResult = GestureState(rawValue: enumResultAsInt)
+      }
+      return enumResult
     default:
       return super.readValue(ofType: type)
     }
@@ -95,6 +117,9 @@ private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MapContentGestureContext {
       super.writeByte(131)
       super.writeValue(value.toList())
+    } else if let value = value as? GestureState {
+      super.writeByte(132)
+      super.writeValue(value.rawValue)
     } else {
       super.writeValue(value)
     }
