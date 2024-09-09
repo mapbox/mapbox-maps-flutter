@@ -33,6 +33,7 @@ class MapboxMapFactory(
     val pluginVersion = params["mapboxPluginVersion"] as String
     val eventTypes = params["eventTypes"] as List<Int>
 
+    Log.d("kkk: android create view with suffix $channelSuffix")
     val mapInitOptions = MapInitOptions(
       context = context,
       mapOptions = mapOptions?.toMapOptions(context) ?: MapOptions.Builder()

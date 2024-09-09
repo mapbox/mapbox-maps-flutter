@@ -4,7 +4,12 @@ import android.content.Context
 import android.os.Handler
 import com.mapbox.common.TileStore
 import com.mapbox.maps.OfflineManager
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.TileRegion
+import com.mapbox.maps.mapbox_maps.pigeons.TileRegionEstimateOptions
+import com.mapbox.maps.mapbox_maps.pigeons.TileRegionEstimateResult
+import com.mapbox.maps.mapbox_maps.pigeons.TileRegionLoadOptions
+import com.mapbox.maps.mapbox_maps.pigeons.TilesetDescriptorOptions
+import com.mapbox.maps.mapbox_maps.pigeons._TileStore
 import com.mapbox.maps.mapbox_maps.toFLTTileRegion
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionEstimateProgress
 import com.mapbox.maps.mapbox_maps.toFLTTileRegionEstimateResult
@@ -23,6 +28,7 @@ private const val EVENT_CHANNEL_PREFIX = "com.mapbox.maps.flutter/tilestore"
 
 class TileStoreController(
   private val context: Context,
+  private val suffix: String,
   private val binaryMessenger: BinaryMessenger,
   private val tileStore: TileStore
 ) : _TileStore {
@@ -54,7 +60,7 @@ class TileStoreController(
   }
 
   override fun addTileRegionLoadProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/tilestore/tile-region-$id")
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/tilestore/tile-region-$id.$suffix")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
@@ -94,7 +100,7 @@ class TileStoreController(
   }
 
   override fun addTileRegionEstimateProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/tilestore/tile-region-estimate$id")
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/tilestore/tile-region-estimate$id.$suffix")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {

@@ -111,6 +111,7 @@ extension on _MapWidgetDebugOptions {
 class MapboxMap extends ChangeNotifier {
   MapboxMap({
     required _MapboxMapsPlatform mapboxMapsPlatform,
+    required this.suffix,
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
@@ -121,53 +122,55 @@ class MapboxMap extends ChangeNotifier {
     _setupGestures();
   }
 
+  final String suffix;
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.
-  late StyleManager style =
-      StyleManager(binaryMessenger: _proxyBinaryMessenger);
+  late StyleManager style = StyleManager(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to set the location puck.
   late LocationSettings location = LocationSettings(
       _LocationComponentSettingsInterface(
-          binaryMessenger: _proxyBinaryMessenger));
+          binaryMessenger: _proxyBinaryMessenger,
+          messageChannelSuffix: suffix));
 
   late BinaryMessenger _proxyBinaryMessenger;
 
-  late _CameraManager _cameraManager =
-      _CameraManager(binaryMessenger: _proxyBinaryMessenger);
-  late _MapInterface _mapInterface =
-      _MapInterface(binaryMessenger: _proxyBinaryMessenger);
-  late _AnimationManager _animationManager =
-      _AnimationManager(binaryMessenger: _proxyBinaryMessenger);
+  late _CameraManager _cameraManager = _CameraManager(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
+  late _MapInterface _mapInterface = _MapInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
+  late _AnimationManager _animationManager = _AnimationManager(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to create and set annotations.
   late final _AnnotationManager annotations;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  late Projection projection =
-      Projection(binaryMessenger: _proxyBinaryMessenger);
+  late Projection projection = Projection(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to access the gesture settings.
-  late GesturesSettingsInterface gestures =
-      GesturesSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late GesturesSettingsInterface gestures = GesturesSettingsInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to set the logo settings.
-  late LogoSettingsInterface logo =
-      LogoSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late LogoSettingsInterface logo = LogoSettingsInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to access the compass settings.
-  late CompassSettingsInterface compass =
-      CompassSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late CompassSettingsInterface compass = CompassSettingsInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to access the compass settings.
-  late ScaleBarSettingsInterface scaleBar =
-      ScaleBarSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   /// The interface to access the attribution settings.
-  late AttributionSettingsInterface attribution =
-      AttributionSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late AttributionSettingsInterface attribution = AttributionSettingsInterface(
+      binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
@@ -175,8 +178,9 @@ class MapboxMap extends ChangeNotifier {
 
   @override
   void dispose() {
-    _mapboxMapsPlatform.dispose();
-    GestureListener.setUp(null, binaryMessenger: _proxyBinaryMessenger);
+    _mapboxMapsPlatform.releaseMethodChannels();
+    GestureListener.setUp(null,
+        binaryMessenger: _proxyBinaryMessenger, messageChannelSuffix: suffix);
 
     super.dispose();
   }

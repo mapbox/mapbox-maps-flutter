@@ -5,7 +5,6 @@ import android.content.Context
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.Snapshotter
 import com.mapbox.maps.mapbox_maps.MapboxEventHandler
-import com.mapbox.maps.mapbox_maps.ProxyBinaryMessenger
 import com.mapbox.maps.mapbox_maps.StyleController
 import com.mapbox.maps.mapbox_maps.pigeons.MapSnapshotOptions
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
@@ -21,7 +20,7 @@ class SnapshotterInstanceManager(
   private val messenger: BinaryMessenger,
 ) : _SnapshotterInstanceManager {
 
-  private var proxyMessengers = HashMap<String, ProxyBinaryMessenger>()
+  private var proxyMessengers = HashMap<String, BinaryMessenger>()
 
   @SuppressLint("RestrictedApi")
   override fun setupSnapshotterForSuffix(
@@ -34,9 +33,9 @@ class SnapshotterInstanceManager(
       options = options.toSnapshotOptions(context),
       overlayOptions = options.toSnapshotOverlayOptions()
     )
-    val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, suffix)
+    val proxyBinaryMessenger = messenger
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
-    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger, eventTypes.map { it.toInt() })
+    val eventHandler = MapboxEventHandler(styleManager, suffix, proxyBinaryMessenger, eventTypes.map { it.toInt() })
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
     val mapboxStyleManager = MapboxStyleManager(
       styleManager,
@@ -45,16 +44,16 @@ class SnapshotterInstanceManager(
     )
     val snapshotterStyleController = StyleController(context, mapboxStyleManager)
 
-    _SnapshotterMessenger.setUp(proxyBinaryMessenger, snapshotterController)
-    StyleManager.setUp(proxyBinaryMessenger, snapshotterStyleController)
+    _SnapshotterMessenger.setUp(proxyBinaryMessenger, snapshotterController, suffix)
+    StyleManager.setUp(proxyBinaryMessenger, snapshotterStyleController, suffix)
 
-    proxyMessengers[suffix] = proxyBinaryMessenger
+    proxyMessengers[suffix] = messenger
   }
 
   override fun tearDownSnapshotterForSuffix(suffix: String) {
     val proxyBinaryMessenger = proxyMessengers[suffix] ?: return
 
-    _SnapshotterMessenger.setUp(proxyBinaryMessenger, null)
-    StyleManager.setUp(proxyBinaryMessenger, null)
+    _SnapshotterMessenger.setUp(proxyBinaryMessenger, null, suffix)
+    StyleManager.setUp(proxyBinaryMessenger, null, suffix)
   }
 }

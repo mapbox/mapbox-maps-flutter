@@ -4,17 +4,19 @@ part of mapbox_maps_flutter;
 /// The PolylineAnnotationManager to add/update/delete PolylineAnnotationAnnotations on the map.
 class PolylineAnnotationManager extends BaseAnnotationManager {
   PolylineAnnotationManager(
-      {required String id, required BinaryMessenger messenger})
-      : super(id: id, messenger: messenger);
+      {required String id,
+      required String suffix,
+      required BinaryMessenger messenger})
+      : super(id: id, suffix: suffix, messenger: messenger);
 
-  late _PolylineAnnotationMessenger messenger =
-      _PolylineAnnotationMessenger(binaryMessenger: _messenger);
+  late _PolylineAnnotationMessenger messenger = _PolylineAnnotationMessenger(
+      binaryMessenger: _messenger, messageChannelSuffix: _suffix);
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
     OnPolylineAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger);
+        binaryMessenger: _messenger, messageChannelSuffix: _suffix);
   }
 
   /// Create a new annotation with the option.

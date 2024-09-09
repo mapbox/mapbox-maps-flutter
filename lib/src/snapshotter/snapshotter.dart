@@ -45,10 +45,13 @@ final class Snapshotter {
     this.onStyleDataLoadedListener,
     this.onStyleImageMissingListener,
   }) {
-    final messenger = ProxyBinaryMessenger(suffix: _suffix.toString());
-    _snapshotterMessenger = _SnapshotterMessenger(binaryMessenger: messenger);
-    style = StyleManager(binaryMessenger: messenger);
-    _mapEvents = _MapEvents(binaryMessenger: messenger);
+    final messenger = ServicesBinding.instance.defaultBinaryMessenger;
+    _snapshotterMessenger = _SnapshotterMessenger(
+        binaryMessenger: messenger, messageChannelSuffix: _suffix.toString());
+    style = StyleManager(
+        binaryMessenger: messenger, messageChannelSuffix: _suffix.toString());
+    _mapEvents =
+        _MapEvents(binaryMessenger: messenger, suffix: _suffix.toString());
   }
 
   /// Creates a new [Snapshotter] instance.

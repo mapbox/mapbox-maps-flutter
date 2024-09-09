@@ -69,7 +69,9 @@ class MapWidget extends StatefulWidget {
     this.onTapListener,
     this.onLongTapListener,
     this.onScrollListener,
-  }) : super(key: key) {}
+  }) : super(key: key) {
+    LogConfiguration._setupDebugLoggingIfNeeded();
+  }
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
@@ -168,11 +170,9 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  late final _MapboxMapsPlatform _mapboxMapsPlatform =
-      _MapboxMapsPlatform(binaryMessenger: _binaryMessenger);
-  final int _suffix = _suffixesRegistry.getSuffix();
-  late final BinaryMessenger _binaryMessenger =
-      ProxyBinaryMessenger(suffix: _suffix.toString());
+  late final _MapboxMapsPlatform _mapboxMapsPlatform;
+  late final int _suffix;
+  late final BinaryMessenger _binaryMessenger;
   late final _MapEvents _events;
 
   MapboxMap? mapboxMap;
@@ -197,15 +197,27 @@ class _MapWidgetState extends State<MapWidget> {
   void initState() {
     super.initState();
 
-    _events = _MapEvents(binaryMessenger: _binaryMessenger);
+    _suffix = _suffixesRegistry.getSuffix();
+
+    print("kkk: created with suffix $_suffix");
+
+    _binaryMessenger = ServicesBinding.instance.defaultBinaryMessenger;
+    _mapboxMapsPlatform =
+        _MapboxMapsPlatform(binaryMessenger: _binaryMessenger, suffix: _suffix);
+    _events = _MapEvents(
+        binaryMessenger: _binaryMessenger, suffix: _suffix.toString());
+
     _updateEventListeners();
   }
 
   @override
   void dispose() {
+    print("kkk: disposing of suffix $_suffix");
+
     mapboxMap?.dispose();
-    _suffixesRegistry.releaseSuffix(_suffix);
+    _mapboxMapsPlatform.dispose();
     _events.dispose();
+    _suffixesRegistry.releaseSuffix(_suffix);
 
     super.dispose();
   }
@@ -239,6 +251,7 @@ class _MapWidgetState extends State<MapWidget> {
   Future<void> onPlatformViewCreated(int id) async {
     final MapboxMap controller = MapboxMap(
       mapboxMapsPlatform: _mapboxMapsPlatform,
+      suffix: _suffix.toString(),
       onMapTapListener: widget.onTapListener,
       onMapLongTapListener: widget.onLongTapListener,
       onMapScrollListener: widget.onScrollListener,

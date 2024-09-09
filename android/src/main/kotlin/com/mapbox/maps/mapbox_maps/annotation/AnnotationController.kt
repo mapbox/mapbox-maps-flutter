@@ -1,9 +1,14 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.MapView
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.OnCircleAnnotationClickListener
 import com.mapbox.maps.mapbox_maps.pigeons.OnPointAnnotationClickListener
+import com.mapbox.maps.mapbox_maps.pigeons.OnPolygonAnnotationClickListener
+import com.mapbox.maps.mapbox_maps.pigeons.OnPolylineAnnotationClickListener
+import com.mapbox.maps.mapbox_maps.pigeons._CircleAnnotationMessenger
 import com.mapbox.maps.mapbox_maps.pigeons._PointAnnotationMessenger
+import com.mapbox.maps.mapbox_maps.pigeons._PolygonAnnotationMessenger
+import com.mapbox.maps.mapbox_maps.pigeons._PolylineAnnotationMessenger
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
 import com.mapbox.maps.plugin.annotation.AnnotationManager
 import com.mapbox.maps.plugin.annotation.annotations
@@ -94,31 +99,34 @@ class AnnotationController(private val mapView: MapView) :
     result.success(null)
   }
 
-  fun setup(messenger: BinaryMessenger) {
-    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger)
-    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger)
-    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger)
-    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger)
-    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController)
+  fun setup(messenger: BinaryMessenger, suffix: String) {
+    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger, suffix)
+    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger, suffix)
+    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger, suffix)
+    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger, suffix)
+    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController, suffix)
     _CircleAnnotationMessenger.setUp(
       messenger,
-      circleAnnotationController
+      circleAnnotationController,
+      suffix
     )
     _PolylineAnnotationMessenger.setUp(
       messenger,
-      polylineAnnotationController
+      polylineAnnotationController,
+      suffix
     )
     _PolygonAnnotationMessenger.setUp(
       messenger,
-      polygonAnnotationController
+      polygonAnnotationController,
+      suffix
     )
   }
 
-  fun dispose(messenger: BinaryMessenger) {
-    _PointAnnotationMessenger.setUp(messenger, null)
-    _CircleAnnotationMessenger.setUp(messenger, null)
-    _PolylineAnnotationMessenger.setUp(messenger, null)
-    _PolygonAnnotationMessenger.setUp(messenger, null)
+  fun dispose(messenger: BinaryMessenger, suffix: String) {
+    _PointAnnotationMessenger.setUp(messenger, null, suffix)
+    _CircleAnnotationMessenger.setUp(messenger, null, suffix)
+    _PolylineAnnotationMessenger.setUp(messenger, null, suffix)
+    _PolygonAnnotationMessenger.setUp(messenger, null, suffix)
   }
 
   override fun getManager(managerId: String): AnnotationManager<*, *, *, *, *, *, *> {

@@ -38,7 +38,7 @@ class MapboxMapController(
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   messenger: BinaryMessenger,
-  channelSuffix: Int,
+  private val channelSuffix: Int,
   pluginVersion: String,
   eventTypes: List<Int>
 ) : PlatformView,
@@ -61,7 +61,7 @@ class MapboxMapController(
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
 
-  private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "$channelSuffix")
+  private val proxyBinaryMessenger = messenger
   private val eventHandler: MapboxEventHandler
 
   /*
@@ -126,7 +126,7 @@ class MapboxMapController(
     val mapboxMap = mapView.mapboxMap
     this.mapView = mapView
     this.mapboxMap = mapboxMap
-    eventHandler = MapboxEventHandler(mapboxMap.styleManager, proxyBinaryMessenger, eventTypes)
+    eventHandler = MapboxEventHandler(mapboxMap.styleManager, channelSuffix.toString(), proxyBinaryMessenger, eventTypes)
     styleController = StyleController(context, mapboxMap)
     cameraController = CameraController(mapboxMap, context)
     projectionController = MapProjectionController(mapboxMap)
@@ -142,20 +142,21 @@ class MapboxMapController(
 
     changeUserAgent(pluginVersion)
 
-    StyleManager.setUp(proxyBinaryMessenger, styleController)
-    _CameraManager.setUp(proxyBinaryMessenger, cameraController)
-    Projection.setUp(proxyBinaryMessenger, projectionController)
-    _MapInterface.setUp(proxyBinaryMessenger, mapInterfaceController)
-    _AnimationManager.setUp(proxyBinaryMessenger, animationController)
-    annotationController.setup(proxyBinaryMessenger)
-    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, locationComponentController)
-    LogoSettingsInterface.setUp(proxyBinaryMessenger, logoController)
-    GesturesSettingsInterface.setUp(proxyBinaryMessenger, gestureController)
-    AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController)
-    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController)
-    CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController)
+    val suffix = channelSuffix.toString()
+    StyleManager.setUp(proxyBinaryMessenger, styleController, suffix)
+    _CameraManager.setUp(proxyBinaryMessenger, cameraController, suffix)
+    Projection.setUp(proxyBinaryMessenger, projectionController, suffix)
+    _MapInterface.setUp(proxyBinaryMessenger, mapInterfaceController, suffix)
+    _AnimationManager.setUp(proxyBinaryMessenger, animationController, suffix)
+    annotationController.setup(proxyBinaryMessenger, suffix)
+    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, locationComponentController, suffix)
+    LogoSettingsInterface.setUp(proxyBinaryMessenger, logoController, suffix)
+    GesturesSettingsInterface.setUp(proxyBinaryMessenger, gestureController, suffix)
+    AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController, suffix)
+    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController, suffix)
+    CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController, suffix)
 
-    methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
+    methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
   }
 
@@ -165,6 +166,9 @@ class MapboxMapController(
 
   override fun onFlutterViewAttached(flutterView: View) {
     super.onFlutterViewAttached(flutterView)
+
+    Log.d("onFlutterViewAttached suffix $channelSuffix")
+
     val context = flutterView.context
     val shouldDestroyOnDestroy = when (context is FlutterActivity) {
       true -> context.shouldDestroyEngineWithHost()
@@ -177,6 +181,9 @@ class MapboxMapController(
 
   override fun onFlutterViewDetached() {
     super.onFlutterViewDetached()
+
+    Log.d("onFlutterViewDetached suffix $channelSuffix")
+
     lifecycleHelper?.dispose()
     lifecycleHelper = null
     mapView!!.setViewTreeLifecycleOwner(null)
@@ -184,25 +191,30 @@ class MapboxMapController(
 
   override fun dispose() {
     if (mapView == null) {
+      Log.d("-------------------- android view not found suffix $channelSuffix --------------------")
       return
     }
+
+    Log.d("android view dispose suffix $channelSuffix")
+    val suffix = channelSuffix.toString()
+    eventHandler.dispose()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
     mapView = null
     mapboxMap = null
     methodChannel.setMethodCallHandler(null)
-    StyleManager.setUp(proxyBinaryMessenger, null)
-    _CameraManager.setUp(proxyBinaryMessenger, null)
-    Projection.setUp(proxyBinaryMessenger, null)
-    _MapInterface.setUp(proxyBinaryMessenger, null)
-    _AnimationManager.setUp(proxyBinaryMessenger, null)
-    annotationController.dispose(proxyBinaryMessenger)
-    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, null)
-    LogoSettingsInterface.setUp(proxyBinaryMessenger, null)
-    GesturesSettingsInterface.setUp(proxyBinaryMessenger, null)
-    CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
-    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
-    AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
+    StyleManager.setUp(proxyBinaryMessenger, null, suffix)
+    _CameraManager.setUp(proxyBinaryMessenger, null, suffix)
+    Projection.setUp(proxyBinaryMessenger, null, suffix)
+    _MapInterface.setUp(proxyBinaryMessenger, null, suffix)
+    _AnimationManager.setUp(proxyBinaryMessenger, null, suffix)
+    annotationController.dispose(proxyBinaryMessenger, suffix)
+    _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+    LogoSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+    GesturesSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+    CompassSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+    ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+    AttributionSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -222,7 +234,19 @@ class MapboxMapController(
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {
-        dispose()
+        val suffix = channelSuffix.toString()
+        StyleManager.setUp(proxyBinaryMessenger, null, suffix)
+        _CameraManager.setUp(proxyBinaryMessenger, null, suffix)
+        Projection.setUp(proxyBinaryMessenger, null, suffix)
+        _MapInterface.setUp(proxyBinaryMessenger, null, suffix)
+        _AnimationManager.setUp(proxyBinaryMessenger, null, suffix)
+        annotationController.dispose(proxyBinaryMessenger, suffix)
+        _LocationComponentSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+        LogoSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+        GesturesSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+        CompassSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+        ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
+        AttributionSettingsInterface.setUp(proxyBinaryMessenger, null, suffix)
         result.success(null)
       }
       "map#snapshot" -> {

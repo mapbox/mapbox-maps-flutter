@@ -16,6 +16,7 @@ final class _MapEvents {
   OnStyleImageUnusedListener? _onStyleImageUnusedListener;
   OnResourceRequestListener? _onResourceRequestListener;
   late final MethodChannel _channel;
+  late final String _suffix;
   List<_MapEvent> _subscribedEventTypes = [];
 
   List<_MapEvent> get eventTypes {
@@ -40,8 +41,9 @@ final class _MapEvents {
     return listenersMap.values.toList();
   }
 
-  _MapEvents({BinaryMessenger? binaryMessenger}) {
-    _channel = MethodChannel('com.mapbox.maps.flutter.map_events',
+  _MapEvents({BinaryMessenger? binaryMessenger, required String suffix}) {
+    _suffix = suffix;
+    _channel = MethodChannel('com.mapbox.maps.flutter.map_events.$suffix',
         const StandardMethodCodec(), binaryMessenger);
     _channel.setMethodCallHandler(_handleMethodCall);
   }
@@ -65,6 +67,7 @@ final class _MapEvents {
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
+    print("kkk events: call ${call.method}, suffix $_suffix");
     try {
       if (call.method.startsWith("event")) {
         _handleEvents(call);

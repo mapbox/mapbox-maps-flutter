@@ -3,7 +3,9 @@ package com.mapbox.maps.mapbox_maps.offline
 import android.content.Context
 import android.os.Handler
 import com.mapbox.maps.OfflineManager
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.mapbox_maps.pigeons.StylePack
+import com.mapbox.maps.mapbox_maps.pigeons.StylePackLoadOptions
+import com.mapbox.maps.mapbox_maps.pigeons._OfflineManager
 import com.mapbox.maps.mapbox_maps.toFLTStylePack
 import com.mapbox.maps.mapbox_maps.toFLTStylePackLoadProgress
 import com.mapbox.maps.mapbox_maps.toFLTValue
@@ -17,6 +19,7 @@ private const val EVENT_CHANNEL_PREFIX = "com.mapbox.maps.flutter/offline"
 
 class OfflineController(
   private val context: Context,
+  private val suffix: String,
   private val messenger: BinaryMessenger
 ) : _OfflineManager {
 
@@ -57,7 +60,7 @@ class OfflineController(
   }
 
   override fun addStylePackLoadProgressListener(styleURI: String) {
-    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/offline/$styleURI")
+    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/offline/$styleURI.$suffix")
     eventChannel.setStreamHandler(
       object : StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {

@@ -15,7 +15,9 @@ class _AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('point', id: id, belowLayerId: below)
         .then((value) => PointAnnotationManager(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            suffix: _mapboxMapsPlatform.suffix.toString(),
+            messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a [CircleAnnotationManager] to add/remove/update [CircleAnnotation]s on the map.
@@ -27,7 +29,9 @@ class _AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('circle', id: id, belowLayerId: below)
         .then((value) => CircleAnnotationManager(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            suffix: _mapboxMapsPlatform.suffix.toString(),
+            messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a [PolylineAnnotationManager] to add/remove/update [PolylineAnnotation]s on the map.
@@ -39,7 +43,9 @@ class _AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('polyline', id: id, belowLayerId: below)
         .then((value) => PolylineAnnotationManager(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            suffix: _mapboxMapsPlatform.suffix.toString(),
+            messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Create a [PolygonAnnotationManager] to add/remove/update [PolygonAnnotation]s on the map.
@@ -51,7 +57,9 @@ class _AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('polygon', id: id, belowLayerId: below)
         .then((value) => PolygonAnnotationManager(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            suffix: _mapboxMapsPlatform.suffix.toString(),
+            messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
   /// Remove an [AnnotationManager] and all the annotations created by it.
@@ -68,9 +76,13 @@ class _AnnotationManager {
 /// The super class for all AnnotationManagers.
 class BaseAnnotationManager {
   BaseAnnotationManager(
-      {required String id, required BinaryMessenger messenger})
+      {required String id,
+      required String suffix,
+      required BinaryMessenger messenger})
       : this.id = id,
-        _messenger = messenger;
+        _messenger = messenger,
+        _suffix = suffix;
   final String id;
+  final String _suffix;
   final BinaryMessenger _messenger;
 }

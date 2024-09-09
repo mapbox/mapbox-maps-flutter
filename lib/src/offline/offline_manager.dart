@@ -10,23 +10,22 @@ final class OfflineManager {
 
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
     try {
-      _offlineMapInstanceManager
-          .tearDownOfflineManager("offline-manager/${suffix.toString()}");
+      _offlineMapInstanceManager.tearDownOfflineManager(suffix.toString());
       _suffixesRegistry.releaseSuffix(suffix);
     } catch (e) {}
   });
 
   OfflineManager._() {
-    final messenger =
-        ProxyBinaryMessenger(suffix: "offline-manager/${_suffix.toString()}");
-    _api = _OfflineManager(binaryMessenger: messenger);
+    final messenger = ServicesBinding.instance.defaultBinaryMessenger;
+    _api = _OfflineManager(
+        binaryMessenger: messenger, messageChannelSuffix: _suffix.toString());
   }
 
   /// Creates a new instance of [OfflineManager].
   static Future<OfflineManager> create() async {
     final manager = OfflineManager._();
     await _offlineMapInstanceManager
-        .setupOfflineManager("offline-manager/${manager._suffix.toString()}");
+        .setupOfflineManager(manager._suffix.toString());
     _finalizer.attach(manager, manager._suffix, detach: manager);
 
     return manager;
@@ -65,7 +64,7 @@ final class OfflineManager {
     if (progressListener != null) {
       await _api.addStylePackLoadProgressListener(styleURI);
       final eventChannel =
-          EventChannel("com.mapbox.maps.flutter/offline/${styleURI}");
+          EventChannel("com.mapbox.maps.flutter/offline/${styleURI}.$_suffix");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(StylePackLoadProgress.decode(event));
       });

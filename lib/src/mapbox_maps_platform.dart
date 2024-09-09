@@ -4,11 +4,18 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
-      'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
+      'plugins.flutter.io.$suffix',
+      const StandardMethodCodec(),
+      binaryMessenger);
   final BinaryMessenger binaryMessenger;
+  final int suffix;
 
-  _MapboxMapsPlatform({required this.binaryMessenger}) {
+  _MapboxMapsPlatform({required this.binaryMessenger, required this.suffix}) {
     _channel.setMethodCallHandler(_handleMethodCall);
+  }
+
+  void dispose() {
+    _channel.setMethodCallHandler(null);
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
@@ -98,7 +105,7 @@ class _MapboxMapsPlatform {
     }
   }
 
-  void dispose() async {
+  void releaseMethodChannels() async {
     try {
       await _channel.invokeMethod('platform#releaseMethodChannels');
     } catch (e) {

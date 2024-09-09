@@ -8,7 +8,7 @@ import java.nio.ByteBuffer
 // Different map instances use different suffixes to avoid channel name conflicts.
 class ProxyBinaryMessenger(
   private val messenger: BinaryMessenger,
-  private val nameSuffix: String,
+  val nameSuffix: String,
 ) : BinaryMessenger {
 
   private fun String.appendSuffix() = "$this$nameSuffix"
