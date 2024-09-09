@@ -51,8 +51,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final path = await getTemporaryDirectory();
-    final tileStore = await TileStore.createAt(path.uri);
+    final tileStore = await TileStore.createDefault();
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: City.helsinki.toJson(),
         descriptorsOptions: [
