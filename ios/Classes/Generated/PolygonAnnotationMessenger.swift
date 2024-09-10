@@ -86,9 +86,15 @@ struct PolygonAnnotation {
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
+  /// Whether or not the fill should be antialiased.
+  /// Default value: true.
+  var fillAntialias: Bool?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   var fillColor: Int64?
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  var fillEmissiveStrength: Double?
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
   var fillOpacity: Double?
@@ -96,25 +102,39 @@ struct PolygonAnnotation {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  var fillTranslate: [Double?]?
+  /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
+  var fillTranslateAnchor: FillTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PolygonAnnotation? {
     let id = __pigeon_list[0] as! String
     let geometry = __pigeon_list[1] as! Polygon
     let fillSortKey: Double? = nilOrValue(__pigeon_list[2])
-    let fillColor: Int64? = isNullish(__pigeon_list[3]) ? nil : (__pigeon_list[3] is Int64? ? __pigeon_list[3] as! Int64? : Int64(__pigeon_list[3] as! Int32))
-    let fillOpacity: Double? = nilOrValue(__pigeon_list[4])
-    let fillOutlineColor: Int64? = isNullish(__pigeon_list[5]) ? nil : (__pigeon_list[5] is Int64? ? __pigeon_list[5] as! Int64? : Int64(__pigeon_list[5] as! Int32))
-    let fillPattern: String? = nilOrValue(__pigeon_list[6])
+    let fillAntialias: Bool? = nilOrValue(__pigeon_list[3])
+    let fillColor: Int64? = isNullish(__pigeon_list[4]) ? nil : (__pigeon_list[4] is Int64? ? __pigeon_list[4] as! Int64? : Int64(__pigeon_list[4] as! Int32))
+    let fillEmissiveStrength: Double? = nilOrValue(__pigeon_list[5])
+    let fillOpacity: Double? = nilOrValue(__pigeon_list[6])
+    let fillOutlineColor: Int64? = isNullish(__pigeon_list[7]) ? nil : (__pigeon_list[7] is Int64? ? __pigeon_list[7] as! Int64? : Int64(__pigeon_list[7] as! Int32))
+    let fillPattern: String? = nilOrValue(__pigeon_list[8])
+    let fillTranslate: [Double?]? = nilOrValue(__pigeon_list[9])
+    let fillTranslateAnchor: FillTranslateAnchor? = nilOrValue(__pigeon_list[10])
 
     return PolygonAnnotation(
       id: id,
       geometry: geometry,
       fillSortKey: fillSortKey,
+      fillAntialias: fillAntialias,
       fillColor: fillColor,
+      fillEmissiveStrength: fillEmissiveStrength,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern
+      fillPattern: fillPattern,
+      fillTranslate: fillTranslate,
+      fillTranslateAnchor: fillTranslateAnchor
     )
   }
   func toList() -> [Any?] {
@@ -122,10 +142,14 @@ struct PolygonAnnotation {
       id,
       geometry,
       fillSortKey,
+      fillAntialias,
       fillColor,
+      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTranslate,
+      fillTranslateAnchor,
     ]
   }
 }
@@ -136,9 +160,15 @@ struct PolygonAnnotationOptions {
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
+  /// Whether or not the fill should be antialiased.
+  /// Default value: true.
+  var fillAntialias: Bool?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   var fillColor: Int64?
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  var fillEmissiveStrength: Double?
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
   var fillOpacity: Double?
@@ -146,33 +176,51 @@ struct PolygonAnnotationOptions {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  var fillTranslate: [Double?]?
+  /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
+  var fillTranslateAnchor: FillTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PolygonAnnotationOptions? {
     let geometry = __pigeon_list[0] as! Polygon
     let fillSortKey: Double? = nilOrValue(__pigeon_list[1])
-    let fillColor: Int64? = isNullish(__pigeon_list[2]) ? nil : (__pigeon_list[2] is Int64? ? __pigeon_list[2] as! Int64? : Int64(__pigeon_list[2] as! Int32))
-    let fillOpacity: Double? = nilOrValue(__pigeon_list[3])
-    let fillOutlineColor: Int64? = isNullish(__pigeon_list[4]) ? nil : (__pigeon_list[4] is Int64? ? __pigeon_list[4] as! Int64? : Int64(__pigeon_list[4] as! Int32))
-    let fillPattern: String? = nilOrValue(__pigeon_list[5])
+    let fillAntialias: Bool? = nilOrValue(__pigeon_list[2])
+    let fillColor: Int64? = isNullish(__pigeon_list[3]) ? nil : (__pigeon_list[3] is Int64? ? __pigeon_list[3] as! Int64? : Int64(__pigeon_list[3] as! Int32))
+    let fillEmissiveStrength: Double? = nilOrValue(__pigeon_list[4])
+    let fillOpacity: Double? = nilOrValue(__pigeon_list[5])
+    let fillOutlineColor: Int64? = isNullish(__pigeon_list[6]) ? nil : (__pigeon_list[6] is Int64? ? __pigeon_list[6] as! Int64? : Int64(__pigeon_list[6] as! Int32))
+    let fillPattern: String? = nilOrValue(__pigeon_list[7])
+    let fillTranslate: [Double?]? = nilOrValue(__pigeon_list[8])
+    let fillTranslateAnchor: FillTranslateAnchor? = nilOrValue(__pigeon_list[9])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
       fillSortKey: fillSortKey,
+      fillAntialias: fillAntialias,
       fillColor: fillColor,
+      fillEmissiveStrength: fillEmissiveStrength,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern
+      fillPattern: fillPattern,
+      fillTranslate: fillTranslate,
+      fillTranslateAnchor: fillTranslateAnchor
     )
   }
   func toList() -> [Any?] {
     return [
       geometry,
       fillSortKey,
+      fillAntialias,
       fillColor,
+      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTranslate,
+      fillTranslateAnchor,
     ]
   }
 }
@@ -272,10 +320,20 @@ protocol _PolygonAnnotationMessenger {
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setFillAntialias(managerId: String, fillAntialias: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillAntialias(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setFillColor(managerId: String, fillColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillEmissiveStrength(managerId: String, fillEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setFillOpacity(managerId: String, fillOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setFillOutlineColor(managerId: String, fillOutlineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillOutlineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setFillPattern(managerId: String, fillPattern: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillPattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
   func setFillTranslate(managerId: String, fillTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -377,6 +435,41 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
+    let setFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillSortKeyArg = args[1] as! Double
+        api.setFillSortKey(managerId: managerIdArg, fillSortKey: fillSortKeyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillSortKeyChannel.setMessageHandler(nil)
+    }
+    let getFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillSortKey(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillSortKeyChannel.setMessageHandler(nil)
+    }
     let setFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillAntialiasChannel.setMessageHandler { message, reply in
@@ -412,6 +505,41 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillAntialiasChannel.setMessageHandler(nil)
     }
+    let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setFillColor(managerId: managerIdArg, fillColor: fillColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillColorChannel.setMessageHandler(nil)
+    }
+    let getFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillColorChannel.setMessageHandler(nil)
+    }
     let setFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillEmissiveStrengthChannel.setMessageHandler { message, reply in
@@ -446,6 +574,111 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       getFillEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let setFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillOpacityArg = args[1] as! Double
+        api.setFillOpacity(managerId: managerIdArg, fillOpacity: fillOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillOpacityChannel.setMessageHandler(nil)
+    }
+    let getFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillOpacityChannel.setMessageHandler(nil)
+    }
+    let setFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillOutlineColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillOutlineColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setFillOutlineColor(managerId: managerIdArg, fillOutlineColor: fillOutlineColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillOutlineColorChannel.setMessageHandler(nil)
+    }
+    let getFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillOutlineColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillOutlineColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillOutlineColorChannel.setMessageHandler(nil)
+    }
+    let setFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillPatternChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillPatternArg = args[1] as! String
+        api.setFillPattern(managerId: managerIdArg, fillPattern: fillPatternArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillPatternChannel.setMessageHandler(nil)
+    }
+    let getFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillPatternChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillPattern(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillPatternChannel.setMessageHandler(nil)
     }
     let setFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

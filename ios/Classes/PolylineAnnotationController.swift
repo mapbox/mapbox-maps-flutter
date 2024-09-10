@@ -135,6 +135,26 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
+    func getLineJoin(managerId: String, completion: @escaping (Result<LineJoin?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineJoin?.toFLTLineJoin()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineJoin(managerId: String, lineJoin: LineJoin, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineJoin = MapboxMaps.LineJoin(lineJoin)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineMiterLimit(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -168,6 +188,126 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.lineRoundLimit = lineRoundLimit
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineSortKey))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineSortKey(managerId: String, lineSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineSortKey = lineSortKey
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineZOffset))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineZOffset(managerId: String, lineZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineZOffset = lineZOffset
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineBlur))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineBlur(managerId: String, lineBlur: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineBlur = lineBlur
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineBorderColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineBorderColor))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineBorderColor(managerId: String, lineBorderColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineBorderColor = lineBorderColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineBorderWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineBorderWidth))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineBorderWidth(managerId: String, lineBorderWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineBorderWidth = lineBorderWidth
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineColor))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineColor(managerId: String, lineColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineColor = lineColor
 
             completion(.success(()))
         } catch {
@@ -235,6 +375,26 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
+    func getLineGapWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineGapWidth))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineGapWidth(managerId: String, lineGapWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineGapWidth = lineGapWidth
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -248,6 +408,66 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.lineOcclusionOpacity = lineOcclusionOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineOffset))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineOffset(managerId: String, lineOffset: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineOffset = lineOffset
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineOpacity(managerId: String, lineOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineOpacity = lineOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLinePattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.linePattern))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLinePattern(managerId: String, linePattern: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.linePattern = linePattern
 
             completion(.success(()))
         } catch {
@@ -295,6 +515,46 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
+    func getLineTrimColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineTrimColor))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineTrimColor(managerId: String, lineTrimColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineTrimColor = lineTrimColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineTrimFadeRange))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -314,14 +574,43 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getLineWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineWidth))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineWidth(managerId: String, lineWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineWidth = lineWidth
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension PolylineAnnotationOptions {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(lineString: geometry)
+        if let lineCap {
+            annotation.lineCap = MapboxMaps.LineCap(lineCap)
+        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
+        }
+        if let lineMiterLimit {
+            annotation.lineMiterLimit = lineMiterLimit
+        }
+        if let lineRoundLimit {
+            annotation.lineRoundLimit = lineRoundLimit
         }
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
@@ -341,8 +630,20 @@ extension PolylineAnnotationOptions {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
+        if let lineDasharray {
+            annotation.lineDasharray = lineDasharray.compactMap { $0 }
+        }
+        if let lineDepthOcclusionFactor {
+            annotation.lineDepthOcclusionFactor = lineDepthOcclusionFactor
+        }
+        if let lineEmissiveStrength {
+            annotation.lineEmissiveStrength = lineEmissiveStrength
+        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
+        }
+        if let lineOcclusionOpacity {
+            annotation.lineOcclusionOpacity = lineOcclusionOpacity
         }
         if let lineOffset {
             annotation.lineOffset = lineOffset
@@ -352,6 +653,21 @@ extension PolylineAnnotationOptions {
         }
         if let linePattern {
             annotation.linePattern = linePattern
+        }
+        if let lineTranslate {
+            annotation.lineTranslate = lineTranslate.compactMap { $0 }
+        }
+        if let lineTranslateAnchor {
+            annotation.lineTranslateAnchor = MapboxMaps.LineTranslateAnchor(lineTranslateAnchor)
+        }
+        if let lineTrimColor {
+            annotation.lineTrimColor = StyleColor(rgb: lineTrimColor)
+        }
+        if let lineTrimFadeRange {
+            annotation.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
+        }
+        if let lineTrimOffset {
+            annotation.lineTrimOffset = lineTrimOffset.compactMap { $0 }
         }
         if let lineWidth {
             annotation.lineWidth = lineWidth
@@ -364,8 +680,17 @@ extension PolylineAnnotation {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: geometry)
+        if let lineCap {
+            annotation.lineCap = MapboxMaps.LineCap(lineCap)
+        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
+        }
+        if let lineMiterLimit {
+            annotation.lineMiterLimit = lineMiterLimit
+        }
+        if let lineRoundLimit {
+            annotation.lineRoundLimit = lineRoundLimit
         }
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
@@ -385,8 +710,20 @@ extension PolylineAnnotation {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
+        if let lineDasharray {
+            annotation.lineDasharray = lineDasharray.compactMap { $0 }
+        }
+        if let lineDepthOcclusionFactor {
+            annotation.lineDepthOcclusionFactor = lineDepthOcclusionFactor
+        }
+        if let lineEmissiveStrength {
+            annotation.lineEmissiveStrength = lineEmissiveStrength
+        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
+        }
+        if let lineOcclusionOpacity {
+            annotation.lineOcclusionOpacity = lineOcclusionOpacity
         }
         if let lineOffset {
             annotation.lineOffset = lineOffset
@@ -396,6 +733,21 @@ extension PolylineAnnotation {
         }
         if let linePattern {
             annotation.linePattern = linePattern
+        }
+        if let lineTranslate {
+            annotation.lineTranslate = lineTranslate.compactMap { $0 }
+        }
+        if let lineTranslateAnchor {
+            annotation.lineTranslateAnchor = MapboxMaps.LineTranslateAnchor(lineTranslateAnchor)
+        }
+        if let lineTrimColor {
+            annotation.lineTrimColor = StyleColor(rgb: lineTrimColor)
+        }
+        if let lineTrimFadeRange {
+            annotation.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
+        }
+        if let lineTrimOffset {
+            annotation.lineTrimOffset = lineTrimOffset.compactMap { $0 }
         }
         if let lineWidth {
             annotation.lineWidth = lineWidth
@@ -409,17 +761,29 @@ extension MapboxMaps.PolylineAnnotation {
         PolylineAnnotation(
             id: id,
             geometry: lineString,
+            lineCap: lineCap?.toFLTLineCap(),
             lineJoin: lineJoin?.toFLTLineJoin(),
+            lineMiterLimit: lineMiterLimit,
+            lineRoundLimit: lineRoundLimit,
             lineSortKey: lineSortKey,
             lineZOffset: lineZOffset,
             lineBlur: lineBlur,
             lineBorderColor: lineBorderColor?.intValue,
             lineBorderWidth: lineBorderWidth,
             lineColor: lineColor?.intValue,
+            lineDasharray: lineDasharray,
+            lineDepthOcclusionFactor: lineDepthOcclusionFactor,
+            lineEmissiveStrength: lineEmissiveStrength,
             lineGapWidth: lineGapWidth,
+            lineOcclusionOpacity: lineOcclusionOpacity,
             lineOffset: lineOffset,
             lineOpacity: lineOpacity,
             linePattern: linePattern,
+            lineTranslate: lineTranslate,
+            lineTranslateAnchor: lineTranslateAnchor?.toFLTLineTranslateAnchor(),
+            lineTrimColor: lineTrimColor?.intValue,
+            lineTrimFadeRange: lineTrimFadeRange,
+            lineTrimOffset: lineTrimOffset,
             lineWidth: lineWidth
         )
     }

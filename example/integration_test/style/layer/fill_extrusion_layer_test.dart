@@ -39,6 +39,7 @@ void main() {
       fillExtrusionFloodLightIntensity: 1.0,
       fillExtrusionFloodLightWallRadius: 1.0,
       fillExtrusionHeight: 1.0,
+      fillExtrusionLineWidth: 1.0,
       fillExtrusionOpacity: 1.0,
       fillExtrusionPattern: "abc",
       fillExtrusionRoundedRoof: true,
@@ -69,6 +70,7 @@ void main() {
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);
     expect(layer.fillExtrusionFloodLightWallRadius, 1.0);
     expect(layer.fillExtrusionHeight, 1.0);
+    expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPattern, "abc");
     expect(layer.fillExtrusionRoundedRoof, true);
@@ -114,6 +116,7 @@ void main() {
       fillExtrusionFloodLightIntensityExpression: ['number', 1.0],
       fillExtrusionFloodLightWallRadiusExpression: ['number', 1.0],
       fillExtrusionHeightExpression: ['number', 1.0],
+      fillExtrusionLineWidthExpression: ['number', 1.0],
       fillExtrusionOpacityExpression: ['number', 1.0],
       fillExtrusionPatternExpression: ['image', "abc"],
       fillExtrusionRoundedRoofExpression: ['==', true, true],
@@ -153,6 +156,7 @@ void main() {
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);
     expect(layer.fillExtrusionFloodLightWallRadius, 1.0);
     expect(layer.fillExtrusionHeight, 1.0);
+    expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPatternExpression, ['image', "abc"]);
     expect(layer.fillExtrusionRoundedRoof, true);

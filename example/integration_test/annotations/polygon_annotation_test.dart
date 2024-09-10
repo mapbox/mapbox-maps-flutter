@@ -26,10 +26,14 @@ void main() {
     var polygonAnnotationOptions = PolygonAnnotationOptions(
       geometry: geometry,
       fillSortKey: 1.0,
+      fillAntialias: true,
       fillColor: Colors.red.value,
+      fillEmissiveStrength: 1.0,
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
+      fillTranslate: [0.0, 1.0],
+      fillTranslateAnchor: FillTranslateAnchor.MAP,
     );
     final annotation = await manager.create(polygonAnnotationOptions);
     var polygon = annotation.geometry;
@@ -41,10 +45,14 @@ void main() {
     expect(-3.363937, points.last.lng);
     expect(-10.733102, points.last.lat);
     expect(1.0, annotation.fillSortKey);
+    expect(true, annotation.fillAntialias);
     expect(Colors.red.value, annotation.fillColor);
+    expect(1.0, annotation.fillEmissiveStrength);
     expect(1.0, annotation.fillOpacity);
     expect(Colors.red.value, annotation.fillOutlineColor);
     expect("abc", annotation.fillPattern);
+    expect([0.0, 1.0], annotation.fillTranslate);
+    expect(FillTranslateAnchor.MAP, annotation.fillTranslateAnchor);
   });
 
   testWidgets('update and delete PolygonAnnotation',

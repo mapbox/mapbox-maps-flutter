@@ -48,6 +48,8 @@ void main() {
       linePattern: "abc",
       lineTranslate: [0.0, 1.0],
       lineTranslateAnchor: LineTranslateAnchor.MAP,
+      lineTrimColor: Colors.red.value,
+      lineTrimFadeRange: [0.0, 1.0],
       lineTrimOffset: [0.0, 1.0],
       lineWidth: 1.0,
     ));
@@ -78,6 +80,8 @@ void main() {
     expect(layer.linePattern, "abc");
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
+    expect(layer.lineTrimColor, Colors.red.value);
+    expect(layer.lineTrimFadeRange, [0.0, 1.0]);
     expect(layer.lineTrimOffset, [0.0, 1.0]);
     expect(layer.lineWidth, 1.0);
   });
@@ -131,6 +135,11 @@ void main() {
         [0.0, 1.0]
       ],
       lineTranslateAnchorExpression: ['string', 'map'],
+      lineTrimColorExpression: ['rgba', 255, 0, 0, 1],
+      lineTrimFadeRangeExpression: [
+        'literal',
+        [0.0, 1.0]
+      ],
       lineTrimOffsetExpression: [
         'literal',
         [0.0, 1.0]
@@ -169,6 +178,8 @@ void main() {
     expect(layer.linePatternExpression, ['image', "abc"]);
     expect(layer.lineTranslate, [0.0, 1.0]);
     expect(layer.lineTranslateAnchor, LineTranslateAnchor.MAP);
+    expect(layer.lineTrimColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.lineTrimFadeRange, [0.0, 1.0]);
     expect(layer.lineTrimOffset, [0.0, 1.0]);
     expect(layer.lineWidth, 1.0);
   });

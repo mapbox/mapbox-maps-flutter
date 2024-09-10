@@ -102,10 +102,25 @@ data class PolylineAnnotation(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
   /**
+   * The display of line endings.
+   * Default value: "butt".
+   */
+  val lineCap: LineCap? = null,
+  /**
    * The display of lines when joining.
    * Default value: "miter".
    */
   val lineJoin: LineJoin? = null,
+  /**
+   * Used to automatically convert miter joins to bevel joins for sharp angles.
+   * Default value: 2.
+   */
+  val lineMiterLimit: Double? = null,
+  /**
+   * Used to automatically convert round joins to miter joins for shallow angles.
+   * Default value: 1.05.
+   */
+  val lineRoundLimit: Double? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
@@ -131,10 +146,32 @@ data class PolylineAnnotation(
    */
   val lineColor: Long? = null,
   /**
+   * Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+   * Minimum value: 0.
+   */
+  val lineDasharray: List<Double?>? = null,
+  /**
+   * Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+   * Default value: 1. Value range: [0, 1]
+   */
+  val lineDepthOcclusionFactor: Double? = null,
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 0. Minimum value: 0.
+   */
+  val lineEmissiveStrength: Double? = null,
+  /**
    * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
    * Default value: 0. Minimum value: 0.
    */
   val lineGapWidth: Double? = null,
+  /** A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`. */
+  val lineGradient: Long? = null,
+  /**
+   * Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val lineOcclusionOpacity: Double? = null,
   /**
    * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
    * Default value: 0.
@@ -147,6 +184,31 @@ data class PolylineAnnotation(
   val lineOpacity: Double? = null,
   /** Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val linePattern: String? = null,
+  /**
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * Default value: [0,0].
+   */
+  val lineTranslate: List<Double?>? = null,
+  /**
+   * Controls the frame of reference for `line-translate`.
+   * Default value: "map".
+   */
+  val lineTranslateAnchor: LineTranslateAnchor? = null,
+  /**
+   * The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+   * Default value: "transparent".
+   */
+  val lineTrimColor: Long? = null,
+  /**
+   * The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+   * Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+   */
+  val lineTrimFadeRange: List<Double?>? = null,
+  /**
+   * The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+   * Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+   */
+  val lineTrimOffset: List<Double?>? = null,
   /**
    * Stroke thickness.
    * Default value: 1. Minimum value: 0.
@@ -159,36 +221,62 @@ data class PolylineAnnotation(
     fun fromList(__pigeon_list: List<Any?>): PolylineAnnotation {
       val id = __pigeon_list[0] as String
       val geometry = __pigeon_list[1] as LineString
-      val lineJoin = __pigeon_list[2] as LineJoin?
-      val lineSortKey = __pigeon_list[3] as Double?
-      val lineZOffset = __pigeon_list[4] as Double?
-      val lineBlur = __pigeon_list[5] as Double?
-      val lineBorderColor = __pigeon_list[6].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val lineBorderWidth = __pigeon_list[7] as Double?
-      val lineColor = __pigeon_list[8].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val lineGapWidth = __pigeon_list[9] as Double?
-      val lineOffset = __pigeon_list[10] as Double?
-      val lineOpacity = __pigeon_list[11] as Double?
-      val linePattern = __pigeon_list[12] as String?
-      val lineWidth = __pigeon_list[13] as Double?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val lineCap = __pigeon_list[2] as LineCap?
+      val lineJoin = __pigeon_list[3] as LineJoin?
+      val lineMiterLimit = __pigeon_list[4] as Double?
+      val lineRoundLimit = __pigeon_list[5] as Double?
+      val lineSortKey = __pigeon_list[6] as Double?
+      val lineZOffset = __pigeon_list[7] as Double?
+      val lineBlur = __pigeon_list[8] as Double?
+      val lineBorderColor = __pigeon_list[9].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineBorderWidth = __pigeon_list[10] as Double?
+      val lineColor = __pigeon_list[11].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineDasharray = __pigeon_list[12] as List<Double?>?
+      val lineDepthOcclusionFactor = __pigeon_list[13] as Double?
+      val lineEmissiveStrength = __pigeon_list[14] as Double?
+      val lineGapWidth = __pigeon_list[15] as Double?
+      val lineGradient = __pigeon_list[16].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineOcclusionOpacity = __pigeon_list[17] as Double?
+      val lineOffset = __pigeon_list[18] as Double?
+      val lineOpacity = __pigeon_list[19] as Double?
+      val linePattern = __pigeon_list[20] as String?
+      val lineTranslate = __pigeon_list[21] as List<Double?>?
+      val lineTranslateAnchor = __pigeon_list[22] as LineTranslateAnchor?
+      val lineTrimColor = __pigeon_list[23].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineTrimFadeRange = __pigeon_list[24] as List<Double?>?
+      val lineTrimOffset = __pigeon_list[25] as List<Double?>?
+      val lineWidth = __pigeon_list[26] as Double?
+      return PolylineAnnotation(id, geometry, lineCap, lineJoin, lineMiterLimit, lineRoundLimit, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineDasharray, lineDepthOcclusionFactor, lineEmissiveStrength, lineGapWidth, lineGradient, lineOcclusionOpacity, lineOffset, lineOpacity, linePattern, lineTranslate, lineTranslateAnchor, lineTrimColor, lineTrimFadeRange, lineTrimOffset, lineWidth)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       id,
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     )
   }
@@ -199,10 +287,25 @@ data class PolylineAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: LineString,
   /**
+   * The display of line endings.
+   * Default value: "butt".
+   */
+  val lineCap: LineCap? = null,
+  /**
    * The display of lines when joining.
    * Default value: "miter".
    */
   val lineJoin: LineJoin? = null,
+  /**
+   * Used to automatically convert miter joins to bevel joins for sharp angles.
+   * Default value: 2.
+   */
+  val lineMiterLimit: Double? = null,
+  /**
+   * Used to automatically convert round joins to miter joins for shallow angles.
+   * Default value: 1.05.
+   */
+  val lineRoundLimit: Double? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
@@ -228,10 +331,32 @@ data class PolylineAnnotationOptions(
    */
   val lineColor: Long? = null,
   /**
+   * Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+   * Minimum value: 0.
+   */
+  val lineDasharray: List<Double?>? = null,
+  /**
+   * Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+   * Default value: 1. Value range: [0, 1]
+   */
+  val lineDepthOcclusionFactor: Double? = null,
+  /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 0. Minimum value: 0.
+   */
+  val lineEmissiveStrength: Double? = null,
+  /**
    * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
    * Default value: 0. Minimum value: 0.
    */
   val lineGapWidth: Double? = null,
+  /** A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`. */
+  val lineGradient: Long? = null,
+  /**
+   * Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val lineOcclusionOpacity: Double? = null,
   /**
    * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
    * Default value: 0.
@@ -245,6 +370,31 @@ data class PolylineAnnotationOptions(
   /** Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val linePattern: String? = null,
   /**
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * Default value: [0,0].
+   */
+  val lineTranslate: List<Double?>? = null,
+  /**
+   * Controls the frame of reference for `line-translate`.
+   * Default value: "map".
+   */
+  val lineTranslateAnchor: LineTranslateAnchor? = null,
+  /**
+   * The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+   * Default value: "transparent".
+   */
+  val lineTrimColor: Long? = null,
+  /**
+   * The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+   * Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+   */
+  val lineTrimFadeRange: List<Double?>? = null,
+  /**
+   * The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+   * Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+   */
+  val lineTrimOffset: List<Double?>? = null,
+  /**
    * Stroke thickness.
    * Default value: 1. Minimum value: 0.
    */
@@ -255,35 +405,61 @@ data class PolylineAnnotationOptions(
     @Suppress("LocalVariableName")
     fun fromList(__pigeon_list: List<Any?>): PolylineAnnotationOptions {
       val geometry = __pigeon_list[0] as LineString
-      val lineJoin = __pigeon_list[1] as LineJoin?
-      val lineSortKey = __pigeon_list[2] as Double?
-      val lineZOffset = __pigeon_list[3] as Double?
-      val lineBlur = __pigeon_list[4] as Double?
-      val lineBorderColor = __pigeon_list[5].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val lineBorderWidth = __pigeon_list[6] as Double?
-      val lineColor = __pigeon_list[7].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val lineGapWidth = __pigeon_list[8] as Double?
-      val lineOffset = __pigeon_list[9] as Double?
-      val lineOpacity = __pigeon_list[10] as Double?
-      val linePattern = __pigeon_list[11] as String?
-      val lineWidth = __pigeon_list[12] as Double?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val lineCap = __pigeon_list[1] as LineCap?
+      val lineJoin = __pigeon_list[2] as LineJoin?
+      val lineMiterLimit = __pigeon_list[3] as Double?
+      val lineRoundLimit = __pigeon_list[4] as Double?
+      val lineSortKey = __pigeon_list[5] as Double?
+      val lineZOffset = __pigeon_list[6] as Double?
+      val lineBlur = __pigeon_list[7] as Double?
+      val lineBorderColor = __pigeon_list[8].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineBorderWidth = __pigeon_list[9] as Double?
+      val lineColor = __pigeon_list[10].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineDasharray = __pigeon_list[11] as List<Double?>?
+      val lineDepthOcclusionFactor = __pigeon_list[12] as Double?
+      val lineEmissiveStrength = __pigeon_list[13] as Double?
+      val lineGapWidth = __pigeon_list[14] as Double?
+      val lineGradient = __pigeon_list[15].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineOcclusionOpacity = __pigeon_list[16] as Double?
+      val lineOffset = __pigeon_list[17] as Double?
+      val lineOpacity = __pigeon_list[18] as Double?
+      val linePattern = __pigeon_list[19] as String?
+      val lineTranslate = __pigeon_list[20] as List<Double?>?
+      val lineTranslateAnchor = __pigeon_list[21] as LineTranslateAnchor?
+      val lineTrimColor = __pigeon_list[22].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val lineTrimFadeRange = __pigeon_list[23] as List<Double?>?
+      val lineTrimOffset = __pigeon_list[24] as List<Double?>?
+      val lineWidth = __pigeon_list[25] as Double?
+      return PolylineAnnotationOptions(geometry, lineCap, lineJoin, lineMiterLimit, lineRoundLimit, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineDasharray, lineDepthOcclusionFactor, lineEmissiveStrength, lineGapWidth, lineGradient, lineOcclusionOpacity, lineOffset, lineOpacity, linePattern, lineTranslate, lineTranslateAnchor, lineTrimColor, lineTrimFadeRange, lineTrimOffset, lineWidth)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     )
   }
@@ -389,24 +565,52 @@ interface _PolylineAnnotationMessenger {
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
   fun setLineCap(managerId: String, lineCap: LineCap, callback: (Result<Unit>) -> Unit)
   fun getLineCap(managerId: String, callback: (Result<LineCap?>) -> Unit)
+  fun setLineJoin(managerId: String, lineJoin: LineJoin, callback: (Result<Unit>) -> Unit)
+  fun getLineJoin(managerId: String, callback: (Result<LineJoin?>) -> Unit)
   fun setLineMiterLimit(managerId: String, lineMiterLimit: Double, callback: (Result<Unit>) -> Unit)
   fun getLineMiterLimit(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineRoundLimit(managerId: String, lineRoundLimit: Double, callback: (Result<Unit>) -> Unit)
   fun getLineRoundLimit(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineSortKey(managerId: String, lineSortKey: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineZOffset(managerId: String, lineZOffset: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineBlur(managerId: String, lineBlur: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineBlur(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineBorderColor(managerId: String, lineBorderColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getLineBorderColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setLineBorderWidth(managerId: String, lineBorderWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineBorderWidth(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineColor(managerId: String, lineColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getLineColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setLineDasharray(managerId: String, lineDasharray: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getLineDasharray(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setLineDepthOcclusionFactor(managerId: String, lineDepthOcclusionFactor: Double, callback: (Result<Unit>) -> Unit)
   fun getLineDepthOcclusionFactor(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
   fun getLineEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineGapWidth(managerId: String, lineGapWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineGapWidth(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineOcclusionOpacity(managerId: String, lineOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
   fun getLineOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineOffset(managerId: String, lineOffset: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineOffset(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLineOpacity(managerId: String, lineOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setLinePattern(managerId: String, linePattern: String, callback: (Result<Unit>) -> Unit)
+  fun getLinePattern(managerId: String, callback: (Result<String?>) -> Unit)
   fun setLineTranslate(managerId: String, lineTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getLineTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getLineTranslateAnchor(managerId: String, callback: (Result<LineTranslateAnchor?>) -> Unit)
+  fun setLineTrimColor(managerId: String, lineTrimColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getLineTrimColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setLineTrimFadeRange(managerId: String, lineTrimFadeRange: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getLineTrimFadeRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setLineTrimOffset(managerId: String, lineTrimOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getLineTrimOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setLineWidth(managerId: String, lineWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getLineWidth(managerId: String, callback: (Result<Double?>) -> Unit)
 
   companion object {
     /** The codec used by _PolylineAnnotationMessenger. */
@@ -559,6 +763,46 @@ interface _PolylineAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineJoinArg = args[1] as LineJoin
+            api.setLineJoin(managerIdArg, lineJoinArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineJoin$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineJoin(managerIdArg) { result: Result<LineJoin?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineMiterLimit$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -625,6 +869,246 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineRoundLimit(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineSortKeyArg = args[1] as Double
+            api.setLineSortKey(managerIdArg, lineSortKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineSortKey(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineZOffsetArg = args[1] as Double
+            api.setLineZOffset(managerIdArg, lineZOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineZOffset(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineBlurArg = args[1] as Double
+            api.setLineBlur(managerIdArg, lineBlurArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineBlur(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineBorderColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setLineBorderColor(managerIdArg, lineBorderColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineBorderColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineBorderWidthArg = args[1] as Double
+            api.setLineBorderWidth(managerIdArg, lineBorderWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineBorderWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setLineColor(managerIdArg, lineColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineColor(managerIdArg) { result: Result<Long?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -759,6 +1243,46 @@ interface _PolylineAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineGapWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineGapWidthArg = args[1] as Double
+            api.setLineGapWidth(managerIdArg, lineGapWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineGapWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineGapWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -785,6 +1309,126 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineOffsetArg = args[1] as Double
+            api.setLineOffset(managerIdArg, lineOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineOffset(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineOpacityArg = args[1] as Double
+            api.setLineOpacity(managerIdArg, lineOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLinePattern$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val linePatternArg = args[1] as String
+            api.setLinePattern(managerIdArg, linePatternArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLinePattern$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLinePattern(managerIdArg) { result: Result<String?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -879,6 +1523,86 @@ interface _PolylineAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineTrimColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setLineTrimColor(managerIdArg, lineTrimColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineTrimColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineTrimFadeRangeArg = args[1] as List<Double?>
+            api.setLineTrimFadeRange(managerIdArg, lineTrimFadeRangeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineTrimFadeRange(managerIdArg) { result: Result<List<Double?>?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -905,6 +1629,46 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineTrimOffset(managerIdArg) { result: Result<List<Double?>?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val lineWidthArg = args[1] as Double
+            api.setLineWidth(managerIdArg, lineWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getLineWidth(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

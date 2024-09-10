@@ -19,10 +19,14 @@ class PolygonAnnotation {
     required this.id,
     required this.geometry,
     this.fillSortKey,
+    this.fillAntialias,
     this.fillColor,
+    this.fillEmissiveStrength,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillTranslate,
+    this.fillTranslateAnchor,
   });
 
   /// The id for annotation
@@ -34,9 +38,17 @@ class PolygonAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
 
+  /// Whether or not the fill should be antialiased.
+  /// Default value: true.
+  bool? fillAntialias;
+
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   int? fillColor;
+
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
@@ -48,15 +60,27 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  List<double?>? fillTranslate;
+
+  /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
+  FillTranslateAnchor? fillTranslateAnchor;
+
   Object encode() {
     return <Object?>[
       id,
       geometry,
       fillSortKey,
+      fillAntialias,
       fillColor,
+      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTranslate,
+      fillTranslateAnchor,
     ];
   }
 
@@ -66,10 +90,14 @@ class PolygonAnnotation {
       id: result[0]! as String,
       geometry: result[1]! as Polygon,
       fillSortKey: result[2] as double?,
-      fillColor: result[3] as int?,
-      fillOpacity: result[4] as double?,
-      fillOutlineColor: result[5] as int?,
-      fillPattern: result[6] as String?,
+      fillAntialias: result[3] as bool?,
+      fillColor: result[4] as int?,
+      fillEmissiveStrength: result[5] as double?,
+      fillOpacity: result[6] as double?,
+      fillOutlineColor: result[7] as int?,
+      fillPattern: result[8] as String?,
+      fillTranslate: (result[9] as List<Object?>?)?.cast<double?>(),
+      fillTranslateAnchor: result[10] as FillTranslateAnchor?,
     );
   }
 }
@@ -78,10 +106,14 @@ class PolygonAnnotationOptions {
   PolygonAnnotationOptions({
     required this.geometry,
     this.fillSortKey,
+    this.fillAntialias,
     this.fillColor,
+    this.fillEmissiveStrength,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillTranslate,
+    this.fillTranslateAnchor,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -90,9 +122,17 @@ class PolygonAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
 
+  /// Whether or not the fill should be antialiased.
+  /// Default value: true.
+  bool? fillAntialias;
+
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   int? fillColor;
+
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
@@ -104,14 +144,26 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  List<double?>? fillTranslate;
+
+  /// Controls the frame of reference for `fill-translate`.
+  /// Default value: "map".
+  FillTranslateAnchor? fillTranslateAnchor;
+
   Object encode() {
     return <Object?>[
       geometry,
       fillSortKey,
+      fillAntialias,
       fillColor,
+      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTranslate,
+      fillTranslateAnchor,
     ];
   }
 
@@ -120,10 +172,14 @@ class PolygonAnnotationOptions {
     return PolygonAnnotationOptions(
       geometry: result[0]! as Polygon,
       fillSortKey: result[1] as double?,
-      fillColor: result[2] as int?,
-      fillOpacity: result[3] as double?,
-      fillOutlineColor: result[4] as int?,
-      fillPattern: result[5] as String?,
+      fillAntialias: result[2] as bool?,
+      fillColor: result[3] as int?,
+      fillEmissiveStrength: result[4] as double?,
+      fillOpacity: result[5] as double?,
+      fillOutlineColor: result[6] as int?,
+      fillPattern: result[7] as String?,
+      fillTranslate: (result[8] as List<Object?>?)?.cast<double?>(),
+      fillTranslateAnchor: result[9] as FillTranslateAnchor?,
     );
   }
 }
@@ -361,6 +417,54 @@ class _PolygonAnnotationMessenger {
     }
   }
 
+  Future<void> setFillSortKey(String managerId, double fillSortKey) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, fillSortKey]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getFillSortKey(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setFillAntialias(String managerId, bool fillAntialias) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias$__pigeon_messageChannelSuffix';
@@ -406,6 +510,54 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as bool?);
+    }
+  }
+
+  Future<void> setFillColor(String managerId, int fillColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, fillColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getFillColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
     }
   }
 
@@ -455,6 +607,151 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setFillOpacity(String managerId, double fillOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, fillOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getFillOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setFillOutlineColor(
+      String managerId, int fillOutlineColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOutlineColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, fillOutlineColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getFillOutlineColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOutlineColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setFillPattern(String managerId, String fillPattern) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillPattern$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, fillPattern]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<String?> getFillPattern(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillPattern$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
     }
   }
 

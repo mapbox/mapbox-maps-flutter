@@ -115,6 +115,26 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     // MARK: Properties
 
+    func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillSortKey))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillSortKey = fillSortKey
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getFillAntialias(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -135,6 +155,26 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         }
     }
 
+    func getFillColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillColor))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillColor(managerId: String, fillColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillColor = fillColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getFillEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -148,6 +188,66 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.fillEmissiveStrength = fillEmissiveStrength
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillOpacity(managerId: String, fillOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillOpacity = fillOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillOutlineColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillOutlineColor))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillOutlineColor(managerId: String, fillOutlineColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillOutlineColor = fillOutlineColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getFillPattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillPattern))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillPattern(managerId: String, fillPattern: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillPattern = fillPattern
 
             completion(.success(()))
         } catch {
@@ -203,8 +303,14 @@ extension PolygonAnnotationOptions {
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
+        if let fillAntialias {
+            annotation.fillAntialias = fillAntialias
+        }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
+        }
+        if let fillEmissiveStrength {
+            annotation.fillEmissiveStrength = fillEmissiveStrength
         }
         if let fillOpacity {
             annotation.fillOpacity = fillOpacity
@@ -214,6 +320,12 @@ extension PolygonAnnotationOptions {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
+        }
+        if let fillTranslate {
+            annotation.fillTranslate = fillTranslate.compactMap { $0 }
+        }
+        if let fillTranslateAnchor {
+            annotation.fillTranslateAnchor = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
         }
         return annotation
     }
@@ -226,8 +338,14 @@ extension PolygonAnnotation {
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
+        if let fillAntialias {
+            annotation.fillAntialias = fillAntialias
+        }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
+        }
+        if let fillEmissiveStrength {
+            annotation.fillEmissiveStrength = fillEmissiveStrength
         }
         if let fillOpacity {
             annotation.fillOpacity = fillOpacity
@@ -237,6 +355,12 @@ extension PolygonAnnotation {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
+        }
+        if let fillTranslate {
+            annotation.fillTranslate = fillTranslate.compactMap { $0 }
+        }
+        if let fillTranslateAnchor {
+            annotation.fillTranslateAnchor = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
         }
         return annotation
     }
@@ -248,10 +372,14 @@ extension MapboxMaps.PolygonAnnotation {
             id: id,
             geometry: polygon,
             fillSortKey: fillSortKey,
+            fillAntialias: fillAntialias,
             fillColor: fillColor?.intValue,
+            fillEmissiveStrength: fillEmissiveStrength,
             fillOpacity: fillOpacity,
             fillOutlineColor: fillOutlineColor?.intValue,
-            fillPattern: fillPattern
+            fillPattern: fillPattern,
+            fillTranslate: fillTranslate,
+            fillTranslateAnchor: fillTranslateAnchor?.toFLTFillTranslateAnchor()
         )
     }
 }

@@ -108,9 +108,18 @@ struct PolylineAnnotation {
   var id: String
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
+  /// The display of line endings.
+  /// Default value: "butt".
+  var lineCap: LineCap?
   /// The display of lines when joining.
   /// Default value: "miter".
   var lineJoin: LineJoin?
+  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
+  var lineMiterLimit: Double?
+  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
+  var lineRoundLimit: Double?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
@@ -127,9 +136,23 @@ struct PolylineAnnotation {
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
   var lineColor: Int64?
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
+  var lineDasharray: [Double?]?
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
+  var lineDepthOcclusionFactor: Double?
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  var lineEmissiveStrength: Double?
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   var lineGapWidth: Double?
+  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  var lineGradient: Int64?
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  var lineOcclusionOpacity: Double?
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
   var lineOffset: Double?
@@ -138,6 +161,21 @@ struct PolylineAnnotation {
   var lineOpacity: Double?
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var linePattern: String?
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  var lineTranslate: [Double?]?
+  /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
+  var lineTranslateAnchor: LineTranslateAnchor?
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  var lineTrimColor: Int64?
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  var lineTrimFadeRange: [Double?]?
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  var lineTrimOffset: [Double?]?
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
   var lineWidth: Double?
@@ -146,33 +184,59 @@ struct PolylineAnnotation {
   static func fromList(_ __pigeon_list: [Any?]) -> PolylineAnnotation? {
     let id = __pigeon_list[0] as! String
     let geometry = __pigeon_list[1] as! LineString
-    let lineJoin: LineJoin? = nilOrValue(__pigeon_list[2])
-    let lineSortKey: Double? = nilOrValue(__pigeon_list[3])
-    let lineZOffset: Double? = nilOrValue(__pigeon_list[4])
-    let lineBlur: Double? = nilOrValue(__pigeon_list[5])
-    let lineBorderColor: Int64? = isNullish(__pigeon_list[6]) ? nil : (__pigeon_list[6] is Int64? ? __pigeon_list[6] as! Int64? : Int64(__pigeon_list[6] as! Int32))
-    let lineBorderWidth: Double? = nilOrValue(__pigeon_list[7])
-    let lineColor: Int64? = isNullish(__pigeon_list[8]) ? nil : (__pigeon_list[8] is Int64? ? __pigeon_list[8] as! Int64? : Int64(__pigeon_list[8] as! Int32))
-    let lineGapWidth: Double? = nilOrValue(__pigeon_list[9])
-    let lineOffset: Double? = nilOrValue(__pigeon_list[10])
-    let lineOpacity: Double? = nilOrValue(__pigeon_list[11])
-    let linePattern: String? = nilOrValue(__pigeon_list[12])
-    let lineWidth: Double? = nilOrValue(__pigeon_list[13])
+    let lineCap: LineCap? = nilOrValue(__pigeon_list[2])
+    let lineJoin: LineJoin? = nilOrValue(__pigeon_list[3])
+    let lineMiterLimit: Double? = nilOrValue(__pigeon_list[4])
+    let lineRoundLimit: Double? = nilOrValue(__pigeon_list[5])
+    let lineSortKey: Double? = nilOrValue(__pigeon_list[6])
+    let lineZOffset: Double? = nilOrValue(__pigeon_list[7])
+    let lineBlur: Double? = nilOrValue(__pigeon_list[8])
+    let lineBorderColor: Int64? = isNullish(__pigeon_list[9]) ? nil : (__pigeon_list[9] is Int64? ? __pigeon_list[9] as! Int64? : Int64(__pigeon_list[9] as! Int32))
+    let lineBorderWidth: Double? = nilOrValue(__pigeon_list[10])
+    let lineColor: Int64? = isNullish(__pigeon_list[11]) ? nil : (__pigeon_list[11] is Int64? ? __pigeon_list[11] as! Int64? : Int64(__pigeon_list[11] as! Int32))
+    let lineDasharray: [Double?]? = nilOrValue(__pigeon_list[12])
+    let lineDepthOcclusionFactor: Double? = nilOrValue(__pigeon_list[13])
+    let lineEmissiveStrength: Double? = nilOrValue(__pigeon_list[14])
+    let lineGapWidth: Double? = nilOrValue(__pigeon_list[15])
+    let lineGradient: Int64? = isNullish(__pigeon_list[16]) ? nil : (__pigeon_list[16] is Int64? ? __pigeon_list[16] as! Int64? : Int64(__pigeon_list[16] as! Int32))
+    let lineOcclusionOpacity: Double? = nilOrValue(__pigeon_list[17])
+    let lineOffset: Double? = nilOrValue(__pigeon_list[18])
+    let lineOpacity: Double? = nilOrValue(__pigeon_list[19])
+    let linePattern: String? = nilOrValue(__pigeon_list[20])
+    let lineTranslate: [Double?]? = nilOrValue(__pigeon_list[21])
+    let lineTranslateAnchor: LineTranslateAnchor? = nilOrValue(__pigeon_list[22])
+    let lineTrimColor: Int64? = isNullish(__pigeon_list[23]) ? nil : (__pigeon_list[23] is Int64? ? __pigeon_list[23] as! Int64? : Int64(__pigeon_list[23] as! Int32))
+    let lineTrimFadeRange: [Double?]? = nilOrValue(__pigeon_list[24])
+    let lineTrimOffset: [Double?]? = nilOrValue(__pigeon_list[25])
+    let lineWidth: Double? = nilOrValue(__pigeon_list[26])
 
     return PolylineAnnotation(
       id: id,
       geometry: geometry,
+      lineCap: lineCap,
       lineJoin: lineJoin,
+      lineMiterLimit: lineMiterLimit,
+      lineRoundLimit: lineRoundLimit,
       lineSortKey: lineSortKey,
       lineZOffset: lineZOffset,
       lineBlur: lineBlur,
       lineBorderColor: lineBorderColor,
       lineBorderWidth: lineBorderWidth,
       lineColor: lineColor,
+      lineDasharray: lineDasharray,
+      lineDepthOcclusionFactor: lineDepthOcclusionFactor,
+      lineEmissiveStrength: lineEmissiveStrength,
       lineGapWidth: lineGapWidth,
+      lineGradient: lineGradient,
+      lineOcclusionOpacity: lineOcclusionOpacity,
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
+      lineTranslate: lineTranslate,
+      lineTranslateAnchor: lineTranslateAnchor,
+      lineTrimColor: lineTrimColor,
+      lineTrimFadeRange: lineTrimFadeRange,
+      lineTrimOffset: lineTrimOffset,
       lineWidth: lineWidth
     )
   }
@@ -180,17 +244,30 @@ struct PolylineAnnotation {
     return [
       id,
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     ]
   }
@@ -200,9 +277,18 @@ struct PolylineAnnotation {
 struct PolylineAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: LineString
+  /// The display of line endings.
+  /// Default value: "butt".
+  var lineCap: LineCap?
   /// The display of lines when joining.
   /// Default value: "miter".
   var lineJoin: LineJoin?
+  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
+  var lineMiterLimit: Double?
+  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
+  var lineRoundLimit: Double?
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
@@ -219,9 +305,23 @@ struct PolylineAnnotationOptions {
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
   var lineColor: Int64?
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
+  var lineDasharray: [Double?]?
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
+  var lineDepthOcclusionFactor: Double?
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  var lineEmissiveStrength: Double?
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   var lineGapWidth: Double?
+  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  var lineGradient: Int64?
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  var lineOcclusionOpacity: Double?
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
   var lineOffset: Double?
@@ -230,6 +330,21 @@ struct PolylineAnnotationOptions {
   var lineOpacity: Double?
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var linePattern: String?
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  var lineTranslate: [Double?]?
+  /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
+  var lineTranslateAnchor: LineTranslateAnchor?
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  var lineTrimColor: Int64?
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  var lineTrimFadeRange: [Double?]?
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  var lineTrimOffset: [Double?]?
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
   var lineWidth: Double?
@@ -237,49 +352,88 @@ struct PolylineAnnotationOptions {
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PolylineAnnotationOptions? {
     let geometry = __pigeon_list[0] as! LineString
-    let lineJoin: LineJoin? = nilOrValue(__pigeon_list[1])
-    let lineSortKey: Double? = nilOrValue(__pigeon_list[2])
-    let lineZOffset: Double? = nilOrValue(__pigeon_list[3])
-    let lineBlur: Double? = nilOrValue(__pigeon_list[4])
-    let lineBorderColor: Int64? = isNullish(__pigeon_list[5]) ? nil : (__pigeon_list[5] is Int64? ? __pigeon_list[5] as! Int64? : Int64(__pigeon_list[5] as! Int32))
-    let lineBorderWidth: Double? = nilOrValue(__pigeon_list[6])
-    let lineColor: Int64? = isNullish(__pigeon_list[7]) ? nil : (__pigeon_list[7] is Int64? ? __pigeon_list[7] as! Int64? : Int64(__pigeon_list[7] as! Int32))
-    let lineGapWidth: Double? = nilOrValue(__pigeon_list[8])
-    let lineOffset: Double? = nilOrValue(__pigeon_list[9])
-    let lineOpacity: Double? = nilOrValue(__pigeon_list[10])
-    let linePattern: String? = nilOrValue(__pigeon_list[11])
-    let lineWidth: Double? = nilOrValue(__pigeon_list[12])
+    let lineCap: LineCap? = nilOrValue(__pigeon_list[1])
+    let lineJoin: LineJoin? = nilOrValue(__pigeon_list[2])
+    let lineMiterLimit: Double? = nilOrValue(__pigeon_list[3])
+    let lineRoundLimit: Double? = nilOrValue(__pigeon_list[4])
+    let lineSortKey: Double? = nilOrValue(__pigeon_list[5])
+    let lineZOffset: Double? = nilOrValue(__pigeon_list[6])
+    let lineBlur: Double? = nilOrValue(__pigeon_list[7])
+    let lineBorderColor: Int64? = isNullish(__pigeon_list[8]) ? nil : (__pigeon_list[8] is Int64? ? __pigeon_list[8] as! Int64? : Int64(__pigeon_list[8] as! Int32))
+    let lineBorderWidth: Double? = nilOrValue(__pigeon_list[9])
+    let lineColor: Int64? = isNullish(__pigeon_list[10]) ? nil : (__pigeon_list[10] is Int64? ? __pigeon_list[10] as! Int64? : Int64(__pigeon_list[10] as! Int32))
+    let lineDasharray: [Double?]? = nilOrValue(__pigeon_list[11])
+    let lineDepthOcclusionFactor: Double? = nilOrValue(__pigeon_list[12])
+    let lineEmissiveStrength: Double? = nilOrValue(__pigeon_list[13])
+    let lineGapWidth: Double? = nilOrValue(__pigeon_list[14])
+    let lineGradient: Int64? = isNullish(__pigeon_list[15]) ? nil : (__pigeon_list[15] is Int64? ? __pigeon_list[15] as! Int64? : Int64(__pigeon_list[15] as! Int32))
+    let lineOcclusionOpacity: Double? = nilOrValue(__pigeon_list[16])
+    let lineOffset: Double? = nilOrValue(__pigeon_list[17])
+    let lineOpacity: Double? = nilOrValue(__pigeon_list[18])
+    let linePattern: String? = nilOrValue(__pigeon_list[19])
+    let lineTranslate: [Double?]? = nilOrValue(__pigeon_list[20])
+    let lineTranslateAnchor: LineTranslateAnchor? = nilOrValue(__pigeon_list[21])
+    let lineTrimColor: Int64? = isNullish(__pigeon_list[22]) ? nil : (__pigeon_list[22] is Int64? ? __pigeon_list[22] as! Int64? : Int64(__pigeon_list[22] as! Int32))
+    let lineTrimFadeRange: [Double?]? = nilOrValue(__pigeon_list[23])
+    let lineTrimOffset: [Double?]? = nilOrValue(__pigeon_list[24])
+    let lineWidth: Double? = nilOrValue(__pigeon_list[25])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
+      lineCap: lineCap,
       lineJoin: lineJoin,
+      lineMiterLimit: lineMiterLimit,
+      lineRoundLimit: lineRoundLimit,
       lineSortKey: lineSortKey,
       lineZOffset: lineZOffset,
       lineBlur: lineBlur,
       lineBorderColor: lineBorderColor,
       lineBorderWidth: lineBorderWidth,
       lineColor: lineColor,
+      lineDasharray: lineDasharray,
+      lineDepthOcclusionFactor: lineDepthOcclusionFactor,
+      lineEmissiveStrength: lineEmissiveStrength,
       lineGapWidth: lineGapWidth,
+      lineGradient: lineGradient,
+      lineOcclusionOpacity: lineOcclusionOpacity,
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
+      lineTranslate: lineTranslate,
+      lineTranslateAnchor: lineTranslateAnchor,
+      lineTrimColor: lineTrimColor,
+      lineTrimFadeRange: lineTrimFadeRange,
+      lineTrimOffset: lineTrimOffset,
       lineWidth: lineWidth
     )
   }
   func toList() -> [Any?] {
     return [
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     ]
   }
@@ -402,24 +556,52 @@ protocol _PolylineAnnotationMessenger {
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
   func setLineCap(managerId: String, lineCap: LineCap, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineCap(managerId: String, completion: @escaping (Result<LineCap?, Error>) -> Void)
+  func setLineJoin(managerId: String, lineJoin: LineJoin, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineJoin(managerId: String, completion: @escaping (Result<LineJoin?, Error>) -> Void)
   func setLineMiterLimit(managerId: String, lineMiterLimit: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineMiterLimit(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineRoundLimit(managerId: String, lineRoundLimit: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineRoundLimit(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineSortKey(managerId: String, lineSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineZOffset(managerId: String, lineZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineBlur(managerId: String, lineBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineBorderColor(managerId: String, lineBorderColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineBorderColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setLineBorderWidth(managerId: String, lineBorderWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineBorderWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineColor(managerId: String, lineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setLineDasharray(managerId: String, lineDasharray: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getLineDasharray(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setLineDepthOcclusionFactor(managerId: String, lineDepthOcclusionFactor: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineDepthOcclusionFactor(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineGapWidth(managerId: String, lineGapWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineGapWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineOcclusionOpacity(managerId: String, lineOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineOffset(managerId: String, lineOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLineOpacity(managerId: String, lineOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setLinePattern(managerId: String, linePattern: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLinePattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
   func setLineTranslate(managerId: String, lineTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTranslateAnchor(managerId: String, completion: @escaping (Result<LineTranslateAnchor?, Error>) -> Void)
+  func setLineTrimColor(managerId: String, lineTrimColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTrimColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setLineTrimOffset(managerId: String, lineTrimOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setLineWidth(managerId: String, lineWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -552,6 +734,41 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineCapChannel.setMessageHandler(nil)
     }
+    let setLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineJoinChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineJoinArg = args[1] as! LineJoin
+        api.setLineJoin(managerId: managerIdArg, lineJoin: lineJoinArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineJoinChannel.setMessageHandler(nil)
+    }
+    let getLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineJoinChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineJoin(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineJoinChannel.setMessageHandler(nil)
+    }
     let setLineMiterLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineMiterLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineMiterLimitChannel.setMessageHandler { message, reply in
@@ -621,6 +838,216 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineRoundLimitChannel.setMessageHandler(nil)
+    }
+    let setLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineSortKeyArg = args[1] as! Double
+        api.setLineSortKey(managerId: managerIdArg, lineSortKey: lineSortKeyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineSortKeyChannel.setMessageHandler(nil)
+    }
+    let getLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineSortKey(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineSortKeyChannel.setMessageHandler(nil)
+    }
+    let setLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineZOffsetArg = args[1] as! Double
+        api.setLineZOffset(managerId: managerIdArg, lineZOffset: lineZOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineZOffsetChannel.setMessageHandler(nil)
+    }
+    let getLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineZOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineZOffsetChannel.setMessageHandler(nil)
+    }
+    let setLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineBlurArg = args[1] as! Double
+        api.setLineBlur(managerId: managerIdArg, lineBlur: lineBlurArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineBlurChannel.setMessageHandler(nil)
+    }
+    let getLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineBlur(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineBlurChannel.setMessageHandler(nil)
+    }
+    let setLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineBorderColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineBorderColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setLineBorderColor(managerId: managerIdArg, lineBorderColor: lineBorderColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineBorderColorChannel.setMessageHandler(nil)
+    }
+    let getLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineBorderColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineBorderColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineBorderColorChannel.setMessageHandler(nil)
+    }
+    let setLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineBorderWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineBorderWidthArg = args[1] as! Double
+        api.setLineBorderWidth(managerId: managerIdArg, lineBorderWidth: lineBorderWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineBorderWidthChannel.setMessageHandler(nil)
+    }
+    let getLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineBorderWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineBorderWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineBorderWidthChannel.setMessageHandler(nil)
+    }
+    let setLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setLineColor(managerId: managerIdArg, lineColor: lineColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineColorChannel.setMessageHandler(nil)
+    }
+    let getLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineColorChannel.setMessageHandler(nil)
     }
     let setLineDasharrayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDasharray\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -727,6 +1154,41 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineEmissiveStrengthChannel.setMessageHandler(nil)
     }
+    let setLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineGapWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineGapWidthArg = args[1] as! Double
+        api.setLineGapWidth(managerId: managerIdArg, lineGapWidth: lineGapWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineGapWidthChannel.setMessageHandler(nil)
+    }
+    let getLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineGapWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineGapWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineGapWidthChannel.setMessageHandler(nil)
+    }
     let setLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineOcclusionOpacityChannel.setMessageHandler { message, reply in
@@ -761,6 +1223,111 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let setLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineOffsetArg = args[1] as! Double
+        api.setLineOffset(managerId: managerIdArg, lineOffset: lineOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineOffsetChannel.setMessageHandler(nil)
+    }
+    let getLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineOffsetChannel.setMessageHandler(nil)
+    }
+    let setLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineOpacityArg = args[1] as! Double
+        api.setLineOpacity(managerId: managerIdArg, lineOpacity: lineOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineOpacityChannel.setMessageHandler(nil)
+    }
+    let getLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineOpacityChannel.setMessageHandler(nil)
+    }
+    let setLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLinePatternChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let linePatternArg = args[1] as! String
+        api.setLinePattern(managerId: managerIdArg, linePattern: linePatternArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLinePatternChannel.setMessageHandler(nil)
+    }
+    let getLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLinePatternChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLinePattern(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLinePatternChannel.setMessageHandler(nil)
     }
     let setLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -832,6 +1399,76 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTranslateAnchorChannel.setMessageHandler(nil)
     }
+    let setLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineTrimColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineTrimColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setLineTrimColor(managerId: managerIdArg, lineTrimColor: lineTrimColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineTrimColorChannel.setMessageHandler(nil)
+    }
+    let getLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineTrimColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineTrimColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineTrimColorChannel.setMessageHandler(nil)
+    }
+    let setLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineTrimFadeRangeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineTrimFadeRangeArg = args[1] as! [Double?]
+        api.setLineTrimFadeRange(managerId: managerIdArg, lineTrimFadeRange: lineTrimFadeRangeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineTrimFadeRangeChannel.setMessageHandler(nil)
+    }
+    let getLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineTrimFadeRangeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineTrimFadeRange(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineTrimFadeRangeChannel.setMessageHandler(nil)
+    }
     let setLineTrimOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTrimOffsetChannel.setMessageHandler { message, reply in
@@ -866,6 +1503,41 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineTrimOffsetChannel.setMessageHandler(nil)
+    }
+    let setLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLineWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let lineWidthArg = args[1] as! Double
+        api.setLineWidth(managerId: managerIdArg, lineWidth: lineWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setLineWidthChannel.setMessageHandler(nil)
+    }
+    let getLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getLineWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getLineWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getLineWidthChannel.setMessageHandler(nil)
     }
   }
 }

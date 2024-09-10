@@ -1,4 +1,5 @@
 // This file is generated.
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -32,9 +33,25 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
 
+    await manager.setCircleSortKey(1.0);
+    var circleSortKey = await manager.getCircleSortKey();
+    expect(1.0, circleSortKey);
+
+    await manager.setCircleBlur(1.0);
+    var circleBlur = await manager.getCircleBlur();
+    expect(1.0, circleBlur);
+
+    await manager.setCircleColor(Colors.red.value);
+    var circleColor = await manager.getCircleColor();
+    expect(Colors.red.value, circleColor);
+
     await manager.setCircleEmissiveStrength(1.0);
     var circleEmissiveStrength = await manager.getCircleEmissiveStrength();
     expect(1.0, circleEmissiveStrength);
+
+    await manager.setCircleOpacity(1.0);
+    var circleOpacity = await manager.getCircleOpacity();
+    expect(1.0, circleOpacity);
 
     await manager.setCirclePitchAlignment(CirclePitchAlignment.MAP);
     var circlePitchAlignment = await manager.getCirclePitchAlignment();
@@ -43,6 +60,22 @@ void main() {
     await manager.setCirclePitchScale(CirclePitchScale.MAP);
     var circlePitchScale = await manager.getCirclePitchScale();
     expect(CirclePitchScale.MAP, circlePitchScale);
+
+    await manager.setCircleRadius(1.0);
+    var circleRadius = await manager.getCircleRadius();
+    expect(1.0, circleRadius);
+
+    await manager.setCircleStrokeColor(Colors.red.value);
+    var circleStrokeColor = await manager.getCircleStrokeColor();
+    expect(Colors.red.value, circleStrokeColor);
+
+    await manager.setCircleStrokeOpacity(1.0);
+    var circleStrokeOpacity = await manager.getCircleStrokeOpacity();
+    expect(1.0, circleStrokeOpacity);
+
+    await manager.setCircleStrokeWidth(1.0);
+    var circleStrokeWidth = await manager.getCircleStrokeWidth();
+    expect(1.0, circleStrokeWidth);
 
     await manager.setCircleTranslate([0.0, 1.0]);
     var circleTranslate = await manager.getCircleTranslate();

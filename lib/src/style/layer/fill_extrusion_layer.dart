@@ -45,6 +45,8 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionFloodLightWallRadiusExpression,
     double? this.fillExtrusionHeight,
     List<Object>? this.fillExtrusionHeightExpression,
+    double? this.fillExtrusionLineWidth,
+    List<Object>? this.fillExtrusionLineWidthExpression,
     double? this.fillExtrusionOpacity,
     List<Object>? this.fillExtrusionOpacityExpression,
     String? this.fillExtrusionPattern,
@@ -179,12 +181,12 @@ class FillExtrusionLayer extends Layer {
   /// Default value: 0.69. Value range: [0, 1]
   List<Object>? fillExtrusionFloodLightGroundAttenuationExpression;
 
-  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters.
+  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
   /// Default value: 0.
   @experimental
   double? fillExtrusionFloodLightGroundRadius;
 
-  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters.
+  /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
   /// Default value: 0.
   List<Object>? fillExtrusionFloodLightGroundRadiusExpression;
 
@@ -213,6 +215,15 @@ class FillExtrusionLayer extends Layer {
   /// The height with which to extrude this layer.
   /// Default value: 0. Minimum value: 0.
   List<Object>? fillExtrusionHeightExpression;
+
+  /// If a non-zero value is provided, it sets the fill-extrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fill-extrusion properties might not be supported with non-zero line width.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
+  double? fillExtrusionLineWidth;
+
+  /// If a non-zero value is provided, it sets the fill-extrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fill-extrusion properties might not be supported with non-zero line width.
+  /// Default value: 0. Minimum value: 0.
+  List<Object>? fillExtrusionLineWidthExpression;
 
   /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
   /// Default value: 1. Value range: [0, 1]
@@ -416,6 +427,13 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-height"] = fillExtrusionHeight;
     }
 
+    if (fillExtrusionLineWidthExpression != null) {
+      paint["fill-extrusion-line-width"] = fillExtrusionLineWidthExpression;
+    }
+    if (fillExtrusionLineWidth != null) {
+      paint["fill-extrusion-line-width"] = fillExtrusionLineWidth;
+    }
+
     if (fillExtrusionOpacityExpression != null) {
       paint["fill-extrusion-opacity"] = fillExtrusionOpacityExpression;
     }
@@ -582,6 +600,10 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionHeight: _optionalCast(map["paint"]["fill-extrusion-height"]),
       fillExtrusionHeightExpression:
           _optionalCastList(map["paint"]["fill-extrusion-height"]),
+      fillExtrusionLineWidth:
+          _optionalCast(map["paint"]["fill-extrusion-line-width"]),
+      fillExtrusionLineWidthExpression:
+          _optionalCastList(map["paint"]["fill-extrusion-line-width"]),
       fillExtrusionOpacity:
           _optionalCast(map["paint"]["fill-extrusion-opacity"]),
       fillExtrusionOpacityExpression:

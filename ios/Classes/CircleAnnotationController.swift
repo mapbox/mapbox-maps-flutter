@@ -115,6 +115,66 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
 
     // MARK: Properties
 
+    func getCircleSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleSortKey))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleSortKey(managerId: String, circleSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleSortKey = circleSortKey
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleBlur))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleBlur(managerId: String, circleBlur: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleBlur = circleBlur
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleColor))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleColor(managerId: String, circleColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleColor = circleColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getCircleEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -128,6 +188,26 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.circleEmissiveStrength = circleEmissiveStrength
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleOpacity(managerId: String, circleOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleOpacity = circleOpacity
 
             completion(.success(()))
         } catch {
@@ -168,6 +248,86 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleRadius(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleRadius))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleRadius(managerId: String, circleRadius: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleRadius = circleRadius
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeColor))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeColor(managerId: String, circleStrokeColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeColor = circleStrokeColor
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeOpacity(managerId: String, circleStrokeOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeOpacity = circleStrokeOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeWidth))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeWidth(managerId: String, circleStrokeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeWidth = circleStrokeWidth
 
             completion(.success(()))
         } catch {
@@ -229,8 +389,17 @@ extension CircleAnnotationOptions {
         if let circleColor {
             annotation.circleColor = StyleColor(rgb: circleColor)
         }
+        if let circleEmissiveStrength {
+            annotation.circleEmissiveStrength = circleEmissiveStrength
+        }
         if let circleOpacity {
             annotation.circleOpacity = circleOpacity
+        }
+        if let circlePitchAlignment {
+            annotation.circlePitchAlignment = MapboxMaps.CirclePitchAlignment(circlePitchAlignment)
+        }
+        if let circlePitchScale {
+            annotation.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
         }
         if let circleRadius {
             annotation.circleRadius = circleRadius
@@ -243,6 +412,12 @@ extension CircleAnnotationOptions {
         }
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
+        }
+        if let circleTranslate {
+            annotation.circleTranslate = circleTranslate.compactMap { $0 }
+        }
+        if let circleTranslateAnchor {
+            annotation.circleTranslateAnchor = MapboxMaps.CircleTranslateAnchor(circleTranslateAnchor)
         }
         return annotation
     }
@@ -261,8 +436,17 @@ extension CircleAnnotation {
         if let circleColor {
             annotation.circleColor = StyleColor(rgb: circleColor)
         }
+        if let circleEmissiveStrength {
+            annotation.circleEmissiveStrength = circleEmissiveStrength
+        }
         if let circleOpacity {
             annotation.circleOpacity = circleOpacity
+        }
+        if let circlePitchAlignment {
+            annotation.circlePitchAlignment = MapboxMaps.CirclePitchAlignment(circlePitchAlignment)
+        }
+        if let circlePitchScale {
+            annotation.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
         }
         if let circleRadius {
             annotation.circleRadius = circleRadius
@@ -276,6 +460,12 @@ extension CircleAnnotation {
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
         }
+        if let circleTranslate {
+            annotation.circleTranslate = circleTranslate.compactMap { $0 }
+        }
+        if let circleTranslateAnchor {
+            annotation.circleTranslateAnchor = MapboxMaps.CircleTranslateAnchor(circleTranslateAnchor)
+        }
         return annotation
     }
 }
@@ -288,11 +478,16 @@ extension MapboxMaps.CircleAnnotation {
             circleSortKey: circleSortKey,
             circleBlur: circleBlur,
             circleColor: circleColor?.intValue,
+            circleEmissiveStrength: circleEmissiveStrength,
             circleOpacity: circleOpacity,
+            circlePitchAlignment: circlePitchAlignment?.toFLTCirclePitchAlignment(),
+            circlePitchScale: circlePitchScale?.toFLTCirclePitchScale(),
             circleRadius: circleRadius,
             circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
-            circleStrokeWidth: circleStrokeWidth
+            circleStrokeWidth: circleStrokeWidth,
+            circleTranslate: circleTranslate,
+            circleTranslateAnchor: circleTranslateAnchor?.toFLTCircleTranslateAnchor()
         )
     }
 }

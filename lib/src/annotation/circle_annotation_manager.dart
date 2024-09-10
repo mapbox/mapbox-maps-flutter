@@ -37,6 +37,27 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => messenger.deleteAll(id);
 
+  /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+  Future<void> setCircleSortKey(double circleSortKey) =>
+      messenger.setCircleSortKey(id, circleSortKey);
+
+  /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
+  Future<double?> getCircleSortKey() => messenger.getCircleSortKey(id);
+
+  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect. Default value: 0.
+  Future<void> setCircleBlur(double circleBlur) =>
+      messenger.setCircleBlur(id, circleBlur);
+
+  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect. Default value: 0.
+  Future<double?> getCircleBlur() => messenger.getCircleBlur(id);
+
+  /// The fill color of the circle. Default value: "#000000".
+  Future<void> setCircleColor(int circleColor) =>
+      messenger.setCircleColor(id, circleColor);
+
+  /// The fill color of the circle. Default value: "#000000".
+  Future<int?> getCircleColor() => messenger.getCircleColor(id);
+
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
       messenger.setCircleEmissiveStrength(id, circleEmissiveStrength);
@@ -44,6 +65,13 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
   Future<double?> getCircleEmissiveStrength() =>
       messenger.getCircleEmissiveStrength(id);
+
+  /// The opacity at which the circle will be drawn. Default value: 1. Value range: [0, 1]
+  Future<void> setCircleOpacity(double circleOpacity) =>
+      messenger.setCircleOpacity(id, circleOpacity);
+
+  /// The opacity at which the circle will be drawn. Default value: 1. Value range: [0, 1]
+  Future<double?> getCircleOpacity() => messenger.getCircleOpacity(id);
 
   /// Orientation of circle when map is pitched. Default value: "viewport".
   Future<void> setCirclePitchAlignment(
@@ -61,6 +89,35 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Controls the scaling behavior of the circle when the map is pitched. Default value: "map".
   Future<CirclePitchScale?> getCirclePitchScale() =>
       messenger.getCirclePitchScale(id);
+
+  /// Circle radius. Default value: 5. Minimum value: 0.
+  Future<void> setCircleRadius(double circleRadius) =>
+      messenger.setCircleRadius(id, circleRadius);
+
+  /// Circle radius. Default value: 5. Minimum value: 0.
+  Future<double?> getCircleRadius() => messenger.getCircleRadius(id);
+
+  /// The stroke color of the circle. Default value: "#000000".
+  Future<void> setCircleStrokeColor(int circleStrokeColor) =>
+      messenger.setCircleStrokeColor(id, circleStrokeColor);
+
+  /// The stroke color of the circle. Default value: "#000000".
+  Future<int?> getCircleStrokeColor() => messenger.getCircleStrokeColor(id);
+
+  /// The opacity of the circle's stroke. Default value: 1. Value range: [0, 1]
+  Future<void> setCircleStrokeOpacity(double circleStrokeOpacity) =>
+      messenger.setCircleStrokeOpacity(id, circleStrokeOpacity);
+
+  /// The opacity of the circle's stroke. Default value: 1. Value range: [0, 1]
+  Future<double?> getCircleStrokeOpacity() =>
+      messenger.getCircleStrokeOpacity(id);
+
+  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0.
+  Future<void> setCircleStrokeWidth(double circleStrokeWidth) =>
+      messenger.setCircleStrokeWidth(id, circleStrokeWidth);
+
+  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0.
+  Future<double?> getCircleStrokeWidth() => messenger.getCircleStrokeWidth(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
   Future<void> setCircleTranslate(List<double?> circleTranslate) =>

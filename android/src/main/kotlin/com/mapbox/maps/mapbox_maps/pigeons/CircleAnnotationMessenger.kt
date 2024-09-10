@@ -98,7 +98,7 @@ data class CircleAnnotation(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
   /**
-   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
    * Default value: 0.
    */
   val circleBlur: Double? = null,
@@ -108,10 +108,25 @@ data class CircleAnnotation(
    */
   val circleColor: Long? = null,
   /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 0. Minimum value: 0.
+   */
+  val circleEmissiveStrength: Double? = null,
+  /**
    * The opacity at which the circle will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val circleOpacity: Double? = null,
+  /**
+   * Orientation of circle when map is pitched.
+   * Default value: "viewport".
+   */
+  val circlePitchAlignment: CirclePitchAlignment? = null,
+  /**
+   * Controls the scaling behavior of the circle when the map is pitched.
+   * Default value: "map".
+   */
+  val circlePitchScale: CirclePitchScale? = null,
   /**
    * Circle radius.
    * Default value: 5. Minimum value: 0.
@@ -131,7 +146,17 @@ data class CircleAnnotation(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /**
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * Default value: [0,0].
+   */
+  val circleTranslate: List<Double?>? = null,
+  /**
+   * Controls the frame of reference for `circle-translate`.
+   * Default value: "map".
+   */
+  val circleTranslateAnchor: CircleTranslateAnchor? = null
 
 ) {
   companion object {
@@ -142,12 +167,17 @@ data class CircleAnnotation(
       val circleSortKey = __pigeon_list[2] as Double?
       val circleBlur = __pigeon_list[3] as Double?
       val circleColor = __pigeon_list[4].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleOpacity = __pigeon_list[5] as Double?
-      val circleRadius = __pigeon_list[6] as Double?
-      val circleStrokeColor = __pigeon_list[7].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleStrokeOpacity = __pigeon_list[8] as Double?
-      val circleStrokeWidth = __pigeon_list[9] as Double?
-      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val circleEmissiveStrength = __pigeon_list[5] as Double?
+      val circleOpacity = __pigeon_list[6] as Double?
+      val circlePitchAlignment = __pigeon_list[7] as CirclePitchAlignment?
+      val circlePitchScale = __pigeon_list[8] as CirclePitchScale?
+      val circleRadius = __pigeon_list[9] as Double?
+      val circleStrokeColor = __pigeon_list[10].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val circleStrokeOpacity = __pigeon_list[11] as Double?
+      val circleStrokeWidth = __pigeon_list[12] as Double?
+      val circleTranslate = __pigeon_list[13] as List<Double?>?
+      val circleTranslateAnchor = __pigeon_list[14] as CircleTranslateAnchor?
+      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleEmissiveStrength, circleOpacity, circlePitchAlignment, circlePitchScale, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleTranslate, circleTranslateAnchor)
     }
   }
   fun toList(): List<Any?> {
@@ -157,11 +187,16 @@ data class CircleAnnotation(
       circleSortKey,
       circleBlur,
       circleColor,
+      circleEmissiveStrength,
       circleOpacity,
+      circlePitchAlignment,
+      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleTranslate,
+      circleTranslateAnchor,
     )
   }
 }
@@ -173,7 +208,7 @@ data class CircleAnnotationOptions(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val circleSortKey: Double? = null,
   /**
-   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+   * Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
    * Default value: 0.
    */
   val circleBlur: Double? = null,
@@ -183,10 +218,25 @@ data class CircleAnnotationOptions(
    */
   val circleColor: Long? = null,
   /**
+   * Controls the intensity of light emitted on the source features.
+   * Default value: 0. Minimum value: 0.
+   */
+  val circleEmissiveStrength: Double? = null,
+  /**
    * The opacity at which the circle will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val circleOpacity: Double? = null,
+  /**
+   * Orientation of circle when map is pitched.
+   * Default value: "viewport".
+   */
+  val circlePitchAlignment: CirclePitchAlignment? = null,
+  /**
+   * Controls the scaling behavior of the circle when the map is pitched.
+   * Default value: "map".
+   */
+  val circlePitchScale: CirclePitchScale? = null,
   /**
    * Circle radius.
    * Default value: 5. Minimum value: 0.
@@ -206,7 +256,17 @@ data class CircleAnnotationOptions(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /**
+   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+   * Default value: [0,0].
+   */
+  val circleTranslate: List<Double?>? = null,
+  /**
+   * Controls the frame of reference for `circle-translate`.
+   * Default value: "map".
+   */
+  val circleTranslateAnchor: CircleTranslateAnchor? = null
 
 ) {
   companion object {
@@ -216,12 +276,17 @@ data class CircleAnnotationOptions(
       val circleSortKey = __pigeon_list[1] as Double?
       val circleBlur = __pigeon_list[2] as Double?
       val circleColor = __pigeon_list[3].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleOpacity = __pigeon_list[4] as Double?
-      val circleRadius = __pigeon_list[5] as Double?
-      val circleStrokeColor = __pigeon_list[6].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleStrokeOpacity = __pigeon_list[7] as Double?
-      val circleStrokeWidth = __pigeon_list[8] as Double?
-      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val circleEmissiveStrength = __pigeon_list[4] as Double?
+      val circleOpacity = __pigeon_list[5] as Double?
+      val circlePitchAlignment = __pigeon_list[6] as CirclePitchAlignment?
+      val circlePitchScale = __pigeon_list[7] as CirclePitchScale?
+      val circleRadius = __pigeon_list[8] as Double?
+      val circleStrokeColor = __pigeon_list[9].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val circleStrokeOpacity = __pigeon_list[10] as Double?
+      val circleStrokeWidth = __pigeon_list[11] as Double?
+      val circleTranslate = __pigeon_list[12] as List<Double?>?
+      val circleTranslateAnchor = __pigeon_list[13] as CircleTranslateAnchor?
+      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleEmissiveStrength, circleOpacity, circlePitchAlignment, circlePitchScale, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleTranslate, circleTranslateAnchor)
     }
   }
   fun toList(): List<Any?> {
@@ -230,11 +295,16 @@ data class CircleAnnotationOptions(
       circleSortKey,
       circleBlur,
       circleColor,
+      circleEmissiveStrength,
       circleOpacity,
+      circlePitchAlignment,
+      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      circleTranslate,
+      circleTranslateAnchor,
     )
   }
 }
@@ -337,12 +407,28 @@ interface _CircleAnnotationMessenger {
   fun update(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setCircleSortKey(managerId: String, circleSortKey: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setCircleBlur(managerId: String, circleBlur: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleBlur(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setCircleColor(managerId: String, circleColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getCircleColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setCircleEmissiveStrength(managerId: String, circleEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
   fun getCircleEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setCircleOpacity(managerId: String, circleOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setCirclePitchAlignment(managerId: String, circlePitchAlignment: CirclePitchAlignment, callback: (Result<Unit>) -> Unit)
   fun getCirclePitchAlignment(managerId: String, callback: (Result<CirclePitchAlignment?>) -> Unit)
   fun setCirclePitchScale(managerId: String, circlePitchScale: CirclePitchScale, callback: (Result<Unit>) -> Unit)
   fun getCirclePitchScale(managerId: String, callback: (Result<CirclePitchScale?>) -> Unit)
+  fun setCircleRadius(managerId: String, circleRadius: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleRadius(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setCircleStrokeColor(managerId: String, circleStrokeColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getCircleStrokeColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setCircleStrokeOpacity(managerId: String, circleStrokeOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleStrokeOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setCircleStrokeWidth(managerId: String, circleStrokeWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getCircleStrokeWidth(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setCircleTranslate(managerId: String, circleTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getCircleTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -459,6 +545,126 @@ interface _CircleAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleSortKeyArg = args[1] as Double
+            api.setCircleSortKey(managerIdArg, circleSortKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleSortKey(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleBlurArg = args[1] as Double
+            api.setCircleBlur(managerIdArg, circleBlurArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleBlur(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setCircleColor(managerIdArg, circleColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleEmissiveStrength$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -485,6 +691,46 @@ interface _CircleAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getCircleEmissiveStrength(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleOpacityArg = args[1] as Double
+            api.setCircleOpacity(managerIdArg, circleOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleOpacity(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -565,6 +811,166 @@ interface _CircleAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getCirclePitchScale(managerIdArg) { result: Result<CirclePitchScale?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleRadius$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleRadiusArg = args[1] as Double
+            api.setCircleRadius(managerIdArg, circleRadiusArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleRadius$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleRadius(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleStrokeColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setCircleStrokeColor(managerIdArg, circleStrokeColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleStrokeColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleStrokeOpacityArg = args[1] as Double
+            api.setCircleStrokeOpacity(managerIdArg, circleStrokeOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleStrokeOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleStrokeWidthArg = args[1] as Double
+            api.setCircleStrokeWidth(managerIdArg, circleStrokeWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleStrokeWidth(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

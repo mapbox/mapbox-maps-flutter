@@ -28,8 +28,6 @@ class ModelLayer extends Layer {
     List<Object>? this.modelCutoffFadeRangeExpression,
     double? this.modelEmissiveStrength,
     List<Object>? this.modelEmissiveStrengthExpression,
-    List<double?>? this.modelFrontCutoff,
-    List<Object>? this.modelFrontCutoffExpression,
     List<double?>? this.modelHeightBasedEmissiveStrengthMultiplier,
     List<Object>? this.modelHeightBasedEmissiveStrengthMultiplierExpression,
     double? this.modelOpacity,
@@ -128,15 +126,6 @@ class ModelLayer extends Layer {
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
   List<Object>? modelEmissiveStrengthExpression;
-
-  /// An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled.
-  /// Default value: [0,0,1]. Minimum value: [0,0,0]. Maximum value: [1,1,1].
-  @experimental
-  List<double?>? modelFrontCutoff;
-
-  /// An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled.
-  /// Default value: [0,0,1]. Minimum value: [0,0,0]. Maximum value: [1,1,1].
-  List<Object>? modelFrontCutoffExpression;
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
@@ -283,13 +272,6 @@ class ModelLayer extends Layer {
       paint["model-emissive-strength"] = modelEmissiveStrength;
     }
 
-    if (modelFrontCutoffExpression != null) {
-      paint["model-front-cutoff"] = modelFrontCutoffExpression;
-    }
-    if (modelFrontCutoff != null) {
-      paint["model-front-cutoff"] = modelFrontCutoff;
-    }
-
     if (modelHeightBasedEmissiveStrengthMultiplierExpression != null) {
       paint["model-height-based-emissive-strength-multiplier"] =
           modelHeightBasedEmissiveStrengthMultiplierExpression;
@@ -428,11 +410,6 @@ class ModelLayer extends Layer {
           _optionalCast(map["paint"]["model-emissive-strength"]),
       modelEmissiveStrengthExpression:
           _optionalCastList(map["paint"]["model-emissive-strength"]),
-      modelFrontCutoff: (map["paint"]["model-front-cutoff"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      modelFrontCutoffExpression:
-          _optionalCastList(map["paint"]["model-front-cutoff"]),
       modelHeightBasedEmissiveStrengthMultiplier: (map["paint"]
               ["model-height-based-emissive-strength-multiplier"] as List?)
           ?.map<double?>((e) => e.toDouble())

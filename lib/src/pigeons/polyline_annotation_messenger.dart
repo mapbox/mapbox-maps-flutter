@@ -47,17 +47,30 @@ class PolylineAnnotation {
   PolylineAnnotation({
     required this.id,
     required this.geometry,
+    this.lineCap,
     this.lineJoin,
+    this.lineMiterLimit,
+    this.lineRoundLimit,
     this.lineSortKey,
     this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
+    this.lineDasharray,
+    this.lineDepthOcclusionFactor,
+    this.lineEmissiveStrength,
     this.lineGapWidth,
+    this.lineGradient,
+    this.lineOcclusionOpacity,
     this.lineOffset,
     this.lineOpacity,
     this.linePattern,
+    this.lineTranslate,
+    this.lineTranslateAnchor,
+    this.lineTrimColor,
+    this.lineTrimFadeRange,
+    this.lineTrimOffset,
     this.lineWidth,
   });
 
@@ -67,9 +80,21 @@ class PolylineAnnotation {
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
+  /// The display of line endings.
+  /// Default value: "butt".
+  LineCap? lineCap;
+
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
+
+  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
+  double? lineMiterLimit;
+
+  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
+  double? lineRoundLimit;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
@@ -93,9 +118,28 @@ class PolylineAnnotation {
   /// Default value: "#000000".
   int? lineColor;
 
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
+  List<double?>? lineDasharray;
+
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
+  double? lineDepthOcclusionFactor;
+
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  double? lineEmissiveStrength;
+
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
+
+  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  int? lineGradient;
+
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  double? lineOcclusionOpacity;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
@@ -107,6 +151,26 @@ class PolylineAnnotation {
 
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
+
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  List<double?>? lineTranslate;
+
+  /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
+  LineTranslateAnchor? lineTranslateAnchor;
+
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  int? lineTrimColor;
+
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  List<double?>? lineTrimFadeRange;
+
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  List<double?>? lineTrimOffset;
 
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
@@ -116,17 +180,30 @@ class PolylineAnnotation {
     return <Object?>[
       id,
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     ];
   }
@@ -136,18 +213,31 @@ class PolylineAnnotation {
     return PolylineAnnotation(
       id: result[0]! as String,
       geometry: result[1]! as LineString,
-      lineJoin: result[2] as LineJoin?,
-      lineSortKey: result[3] as double?,
-      lineZOffset: result[4] as double?,
-      lineBlur: result[5] as double?,
-      lineBorderColor: result[6] as int?,
-      lineBorderWidth: result[7] as double?,
-      lineColor: result[8] as int?,
-      lineGapWidth: result[9] as double?,
-      lineOffset: result[10] as double?,
-      lineOpacity: result[11] as double?,
-      linePattern: result[12] as String?,
-      lineWidth: result[13] as double?,
+      lineCap: result[2] as LineCap?,
+      lineJoin: result[3] as LineJoin?,
+      lineMiterLimit: result[4] as double?,
+      lineRoundLimit: result[5] as double?,
+      lineSortKey: result[6] as double?,
+      lineZOffset: result[7] as double?,
+      lineBlur: result[8] as double?,
+      lineBorderColor: result[9] as int?,
+      lineBorderWidth: result[10] as double?,
+      lineColor: result[11] as int?,
+      lineDasharray: (result[12] as List<Object?>?)?.cast<double?>(),
+      lineDepthOcclusionFactor: result[13] as double?,
+      lineEmissiveStrength: result[14] as double?,
+      lineGapWidth: result[15] as double?,
+      lineGradient: result[16] as int?,
+      lineOcclusionOpacity: result[17] as double?,
+      lineOffset: result[18] as double?,
+      lineOpacity: result[19] as double?,
+      linePattern: result[20] as String?,
+      lineTranslate: (result[21] as List<Object?>?)?.cast<double?>(),
+      lineTranslateAnchor: result[22] as LineTranslateAnchor?,
+      lineTrimColor: result[23] as int?,
+      lineTrimFadeRange: (result[24] as List<Object?>?)?.cast<double?>(),
+      lineTrimOffset: (result[25] as List<Object?>?)?.cast<double?>(),
+      lineWidth: result[26] as double?,
     );
   }
 }
@@ -155,26 +245,51 @@ class PolylineAnnotation {
 class PolylineAnnotationOptions {
   PolylineAnnotationOptions({
     required this.geometry,
+    this.lineCap,
     this.lineJoin,
+    this.lineMiterLimit,
+    this.lineRoundLimit,
     this.lineSortKey,
     this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
+    this.lineDasharray,
+    this.lineDepthOcclusionFactor,
+    this.lineEmissiveStrength,
     this.lineGapWidth,
+    this.lineGradient,
+    this.lineOcclusionOpacity,
     this.lineOffset,
     this.lineOpacity,
     this.linePattern,
+    this.lineTranslate,
+    this.lineTranslateAnchor,
+    this.lineTrimColor,
+    this.lineTrimFadeRange,
+    this.lineTrimOffset,
     this.lineWidth,
   });
 
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
+  /// The display of line endings.
+  /// Default value: "butt".
+  LineCap? lineCap;
+
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
+
+  /// Used to automatically convert miter joins to bevel joins for sharp angles.
+  /// Default value: 2.
+  double? lineMiterLimit;
+
+  /// Used to automatically convert round joins to miter joins for shallow angles.
+  /// Default value: 1.05.
+  double? lineRoundLimit;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
@@ -198,9 +313,28 @@ class PolylineAnnotationOptions {
   /// Default value: "#000000".
   int? lineColor;
 
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
+  /// Minimum value: 0.
+  List<double?>? lineDasharray;
+
+  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
+  /// Default value: 1. Value range: [0, 1]
+  double? lineDepthOcclusionFactor;
+
+  /// Controls the intensity of light emitted on the source features.
+  /// Default value: 0. Minimum value: 0.
+  double? lineEmissiveStrength;
+
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
+
+  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
+  int? lineGradient;
+
+  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
+  /// Default value: 0. Value range: [0, 1]
+  double? lineOcclusionOpacity;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
@@ -213,6 +347,26 @@ class PolylineAnnotationOptions {
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
 
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
+  /// Default value: [0,0].
+  List<double?>? lineTranslate;
+
+  /// Controls the frame of reference for `line-translate`.
+  /// Default value: "map".
+  LineTranslateAnchor? lineTranslateAnchor;
+
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  int? lineTrimColor;
+
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  List<double?>? lineTrimFadeRange;
+
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  List<double?>? lineTrimOffset;
+
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
   double? lineWidth;
@@ -220,17 +374,30 @@ class PolylineAnnotationOptions {
   Object encode() {
     return <Object?>[
       geometry,
+      lineCap,
       lineJoin,
+      lineMiterLimit,
+      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
+      lineDasharray,
+      lineDepthOcclusionFactor,
+      lineEmissiveStrength,
       lineGapWidth,
+      lineGradient,
+      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
+      lineTranslate,
+      lineTranslateAnchor,
+      lineTrimColor,
+      lineTrimFadeRange,
+      lineTrimOffset,
       lineWidth,
     ];
   }
@@ -239,18 +406,31 @@ class PolylineAnnotationOptions {
     result as List<Object?>;
     return PolylineAnnotationOptions(
       geometry: result[0]! as LineString,
-      lineJoin: result[1] as LineJoin?,
-      lineSortKey: result[2] as double?,
-      lineZOffset: result[3] as double?,
-      lineBlur: result[4] as double?,
-      lineBorderColor: result[5] as int?,
-      lineBorderWidth: result[6] as double?,
-      lineColor: result[7] as int?,
-      lineGapWidth: result[8] as double?,
-      lineOffset: result[9] as double?,
-      lineOpacity: result[10] as double?,
-      linePattern: result[11] as String?,
-      lineWidth: result[12] as double?,
+      lineCap: result[1] as LineCap?,
+      lineJoin: result[2] as LineJoin?,
+      lineMiterLimit: result[3] as double?,
+      lineRoundLimit: result[4] as double?,
+      lineSortKey: result[5] as double?,
+      lineZOffset: result[6] as double?,
+      lineBlur: result[7] as double?,
+      lineBorderColor: result[8] as int?,
+      lineBorderWidth: result[9] as double?,
+      lineColor: result[10] as int?,
+      lineDasharray: (result[11] as List<Object?>?)?.cast<double?>(),
+      lineDepthOcclusionFactor: result[12] as double?,
+      lineEmissiveStrength: result[13] as double?,
+      lineGapWidth: result[14] as double?,
+      lineGradient: result[15] as int?,
+      lineOcclusionOpacity: result[16] as double?,
+      lineOffset: result[17] as double?,
+      lineOpacity: result[18] as double?,
+      linePattern: result[19] as String?,
+      lineTranslate: (result[20] as List<Object?>?)?.cast<double?>(),
+      lineTranslateAnchor: result[21] as LineTranslateAnchor?,
+      lineTrimColor: result[22] as int?,
+      lineTrimFadeRange: (result[23] as List<Object?>?)?.cast<double?>(),
+      lineTrimOffset: (result[24] as List<Object?>?)?.cast<double?>(),
+      lineWidth: result[25] as double?,
     );
   }
 }
@@ -548,6 +728,54 @@ class _PolylineAnnotationMessenger {
     }
   }
 
+  Future<void> setLineJoin(String managerId, LineJoin lineJoin) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineJoin]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<LineJoin?> getLineJoin(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineJoin$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as LineJoin?);
+    }
+  }
+
   Future<void> setLineMiterLimit(
       String managerId, double lineMiterLimit) async {
     final String __pigeon_channelName =
@@ -643,6 +871,295 @@ class _PolylineAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineSortKey(String managerId, double lineSortKey) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineSortKey]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineSortKey(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineZOffset(String managerId, double lineZOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineZOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineZOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineZOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineBlur(String managerId, double lineBlur) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineBlur]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineBlur(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineBorderColor(String managerId, int lineBorderColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineBorderColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getLineBorderColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setLineBorderWidth(
+      String managerId, double lineBorderWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineBorderWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineBorderWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineColor(String managerId, int lineColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getLineColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
     }
   }
 
@@ -793,6 +1310,54 @@ class _PolylineAnnotationMessenger {
     }
   }
 
+  Future<void> setLineGapWidth(String managerId, double lineGapWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineGapWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineGapWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineGapWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineGapWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setLineOcclusionOpacity(
       String managerId, double lineOcclusionOpacity) async {
     final String __pigeon_channelName =
@@ -839,6 +1404,150 @@ class _PolylineAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineOffset(String managerId, double lineOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLineOpacity(String managerId, double lineOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setLinePattern(String managerId, String linePattern) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLinePattern$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, linePattern]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<String?> getLinePattern(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLinePattern$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
     }
   }
 
@@ -940,6 +1649,103 @@ class _PolylineAnnotationMessenger {
     }
   }
 
+  Future<void> setLineTrimColor(String managerId, int lineTrimColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineTrimColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getLineTrimColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setLineTrimFadeRange(
+      String managerId, List<double?> lineTrimFadeRange) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineTrimFadeRange]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<double?>?> getLineTrimFadeRange(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
+    }
+  }
+
   Future<void> setLineTrimOffset(
       String managerId, List<double?> lineTrimOffset) async {
     final String __pigeon_channelName =
@@ -986,6 +1792,54 @@ class _PolylineAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
+    }
+  }
+
+  Future<void> setLineWidth(String managerId, double lineWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, lineWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getLineWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
     }
   }
 }
