@@ -4,6 +4,7 @@ excluded:
   - Carthage
   - Pods
   - Classes/Generated
+  - Classes/*AnnotationController.swift
 disabled_rules:
   - comment_spacing
   - computed_accessors_order
