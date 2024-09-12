@@ -152,38 +152,17 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.image?.let {
       originalAnnotation.iconImageBitmap = (BitmapFactory.decodeByteArray(it, 0, it.size))
     }
-    annotation.iconAllowOverlap?.let {
-      originalAnnotation.iconAllowOverlap = it
-    }
     annotation.iconAnchor?.let {
       originalAnnotation.iconAnchor = it.toIconAnchor()
-    }
-    annotation.iconIgnorePlacement?.let {
-      originalAnnotation.iconIgnorePlacement = it
     }
     annotation.iconImage?.let {
       originalAnnotation.iconImage = it
     }
-    annotation.iconKeepUpright?.let {
-      originalAnnotation.iconKeepUpright = it
-    }
     annotation.iconOffset?.let {
       originalAnnotation.iconOffset = it.mapNotNull { it }
     }
-    annotation.iconOptional?.let {
-      originalAnnotation.iconOptional = it
-    }
-    annotation.iconPadding?.let {
-      originalAnnotation.iconPadding = it
-    }
-    annotation.iconPitchAlignment?.let {
-      originalAnnotation.iconPitchAlignment = it.toIconPitchAlignment()
-    }
     annotation.iconRotate?.let {
       originalAnnotation.iconRotate = it
-    }
-    annotation.iconRotationAlignment?.let {
-      originalAnnotation.iconRotationAlignment = it.toIconRotationAlignment()
     }
     annotation.iconSize?.let {
       originalAnnotation.iconSize = it
@@ -194,26 +173,8 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.iconTextFitPadding?.let {
       originalAnnotation.iconTextFitPadding = it.mapNotNull { it }
     }
-    annotation.symbolAvoidEdges?.let {
-      originalAnnotation.symbolAvoidEdges = it
-    }
-    annotation.symbolPlacement?.let {
-      originalAnnotation.symbolPlacement = it.toSymbolPlacement()
-    }
     annotation.symbolSortKey?.let {
       originalAnnotation.symbolSortKey = it
-    }
-    annotation.symbolSpacing?.let {
-      originalAnnotation.symbolSpacing = it
-    }
-    annotation.symbolZElevate?.let {
-      originalAnnotation.symbolZElevate = it
-    }
-    annotation.symbolZOrder?.let {
-      originalAnnotation.symbolZOrder = it.toSymbolZOrder()
-    }
-    annotation.textAllowOverlap?.let {
-      originalAnnotation.textAllowOverlap = it
     }
     annotation.textAnchor?.let {
       originalAnnotation.textAnchor = it.toTextAnchor()
@@ -221,17 +182,8 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textField?.let {
       originalAnnotation.textField = it
     }
-    annotation.textFont?.let {
-      originalAnnotation.textFont = it.mapNotNull { it }
-    }
-    annotation.textIgnorePlacement?.let {
-      originalAnnotation.textIgnorePlacement = it
-    }
     annotation.textJustify?.let {
       originalAnnotation.textJustify = it.toTextJustify()
-    }
-    annotation.textKeepUpright?.let {
-      originalAnnotation.textKeepUpright = it
     }
     annotation.textLetterSpacing?.let {
       originalAnnotation.textLetterSpacing = it
@@ -239,23 +191,11 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textLineHeight?.let {
       originalAnnotation.textLineHeight = it
     }
-    annotation.textMaxAngle?.let {
-      originalAnnotation.textMaxAngle = it
-    }
     annotation.textMaxWidth?.let {
       originalAnnotation.textMaxWidth = it
     }
     annotation.textOffset?.let {
       originalAnnotation.textOffset = it.mapNotNull { it }
-    }
-    annotation.textOptional?.let {
-      originalAnnotation.textOptional = it
-    }
-    annotation.textPadding?.let {
-      originalAnnotation.textPadding = it
-    }
-    annotation.textPitchAlignment?.let {
-      originalAnnotation.textPitchAlignment = it.toTextPitchAlignment()
     }
     annotation.textRadialOffset?.let {
       originalAnnotation.textRadialOffset = it
@@ -263,26 +203,14 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textRotate?.let {
       originalAnnotation.textRotate = it
     }
-    annotation.textRotationAlignment?.let {
-      originalAnnotation.textRotationAlignment = it.toTextRotationAlignment()
-    }
     annotation.textSize?.let {
       originalAnnotation.textSize = it
     }
     annotation.textTransform?.let {
       originalAnnotation.textTransform = it.toTextTransform()
     }
-    annotation.textVariableAnchor?.let {
-      originalAnnotation.textVariableAnchor = it.mapNotNull { it }
-    }
-    annotation.textWritingMode?.let {
-      originalAnnotation.textWritingMode = it.mapNotNull { it }
-    }
     annotation.iconColor?.let {
       originalAnnotation.iconColorInt = it.toInt()
-    }
-    annotation.iconColorSaturation?.let {
-      originalAnnotation.iconColorSaturation = it
     }
     annotation.iconEmissiveStrength?.let {
       originalAnnotation.iconEmissiveStrength = it
@@ -304,15 +232,6 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
     annotation.iconOpacity?.let {
       originalAnnotation.iconOpacity = it
-    }
-    annotation.iconTranslate?.let {
-      originalAnnotation.iconTranslate = it.mapNotNull { it }
-    }
-    annotation.iconTranslateAnchor?.let {
-      originalAnnotation.iconTranslateAnchor = it.toIconTranslateAnchor()
-    }
-    annotation.symbolElevationReference?.let {
-      originalAnnotation.symbolElevationReference = it.toSymbolElevationReference()
     }
     annotation.symbolZOffset?.let {
       originalAnnotation.symbolZOffset = it
@@ -338,12 +257,6 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     annotation.textOpacity?.let {
       originalAnnotation.textOpacity = it
     }
-    annotation.textTranslate?.let {
-      originalAnnotation.textTranslate = it.mapNotNull { it }
-    }
-    annotation.textTranslateAnchor?.let {
-      originalAnnotation.textTranslateAnchor = it.toTextTranslateAnchor()
-    }
     return originalAnnotation
   }
 
@@ -362,8 +275,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconAllowOverlap != null) {
-      callback(Result.success(manager.iconAllowOverlap!!))
+    val value = manager.iconAllowOverlap
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -384,8 +298,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<IconAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconAnchor != null) {
-      callback(Result.success(manager.iconAnchor!!.toFLTIconAnchor()))
+    val value = manager.iconAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTIconAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -406,8 +321,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconIgnorePlacement != null) {
-      callback(Result.success(manager.iconIgnorePlacement!!))
+    val value = manager.iconIgnorePlacement
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -428,8 +344,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<String?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconImage != null) {
-      callback(Result.success(manager.iconImage!!))
+    val value = manager.iconImage
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -450,8 +367,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconKeepUpright != null) {
-      callback(Result.success(manager.iconKeepUpright!!))
+    val value = manager.iconKeepUpright
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -472,8 +390,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconOffset != null) {
-      callback(Result.success(manager.iconOffset!!))
+    val value = manager.iconOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -494,8 +413,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconOptional != null) {
-      callback(Result.success(manager.iconOptional!!))
+    val value = manager.iconOptional
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -516,8 +436,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconPadding != null) {
-      callback(Result.success(manager.iconPadding!!))
+    val value = manager.iconPadding
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -538,8 +459,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<IconPitchAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconPitchAlignment != null) {
-      callback(Result.success(manager.iconPitchAlignment!!.toFLTIconPitchAlignment()))
+    val value = manager.iconPitchAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTIconPitchAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -560,8 +482,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconRotate != null) {
-      callback(Result.success(manager.iconRotate!!))
+    val value = manager.iconRotate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -582,8 +505,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<IconRotationAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconRotationAlignment != null) {
-      callback(Result.success(manager.iconRotationAlignment!!.toFLTIconRotationAlignment()))
+    val value = manager.iconRotationAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTIconRotationAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -604,8 +528,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconSize != null) {
-      callback(Result.success(manager.iconSize!!))
+    val value = manager.iconSize
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -626,8 +551,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<IconTextFit?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTextFit != null) {
-      callback(Result.success(manager.iconTextFit!!.toFLTIconTextFit()))
+    val value = manager.iconTextFit
+    if (value != null) {
+      callback(Result.success(value.toFLTIconTextFit()))
     } else {
       callback(Result.success(null))
     }
@@ -648,8 +574,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTextFitPadding != null) {
-      callback(Result.success(manager.iconTextFitPadding!!))
+    val value = manager.iconTextFitPadding
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -670,8 +597,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolAvoidEdges != null) {
-      callback(Result.success(manager.symbolAvoidEdges!!))
+    val value = manager.symbolAvoidEdges
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -692,8 +620,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<SymbolPlacement?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolPlacement != null) {
-      callback(Result.success(manager.symbolPlacement!!.toFLTSymbolPlacement()))
+    val value = manager.symbolPlacement
+    if (value != null) {
+      callback(Result.success(value.toFLTSymbolPlacement()))
     } else {
       callback(Result.success(null))
     }
@@ -714,8 +643,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolSortKey != null) {
-      callback(Result.success(manager.symbolSortKey!!))
+    val value = manager.symbolSortKey
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -736,8 +666,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolSpacing != null) {
-      callback(Result.success(manager.symbolSpacing!!))
+    val value = manager.symbolSpacing
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -758,8 +689,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolZElevate != null) {
-      callback(Result.success(manager.symbolZElevate!!))
+    val value = manager.symbolZElevate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -780,8 +712,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<SymbolZOrder?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolZOrder != null) {
-      callback(Result.success(manager.symbolZOrder!!.toFLTSymbolZOrder()))
+    val value = manager.symbolZOrder
+    if (value != null) {
+      callback(Result.success(value.toFLTSymbolZOrder()))
     } else {
       callback(Result.success(null))
     }
@@ -802,8 +735,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textAllowOverlap != null) {
-      callback(Result.success(manager.textAllowOverlap!!))
+    val value = manager.textAllowOverlap
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -824,8 +758,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textAnchor != null) {
-      callback(Result.success(manager.textAnchor!!.toFLTTextAnchor()))
+    val value = manager.textAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTTextAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -846,8 +781,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<String?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textField != null) {
-      callback(Result.success(manager.textField!!))
+    val value = manager.textField
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -868,8 +804,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<String?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textFont != null) {
-      callback(Result.success(manager.textFont!!))
+    val value = manager.textFont
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -890,8 +827,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textIgnorePlacement != null) {
-      callback(Result.success(manager.textIgnorePlacement!!))
+    val value = manager.textIgnorePlacement
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -912,8 +850,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextJustify?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textJustify != null) {
-      callback(Result.success(manager.textJustify!!.toFLTTextJustify()))
+    val value = manager.textJustify
+    if (value != null) {
+      callback(Result.success(value.toFLTTextJustify()))
     } else {
       callback(Result.success(null))
     }
@@ -934,8 +873,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textKeepUpright != null) {
-      callback(Result.success(manager.textKeepUpright!!))
+    val value = manager.textKeepUpright
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -956,8 +896,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textLetterSpacing != null) {
-      callback(Result.success(manager.textLetterSpacing!!))
+    val value = manager.textLetterSpacing
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -978,8 +919,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textLineHeight != null) {
-      callback(Result.success(manager.textLineHeight!!))
+    val value = manager.textLineHeight
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1000,8 +942,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textMaxAngle != null) {
-      callback(Result.success(manager.textMaxAngle!!))
+    val value = manager.textMaxAngle
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1022,8 +965,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textMaxWidth != null) {
-      callback(Result.success(manager.textMaxWidth!!))
+    val value = manager.textMaxWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1044,8 +988,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textOffset != null) {
-      callback(Result.success(manager.textOffset!!))
+    val value = manager.textOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1066,8 +1011,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textOptional != null) {
-      callback(Result.success(manager.textOptional!!))
+    val value = manager.textOptional
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1088,8 +1034,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textPadding != null) {
-      callback(Result.success(manager.textPadding!!))
+    val value = manager.textPadding
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1110,8 +1057,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextPitchAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textPitchAlignment != null) {
-      callback(Result.success(manager.textPitchAlignment!!.toFLTTextPitchAlignment()))
+    val value = manager.textPitchAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTTextPitchAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -1132,8 +1080,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textRadialOffset != null) {
-      callback(Result.success(manager.textRadialOffset!!))
+    val value = manager.textRadialOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1154,8 +1103,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textRotate != null) {
-      callback(Result.success(manager.textRotate!!))
+    val value = manager.textRotate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1176,8 +1126,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextRotationAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textRotationAlignment != null) {
-      callback(Result.success(manager.textRotationAlignment!!.toFLTTextRotationAlignment()))
+    val value = manager.textRotationAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTTextRotationAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -1198,8 +1149,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textSize != null) {
-      callback(Result.success(manager.textSize!!))
+    val value = manager.textSize
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1220,8 +1172,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextTransform?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textTransform != null) {
-      callback(Result.success(manager.textTransform!!.toFLTTextTransform()))
+    val value = manager.textTransform
+    if (value != null) {
+      callback(Result.success(value.toFLTTextTransform()))
     } else {
       callback(Result.success(null))
     }
@@ -1229,21 +1182,22 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
 
   override fun setIconColor(
     managerId: String,
-    iconColor: String,
+    iconColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconColor = iconColor
+    manager.iconColorInt = iconColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getIconColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconColor != null) {
-      callback(Result.success(manager.iconColor!!))
+    val value = manager.iconColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -1264,8 +1218,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconColorSaturation != null) {
-      callback(Result.success(manager.iconColorSaturation!!))
+    val value = manager.iconColorSaturation
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1286,8 +1241,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconEmissiveStrength != null) {
-      callback(Result.success(manager.iconEmissiveStrength!!))
+    val value = manager.iconEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1308,8 +1264,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconHaloBlur != null) {
-      callback(Result.success(manager.iconHaloBlur!!))
+    val value = manager.iconHaloBlur
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1317,21 +1274,22 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
 
   override fun setIconHaloColor(
     managerId: String,
-    iconHaloColor: String,
+    iconHaloColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.iconHaloColor = iconHaloColor
+    manager.iconHaloColorInt = iconHaloColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getIconHaloColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconHaloColor != null) {
-      callback(Result.success(manager.iconHaloColor!!))
+    val value = manager.iconHaloColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -1352,8 +1310,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconHaloWidth != null) {
-      callback(Result.success(manager.iconHaloWidth!!))
+    val value = manager.iconHaloWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1374,8 +1333,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconImageCrossFade != null) {
-      callback(Result.success(manager.iconImageCrossFade!!))
+    val value = manager.iconImageCrossFade
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1396,8 +1356,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconOcclusionOpacity != null) {
-      callback(Result.success(manager.iconOcclusionOpacity!!))
+    val value = manager.iconOcclusionOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1418,8 +1379,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconOpacity != null) {
-      callback(Result.success(manager.iconOpacity!!))
+    val value = manager.iconOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1440,8 +1402,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTranslate != null) {
-      callback(Result.success(manager.iconTranslate!!))
+    val value = manager.iconTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1462,8 +1425,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<IconTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.iconTranslateAnchor != null) {
-      callback(Result.success(manager.iconTranslateAnchor!!.toFLTIconTranslateAnchor()))
+    val value = manager.iconTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTIconTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -1484,8 +1448,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<SymbolElevationReference?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolElevationReference != null) {
-      callback(Result.success(manager.symbolElevationReference!!.toFLTSymbolElevationReference()))
+    val value = manager.symbolElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTSymbolElevationReference()))
     } else {
       callback(Result.success(null))
     }
@@ -1506,8 +1471,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.symbolZOffset != null) {
-      callback(Result.success(manager.symbolZOffset!!))
+    val value = manager.symbolZOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1515,21 +1481,22 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
 
   override fun setTextColor(
     managerId: String,
-    textColor: String,
+    textColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textColor = textColor
+    manager.textColorInt = textColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getTextColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textColor != null) {
-      callback(Result.success(manager.textColor!!))
+    val value = manager.textColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -1550,8 +1517,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textEmissiveStrength != null) {
-      callback(Result.success(manager.textEmissiveStrength!!))
+    val value = manager.textEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1572,8 +1540,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textHaloBlur != null) {
-      callback(Result.success(manager.textHaloBlur!!))
+    val value = manager.textHaloBlur
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1581,21 +1550,22 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
 
   override fun setTextHaloColor(
     managerId: String,
-    textHaloColor: String,
+    textHaloColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    manager.textHaloColor = textHaloColor
+    manager.textHaloColorInt = textHaloColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getTextHaloColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textHaloColor != null) {
-      callback(Result.success(manager.textHaloColor!!))
+    val value = manager.textHaloColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -1616,8 +1586,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textHaloWidth != null) {
-      callback(Result.success(manager.textHaloWidth!!))
+    val value = manager.textHaloWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1638,8 +1609,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textOcclusionOpacity != null) {
-      callback(Result.success(manager.textOcclusionOpacity!!))
+    val value = manager.textOcclusionOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1660,8 +1632,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textOpacity != null) {
-      callback(Result.success(manager.textOpacity!!))
+    val value = manager.textOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1682,8 +1655,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textTranslate != null) {
-      callback(Result.success(manager.textTranslate!!))
+    val value = manager.textTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -1704,8 +1678,9 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     callback: (Result<TextTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
-    if (manager.textTranslateAnchor != null) {
-      callback(Result.success(manager.textTranslateAnchor!!.toFLTTextTranslateAnchor()))
+    val value = manager.textTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTTextTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -1721,51 +1696,27 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
         it.compress(Bitmap.CompressFormat.PNG, 100, stream)
       }.toByteArray()
     },
-    iconAllowOverlap = iconAllowOverlap,
     iconAnchor = iconAnchor?.toFLTIconAnchor(),
-    iconIgnorePlacement = iconIgnorePlacement,
     iconImage = iconImage,
-    iconKeepUpright = iconKeepUpright,
     iconOffset = iconOffset,
-    iconOptional = iconOptional,
-    iconPadding = iconPadding,
-    iconPitchAlignment = iconPitchAlignment?.toFLTIconPitchAlignment(),
     iconRotate = iconRotate,
-    iconRotationAlignment = iconRotationAlignment?.toFLTIconRotationAlignment(),
     iconSize = iconSize,
     iconTextFit = iconTextFit?.toFLTIconTextFit(),
     iconTextFitPadding = iconTextFitPadding,
-    symbolAvoidEdges = symbolAvoidEdges,
-    symbolPlacement = symbolPlacement?.toFLTSymbolPlacement(),
     symbolSortKey = symbolSortKey,
-    symbolSpacing = symbolSpacing,
-    symbolZElevate = symbolZElevate,
-    symbolZOrder = symbolZOrder?.toFLTSymbolZOrder(),
-    textAllowOverlap = textAllowOverlap,
     textAnchor = textAnchor?.toFLTTextAnchor(),
     textField = textField,
-    textFont = textFont,
-    textIgnorePlacement = textIgnorePlacement,
     textJustify = textJustify?.toFLTTextJustify(),
-    textKeepUpright = textKeepUpright,
     textLetterSpacing = textLetterSpacing,
     textLineHeight = textLineHeight,
-    textMaxAngle = textMaxAngle,
     textMaxWidth = textMaxWidth,
     textOffset = textOffset,
-    textOptional = textOptional,
-    textPadding = textPadding,
-    textPitchAlignment = textPitchAlignment?.toFLTTextPitchAlignment(),
     textRadialOffset = textRadialOffset,
     textRotate = textRotate,
-    textRotationAlignment = textRotationAlignment?.toFLTTextRotationAlignment(),
     textSize = textSize,
     textTransform = textTransform?.toFLTTextTransform(),
-    textVariableAnchor = textVariableAnchor,
-    textWritingMode = textWritingMode,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     iconColor = iconColorInt?.toUInt()?.toLong(),
-    iconColorSaturation = iconColorSaturation,
     iconEmissiveStrength = iconEmissiveStrength,
     iconHaloBlur = iconHaloBlur,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
@@ -1774,9 +1725,6 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
     iconImageCrossFade = iconImageCrossFade,
     iconOcclusionOpacity = iconOcclusionOpacity,
     iconOpacity = iconOpacity,
-    iconTranslate = iconTranslate,
-    iconTranslateAnchor = iconTranslateAnchor?.toFLTIconTranslateAnchor(),
-    symbolElevationReference = symbolElevationReference?.toFLTSymbolElevationReference(),
     symbolZOffset = symbolZOffset,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     textColor = textColorInt?.toUInt()?.toLong(),
@@ -1787,8 +1735,6 @@ fun com.mapbox.maps.plugin.annotation.generated.PointAnnotation.toFLTPointAnnota
     textHaloWidth = textHaloWidth,
     textOcclusionOpacity = textOcclusionOpacity,
     textOpacity = textOpacity,
-    textTranslate = textTranslate,
-    textTranslateAnchor = textTranslateAnchor?.toFLTTextTranslateAnchor(),
   )
 }
 
@@ -1800,38 +1746,17 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.image?.let {
     options.withIconImage(BitmapFactory.decodeByteArray(it, 0, it.size))
   }
-  this.iconAllowOverlap?.let {
-    options.withIconAllowOverlap(it)
-  }
   this.iconAnchor?.let {
     options.withIconAnchor(it.toIconAnchor())
-  }
-  this.iconIgnorePlacement?.let {
-    options.withIconIgnorePlacement(it)
   }
   this.iconImage?.let {
     options.withIconImage(it)
   }
-  this.iconKeepUpright?.let {
-    options.withIconKeepUpright(it)
-  }
   this.iconOffset?.let {
     options.withIconOffset(it.mapNotNull { it })
   }
-  this.iconOptional?.let {
-    options.withIconOptional(it)
-  }
-  this.iconPadding?.let {
-    options.withIconPadding(it)
-  }
-  this.iconPitchAlignment?.let {
-    options.withIconPitchAlignment(it.toIconPitchAlignment())
-  }
   this.iconRotate?.let {
     options.withIconRotate(it)
-  }
-  this.iconRotationAlignment?.let {
-    options.withIconRotationAlignment(it.toIconRotationAlignment())
   }
   this.iconSize?.let {
     options.withIconSize(it)
@@ -1842,26 +1767,8 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.iconTextFitPadding?.let {
     options.withIconTextFitPadding(it.mapNotNull { it })
   }
-  this.symbolAvoidEdges?.let {
-    options.withSymbolAvoidEdges(it)
-  }
-  this.symbolPlacement?.let {
-    options.withSymbolPlacement(it.toSymbolPlacement())
-  }
   this.symbolSortKey?.let {
     options.withSymbolSortKey(it)
-  }
-  this.symbolSpacing?.let {
-    options.withSymbolSpacing(it)
-  }
-  this.symbolZElevate?.let {
-    options.withSymbolZElevate(it)
-  }
-  this.symbolZOrder?.let {
-    options.withSymbolZOrder(it.toSymbolZOrder())
-  }
-  this.textAllowOverlap?.let {
-    options.withTextAllowOverlap(it)
   }
   this.textAnchor?.let {
     options.withTextAnchor(it.toTextAnchor())
@@ -1869,17 +1776,8 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.textField?.let {
     options.withTextField(it)
   }
-  this.textFont?.let {
-    options.withTextFont(it.mapNotNull { it })
-  }
-  this.textIgnorePlacement?.let {
-    options.withTextIgnorePlacement(it)
-  }
   this.textJustify?.let {
     options.withTextJustify(it.toTextJustify())
-  }
-  this.textKeepUpright?.let {
-    options.withTextKeepUpright(it)
   }
   this.textLetterSpacing?.let {
     options.withTextLetterSpacing(it)
@@ -1887,23 +1785,11 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.textLineHeight?.let {
     options.withTextLineHeight(it)
   }
-  this.textMaxAngle?.let {
-    options.withTextMaxAngle(it)
-  }
   this.textMaxWidth?.let {
     options.withTextMaxWidth(it)
   }
   this.textOffset?.let {
     options.withTextOffset(it.mapNotNull { it })
-  }
-  this.textOptional?.let {
-    options.withTextOptional(it)
-  }
-  this.textPadding?.let {
-    options.withTextPadding(it)
-  }
-  this.textPitchAlignment?.let {
-    options.withTextPitchAlignment(it.toTextPitchAlignment())
   }
   this.textRadialOffset?.let {
     options.withTextRadialOffset(it)
@@ -1911,26 +1797,14 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   this.textRotate?.let {
     options.withTextRotate(it)
   }
-  this.textRotationAlignment?.let {
-    options.withTextRotationAlignment(it.toTextRotationAlignment())
-  }
   this.textSize?.let {
     options.withTextSize(it)
   }
   this.textTransform?.let {
     options.withTextTransform(it.toTextTransform())
   }
-  this.textVariableAnchor?.let {
-    options.withTextVariableAnchor(it.mapNotNull { it })
-  }
-  this.textWritingMode?.let {
-    options.withTextWritingMode(it.mapNotNull { it })
-  }
   this.iconColor?.let {
     options.withIconColor(it.toInt())
-  }
-  this.iconColorSaturation?.let {
-    options.withIconColorSaturation(it)
   }
   this.iconEmissiveStrength?.let {
     options.withIconEmissiveStrength(it)
@@ -1952,15 +1826,6 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   }
   this.iconOpacity?.let {
     options.withIconOpacity(it)
-  }
-  this.iconTranslate?.let {
-    options.withIconTranslate(it.mapNotNull { it })
-  }
-  this.iconTranslateAnchor?.let {
-    options.withIconTranslateAnchor(it.toIconTranslateAnchor())
-  }
-  this.symbolElevationReference?.let {
-    options.withSymbolElevationReference(it.toSymbolElevationReference())
   }
   this.symbolZOffset?.let {
     options.withSymbolZOffset(it)
@@ -1985,12 +1850,6 @@ fun PointAnnotationOptions.toPointAnnotationOptions(): com.mapbox.maps.plugin.an
   }
   this.textOpacity?.let {
     options.withTextOpacity(it)
-  }
-  this.textTranslate?.let {
-    options.withTextTranslate(it.mapNotNull { it })
-  }
-  this.textTranslateAnchor?.let {
-    options.withTextTranslateAnchor(it.toTextTranslateAnchor())
   }
   return options
 }

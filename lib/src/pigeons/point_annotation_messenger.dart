@@ -263,50 +263,26 @@ class PointAnnotation {
     required this.id,
     required this.geometry,
     this.image,
-    this.iconAllowOverlap,
     this.iconAnchor,
-    this.iconIgnorePlacement,
     this.iconImage,
-    this.iconKeepUpright,
     this.iconOffset,
-    this.iconOptional,
-    this.iconPadding,
-    this.iconPitchAlignment,
     this.iconRotate,
-    this.iconRotationAlignment,
     this.iconSize,
     this.iconTextFit,
     this.iconTextFitPadding,
-    this.symbolAvoidEdges,
-    this.symbolPlacement,
     this.symbolSortKey,
-    this.symbolSpacing,
-    this.symbolZElevate,
-    this.symbolZOrder,
-    this.textAllowOverlap,
     this.textAnchor,
     this.textField,
-    this.textFont,
-    this.textIgnorePlacement,
     this.textJustify,
-    this.textKeepUpright,
     this.textLetterSpacing,
     this.textLineHeight,
-    this.textMaxAngle,
     this.textMaxWidth,
     this.textOffset,
-    this.textOptional,
-    this.textPadding,
-    this.textPitchAlignment,
     this.textRadialOffset,
     this.textRotate,
-    this.textRotationAlignment,
     this.textSize,
     this.textTransform,
-    this.textVariableAnchor,
-    this.textWritingMode,
     this.iconColor,
-    this.iconColorSaturation,
     this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
@@ -314,9 +290,6 @@ class PointAnnotation {
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
-    this.iconTranslate,
-    this.iconTranslateAnchor,
-    this.symbolElevationReference,
     this.symbolZOffset,
     this.textColor,
     this.textEmissiveStrength,
@@ -325,8 +298,6 @@ class PointAnnotation {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
-    this.textTranslate,
-    this.textTranslateAnchor,
   });
 
   /// The id for annotation
@@ -339,48 +310,20 @@ class PointAnnotation {
   /// Will not take effect if [iconImage] has been set.
   Uint8List? image;
 
-  /// If true, the icon will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  bool? iconAllowOverlap;
-
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
   IconAnchor? iconAnchor;
 
-  /// If true, other symbols can be visible even if they collide with the icon.
-  /// Default value: false.
-  bool? iconIgnorePlacement;
-
   /// Name of image in sprite to use for drawing an image background.
   String? iconImage;
-
-  /// If true, the icon may be flipped to prevent it from being rendered upside-down.
-  /// Default value: false.
-  bool? iconKeepUpright;
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
   List<double?>? iconOffset;
 
-  /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-  /// Default value: false.
-  bool? iconOptional;
-
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  double? iconPadding;
-
-  /// Orientation of icon when map is pitched.
-  /// Default value: "auto".
-  IconPitchAlignment? iconPitchAlignment;
-
   /// Rotates the icon clockwise.
   /// Default value: 0.
   double? iconRotate;
-
-  /// In combination with `symbol-placement`, determines the rotation behavior of icons.
-  /// Default value: "auto".
-  IconRotationAlignment? iconRotationAlignment;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   /// Default value: 1. Minimum value: 0.
@@ -394,32 +337,8 @@ class PointAnnotation {
   /// Default value: [0,0,0,0].
   List<double?>? iconTextFitPadding;
 
-  /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-  /// Default value: false.
-  bool? symbolAvoidEdges;
-
-  /// Label placement relative to its geometry.
-  /// Default value: "point".
-  SymbolPlacement? symbolPlacement;
-
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
-
-  /// Distance between two symbol anchors.
-  /// Default value: 250. Minimum value: 1.
-  double? symbolSpacing;
-
-  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-  /// Default value: false.
-  bool? symbolZElevate;
-
-  /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-  /// Default value: "auto".
-  SymbolZOrder? symbolZOrder;
-
-  /// If true, the text will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  bool? textAllowOverlap;
 
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
@@ -429,20 +348,9 @@ class PointAnnotation {
   /// Default value: "".
   String? textField;
 
-  /// Font stack to use for displaying text.
-  List<String?>? textFont;
-
-  /// If true, other symbols can be visible even if they collide with the text.
-  /// Default value: false.
-  bool? textIgnorePlacement;
-
   /// Text justification options.
   /// Default value: "center".
   TextJustify? textJustify;
-
-  /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-  /// Default value: true.
-  bool? textKeepUpright;
 
   /// Text tracking amount.
   /// Default value: 0.
@@ -452,10 +360,6 @@ class PointAnnotation {
   /// Default value: 1.2.
   double? textLineHeight;
 
-  /// Maximum angle change between adjacent characters.
-  /// Default value: 45.
-  double? textMaxAngle;
-
   /// The maximum line width for text wrapping.
   /// Default value: 10. Minimum value: 0.
   double? textMaxWidth;
@@ -463,18 +367,6 @@ class PointAnnotation {
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
   List<double?>? textOffset;
-
-  /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-  /// Default value: false.
-  bool? textOptional;
-
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  double? textPadding;
-
-  /// Orientation of text when map is pitched.
-  /// Default value: "auto".
-  TextPitchAlignment? textPitchAlignment;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
@@ -484,10 +376,6 @@ class PointAnnotation {
   /// Default value: 0.
   double? textRotate;
 
-  /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-  /// Default value: "auto".
-  TextRotationAlignment? textRotationAlignment;
-
   /// Font size.
   /// Default value: 16. Minimum value: 0.
   double? textSize;
@@ -496,19 +384,9 @@ class PointAnnotation {
   /// Default value: "none".
   TextTransform? textTransform;
 
-  /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
-  List<String?>? textVariableAnchor;
-
-  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
-  List<String?>? textWritingMode;
-
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
   int? iconColor;
-
-  /// Increase or reduce the saturation of the symbol icon.
-  /// Default value: 0. Value range: [-1, 1]
-  double? iconColorSaturation;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 1. Minimum value: 0.
@@ -537,18 +415,6 @@ class PointAnnotation {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
-
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  List<double?>? iconTranslate;
-
-  /// Controls the frame of reference for `icon-translate`.
-  /// Default value: "map".
-  IconTranslateAnchor? iconTranslateAnchor;
-
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  SymbolElevationReference? symbolElevationReference;
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
@@ -582,63 +448,31 @@ class PointAnnotation {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  List<double?>? textTranslate;
-
-  /// Controls the frame of reference for `text-translate`.
-  /// Default value: "map".
-  TextTranslateAnchor? textTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       id,
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -646,9 +480,6 @@ class PointAnnotation {
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -657,8 +488,6 @@ class PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     ];
   }
 
@@ -668,70 +497,41 @@ class PointAnnotation {
       id: result[0]! as String,
       geometry: result[1]! as Point,
       image: result[2] as Uint8List?,
-      iconAllowOverlap: result[3] as bool?,
-      iconAnchor: result[4] as IconAnchor?,
-      iconIgnorePlacement: result[5] as bool?,
-      iconImage: result[6] as String?,
-      iconKeepUpright: result[7] as bool?,
-      iconOffset: (result[8] as List<Object?>?)?.cast<double?>(),
-      iconOptional: result[9] as bool?,
-      iconPadding: result[10] as double?,
-      iconPitchAlignment: result[11] as IconPitchAlignment?,
-      iconRotate: result[12] as double?,
-      iconRotationAlignment: result[13] as IconRotationAlignment?,
-      iconSize: result[14] as double?,
-      iconTextFit: result[15] as IconTextFit?,
-      iconTextFitPadding: (result[16] as List<Object?>?)?.cast<double?>(),
-      symbolAvoidEdges: result[17] as bool?,
-      symbolPlacement: result[18] as SymbolPlacement?,
-      symbolSortKey: result[19] as double?,
-      symbolSpacing: result[20] as double?,
-      symbolZElevate: result[21] as bool?,
-      symbolZOrder: result[22] as SymbolZOrder?,
-      textAllowOverlap: result[23] as bool?,
-      textAnchor: result[24] as TextAnchor?,
-      textField: result[25] as String?,
-      textFont: (result[26] as List<Object?>?)?.cast<String?>(),
-      textIgnorePlacement: result[27] as bool?,
-      textJustify: result[28] as TextJustify?,
-      textKeepUpright: result[29] as bool?,
-      textLetterSpacing: result[30] as double?,
-      textLineHeight: result[31] as double?,
-      textMaxAngle: result[32] as double?,
-      textMaxWidth: result[33] as double?,
-      textOffset: (result[34] as List<Object?>?)?.cast<double?>(),
-      textOptional: result[35] as bool?,
-      textPadding: result[36] as double?,
-      textPitchAlignment: result[37] as TextPitchAlignment?,
-      textRadialOffset: result[38] as double?,
-      textRotate: result[39] as double?,
-      textRotationAlignment: result[40] as TextRotationAlignment?,
-      textSize: result[41] as double?,
-      textTransform: result[42] as TextTransform?,
-      textVariableAnchor: (result[43] as List<Object?>?)?.cast<String?>(),
-      textWritingMode: (result[44] as List<Object?>?)?.cast<String?>(),
-      iconColor: result[45] as int?,
-      iconColorSaturation: result[46] as double?,
-      iconEmissiveStrength: result[47] as double?,
-      iconHaloBlur: result[48] as double?,
-      iconHaloColor: result[49] as int?,
-      iconHaloWidth: result[50] as double?,
-      iconImageCrossFade: result[51] as double?,
-      iconOcclusionOpacity: result[52] as double?,
-      iconOpacity: result[53] as double?,
-      iconTranslate: (result[54] as List<Object?>?)?.cast<double?>(),
-      iconTranslateAnchor: result[55] as IconTranslateAnchor?,
-      symbolElevationReference: result[56] as SymbolElevationReference?,
-      symbolZOffset: result[57] as double?,
-      textColor: result[58] as int?,
-      textEmissiveStrength: result[59] as double?,
-      textHaloBlur: result[60] as double?,
-      textHaloColor: result[61] as int?,
-      textHaloWidth: result[62] as double?,
-      textOcclusionOpacity: result[63] as double?,
-      textOpacity: result[64] as double?,
-      textTranslate: (result[65] as List<Object?>?)?.cast<double?>(),
-      textTranslateAnchor: result[66] as TextTranslateAnchor?,
+      iconAnchor: result[3] as IconAnchor?,
+      iconImage: result[4] as String?,
+      iconOffset: (result[5] as List<Object?>?)?.cast<double?>(),
+      iconRotate: result[6] as double?,
+      iconSize: result[7] as double?,
+      iconTextFit: result[8] as IconTextFit?,
+      iconTextFitPadding: (result[9] as List<Object?>?)?.cast<double?>(),
+      symbolSortKey: result[10] as double?,
+      textAnchor: result[11] as TextAnchor?,
+      textField: result[12] as String?,
+      textJustify: result[13] as TextJustify?,
+      textLetterSpacing: result[14] as double?,
+      textLineHeight: result[15] as double?,
+      textMaxWidth: result[16] as double?,
+      textOffset: (result[17] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[18] as double?,
+      textRotate: result[19] as double?,
+      textSize: result[20] as double?,
+      textTransform: result[21] as TextTransform?,
+      iconColor: result[22] as int?,
+      iconEmissiveStrength: result[23] as double?,
+      iconHaloBlur: result[24] as double?,
+      iconHaloColor: result[25] as int?,
+      iconHaloWidth: result[26] as double?,
+      iconImageCrossFade: result[27] as double?,
+      iconOcclusionOpacity: result[28] as double?,
+      iconOpacity: result[29] as double?,
+      symbolZOffset: result[30] as double?,
+      textColor: result[31] as int?,
+      textEmissiveStrength: result[32] as double?,
+      textHaloBlur: result[33] as double?,
+      textHaloColor: result[34] as int?,
+      textHaloWidth: result[35] as double?,
+      textOcclusionOpacity: result[36] as double?,
+      textOpacity: result[37] as double?,
     );
   }
 }
@@ -740,50 +540,26 @@ class PointAnnotationOptions {
   PointAnnotationOptions({
     required this.geometry,
     this.image,
-    this.iconAllowOverlap,
     this.iconAnchor,
-    this.iconIgnorePlacement,
     this.iconImage,
-    this.iconKeepUpright,
     this.iconOffset,
-    this.iconOptional,
-    this.iconPadding,
-    this.iconPitchAlignment,
     this.iconRotate,
-    this.iconRotationAlignment,
     this.iconSize,
     this.iconTextFit,
     this.iconTextFitPadding,
-    this.symbolAvoidEdges,
-    this.symbolPlacement,
     this.symbolSortKey,
-    this.symbolSpacing,
-    this.symbolZElevate,
-    this.symbolZOrder,
-    this.textAllowOverlap,
     this.textAnchor,
     this.textField,
-    this.textFont,
-    this.textIgnorePlacement,
     this.textJustify,
-    this.textKeepUpright,
     this.textLetterSpacing,
     this.textLineHeight,
-    this.textMaxAngle,
     this.textMaxWidth,
     this.textOffset,
-    this.textOptional,
-    this.textPadding,
-    this.textPitchAlignment,
     this.textRadialOffset,
     this.textRotate,
-    this.textRotationAlignment,
     this.textSize,
     this.textTransform,
-    this.textVariableAnchor,
-    this.textWritingMode,
     this.iconColor,
-    this.iconColorSaturation,
     this.iconEmissiveStrength,
     this.iconHaloBlur,
     this.iconHaloColor,
@@ -791,9 +567,6 @@ class PointAnnotationOptions {
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
-    this.iconTranslate,
-    this.iconTranslateAnchor,
-    this.symbolElevationReference,
     this.symbolZOffset,
     this.textColor,
     this.textEmissiveStrength,
@@ -802,8 +575,6 @@ class PointAnnotationOptions {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
-    this.textTranslate,
-    this.textTranslateAnchor,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -813,48 +584,20 @@ class PointAnnotationOptions {
   /// Will not take effect if [iconImage] has been set.
   Uint8List? image;
 
-  /// If true, the icon will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  bool? iconAllowOverlap;
-
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
   IconAnchor? iconAnchor;
 
-  /// If true, other symbols can be visible even if they collide with the icon.
-  /// Default value: false.
-  bool? iconIgnorePlacement;
-
   /// Name of image in sprite to use for drawing an image background.
   String? iconImage;
-
-  /// If true, the icon may be flipped to prevent it from being rendered upside-down.
-  /// Default value: false.
-  bool? iconKeepUpright;
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
   List<double?>? iconOffset;
 
-  /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-  /// Default value: false.
-  bool? iconOptional;
-
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  double? iconPadding;
-
-  /// Orientation of icon when map is pitched.
-  /// Default value: "auto".
-  IconPitchAlignment? iconPitchAlignment;
-
   /// Rotates the icon clockwise.
   /// Default value: 0.
   double? iconRotate;
-
-  /// In combination with `symbol-placement`, determines the rotation behavior of icons.
-  /// Default value: "auto".
-  IconRotationAlignment? iconRotationAlignment;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   /// Default value: 1. Minimum value: 0.
@@ -868,32 +611,8 @@ class PointAnnotationOptions {
   /// Default value: [0,0,0,0].
   List<double?>? iconTextFitPadding;
 
-  /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-  /// Default value: false.
-  bool? symbolAvoidEdges;
-
-  /// Label placement relative to its geometry.
-  /// Default value: "point".
-  SymbolPlacement? symbolPlacement;
-
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
-
-  /// Distance between two symbol anchors.
-  /// Default value: 250. Minimum value: 1.
-  double? symbolSpacing;
-
-  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-  /// Default value: false.
-  bool? symbolZElevate;
-
-  /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-  /// Default value: "auto".
-  SymbolZOrder? symbolZOrder;
-
-  /// If true, the text will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  bool? textAllowOverlap;
 
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
@@ -903,20 +622,9 @@ class PointAnnotationOptions {
   /// Default value: "".
   String? textField;
 
-  /// Font stack to use for displaying text.
-  List<String?>? textFont;
-
-  /// If true, other symbols can be visible even if they collide with the text.
-  /// Default value: false.
-  bool? textIgnorePlacement;
-
   /// Text justification options.
   /// Default value: "center".
   TextJustify? textJustify;
-
-  /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-  /// Default value: true.
-  bool? textKeepUpright;
 
   /// Text tracking amount.
   /// Default value: 0.
@@ -926,10 +634,6 @@ class PointAnnotationOptions {
   /// Default value: 1.2.
   double? textLineHeight;
 
-  /// Maximum angle change between adjacent characters.
-  /// Default value: 45.
-  double? textMaxAngle;
-
   /// The maximum line width for text wrapping.
   /// Default value: 10. Minimum value: 0.
   double? textMaxWidth;
@@ -937,18 +641,6 @@ class PointAnnotationOptions {
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
   List<double?>? textOffset;
-
-  /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-  /// Default value: false.
-  bool? textOptional;
-
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  double? textPadding;
-
-  /// Orientation of text when map is pitched.
-  /// Default value: "auto".
-  TextPitchAlignment? textPitchAlignment;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
@@ -958,10 +650,6 @@ class PointAnnotationOptions {
   /// Default value: 0.
   double? textRotate;
 
-  /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-  /// Default value: "auto".
-  TextRotationAlignment? textRotationAlignment;
-
   /// Font size.
   /// Default value: 16. Minimum value: 0.
   double? textSize;
@@ -970,19 +658,9 @@ class PointAnnotationOptions {
   /// Default value: "none".
   TextTransform? textTransform;
 
-  /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
-  List<String?>? textVariableAnchor;
-
-  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
-  List<String?>? textWritingMode;
-
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
   int? iconColor;
-
-  /// Increase or reduce the saturation of the symbol icon.
-  /// Default value: 0. Value range: [-1, 1]
-  double? iconColorSaturation;
 
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 1. Minimum value: 0.
@@ -1011,18 +689,6 @@ class PointAnnotationOptions {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
-
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  List<double?>? iconTranslate;
-
-  /// Controls the frame of reference for `icon-translate`.
-  /// Default value: "map".
-  IconTranslateAnchor? iconTranslateAnchor;
-
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  SymbolElevationReference? symbolElevationReference;
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
@@ -1056,62 +722,30 @@ class PointAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  List<double?>? textTranslate;
-
-  /// Controls the frame of reference for `text-translate`.
-  /// Default value: "map".
-  TextTranslateAnchor? textTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -1119,9 +753,6 @@ class PointAnnotationOptions {
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -1130,8 +761,6 @@ class PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     ];
   }
 
@@ -1140,70 +769,41 @@ class PointAnnotationOptions {
     return PointAnnotationOptions(
       geometry: result[0]! as Point,
       image: result[1] as Uint8List?,
-      iconAllowOverlap: result[2] as bool?,
-      iconAnchor: result[3] as IconAnchor?,
-      iconIgnorePlacement: result[4] as bool?,
-      iconImage: result[5] as String?,
-      iconKeepUpright: result[6] as bool?,
-      iconOffset: (result[7] as List<Object?>?)?.cast<double?>(),
-      iconOptional: result[8] as bool?,
-      iconPadding: result[9] as double?,
-      iconPitchAlignment: result[10] as IconPitchAlignment?,
-      iconRotate: result[11] as double?,
-      iconRotationAlignment: result[12] as IconRotationAlignment?,
-      iconSize: result[13] as double?,
-      iconTextFit: result[14] as IconTextFit?,
-      iconTextFitPadding: (result[15] as List<Object?>?)?.cast<double?>(),
-      symbolAvoidEdges: result[16] as bool?,
-      symbolPlacement: result[17] as SymbolPlacement?,
-      symbolSortKey: result[18] as double?,
-      symbolSpacing: result[19] as double?,
-      symbolZElevate: result[20] as bool?,
-      symbolZOrder: result[21] as SymbolZOrder?,
-      textAllowOverlap: result[22] as bool?,
-      textAnchor: result[23] as TextAnchor?,
-      textField: result[24] as String?,
-      textFont: (result[25] as List<Object?>?)?.cast<String?>(),
-      textIgnorePlacement: result[26] as bool?,
-      textJustify: result[27] as TextJustify?,
-      textKeepUpright: result[28] as bool?,
-      textLetterSpacing: result[29] as double?,
-      textLineHeight: result[30] as double?,
-      textMaxAngle: result[31] as double?,
-      textMaxWidth: result[32] as double?,
-      textOffset: (result[33] as List<Object?>?)?.cast<double?>(),
-      textOptional: result[34] as bool?,
-      textPadding: result[35] as double?,
-      textPitchAlignment: result[36] as TextPitchAlignment?,
-      textRadialOffset: result[37] as double?,
-      textRotate: result[38] as double?,
-      textRotationAlignment: result[39] as TextRotationAlignment?,
-      textSize: result[40] as double?,
-      textTransform: result[41] as TextTransform?,
-      textVariableAnchor: (result[42] as List<Object?>?)?.cast<String?>(),
-      textWritingMode: (result[43] as List<Object?>?)?.cast<String?>(),
-      iconColor: result[44] as int?,
-      iconColorSaturation: result[45] as double?,
-      iconEmissiveStrength: result[46] as double?,
-      iconHaloBlur: result[47] as double?,
-      iconHaloColor: result[48] as int?,
-      iconHaloWidth: result[49] as double?,
-      iconImageCrossFade: result[50] as double?,
-      iconOcclusionOpacity: result[51] as double?,
-      iconOpacity: result[52] as double?,
-      iconTranslate: (result[53] as List<Object?>?)?.cast<double?>(),
-      iconTranslateAnchor: result[54] as IconTranslateAnchor?,
-      symbolElevationReference: result[55] as SymbolElevationReference?,
-      symbolZOffset: result[56] as double?,
-      textColor: result[57] as int?,
-      textEmissiveStrength: result[58] as double?,
-      textHaloBlur: result[59] as double?,
-      textHaloColor: result[60] as int?,
-      textHaloWidth: result[61] as double?,
-      textOcclusionOpacity: result[62] as double?,
-      textOpacity: result[63] as double?,
-      textTranslate: (result[64] as List<Object?>?)?.cast<double?>(),
-      textTranslateAnchor: result[65] as TextTranslateAnchor?,
+      iconAnchor: result[2] as IconAnchor?,
+      iconImage: result[3] as String?,
+      iconOffset: (result[4] as List<Object?>?)?.cast<double?>(),
+      iconRotate: result[5] as double?,
+      iconSize: result[6] as double?,
+      iconTextFit: result[7] as IconTextFit?,
+      iconTextFitPadding: (result[8] as List<Object?>?)?.cast<double?>(),
+      symbolSortKey: result[9] as double?,
+      textAnchor: result[10] as TextAnchor?,
+      textField: result[11] as String?,
+      textJustify: result[12] as TextJustify?,
+      textLetterSpacing: result[13] as double?,
+      textLineHeight: result[14] as double?,
+      textMaxWidth: result[15] as double?,
+      textOffset: (result[16] as List<Object?>?)?.cast<double?>(),
+      textRadialOffset: result[17] as double?,
+      textRotate: result[18] as double?,
+      textSize: result[19] as double?,
+      textTransform: result[20] as TextTransform?,
+      iconColor: result[21] as int?,
+      iconEmissiveStrength: result[22] as double?,
+      iconHaloBlur: result[23] as double?,
+      iconHaloColor: result[24] as int?,
+      iconHaloWidth: result[25] as double?,
+      iconImageCrossFade: result[26] as double?,
+      iconOcclusionOpacity: result[27] as double?,
+      iconOpacity: result[28] as double?,
+      symbolZOffset: result[29] as double?,
+      textColor: result[30] as int?,
+      textEmissiveStrength: result[31] as double?,
+      textHaloBlur: result[32] as double?,
+      textHaloColor: result[33] as int?,
+      textHaloWidth: result[34] as double?,
+      textOcclusionOpacity: result[35] as double?,
+      textOpacity: result[36] as double?,
     );
   }
 }

@@ -41,16 +41,11 @@ class CircleAnnotation {
     this.circleSortKey,
     this.circleBlur,
     this.circleColor,
-    this.circleEmissiveStrength,
     this.circleOpacity,
-    this.circlePitchAlignment,
-    this.circlePitchScale,
     this.circleRadius,
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
-    this.circleTranslate,
-    this.circleTranslateAnchor,
   });
 
   /// The id for annotation
@@ -70,21 +65,9 @@ class CircleAnnotation {
   /// Default value: "#000000".
   int? circleColor;
 
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? circleEmissiveStrength;
-
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? circleOpacity;
-
-  /// Orientation of circle when map is pitched.
-  /// Default value: "viewport".
-  CirclePitchAlignment? circlePitchAlignment;
-
-  /// Controls the scaling behavior of the circle when the map is pitched.
-  /// Default value: "map".
-  CirclePitchScale? circlePitchScale;
 
   /// Circle radius.
   /// Default value: 5. Minimum value: 0.
@@ -102,14 +85,6 @@ class CircleAnnotation {
   /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? circleTranslate;
-
-  /// Controls the frame of reference for `circle-translate`.
-  /// Default value: "map".
-  CircleTranslateAnchor? circleTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       id,
@@ -117,16 +92,11 @@ class CircleAnnotation {
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     ];
   }
 
@@ -138,16 +108,11 @@ class CircleAnnotation {
       circleSortKey: result[2] as double?,
       circleBlur: result[3] as double?,
       circleColor: result[4] as int?,
-      circleEmissiveStrength: result[5] as double?,
-      circleOpacity: result[6] as double?,
-      circlePitchAlignment: result[7] as CirclePitchAlignment?,
-      circlePitchScale: result[8] as CirclePitchScale?,
-      circleRadius: result[9] as double?,
-      circleStrokeColor: result[10] as int?,
-      circleStrokeOpacity: result[11] as double?,
-      circleStrokeWidth: result[12] as double?,
-      circleTranslate: (result[13] as List<Object?>?)?.cast<double?>(),
-      circleTranslateAnchor: result[14] as CircleTranslateAnchor?,
+      circleOpacity: result[5] as double?,
+      circleRadius: result[6] as double?,
+      circleStrokeColor: result[7] as int?,
+      circleStrokeOpacity: result[8] as double?,
+      circleStrokeWidth: result[9] as double?,
     );
   }
 }
@@ -158,16 +123,11 @@ class CircleAnnotationOptions {
     this.circleSortKey,
     this.circleBlur,
     this.circleColor,
-    this.circleEmissiveStrength,
     this.circleOpacity,
-    this.circlePitchAlignment,
-    this.circlePitchScale,
     this.circleRadius,
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
-    this.circleTranslate,
-    this.circleTranslateAnchor,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -184,21 +144,9 @@ class CircleAnnotationOptions {
   /// Default value: "#000000".
   int? circleColor;
 
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? circleEmissiveStrength;
-
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? circleOpacity;
-
-  /// Orientation of circle when map is pitched.
-  /// Default value: "viewport".
-  CirclePitchAlignment? circlePitchAlignment;
-
-  /// Controls the scaling behavior of the circle when the map is pitched.
-  /// Default value: "map".
-  CirclePitchScale? circlePitchScale;
 
   /// Circle radius.
   /// Default value: 5. Minimum value: 0.
@@ -216,30 +164,17 @@ class CircleAnnotationOptions {
   /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? circleTranslate;
-
-  /// Controls the frame of reference for `circle-translate`.
-  /// Default value: "map".
-  CircleTranslateAnchor? circleTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       geometry,
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     ];
   }
 
@@ -250,16 +185,11 @@ class CircleAnnotationOptions {
       circleSortKey: result[1] as double?,
       circleBlur: result[2] as double?,
       circleColor: result[3] as int?,
-      circleEmissiveStrength: result[4] as double?,
-      circleOpacity: result[5] as double?,
-      circlePitchAlignment: result[6] as CirclePitchAlignment?,
-      circlePitchScale: result[7] as CirclePitchScale?,
-      circleRadius: result[8] as double?,
-      circleStrokeColor: result[9] as int?,
-      circleStrokeOpacity: result[10] as double?,
-      circleStrokeWidth: result[11] as double?,
-      circleTranslate: (result[12] as List<Object?>?)?.cast<double?>(),
-      circleTranslateAnchor: result[13] as CircleTranslateAnchor?,
+      circleOpacity: result[4] as double?,
+      circleRadius: result[5] as double?,
+      circleStrokeColor: result[6] as int?,
+      circleStrokeOpacity: result[7] as double?,
+      circleStrokeWidth: result[8] as double?,
     );
   }
 }

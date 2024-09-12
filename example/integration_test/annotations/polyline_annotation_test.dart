@@ -19,30 +19,17 @@ void main() {
 
     var polylineAnnotationOptions = PolylineAnnotationOptions(
       geometry: geometry,
-      lineCap: LineCap.BUTT,
       lineJoin: LineJoin.BEVEL,
-      lineMiterLimit: 1.0,
-      lineRoundLimit: 1.0,
       lineSortKey: 1.0,
       lineZOffset: 1.0,
       lineBlur: 1.0,
       lineBorderColor: Colors.red.value,
       lineBorderWidth: 1.0,
       lineColor: Colors.red.value,
-      lineDasharray: [1.0, 2.0],
-      lineDepthOcclusionFactor: 1.0,
-      lineEmissiveStrength: 1.0,
       lineGapWidth: 1.0,
-      lineGradient: Colors.red.value,
-      lineOcclusionOpacity: 1.0,
       lineOffset: 1.0,
       lineOpacity: 1.0,
       linePattern: "abc",
-      lineTranslate: [0.0, 1.0],
-      lineTranslateAnchor: LineTranslateAnchor.MAP,
-      lineTrimColor: Colors.red.value,
-      lineTrimFadeRange: [0.0, 1.0],
-      lineTrimOffset: [0.0, 1.0],
       lineWidth: 1.0,
     );
     final annotation = await manager.create(polylineAnnotationOptions);
@@ -53,30 +40,17 @@ void main() {
     expect(2.0, points.first.lat);
     expect(10.0, points.last.lng);
     expect(20.0, points.last.lat);
-    expect(LineCap.BUTT, annotation.lineCap);
     expect(LineJoin.BEVEL, annotation.lineJoin);
-    expect(1.0, annotation.lineMiterLimit);
-    expect(1.0, annotation.lineRoundLimit);
     expect(1.0, annotation.lineSortKey);
     expect(1.0, annotation.lineZOffset);
     expect(1.0, annotation.lineBlur);
     expect(Colors.red.value, annotation.lineBorderColor);
     expect(1.0, annotation.lineBorderWidth);
     expect(Colors.red.value, annotation.lineColor);
-    expect([1.0, 2.0], annotation.lineDasharray);
-    expect(1.0, annotation.lineDepthOcclusionFactor);
-    expect(1.0, annotation.lineEmissiveStrength);
     expect(1.0, annotation.lineGapWidth);
-    expect(Colors.red.value, annotation.lineGradient);
-    expect(1.0, annotation.lineOcclusionOpacity);
     expect(1.0, annotation.lineOffset);
     expect(1.0, annotation.lineOpacity);
     expect("abc", annotation.linePattern);
-    expect([0.0, 1.0], annotation.lineTranslate);
-    expect(LineTranslateAnchor.MAP, annotation.lineTranslateAnchor);
-    expect(Colors.red.value, annotation.lineTrimColor);
-    expect([0.0, 1.0], annotation.lineTrimFadeRange);
-    expect([0.0, 1.0], annotation.lineTrimOffset);
     expect(1.0, annotation.lineWidth);
   });
 

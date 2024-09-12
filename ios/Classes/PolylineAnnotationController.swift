@@ -255,19 +255,19 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineBorderColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getLineBorderColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.lineBorderColor))
+            completion(.success(manager.lineBorderColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setLineBorderColor(managerId: String, lineBorderColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineBorderColor(managerId: String, lineBorderColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineBorderColor = lineBorderColor
+            manager.lineBorderColor = StyleColor(rgb: lineBorderColor)
 
             completion(.success(()))
         } catch {
@@ -295,19 +295,19 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getLineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.lineColor))
+            completion(.success(manager.lineColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setLineColor(managerId: String, lineColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineColor(managerId: String, lineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineColor = lineColor
+            manager.lineColor = StyleColor(rgb: lineColor)
 
             completion(.success(()))
         } catch {
@@ -515,19 +515,19 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineTrimColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getLineTrimColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.lineTrimColor))
+            completion(.success(manager.lineTrimColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setLineTrimColor(managerId: String, lineTrimColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineTrimColor(managerId: String, lineTrimColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.lineTrimColor = lineTrimColor
+            manager.lineTrimColor = StyleColor(rgb: lineTrimColor)
 
             completion(.success(()))
         } catch {
@@ -600,17 +600,8 @@ extension PolylineAnnotationOptions {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(lineString: geometry)
-        if let lineCap {
-            annotation.lineCap = MapboxMaps.LineCap(lineCap)
-        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
-        }
-        if let lineMiterLimit {
-            annotation.lineMiterLimit = lineMiterLimit
-        }
-        if let lineRoundLimit {
-            annotation.lineRoundLimit = lineRoundLimit
         }
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
@@ -630,20 +621,8 @@ extension PolylineAnnotationOptions {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
-        if let lineDasharray {
-            annotation.lineDasharray = lineDasharray.compactMap { $0 }
-        }
-        if let lineDepthOcclusionFactor {
-            annotation.lineDepthOcclusionFactor = lineDepthOcclusionFactor
-        }
-        if let lineEmissiveStrength {
-            annotation.lineEmissiveStrength = lineEmissiveStrength
-        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
-        }
-        if let lineOcclusionOpacity {
-            annotation.lineOcclusionOpacity = lineOcclusionOpacity
         }
         if let lineOffset {
             annotation.lineOffset = lineOffset
@@ -653,21 +632,6 @@ extension PolylineAnnotationOptions {
         }
         if let linePattern {
             annotation.linePattern = linePattern
-        }
-        if let lineTranslate {
-            annotation.lineTranslate = lineTranslate.compactMap { $0 }
-        }
-        if let lineTranslateAnchor {
-            annotation.lineTranslateAnchor = MapboxMaps.LineTranslateAnchor(lineTranslateAnchor)
-        }
-        if let lineTrimColor {
-            annotation.lineTrimColor = StyleColor(rgb: lineTrimColor)
-        }
-        if let lineTrimFadeRange {
-            annotation.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
-        }
-        if let lineTrimOffset {
-            annotation.lineTrimOffset = lineTrimOffset.compactMap { $0 }
         }
         if let lineWidth {
             annotation.lineWidth = lineWidth
@@ -680,17 +644,8 @@ extension PolylineAnnotation {
 
     func toPolylineAnnotation() -> MapboxMaps.PolylineAnnotation {
         var annotation = MapboxMaps.PolylineAnnotation(id: self.id, lineString: geometry)
-        if let lineCap {
-            annotation.lineCap = MapboxMaps.LineCap(lineCap)
-        }
         if let lineJoin {
             annotation.lineJoin = MapboxMaps.LineJoin(lineJoin)
-        }
-        if let lineMiterLimit {
-            annotation.lineMiterLimit = lineMiterLimit
-        }
-        if let lineRoundLimit {
-            annotation.lineRoundLimit = lineRoundLimit
         }
         if let lineSortKey {
             annotation.lineSortKey = lineSortKey
@@ -710,20 +665,8 @@ extension PolylineAnnotation {
         if let lineColor {
             annotation.lineColor = StyleColor(rgb: lineColor)
         }
-        if let lineDasharray {
-            annotation.lineDasharray = lineDasharray.compactMap { $0 }
-        }
-        if let lineDepthOcclusionFactor {
-            annotation.lineDepthOcclusionFactor = lineDepthOcclusionFactor
-        }
-        if let lineEmissiveStrength {
-            annotation.lineEmissiveStrength = lineEmissiveStrength
-        }
         if let lineGapWidth {
             annotation.lineGapWidth = lineGapWidth
-        }
-        if let lineOcclusionOpacity {
-            annotation.lineOcclusionOpacity = lineOcclusionOpacity
         }
         if let lineOffset {
             annotation.lineOffset = lineOffset
@@ -733,21 +676,6 @@ extension PolylineAnnotation {
         }
         if let linePattern {
             annotation.linePattern = linePattern
-        }
-        if let lineTranslate {
-            annotation.lineTranslate = lineTranslate.compactMap { $0 }
-        }
-        if let lineTranslateAnchor {
-            annotation.lineTranslateAnchor = MapboxMaps.LineTranslateAnchor(lineTranslateAnchor)
-        }
-        if let lineTrimColor {
-            annotation.lineTrimColor = StyleColor(rgb: lineTrimColor)
-        }
-        if let lineTrimFadeRange {
-            annotation.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
-        }
-        if let lineTrimOffset {
-            annotation.lineTrimOffset = lineTrimOffset.compactMap { $0 }
         }
         if let lineWidth {
             annotation.lineWidth = lineWidth
@@ -761,29 +689,17 @@ extension MapboxMaps.PolylineAnnotation {
         PolylineAnnotation(
             id: id,
             geometry: lineString,
-            lineCap: lineCap?.toFLTLineCap(),
             lineJoin: lineJoin?.toFLTLineJoin(),
-            lineMiterLimit: lineMiterLimit,
-            lineRoundLimit: lineRoundLimit,
             lineSortKey: lineSortKey,
             lineZOffset: lineZOffset,
             lineBlur: lineBlur,
             lineBorderColor: lineBorderColor?.intValue,
             lineBorderWidth: lineBorderWidth,
             lineColor: lineColor?.intValue,
-            lineDasharray: lineDasharray,
-            lineDepthOcclusionFactor: lineDepthOcclusionFactor,
-            lineEmissiveStrength: lineEmissiveStrength,
             lineGapWidth: lineGapWidth,
-            lineOcclusionOpacity: lineOcclusionOpacity,
             lineOffset: lineOffset,
             lineOpacity: lineOpacity,
             linePattern: linePattern,
-            lineTranslate: lineTranslate,
-            lineTranslateAnchor: lineTranslateAnchor?.toFLTLineTranslateAnchor(),
-            lineTrimColor: lineTrimColor?.intValue,
-            lineTrimFadeRange: lineTrimFadeRange,
-            lineTrimOffset: lineTrimOffset,
             lineWidth: lineWidth
         )
     }

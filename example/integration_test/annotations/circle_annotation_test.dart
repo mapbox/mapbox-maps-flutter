@@ -20,16 +20,11 @@ void main() {
       circleSortKey: 1.0,
       circleBlur: 1.0,
       circleColor: Colors.red.value,
-      circleEmissiveStrength: 1.0,
       circleOpacity: 1.0,
-      circlePitchAlignment: CirclePitchAlignment.MAP,
-      circlePitchScale: CirclePitchScale.MAP,
       circleRadius: 1.0,
       circleStrokeColor: Colors.red.value,
       circleStrokeOpacity: 1.0,
       circleStrokeWidth: 1.0,
-      circleTranslate: [0.0, 1.0],
-      circleTranslateAnchor: CircleTranslateAnchor.MAP,
     );
     final annotation = await manager.create(circleAnnotationOptions);
     var point = annotation.geometry;
@@ -38,16 +33,11 @@ void main() {
     expect(1.0, annotation.circleSortKey);
     expect(1.0, annotation.circleBlur);
     expect(Colors.red.value, annotation.circleColor);
-    expect(1.0, annotation.circleEmissiveStrength);
     expect(1.0, annotation.circleOpacity);
-    expect(CirclePitchAlignment.MAP, annotation.circlePitchAlignment);
-    expect(CirclePitchScale.MAP, annotation.circlePitchScale);
     expect(1.0, annotation.circleRadius);
     expect(Colors.red.value, annotation.circleStrokeColor);
     expect(1.0, annotation.circleStrokeOpacity);
     expect(1.0, annotation.circleStrokeWidth);
-    expect([0.0, 1.0], annotation.circleTranslate);
-    expect(CircleTranslateAnchor.MAP, annotation.circleTranslateAnchor);
   });
 
   testWidgets('update and delete CircleAnnotation',

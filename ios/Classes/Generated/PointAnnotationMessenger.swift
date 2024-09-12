@@ -284,38 +284,17 @@ struct PointAnnotation {
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
-  /// If true, the icon will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  var iconAllowOverlap: Bool?
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
   var iconAnchor: IconAnchor?
-  /// If true, other symbols can be visible even if they collide with the icon.
-  /// Default value: false.
-  var iconIgnorePlacement: Bool?
   /// Name of image in sprite to use for drawing an image background.
   var iconImage: String?
-  /// If true, the icon may be flipped to prevent it from being rendered upside-down.
-  /// Default value: false.
-  var iconKeepUpright: Bool?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
   var iconOffset: [Double?]?
-  /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-  /// Default value: false.
-  var iconOptional: Bool?
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  var iconPadding: Double?
-  /// Orientation of icon when map is pitched.
-  /// Default value: "auto".
-  var iconPitchAlignment: IconPitchAlignment?
   /// Rotates the icon clockwise.
   /// Default value: 0.
   var iconRotate: Double?
-  /// In combination with `symbol-placement`, determines the rotation behavior of icons.
-  /// Default value: "auto".
-  var iconRotationAlignment: IconRotationAlignment?
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   /// Default value: 1. Minimum value: 0.
   var iconSize: Double?
@@ -325,92 +304,44 @@ struct PointAnnotation {
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
   var iconTextFitPadding: [Double?]?
-  /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-  /// Default value: false.
-  var symbolAvoidEdges: Bool?
-  /// Label placement relative to its geometry.
-  /// Default value: "point".
-  var symbolPlacement: SymbolPlacement?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
-  /// Distance between two symbol anchors.
-  /// Default value: 250. Minimum value: 1.
-  var symbolSpacing: Double?
-  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-  /// Default value: false.
-  var symbolZElevate: Bool?
-  /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-  /// Default value: "auto".
-  var symbolZOrder: SymbolZOrder?
-  /// If true, the text will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  var textAllowOverlap: Bool?
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
   var textAnchor: TextAnchor?
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   /// Default value: "".
   var textField: String?
-  /// Font stack to use for displaying text.
-  var textFont: [String?]?
-  /// If true, other symbols can be visible even if they collide with the text.
-  /// Default value: false.
-  var textIgnorePlacement: Bool?
   /// Text justification options.
   /// Default value: "center".
   var textJustify: TextJustify?
-  /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-  /// Default value: true.
-  var textKeepUpright: Bool?
   /// Text tracking amount.
   /// Default value: 0.
   var textLetterSpacing: Double?
   /// Text leading value for multi-line text.
   /// Default value: 1.2.
   var textLineHeight: Double?
-  /// Maximum angle change between adjacent characters.
-  /// Default value: 45.
-  var textMaxAngle: Double?
   /// The maximum line width for text wrapping.
   /// Default value: 10. Minimum value: 0.
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
   var textOffset: [Double?]?
-  /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-  /// Default value: false.
-  var textOptional: Bool?
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  var textPadding: Double?
-  /// Orientation of text when map is pitched.
-  /// Default value: "auto".
-  var textPitchAlignment: TextPitchAlignment?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
   var textRadialOffset: Double?
   /// Rotates the text clockwise.
   /// Default value: 0.
   var textRotate: Double?
-  /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-  /// Default value: "auto".
-  var textRotationAlignment: TextRotationAlignment?
   /// Font size.
   /// Default value: 16. Minimum value: 0.
   var textSize: Double?
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   /// Default value: "none".
   var textTransform: TextTransform?
-  /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
-  var textVariableAnchor: [String?]?
-  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
-  var textWritingMode: [String?]?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
   var iconColor: Int64?
-  /// Increase or reduce the saturation of the symbol icon.
-  /// Default value: 0. Value range: [-1, 1]
-  var iconColorSaturation: Double?
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 1. Minimum value: 0.
   var iconEmissiveStrength: Double?
@@ -432,15 +363,6 @@ struct PointAnnotation {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  var iconTranslate: [Double?]?
-  /// Controls the frame of reference for `icon-translate`.
-  /// Default value: "map".
-  var iconTranslateAnchor: IconTranslateAnchor?
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  var symbolElevationReference: SymbolElevationReference?
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
   var symbolZOffset: Double?
@@ -465,131 +387,72 @@ struct PointAnnotation {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  var textTranslate: [Double?]?
-  /// Controls the frame of reference for `text-translate`.
-  /// Default value: "map".
-  var textTranslateAnchor: TextTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PointAnnotation? {
     let id = __pigeon_list[0] as! String
     let geometry = __pigeon_list[1] as! Point
     let image: FlutterStandardTypedData? = nilOrValue(__pigeon_list[2])
-    let iconAllowOverlap: Bool? = nilOrValue(__pigeon_list[3])
-    let iconAnchor: IconAnchor? = nilOrValue(__pigeon_list[4])
-    let iconIgnorePlacement: Bool? = nilOrValue(__pigeon_list[5])
-    let iconImage: String? = nilOrValue(__pigeon_list[6])
-    let iconKeepUpright: Bool? = nilOrValue(__pigeon_list[7])
-    let iconOffset: [Double?]? = nilOrValue(__pigeon_list[8])
-    let iconOptional: Bool? = nilOrValue(__pigeon_list[9])
-    let iconPadding: Double? = nilOrValue(__pigeon_list[10])
-    let iconPitchAlignment: IconPitchAlignment? = nilOrValue(__pigeon_list[11])
-    let iconRotate: Double? = nilOrValue(__pigeon_list[12])
-    let iconRotationAlignment: IconRotationAlignment? = nilOrValue(__pigeon_list[13])
-    let iconSize: Double? = nilOrValue(__pigeon_list[14])
-    let iconTextFit: IconTextFit? = nilOrValue(__pigeon_list[15])
-    let iconTextFitPadding: [Double?]? = nilOrValue(__pigeon_list[16])
-    let symbolAvoidEdges: Bool? = nilOrValue(__pigeon_list[17])
-    let symbolPlacement: SymbolPlacement? = nilOrValue(__pigeon_list[18])
-    let symbolSortKey: Double? = nilOrValue(__pigeon_list[19])
-    let symbolSpacing: Double? = nilOrValue(__pigeon_list[20])
-    let symbolZElevate: Bool? = nilOrValue(__pigeon_list[21])
-    let symbolZOrder: SymbolZOrder? = nilOrValue(__pigeon_list[22])
-    let textAllowOverlap: Bool? = nilOrValue(__pigeon_list[23])
-    let textAnchor: TextAnchor? = nilOrValue(__pigeon_list[24])
-    let textField: String? = nilOrValue(__pigeon_list[25])
-    let textFont: [String?]? = nilOrValue(__pigeon_list[26])
-    let textIgnorePlacement: Bool? = nilOrValue(__pigeon_list[27])
-    let textJustify: TextJustify? = nilOrValue(__pigeon_list[28])
-    let textKeepUpright: Bool? = nilOrValue(__pigeon_list[29])
-    let textLetterSpacing: Double? = nilOrValue(__pigeon_list[30])
-    let textLineHeight: Double? = nilOrValue(__pigeon_list[31])
-    let textMaxAngle: Double? = nilOrValue(__pigeon_list[32])
-    let textMaxWidth: Double? = nilOrValue(__pigeon_list[33])
-    let textOffset: [Double?]? = nilOrValue(__pigeon_list[34])
-    let textOptional: Bool? = nilOrValue(__pigeon_list[35])
-    let textPadding: Double? = nilOrValue(__pigeon_list[36])
-    let textPitchAlignment: TextPitchAlignment? = nilOrValue(__pigeon_list[37])
-    let textRadialOffset: Double? = nilOrValue(__pigeon_list[38])
-    let textRotate: Double? = nilOrValue(__pigeon_list[39])
-    let textRotationAlignment: TextRotationAlignment? = nilOrValue(__pigeon_list[40])
-    let textSize: Double? = nilOrValue(__pigeon_list[41])
-    let textTransform: TextTransform? = nilOrValue(__pigeon_list[42])
-    let textVariableAnchor: [String?]? = nilOrValue(__pigeon_list[43])
-    let textWritingMode: [String?]? = nilOrValue(__pigeon_list[44])
-    let iconColor: Int64? = isNullish(__pigeon_list[45]) ? nil : (__pigeon_list[45] is Int64? ? __pigeon_list[45] as! Int64? : Int64(__pigeon_list[45] as! Int32))
-    let iconColorSaturation: Double? = nilOrValue(__pigeon_list[46])
-    let iconEmissiveStrength: Double? = nilOrValue(__pigeon_list[47])
-    let iconHaloBlur: Double? = nilOrValue(__pigeon_list[48])
-    let iconHaloColor: Int64? = isNullish(__pigeon_list[49]) ? nil : (__pigeon_list[49] is Int64? ? __pigeon_list[49] as! Int64? : Int64(__pigeon_list[49] as! Int32))
-    let iconHaloWidth: Double? = nilOrValue(__pigeon_list[50])
-    let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[51])
-    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[52])
-    let iconOpacity: Double? = nilOrValue(__pigeon_list[53])
-    let iconTranslate: [Double?]? = nilOrValue(__pigeon_list[54])
-    let iconTranslateAnchor: IconTranslateAnchor? = nilOrValue(__pigeon_list[55])
-    let symbolElevationReference: SymbolElevationReference? = nilOrValue(__pigeon_list[56])
-    let symbolZOffset: Double? = nilOrValue(__pigeon_list[57])
-    let textColor: Int64? = isNullish(__pigeon_list[58]) ? nil : (__pigeon_list[58] is Int64? ? __pigeon_list[58] as! Int64? : Int64(__pigeon_list[58] as! Int32))
-    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[59])
-    let textHaloBlur: Double? = nilOrValue(__pigeon_list[60])
-    let textHaloColor: Int64? = isNullish(__pigeon_list[61]) ? nil : (__pigeon_list[61] is Int64? ? __pigeon_list[61] as! Int64? : Int64(__pigeon_list[61] as! Int32))
-    let textHaloWidth: Double? = nilOrValue(__pigeon_list[62])
-    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[63])
-    let textOpacity: Double? = nilOrValue(__pigeon_list[64])
-    let textTranslate: [Double?]? = nilOrValue(__pigeon_list[65])
-    let textTranslateAnchor: TextTranslateAnchor? = nilOrValue(__pigeon_list[66])
+    let iconAnchor: IconAnchor? = nilOrValue(__pigeon_list[3])
+    let iconImage: String? = nilOrValue(__pigeon_list[4])
+    let iconOffset: [Double?]? = nilOrValue(__pigeon_list[5])
+    let iconRotate: Double? = nilOrValue(__pigeon_list[6])
+    let iconSize: Double? = nilOrValue(__pigeon_list[7])
+    let iconTextFit: IconTextFit? = nilOrValue(__pigeon_list[8])
+    let iconTextFitPadding: [Double?]? = nilOrValue(__pigeon_list[9])
+    let symbolSortKey: Double? = nilOrValue(__pigeon_list[10])
+    let textAnchor: TextAnchor? = nilOrValue(__pigeon_list[11])
+    let textField: String? = nilOrValue(__pigeon_list[12])
+    let textJustify: TextJustify? = nilOrValue(__pigeon_list[13])
+    let textLetterSpacing: Double? = nilOrValue(__pigeon_list[14])
+    let textLineHeight: Double? = nilOrValue(__pigeon_list[15])
+    let textMaxWidth: Double? = nilOrValue(__pigeon_list[16])
+    let textOffset: [Double?]? = nilOrValue(__pigeon_list[17])
+    let textRadialOffset: Double? = nilOrValue(__pigeon_list[18])
+    let textRotate: Double? = nilOrValue(__pigeon_list[19])
+    let textSize: Double? = nilOrValue(__pigeon_list[20])
+    let textTransform: TextTransform? = nilOrValue(__pigeon_list[21])
+    let iconColor: Int64? = isNullish(__pigeon_list[22]) ? nil : (__pigeon_list[22] is Int64? ? __pigeon_list[22] as! Int64? : Int64(__pigeon_list[22] as! Int32))
+    let iconEmissiveStrength: Double? = nilOrValue(__pigeon_list[23])
+    let iconHaloBlur: Double? = nilOrValue(__pigeon_list[24])
+    let iconHaloColor: Int64? = isNullish(__pigeon_list[25]) ? nil : (__pigeon_list[25] is Int64? ? __pigeon_list[25] as! Int64? : Int64(__pigeon_list[25] as! Int32))
+    let iconHaloWidth: Double? = nilOrValue(__pigeon_list[26])
+    let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[27])
+    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[28])
+    let iconOpacity: Double? = nilOrValue(__pigeon_list[29])
+    let symbolZOffset: Double? = nilOrValue(__pigeon_list[30])
+    let textColor: Int64? = isNullish(__pigeon_list[31]) ? nil : (__pigeon_list[31] is Int64? ? __pigeon_list[31] as! Int64? : Int64(__pigeon_list[31] as! Int32))
+    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[32])
+    let textHaloBlur: Double? = nilOrValue(__pigeon_list[33])
+    let textHaloColor: Int64? = isNullish(__pigeon_list[34]) ? nil : (__pigeon_list[34] is Int64? ? __pigeon_list[34] as! Int64? : Int64(__pigeon_list[34] as! Int32))
+    let textHaloWidth: Double? = nilOrValue(__pigeon_list[35])
+    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[36])
+    let textOpacity: Double? = nilOrValue(__pigeon_list[37])
 
     return PointAnnotation(
       id: id,
       geometry: geometry,
       image: image,
-      iconAllowOverlap: iconAllowOverlap,
       iconAnchor: iconAnchor,
-      iconIgnorePlacement: iconIgnorePlacement,
       iconImage: iconImage,
-      iconKeepUpright: iconKeepUpright,
       iconOffset: iconOffset,
-      iconOptional: iconOptional,
-      iconPadding: iconPadding,
-      iconPitchAlignment: iconPitchAlignment,
       iconRotate: iconRotate,
-      iconRotationAlignment: iconRotationAlignment,
       iconSize: iconSize,
       iconTextFit: iconTextFit,
       iconTextFitPadding: iconTextFitPadding,
-      symbolAvoidEdges: symbolAvoidEdges,
-      symbolPlacement: symbolPlacement,
       symbolSortKey: symbolSortKey,
-      symbolSpacing: symbolSpacing,
-      symbolZElevate: symbolZElevate,
-      symbolZOrder: symbolZOrder,
-      textAllowOverlap: textAllowOverlap,
       textAnchor: textAnchor,
       textField: textField,
-      textFont: textFont,
-      textIgnorePlacement: textIgnorePlacement,
       textJustify: textJustify,
-      textKeepUpright: textKeepUpright,
       textLetterSpacing: textLetterSpacing,
       textLineHeight: textLineHeight,
-      textMaxAngle: textMaxAngle,
       textMaxWidth: textMaxWidth,
       textOffset: textOffset,
-      textOptional: textOptional,
-      textPadding: textPadding,
-      textPitchAlignment: textPitchAlignment,
       textRadialOffset: textRadialOffset,
       textRotate: textRotate,
-      textRotationAlignment: textRotationAlignment,
       textSize: textSize,
       textTransform: textTransform,
-      textVariableAnchor: textVariableAnchor,
-      textWritingMode: textWritingMode,
       iconColor: iconColor,
-      iconColorSaturation: iconColorSaturation,
       iconEmissiveStrength: iconEmissiveStrength,
       iconHaloBlur: iconHaloBlur,
       iconHaloColor: iconHaloColor,
@@ -597,9 +460,6 @@ struct PointAnnotation {
       iconImageCrossFade: iconImageCrossFade,
       iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
-      iconTranslate: iconTranslate,
-      iconTranslateAnchor: iconTranslateAnchor,
-      symbolElevationReference: symbolElevationReference,
       symbolZOffset: symbolZOffset,
       textColor: textColor,
       textEmissiveStrength: textEmissiveStrength,
@@ -607,9 +467,7 @@ struct PointAnnotation {
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
-      textOpacity: textOpacity,
-      textTranslate: textTranslate,
-      textTranslateAnchor: textTranslateAnchor
+      textOpacity: textOpacity
     )
   }
   func toList() -> [Any?] {
@@ -617,50 +475,26 @@ struct PointAnnotation {
       id,
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -668,9 +502,6 @@ struct PointAnnotation {
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -679,8 +510,6 @@ struct PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     ]
   }
 }
@@ -692,38 +521,17 @@ struct PointAnnotationOptions {
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
   var image: FlutterStandardTypedData?
-  /// If true, the icon will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  var iconAllowOverlap: Bool?
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
   var iconAnchor: IconAnchor?
-  /// If true, other symbols can be visible even if they collide with the icon.
-  /// Default value: false.
-  var iconIgnorePlacement: Bool?
   /// Name of image in sprite to use for drawing an image background.
   var iconImage: String?
-  /// If true, the icon may be flipped to prevent it from being rendered upside-down.
-  /// Default value: false.
-  var iconKeepUpright: Bool?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
   var iconOffset: [Double?]?
-  /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-  /// Default value: false.
-  var iconOptional: Bool?
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  var iconPadding: Double?
-  /// Orientation of icon when map is pitched.
-  /// Default value: "auto".
-  var iconPitchAlignment: IconPitchAlignment?
   /// Rotates the icon clockwise.
   /// Default value: 0.
   var iconRotate: Double?
-  /// In combination with `symbol-placement`, determines the rotation behavior of icons.
-  /// Default value: "auto".
-  var iconRotationAlignment: IconRotationAlignment?
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
   /// Default value: 1. Minimum value: 0.
   var iconSize: Double?
@@ -733,92 +541,44 @@ struct PointAnnotationOptions {
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
   var iconTextFitPadding: [Double?]?
-  /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-  /// Default value: false.
-  var symbolAvoidEdges: Bool?
-  /// Label placement relative to its geometry.
-  /// Default value: "point".
-  var symbolPlacement: SymbolPlacement?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
-  /// Distance between two symbol anchors.
-  /// Default value: 250. Minimum value: 1.
-  var symbolSpacing: Double?
-  /// Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-  /// Default value: false.
-  var symbolZElevate: Bool?
-  /// Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-  /// Default value: "auto".
-  var symbolZOrder: SymbolZOrder?
-  /// If true, the text will be visible even if it collides with other previously drawn symbols.
-  /// Default value: false.
-  var textAllowOverlap: Bool?
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
   var textAnchor: TextAnchor?
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   /// Default value: "".
   var textField: String?
-  /// Font stack to use for displaying text.
-  var textFont: [String?]?
-  /// If true, other symbols can be visible even if they collide with the text.
-  /// Default value: false.
-  var textIgnorePlacement: Bool?
   /// Text justification options.
   /// Default value: "center".
   var textJustify: TextJustify?
-  /// If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-  /// Default value: true.
-  var textKeepUpright: Bool?
   /// Text tracking amount.
   /// Default value: 0.
   var textLetterSpacing: Double?
   /// Text leading value for multi-line text.
   /// Default value: 1.2.
   var textLineHeight: Double?
-  /// Maximum angle change between adjacent characters.
-  /// Default value: 45.
-  var textMaxAngle: Double?
   /// The maximum line width for text wrapping.
   /// Default value: 10. Minimum value: 0.
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
   var textOffset: [Double?]?
-  /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-  /// Default value: false.
-  var textOptional: Bool?
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions.
-  /// Default value: 2. Minimum value: 0.
-  var textPadding: Double?
-  /// Orientation of text when map is pitched.
-  /// Default value: "auto".
-  var textPitchAlignment: TextPitchAlignment?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
   var textRadialOffset: Double?
   /// Rotates the text clockwise.
   /// Default value: 0.
   var textRotate: Double?
-  /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-  /// Default value: "auto".
-  var textRotationAlignment: TextRotationAlignment?
   /// Font size.
   /// Default value: 16. Minimum value: 0.
   var textSize: Double?
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   /// Default value: "none".
   var textTransform: TextTransform?
-  /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
-  var textVariableAnchor: [String?]?
-  /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
-  var textWritingMode: [String?]?
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
   var iconColor: Int64?
-  /// Increase or reduce the saturation of the symbol icon.
-  /// Default value: 0. Value range: [-1, 1]
-  var iconColorSaturation: Double?
   /// Controls the intensity of light emitted on the source features.
   /// Default value: 1. Minimum value: 0.
   var iconEmissiveStrength: Double?
@@ -840,15 +600,6 @@ struct PointAnnotationOptions {
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  var iconTranslate: [Double?]?
-  /// Controls the frame of reference for `icon-translate`.
-  /// Default value: "map".
-  var iconTranslateAnchor: IconTranslateAnchor?
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  var symbolElevationReference: SymbolElevationReference?
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
   var symbolZOffset: Double?
@@ -873,129 +624,70 @@ struct PointAnnotationOptions {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-  /// Default value: [0,0].
-  var textTranslate: [Double?]?
-  /// Controls the frame of reference for `text-translate`.
-  /// Default value: "map".
-  var textTranslateAnchor: TextTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PointAnnotationOptions? {
     let geometry = __pigeon_list[0] as! Point
     let image: FlutterStandardTypedData? = nilOrValue(__pigeon_list[1])
-    let iconAllowOverlap: Bool? = nilOrValue(__pigeon_list[2])
-    let iconAnchor: IconAnchor? = nilOrValue(__pigeon_list[3])
-    let iconIgnorePlacement: Bool? = nilOrValue(__pigeon_list[4])
-    let iconImage: String? = nilOrValue(__pigeon_list[5])
-    let iconKeepUpright: Bool? = nilOrValue(__pigeon_list[6])
-    let iconOffset: [Double?]? = nilOrValue(__pigeon_list[7])
-    let iconOptional: Bool? = nilOrValue(__pigeon_list[8])
-    let iconPadding: Double? = nilOrValue(__pigeon_list[9])
-    let iconPitchAlignment: IconPitchAlignment? = nilOrValue(__pigeon_list[10])
-    let iconRotate: Double? = nilOrValue(__pigeon_list[11])
-    let iconRotationAlignment: IconRotationAlignment? = nilOrValue(__pigeon_list[12])
-    let iconSize: Double? = nilOrValue(__pigeon_list[13])
-    let iconTextFit: IconTextFit? = nilOrValue(__pigeon_list[14])
-    let iconTextFitPadding: [Double?]? = nilOrValue(__pigeon_list[15])
-    let symbolAvoidEdges: Bool? = nilOrValue(__pigeon_list[16])
-    let symbolPlacement: SymbolPlacement? = nilOrValue(__pigeon_list[17])
-    let symbolSortKey: Double? = nilOrValue(__pigeon_list[18])
-    let symbolSpacing: Double? = nilOrValue(__pigeon_list[19])
-    let symbolZElevate: Bool? = nilOrValue(__pigeon_list[20])
-    let symbolZOrder: SymbolZOrder? = nilOrValue(__pigeon_list[21])
-    let textAllowOverlap: Bool? = nilOrValue(__pigeon_list[22])
-    let textAnchor: TextAnchor? = nilOrValue(__pigeon_list[23])
-    let textField: String? = nilOrValue(__pigeon_list[24])
-    let textFont: [String?]? = nilOrValue(__pigeon_list[25])
-    let textIgnorePlacement: Bool? = nilOrValue(__pigeon_list[26])
-    let textJustify: TextJustify? = nilOrValue(__pigeon_list[27])
-    let textKeepUpright: Bool? = nilOrValue(__pigeon_list[28])
-    let textLetterSpacing: Double? = nilOrValue(__pigeon_list[29])
-    let textLineHeight: Double? = nilOrValue(__pigeon_list[30])
-    let textMaxAngle: Double? = nilOrValue(__pigeon_list[31])
-    let textMaxWidth: Double? = nilOrValue(__pigeon_list[32])
-    let textOffset: [Double?]? = nilOrValue(__pigeon_list[33])
-    let textOptional: Bool? = nilOrValue(__pigeon_list[34])
-    let textPadding: Double? = nilOrValue(__pigeon_list[35])
-    let textPitchAlignment: TextPitchAlignment? = nilOrValue(__pigeon_list[36])
-    let textRadialOffset: Double? = nilOrValue(__pigeon_list[37])
-    let textRotate: Double? = nilOrValue(__pigeon_list[38])
-    let textRotationAlignment: TextRotationAlignment? = nilOrValue(__pigeon_list[39])
-    let textSize: Double? = nilOrValue(__pigeon_list[40])
-    let textTransform: TextTransform? = nilOrValue(__pigeon_list[41])
-    let textVariableAnchor: [String?]? = nilOrValue(__pigeon_list[42])
-    let textWritingMode: [String?]? = nilOrValue(__pigeon_list[43])
-    let iconColor: Int64? = isNullish(__pigeon_list[44]) ? nil : (__pigeon_list[44] is Int64? ? __pigeon_list[44] as! Int64? : Int64(__pigeon_list[44] as! Int32))
-    let iconColorSaturation: Double? = nilOrValue(__pigeon_list[45])
-    let iconEmissiveStrength: Double? = nilOrValue(__pigeon_list[46])
-    let iconHaloBlur: Double? = nilOrValue(__pigeon_list[47])
-    let iconHaloColor: Int64? = isNullish(__pigeon_list[48]) ? nil : (__pigeon_list[48] is Int64? ? __pigeon_list[48] as! Int64? : Int64(__pigeon_list[48] as! Int32))
-    let iconHaloWidth: Double? = nilOrValue(__pigeon_list[49])
-    let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[50])
-    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[51])
-    let iconOpacity: Double? = nilOrValue(__pigeon_list[52])
-    let iconTranslate: [Double?]? = nilOrValue(__pigeon_list[53])
-    let iconTranslateAnchor: IconTranslateAnchor? = nilOrValue(__pigeon_list[54])
-    let symbolElevationReference: SymbolElevationReference? = nilOrValue(__pigeon_list[55])
-    let symbolZOffset: Double? = nilOrValue(__pigeon_list[56])
-    let textColor: Int64? = isNullish(__pigeon_list[57]) ? nil : (__pigeon_list[57] is Int64? ? __pigeon_list[57] as! Int64? : Int64(__pigeon_list[57] as! Int32))
-    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[58])
-    let textHaloBlur: Double? = nilOrValue(__pigeon_list[59])
-    let textHaloColor: Int64? = isNullish(__pigeon_list[60]) ? nil : (__pigeon_list[60] is Int64? ? __pigeon_list[60] as! Int64? : Int64(__pigeon_list[60] as! Int32))
-    let textHaloWidth: Double? = nilOrValue(__pigeon_list[61])
-    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[62])
-    let textOpacity: Double? = nilOrValue(__pigeon_list[63])
-    let textTranslate: [Double?]? = nilOrValue(__pigeon_list[64])
-    let textTranslateAnchor: TextTranslateAnchor? = nilOrValue(__pigeon_list[65])
+    let iconAnchor: IconAnchor? = nilOrValue(__pigeon_list[2])
+    let iconImage: String? = nilOrValue(__pigeon_list[3])
+    let iconOffset: [Double?]? = nilOrValue(__pigeon_list[4])
+    let iconRotate: Double? = nilOrValue(__pigeon_list[5])
+    let iconSize: Double? = nilOrValue(__pigeon_list[6])
+    let iconTextFit: IconTextFit? = nilOrValue(__pigeon_list[7])
+    let iconTextFitPadding: [Double?]? = nilOrValue(__pigeon_list[8])
+    let symbolSortKey: Double? = nilOrValue(__pigeon_list[9])
+    let textAnchor: TextAnchor? = nilOrValue(__pigeon_list[10])
+    let textField: String? = nilOrValue(__pigeon_list[11])
+    let textJustify: TextJustify? = nilOrValue(__pigeon_list[12])
+    let textLetterSpacing: Double? = nilOrValue(__pigeon_list[13])
+    let textLineHeight: Double? = nilOrValue(__pigeon_list[14])
+    let textMaxWidth: Double? = nilOrValue(__pigeon_list[15])
+    let textOffset: [Double?]? = nilOrValue(__pigeon_list[16])
+    let textRadialOffset: Double? = nilOrValue(__pigeon_list[17])
+    let textRotate: Double? = nilOrValue(__pigeon_list[18])
+    let textSize: Double? = nilOrValue(__pigeon_list[19])
+    let textTransform: TextTransform? = nilOrValue(__pigeon_list[20])
+    let iconColor: Int64? = isNullish(__pigeon_list[21]) ? nil : (__pigeon_list[21] is Int64? ? __pigeon_list[21] as! Int64? : Int64(__pigeon_list[21] as! Int32))
+    let iconEmissiveStrength: Double? = nilOrValue(__pigeon_list[22])
+    let iconHaloBlur: Double? = nilOrValue(__pigeon_list[23])
+    let iconHaloColor: Int64? = isNullish(__pigeon_list[24]) ? nil : (__pigeon_list[24] is Int64? ? __pigeon_list[24] as! Int64? : Int64(__pigeon_list[24] as! Int32))
+    let iconHaloWidth: Double? = nilOrValue(__pigeon_list[25])
+    let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[26])
+    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[27])
+    let iconOpacity: Double? = nilOrValue(__pigeon_list[28])
+    let symbolZOffset: Double? = nilOrValue(__pigeon_list[29])
+    let textColor: Int64? = isNullish(__pigeon_list[30]) ? nil : (__pigeon_list[30] is Int64? ? __pigeon_list[30] as! Int64? : Int64(__pigeon_list[30] as! Int32))
+    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[31])
+    let textHaloBlur: Double? = nilOrValue(__pigeon_list[32])
+    let textHaloColor: Int64? = isNullish(__pigeon_list[33]) ? nil : (__pigeon_list[33] is Int64? ? __pigeon_list[33] as! Int64? : Int64(__pigeon_list[33] as! Int32))
+    let textHaloWidth: Double? = nilOrValue(__pigeon_list[34])
+    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[35])
+    let textOpacity: Double? = nilOrValue(__pigeon_list[36])
 
     return PointAnnotationOptions(
       geometry: geometry,
       image: image,
-      iconAllowOverlap: iconAllowOverlap,
       iconAnchor: iconAnchor,
-      iconIgnorePlacement: iconIgnorePlacement,
       iconImage: iconImage,
-      iconKeepUpright: iconKeepUpright,
       iconOffset: iconOffset,
-      iconOptional: iconOptional,
-      iconPadding: iconPadding,
-      iconPitchAlignment: iconPitchAlignment,
       iconRotate: iconRotate,
-      iconRotationAlignment: iconRotationAlignment,
       iconSize: iconSize,
       iconTextFit: iconTextFit,
       iconTextFitPadding: iconTextFitPadding,
-      symbolAvoidEdges: symbolAvoidEdges,
-      symbolPlacement: symbolPlacement,
       symbolSortKey: symbolSortKey,
-      symbolSpacing: symbolSpacing,
-      symbolZElevate: symbolZElevate,
-      symbolZOrder: symbolZOrder,
-      textAllowOverlap: textAllowOverlap,
       textAnchor: textAnchor,
       textField: textField,
-      textFont: textFont,
-      textIgnorePlacement: textIgnorePlacement,
       textJustify: textJustify,
-      textKeepUpright: textKeepUpright,
       textLetterSpacing: textLetterSpacing,
       textLineHeight: textLineHeight,
-      textMaxAngle: textMaxAngle,
       textMaxWidth: textMaxWidth,
       textOffset: textOffset,
-      textOptional: textOptional,
-      textPadding: textPadding,
-      textPitchAlignment: textPitchAlignment,
       textRadialOffset: textRadialOffset,
       textRotate: textRotate,
-      textRotationAlignment: textRotationAlignment,
       textSize: textSize,
       textTransform: textTransform,
-      textVariableAnchor: textVariableAnchor,
-      textWritingMode: textWritingMode,
       iconColor: iconColor,
-      iconColorSaturation: iconColorSaturation,
       iconEmissiveStrength: iconEmissiveStrength,
       iconHaloBlur: iconHaloBlur,
       iconHaloColor: iconHaloColor,
@@ -1003,9 +695,6 @@ struct PointAnnotationOptions {
       iconImageCrossFade: iconImageCrossFade,
       iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
-      iconTranslate: iconTranslate,
-      iconTranslateAnchor: iconTranslateAnchor,
-      symbolElevationReference: symbolElevationReference,
       symbolZOffset: symbolZOffset,
       textColor: textColor,
       textEmissiveStrength: textEmissiveStrength,
@@ -1013,59 +702,33 @@ struct PointAnnotationOptions {
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
-      textOpacity: textOpacity,
-      textTranslate: textTranslate,
-      textTranslateAnchor: textTranslateAnchor
+      textOpacity: textOpacity
     )
   }
   func toList() -> [Any?] {
     return [
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -1073,9 +736,6 @@ struct PointAnnotationOptions {
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -1084,8 +744,6 @@ struct PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     ]
   }
 }

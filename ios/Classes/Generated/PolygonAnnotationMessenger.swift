@@ -86,15 +86,9 @@ struct PolygonAnnotation {
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
-  /// Whether or not the fill should be antialiased.
-  /// Default value: true.
-  var fillAntialias: Bool?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   var fillColor: Int64?
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  var fillEmissiveStrength: Double?
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
   var fillOpacity: Double?
@@ -102,39 +96,25 @@ struct PolygonAnnotation {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  var fillTranslate: [Double?]?
-  /// Controls the frame of reference for `fill-translate`.
-  /// Default value: "map".
-  var fillTranslateAnchor: FillTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PolygonAnnotation? {
     let id = __pigeon_list[0] as! String
     let geometry = __pigeon_list[1] as! Polygon
     let fillSortKey: Double? = nilOrValue(__pigeon_list[2])
-    let fillAntialias: Bool? = nilOrValue(__pigeon_list[3])
-    let fillColor: Int64? = isNullish(__pigeon_list[4]) ? nil : (__pigeon_list[4] is Int64? ? __pigeon_list[4] as! Int64? : Int64(__pigeon_list[4] as! Int32))
-    let fillEmissiveStrength: Double? = nilOrValue(__pigeon_list[5])
-    let fillOpacity: Double? = nilOrValue(__pigeon_list[6])
-    let fillOutlineColor: Int64? = isNullish(__pigeon_list[7]) ? nil : (__pigeon_list[7] is Int64? ? __pigeon_list[7] as! Int64? : Int64(__pigeon_list[7] as! Int32))
-    let fillPattern: String? = nilOrValue(__pigeon_list[8])
-    let fillTranslate: [Double?]? = nilOrValue(__pigeon_list[9])
-    let fillTranslateAnchor: FillTranslateAnchor? = nilOrValue(__pigeon_list[10])
+    let fillColor: Int64? = isNullish(__pigeon_list[3]) ? nil : (__pigeon_list[3] is Int64? ? __pigeon_list[3] as! Int64? : Int64(__pigeon_list[3] as! Int32))
+    let fillOpacity: Double? = nilOrValue(__pigeon_list[4])
+    let fillOutlineColor: Int64? = isNullish(__pigeon_list[5]) ? nil : (__pigeon_list[5] is Int64? ? __pigeon_list[5] as! Int64? : Int64(__pigeon_list[5] as! Int32))
+    let fillPattern: String? = nilOrValue(__pigeon_list[6])
 
     return PolygonAnnotation(
       id: id,
       geometry: geometry,
       fillSortKey: fillSortKey,
-      fillAntialias: fillAntialias,
       fillColor: fillColor,
-      fillEmissiveStrength: fillEmissiveStrength,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern,
-      fillTranslate: fillTranslate,
-      fillTranslateAnchor: fillTranslateAnchor
+      fillPattern: fillPattern
     )
   }
   func toList() -> [Any?] {
@@ -142,14 +122,10 @@ struct PolygonAnnotation {
       id,
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     ]
   }
 }
@@ -160,15 +136,9 @@ struct PolygonAnnotationOptions {
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var fillSortKey: Double?
-  /// Whether or not the fill should be antialiased.
-  /// Default value: true.
-  var fillAntialias: Bool?
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   var fillColor: Int64?
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  var fillEmissiveStrength: Double?
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
   var fillOpacity: Double?
@@ -176,51 +146,33 @@ struct PolygonAnnotationOptions {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  var fillTranslate: [Double?]?
-  /// Controls the frame of reference for `fill-translate`.
-  /// Default value: "map".
-  var fillTranslateAnchor: FillTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> PolygonAnnotationOptions? {
     let geometry = __pigeon_list[0] as! Polygon
     let fillSortKey: Double? = nilOrValue(__pigeon_list[1])
-    let fillAntialias: Bool? = nilOrValue(__pigeon_list[2])
-    let fillColor: Int64? = isNullish(__pigeon_list[3]) ? nil : (__pigeon_list[3] is Int64? ? __pigeon_list[3] as! Int64? : Int64(__pigeon_list[3] as! Int32))
-    let fillEmissiveStrength: Double? = nilOrValue(__pigeon_list[4])
-    let fillOpacity: Double? = nilOrValue(__pigeon_list[5])
-    let fillOutlineColor: Int64? = isNullish(__pigeon_list[6]) ? nil : (__pigeon_list[6] is Int64? ? __pigeon_list[6] as! Int64? : Int64(__pigeon_list[6] as! Int32))
-    let fillPattern: String? = nilOrValue(__pigeon_list[7])
-    let fillTranslate: [Double?]? = nilOrValue(__pigeon_list[8])
-    let fillTranslateAnchor: FillTranslateAnchor? = nilOrValue(__pigeon_list[9])
+    let fillColor: Int64? = isNullish(__pigeon_list[2]) ? nil : (__pigeon_list[2] is Int64? ? __pigeon_list[2] as! Int64? : Int64(__pigeon_list[2] as! Int32))
+    let fillOpacity: Double? = nilOrValue(__pigeon_list[3])
+    let fillOutlineColor: Int64? = isNullish(__pigeon_list[4]) ? nil : (__pigeon_list[4] is Int64? ? __pigeon_list[4] as! Int64? : Int64(__pigeon_list[4] as! Int32))
+    let fillPattern: String? = nilOrValue(__pigeon_list[5])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
       fillSortKey: fillSortKey,
-      fillAntialias: fillAntialias,
       fillColor: fillColor,
-      fillEmissiveStrength: fillEmissiveStrength,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern,
-      fillTranslate: fillTranslate,
-      fillTranslateAnchor: fillTranslateAnchor
+      fillPattern: fillPattern
     )
   }
   func toList() -> [Any?] {
     return [
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     ]
   }
 }

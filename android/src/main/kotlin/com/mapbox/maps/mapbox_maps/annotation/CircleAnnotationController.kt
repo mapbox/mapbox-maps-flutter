@@ -133,17 +133,8 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     annotation.circleColor?.let {
       originalAnnotation.circleColorInt = it.toInt()
     }
-    annotation.circleEmissiveStrength?.let {
-      originalAnnotation.circleEmissiveStrength = it
-    }
     annotation.circleOpacity?.let {
       originalAnnotation.circleOpacity = it
-    }
-    annotation.circlePitchAlignment?.let {
-      originalAnnotation.circlePitchAlignment = it.toCirclePitchAlignment()
-    }
-    annotation.circlePitchScale?.let {
-      originalAnnotation.circlePitchScale = it.toCirclePitchScale()
     }
     annotation.circleRadius?.let {
       originalAnnotation.circleRadius = it
@@ -156,12 +147,6 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     }
     annotation.circleStrokeWidth?.let {
       originalAnnotation.circleStrokeWidth = it
-    }
-    annotation.circleTranslate?.let {
-      originalAnnotation.circleTranslate = it.mapNotNull { it }
-    }
-    annotation.circleTranslateAnchor?.let {
-      originalAnnotation.circleTranslateAnchor = it.toCircleTranslateAnchor()
     }
     return originalAnnotation
   }
@@ -181,8 +166,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleSortKey != null) {
-      callback(Result.success(manager.circleSortKey!!))
+    val value = manager.circleSortKey
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -203,8 +189,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleBlur != null) {
-      callback(Result.success(manager.circleBlur!!))
+    val value = manager.circleBlur
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -212,21 +199,22 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
 
   override fun setCircleColor(
     managerId: String,
-    circleColor: String,
+    circleColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circleColor = circleColor
+    manager.circleColorInt = circleColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getCircleColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleColor != null) {
-      callback(Result.success(manager.circleColor!!))
+    val value = manager.circleColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -247,8 +235,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleEmissiveStrength != null) {
-      callback(Result.success(manager.circleEmissiveStrength!!))
+    val value = manager.circleEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -269,8 +258,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleOpacity != null) {
-      callback(Result.success(manager.circleOpacity!!))
+    val value = manager.circleOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -291,8 +281,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CirclePitchAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circlePitchAlignment != null) {
-      callback(Result.success(manager.circlePitchAlignment!!.toFLTCirclePitchAlignment()))
+    val value = manager.circlePitchAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTCirclePitchAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -313,8 +304,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CirclePitchScale?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circlePitchScale != null) {
-      callback(Result.success(manager.circlePitchScale!!.toFLTCirclePitchScale()))
+    val value = manager.circlePitchScale
+    if (value != null) {
+      callback(Result.success(value.toFLTCirclePitchScale()))
     } else {
       callback(Result.success(null))
     }
@@ -335,8 +327,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleRadius != null) {
-      callback(Result.success(manager.circleRadius!!))
+    val value = manager.circleRadius
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -344,21 +337,22 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
 
   override fun setCircleStrokeColor(
     managerId: String,
-    circleStrokeColor: String,
+    circleStrokeColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    manager.circleStrokeColor = circleStrokeColor
+    manager.circleStrokeColorInt = circleStrokeColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getCircleStrokeColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleStrokeColor != null) {
-      callback(Result.success(manager.circleStrokeColor!!))
+    val value = manager.circleStrokeColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -379,8 +373,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleStrokeOpacity != null) {
-      callback(Result.success(manager.circleStrokeOpacity!!))
+    val value = manager.circleStrokeOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -401,8 +396,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleStrokeWidth != null) {
-      callback(Result.success(manager.circleStrokeWidth!!))
+    val value = manager.circleStrokeWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -423,8 +419,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleTranslate != null) {
-      callback(Result.success(manager.circleTranslate!!))
+    val value = manager.circleTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -445,8 +442,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CircleTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleTranslateAnchor != null) {
-      callback(Result.success(manager.circleTranslateAnchor!!.toFLTCircleTranslateAnchor()))
+    val value = manager.circleTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTCircleTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -461,17 +459,12 @@ fun com.mapbox.maps.plugin.annotation.generated.CircleAnnotation.toFLTCircleAnno
     circleBlur = circleBlur,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     circleColor = circleColorInt?.toUInt()?.toLong(),
-    circleEmissiveStrength = circleEmissiveStrength,
     circleOpacity = circleOpacity,
-    circlePitchAlignment = circlePitchAlignment?.toFLTCirclePitchAlignment(),
-    circlePitchScale = circlePitchScale?.toFLTCirclePitchScale(),
     circleRadius = circleRadius,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     circleStrokeColor = circleStrokeColorInt?.toUInt()?.toLong(),
     circleStrokeOpacity = circleStrokeOpacity,
     circleStrokeWidth = circleStrokeWidth,
-    circleTranslate = circleTranslate,
-    circleTranslateAnchor = circleTranslateAnchor?.toFLTCircleTranslateAnchor(),
   )
 }
 
@@ -489,17 +482,8 @@ fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.
   this.circleColor?.let {
     options.withCircleColor(it.toInt())
   }
-  this.circleEmissiveStrength?.let {
-    options.withCircleEmissiveStrength(it)
-  }
   this.circleOpacity?.let {
     options.withCircleOpacity(it)
-  }
-  this.circlePitchAlignment?.let {
-    options.withCirclePitchAlignment(it.toCirclePitchAlignment())
-  }
-  this.circlePitchScale?.let {
-    options.withCirclePitchScale(it.toCirclePitchScale())
   }
   this.circleRadius?.let {
     options.withCircleRadius(it)
@@ -512,12 +496,6 @@ fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.
   }
   this.circleStrokeWidth?.let {
     options.withCircleStrokeWidth(it)
-  }
-  this.circleTranslate?.let {
-    options.withCircleTranslate(it.mapNotNull { it })
-  }
-  this.circleTranslateAnchor?.let {
-    options.withCircleTranslateAnchor(it.toCircleTranslateAnchor())
   }
   return options
 }

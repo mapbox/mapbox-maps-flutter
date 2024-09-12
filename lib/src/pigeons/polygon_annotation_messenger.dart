@@ -19,14 +19,10 @@ class PolygonAnnotation {
     required this.id,
     required this.geometry,
     this.fillSortKey,
-    this.fillAntialias,
     this.fillColor,
-    this.fillEmissiveStrength,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
-    this.fillTranslate,
-    this.fillTranslateAnchor,
   });
 
   /// The id for annotation
@@ -38,17 +34,9 @@ class PolygonAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
 
-  /// Whether or not the fill should be antialiased.
-  /// Default value: true.
-  bool? fillAntialias;
-
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   int? fillColor;
-
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
@@ -60,27 +48,15 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? fillTranslate;
-
-  /// Controls the frame of reference for `fill-translate`.
-  /// Default value: "map".
-  FillTranslateAnchor? fillTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       id,
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     ];
   }
 
@@ -90,14 +66,10 @@ class PolygonAnnotation {
       id: result[0]! as String,
       geometry: result[1]! as Polygon,
       fillSortKey: result[2] as double?,
-      fillAntialias: result[3] as bool?,
-      fillColor: result[4] as int?,
-      fillEmissiveStrength: result[5] as double?,
-      fillOpacity: result[6] as double?,
-      fillOutlineColor: result[7] as int?,
-      fillPattern: result[8] as String?,
-      fillTranslate: (result[9] as List<Object?>?)?.cast<double?>(),
-      fillTranslateAnchor: result[10] as FillTranslateAnchor?,
+      fillColor: result[3] as int?,
+      fillOpacity: result[4] as double?,
+      fillOutlineColor: result[5] as int?,
+      fillPattern: result[6] as String?,
     );
   }
 }
@@ -106,14 +78,10 @@ class PolygonAnnotationOptions {
   PolygonAnnotationOptions({
     required this.geometry,
     this.fillSortKey,
-    this.fillAntialias,
     this.fillColor,
-    this.fillEmissiveStrength,
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
-    this.fillTranslate,
-    this.fillTranslateAnchor,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -122,17 +90,9 @@ class PolygonAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? fillSortKey;
 
-  /// Whether or not the fill should be antialiased.
-  /// Default value: true.
-  bool? fillAntialias;
-
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
   int? fillColor;
-
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? fillEmissiveStrength;
 
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
@@ -144,26 +104,14 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? fillTranslate;
-
-  /// Controls the frame of reference for `fill-translate`.
-  /// Default value: "map".
-  FillTranslateAnchor? fillTranslateAnchor;
-
   Object encode() {
     return <Object?>[
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     ];
   }
 
@@ -172,14 +120,10 @@ class PolygonAnnotationOptions {
     return PolygonAnnotationOptions(
       geometry: result[0]! as Polygon,
       fillSortKey: result[1] as double?,
-      fillAntialias: result[2] as bool?,
-      fillColor: result[3] as int?,
-      fillEmissiveStrength: result[4] as double?,
-      fillOpacity: result[5] as double?,
-      fillOutlineColor: result[6] as int?,
-      fillPattern: result[7] as String?,
-      fillTranslate: (result[8] as List<Object?>?)?.cast<double?>(),
-      fillTranslateAnchor: result[9] as FillTranslateAnchor?,
+      fillColor: result[2] as int?,
+      fillOpacity: result[3] as double?,
+      fillOutlineColor: result[4] as int?,
+      fillPattern: result[5] as String?,
     );
   }
 }

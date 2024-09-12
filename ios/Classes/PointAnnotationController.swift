@@ -915,19 +915,19 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getIconColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getIconColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.iconColor))
+            completion(.success(manager.iconColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconColor(managerId: String, iconColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setIconColor(managerId: String, iconColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconColor = iconColor
+            manager.iconColor = StyleColor(rgb: iconColor)
 
             completion(.success(()))
         } catch {
@@ -995,19 +995,19 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getIconHaloColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getIconHaloColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.iconHaloColor))
+            completion(.success(manager.iconHaloColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setIconHaloColor(managerId: String, iconHaloColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setIconHaloColor(managerId: String, iconHaloColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.iconHaloColor = iconHaloColor
+            manager.iconHaloColor = StyleColor(rgb: iconHaloColor)
 
             completion(.success(()))
         } catch {
@@ -1175,19 +1175,19 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getTextColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getTextColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.textColor))
+            completion(.success(manager.textColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextColor(managerId: String, textColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setTextColor(managerId: String, textColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textColor = textColor
+            manager.textColor = StyleColor(rgb: textColor)
 
             completion(.success(()))
         } catch {
@@ -1235,19 +1235,19 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getTextHaloColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getTextHaloColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.textHaloColor))
+            completion(.success(manager.textHaloColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setTextHaloColor(managerId: String, textHaloColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setTextHaloColor(managerId: String, textHaloColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.textHaloColor = textHaloColor
+            manager.textHaloColor = StyleColor(rgb: textHaloColor)
 
             completion(.success(()))
         } catch {
@@ -1363,38 +1363,17 @@ extension PointAnnotationOptions {
         if let image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: UUID().uuidString)
         }
-        if let iconAllowOverlap {
-            annotation.iconAllowOverlap = iconAllowOverlap
-        }
         if let iconAnchor {
             annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
-        }
-        if let iconIgnorePlacement {
-            annotation.iconIgnorePlacement = iconIgnorePlacement
         }
         if let iconImage {
             annotation.iconImage = iconImage
         }
-        if let iconKeepUpright {
-            annotation.iconKeepUpright = iconKeepUpright
-        }
         if let iconOffset {
             annotation.iconOffset = iconOffset.compactMap { $0 }
         }
-        if let iconOptional {
-            annotation.iconOptional = iconOptional
-        }
-        if let iconPadding {
-            annotation.iconPadding = iconPadding
-        }
-        if let iconPitchAlignment {
-            annotation.iconPitchAlignment = MapboxMaps.IconPitchAlignment(iconPitchAlignment)
-        }
         if let iconRotate {
             annotation.iconRotate = iconRotate
-        }
-        if let iconRotationAlignment {
-            annotation.iconRotationAlignment = MapboxMaps.IconRotationAlignment(iconRotationAlignment)
         }
         if let iconSize {
             annotation.iconSize = iconSize
@@ -1405,26 +1384,8 @@ extension PointAnnotationOptions {
         if let iconTextFitPadding {
             annotation.iconTextFitPadding = iconTextFitPadding.compactMap { $0 }
         }
-        if let symbolAvoidEdges {
-            annotation.symbolAvoidEdges = symbolAvoidEdges
-        }
-        if let symbolPlacement {
-            annotation.symbolPlacement = MapboxMaps.SymbolPlacement(symbolPlacement)
-        }
         if let symbolSortKey {
             annotation.symbolSortKey = symbolSortKey
-        }
-        if let symbolSpacing {
-            annotation.symbolSpacing = symbolSpacing
-        }
-        if let symbolZElevate {
-            annotation.symbolZElevate = symbolZElevate
-        }
-        if let symbolZOrder {
-            annotation.symbolZOrder = MapboxMaps.SymbolZOrder(symbolZOrder)
-        }
-        if let textAllowOverlap {
-            annotation.textAllowOverlap = textAllowOverlap
         }
         if let textAnchor {
             annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
@@ -1432,17 +1393,8 @@ extension PointAnnotationOptions {
         if let textField {
             annotation.textField = textField
         }
-        if let textFont {
-            annotation.textFont = textFont.compactMap { $0 }
-        }
-        if let textIgnorePlacement {
-            annotation.textIgnorePlacement = textIgnorePlacement
-        }
         if let textJustify {
             annotation.textJustify = MapboxMaps.TextJustify(textJustify)
-        }
-        if let textKeepUpright {
-            annotation.textKeepUpright = textKeepUpright
         }
         if let textLetterSpacing {
             annotation.textLetterSpacing = textLetterSpacing
@@ -1450,32 +1402,17 @@ extension PointAnnotationOptions {
         if let textLineHeight {
             annotation.textLineHeight = textLineHeight
         }
-        if let textMaxAngle {
-            annotation.textMaxAngle = textMaxAngle
-        }
         if let textMaxWidth {
             annotation.textMaxWidth = textMaxWidth
         }
         if let textOffset {
             annotation.textOffset = textOffset.compactMap { $0 }
         }
-        if let textOptional {
-            annotation.textOptional = textOptional
-        }
-        if let textPadding {
-            annotation.textPadding = textPadding
-        }
-        if let textPitchAlignment {
-            annotation.textPitchAlignment = MapboxMaps.TextPitchAlignment(textPitchAlignment)
-        }
         if let textRadialOffset {
             annotation.textRadialOffset = textRadialOffset
         }
         if let textRotate {
             annotation.textRotate = textRotate
-        }
-        if let textRotationAlignment {
-            annotation.textRotationAlignment = MapboxMaps.TextRotationAlignment(textRotationAlignment)
         }
         if let textSize {
             annotation.textSize = textSize
@@ -1485,9 +1422,6 @@ extension PointAnnotationOptions {
         }
         if let iconColor {
             annotation.iconColor = StyleColor(rgb: iconColor)
-        }
-        if let iconColorSaturation {
-            annotation.iconColorSaturation = iconColorSaturation
         }
         if let iconEmissiveStrength {
             annotation.iconEmissiveStrength = iconEmissiveStrength
@@ -1509,15 +1443,6 @@ extension PointAnnotationOptions {
         }
         if let iconOpacity {
             annotation.iconOpacity = iconOpacity
-        }
-        if let iconTranslate {
-            annotation.iconTranslate = iconTranslate.compactMap { $0 }
-        }
-        if let iconTranslateAnchor {
-            annotation.iconTranslateAnchor = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
-        }
-        if let symbolElevationReference {
-            annotation.symbolElevationReference = MapboxMaps.SymbolElevationReference(symbolElevationReference)
         }
         if let symbolZOffset {
             annotation.symbolZOffset = symbolZOffset
@@ -1542,12 +1467,6 @@ extension PointAnnotationOptions {
         }
         if let textOpacity {
             annotation.textOpacity = textOpacity
-        }
-        if let textTranslate {
-            annotation.textTranslate = textTranslate.compactMap { $0 }
-        }
-        if let textTranslateAnchor {
-            annotation.textTranslateAnchor = MapboxMaps.TextTranslateAnchor(textTranslateAnchor)
         }
         return annotation
     }
@@ -1560,38 +1479,17 @@ extension PointAnnotation {
         if let image = self.image {
             annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
         }
-        if let iconAllowOverlap {
-            annotation.iconAllowOverlap = iconAllowOverlap
-        }
         if let iconAnchor {
             annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
-        }
-        if let iconIgnorePlacement {
-            annotation.iconIgnorePlacement = iconIgnorePlacement
         }
         if let iconImage {
             annotation.iconImage = iconImage
         }
-        if let iconKeepUpright {
-            annotation.iconKeepUpright = iconKeepUpright
-        }
         if let iconOffset {
             annotation.iconOffset = iconOffset.compactMap { $0 }
         }
-        if let iconOptional {
-            annotation.iconOptional = iconOptional
-        }
-        if let iconPadding {
-            annotation.iconPadding = iconPadding
-        }
-        if let iconPitchAlignment {
-            annotation.iconPitchAlignment = MapboxMaps.IconPitchAlignment(iconPitchAlignment)
-        }
         if let iconRotate {
             annotation.iconRotate = iconRotate
-        }
-        if let iconRotationAlignment {
-            annotation.iconRotationAlignment = MapboxMaps.IconRotationAlignment(iconRotationAlignment)
         }
         if let iconSize {
             annotation.iconSize = iconSize
@@ -1602,26 +1500,8 @@ extension PointAnnotation {
         if let iconTextFitPadding {
             annotation.iconTextFitPadding = iconTextFitPadding.compactMap { $0 }
         }
-        if let symbolAvoidEdges {
-            annotation.symbolAvoidEdges = symbolAvoidEdges
-        }
-        if let symbolPlacement {
-            annotation.symbolPlacement = MapboxMaps.SymbolPlacement(symbolPlacement)
-        }
         if let symbolSortKey {
             annotation.symbolSortKey = symbolSortKey
-        }
-        if let symbolSpacing {
-            annotation.symbolSpacing = symbolSpacing
-        }
-        if let symbolZElevate {
-            annotation.symbolZElevate = symbolZElevate
-        }
-        if let symbolZOrder {
-            annotation.symbolZOrder = MapboxMaps.SymbolZOrder(symbolZOrder)
-        }
-        if let textAllowOverlap {
-            annotation.textAllowOverlap = textAllowOverlap
         }
         if let textAnchor {
             annotation.textAnchor = MapboxMaps.TextAnchor(textAnchor)
@@ -1629,17 +1509,8 @@ extension PointAnnotation {
         if let textField {
             annotation.textField = textField
         }
-        if let textFont {
-            annotation.textFont = textFont.compactMap { $0 }
-        }
-        if let textIgnorePlacement {
-            annotation.textIgnorePlacement = textIgnorePlacement
-        }
         if let textJustify {
             annotation.textJustify = MapboxMaps.TextJustify(textJustify)
-        }
-        if let textKeepUpright {
-            annotation.textKeepUpright = textKeepUpright
         }
         if let textLetterSpacing {
             annotation.textLetterSpacing = textLetterSpacing
@@ -1647,32 +1518,17 @@ extension PointAnnotation {
         if let textLineHeight {
             annotation.textLineHeight = textLineHeight
         }
-        if let textMaxAngle {
-            annotation.textMaxAngle = textMaxAngle
-        }
         if let textMaxWidth {
             annotation.textMaxWidth = textMaxWidth
         }
         if let textOffset {
             annotation.textOffset = textOffset.compactMap { $0 }
         }
-        if let textOptional {
-            annotation.textOptional = textOptional
-        }
-        if let textPadding {
-            annotation.textPadding = textPadding
-        }
-        if let textPitchAlignment {
-            annotation.textPitchAlignment = MapboxMaps.TextPitchAlignment(textPitchAlignment)
-        }
         if let textRadialOffset {
             annotation.textRadialOffset = textRadialOffset
         }
         if let textRotate {
             annotation.textRotate = textRotate
-        }
-        if let textRotationAlignment {
-            annotation.textRotationAlignment = MapboxMaps.TextRotationAlignment(textRotationAlignment)
         }
         if let textSize {
             annotation.textSize = textSize
@@ -1682,9 +1538,6 @@ extension PointAnnotation {
         }
         if let iconColor {
             annotation.iconColor = StyleColor(rgb: iconColor)
-        }
-        if let iconColorSaturation {
-            annotation.iconColorSaturation = iconColorSaturation
         }
         if let iconEmissiveStrength {
             annotation.iconEmissiveStrength = iconEmissiveStrength
@@ -1706,15 +1559,6 @@ extension PointAnnotation {
         }
         if let iconOpacity {
             annotation.iconOpacity = iconOpacity
-        }
-        if let iconTranslate {
-            annotation.iconTranslate = iconTranslate.compactMap { $0 }
-        }
-        if let iconTranslateAnchor {
-            annotation.iconTranslateAnchor = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
-        }
-        if let symbolElevationReference {
-            annotation.symbolElevationReference = MapboxMaps.SymbolElevationReference(symbolElevationReference)
         }
         if let symbolZOffset {
             annotation.symbolZOffset = symbolZOffset
@@ -1740,12 +1584,6 @@ extension PointAnnotation {
         if let textOpacity {
             annotation.textOpacity = textOpacity
         }
-        if let textTranslate {
-            annotation.textTranslate = textTranslate.compactMap { $0 }
-        }
-        if let textTranslateAnchor {
-            annotation.textTranslateAnchor = MapboxMaps.TextTranslateAnchor(textTranslateAnchor)
-        }
         return annotation
     }
 }
@@ -1756,48 +1594,26 @@ extension MapboxMaps.PointAnnotation {
             id: id,
             geometry: point,
             image: image?.image.pngData().map(FlutterStandardTypedData.init(bytes:)),
-            iconAllowOverlap: iconAllowOverlap,
             iconAnchor: iconAnchor?.toFLTIconAnchor(),
-            iconIgnorePlacement: iconIgnorePlacement,
             iconImage: iconImage,
-            iconKeepUpright: iconKeepUpright,
             iconOffset: iconOffset,
-            iconOptional: iconOptional,
-            iconPadding: iconPadding,
-            iconPitchAlignment: iconPitchAlignment?.toFLTIconPitchAlignment(),
             iconRotate: iconRotate,
-            iconRotationAlignment: iconRotationAlignment?.toFLTIconRotationAlignment(),
             iconSize: iconSize,
             iconTextFit: iconTextFit?.toFLTIconTextFit(),
             iconTextFitPadding: iconTextFitPadding,
-            symbolAvoidEdges: symbolAvoidEdges,
-            symbolPlacement: symbolPlacement?.toFLTSymbolPlacement(),
             symbolSortKey: symbolSortKey,
-            symbolSpacing: symbolSpacing,
-            symbolZElevate: symbolZElevate,
-            symbolZOrder: symbolZOrder?.toFLTSymbolZOrder(),
-            textAllowOverlap: textAllowOverlap,
             textAnchor: textAnchor?.toFLTTextAnchor(),
             textField: textField,
-            textFont: textFont,
-            textIgnorePlacement: textIgnorePlacement,
             textJustify: textJustify?.toFLTTextJustify(),
-            textKeepUpright: textKeepUpright,
             textLetterSpacing: textLetterSpacing,
             textLineHeight: textLineHeight,
-            textMaxAngle: textMaxAngle,
             textMaxWidth: textMaxWidth,
             textOffset: textOffset,
-            textOptional: textOptional,
-            textPadding: textPadding,
-            textPitchAlignment: textPitchAlignment?.toFLTTextPitchAlignment(),
             textRadialOffset: textRadialOffset,
             textRotate: textRotate,
-            textRotationAlignment: textRotationAlignment?.toFLTTextRotationAlignment(),
             textSize: textSize,
             textTransform: textTransform?.toFLTTextTransform(),
             iconColor: iconColor?.intValue,
-            iconColorSaturation: iconColorSaturation,
             iconEmissiveStrength: iconEmissiveStrength,
             iconHaloBlur: iconHaloBlur,
             iconHaloColor: iconHaloColor?.intValue,
@@ -1805,9 +1621,6 @@ extension MapboxMaps.PointAnnotation {
             iconImageCrossFade: iconImageCrossFade,
             iconOcclusionOpacity: iconOcclusionOpacity,
             iconOpacity: iconOpacity,
-            iconTranslate: iconTranslate,
-            iconTranslateAnchor: iconTranslateAnchor?.toFLTIconTranslateAnchor(),
-            symbolElevationReference: symbolElevationReference?.toFLTSymbolElevationReference(),
             symbolZOffset: symbolZOffset,
             textColor: textColor?.intValue,
             textEmissiveStrength: textEmissiveStrength,
@@ -1815,9 +1628,7 @@ extension MapboxMaps.PointAnnotation {
             textHaloColor: textHaloColor?.intValue,
             textHaloWidth: textHaloWidth,
             textOcclusionOpacity: textOcclusionOpacity,
-            textOpacity: textOpacity,
-            textTranslate: textTranslate,
-            textTranslateAnchor: textTranslateAnchor?.toFLTTextTranslateAnchor()
+            textOpacity: textOpacity
         )
     }
 }

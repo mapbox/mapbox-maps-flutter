@@ -110,18 +110,9 @@ struct CircleAnnotation {
   /// The fill color of the circle.
   /// Default value: "#000000".
   var circleColor: Int64?
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  var circleEmissiveStrength: Double?
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double?
-  /// Orientation of circle when map is pitched.
-  /// Default value: "viewport".
-  var circlePitchAlignment: CirclePitchAlignment?
-  /// Controls the scaling behavior of the circle when the map is pitched.
-  /// Default value: "map".
-  var circlePitchScale: CirclePitchScale?
   /// Circle radius.
   /// Default value: 5. Minimum value: 0.
   var circleRadius: Double?
@@ -134,12 +125,6 @@ struct CircleAnnotation {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0.
   var circleStrokeWidth: Double?
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  var circleTranslate: [Double?]?
-  /// Controls the frame of reference for `circle-translate`.
-  /// Default value: "map".
-  var circleTranslateAnchor: CircleTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> CircleAnnotation? {
@@ -148,16 +133,11 @@ struct CircleAnnotation {
     let circleSortKey: Double? = nilOrValue(__pigeon_list[2])
     let circleBlur: Double? = nilOrValue(__pigeon_list[3])
     let circleColor: Int64? = isNullish(__pigeon_list[4]) ? nil : (__pigeon_list[4] is Int64? ? __pigeon_list[4] as! Int64? : Int64(__pigeon_list[4] as! Int32))
-    let circleEmissiveStrength: Double? = nilOrValue(__pigeon_list[5])
-    let circleOpacity: Double? = nilOrValue(__pigeon_list[6])
-    let circlePitchAlignment: CirclePitchAlignment? = nilOrValue(__pigeon_list[7])
-    let circlePitchScale: CirclePitchScale? = nilOrValue(__pigeon_list[8])
-    let circleRadius: Double? = nilOrValue(__pigeon_list[9])
-    let circleStrokeColor: Int64? = isNullish(__pigeon_list[10]) ? nil : (__pigeon_list[10] is Int64? ? __pigeon_list[10] as! Int64? : Int64(__pigeon_list[10] as! Int32))
-    let circleStrokeOpacity: Double? = nilOrValue(__pigeon_list[11])
-    let circleStrokeWidth: Double? = nilOrValue(__pigeon_list[12])
-    let circleTranslate: [Double?]? = nilOrValue(__pigeon_list[13])
-    let circleTranslateAnchor: CircleTranslateAnchor? = nilOrValue(__pigeon_list[14])
+    let circleOpacity: Double? = nilOrValue(__pigeon_list[5])
+    let circleRadius: Double? = nilOrValue(__pigeon_list[6])
+    let circleStrokeColor: Int64? = isNullish(__pigeon_list[7]) ? nil : (__pigeon_list[7] is Int64? ? __pigeon_list[7] as! Int64? : Int64(__pigeon_list[7] as! Int32))
+    let circleStrokeOpacity: Double? = nilOrValue(__pigeon_list[8])
+    let circleStrokeWidth: Double? = nilOrValue(__pigeon_list[9])
 
     return CircleAnnotation(
       id: id,
@@ -165,16 +145,11 @@ struct CircleAnnotation {
       circleSortKey: circleSortKey,
       circleBlur: circleBlur,
       circleColor: circleColor,
-      circleEmissiveStrength: circleEmissiveStrength,
       circleOpacity: circleOpacity,
-      circlePitchAlignment: circlePitchAlignment,
-      circlePitchScale: circlePitchScale,
       circleRadius: circleRadius,
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
-      circleStrokeWidth: circleStrokeWidth,
-      circleTranslate: circleTranslate,
-      circleTranslateAnchor: circleTranslateAnchor
+      circleStrokeWidth: circleStrokeWidth
     )
   }
   func toList() -> [Any?] {
@@ -184,16 +159,11 @@ struct CircleAnnotation {
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     ]
   }
 }
@@ -210,18 +180,9 @@ struct CircleAnnotationOptions {
   /// The fill color of the circle.
   /// Default value: "#000000".
   var circleColor: Int64?
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  var circleEmissiveStrength: Double?
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double?
-  /// Orientation of circle when map is pitched.
-  /// Default value: "viewport".
-  var circlePitchAlignment: CirclePitchAlignment?
-  /// Controls the scaling behavior of the circle when the map is pitched.
-  /// Default value: "map".
-  var circlePitchScale: CirclePitchScale?
   /// Circle radius.
   /// Default value: 5. Minimum value: 0.
   var circleRadius: Double?
@@ -234,12 +195,6 @@ struct CircleAnnotationOptions {
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0.
   var circleStrokeWidth: Double?
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  var circleTranslate: [Double?]?
-  /// Controls the frame of reference for `circle-translate`.
-  /// Default value: "map".
-  var circleTranslateAnchor: CircleTranslateAnchor?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ __pigeon_list: [Any?]) -> CircleAnnotationOptions? {
@@ -247,32 +202,22 @@ struct CircleAnnotationOptions {
     let circleSortKey: Double? = nilOrValue(__pigeon_list[1])
     let circleBlur: Double? = nilOrValue(__pigeon_list[2])
     let circleColor: Int64? = isNullish(__pigeon_list[3]) ? nil : (__pigeon_list[3] is Int64? ? __pigeon_list[3] as! Int64? : Int64(__pigeon_list[3] as! Int32))
-    let circleEmissiveStrength: Double? = nilOrValue(__pigeon_list[4])
-    let circleOpacity: Double? = nilOrValue(__pigeon_list[5])
-    let circlePitchAlignment: CirclePitchAlignment? = nilOrValue(__pigeon_list[6])
-    let circlePitchScale: CirclePitchScale? = nilOrValue(__pigeon_list[7])
-    let circleRadius: Double? = nilOrValue(__pigeon_list[8])
-    let circleStrokeColor: Int64? = isNullish(__pigeon_list[9]) ? nil : (__pigeon_list[9] is Int64? ? __pigeon_list[9] as! Int64? : Int64(__pigeon_list[9] as! Int32))
-    let circleStrokeOpacity: Double? = nilOrValue(__pigeon_list[10])
-    let circleStrokeWidth: Double? = nilOrValue(__pigeon_list[11])
-    let circleTranslate: [Double?]? = nilOrValue(__pigeon_list[12])
-    let circleTranslateAnchor: CircleTranslateAnchor? = nilOrValue(__pigeon_list[13])
+    let circleOpacity: Double? = nilOrValue(__pigeon_list[4])
+    let circleRadius: Double? = nilOrValue(__pigeon_list[5])
+    let circleStrokeColor: Int64? = isNullish(__pigeon_list[6]) ? nil : (__pigeon_list[6] is Int64? ? __pigeon_list[6] as! Int64? : Int64(__pigeon_list[6] as! Int32))
+    let circleStrokeOpacity: Double? = nilOrValue(__pigeon_list[7])
+    let circleStrokeWidth: Double? = nilOrValue(__pigeon_list[8])
 
     return CircleAnnotationOptions(
       geometry: geometry,
       circleSortKey: circleSortKey,
       circleBlur: circleBlur,
       circleColor: circleColor,
-      circleEmissiveStrength: circleEmissiveStrength,
       circleOpacity: circleOpacity,
-      circlePitchAlignment: circlePitchAlignment,
-      circlePitchScale: circlePitchScale,
       circleRadius: circleRadius,
       circleStrokeColor: circleStrokeColor,
       circleStrokeOpacity: circleStrokeOpacity,
-      circleStrokeWidth: circleStrokeWidth,
-      circleTranslate: circleTranslate,
-      circleTranslateAnchor: circleTranslateAnchor
+      circleStrokeWidth: circleStrokeWidth
     )
   }
   func toList() -> [Any?] {
@@ -281,16 +226,11 @@ struct CircleAnnotationOptions {
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     ]
   }
 }

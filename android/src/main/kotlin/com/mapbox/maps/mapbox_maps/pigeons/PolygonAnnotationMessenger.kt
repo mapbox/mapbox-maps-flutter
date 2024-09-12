@@ -64,20 +64,10 @@ data class PolygonAnnotation(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
   /**
-   * Whether or not the fill should be antialiased.
-   * Default value: true.
-   */
-  val fillAntialias: Boolean? = null,
-  /**
    * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
    * Default value: "#000000".
    */
   val fillColor: Long? = null,
-  /**
-   * Controls the intensity of light emitted on the source features.
-   * Default value: 0. Minimum value: 0.
-   */
-  val fillEmissiveStrength: Double? = null,
   /**
    * The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
    * Default value: 1. Value range: [0, 1]
@@ -86,17 +76,7 @@ data class PolygonAnnotation(
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
-  val fillPattern: String? = null,
-  /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-   * Default value: [0,0].
-   */
-  val fillTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `fill-translate`.
-   * Default value: "map".
-   */
-  val fillTranslateAnchor: FillTranslateAnchor? = null
+  val fillPattern: String? = null
 
 ) {
   companion object {
@@ -105,15 +85,11 @@ data class PolygonAnnotation(
       val id = __pigeon_list[0] as String
       val geometry = __pigeon_list[1] as Polygon
       val fillSortKey = __pigeon_list[2] as Double?
-      val fillAntialias = __pigeon_list[3] as Boolean?
-      val fillColor = __pigeon_list[4].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val fillEmissiveStrength = __pigeon_list[5] as Double?
-      val fillOpacity = __pigeon_list[6] as Double?
-      val fillOutlineColor = __pigeon_list[7].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val fillPattern = __pigeon_list[8] as String?
-      val fillTranslate = __pigeon_list[9] as List<Double?>?
-      val fillTranslateAnchor = __pigeon_list[10] as FillTranslateAnchor?
-      return PolygonAnnotation(id, geometry, fillSortKey, fillAntialias, fillColor, fillEmissiveStrength, fillOpacity, fillOutlineColor, fillPattern, fillTranslate, fillTranslateAnchor)
+      val fillColor = __pigeon_list[3].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val fillOpacity = __pigeon_list[4] as Double?
+      val fillOutlineColor = __pigeon_list[5].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val fillPattern = __pigeon_list[6] as String?
+      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern)
     }
   }
   fun toList(): List<Any?> {
@@ -121,14 +97,10 @@ data class PolygonAnnotation(
       id,
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     )
   }
 }
@@ -140,20 +112,10 @@ data class PolygonAnnotationOptions(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
   /**
-   * Whether or not the fill should be antialiased.
-   * Default value: true.
-   */
-  val fillAntialias: Boolean? = null,
-  /**
    * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
    * Default value: "#000000".
    */
   val fillColor: Long? = null,
-  /**
-   * Controls the intensity of light emitted on the source features.
-   * Default value: 0. Minimum value: 0.
-   */
-  val fillEmissiveStrength: Double? = null,
   /**
    * The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
    * Default value: 1. Value range: [0, 1]
@@ -162,17 +124,7 @@ data class PolygonAnnotationOptions(
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
-  val fillPattern: String? = null,
-  /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-   * Default value: [0,0].
-   */
-  val fillTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `fill-translate`.
-   * Default value: "map".
-   */
-  val fillTranslateAnchor: FillTranslateAnchor? = null
+  val fillPattern: String? = null
 
 ) {
   companion object {
@@ -180,29 +132,21 @@ data class PolygonAnnotationOptions(
     fun fromList(__pigeon_list: List<Any?>): PolygonAnnotationOptions {
       val geometry = __pigeon_list[0] as Polygon
       val fillSortKey = __pigeon_list[1] as Double?
-      val fillAntialias = __pigeon_list[2] as Boolean?
-      val fillColor = __pigeon_list[3].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val fillEmissiveStrength = __pigeon_list[4] as Double?
-      val fillOpacity = __pigeon_list[5] as Double?
-      val fillOutlineColor = __pigeon_list[6].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val fillPattern = __pigeon_list[7] as String?
-      val fillTranslate = __pigeon_list[8] as List<Double?>?
-      val fillTranslateAnchor = __pigeon_list[9] as FillTranslateAnchor?
-      return PolygonAnnotationOptions(geometry, fillSortKey, fillAntialias, fillColor, fillEmissiveStrength, fillOpacity, fillOutlineColor, fillPattern, fillTranslate, fillTranslateAnchor)
+      val fillColor = __pigeon_list[2].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val fillOpacity = __pigeon_list[3] as Double?
+      val fillOutlineColor = __pigeon_list[4].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val fillPattern = __pigeon_list[5] as String?
+      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       geometry,
       fillSortKey,
-      fillAntialias,
       fillColor,
-      fillEmissiveStrength,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
-      fillTranslate,
-      fillTranslateAnchor,
     )
   }
 }

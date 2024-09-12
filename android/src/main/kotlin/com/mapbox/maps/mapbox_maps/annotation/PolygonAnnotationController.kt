@@ -123,14 +123,8 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.fillSortKey?.let {
       originalAnnotation.fillSortKey = it
     }
-    annotation.fillAntialias?.let {
-      originalAnnotation.fillAntialias = it
-    }
     annotation.fillColor?.let {
       originalAnnotation.fillColorInt = it.toInt()
-    }
-    annotation.fillEmissiveStrength?.let {
-      originalAnnotation.fillEmissiveStrength = it
     }
     annotation.fillOpacity?.let {
       originalAnnotation.fillOpacity = it
@@ -140,12 +134,6 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     }
     annotation.fillPattern?.let {
       originalAnnotation.fillPattern = it
-    }
-    annotation.fillTranslate?.let {
-      originalAnnotation.fillTranslate = it.mapNotNull { it }
-    }
-    annotation.fillTranslateAnchor?.let {
-      originalAnnotation.fillTranslateAnchor = it.toFillTranslateAnchor()
     }
     return originalAnnotation
   }
@@ -165,8 +153,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillSortKey != null) {
-      callback(Result.success(manager.fillSortKey!!))
+    val value = manager.fillSortKey
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -187,8 +176,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<Boolean?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillAntialias != null) {
-      callback(Result.success(manager.fillAntialias!!))
+    val value = manager.fillAntialias
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -196,21 +186,22 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
 
   override fun setFillColor(
     managerId: String,
-    fillColor: String,
+    fillColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    manager.fillColor = fillColor
+    manager.fillColorInt = fillColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getFillColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillColor != null) {
-      callback(Result.success(manager.fillColor!!))
+    val value = manager.fillColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -231,8 +222,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillEmissiveStrength != null) {
-      callback(Result.success(manager.fillEmissiveStrength!!))
+    val value = manager.fillEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -253,8 +245,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillOpacity != null) {
-      callback(Result.success(manager.fillOpacity!!))
+    val value = manager.fillOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -262,21 +255,22 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
 
   override fun setFillOutlineColor(
     managerId: String,
-    fillOutlineColor: String,
+    fillOutlineColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    manager.fillOutlineColor = fillOutlineColor
+    manager.fillOutlineColorInt = fillOutlineColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getFillOutlineColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillOutlineColor != null) {
-      callback(Result.success(manager.fillOutlineColor!!))
+    val value = manager.fillOutlineColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -297,8 +291,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<String?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillPattern != null) {
-      callback(Result.success(manager.fillPattern!!))
+    val value = manager.fillPattern
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -319,8 +314,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillTranslate != null) {
-      callback(Result.success(manager.fillTranslate!!))
+    val value = manager.fillTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -341,8 +337,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     callback: (Result<FillTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolygonAnnotationManager
-    if (manager.fillTranslateAnchor != null) {
-      callback(Result.success(manager.fillTranslateAnchor!!.toFLTFillTranslateAnchor()))
+    val value = manager.fillTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTFillTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -354,16 +351,12 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
     id = id,
     geometry = geometry,
     fillSortKey = fillSortKey,
-    fillAntialias = fillAntialias,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillColor = fillColorInt?.toUInt()?.toLong(),
-    fillEmissiveStrength = fillEmissiveStrength,
     fillOpacity = fillOpacity,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillOutlineColor = fillOutlineColorInt?.toUInt()?.toLong(),
     fillPattern = fillPattern,
-    fillTranslate = fillTranslate,
-    fillTranslateAnchor = fillTranslateAnchor?.toFLTFillTranslateAnchor(),
   )
 }
 
@@ -375,14 +368,8 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   this.fillSortKey?.let {
     options.withFillSortKey(it)
   }
-  this.fillAntialias?.let {
-    options.withFillAntialias(it)
-  }
   this.fillColor?.let {
     options.withFillColor(it.toInt())
-  }
-  this.fillEmissiveStrength?.let {
-    options.withFillEmissiveStrength(it)
   }
   this.fillOpacity?.let {
     options.withFillOpacity(it)
@@ -392,12 +379,6 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   }
   this.fillPattern?.let {
     options.withFillPattern(it)
-  }
-  this.fillTranslate?.let {
-    options.withFillTranslate(it.mapNotNull { it })
-  }
-  this.fillTranslateAnchor?.let {
-    options.withFillTranslateAnchor(it.toFillTranslateAnchor())
   }
   return options
 }

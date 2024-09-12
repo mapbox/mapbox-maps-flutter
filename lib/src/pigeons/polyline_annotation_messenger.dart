@@ -47,30 +47,17 @@ class PolylineAnnotation {
   PolylineAnnotation({
     required this.id,
     required this.geometry,
-    this.lineCap,
     this.lineJoin,
-    this.lineMiterLimit,
-    this.lineRoundLimit,
     this.lineSortKey,
     this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
-    this.lineDasharray,
-    this.lineDepthOcclusionFactor,
-    this.lineEmissiveStrength,
     this.lineGapWidth,
-    this.lineGradient,
-    this.lineOcclusionOpacity,
     this.lineOffset,
     this.lineOpacity,
     this.linePattern,
-    this.lineTranslate,
-    this.lineTranslateAnchor,
-    this.lineTrimColor,
-    this.lineTrimFadeRange,
-    this.lineTrimOffset,
     this.lineWidth,
   });
 
@@ -80,21 +67,9 @@ class PolylineAnnotation {
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
-  /// The display of line endings.
-  /// Default value: "butt".
-  LineCap? lineCap;
-
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
-
-  /// Used to automatically convert miter joins to bevel joins for sharp angles.
-  /// Default value: 2.
-  double? lineMiterLimit;
-
-  /// Used to automatically convert round joins to miter joins for shallow angles.
-  /// Default value: 1.05.
-  double? lineRoundLimit;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
@@ -118,28 +93,9 @@ class PolylineAnnotation {
   /// Default value: "#000000".
   int? lineColor;
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  /// Minimum value: 0.
-  List<double?>? lineDasharray;
-
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
-  /// Default value: 1. Value range: [0, 1]
-  double? lineDepthOcclusionFactor;
-
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? lineEmissiveStrength;
-
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
-
-  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
-  int? lineGradient;
-
-  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
-  /// Default value: 0. Value range: [0, 1]
-  double? lineOcclusionOpacity;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
@@ -151,26 +107,6 @@ class PolylineAnnotation {
 
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
-
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? lineTranslate;
-
-  /// Controls the frame of reference for `line-translate`.
-  /// Default value: "map".
-  LineTranslateAnchor? lineTranslateAnchor;
-
-  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
-  /// Default value: "transparent".
-  int? lineTrimColor;
-
-  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
-  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  List<double?>? lineTrimFadeRange;
-
-  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
-  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  List<double?>? lineTrimOffset;
 
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
@@ -180,30 +116,17 @@ class PolylineAnnotation {
     return <Object?>[
       id,
       geometry,
-      lineCap,
       lineJoin,
-      lineMiterLimit,
-      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
-      lineDasharray,
-      lineDepthOcclusionFactor,
-      lineEmissiveStrength,
       lineGapWidth,
-      lineGradient,
-      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
-      lineTranslate,
-      lineTranslateAnchor,
-      lineTrimColor,
-      lineTrimFadeRange,
-      lineTrimOffset,
       lineWidth,
     ];
   }
@@ -213,31 +136,18 @@ class PolylineAnnotation {
     return PolylineAnnotation(
       id: result[0]! as String,
       geometry: result[1]! as LineString,
-      lineCap: result[2] as LineCap?,
-      lineJoin: result[3] as LineJoin?,
-      lineMiterLimit: result[4] as double?,
-      lineRoundLimit: result[5] as double?,
-      lineSortKey: result[6] as double?,
-      lineZOffset: result[7] as double?,
-      lineBlur: result[8] as double?,
-      lineBorderColor: result[9] as int?,
-      lineBorderWidth: result[10] as double?,
-      lineColor: result[11] as int?,
-      lineDasharray: (result[12] as List<Object?>?)?.cast<double?>(),
-      lineDepthOcclusionFactor: result[13] as double?,
-      lineEmissiveStrength: result[14] as double?,
-      lineGapWidth: result[15] as double?,
-      lineGradient: result[16] as int?,
-      lineOcclusionOpacity: result[17] as double?,
-      lineOffset: result[18] as double?,
-      lineOpacity: result[19] as double?,
-      linePattern: result[20] as String?,
-      lineTranslate: (result[21] as List<Object?>?)?.cast<double?>(),
-      lineTranslateAnchor: result[22] as LineTranslateAnchor?,
-      lineTrimColor: result[23] as int?,
-      lineTrimFadeRange: (result[24] as List<Object?>?)?.cast<double?>(),
-      lineTrimOffset: (result[25] as List<Object?>?)?.cast<double?>(),
-      lineWidth: result[26] as double?,
+      lineJoin: result[2] as LineJoin?,
+      lineSortKey: result[3] as double?,
+      lineZOffset: result[4] as double?,
+      lineBlur: result[5] as double?,
+      lineBorderColor: result[6] as int?,
+      lineBorderWidth: result[7] as double?,
+      lineColor: result[8] as int?,
+      lineGapWidth: result[9] as double?,
+      lineOffset: result[10] as double?,
+      lineOpacity: result[11] as double?,
+      linePattern: result[12] as String?,
+      lineWidth: result[13] as double?,
     );
   }
 }
@@ -245,51 +155,26 @@ class PolylineAnnotation {
 class PolylineAnnotationOptions {
   PolylineAnnotationOptions({
     required this.geometry,
-    this.lineCap,
     this.lineJoin,
-    this.lineMiterLimit,
-    this.lineRoundLimit,
     this.lineSortKey,
     this.lineZOffset,
     this.lineBlur,
     this.lineBorderColor,
     this.lineBorderWidth,
     this.lineColor,
-    this.lineDasharray,
-    this.lineDepthOcclusionFactor,
-    this.lineEmissiveStrength,
     this.lineGapWidth,
-    this.lineGradient,
-    this.lineOcclusionOpacity,
     this.lineOffset,
     this.lineOpacity,
     this.linePattern,
-    this.lineTranslate,
-    this.lineTranslateAnchor,
-    this.lineTrimColor,
-    this.lineTrimFadeRange,
-    this.lineTrimOffset,
     this.lineWidth,
   });
 
   /// The geometry that determines the location/shape of this annotation
   LineString geometry;
 
-  /// The display of line endings.
-  /// Default value: "butt".
-  LineCap? lineCap;
-
   /// The display of lines when joining.
   /// Default value: "miter".
   LineJoin? lineJoin;
-
-  /// Used to automatically convert miter joins to bevel joins for sharp angles.
-  /// Default value: 2.
-  double? lineMiterLimit;
-
-  /// Used to automatically convert round joins to miter joins for shallow angles.
-  /// Default value: 1.05.
-  double? lineRoundLimit;
 
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
@@ -313,28 +198,9 @@ class PolylineAnnotationOptions {
   /// Default value: "#000000".
   int? lineColor;
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  /// Minimum value: 0.
-  List<double?>? lineDasharray;
-
-  /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded.
-  /// Default value: 1. Value range: [0, 1]
-  double? lineDepthOcclusionFactor;
-
-  /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
-  double? lineEmissiveStrength;
-
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
-
-  /// A gradient used to color a line feature at various distances along its length. Defined using a `step` or `interpolate` expression which outputs a color for each corresponding `line-progress` input value. `line-progress` is a percentage of the line feature's total length as measured on the webmercator projected coordinate plane (a `number` between `0` and `1`). Can only be used with GeoJSON sources that specify `"lineMetrics": true`.
-  int? lineGradient;
-
-  /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
-  /// Default value: 0. Value range: [0, 1]
-  double? lineOcclusionOpacity;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0.
@@ -347,26 +213,6 @@ class PolylineAnnotationOptions {
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? linePattern;
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-  /// Default value: [0,0].
-  List<double?>? lineTranslate;
-
-  /// Controls the frame of reference for `line-translate`.
-  /// Default value: "map".
-  LineTranslateAnchor? lineTranslateAnchor;
-
-  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
-  /// Default value: "transparent".
-  int? lineTrimColor;
-
-  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
-  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  List<double?>? lineTrimFadeRange;
-
-  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
-  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  List<double?>? lineTrimOffset;
-
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0.
   double? lineWidth;
@@ -374,30 +220,17 @@ class PolylineAnnotationOptions {
   Object encode() {
     return <Object?>[
       geometry,
-      lineCap,
       lineJoin,
-      lineMiterLimit,
-      lineRoundLimit,
       lineSortKey,
       lineZOffset,
       lineBlur,
       lineBorderColor,
       lineBorderWidth,
       lineColor,
-      lineDasharray,
-      lineDepthOcclusionFactor,
-      lineEmissiveStrength,
       lineGapWidth,
-      lineGradient,
-      lineOcclusionOpacity,
       lineOffset,
       lineOpacity,
       linePattern,
-      lineTranslate,
-      lineTranslateAnchor,
-      lineTrimColor,
-      lineTrimFadeRange,
-      lineTrimOffset,
       lineWidth,
     ];
   }
@@ -406,31 +239,18 @@ class PolylineAnnotationOptions {
     result as List<Object?>;
     return PolylineAnnotationOptions(
       geometry: result[0]! as LineString,
-      lineCap: result[1] as LineCap?,
-      lineJoin: result[2] as LineJoin?,
-      lineMiterLimit: result[3] as double?,
-      lineRoundLimit: result[4] as double?,
-      lineSortKey: result[5] as double?,
-      lineZOffset: result[6] as double?,
-      lineBlur: result[7] as double?,
-      lineBorderColor: result[8] as int?,
-      lineBorderWidth: result[9] as double?,
-      lineColor: result[10] as int?,
-      lineDasharray: (result[11] as List<Object?>?)?.cast<double?>(),
-      lineDepthOcclusionFactor: result[12] as double?,
-      lineEmissiveStrength: result[13] as double?,
-      lineGapWidth: result[14] as double?,
-      lineGradient: result[15] as int?,
-      lineOcclusionOpacity: result[16] as double?,
-      lineOffset: result[17] as double?,
-      lineOpacity: result[18] as double?,
-      linePattern: result[19] as String?,
-      lineTranslate: (result[20] as List<Object?>?)?.cast<double?>(),
-      lineTranslateAnchor: result[21] as LineTranslateAnchor?,
-      lineTrimColor: result[22] as int?,
-      lineTrimFadeRange: (result[23] as List<Object?>?)?.cast<double?>(),
-      lineTrimOffset: (result[24] as List<Object?>?)?.cast<double?>(),
-      lineWidth: result[25] as double?,
+      lineJoin: result[1] as LineJoin?,
+      lineSortKey: result[2] as double?,
+      lineZOffset: result[3] as double?,
+      lineBlur: result[4] as double?,
+      lineBorderColor: result[5] as int?,
+      lineBorderWidth: result[6] as double?,
+      lineColor: result[7] as int?,
+      lineGapWidth: result[8] as double?,
+      lineOffset: result[9] as double?,
+      lineOpacity: result[10] as double?,
+      linePattern: result[11] as String?,
+      lineWidth: result[12] as double?,
     );
   }
 }

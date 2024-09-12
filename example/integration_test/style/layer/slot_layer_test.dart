@@ -17,14 +17,12 @@ void main() {
 
     await mapboxMap.style.addLayer(SlotLayer(
       id: 'layer',
-      sourceId: 'source',
       visibility: Visibility.NONE,
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
     ));
     var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
-    expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
@@ -38,7 +36,6 @@ void main() {
 
     await mapboxMap.style.addLayer(SlotLayer(
       id: 'layer',
-      sourceId: 'source',
       visibilityExpression: ['string', 'none'],
       filter: [
         "==",
@@ -50,7 +47,6 @@ void main() {
       slot: LayerSlot.BOTTOM,
     ));
     var layer = await mapboxMap.style.getLayer('layer') as SlotLayer;
-    expect('source', layer.sourceId);
     expect(layer.minZoom, 1);
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);

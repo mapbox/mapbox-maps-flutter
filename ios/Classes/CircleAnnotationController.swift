@@ -155,19 +155,19 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         }
     }
 
-    func getCircleColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getCircleColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.circleColor))
+            completion(.success(manager.circleColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCircleColor(managerId: String, circleColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setCircleColor(managerId: String, circleColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circleColor = circleColor
+            manager.circleColor = StyleColor(rgb: circleColor)
 
             completion(.success(()))
         } catch {
@@ -275,19 +275,19 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         }
     }
 
-    func getCircleStrokeColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getCircleStrokeColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.circleStrokeColor))
+            completion(.success(manager.circleStrokeColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setCircleStrokeColor(managerId: String, circleStrokeColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setCircleStrokeColor(managerId: String, circleStrokeColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.circleStrokeColor = circleStrokeColor
+            manager.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
 
             completion(.success(()))
         } catch {
@@ -389,17 +389,8 @@ extension CircleAnnotationOptions {
         if let circleColor {
             annotation.circleColor = StyleColor(rgb: circleColor)
         }
-        if let circleEmissiveStrength {
-            annotation.circleEmissiveStrength = circleEmissiveStrength
-        }
         if let circleOpacity {
             annotation.circleOpacity = circleOpacity
-        }
-        if let circlePitchAlignment {
-            annotation.circlePitchAlignment = MapboxMaps.CirclePitchAlignment(circlePitchAlignment)
-        }
-        if let circlePitchScale {
-            annotation.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
         }
         if let circleRadius {
             annotation.circleRadius = circleRadius
@@ -412,12 +403,6 @@ extension CircleAnnotationOptions {
         }
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
-        }
-        if let circleTranslate {
-            annotation.circleTranslate = circleTranslate.compactMap { $0 }
-        }
-        if let circleTranslateAnchor {
-            annotation.circleTranslateAnchor = MapboxMaps.CircleTranslateAnchor(circleTranslateAnchor)
         }
         return annotation
     }
@@ -436,17 +421,8 @@ extension CircleAnnotation {
         if let circleColor {
             annotation.circleColor = StyleColor(rgb: circleColor)
         }
-        if let circleEmissiveStrength {
-            annotation.circleEmissiveStrength = circleEmissiveStrength
-        }
         if let circleOpacity {
             annotation.circleOpacity = circleOpacity
-        }
-        if let circlePitchAlignment {
-            annotation.circlePitchAlignment = MapboxMaps.CirclePitchAlignment(circlePitchAlignment)
-        }
-        if let circlePitchScale {
-            annotation.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
         }
         if let circleRadius {
             annotation.circleRadius = circleRadius
@@ -460,12 +436,6 @@ extension CircleAnnotation {
         if let circleStrokeWidth {
             annotation.circleStrokeWidth = circleStrokeWidth
         }
-        if let circleTranslate {
-            annotation.circleTranslate = circleTranslate.compactMap { $0 }
-        }
-        if let circleTranslateAnchor {
-            annotation.circleTranslateAnchor = MapboxMaps.CircleTranslateAnchor(circleTranslateAnchor)
-        }
         return annotation
     }
 }
@@ -478,16 +448,11 @@ extension MapboxMaps.CircleAnnotation {
             circleSortKey: circleSortKey,
             circleBlur: circleBlur,
             circleColor: circleColor?.intValue,
-            circleEmissiveStrength: circleEmissiveStrength,
             circleOpacity: circleOpacity,
-            circlePitchAlignment: circlePitchAlignment?.toFLTCirclePitchAlignment(),
-            circlePitchScale: circlePitchScale?.toFLTCirclePitchScale(),
             circleRadius: circleRadius,
             circleStrokeColor: circleStrokeColor?.intValue,
             circleStrokeOpacity: circleStrokeOpacity,
-            circleStrokeWidth: circleStrokeWidth,
-            circleTranslate: circleTranslate,
-            circleTranslateAnchor: circleTranslateAnchor?.toFLTCircleTranslateAnchor()
+            circleStrokeWidth: circleStrokeWidth
         )
     }
 }

@@ -1,7 +1,13 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
-import com.mapbox.maps.mapbox_maps.pigeons.*
+import com.mapbox.maps.extension.style.utils.ColorUtils
+import com.mapbox.maps.mapbox_maps.pigeons.LineCap
+import com.mapbox.maps.mapbox_maps.pigeons.LineJoin
+import com.mapbox.maps.mapbox_maps.pigeons.LineTranslateAnchor
+import com.mapbox.maps.mapbox_maps.pigeons.PolylineAnnotation
+import com.mapbox.maps.mapbox_maps.pigeons.PolylineAnnotationOptions
+import com.mapbox.maps.mapbox_maps.pigeons._PolylineAnnotationMessenger
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import toFLTLineCap
 import toFLTLineJoin
@@ -124,17 +130,8 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.geometry?.let {
       originalAnnotation.geometry = it
     }
-    annotation.lineCap?.let {
-      originalAnnotation.lineCap = it.toLineCap()
-    }
     annotation.lineJoin?.let {
       originalAnnotation.lineJoin = it.toLineJoin()
-    }
-    annotation.lineMiterLimit?.let {
-      originalAnnotation.lineMiterLimit = it
-    }
-    annotation.lineRoundLimit?.let {
-      originalAnnotation.lineRoundLimit = it
     }
     annotation.lineSortKey?.let {
       originalAnnotation.lineSortKey = it
@@ -154,23 +151,8 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     annotation.lineColor?.let {
       originalAnnotation.lineColorInt = it.toInt()
     }
-    annotation.lineDasharray?.let {
-      originalAnnotation.lineDasharray = it.mapNotNull { it }
-    }
-    annotation.lineDepthOcclusionFactor?.let {
-      originalAnnotation.lineDepthOcclusionFactor = it
-    }
-    annotation.lineEmissiveStrength?.let {
-      originalAnnotation.lineEmissiveStrength = it
-    }
     annotation.lineGapWidth?.let {
       originalAnnotation.lineGapWidth = it
-    }
-    annotation.lineGradient?.let {
-      originalAnnotation.lineGradientInt = it.toInt()
-    }
-    annotation.lineOcclusionOpacity?.let {
-      originalAnnotation.lineOcclusionOpacity = it
     }
     annotation.lineOffset?.let {
       originalAnnotation.lineOffset = it
@@ -180,21 +162,6 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     }
     annotation.linePattern?.let {
       originalAnnotation.linePattern = it
-    }
-    annotation.lineTranslate?.let {
-      originalAnnotation.lineTranslate = it.mapNotNull { it }
-    }
-    annotation.lineTranslateAnchor?.let {
-      originalAnnotation.lineTranslateAnchor = it.toLineTranslateAnchor()
-    }
-    annotation.lineTrimColor?.let {
-      originalAnnotation.lineTrimColorInt = it.toInt()
-    }
-    annotation.lineTrimFadeRange?.let {
-      originalAnnotation.lineTrimFadeRange = it.mapNotNull { it }
-    }
-    annotation.lineTrimOffset?.let {
-      originalAnnotation.lineTrimOffset = it.mapNotNull { it }
     }
     annotation.lineWidth?.let {
       originalAnnotation.lineWidth = it
@@ -217,8 +184,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<LineCap?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineCap != null) {
-      callback(Result.success(manager.lineCap!!.toFLTLineCap()))
+    val value = manager.lineCap
+    if (value != null) {
+      callback(Result.success(value.toFLTLineCap()))
     } else {
       callback(Result.success(null))
     }
@@ -239,8 +207,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<LineJoin?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineJoin != null) {
-      callback(Result.success(manager.lineJoin!!.toFLTLineJoin()))
+    val value = manager.lineJoin
+    if (value != null) {
+      callback(Result.success(value.toFLTLineJoin()))
     } else {
       callback(Result.success(null))
     }
@@ -261,8 +230,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineMiterLimit != null) {
-      callback(Result.success(manager.lineMiterLimit!!))
+    val value = manager.lineMiterLimit
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -283,8 +253,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineRoundLimit != null) {
-      callback(Result.success(manager.lineRoundLimit!!))
+    val value = manager.lineRoundLimit
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -305,8 +276,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineSortKey != null) {
-      callback(Result.success(manager.lineSortKey!!))
+    val value = manager.lineSortKey
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -327,8 +299,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineZOffset != null) {
-      callback(Result.success(manager.lineZOffset!!))
+    val value = manager.lineZOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -349,8 +322,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineBlur != null) {
-      callback(Result.success(manager.lineBlur!!))
+    val value = manager.lineBlur
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -358,21 +332,22 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
 
   override fun setLineBorderColor(
     managerId: String,
-    lineBorderColor: String,
+    lineBorderColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineBorderColor = lineBorderColor
+    manager.lineBorderColorInt = lineBorderColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getLineBorderColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineBorderColor != null) {
-      callback(Result.success(manager.lineBorderColor!!))
+    val value = manager.lineBorderColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -393,8 +368,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineBorderWidth != null) {
-      callback(Result.success(manager.lineBorderWidth!!))
+    val value = manager.lineBorderWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -402,21 +378,22 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
 
   override fun setLineColor(
     managerId: String,
-    lineColor: String,
+    lineColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineColor = lineColor
+    manager.lineColorInt = lineColor.toInt()
     callback(Result.success(Unit))
   }
 
   override fun getLineColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineColor != null) {
-      callback(Result.success(manager.lineColor!!))
+    val value = manager.lineColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -437,8 +414,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineDasharray != null) {
-      callback(Result.success(manager.lineDasharray!!))
+    val value = manager.lineDasharray
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -459,8 +437,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineDepthOcclusionFactor != null) {
-      callback(Result.success(manager.lineDepthOcclusionFactor!!))
+    val value = manager.lineDepthOcclusionFactor
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -481,8 +460,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineEmissiveStrength != null) {
-      callback(Result.success(manager.lineEmissiveStrength!!))
+    val value = manager.lineEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -503,8 +483,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineGapWidth != null) {
-      callback(Result.success(manager.lineGapWidth!!))
+    val value = manager.lineGapWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -525,8 +506,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineOcclusionOpacity != null) {
-      callback(Result.success(manager.lineOcclusionOpacity!!))
+    val value = manager.lineOcclusionOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -547,8 +529,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineOffset != null) {
-      callback(Result.success(manager.lineOffset!!))
+    val value = manager.lineOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -569,8 +552,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineOpacity != null) {
-      callback(Result.success(manager.lineOpacity!!))
+    val value = manager.lineOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -591,8 +575,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<String?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.linePattern != null) {
-      callback(Result.success(manager.linePattern!!))
+    val value = manager.linePattern
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -613,8 +598,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTranslate != null) {
-      callback(Result.success(manager.lineTranslate!!))
+    val value = manager.lineTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -635,8 +621,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<LineTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTranslateAnchor != null) {
-      callback(Result.success(manager.lineTranslateAnchor!!.toFLTLineTranslateAnchor()))
+    val value = manager.lineTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTLineTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }
@@ -644,21 +631,22 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
 
   override fun setLineTrimColor(
     managerId: String,
-    lineTrimColor: String,
+    lineTrimColor: Long,
     callback: (Result<Unit>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    manager.lineTrimColor = lineTrimColor
+    manager.lineTrimColor = lineTrimColor.let { ColorUtils.colorToRgbaString(it.toInt()) }
     callback(Result.success(Unit))
   }
 
   override fun getLineTrimColor(
     managerId: String,
-    callback: (Result<String?>) -> Unit
+    callback: (Result<Long?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTrimColor != null) {
-      callback(Result.success(manager.lineTrimColor!!))
+    val value = manager.lineTrimColor
+    if (value != null) {
+      callback(Result.success(ColorUtils.rgbaToColor(value)?.toUInt()?.toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -679,8 +667,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTrimFadeRange != null) {
-      callback(Result.success(manager.lineTrimFadeRange!!))
+    val value = manager.lineTrimFadeRange
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -701,8 +690,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTrimOffset != null) {
-      callback(Result.success(manager.lineTrimOffset!!))
+    val value = manager.lineTrimOffset
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -723,8 +713,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineWidth != null) {
-      callback(Result.success(manager.lineWidth!!))
+    val value = manager.lineWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -735,10 +726,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
   return PolylineAnnotation(
     id = id,
     geometry = geometry,
-    lineCap = lineCap?.toFLTLineCap(),
     lineJoin = lineJoin?.toFLTLineJoin(),
-    lineMiterLimit = lineMiterLimit,
-    lineRoundLimit = lineRoundLimit,
     lineSortKey = lineSortKey,
     lineZOffset = lineZOffset,
     lineBlur = lineBlur,
@@ -747,22 +735,10 @@ fun com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation.toFLTPolyline
     lineBorderWidth = lineBorderWidth,
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     lineColor = lineColorInt?.toUInt()?.toLong(),
-    lineDasharray = lineDasharray,
-    lineDepthOcclusionFactor = lineDepthOcclusionFactor,
-    lineEmissiveStrength = lineEmissiveStrength,
     lineGapWidth = lineGapWidth,
-    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
-    lineGradient = lineGradientInt?.toUInt()?.toLong(),
-    lineOcclusionOpacity = lineOcclusionOpacity,
     lineOffset = lineOffset,
     lineOpacity = lineOpacity,
     linePattern = linePattern,
-    lineTranslate = lineTranslate,
-    lineTranslateAnchor = lineTranslateAnchor?.toFLTLineTranslateAnchor(),
-    // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
-    lineTrimColor = lineTrimColorInt?.toUInt()?.toLong(),
-    lineTrimFadeRange = lineTrimFadeRange,
-    lineTrimOffset = lineTrimOffset,
     lineWidth = lineWidth,
   )
 }
@@ -772,17 +748,8 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   this.geometry?.let {
     options.withGeometry(it)
   }
-  this.lineCap?.let {
-    options.withLineCap(it.toLineCap())
-  }
   this.lineJoin?.let {
     options.withLineJoin(it.toLineJoin())
-  }
-  this.lineMiterLimit?.let {
-    options.withLineMiterLimit(it)
-  }
-  this.lineRoundLimit?.let {
-    options.withLineRoundLimit(it)
   }
   this.lineSortKey?.let {
     options.withLineSortKey(it)
@@ -802,23 +769,8 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   this.lineColor?.let {
     options.withLineColor(it.toInt())
   }
-  this.lineDasharray?.let {
-    options.withLineDasharray(it.mapNotNull { it })
-  }
-  this.lineDepthOcclusionFactor?.let {
-    options.withLineDepthOcclusionFactor(it)
-  }
-  this.lineEmissiveStrength?.let {
-    options.withLineEmissiveStrength(it)
-  }
   this.lineGapWidth?.let {
     options.withLineGapWidth(it)
-  }
-  this.lineGradient?.let {
-    options.withLineGradient(it.toInt())
-  }
-  this.lineOcclusionOpacity?.let {
-    options.withLineOcclusionOpacity(it)
   }
   this.lineOffset?.let {
     options.withLineOffset(it)
@@ -828,21 +780,6 @@ fun PolylineAnnotationOptions.toPolylineAnnotationOptions(): com.mapbox.maps.plu
   }
   this.linePattern?.let {
     options.withLinePattern(it)
-  }
-  this.lineTranslate?.let {
-    options.withLineTranslate(it.mapNotNull { it })
-  }
-  this.lineTranslateAnchor?.let {
-    options.withLineTranslateAnchor(it.toLineTranslateAnchor())
-  }
-  this.lineTrimColor?.let {
-    options.withLineTrimColor(it.toInt())
-  }
-  this.lineTrimFadeRange?.let {
-    options.withLineTrimFadeRange(it.mapNotNull { it })
-  }
-  this.lineTrimOffset?.let {
-    options.withLineTrimOffset(it.mapNotNull { it })
   }
   this.lineWidth?.let {
     options.withLineWidth(it)

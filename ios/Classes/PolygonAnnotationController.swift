@@ -155,19 +155,19 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         }
     }
 
-    func getFillColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getFillColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.fillColor))
+            completion(.success(manager.fillColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setFillColor(managerId: String, fillColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setFillColor(managerId: String, fillColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.fillColor = fillColor
+            manager.fillColor = StyleColor(rgb: fillColor)
 
             completion(.success(()))
         } catch {
@@ -215,19 +215,19 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         }
     }
 
-    func getFillOutlineColor(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
+    func getFillOutlineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            completion(.success(manager.fillOutlineColor))
+            completion(.success(manager.fillOutlineColor?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
 
-    func setFillOutlineColor(managerId: String, fillOutlineColor: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func setFillOutlineColor(managerId: String, fillOutlineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
-            manager.fillOutlineColor = fillOutlineColor
+            manager.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
 
             completion(.success(()))
         } catch {
@@ -303,14 +303,8 @@ extension PolygonAnnotationOptions {
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
-        if let fillAntialias {
-            annotation.fillAntialias = fillAntialias
-        }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
-        }
-        if let fillEmissiveStrength {
-            annotation.fillEmissiveStrength = fillEmissiveStrength
         }
         if let fillOpacity {
             annotation.fillOpacity = fillOpacity
@@ -320,12 +314,6 @@ extension PolygonAnnotationOptions {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
-        }
-        if let fillTranslate {
-            annotation.fillTranslate = fillTranslate.compactMap { $0 }
-        }
-        if let fillTranslateAnchor {
-            annotation.fillTranslateAnchor = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
         }
         return annotation
     }
@@ -338,14 +326,8 @@ extension PolygonAnnotation {
         if let fillSortKey {
             annotation.fillSortKey = fillSortKey
         }
-        if let fillAntialias {
-            annotation.fillAntialias = fillAntialias
-        }
         if let fillColor {
             annotation.fillColor = StyleColor(rgb: fillColor)
-        }
-        if let fillEmissiveStrength {
-            annotation.fillEmissiveStrength = fillEmissiveStrength
         }
         if let fillOpacity {
             annotation.fillOpacity = fillOpacity
@@ -355,12 +337,6 @@ extension PolygonAnnotation {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
-        }
-        if let fillTranslate {
-            annotation.fillTranslate = fillTranslate.compactMap { $0 }
-        }
-        if let fillTranslateAnchor {
-            annotation.fillTranslateAnchor = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
         }
         return annotation
     }
@@ -372,14 +348,10 @@ extension MapboxMaps.PolygonAnnotation {
             id: id,
             geometry: polygon,
             fillSortKey: fillSortKey,
-            fillAntialias: fillAntialias,
             fillColor: fillColor?.intValue,
-            fillEmissiveStrength: fillEmissiveStrength,
             fillOpacity: fillOpacity,
             fillOutlineColor: fillOutlineColor?.intValue,
-            fillPattern: fillPattern,
-            fillTranslate: fillTranslate,
-            fillTranslateAnchor: fillTranslateAnchor?.toFLTFillTranslateAnchor()
+            fillPattern: fillPattern
         )
     }
 }

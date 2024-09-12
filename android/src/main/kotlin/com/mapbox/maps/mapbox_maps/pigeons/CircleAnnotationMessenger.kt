@@ -108,25 +108,10 @@ data class CircleAnnotation(
    */
   val circleColor: Long? = null,
   /**
-   * Controls the intensity of light emitted on the source features.
-   * Default value: 0. Minimum value: 0.
-   */
-  val circleEmissiveStrength: Double? = null,
-  /**
    * The opacity at which the circle will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val circleOpacity: Double? = null,
-  /**
-   * Orientation of circle when map is pitched.
-   * Default value: "viewport".
-   */
-  val circlePitchAlignment: CirclePitchAlignment? = null,
-  /**
-   * Controls the scaling behavior of the circle when the map is pitched.
-   * Default value: "map".
-   */
-  val circlePitchScale: CirclePitchScale? = null,
   /**
    * Circle radius.
    * Default value: 5. Minimum value: 0.
@@ -146,17 +131,7 @@ data class CircleAnnotation(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null,
-  /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-   * Default value: [0,0].
-   */
-  val circleTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `circle-translate`.
-   * Default value: "map".
-   */
-  val circleTranslateAnchor: CircleTranslateAnchor? = null
+  val circleStrokeWidth: Double? = null
 
 ) {
   companion object {
@@ -167,17 +142,12 @@ data class CircleAnnotation(
       val circleSortKey = __pigeon_list[2] as Double?
       val circleBlur = __pigeon_list[3] as Double?
       val circleColor = __pigeon_list[4].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleEmissiveStrength = __pigeon_list[5] as Double?
-      val circleOpacity = __pigeon_list[6] as Double?
-      val circlePitchAlignment = __pigeon_list[7] as CirclePitchAlignment?
-      val circlePitchScale = __pigeon_list[8] as CirclePitchScale?
-      val circleRadius = __pigeon_list[9] as Double?
-      val circleStrokeColor = __pigeon_list[10].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleStrokeOpacity = __pigeon_list[11] as Double?
-      val circleStrokeWidth = __pigeon_list[12] as Double?
-      val circleTranslate = __pigeon_list[13] as List<Double?>?
-      val circleTranslateAnchor = __pigeon_list[14] as CircleTranslateAnchor?
-      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleEmissiveStrength, circleOpacity, circlePitchAlignment, circlePitchScale, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleTranslate, circleTranslateAnchor)
+      val circleOpacity = __pigeon_list[5] as Double?
+      val circleRadius = __pigeon_list[6] as Double?
+      val circleStrokeColor = __pigeon_list[7].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val circleStrokeOpacity = __pigeon_list[8] as Double?
+      val circleStrokeWidth = __pigeon_list[9] as Double?
+      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
     }
   }
   fun toList(): List<Any?> {
@@ -187,16 +157,11 @@ data class CircleAnnotation(
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     )
   }
 }
@@ -218,25 +183,10 @@ data class CircleAnnotationOptions(
    */
   val circleColor: Long? = null,
   /**
-   * Controls the intensity of light emitted on the source features.
-   * Default value: 0. Minimum value: 0.
-   */
-  val circleEmissiveStrength: Double? = null,
-  /**
    * The opacity at which the circle will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val circleOpacity: Double? = null,
-  /**
-   * Orientation of circle when map is pitched.
-   * Default value: "viewport".
-   */
-  val circlePitchAlignment: CirclePitchAlignment? = null,
-  /**
-   * Controls the scaling behavior of the circle when the map is pitched.
-   * Default value: "map".
-   */
-  val circlePitchScale: CirclePitchScale? = null,
   /**
    * Circle radius.
    * Default value: 5. Minimum value: 0.
@@ -256,17 +206,7 @@ data class CircleAnnotationOptions(
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
    * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null,
-  /**
-   * The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
-   * Default value: [0,0].
-   */
-  val circleTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `circle-translate`.
-   * Default value: "map".
-   */
-  val circleTranslateAnchor: CircleTranslateAnchor? = null
+  val circleStrokeWidth: Double? = null
 
 ) {
   companion object {
@@ -276,17 +216,12 @@ data class CircleAnnotationOptions(
       val circleSortKey = __pigeon_list[1] as Double?
       val circleBlur = __pigeon_list[2] as Double?
       val circleColor = __pigeon_list[3].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleEmissiveStrength = __pigeon_list[4] as Double?
-      val circleOpacity = __pigeon_list[5] as Double?
-      val circlePitchAlignment = __pigeon_list[6] as CirclePitchAlignment?
-      val circlePitchScale = __pigeon_list[7] as CirclePitchScale?
-      val circleRadius = __pigeon_list[8] as Double?
-      val circleStrokeColor = __pigeon_list[9].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val circleStrokeOpacity = __pigeon_list[10] as Double?
-      val circleStrokeWidth = __pigeon_list[11] as Double?
-      val circleTranslate = __pigeon_list[12] as List<Double?>?
-      val circleTranslateAnchor = __pigeon_list[13] as CircleTranslateAnchor?
-      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleEmissiveStrength, circleOpacity, circlePitchAlignment, circlePitchScale, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, circleTranslate, circleTranslateAnchor)
+      val circleOpacity = __pigeon_list[4] as Double?
+      val circleRadius = __pigeon_list[5] as Double?
+      val circleStrokeColor = __pigeon_list[6].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val circleStrokeOpacity = __pigeon_list[7] as Double?
+      val circleStrokeWidth = __pigeon_list[8] as Double?
+      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
     }
   }
   fun toList(): List<Any?> {
@@ -295,16 +230,11 @@ data class CircleAnnotationOptions(
       circleSortKey,
       circleBlur,
       circleColor,
-      circleEmissiveStrength,
       circleOpacity,
-      circlePitchAlignment,
-      circlePitchScale,
       circleRadius,
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
-      circleTranslate,
-      circleTranslateAnchor,
     )
   }
 }

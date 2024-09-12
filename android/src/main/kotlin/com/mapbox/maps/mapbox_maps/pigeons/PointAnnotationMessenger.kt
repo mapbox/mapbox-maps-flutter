@@ -380,57 +380,22 @@ data class PointAnnotation(
    */
   val image: ByteArray? = null,
   /**
-   * If true, the icon will be visible even if it collides with other previously drawn symbols.
-   * Default value: false.
-   */
-  val iconAllowOverlap: Boolean? = null,
-  /**
    * Part of the icon placed closest to the anchor.
    * Default value: "center".
    */
   val iconAnchor: IconAnchor? = null,
-  /**
-   * If true, other symbols can be visible even if they collide with the icon.
-   * Default value: false.
-   */
-  val iconIgnorePlacement: Boolean? = null,
   /** Name of image in sprite to use for drawing an image background. */
   val iconImage: String? = null,
-  /**
-   * If true, the icon may be flipped to prevent it from being rendered upside-down.
-   * Default value: false.
-   */
-  val iconKeepUpright: Boolean? = null,
   /**
    * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
    * Default value: [0,0].
    */
   val iconOffset: List<Double?>? = null,
   /**
-   * If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-   * Default value: false.
-   */
-  val iconOptional: Boolean? = null,
-  /**
-   * Size of the additional area around the icon bounding box used for detecting symbol collisions.
-   * Default value: 2. Minimum value: 0.
-   */
-  val iconPadding: Double? = null,
-  /**
-   * Orientation of icon when map is pitched.
-   * Default value: "auto".
-   */
-  val iconPitchAlignment: IconPitchAlignment? = null,
-  /**
    * Rotates the icon clockwise.
    * Default value: 0.
    */
   val iconRotate: Double? = null,
-  /**
-   * In combination with `symbol-placement`, determines the rotation behavior of icons.
-   * Default value: "auto".
-   */
-  val iconRotationAlignment: IconRotationAlignment? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
    * Default value: 1. Minimum value: 0.
@@ -446,38 +411,8 @@ data class PointAnnotation(
    * Default value: [0,0,0,0].
    */
   val iconTextFitPadding: List<Double?>? = null,
-  /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-   * Default value: false.
-   */
-  val symbolAvoidEdges: Boolean? = null,
-  /**
-   * Label placement relative to its geometry.
-   * Default value: "point".
-   */
-  val symbolPlacement: SymbolPlacement? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
-  /**
-   * Distance between two symbol anchors.
-   * Default value: 250. Minimum value: 1.
-   */
-  val symbolSpacing: Double? = null,
-  /**
-   * Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-   * Default value: false.
-   */
-  val symbolZElevate: Boolean? = null,
-  /**
-   * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-   * Default value: "auto".
-   */
-  val symbolZOrder: SymbolZOrder? = null,
-  /**
-   * If true, the text will be visible even if it collides with other previously drawn symbols.
-   * Default value: false.
-   */
-  val textAllowOverlap: Boolean? = null,
   /**
    * Part of the text placed closest to the anchor.
    * Default value: "center".
@@ -488,23 +423,11 @@ data class PointAnnotation(
    * Default value: "".
    */
   val textField: String? = null,
-  /** Font stack to use for displaying text. */
-  val textFont: List<String?>? = null,
-  /**
-   * If true, other symbols can be visible even if they collide with the text.
-   * Default value: false.
-   */
-  val textIgnorePlacement: Boolean? = null,
   /**
    * Text justification options.
    * Default value: "center".
    */
   val textJustify: TextJustify? = null,
-  /**
-   * If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-   * Default value: true.
-   */
-  val textKeepUpright: Boolean? = null,
   /**
    * Text tracking amount.
    * Default value: 0.
@@ -516,11 +439,6 @@ data class PointAnnotation(
    */
   val textLineHeight: Double? = null,
   /**
-   * Maximum angle change between adjacent characters.
-   * Default value: 45.
-   */
-  val textMaxAngle: Double? = null,
-  /**
    * The maximum line width for text wrapping.
    * Default value: 10. Minimum value: 0.
    */
@@ -530,21 +448,6 @@ data class PointAnnotation(
    * Default value: [0,0].
    */
   val textOffset: List<Double?>? = null,
-  /**
-   * If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-   * Default value: false.
-   */
-  val textOptional: Boolean? = null,
-  /**
-   * Size of the additional area around the text bounding box used for detecting symbol collisions.
-   * Default value: 2. Minimum value: 0.
-   */
-  val textPadding: Double? = null,
-  /**
-   * Orientation of text when map is pitched.
-   * Default value: "auto".
-   */
-  val textPitchAlignment: TextPitchAlignment? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
    * Default value: 0.
@@ -556,11 +459,6 @@ data class PointAnnotation(
    */
   val textRotate: Double? = null,
   /**
-   * In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-   * Default value: "auto".
-   */
-  val textRotationAlignment: TextRotationAlignment? = null,
-  /**
    * Font size.
    * Default value: 16. Minimum value: 0.
    */
@@ -570,20 +468,11 @@ data class PointAnnotation(
    * Default value: "none".
    */
   val textTransform: TextTransform? = null,
-  /** To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`. */
-  val textVariableAnchor: List<String?>? = null,
-  /** The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement. */
-  val textWritingMode: List<String?>? = null,
   /**
    * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    * Default value: "#000000".
    */
   val iconColor: Long? = null,
-  /**
-   * Increase or reduce the saturation of the symbol icon.
-   * Default value: 0. Value range: [-1, 1]
-   */
-  val iconColorSaturation: Double? = null,
   /**
    * Controls the intensity of light emitted on the source features.
    * Default value: 1. Minimum value: 0.
@@ -619,21 +508,6 @@ data class PointAnnotation(
    * Default value: 1. Value range: [0, 1]
    */
   val iconOpacity: Double? = null,
-  /**
-   * Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-   * Default value: [0,0].
-   */
-  val iconTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `icon-translate`.
-   * Default value: "map".
-   */
-  val iconTranslateAnchor: IconTranslateAnchor? = null,
-  /**
-   * Selects the base of symbol-elevation.
-   * Default value: "ground".
-   */
-  val symbolElevationReference: SymbolElevationReference? = null,
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
@@ -673,17 +547,7 @@ data class PointAnnotation(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null,
-  /**
-   * Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-   * Default value: [0,0].
-   */
-  val textTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `text-translate`.
-   * Default value: "map".
-   */
-  val textTranslateAnchor: TextTranslateAnchor? = null
+  val textOpacity: Double? = null
 
 ) {
   companion object {
@@ -692,71 +556,42 @@ data class PointAnnotation(
       val id = __pigeon_list[0] as String
       val geometry = __pigeon_list[1] as Point
       val image = __pigeon_list[2] as ByteArray?
-      val iconAllowOverlap = __pigeon_list[3] as Boolean?
-      val iconAnchor = __pigeon_list[4] as IconAnchor?
-      val iconIgnorePlacement = __pigeon_list[5] as Boolean?
-      val iconImage = __pigeon_list[6] as String?
-      val iconKeepUpright = __pigeon_list[7] as Boolean?
-      val iconOffset = __pigeon_list[8] as List<Double?>?
-      val iconOptional = __pigeon_list[9] as Boolean?
-      val iconPadding = __pigeon_list[10] as Double?
-      val iconPitchAlignment = __pigeon_list[11] as IconPitchAlignment?
-      val iconRotate = __pigeon_list[12] as Double?
-      val iconRotationAlignment = __pigeon_list[13] as IconRotationAlignment?
-      val iconSize = __pigeon_list[14] as Double?
-      val iconTextFit = __pigeon_list[15] as IconTextFit?
-      val iconTextFitPadding = __pigeon_list[16] as List<Double?>?
-      val symbolAvoidEdges = __pigeon_list[17] as Boolean?
-      val symbolPlacement = __pigeon_list[18] as SymbolPlacement?
-      val symbolSortKey = __pigeon_list[19] as Double?
-      val symbolSpacing = __pigeon_list[20] as Double?
-      val symbolZElevate = __pigeon_list[21] as Boolean?
-      val symbolZOrder = __pigeon_list[22] as SymbolZOrder?
-      val textAllowOverlap = __pigeon_list[23] as Boolean?
-      val textAnchor = __pigeon_list[24] as TextAnchor?
-      val textField = __pigeon_list[25] as String?
-      val textFont = __pigeon_list[26] as List<String?>?
-      val textIgnorePlacement = __pigeon_list[27] as Boolean?
-      val textJustify = __pigeon_list[28] as TextJustify?
-      val textKeepUpright = __pigeon_list[29] as Boolean?
-      val textLetterSpacing = __pigeon_list[30] as Double?
-      val textLineHeight = __pigeon_list[31] as Double?
-      val textMaxAngle = __pigeon_list[32] as Double?
-      val textMaxWidth = __pigeon_list[33] as Double?
-      val textOffset = __pigeon_list[34] as List<Double?>?
-      val textOptional = __pigeon_list[35] as Boolean?
-      val textPadding = __pigeon_list[36] as Double?
-      val textPitchAlignment = __pigeon_list[37] as TextPitchAlignment?
-      val textRadialOffset = __pigeon_list[38] as Double?
-      val textRotate = __pigeon_list[39] as Double?
-      val textRotationAlignment = __pigeon_list[40] as TextRotationAlignment?
-      val textSize = __pigeon_list[41] as Double?
-      val textTransform = __pigeon_list[42] as TextTransform?
-      val textVariableAnchor = __pigeon_list[43] as List<String?>?
-      val textWritingMode = __pigeon_list[44] as List<String?>?
-      val iconColor = __pigeon_list[45].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val iconColorSaturation = __pigeon_list[46] as Double?
-      val iconEmissiveStrength = __pigeon_list[47] as Double?
-      val iconHaloBlur = __pigeon_list[48] as Double?
-      val iconHaloColor = __pigeon_list[49].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val iconHaloWidth = __pigeon_list[50] as Double?
-      val iconImageCrossFade = __pigeon_list[51] as Double?
-      val iconOcclusionOpacity = __pigeon_list[52] as Double?
-      val iconOpacity = __pigeon_list[53] as Double?
-      val iconTranslate = __pigeon_list[54] as List<Double?>?
-      val iconTranslateAnchor = __pigeon_list[55] as IconTranslateAnchor?
-      val symbolElevationReference = __pigeon_list[56] as SymbolElevationReference?
-      val symbolZOffset = __pigeon_list[57] as Double?
-      val textColor = __pigeon_list[58].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textEmissiveStrength = __pigeon_list[59] as Double?
-      val textHaloBlur = __pigeon_list[60] as Double?
-      val textHaloColor = __pigeon_list[61].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textHaloWidth = __pigeon_list[62] as Double?
-      val textOcclusionOpacity = __pigeon_list[63] as Double?
-      val textOpacity = __pigeon_list[64] as Double?
-      val textTranslate = __pigeon_list[65] as List<Double?>?
-      val textTranslateAnchor = __pigeon_list[66] as TextTranslateAnchor?
-      return PointAnnotation(id, geometry, image, iconAllowOverlap, iconAnchor, iconIgnorePlacement, iconImage, iconKeepUpright, iconOffset, iconOptional, iconPadding, iconPitchAlignment, iconRotate, iconRotationAlignment, iconSize, iconTextFit, iconTextFitPadding, symbolAvoidEdges, symbolPlacement, symbolSortKey, symbolSpacing, symbolZElevate, symbolZOrder, textAllowOverlap, textAnchor, textField, textFont, textIgnorePlacement, textJustify, textKeepUpright, textLetterSpacing, textLineHeight, textMaxAngle, textMaxWidth, textOffset, textOptional, textPadding, textPitchAlignment, textRadialOffset, textRotate, textRotationAlignment, textSize, textTransform, textVariableAnchor, textWritingMode, iconColor, iconColorSaturation, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, iconTranslate, iconTranslateAnchor, symbolElevationReference, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, textTranslate, textTranslateAnchor)
+      val iconAnchor = __pigeon_list[3] as IconAnchor?
+      val iconImage = __pigeon_list[4] as String?
+      val iconOffset = __pigeon_list[5] as List<Double?>?
+      val iconRotate = __pigeon_list[6] as Double?
+      val iconSize = __pigeon_list[7] as Double?
+      val iconTextFit = __pigeon_list[8] as IconTextFit?
+      val iconTextFitPadding = __pigeon_list[9] as List<Double?>?
+      val symbolSortKey = __pigeon_list[10] as Double?
+      val textAnchor = __pigeon_list[11] as TextAnchor?
+      val textField = __pigeon_list[12] as String?
+      val textJustify = __pigeon_list[13] as TextJustify?
+      val textLetterSpacing = __pigeon_list[14] as Double?
+      val textLineHeight = __pigeon_list[15] as Double?
+      val textMaxWidth = __pigeon_list[16] as Double?
+      val textOffset = __pigeon_list[17] as List<Double?>?
+      val textRadialOffset = __pigeon_list[18] as Double?
+      val textRotate = __pigeon_list[19] as Double?
+      val textSize = __pigeon_list[20] as Double?
+      val textTransform = __pigeon_list[21] as TextTransform?
+      val iconColor = __pigeon_list[22].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val iconEmissiveStrength = __pigeon_list[23] as Double?
+      val iconHaloBlur = __pigeon_list[24] as Double?
+      val iconHaloColor = __pigeon_list[25].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val iconHaloWidth = __pigeon_list[26] as Double?
+      val iconImageCrossFade = __pigeon_list[27] as Double?
+      val iconOcclusionOpacity = __pigeon_list[28] as Double?
+      val iconOpacity = __pigeon_list[29] as Double?
+      val symbolZOffset = __pigeon_list[30] as Double?
+      val textColor = __pigeon_list[31].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textEmissiveStrength = __pigeon_list[32] as Double?
+      val textHaloBlur = __pigeon_list[33] as Double?
+      val textHaloColor = __pigeon_list[34].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textHaloWidth = __pigeon_list[35] as Double?
+      val textOcclusionOpacity = __pigeon_list[36] as Double?
+      val textOpacity = __pigeon_list[37] as Double?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
     }
   }
   fun toList(): List<Any?> {
@@ -764,50 +599,26 @@ data class PointAnnotation(
       id,
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -815,9 +626,6 @@ data class PointAnnotation(
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -826,8 +634,6 @@ data class PointAnnotation(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     )
   }
 }
@@ -842,57 +648,22 @@ data class PointAnnotationOptions(
    */
   val image: ByteArray? = null,
   /**
-   * If true, the icon will be visible even if it collides with other previously drawn symbols.
-   * Default value: false.
-   */
-  val iconAllowOverlap: Boolean? = null,
-  /**
    * Part of the icon placed closest to the anchor.
    * Default value: "center".
    */
   val iconAnchor: IconAnchor? = null,
-  /**
-   * If true, other symbols can be visible even if they collide with the icon.
-   * Default value: false.
-   */
-  val iconIgnorePlacement: Boolean? = null,
   /** Name of image in sprite to use for drawing an image background. */
   val iconImage: String? = null,
-  /**
-   * If true, the icon may be flipped to prevent it from being rendered upside-down.
-   * Default value: false.
-   */
-  val iconKeepUpright: Boolean? = null,
   /**
    * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
    * Default value: [0,0].
    */
   val iconOffset: List<Double?>? = null,
   /**
-   * If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not.
-   * Default value: false.
-   */
-  val iconOptional: Boolean? = null,
-  /**
-   * Size of the additional area around the icon bounding box used for detecting symbol collisions.
-   * Default value: 2. Minimum value: 0.
-   */
-  val iconPadding: Double? = null,
-  /**
-   * Orientation of icon when map is pitched.
-   * Default value: "auto".
-   */
-  val iconPitchAlignment: IconPitchAlignment? = null,
-  /**
    * Rotates the icon clockwise.
    * Default value: 0.
    */
   val iconRotate: Double? = null,
-  /**
-   * In combination with `symbol-placement`, determines the rotation behavior of icons.
-   * Default value: "auto".
-   */
-  val iconRotationAlignment: IconRotationAlignment? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
    * Default value: 1. Minimum value: 0.
@@ -908,38 +679,8 @@ data class PointAnnotationOptions(
    * Default value: [0,0,0,0].
    */
   val iconTextFitPadding: List<Double?>? = null,
-  /**
-   * If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
-   * Default value: false.
-   */
-  val symbolAvoidEdges: Boolean? = null,
-  /**
-   * Label placement relative to its geometry.
-   * Default value: "point".
-   */
-  val symbolPlacement: SymbolPlacement? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
-  /**
-   * Distance between two symbol anchors.
-   * Default value: 250. Minimum value: 1.
-   */
-  val symbolSpacing: Double? = null,
-  /**
-   * Position symbol on buildings (both fill extrusions and models) rooftops. In order to have minimal impact on performance, this is supported only when `fill-extrusion-height` is not zoom-dependent and remains unchanged. For fading in buildings when zooming in, fill-extrusion-vertical-scale should be used and symbols would raise with building rooftops. Symbols are sorted by elevation, except in cases when `viewport-y` sorting or `symbol-sort-key` are applied.
-   * Default value: false.
-   */
-  val symbolZElevate: Boolean? = null,
-  /**
-   * Determines whether overlapping symbols in the same layer are rendered in the order that they appear in the data source or by their y-position relative to the viewport. To control the order and prioritization of symbols otherwise, use `symbol-sort-key`.
-   * Default value: "auto".
-   */
-  val symbolZOrder: SymbolZOrder? = null,
-  /**
-   * If true, the text will be visible even if it collides with other previously drawn symbols.
-   * Default value: false.
-   */
-  val textAllowOverlap: Boolean? = null,
   /**
    * Part of the text placed closest to the anchor.
    * Default value: "center".
@@ -950,23 +691,11 @@ data class PointAnnotationOptions(
    * Default value: "".
    */
   val textField: String? = null,
-  /** Font stack to use for displaying text. */
-  val textFont: List<String?>? = null,
-  /**
-   * If true, other symbols can be visible even if they collide with the text.
-   * Default value: false.
-   */
-  val textIgnorePlacement: Boolean? = null,
   /**
    * Text justification options.
    * Default value: "center".
    */
   val textJustify: TextJustify? = null,
-  /**
-   * If true, the text may be flipped vertically to prevent it from being rendered upside-down.
-   * Default value: true.
-   */
-  val textKeepUpright: Boolean? = null,
   /**
    * Text tracking amount.
    * Default value: 0.
@@ -978,11 +707,6 @@ data class PointAnnotationOptions(
    */
   val textLineHeight: Double? = null,
   /**
-   * Maximum angle change between adjacent characters.
-   * Default value: 45.
-   */
-  val textMaxAngle: Double? = null,
-  /**
    * The maximum line width for text wrapping.
    * Default value: 10. Minimum value: 0.
    */
@@ -992,21 +716,6 @@ data class PointAnnotationOptions(
    * Default value: [0,0].
    */
   val textOffset: List<Double?>? = null,
-  /**
-   * If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not.
-   * Default value: false.
-   */
-  val textOptional: Boolean? = null,
-  /**
-   * Size of the additional area around the text bounding box used for detecting symbol collisions.
-   * Default value: 2. Minimum value: 0.
-   */
-  val textPadding: Double? = null,
-  /**
-   * Orientation of text when map is pitched.
-   * Default value: "auto".
-   */
-  val textPitchAlignment: TextPitchAlignment? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
    * Default value: 0.
@@ -1018,11 +727,6 @@ data class PointAnnotationOptions(
    */
   val textRotate: Double? = null,
   /**
-   * In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text.
-   * Default value: "auto".
-   */
-  val textRotationAlignment: TextRotationAlignment? = null,
-  /**
    * Font size.
    * Default value: 16. Minimum value: 0.
    */
@@ -1032,20 +736,11 @@ data class PointAnnotationOptions(
    * Default value: "none".
    */
   val textTransform: TextTransform? = null,
-  /** To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`. */
-  val textVariableAnchor: List<String?>? = null,
-  /** The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement. */
-  val textWritingMode: List<String?>? = null,
   /**
    * The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
    * Default value: "#000000".
    */
   val iconColor: Long? = null,
-  /**
-   * Increase or reduce the saturation of the symbol icon.
-   * Default value: 0. Value range: [-1, 1]
-   */
-  val iconColorSaturation: Double? = null,
   /**
    * Controls the intensity of light emitted on the source features.
    * Default value: 1. Minimum value: 0.
@@ -1081,21 +776,6 @@ data class PointAnnotationOptions(
    * Default value: 1. Value range: [0, 1]
    */
   val iconOpacity: Double? = null,
-  /**
-   * Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-   * Default value: [0,0].
-   */
-  val iconTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `icon-translate`.
-   * Default value: "map".
-   */
-  val iconTranslateAnchor: IconTranslateAnchor? = null,
-  /**
-   * Selects the base of symbol-elevation.
-   * Default value: "ground".
-   */
-  val symbolElevationReference: SymbolElevationReference? = null,
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
@@ -1135,17 +815,7 @@ data class PointAnnotationOptions(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null,
-  /**
-   * Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
-   * Default value: [0,0].
-   */
-  val textTranslate: List<Double?>? = null,
-  /**
-   * Controls the frame of reference for `text-translate`.
-   * Default value: "map".
-   */
-  val textTranslateAnchor: TextTranslateAnchor? = null
+  val textOpacity: Double? = null
 
 ) {
   companion object {
@@ -1153,121 +823,68 @@ data class PointAnnotationOptions(
     fun fromList(__pigeon_list: List<Any?>): PointAnnotationOptions {
       val geometry = __pigeon_list[0] as Point
       val image = __pigeon_list[1] as ByteArray?
-      val iconAllowOverlap = __pigeon_list[2] as Boolean?
-      val iconAnchor = __pigeon_list[3] as IconAnchor?
-      val iconIgnorePlacement = __pigeon_list[4] as Boolean?
-      val iconImage = __pigeon_list[5] as String?
-      val iconKeepUpright = __pigeon_list[6] as Boolean?
-      val iconOffset = __pigeon_list[7] as List<Double?>?
-      val iconOptional = __pigeon_list[8] as Boolean?
-      val iconPadding = __pigeon_list[9] as Double?
-      val iconPitchAlignment = __pigeon_list[10] as IconPitchAlignment?
-      val iconRotate = __pigeon_list[11] as Double?
-      val iconRotationAlignment = __pigeon_list[12] as IconRotationAlignment?
-      val iconSize = __pigeon_list[13] as Double?
-      val iconTextFit = __pigeon_list[14] as IconTextFit?
-      val iconTextFitPadding = __pigeon_list[15] as List<Double?>?
-      val symbolAvoidEdges = __pigeon_list[16] as Boolean?
-      val symbolPlacement = __pigeon_list[17] as SymbolPlacement?
-      val symbolSortKey = __pigeon_list[18] as Double?
-      val symbolSpacing = __pigeon_list[19] as Double?
-      val symbolZElevate = __pigeon_list[20] as Boolean?
-      val symbolZOrder = __pigeon_list[21] as SymbolZOrder?
-      val textAllowOverlap = __pigeon_list[22] as Boolean?
-      val textAnchor = __pigeon_list[23] as TextAnchor?
-      val textField = __pigeon_list[24] as String?
-      val textFont = __pigeon_list[25] as List<String?>?
-      val textIgnorePlacement = __pigeon_list[26] as Boolean?
-      val textJustify = __pigeon_list[27] as TextJustify?
-      val textKeepUpright = __pigeon_list[28] as Boolean?
-      val textLetterSpacing = __pigeon_list[29] as Double?
-      val textLineHeight = __pigeon_list[30] as Double?
-      val textMaxAngle = __pigeon_list[31] as Double?
-      val textMaxWidth = __pigeon_list[32] as Double?
-      val textOffset = __pigeon_list[33] as List<Double?>?
-      val textOptional = __pigeon_list[34] as Boolean?
-      val textPadding = __pigeon_list[35] as Double?
-      val textPitchAlignment = __pigeon_list[36] as TextPitchAlignment?
-      val textRadialOffset = __pigeon_list[37] as Double?
-      val textRotate = __pigeon_list[38] as Double?
-      val textRotationAlignment = __pigeon_list[39] as TextRotationAlignment?
-      val textSize = __pigeon_list[40] as Double?
-      val textTransform = __pigeon_list[41] as TextTransform?
-      val textVariableAnchor = __pigeon_list[42] as List<String?>?
-      val textWritingMode = __pigeon_list[43] as List<String?>?
-      val iconColor = __pigeon_list[44].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val iconColorSaturation = __pigeon_list[45] as Double?
-      val iconEmissiveStrength = __pigeon_list[46] as Double?
-      val iconHaloBlur = __pigeon_list[47] as Double?
-      val iconHaloColor = __pigeon_list[48].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val iconHaloWidth = __pigeon_list[49] as Double?
-      val iconImageCrossFade = __pigeon_list[50] as Double?
-      val iconOcclusionOpacity = __pigeon_list[51] as Double?
-      val iconOpacity = __pigeon_list[52] as Double?
-      val iconTranslate = __pigeon_list[53] as List<Double?>?
-      val iconTranslateAnchor = __pigeon_list[54] as IconTranslateAnchor?
-      val symbolElevationReference = __pigeon_list[55] as SymbolElevationReference?
-      val symbolZOffset = __pigeon_list[56] as Double?
-      val textColor = __pigeon_list[57].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textEmissiveStrength = __pigeon_list[58] as Double?
-      val textHaloBlur = __pigeon_list[59] as Double?
-      val textHaloColor = __pigeon_list[60].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textHaloWidth = __pigeon_list[61] as Double?
-      val textOcclusionOpacity = __pigeon_list[62] as Double?
-      val textOpacity = __pigeon_list[63] as Double?
-      val textTranslate = __pigeon_list[64] as List<Double?>?
-      val textTranslateAnchor = __pigeon_list[65] as TextTranslateAnchor?
-      return PointAnnotationOptions(geometry, image, iconAllowOverlap, iconAnchor, iconIgnorePlacement, iconImage, iconKeepUpright, iconOffset, iconOptional, iconPadding, iconPitchAlignment, iconRotate, iconRotationAlignment, iconSize, iconTextFit, iconTextFitPadding, symbolAvoidEdges, symbolPlacement, symbolSortKey, symbolSpacing, symbolZElevate, symbolZOrder, textAllowOverlap, textAnchor, textField, textFont, textIgnorePlacement, textJustify, textKeepUpright, textLetterSpacing, textLineHeight, textMaxAngle, textMaxWidth, textOffset, textOptional, textPadding, textPitchAlignment, textRadialOffset, textRotate, textRotationAlignment, textSize, textTransform, textVariableAnchor, textWritingMode, iconColor, iconColorSaturation, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, iconTranslate, iconTranslateAnchor, symbolElevationReference, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, textTranslate, textTranslateAnchor)
+      val iconAnchor = __pigeon_list[2] as IconAnchor?
+      val iconImage = __pigeon_list[3] as String?
+      val iconOffset = __pigeon_list[4] as List<Double?>?
+      val iconRotate = __pigeon_list[5] as Double?
+      val iconSize = __pigeon_list[6] as Double?
+      val iconTextFit = __pigeon_list[7] as IconTextFit?
+      val iconTextFitPadding = __pigeon_list[8] as List<Double?>?
+      val symbolSortKey = __pigeon_list[9] as Double?
+      val textAnchor = __pigeon_list[10] as TextAnchor?
+      val textField = __pigeon_list[11] as String?
+      val textJustify = __pigeon_list[12] as TextJustify?
+      val textLetterSpacing = __pigeon_list[13] as Double?
+      val textLineHeight = __pigeon_list[14] as Double?
+      val textMaxWidth = __pigeon_list[15] as Double?
+      val textOffset = __pigeon_list[16] as List<Double?>?
+      val textRadialOffset = __pigeon_list[17] as Double?
+      val textRotate = __pigeon_list[18] as Double?
+      val textSize = __pigeon_list[19] as Double?
+      val textTransform = __pigeon_list[20] as TextTransform?
+      val iconColor = __pigeon_list[21].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val iconEmissiveStrength = __pigeon_list[22] as Double?
+      val iconHaloBlur = __pigeon_list[23] as Double?
+      val iconHaloColor = __pigeon_list[24].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val iconHaloWidth = __pigeon_list[25] as Double?
+      val iconImageCrossFade = __pigeon_list[26] as Double?
+      val iconOcclusionOpacity = __pigeon_list[27] as Double?
+      val iconOpacity = __pigeon_list[28] as Double?
+      val symbolZOffset = __pigeon_list[29] as Double?
+      val textColor = __pigeon_list[30].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textEmissiveStrength = __pigeon_list[31] as Double?
+      val textHaloBlur = __pigeon_list[32] as Double?
+      val textHaloColor = __pigeon_list[33].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textHaloWidth = __pigeon_list[34] as Double?
+      val textOcclusionOpacity = __pigeon_list[35] as Double?
+      val textOpacity = __pigeon_list[36] as Double?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       geometry,
       image,
-      iconAllowOverlap,
       iconAnchor,
-      iconIgnorePlacement,
       iconImage,
-      iconKeepUpright,
       iconOffset,
-      iconOptional,
-      iconPadding,
-      iconPitchAlignment,
       iconRotate,
-      iconRotationAlignment,
       iconSize,
       iconTextFit,
       iconTextFitPadding,
-      symbolAvoidEdges,
-      symbolPlacement,
       symbolSortKey,
-      symbolSpacing,
-      symbolZElevate,
-      symbolZOrder,
-      textAllowOverlap,
       textAnchor,
       textField,
-      textFont,
-      textIgnorePlacement,
       textJustify,
-      textKeepUpright,
       textLetterSpacing,
       textLineHeight,
-      textMaxAngle,
       textMaxWidth,
       textOffset,
-      textOptional,
-      textPadding,
-      textPitchAlignment,
       textRadialOffset,
       textRotate,
-      textRotationAlignment,
       textSize,
       textTransform,
-      textVariableAnchor,
-      textWritingMode,
       iconColor,
-      iconColorSaturation,
       iconEmissiveStrength,
       iconHaloBlur,
       iconHaloColor,
@@ -1275,9 +892,6 @@ data class PointAnnotationOptions(
       iconImageCrossFade,
       iconOcclusionOpacity,
       iconOpacity,
-      iconTranslate,
-      iconTranslateAnchor,
-      symbolElevationReference,
       symbolZOffset,
       textColor,
       textEmissiveStrength,
@@ -1286,8 +900,6 @@ data class PointAnnotationOptions(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
-      textTranslate,
-      textTranslateAnchor,
     )
   }
 }
