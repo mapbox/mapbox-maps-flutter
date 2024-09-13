@@ -5,6 +5,7 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
@@ -4733,7 +4734,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun addGeoJSONSourceFeatures(sourceId: String, dataID: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
+  fun addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
   /**
    * Update existing features in a GeoJSON style source.
    *
@@ -4761,7 +4762,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun updateGeoJSONSourceFeatures(sourceId: String, dataID: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
+  fun updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
   /**
    * Remove features from a GeoJSON style source.
    *
@@ -4789,7 +4790,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun removeGeoJSONSourceFeatures(sourceId: String, dataID: String, featureIds: List<String>, callback: (Result<Unit>) -> Unit)
+  fun removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: List<String>, callback: (Result<Unit>) -> Unit)
   /**
    * Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
    *
@@ -5586,9 +5587,9 @@ interface StyleManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdArg = args[0] as String
-            val dataIDArg = args[1] as String
+            val dataIdArg = args[1] as String
             val featuresArg = args[2] as List<Feature>
-            api.addGeoJSONSourceFeatures(sourceIdArg, dataIDArg, featuresArg) { result: Result<Unit> ->
+            api.addGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featuresArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5607,9 +5608,9 @@ interface StyleManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdArg = args[0] as String
-            val dataIDArg = args[1] as String
+            val dataIdArg = args[1] as String
             val featuresArg = args[2] as List<Feature>
-            api.updateGeoJSONSourceFeatures(sourceIdArg, dataIDArg, featuresArg) { result: Result<Unit> ->
+            api.updateGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featuresArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5628,9 +5629,9 @@ interface StyleManager {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdArg = args[0] as String
-            val dataIDArg = args[1] as String
+            val dataIdArg = args[1] as String
             val featureIdsArg = args[2] as List<String>
-            api.removeGeoJSONSourceFeatures(sourceIdArg, dataIDArg, featureIdsArg) { result: Result<Unit> ->
+            api.removeGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featureIdsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

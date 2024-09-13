@@ -5774,7 +5774,7 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addGeoJSONSourceFeatures(
-      String sourceId, String dataID, List<Feature?> features) async {
+      String sourceId, String dataId, List<Feature?> features) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5784,7 +5784,7 @@ class StyleManager {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[sourceId, dataID, features]) as List<Object?>?;
+        .send(<Object?>[sourceId, dataId, features]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -5824,7 +5824,7 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> updateGeoJSONSourceFeatures(
-      String sourceId, String dataID, List<Feature?> features) async {
+      String sourceId, String dataId, List<Feature?> features) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5834,7 +5834,7 @@ class StyleManager {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[sourceId, dataID, features]) as List<Object?>?;
+        .send(<Object?>[sourceId, dataId, features]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -5874,7 +5874,7 @@ class StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> removeGeoJSONSourceFeatures(
-      String sourceId, String dataID, List<String?> featureIds) async {
+      String sourceId, String dataId, List<String?> featureIds) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
@@ -5884,7 +5884,7 @@ class StyleManager {
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList = await __pigeon_channel
-        .send(<Object?>[sourceId, dataID, featureIds]) as List<Object?>?;
+        .send(<Object?>[sourceId, dataId, featureIds]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

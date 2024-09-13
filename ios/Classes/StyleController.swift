@@ -210,18 +210,18 @@ final class StyleController: StyleManager {
         }
     }
 
-    func addGeoJSONSourceFeatures(sourceId: String, dataID: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
-        styleManager.addGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataID)
+    func addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.addGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataId)
         completion(.success(()))
     }
 
-    func updateGeoJSONSourceFeatures(sourceId: String, dataID: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
-        styleManager.updateGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataID)
+    func updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.updateGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataId)
         completion(.success(()))
     }
 
-    func removeGeoJSONSourceFeatures(sourceId: String, dataID: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void) {
-        styleManager.removeGeoJSONSourceFeatures(forSourceId: sourceId, featureIds: featureIds, dataId: dataID)
+    func removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.removeGeoJSONSourceFeatures(forSourceId: sourceId, featureIds: featureIds, dataId: dataId)
         completion(.success(()))
     }
 

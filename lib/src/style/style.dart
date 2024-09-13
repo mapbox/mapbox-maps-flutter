@@ -314,9 +314,11 @@ extension StyleSource on StyleManager {
     final nonVolatileProperties = source._encode(false);
     final volatileProperties = source._encode(true);
     source.bind(this);
-    return addStyleSource(source.id, nonVolatileProperties).then((value) {
-      // volatile properties have to be set after the source has been added to the style
-      setStyleSourceProperties(source.id, volatileProperties);
+    return addStyleSource(source.id, nonVolatileProperties).then((value) async {
+      // volatile properties have to be set after the source has been
+      // added to the style and the nonVolatileProperties have been set
+      await Future.delayed(Duration(milliseconds: 1));
+      return setStyleSourceProperties(source.id, volatileProperties);
     });
   }
 

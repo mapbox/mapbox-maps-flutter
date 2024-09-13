@@ -4371,7 +4371,7 @@ protocol StyleManager {
   /// @param features An array of GeoJSON features to be added to the source.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func addGeoJSONSourceFeatures(sourceId: String, dataID: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
+  func addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
   /// Update existing features in a GeoJSON style source.
   ///
   /// The update operation will be scheduled and applied on a GeoJSON serialization queue.
@@ -4397,7 +4397,7 @@ protocol StyleManager {
   /// @param features The GeoJSON features to be updated in the source.
   /// 
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func updateGeoJSONSourceFeatures(sourceId: String, dataID: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
+  func updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
   /// Remove features from a GeoJSON style source.
   ///
   /// The remove operation will be scheduled and applied on a GeoJSON serialization queue.
@@ -4423,7 +4423,7 @@ protocol StyleManager {
   /// @param featureIds The Ids of the features that need to be removed from the source.
   /// 
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func removeGeoJSONSourceFeatures(sourceId: String, dataID: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  func removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
   /// Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
   ///
   /// @param sourceId A style source identifier.
@@ -5297,9 +5297,9 @@ class StyleManagerSetup {
       addGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdArg = args[0] as! String
-        let dataIDArg = args[1] as! String
+        let dataIdArg = args[1] as! String
         let featuresArg = args[2] as! [Feature]
-        api.addGeoJSONSourceFeatures(sourceId: sourceIdArg, dataID: dataIDArg, features: featuresArg) { result in
+        api.addGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, features: featuresArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -5341,9 +5341,9 @@ class StyleManagerSetup {
       updateGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdArg = args[0] as! String
-        let dataIDArg = args[1] as! String
+        let dataIdArg = args[1] as! String
         let featuresArg = args[2] as! [Feature]
-        api.updateGeoJSONSourceFeatures(sourceId: sourceIdArg, dataID: dataIDArg, features: featuresArg) { result in
+        api.updateGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, features: featuresArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -5385,9 +5385,9 @@ class StyleManagerSetup {
       removeGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdArg = args[0] as! String
-        let dataIDArg = args[1] as! String
+        let dataIdArg = args[1] as! String
         let featureIdsArg = args[2] as! [String]
-        api.removeGeoJSONSourceFeatures(sourceId: sourceIdArg, dataID: dataIDArg, featureIds: featureIdsArg) { result in
+        api.removeGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, featureIds: featureIdsArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))

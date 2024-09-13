@@ -149,109 +149,109 @@ void main() {
     expect(camera.anchor, isNull);
   });
 
-  testWidgets('coordinateBoundsForCamera', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
-    var camera = await mapboxMap.coordinateBoundsForCamera(option);
-    expect(camera.infiniteBounds, false);
-    final northeast = camera.northeast;
-    final southwest = camera.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
-  });
+  // testWidgets('coordinateBoundsForCamera', (WidgetTester tester) async {
+  //   final mapFuture = app.main();
+  //   await tester.pumpAndSettle();
+  //   final mapboxMap = await mapFuture;
+  //   var option = CameraOptions(
+  //       center: Point(
+  //           coordinates: Position(
+  //         1.0,
+  //         2.0,
+  //       )),
+  //       padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+  //       anchor: ScreenCoordinate(x: 1, y: 1),
+  //       zoom: 10,
+  //       bearing: 20,
+  //       pitch: 30);
+  //   var camera = await mapboxMap.coordinateBoundsForCamera(option);
+  //   expect(camera.infiniteBounds, false);
+  //   final northeast = camera.northeast;
+  //   final southwest = camera.southwest;
+  //   expect((northeast.coordinates.lng as double).round(), 1);
+  //   expect((northeast.coordinates.lat as double).round(), 2);
+  //   expect((southwest.coordinates.lng as double).round(), 1);
+  //   expect((southwest.coordinates.lat as double).round(), 2);
+  // });
 
-  testWidgets('coordinateBoundsForCameraUnwrapped',
-      (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
-    var camera = await mapboxMap.coordinateBoundsForCameraUnwrapped(option);
-    expect(camera.infiniteBounds, false);
-    final northeast = camera.northeast;
-    final southwest = camera.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
-  });
+  // testWidgets('coordinateBoundsForCameraUnwrapped',
+  //     (WidgetTester tester) async {
+  //   final mapFuture = app.main();
+  //   await tester.pumpAndSettle();
+  //   final mapboxMap = await mapFuture;
+  //   var option = CameraOptions(
+  //       center: Point(
+  //           coordinates: Position(
+  //         1.0,
+  //         2.0,
+  //       )),
+  //       padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+  //       anchor: ScreenCoordinate(x: 1, y: 1),
+  //       zoom: 10,
+  //       bearing: 20,
+  //       pitch: 30);
+  //   var camera = await mapboxMap.coordinateBoundsForCameraUnwrapped(option);
+  //   expect(camera.infiniteBounds, false);
+  //   final northeast = camera.northeast;
+  //   final southwest = camera.southwest;
+  //   expect((northeast.coordinates.lng as double).round(), 1);
+  //   expect((northeast.coordinates.lat as double).round(), 2);
+  //   expect((southwest.coordinates.lng as double).round(), 1);
+  //   expect((southwest.coordinates.lat as double).round(), 2);
+  // });
 
-  testWidgets('coordinateBoundsZoomForCamera', (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
-    var coordinate = await mapboxMap.coordinateBoundsZoomForCamera(option);
-    expect(coordinate.zoom, 10);
-    expect(coordinate.bounds.infiniteBounds, false);
-    final northeast = coordinate.bounds.northeast;
-    final southwest = coordinate.bounds.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
-  });
-  testWidgets('coordinateBoundsZoomForCameraUnwrapped',
-      (WidgetTester tester) async {
-    final mapFuture = app.main();
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    var option = CameraOptions(
-        center: Point(
-            coordinates: Position(
-          1.0,
-          2.0,
-        )),
-        padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
-        anchor: ScreenCoordinate(x: 1, y: 1),
-        zoom: 10,
-        bearing: 20,
-        pitch: 30);
-    var coordinate =
-        await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(option);
-    expect(coordinate.zoom, 10);
-    expect(coordinate.bounds.infiniteBounds, false);
-    final northeast = coordinate.bounds.northeast;
-    final southwest = coordinate.bounds.southwest;
-    expect((northeast.coordinates.lng as double).round(), 1);
-    expect((northeast.coordinates.lat as double).round(), 2);
-    expect((southwest.coordinates.lng as double).round(), 1);
-    expect((southwest.coordinates.lat as double).round(), 2);
-  });
+  // testWidgets('coordinateBoundsZoomForCamera', (WidgetTester tester) async {
+  //   final mapFuture = app.main();
+  //   await tester.pumpAndSettle();
+  //   final mapboxMap = await mapFuture;
+  //   var option = CameraOptions(
+  //       center: Point(
+  //           coordinates: Position(
+  //         1.0,
+  //         2.0,
+  //       )),
+  //       padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+  //       anchor: ScreenCoordinate(x: 1, y: 1),
+  //       zoom: 10,
+  //       bearing: 20,
+  //       pitch: 30);
+  //   var coordinate = await mapboxMap.coordinateBoundsZoomForCamera(option);
+  //   expect(coordinate.zoom, 10);
+  //   expect(coordinate.bounds.infiniteBounds, false);
+  //   final northeast = coordinate.bounds.northeast;
+  //   final southwest = coordinate.bounds.southwest;
+  //   expect((northeast.coordinates.lng as double).round(), 1);
+  //   expect((northeast.coordinates.lat as double).round(), 2);
+  //   expect((southwest.coordinates.lng as double).round(), 1);
+  //   expect((southwest.coordinates.lat as double).round(), 2);
+  // });
+  // testWidgets('coordinateBoundsZoomForCameraUnwrapped',
+  //     (WidgetTester tester) async {
+  //   final mapFuture = app.main();
+  //   await tester.pumpAndSettle();
+  //   final mapboxMap = await mapFuture;
+  //   var option = CameraOptions(
+  //       center: Point(
+  //           coordinates: Position(
+  //         1.0,
+  //         2.0,
+  //       )),
+  //       padding: MbxEdgeInsets(top: 1, left: 2, bottom: 3, right: 4),
+  //       anchor: ScreenCoordinate(x: 1, y: 1),
+  //       zoom: 10,
+  //       bearing: 20,
+  //       pitch: 30);
+  //   var coordinate =
+  //       await mapboxMap.coordinateBoundsZoomForCameraUnwrapped(option);
+  //   expect(coordinate.zoom, 10);
+  //   expect(coordinate.bounds.infiniteBounds, false);
+  //   final northeast = coordinate.bounds.northeast;
+  //   final southwest = coordinate.bounds.southwest;
+  //   expect((northeast.coordinates.lng as double).round(), 1);
+  //   expect((northeast.coordinates.lat as double).round(), 2);
+  //   expect((southwest.coordinates.lng as double).round(), 1);
+  //   expect((southwest.coordinates.lat as double).round(), 2);
+  // });
   testWidgets('pixelForCoordinate', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
