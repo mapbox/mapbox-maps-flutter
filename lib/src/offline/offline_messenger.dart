@@ -16,6 +16,27 @@ enum NetworkRestriction {
   DISALLOW_ALL,
 }
 
+/// Describes the tiles data domain.
+enum TileDataDomain {
+  /// Data for Maps.
+  MAPS,
+
+  /// Data for Navigation.
+  NAVIGATION,
+
+  /// Data for Search.
+  SEARCH,
+
+  /// Data for ADAS
+  ADAS,
+}
+
+enum _TileStoreOptionsKey {
+  DISK_QUOTA,
+  MAPBOX_API_URL,
+  TILE_URL_TEMPLATE,
+}
+
 /// Describes the style package load option values.
 class StylePackLoadOptions {
   StylePackLoadOptions({
@@ -662,6 +683,12 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is NetworkRestriction) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
+    } else if (value is TileDataDomain) {
+      buffer.putUint8(142);
+      writeValue(buffer, value.index);
+    } else if (value is _TileStoreOptionsKey) {
+      buffer.putUint8(143);
+      writeValue(buffer, value.index);
     } else {
       super.writeValue(buffer, value);
     }
@@ -698,6 +725,12 @@ class OfflineMessenger_PigeonCodec extends StandardMessageCodec {
       case 141:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : NetworkRestriction.values[value];
+      case 142:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TileDataDomain.values[value];
+      case 143:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : _TileStoreOptionsKey.values[value];
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -1265,6 +1298,31 @@ class _TileStore {
       );
     } else {
       return (__pigeon_replyList[0] as TileRegion?)!;
+    }
+  }
+
+  Future<void> setOptionForKey(
+      _TileStoreOptionsKey key, TileDataDomain? domain, Object? value) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[key, domain, value]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 }

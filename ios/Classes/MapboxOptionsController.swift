@@ -90,4 +90,14 @@ final class MapboxOptionsController: _MapboxOptions, _MapboxMapsOptions {
     func setLanguage(language: String?) throws {
         _ = settingsService.set(key: MapboxCommonSettings.language, value: language)
     }
+
+    func clearData(completion: @escaping (Result<Void, any Error>) -> Void) {
+        MapboxMap.clearData { error in
+            if let error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
 }

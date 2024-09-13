@@ -25,6 +25,10 @@ void main() {
       acceptExpired: true,
       networkRestriction: NetworkRestriction.NONE);
 
+  tearDown(() async {
+    await MapboxMapsOptions.clearData();
+  });
+
   testWidgets("test downloading style pack", (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
@@ -53,8 +57,10 @@ void main() {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
 
-    final tmpDir = await getTemporaryDirectory();
+    final tmpDir = await getTemporaryDirectory().then((tmpDir) =>
+        tmpDir.createTemp("mapbox/tests/${widgetTester.testDescription}"));
     final tileStore = await TileStore.createAt(tmpDir.uri);
+
     final downloadedTileRegion = await tileStore.loadTileRegion(
         "my-tile-region-id", _tileRegionLoadOptions, null);
     expect(downloadedTileRegion.completedResourceCount,

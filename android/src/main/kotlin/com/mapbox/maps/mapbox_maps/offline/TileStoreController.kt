@@ -13,7 +13,9 @@ import com.mapbox.maps.mapbox_maps.toFLTValue
 import com.mapbox.maps.mapbox_maps.toGeometry
 import com.mapbox.maps.mapbox_maps.toNetworkRestriction
 import com.mapbox.maps.mapbox_maps.toResult
+import com.mapbox.maps.mapbox_maps.toTileDataDomain
 import com.mapbox.maps.mapbox_maps.toTileRegionEstimateOptions
+import com.mapbox.maps.mapbox_maps.toTileStoreOptionsKey
 import com.mapbox.maps.mapbox_maps.toTilesetDescriptorOptions
 import com.mapbox.maps.mapbox_maps.toValue
 import io.flutter.plugin.common.BinaryMessenger
@@ -149,6 +151,14 @@ class TileStoreController(
         }
       }
     )
+  }
+
+  override fun setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) {
+    domain?.also {
+      tileStore.setOption(key.toTileStoreOptionsKey(), it.toTileDataDomain(), value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
+    } ?: run {
+      tileStore.setOption(key.toTileStoreOptionsKey(), value?.toValue() ?: com.mapbox.bindgen.Value.nullValue())
+    }
   }
 }
 

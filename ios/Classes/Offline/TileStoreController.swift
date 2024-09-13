@@ -101,6 +101,14 @@ final class TileStoreController: _TileStore {
             executeOnMainThread(completion)(result.map { $0.toFLTTileRegion() })
         }
     }
+
+    func setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) throws {
+        if let domain {
+            tileStore.setOptionForKey(key.toTileStoreOptionsKey(), domain: domain.toTileDataDomain(), value: value as Any)
+        } else {
+            tileStore.setOptionForKey(key.toTileStoreOptionsKey(), value: value as Any)
+        }
+    }
 }
 
 extension OfflineManager {

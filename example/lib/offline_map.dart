@@ -39,8 +39,8 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
         metadata: {"tag": "test"},
         acceptExpired: false);
-    offlineManager.loadStylePack(MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions,
-        (progress) {
+    offlineManager.loadStylePack(
+        MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions, (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_stylePackProgress.isClosed) {
@@ -82,39 +82,43 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   @override
   Widget build(BuildContext context) {
     String downloadButtonText = "Download Map";
-    final mapIsDownloaded = Future
-        .wait([_tileRegionLoadProgress.sink.done, _stylePackProgress.sink.done])
+    final mapIsDownloaded = Future.wait(
+            [_tileRegionLoadProgress.sink.done, _stylePackProgress.sink.done])
         .whenComplete(() async {
-          await OfflineSwitch.shared.setMapboxStackConnected(false);
-        });
+      await OfflineSwitch.shared.setMapboxStackConnected(false);
+    });
 
     return new Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
-          child: FutureBuilder(future: mapIsDownloaded, builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return MapWidget(
-                key: ValueKey("mapWidget"),
-                styleUri: MapboxStyles.SATELLITE_STREETS,
-                cameraOptions: CameraOptions(center: City.helsinki, zoom: 12.0),
-              );
-            } else {
-              return TextButton(
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                ),
-                onPressed: () async {
-                  setState(() {
-                    downloadButtonText = "Downloading";
-                  });
-                  await _downloadStylePack();
-                  await _downloadTileRegion();
-                },
-                child: Text(downloadButtonText),
-              );
-            }
-          }),
+          child: FutureBuilder(
+              future: mapIsDownloaded,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return MapWidget(
+                    key: ValueKey("mapWidget"),
+                    styleUri: MapboxStyles.SATELLITE_STREETS,
+                    cameraOptions:
+                        CameraOptions(center: City.helsinki, zoom: 12.0),
+                  );
+                } else {
+                  return TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        downloadButtonText = "Downloading";
+                      });
+                      await _downloadStylePack();
+                      await _downloadTileRegion();
+                    },
+                    child: Text(downloadButtonText),
+                  );
+                }
+              }),
         ),
         SizedBox(
             height: 100,
