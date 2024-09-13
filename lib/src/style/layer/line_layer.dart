@@ -124,6 +124,7 @@ class LineLayer extends Layer {
   double? lineZOffset;
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  @experimental
   List<Object>? lineZOffsetExpression;
 
   /// Blur applied to the line, in pixels.
@@ -249,6 +250,7 @@ class LineLayer extends Layer {
 
   /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
   /// Default value: "transparent".
+  @experimental
   List<Object>? lineTrimColorExpression;
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
@@ -258,6 +260,7 @@ class LineLayer extends Layer {
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
   List<Object>? lineTrimFadeRangeExpression;
 
   /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].

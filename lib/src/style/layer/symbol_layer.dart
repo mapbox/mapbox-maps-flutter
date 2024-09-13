@@ -580,6 +580,7 @@ class SymbolLayer extends Layer {
 
   /// Selects the base of symbol-elevation.
   /// Default value: "ground".
+  @experimental
   List<Object>? symbolElevationReferenceExpression;
 
   /// Specifies an uniform elevation from the ground, in meters.
@@ -589,6 +590,7 @@ class SymbolLayer extends Layer {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
+  @experimental
   List<Object>? symbolZOffsetExpression;
 
   /// The color with which the text will be drawn.

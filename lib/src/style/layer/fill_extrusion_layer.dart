@@ -86,6 +86,7 @@ class FillExtrusionLayer extends Layer {
 
   /// Radius of a fill extrusion edge in meters. If not zero, rounds extrusion edges for a smoother appearance.
   /// Default value: 0. Value range: [0, 1]
+  @experimental
   List<Object>? fillExtrusionEdgeRadiusExpression;
 
   /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
@@ -95,6 +96,7 @@ class FillExtrusionLayer extends Layer {
 
   /// Provides a control to futher fine-tune the look of the ambient occlusion on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
   /// Default value: 0.69. Value range: [0, 1]
+  @experimental
   List<Object>? fillExtrusionAmbientOcclusionGroundAttenuationExpression;
 
   /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
@@ -104,6 +106,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The extent of the ambient occlusion effect on the ground beneath the extruded buildings in meters.
   /// Default value: 3. Minimum value: 0.
+  @experimental
   List<Object>? fillExtrusionAmbientOcclusionGroundRadiusExpression;
 
   /// Controls the intensity of shading near ground and concave angles between walls. Default value 0.0 disables ambient occlusion and values around 0.3 provide the most plausible results for buildings.
@@ -129,6 +132,7 @@ class FillExtrusionLayer extends Layer {
 
   /// Shades area near ground and concave angles between walls where the radius defines only vertical impact. Default value 3.0 corresponds to height of one floor and brings the most plausible results for buildings.
   /// Default value: 3. Minimum value: 0.
+  @experimental
   List<Object>? fillExtrusionAmbientOcclusionWallRadiusExpression;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
@@ -170,6 +174,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The color of the flood light effect on the walls of the extruded buildings.
   /// Default value: "#ffffff".
+  @experimental
   List<Object>? fillExtrusionFloodLightColorExpression;
 
   /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
@@ -179,6 +184,7 @@ class FillExtrusionLayer extends Layer {
 
   /// Provides a control to futher fine-tune the look of the flood light on the ground beneath the extruded buildings. Lower values give the effect a more solid look while higher values make it smoother.
   /// Default value: 0.69. Value range: [0, 1]
+  @experimental
   List<Object>? fillExtrusionFloodLightGroundAttenuationExpression;
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
@@ -188,6 +194,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
   /// Default value: 0.
+  @experimental
   List<Object>? fillExtrusionFloodLightGroundRadiusExpression;
 
   /// The intensity of the flood light color.
@@ -197,6 +204,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The intensity of the flood light color.
   /// Default value: 0. Value range: [0, 1]
+  @experimental
   List<Object>? fillExtrusionFloodLightIntensityExpression;
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
@@ -206,6 +214,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
   /// Default value: 0. Minimum value: 0.
+  @experimental
   List<Object>? fillExtrusionFloodLightWallRadiusExpression;
 
   /// The height with which to extrude this layer.
@@ -223,6 +232,7 @@ class FillExtrusionLayer extends Layer {
 
   /// If a non-zero value is provided, it sets the fill-extrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fill-extrusion properties might not be supported with non-zero line width.
   /// Default value: 0. Minimum value: 0.
+  @experimental
   List<Object>? fillExtrusionLineWidthExpression;
 
   /// The opacity of the entire fill extrusion layer. This is rendered on a per-layer, not per-feature, basis, and data-driven styling is not available.
@@ -246,6 +256,7 @@ class FillExtrusionLayer extends Layer {
 
   /// Indicates whether top edges should be rounded when fill-extrusion-edge-radius has a value greater than 0. If false, rounded edges are only applied to the sides. Default is true.
   /// Default value: true.
+  @experimental
   List<Object>? fillExtrusionRoundedRoofExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
@@ -279,6 +290,7 @@ class FillExtrusionLayer extends Layer {
 
   /// A global multiplier that can be used to scale base, height, AO, and flood light of the fill extrusions.
   /// Default value: 1. Minimum value: 0.
+  @experimental
   List<Object>? fillExtrusionVerticalScaleExpression;
 
   @override
