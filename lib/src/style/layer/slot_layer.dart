@@ -11,6 +11,8 @@ class SlotLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
+    @Deprecated("This property has no effect on SlotLayer") String? sourceId,
+    @Deprecated("This property has no effect on SlotLayer") String? sourceLayer,
   }) : super(
             id: id,
             visibility: visibility,
@@ -22,6 +24,14 @@ class SlotLayer extends Layer {
 
   @override
   String getType() => "slot";
+
+  /// The id of the source.
+  @Deprecated("This property has no effect on SlotLayer")
+  String get sourceId => "";
+
+  /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
+  @Deprecated("This property has no effect on SlotLayer")
+  String? sourceLayer;
 
   @override
   Future<String> _encode() async {
