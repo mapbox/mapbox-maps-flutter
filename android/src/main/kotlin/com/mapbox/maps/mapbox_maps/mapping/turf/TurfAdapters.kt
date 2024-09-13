@@ -1,6 +1,6 @@
 package com.mapbox.maps.mapbox_maps.mapping.turf
 
-import com.google.gson.Gson;
+import com.google.gson.Gson
 import com.mapbox.geojson.*
 
 fun Point.toList(): List<Any?> {
@@ -57,7 +57,7 @@ fun Feature.toList(): List<Any?> {
 
 object FeatureDecoder {
   @Suppress("UNCHECKED_CAST")
-    fun fromList(list: List<Any?>): Feature {
+  fun fromList(list: List<Any?>): Feature {
     val rawData = list.first() as Map<String, Any>
 
     val gson = Gson()
