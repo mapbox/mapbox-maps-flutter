@@ -65,7 +65,6 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadStylePack() async {
-    offlineManager = await OfflineManager.create();
     final stylePackLoadOptions = StylePackLoadOptions(
         glyphsRasterizationMode:
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
@@ -85,12 +84,6 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final path = await getTemporaryDirectory();
-    tileStore = await TileStore.createDefault();
-
-    // Reset disk quota to default value
-    tileStore?.setDiskQuota(null);
-
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: City.helsinki.toJson(),
         descriptorsOptions: [
@@ -148,9 +141,14 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: () async {
-                      setState(() {
-                        downloadButtonText = "Downloading";
-                      });
+                      offlineManager = await OfflineManager.create();
+
+                      final path = await getTemporaryDirectory();
+                      MapboxMapsOptions.setDataPath(path.path);
+                      tileStore = await TileStore.createAt(path.uri);
+                      // Reset disk quota to default value
+                      tileStore?.setDiskQuota(null);
+
                       await _downloadStylePack();
                       await _downloadTileRegion();
                     },
