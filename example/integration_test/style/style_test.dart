@@ -223,6 +223,29 @@ void main() {
         '<a href=\"https://www.mapbox.com/about/maps/\" target=\"_blank\" title=\"Mapbox\" aria-label=\"Mapbox\" role=\"listitem\">© Mapbox</a>');
   });
 
+  testWidgets('addGeoJSONSourceFeatures', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var data = await rootBundle
+        .loadString('assets/from_crema_to_council_crest.geojson');
+    var feature = Feature(
+        id: "addedFeature", geometry: Point(coordinates: Position(1, 1)));
+
+    // Add GeoJSONSourceFeature
+    await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
+    await mapboxMap.style.addGeoJSONSourceFeatures("line", "dataID", [feature]);
+    await mapboxMap.style
+        .addLayer(CircleLayer(id: "circle_layer", sourceId: "line"));
+
+    await Future.delayed(Duration(milliseconds: 100));
+    var returnedSourceFeatures = await mapboxMap.querySourceFeatures(
+        'line', SourceQueryOptions(filter: ''));
+    expect(returnedSourceFeatures.length, 1);
+    expect(returnedSourceFeatures.first?.queriedFeature.feature['id'],
+        "addedFeature");
+  });
+
   testWidgets('getStyleDefaultCamera', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
