@@ -310,15 +310,27 @@ extension StyleLayer on StyleManager {
 
 /// Extension for StyleManager to add/get sources from the current style.
 extension StyleSource on StyleManager {
-  Future<void> addSource(Source source) {
+  Future<void> addSource(Source source) async {
+    if (source is GeoJsonSource && source.internalData != null) {
+      final internalData = source.internalData!;
+
+      // Add empty data initially so that the source is added and 
+      // volatile properties can be set. Then add the data. 
+      source._data = "";
+      await _addSourceInternal(source);
+      return source.updateGeoJSON(await internalData);
+    } else {
+      return _addSourceInternal(source);
+    }
+  }
+
+  Future<void> _addSourceInternal(Source source) {
     final nonVolatileProperties = source._encode(false);
     final volatileProperties = source._encode(true);
     source.bind(this);
-    return addStyleSource(source.id, nonVolatileProperties).then((value) async {
-      // volatile properties have to be set after the source has been
-      // added to the style and the nonVolatileProperties have been set
-      await Future.delayed(Duration(milliseconds: 1));
-      return setStyleSourceProperties(source.id, volatileProperties);
+    return addStyleSource(source.id, nonVolatileProperties).then((value) {
+      // volatile properties have to be set after the source has been added to the style
+      setStyleSourceProperties(source.id, volatileProperties);
     });
   }
 
@@ -439,4 +451,8 @@ extension StyleColorList on List {
       return Colors.transparent;
     }
   }
+}
+
+extension GeoJSONSourceInternal on GeoJsonSource {
+  String? get internalData => '$_data';
 }
