@@ -6,9 +6,9 @@ Instead of setting a whole new GeoJSON object anew every time a single feature h
 If your features have associated identifiers - you can add, update, and remove them on individual basis in your ``GeoJSONSource``. This is especially beneficial for ``GeoJSONSource``s hosting a large amount of features - in this case adding a feature can be up to 4x faster with the partial GeoJSON update API.
 
 ```dart
-maboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
-maboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
-maboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
 ```
 
 ### 2.3.0-beta.1
