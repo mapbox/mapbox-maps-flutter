@@ -31,6 +31,7 @@ Future<MapboxMap> main() {
   runApp(MaterialApp(
       home: MapWidget(
     key: ValueKey("mapWidget"),
+    androidHostingMode: AndroidPlatformViewHostingMode.VD,
     onMapCreated: (MapboxMap mapboxMap) {
       completer.complete(mapboxMap);
     },
