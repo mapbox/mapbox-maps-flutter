@@ -40,26 +40,27 @@ class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
         lineCap: LineCap.ROUND,
         lineColor: Colors.red.value,
         lineWidth: 6.0));
-    
+
     // Wait 5 seconds, then update the GeoJSONSource with the new line
     await Future.delayed(Duration(seconds: 5));
 
     var newFeature = Feature(
-      id: "featureID",
-      geometry: LineString(coordinates: [
-        Position(-122.483696, 37.833818),
-        Position(-122.4861, 37.828802),
-        Position(-122.493782, 37.833683),
-        Position(-122.48959, 37.8366109),
-        Position(-122.483696, 37.833818)
-    ]));
-    await mapboxMap?.style.updateGeoJSONSourceFeatures("line", "new_line", [newFeature]);
+        id: "featureID",
+        geometry: LineString(coordinates: [
+          Position(-122.483696, 37.833818),
+          Position(-122.4861, 37.828802),
+          Position(-122.493782, 37.833683),
+          Position(-122.48959, 37.8366109),
+          Position(-122.483696, 37.833818)
+        ]));
+    await mapboxMap?.style
+        .updateGeoJSONSourceFeatures("line", "new_line", [newFeature]);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-    body: MapWidget(
+        body: MapWidget(
       key: ValueKey("mapWidget"),
       styleUri: MapboxStyles.MAPBOX_STREETS,
       cameraOptions: CameraOptions(

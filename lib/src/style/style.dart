@@ -314,8 +314,8 @@ extension StyleSource on StyleManager {
     if (source is GeoJsonSource && source._data != null) {
       final internalData = source._data!;
 
-      // Add empty data initially so that the source is added and 
-      // volatile properties can be set. Then add the data. 
+      // Add empty data initially so that the source is added and
+      // volatile properties can be set. Then add the data.
       source._data = "";
       await _addSourceInternal(source);
       return source.updateGeoJSON(internalData);
