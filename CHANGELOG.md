@@ -10,6 +10,7 @@ mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
 ```
+* Print to console native Maps SDK logs in debug configuration.
 
 ### 2.3.0-beta.1
 
