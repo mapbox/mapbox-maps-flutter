@@ -4,7 +4,9 @@ part of mapbox_maps_flutter;
 final class MapboxOptions {
   static _MapboxOptions _options = _MapboxOptions();
 
-  MapboxOptions._() {}
+  MapboxOptions._() {
+    LogConfiguration._setupDebugLoggingIfNeeded();
+  }
 
   /// The access token that is used to access resources provided by Mapbox services.
   static Future<String> getAccessToken() {
