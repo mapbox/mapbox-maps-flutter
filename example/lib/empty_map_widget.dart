@@ -41,7 +41,6 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
         androidHostingMode: AndroidPlatformViewHostingMode.VD,
         cameraOptions: camera,
         onMapCreated: (MapboxMap mapboxMap) {
-          print('onMapCreated');
           completer.complete(mapboxMap);
         },
         onMapLoadedListener: (MapLoadedEventData data) {
@@ -51,10 +50,7 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
         },
         onStyleLoadedListener: (StyleLoadedEventData data) {
           if (!events.onStyleLoaded.isCompleted) {
-            print('onStyleLoadedListener');
             events.onStyleLoaded.complete();
-          } else {
-            print('----------------------------------- style loaded ignored');
           }
         },
         onStyleDataLoadedListener: (StyleDataLoadedEventData data) {

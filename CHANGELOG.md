@@ -28,14 +28,14 @@ for (var i = 0; i < 2000; i++){
 }
 circleAnnotationManager.setCircleColor(Colors.blue.value);
 ```
-* `autoMaxZoom` property exposed for `GeoJsonSource` to fix rendering issues with `FillExtrusionLayer` in some cases.
+* Expose `autoMaxZoom` property for `GeoJsonSource` to fix rendering issues with `FillExtrusionLayer` in some cases.
 * Expose experimental `ClipLayer` to remove 3D data (fill extrusions, landmarks, trees) and symbols.
 * Deprecate `SlotLayer.sourceId` and `SlotLayer.sourceLayer` as they have no effect in this layer.
 * Expose experimental `SymbolLayer.symbolElevationReference` and `SymbolLayer.symbolZOffset`.
-* Add missing `@experimental` annotations to `Layer`'s *Expression properties.
+* Add missing `@experimental` annotations to `Layer`'s `Expression` properties.
 * Remove experimental `model-front-cutoff` property from `ModelLayer`.
 * Expose experimental `lineTrimColor` and `lineTrimFadeRange` on `LineLayer` which allow to set custom color for trimmed line and fade effect for trim.
-* Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switches fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
+* Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switch fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
 
 ### 2.3.0-beta.1
 
