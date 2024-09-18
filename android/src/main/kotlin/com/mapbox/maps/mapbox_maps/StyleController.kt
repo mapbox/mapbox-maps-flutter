@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.mapbox.bindgen.DataRef
 import com.mapbox.bindgen.Value
+import com.mapbox.geojson.Feature
 import com.mapbox.maps.Image
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.RuntimeStylingOptions
@@ -340,6 +341,36 @@ class StyleController(private val context: Context, private val styleManager: Ma
     } else {
       callback(Result.success(Unit))
     }
+  }
+
+  override fun addGeoJSONSourceFeatures(
+    sourceId: String,
+    dataId: String,
+    features: List<Feature>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val expected = styleManager.addGeoJSONSourceFeatures(sourceId, dataId, features)
+    callback(Result.success(Unit))
+  }
+
+  override fun updateGeoJSONSourceFeatures(
+    sourceId: String,
+    dataId: String,
+    features: List<Feature>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val expected = styleManager.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+    callback(Result.success(Unit))
+  }
+
+  override fun removeGeoJSONSourceFeatures(
+    sourceId: String,
+    dataId: String,
+    featureIds: List<String>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val expected = styleManager.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+    callback(Result.success(Unit))
   }
 
   override fun updateStyleImageSourceImage(

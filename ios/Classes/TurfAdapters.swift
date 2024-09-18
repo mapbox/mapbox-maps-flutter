@@ -54,6 +54,22 @@ extension Polygon {
     }
 }
 
+extension Feature {
+    static func fromList(_ list: [Any?]) -> Feature? {
+        guard let raw = list.first as? [String: Any],
+              let jsonData = try? JSONSerialization.data(withJSONObject: raw, options: []),
+              let feature = try? JSONDecoder().decode(Feature.self, from: jsonData) else { return nil }
+
+        return feature
+    }
+
+    func toList() -> [Any?] {
+        return [
+            self.toMap()
+        ]
+    }
+}
+
 extension LocationCoordinate2D {
 
     fileprivate init(values: [Double]) {

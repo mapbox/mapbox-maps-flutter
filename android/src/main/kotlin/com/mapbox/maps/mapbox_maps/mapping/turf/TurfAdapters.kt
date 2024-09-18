@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps.mapping.turf
 
+import com.google.gson.Gson
 import com.mapbox.geojson.*
 
 fun Point.toList(): List<Any?> {
@@ -47,5 +48,21 @@ object PolygonDecoder {
         it.map { Point.fromLngLat(it.first(), it.last()) }
       }
     )
+  }
+}
+
+fun Feature.toList(): List<Any?> {
+  return listOf(this.toJson())
+}
+
+object FeatureDecoder {
+  @Suppress("UNCHECKED_CAST")
+  fun fromList(list: List<Any?>): Feature {
+    val rawData = list.first() as Map<String, Any>
+
+    val gson = Gson()
+    val json = gson.toJson(rawData)
+
+    return Feature.fromJson(json)
   }
 }

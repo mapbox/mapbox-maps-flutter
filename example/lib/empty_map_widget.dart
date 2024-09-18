@@ -10,11 +10,13 @@ class Events {
   var onStyleDataLoaded = Completer();
   var onSourceDataLoaded = Completer();
   var onCameraChanged = Completer();
+  var sourceDataIDs = [""];
 
   void resetOnMapLoaded() => onMapLoaded = Completer();
   void resetOnStyleLoaded() => onStyleLoaded = Completer();
   void resetOnStyleDataLoaded() => onStyleDataLoaded = Completer();
-  void resetOnSourceDataLoaded() => onSourceDataLoaded = Completer();
+  void resetOnSourceDataLoaded() =>
+      {sourceDataIDs.clear(), onSourceDataLoaded = Completer()};
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
 }
@@ -50,6 +52,10 @@ Future<MapboxMap> main() {
       }
     },
     onSourceDataLoadedListener: (SourceDataLoadedEventData data) {
+      var dataID = data.dataId;
+      if (dataID != null) {
+        events.sourceDataIDs.add(dataID);
+      }
       if (!events.onSourceDataLoaded.isCompleted) {
         events.onSourceDataLoaded.complete();
       }
