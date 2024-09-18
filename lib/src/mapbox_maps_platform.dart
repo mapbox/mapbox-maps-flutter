@@ -3,8 +3,8 @@ part of mapbox_maps_flutter;
 typedef OnPlatformViewCreatedCallback = void Function(int);
 
 class _MapboxMapsPlatform {
-  late final MethodChannel _channel = MethodChannel(
-      'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
+  late final MethodChannel _channel =
+      MethodChannel('plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
   final BinaryMessenger binaryMessenger;
 
   _MapboxMapsPlatform({required this.binaryMessenger}) {
@@ -12,8 +12,7 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
-    print(
-        "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+    print("Handle method call ${call.method}, arguments: ${call.arguments} not supported");
   }
 
   Widget buildView(
@@ -73,8 +72,7 @@ class _MapboxMapsPlatform {
         creationParamsCodec: const MapInterfaces_PigeonCodec(),
       );
     }
-    return Text(
-        '$defaultTargetPlatform is not yet supported by the maps plugin');
+    return Text('$defaultTargetPlatform is not yet supported by the maps plugin');
   }
 
   AndroidViewController Function(
@@ -84,8 +82,7 @@ class _MapboxMapsPlatform {
           dynamic creationParams,
           MessageCodec<dynamic>? creationParamsCodec,
           VoidCallback? onFocus})
-      _androidViewControllerFactoryForMode(
-          AndroidPlatformViewHostingMode hostingMode) {
+      _androidViewControllerFactoryForMode(AndroidPlatformViewHostingMode hostingMode) {
     switch (hostingMode) {
       case AndroidPlatformViewHostingMode.TLHC_VD:
         return PlatformViewsService.initAndroidView;
@@ -108,11 +105,9 @@ class _MapboxMapsPlatform {
     _channel.setMethodCallHandler(null);
   }
 
-  Future<dynamic> createAnnotationManager(String type,
-      {String? id, String? belowLayerId}) async {
+  Future<dynamic> createAnnotationManager(String type, {String? id, String? belowLayerId}) async {
     try {
-      return _channel
-          .invokeMethod('annotation#create_manager', <String, dynamic>{
+      return _channel.invokeMethod('annotation#create_manager', <String, dynamic>{
         'type': type,
         'id': id,
         'belowLayerId': belowLayerId,
@@ -124,8 +119,7 @@ class _MapboxMapsPlatform {
 
   Future<void> removeAnnotationManager(String id) {
     try {
-      return _channel.invokeMethod(
-          'annotation#remove_manager', <String, dynamic>{'id': id});
+      return _channel.invokeMethod('annotation#remove_manager', <String, dynamic>{'id': id});
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
@@ -151,6 +145,16 @@ class _MapboxMapsPlatform {
     try {
       final List<int> data = await _channel.invokeMethod('map#snapshot');
       return Uint8List.fromList(data);
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> setSnapshotLegacyMode(bool enable) async {
+    try {
+      return _channel.invokeMethod('map#setSnapshotLegacyMode', <String, dynamic>{
+        'enable': enable,
+      });
     } on PlatformException catch (e) {
       return new Future.error(e);
     }
