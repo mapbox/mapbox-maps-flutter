@@ -2,14 +2,9 @@ part of mapbox_maps_flutter;
 
 /// A class that allows to configure Mapbox SDKs logging per application.
 final class LogConfiguration {
-    // create an instance here to initialize debug logging once
-  static LogConfiguration _instance = LogConfiguration._();
+  static bool _initialized = false;
 
-  LogConfiguration._() {
-    if (kDebugMode && bool.fromEnvironment('MAPBOX_LOG_DEBUG', defaultValue: true)) {
-      LogConfiguration.registerLogWriterBackend(_DebugLoggingBackend());
-    }
-  }
+  LogConfiguration._() {}
 
   /// Sets the backend which writes the log.
   ///
@@ -20,8 +15,18 @@ final class LogConfiguration {
   }
 
   static void _setupDebugLoggingIfNeeded() {
-    // access the instance so lazy loading gets triggered
-    _instance;
+    if (!kDebugMode) {
+      return;
+    }
+
+    if (_initialized) {
+      return;
+    }
+    _initialized = true;
+
+    if (bool.fromEnvironment('MAPBOX_LOG_DEBUG', defaultValue: true)) {
+      LogConfiguration.registerLogWriterBackend(_DebugLoggingBackend());
+    }
   }
 }
 
