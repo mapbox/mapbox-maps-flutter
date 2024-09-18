@@ -1,6 +1,21 @@
 ### main
 
+* Add support for partial GeoJSON updates. 
+
+Instead of setting a whole new GeoJSON object anew every time a single feature has changed, now you can apply more granular, partial GeoJSON updates.
+If your features have associated identifiers - you can add, update, and remove them on individual basis in your ``GeoJSONSource``. This is especially beneficial for ``GeoJSONSource``s hosting a large amount of features - in this case adding a feature can be up to 4x faster with the partial GeoJSON update API.
+
+```dart
+mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
+mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
+```
+
+### 2.3.0-beta.1
+
 * Fix build errors when using Flutter SDK 3.24.
+* Add `GestureState` to `MapContentGestureContext` to indicate whether gesture has been started, its touches have changed or it has ended.
+* Bump Maps SDK to 11.7.0-beta.1
 
 ### 2.2.0
 

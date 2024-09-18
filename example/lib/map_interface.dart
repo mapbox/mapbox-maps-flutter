@@ -279,7 +279,7 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
             min: ScreenCoordinate(x: 0.0, y: 0.0),
             max: ScreenCoordinate(x: 150.0, y: 510.0));
         var renderedQueryGeometry = RenderedQueryGeometry(
-            value: json.encode(screenBox.encode()), type: Type.SCREEN_BOX);
+            value: json.encode(screenBox.toJson()), type: Type.SCREEN_BOX);
         mapboxMap
             ?.queryRenderedFeatures(
                 renderedQueryGeometry,

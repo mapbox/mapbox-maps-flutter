@@ -1856,191 +1856,194 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     if (value is Point) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is Feature) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
+    } else if (value is CameraState) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is CameraBoundsOptions) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
+    } else if (value is CameraBounds) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is MapAnimationOptions) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is _MapWidgetDebugOptionsBox) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is _MapWidgetDebugOptionsBox) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MapOptions) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(146);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is CoordinateBoundsZoom) {
       buffer.putUint8(147);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(148);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(149);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(150);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(151);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(152);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(153);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(154);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FlatLight) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is MbxImage) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is ImageContent) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationMode) {
+    } else if (value is StylePropertyValue) {
       buffer.putUint8(169);
-      writeValue(buffer, value.index);
-    } else if (value is ContextMode) {
+      writeValue(buffer, value.encode());
+    } else if (value is GlyphsRasterizationMode) {
       buffer.putUint8(170);
       writeValue(buffer, value.index);
-    } else if (value is ConstrainMode) {
+    } else if (value is ContextMode) {
       buffer.putUint8(171);
       writeValue(buffer, value.index);
-    } else if (value is ViewportMode) {
+    } else if (value is ConstrainMode) {
       buffer.putUint8(172);
       writeValue(buffer, value.index);
-    } else if (value is NorthOrientation) {
+    } else if (value is ViewportMode) {
       buffer.putUint8(173);
       writeValue(buffer, value.index);
-    } else if (value is _MapWidgetDebugOptions) {
+    } else if (value is NorthOrientation) {
       buffer.putUint8(174);
       writeValue(buffer, value.index);
-    } else if (value is MapDebugOptionsData) {
+    } else if (value is _MapWidgetDebugOptions) {
       buffer.putUint8(175);
       writeValue(buffer, value.index);
-    } else if (value is ViewAnnotationAnchor) {
+    } else if (value is MapDebugOptionsData) {
       buffer.putUint8(176);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(177);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is Type) {
       buffer.putUint8(178);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(179);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(180);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(181);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(182);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(183);
       writeValue(buffer, value.index);
-    } else if (value is Anchor) {
+    } else if (value is StyleProjectionName) {
       buffer.putUint8(184);
       writeValue(buffer, value.index);
-    } else if (value is HttpMethod) {
+    } else if (value is Anchor) {
       buffer.putUint8(185);
       writeValue(buffer, value.index);
-    } else if (value is HttpRequestErrorType) {
+    } else if (value is HttpMethod) {
       buffer.putUint8(186);
       writeValue(buffer, value.index);
-    } else if (value is DownloadErrorCode) {
+    } else if (value is HttpRequestErrorType) {
       buffer.putUint8(187);
       writeValue(buffer, value.index);
-    } else if (value is DownloadState) {
+    } else if (value is DownloadErrorCode) {
       buffer.putUint8(188);
       writeValue(buffer, value.index);
-    } else if (value is TileDataDomain) {
+    } else if (value is DownloadState) {
       buffer.putUint8(189);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
+    } else if (value is TileDataDomain) {
       buffer.putUint8(190);
       writeValue(buffer, value.index);
-    } else if (value is _MapEvent) {
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(191);
+      writeValue(buffer, value.index);
+    } else if (value is _MapEvent) {
+      buffer.putUint8(192);
       writeValue(buffer, value.index);
     } else {
       super.writeValue(buffer, value);
@@ -2053,150 +2056,152 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 129:
         return Point.decode(readValue(buffer)!);
       case 130:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+        return Feature.decode(readValue(buffer)!);
       case 131:
-        return TileCoverOptions.decode(readValue(buffer)!);
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
       case 132:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
+        return TileCoverOptions.decode(readValue(buffer)!);
       case 133:
-        return CameraOptions.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 134:
-        return CameraState.decode(readValue(buffer)!);
+        return CameraOptions.decode(readValue(buffer)!);
       case 135:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
+        return CameraState.decode(readValue(buffer)!);
       case 136:
-        return CameraBounds.decode(readValue(buffer)!);
+        return CameraBoundsOptions.decode(readValue(buffer)!);
       case 137:
-        return MapAnimationOptions.decode(readValue(buffer)!);
+        return CameraBounds.decode(readValue(buffer)!);
       case 138:
-        return CoordinateBounds.decode(readValue(buffer)!);
+        return MapAnimationOptions.decode(readValue(buffer)!);
       case 139:
-        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
+        return CoordinateBounds.decode(readValue(buffer)!);
       case 140:
-        return MapDebugOptions.decode(readValue(buffer)!);
+        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
       case 141:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return MapDebugOptions.decode(readValue(buffer)!);
       case 142:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 143:
-        return MapOptions.decode(readValue(buffer)!);
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 144:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MapOptions.decode(readValue(buffer)!);
       case 145:
-        return ScreenBox.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 146:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 147:
-        return Size.decode(readValue(buffer)!);
+        return CoordinateBoundsZoom.decode(readValue(buffer)!);
       case 148:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 149:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 150:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 151:
-        return LayerPosition.decode(readValue(buffer)!);
+        return FeatureExtensionValue.decode(readValue(buffer)!);
       case 152:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return LayerPosition.decode(readValue(buffer)!);
       case 153:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 154:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 155:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 156:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return RenderedQueryGeometry.decode(readValue(buffer)!);
       case 157:
-        return MercatorCoordinate.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 158:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return MercatorCoordinate.decode(readValue(buffer)!);
       case 159:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 160:
-        return FlatLight.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 161:
-        return DirectionalLight.decode(readValue(buffer)!);
+        return FlatLight.decode(readValue(buffer)!);
       case 162:
-        return AmbientLight.decode(readValue(buffer)!);
+        return DirectionalLight.decode(readValue(buffer)!);
       case 163:
-        return MbxImage.decode(readValue(buffer)!);
+        return AmbientLight.decode(readValue(buffer)!);
       case 164:
-        return ImageStretches.decode(readValue(buffer)!);
+        return MbxImage.decode(readValue(buffer)!);
       case 165:
-        return ImageContent.decode(readValue(buffer)!);
+        return ImageStretches.decode(readValue(buffer)!);
       case 166:
-        return TransitionOptions.decode(readValue(buffer)!);
+        return ImageContent.decode(readValue(buffer)!);
       case 167:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return TransitionOptions.decode(readValue(buffer)!);
       case 168:
-        return StylePropertyValue.decode(readValue(buffer)!);
+        return CanonicalTileID.decode(readValue(buffer)!);
       case 169:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : GlyphsRasterizationMode.values[value];
+        return StylePropertyValue.decode(readValue(buffer)!);
       case 170:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ContextMode.values[value];
+        return value == null ? null : GlyphsRasterizationMode.values[value];
       case 171:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ConstrainMode.values[value];
+        return value == null ? null : ContextMode.values[value];
       case 172:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ViewportMode.values[value];
+        return value == null ? null : ConstrainMode.values[value];
       case 173:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : NorthOrientation.values[value];
+        return value == null ? null : ViewportMode.values[value];
       case 174:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _MapWidgetDebugOptions.values[value];
+        return value == null ? null : NorthOrientation.values[value];
       case 175:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : MapDebugOptionsData.values[value];
+        return value == null ? null : _MapWidgetDebugOptions.values[value];
       case 176:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ViewAnnotationAnchor.values[value];
+        return value == null ? null : MapDebugOptionsData.values[value];
       case 177:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
+        return value == null ? null : ViewAnnotationAnchor.values[value];
       case 178:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePackErrorType.values[value];
+        return value == null ? null : Type.values[value];
       case 179:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ResponseErrorReason.values[value];
+        return value == null ? null : StylePackErrorType.values[value];
       case 180:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : OfflineRegionDownloadState.values[value];
+        return value == null ? null : ResponseErrorReason.values[value];
       case 181:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileStoreUsageMode.values[value];
+        return value == null ? null : OfflineRegionDownloadState.values[value];
       case 182:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePropertyValueKind.values[value];
+        return value == null ? null : TileStoreUsageMode.values[value];
       case 183:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StyleProjectionName.values[value];
+        return value == null ? null : StylePropertyValueKind.values[value];
       case 184:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Anchor.values[value];
+        return value == null ? null : StyleProjectionName.values[value];
       case 185:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpMethod.values[value];
+        return value == null ? null : Anchor.values[value];
       case 186:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpRequestErrorType.values[value];
+        return value == null ? null : HttpMethod.values[value];
       case 187:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadErrorCode.values[value];
+        return value == null ? null : HttpRequestErrorType.values[value];
       case 188:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadState.values[value];
+        return value == null ? null : DownloadErrorCode.values[value];
       case 189:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileDataDomain.values[value];
+        return value == null ? null : DownloadState.values[value];
       case 190:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileRegionErrorType.values[value];
+        return value == null ? null : TileDataDomain.values[value];
       case 191:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TileRegionErrorType.values[value];
+      case 192:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
       default:
@@ -5730,6 +5735,156 @@ class StyleManager {
     );
     final List<Object?>? __pigeon_replyList = await __pigeon_channel
         .send(<Object?>[sourceId, properties]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Add additional features to a GeoJSON style source.
+  ///
+  /// The add operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  ///
+  /// @param sourceId The identifier of the style source.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param features An array of GeoJSON features to be added to the source.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  Future<void> addGeoJSONSourceFeatures(
+      String sourceId, String dataId, List<Feature?> features) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[sourceId, dataId, features]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Update existing features in a GeoJSON style source.
+  ///
+  /// The update operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param features The GeoJSON features to be updated in the source.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  Future<void> updateGeoJSONSourceFeatures(
+      String sourceId, String dataId, List<Feature?> features) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[sourceId, dataId, features]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Remove features from a GeoJSON style source.
+  ///
+  /// The remove operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if an error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  ///
+  /// @param sourceId A style source identifier.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param featureIds The Ids of the features that need to be removed from the source.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  Future<void> removeGeoJSONSourceFeatures(
+      String sourceId, String dataId, List<String?> featureIds) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[sourceId, dataId, featureIds]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
