@@ -580,6 +580,11 @@ class MapboxMap extends ChangeNotifier {
   /// Returns a snapshot of the map.
   /// The snapshot is taken from the current state of the map.
   Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
+
+  /// Add experimental MapView.setSnapshotLegacyMode function
+  /// to help avoiding MapView.snapshot native crash on some Samsung devices running Android 14.
+  Future<dynamic> setSnapshotLegacyMode(bool enable) =>
+      _mapboxMapsPlatform.setSnapshotLegacyMode(enable);
 }
 
 class _GestureListener extends GestureListener {
