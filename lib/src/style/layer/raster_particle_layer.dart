@@ -51,6 +51,7 @@ class RasterParticleLayer extends Layer {
   String? rasterParticleArrayBand;
 
   /// Displayed band of raster array source layer
+  @experimental
   List<Object>? rasterParticleArrayBandExpression;
 
   /// Defines a color map by which to colorize a raster particle layer, parameterized by the `["raster-particle-speed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-particle-max-speed`.
@@ -58,6 +59,7 @@ class RasterParticleLayer extends Layer {
   int? rasterParticleColor;
 
   /// Defines a color map by which to colorize a raster particle layer, parameterized by the `["raster-particle-speed"]` expression and evaluated at 256 uniformly spaced steps over the range specified by `raster-particle-max-speed`.
+  @experimental
   List<Object>? rasterParticleColorExpression;
 
   /// Defines the amount of particles per tile.
@@ -67,6 +69,7 @@ class RasterParticleLayer extends Layer {
 
   /// Defines the amount of particles per tile.
   /// Default value: 512. Minimum value: 1.
+  @experimental
   List<Object>? rasterParticleCountExpression;
 
   /// Defines defines the opacity coefficient applied to the faded particles in each frame. In practice, this property controls the length of the particle tail.
@@ -76,6 +79,7 @@ class RasterParticleLayer extends Layer {
 
   /// Defines defines the opacity coefficient applied to the faded particles in each frame. In practice, this property controls the length of the particle tail.
   /// Default value: 0.98. Value range: [0, 1]
+  @experimental
   List<Object>? rasterParticleFadeOpacityFactorExpression;
 
   /// Defines the maximum speed for particles. Velocities with magnitudes equal to or exceeding this value are clamped to the max value.
@@ -85,6 +89,7 @@ class RasterParticleLayer extends Layer {
 
   /// Defines the maximum speed for particles. Velocities with magnitudes equal to or exceeding this value are clamped to the max value.
   /// Default value: 1. Minimum value: 1.
+  @experimental
   List<Object>? rasterParticleMaxSpeedExpression;
 
   /// Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).
@@ -94,6 +99,7 @@ class RasterParticleLayer extends Layer {
 
   /// Defines a coefficient for a time period at which particles will restart at a random position, to avoid degeneration (empty areas without particles).
   /// Default value: 0.8. Value range: [0, 1]
+  @experimental
   List<Object>? rasterParticleResetRateFactorExpression;
 
   /// Defines a coefficient for the speed of particles’ motion.
@@ -103,6 +109,7 @@ class RasterParticleLayer extends Layer {
 
   /// Defines a coefficient for the speed of particles’ motion.
   /// Default value: 0.2. Value range: [0, 1]
+  @experimental
   List<Object>? rasterParticleSpeedFactorExpression;
 
   @override

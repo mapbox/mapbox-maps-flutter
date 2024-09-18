@@ -110,7 +110,7 @@ enum ViewportMode: Int {
 enum NorthOrientation: Int {
   /// Default, map oriented upwards
   case uPWARDS = 0
-  /// Map oriented righwards
+  /// Map oriented rightwards
   case rIGHTWARDS = 1
   /// Map oriented downwards
   case dOWNWARDS = 2
@@ -2993,7 +2993,7 @@ protocol _MapInterface {
   /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
   /// retain its previous value.
   ///
-  /// Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
   ///
   /// @param sourceId The style source identifier.
@@ -3016,7 +3016,7 @@ protocol _MapInterface {
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
   ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method migth not be
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
   ///
   /// @param sourceId The style source identifier.
@@ -3034,6 +3034,14 @@ protocol _MapInterface {
   func getElevation(coordinate: Point) throws -> Double?
   /// Returns array of tile identifiers that cover current map camera.
   func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3512,7 +3520,7 @@ class _MapInterfaceSetup {
     /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
     /// retain its previous value.
     ///
-    /// Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+    /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
     /// immediately visible using `getStateFeature`.
     ///
     /// @param sourceId The style source identifier.
@@ -3572,7 +3580,7 @@ class _MapInterfaceSetup {
     /// Remove a specified property or all property from a feature's state object, depending on the value of
     /// `stateKey`.
     ///
-    /// Note that updates to feature state are asynchronous, so changes made by this method migth not be
+    /// Note that updates to feature state are asynchronous, so changes made by this method might not be
     /// immediately visible using `getStateFeature`.
     ///
     /// @param sourceId The style source identifier.
@@ -3648,6 +3656,30 @@ class _MapInterfaceSetup {
       }
     } else {
       tileCoverChannel.setMessageHandler(nil)
+    }
+    /// Set whether legacy mode should be used for [snapshot].
+    ///
+    /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+    /// but may help with vendor specific issues like described in
+    /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+    ///
+    /// Note: This method has no effect on iOS platform.
+    let setSnapshotLegacyModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSnapshotLegacyModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        api.setSnapshotLegacyMode(enabled: enabledArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSnapshotLegacyModeChannel.setMessageHandler(nil)
     }
   }
 }
@@ -4173,7 +4205,7 @@ protocol StyleManager {
   func getStyleDefaultCamera(completion: @escaping (Result<CameraOptions, Error>) -> Void)
   /// Returns the map style's transition options. By default, the style parser will attempt
   /// to read the style default transition options, if any, fallbacking to an immediate transition
-  /// otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+  /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
   /// reset once a new style has been loaded.
   ///
   /// The style transition is re-evaluated when a new style is loaded.
@@ -4698,7 +4730,7 @@ class StyleManagerSetup {
     }
     /// Returns the map style's transition options. By default, the style parser will attempt
     /// to read the style default transition options, if any, fallbacking to an immediate transition
-    /// otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+    /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
     /// reset once a new style has been loaded.
     ///
     /// The style transition is re-evaluated when a new style is loaded.

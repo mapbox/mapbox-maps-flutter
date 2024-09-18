@@ -29,7 +29,7 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
 
   var gestureInProgress = true;
   var userAnimationInProgress = true;
-  var showTileBorders = true;
+  var showTileBorders = false;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -201,15 +201,17 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
     return TextButton(
         child: Text('setDebugOptions'),
         onPressed: () {
-          mapboxMap?.setDebug(
-              [MapDebugOptions(data: MapDebugOptionsData.TILE_BORDERS)],
-              showTileBorders);
+          if (showTileBorders == false) {
+            mapboxMap?.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
+          } else {
+            mapboxMap?.setDebugOptions([]);
+          }
+          showTileBorders = !showTileBorders;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("showTileBorders : $showTileBorders"),
+            content: Text("showTileBorders: $showTileBorders"),
             backgroundColor: Theme.of(context).primaryColor,
             duration: Duration(seconds: 2),
           ));
-          showTileBorders = !showTileBorders;
         });
   }
 
@@ -217,9 +219,10 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
     return TextButton(
       child: Text('getDebugOptions'),
       onPressed: () {
-        mapboxMap?.getDebug().then(
+        mapboxMap?.getDebugOptions().then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("getDebugOptions: ${value.first}"),
+                  content: Text(
+                      "getDebugOptions: ${value.firstOrNull?.option.name ?? "none"}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
                 )));
@@ -234,7 +237,7 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
         mapboxMap?.getMapOptions().then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
-                      "Size: ${value.size?.width}-${value.size?.height},constrainMode: ${value.constrainMode},orientation: ${value.orientation}"),
+                      "Size: ${value.size?.width}-${value.size?.height}, constrainMode: ${value.constrainMode}, orientation: ${value.orientation}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
                 )));

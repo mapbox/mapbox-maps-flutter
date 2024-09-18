@@ -21,13 +21,15 @@ class VectorTileSourceWidget extends StatefulWidget {
 
 class VectorTileSourceWidgetState extends State<VectorTileSourceWidget> {
   MapboxMap? mapboxMap;
-  var isLight = true;
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    await mapboxMap.style.addSource(VectorSource(
+  }
+
+  _onStyleLoadedCallback(StyleLoadedEventData data) async {
+    await mapboxMap?.style.addSource(VectorSource(
         id: "terrain-data", url: "mapbox://mapbox.mapbox-terrain-v2"));
-    await mapboxMap.style.addLayerAt(
+    await mapboxMap?.style.addLayerAt(
         LineLayer(
             id: "terrain-data",
             sourceId: "terrain-data",
@@ -43,12 +45,12 @@ class VectorTileSourceWidgetState extends State<VectorTileSourceWidget> {
   Widget build(BuildContext context) {
     return new Scaffold(
         body: MapWidget(
-      key: ValueKey("mapWidget"),
-      styleUri: MapboxStyles.LIGHT,
-      cameraOptions: CameraOptions(
-          center: Point(coordinates: Position(-122.447303, 37.753574)),
-          zoom: 13.0),
-      onMapCreated: _onMapCreated,
-    ));
+            key: ValueKey("mapWidget"),
+            styleUri: MapboxStyles.LIGHT,
+            cameraOptions: CameraOptions(
+                center: Point(coordinates: Position(-122.447303, 37.753574)),
+                zoom: 13.0),
+            onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoadedCallback));
   }
 }

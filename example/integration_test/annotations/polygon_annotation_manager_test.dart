@@ -1,4 +1,5 @@
 // This file is generated.
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -33,13 +34,33 @@ void main() {
     final manager =
         await mapboxMap.annotations.createPolygonAnnotationManager();
 
+    await manager.setFillSortKey(1.0);
+    var fillSortKey = await manager.getFillSortKey();
+    expect(1.0, fillSortKey);
+
     await manager.setFillAntialias(true);
     var fillAntialias = await manager.getFillAntialias();
     expect(true, fillAntialias);
 
+    await manager.setFillColor(Colors.red.value);
+    var fillColor = await manager.getFillColor();
+    expect(Colors.red.value, fillColor);
+
     await manager.setFillEmissiveStrength(1.0);
     var fillEmissiveStrength = await manager.getFillEmissiveStrength();
     expect(1.0, fillEmissiveStrength);
+
+    await manager.setFillOpacity(1.0);
+    var fillOpacity = await manager.getFillOpacity();
+    expect(1.0, fillOpacity);
+
+    await manager.setFillOutlineColor(Colors.red.value);
+    var fillOutlineColor = await manager.getFillOutlineColor();
+    expect(Colors.red.value, fillOutlineColor);
+
+    await manager.setFillPattern("abc");
+    var fillPattern = await manager.getFillPattern();
+    expect("abc", fillPattern);
 
     await manager.setFillTranslate([0.0, 1.0]);
     var fillTranslate = await manager.getFillTranslate();

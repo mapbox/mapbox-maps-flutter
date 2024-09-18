@@ -18,6 +18,7 @@ class GeoJsonSource extends Source {
     Map<String, dynamic>? clusterProperties,
     bool? lineMetrics,
     bool? generateId,
+    bool? autoMaxZoom,
     double? prefetchZoomDelta,
     TileCacheBudget? tileCacheBudget,
   }) : super(id: id) {
@@ -33,6 +34,7 @@ class GeoJsonSource extends Source {
     _clusterProperties = clusterProperties;
     _lineMetrics = lineMetrics;
     _generateId = generateId;
+    _autoMaxZoom = autoMaxZoom;
     _prefetchZoomDelta = prefetchZoomDelta;
     _tileCacheBudget = tileCacheBudget;
   }
@@ -215,6 +217,20 @@ class GeoJsonSource extends Source {
     });
   }
 
+  bool? _autoMaxZoom;
+
+  /// When set to true, the maxZoom property is ignored and is instead calculated automatically based on the largest bounding box from the geoJSON features. This resolves rendering artifacts for features that use wide blur (e.g. fill extrusion ground flood light or circle layer) and would bring performance improvement on lower zoom levels, especially for geoJSON sources that update data frequently. However, it can lead to flickering and precision loss on zoom levels above 19.
+  /// Default value: false.
+  Future<bool?> get autoMaxZoom async {
+    return _style?.getStyleSourceProperty(id, "autoMaxZoom").then((value) {
+      if (value.value != null) {
+        return value.value as bool;
+      } else {
+        return null;
+      }
+    });
+  }
+
   double? _prefetchZoomDelta;
 
   /// When loading a map, if PrefetchZoomDelta is set to any number greater than 0, the map will first request a tile at zoom level lower than zoom - delta, but so that the zoom level is multiple of delta, in an attempt to display a full map at lower resolution as quick as possible. It will get clamped at the tile source minimum zoom.
@@ -300,6 +316,9 @@ class GeoJsonSource extends Source {
       }
       if (_generateId != null) {
         properties["generateId"] = _generateId;
+      }
+      if (_autoMaxZoom != null) {
+        properties["autoMaxZoom"] = _autoMaxZoom;
       }
     }
 

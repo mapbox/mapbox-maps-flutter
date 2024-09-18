@@ -36,6 +36,9 @@ class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
         )),
         zoom: 1,
         pitch: 0));
+  }
+
+  _onStyleLoadedCallback(StyleLoadedEventData data) async {
     _addLayerAndSource();
   }
 
@@ -166,8 +169,10 @@ class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    final MapWidget mapWidget =
-        MapWidget(key: ValueKey("mapWidget"), onMapCreated: _onMapCreated);
+    final MapWidget mapWidget = MapWidget(
+        key: ValueKey("mapWidget"),
+        onMapCreated: _onMapCreated,
+        onStyleLoadedListener: _onStyleLoadedCallback);
 
     final List<Widget> listViewChildren = <Widget>[];
 

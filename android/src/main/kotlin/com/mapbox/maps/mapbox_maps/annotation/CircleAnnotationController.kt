@@ -151,6 +151,75 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     return originalAnnotation
   }
 
+  override fun setCircleSortKey(
+    managerId: String,
+    circleSortKey: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleSortKey = circleSortKey
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleSortKey(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleSortKey
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleBlur(
+    managerId: String,
+    circleBlur: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleBlur = circleBlur
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleBlur(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleBlur
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleColor(
+    managerId: String,
+    circleColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleColorInt = circleColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setCircleEmissiveStrength(
     managerId: String,
     circleEmissiveStrength: Double,
@@ -166,8 +235,32 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleEmissiveStrength != null) {
-      callback(Result.success(manager.circleEmissiveStrength!!))
+    val value = manager.circleEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleOpacity(
+    managerId: String,
+    circleOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleOpacity = circleOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleOpacity
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -188,8 +281,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CirclePitchAlignment?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circlePitchAlignment != null) {
-      callback(Result.success(manager.circlePitchAlignment!!.toFLTCirclePitchAlignment()))
+    val value = manager.circlePitchAlignment
+    if (value != null) {
+      callback(Result.success(value.toFLTCirclePitchAlignment()))
     } else {
       callback(Result.success(null))
     }
@@ -210,8 +304,101 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CirclePitchScale?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circlePitchScale != null) {
-      callback(Result.success(manager.circlePitchScale!!.toFLTCirclePitchScale()))
+    val value = manager.circlePitchScale
+    if (value != null) {
+      callback(Result.success(value.toFLTCirclePitchScale()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleRadius(
+    managerId: String,
+    circleRadius: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleRadius = circleRadius
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleRadius(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleRadius
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleStrokeColor(
+    managerId: String,
+    circleStrokeColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleStrokeColorInt = circleStrokeColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleStrokeColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleStrokeColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleStrokeOpacity(
+    managerId: String,
+    circleStrokeOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleStrokeOpacity = circleStrokeOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleStrokeOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleStrokeOpacity
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setCircleStrokeWidth(
+    managerId: String,
+    circleStrokeWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleStrokeWidth = circleStrokeWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleStrokeWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleStrokeWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -232,8 +419,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleTranslate != null) {
-      callback(Result.success(manager.circleTranslate!!))
+    val value = manager.circleTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -254,8 +442,9 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
     callback: (Result<CircleTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as CircleAnnotationManager
-    if (manager.circleTranslateAnchor != null) {
-      callback(Result.success(manager.circleTranslateAnchor!!.toFLTCircleTranslateAnchor()))
+    val value = manager.circleTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTCircleTranslateAnchor()))
     } else {
       callback(Result.success(null))
     }

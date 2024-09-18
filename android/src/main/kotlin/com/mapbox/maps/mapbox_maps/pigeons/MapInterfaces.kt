@@ -121,7 +121,7 @@ enum class ViewportMode(val raw: Int) {
 enum class NorthOrientation(val raw: Int) {
   /** Default, map oriented upwards */
   UPWARDS(0),
-  /** Map oriented righwards */
+  /** Map oriented rightwards */
   RIGHTWARDS(1),
   /** Map oriented downwards */
   DOWNWARDS(2),
@@ -3292,7 +3292,7 @@ interface _MapInterface {
    * `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
    * retain its previous value.
    *
-   * Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+   * Note that updates to feature `state` are asynchronous, so changes made by this method might not be
    * immediately visible using `getStateFeature`.
    *
    * @param sourceId The style source identifier.
@@ -3319,7 +3319,7 @@ interface _MapInterface {
    * Remove a specified property or all property from a feature's state object, depending on the value of
    * `stateKey`.
    *
-   * Note that updates to feature state are asynchronous, so changes made by this method migth not be
+   * Note that updates to feature state are asynchronous, so changes made by this method might not be
    * immediately visible using `getStateFeature`.
    *
    * @param sourceId The style source identifier.
@@ -3340,6 +3340,16 @@ interface _MapInterface {
   fun getElevation(coordinate: Point): Double?
   /** Returns array of tile identifiers that cover current map camera. */
   fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
+  /**
+   * Set whether legacy mode should be used for [snapshot].
+   *
+   * Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+   * but may help with vendor specific issues like described in
+   * https://github.com/mapbox/mapbox-maps-android/issues/2280.
+   *
+   * Note: This method has no effect on iOS platform.
+   */
+  fun setSnapshotLegacyMode(enabled: Boolean, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -3908,6 +3918,25 @@ interface _MapInterface {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            api.setSnapshotLegacyMode(enabledArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -4487,7 +4516,7 @@ interface StyleManager {
   /**
    * Returns the map style's transition options. By default, the style parser will attempt
    * to read the style default transition options, if any, fallbacking to an immediate transition
-   * otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+   * otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
    * reset once a new style has been loaded.
    *
    * The style transition is re-evaluated when a new style is loaded.

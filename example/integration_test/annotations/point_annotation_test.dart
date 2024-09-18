@@ -47,12 +47,15 @@ void main() {
       iconHaloColor: Colors.red.value,
       iconHaloWidth: 1.0,
       iconImageCrossFade: 1.0,
+      iconOcclusionOpacity: 1.0,
       iconOpacity: 1.0,
+      symbolZOffset: 1.0,
       textColor: Colors.red.value,
       textEmissiveStrength: 1.0,
       textHaloBlur: 1.0,
       textHaloColor: Colors.red.value,
       textHaloWidth: 1.0,
+      textOcclusionOpacity: 1.0,
       textOpacity: 1.0,
     );
     final annotation = await manager.create(pointAnnotationOptions);
@@ -85,12 +88,15 @@ void main() {
     expect(Colors.red.value, annotation.iconHaloColor);
     expect(1.0, annotation.iconHaloWidth);
     expect(1.0, annotation.iconImageCrossFade);
+    expect(1.0, annotation.iconOcclusionOpacity);
     expect(1.0, annotation.iconOpacity);
+    expect(1.0, annotation.symbolZOffset);
     expect(Colors.red.value, annotation.textColor);
     expect(1.0, annotation.textEmissiveStrength);
     expect(1.0, annotation.textHaloBlur);
     expect(Colors.red.value, annotation.textHaloColor);
     expect(1.0, annotation.textHaloWidth);
+    expect(1.0, annotation.textOcclusionOpacity);
     expect(1.0, annotation.textOpacity);
   });
 

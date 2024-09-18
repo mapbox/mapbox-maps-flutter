@@ -64,6 +64,7 @@ class RasterLayer extends Layer {
   String? rasterArrayBand;
 
   /// Displayed band of raster array source layer. Defaults to the first band if not set.
+  @experimental
   List<Object>? rasterArrayBandExpression;
 
   /// Increase or reduce the brightness of the image. The value is the maximum brightness.
@@ -117,6 +118,7 @@ class RasterLayer extends Layer {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
+  @experimental
   List<Object>? rasterElevationExpression;
 
   /// Controls the intensity of light emitted on the source features.

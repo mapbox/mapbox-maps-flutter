@@ -10,6 +10,33 @@ mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
 ```
+* Fix `StyleManager.getLayer()` failing for `ModelLayer`, `RasterParticleLayer` and `SlotLayer`.
+* Expose data-driven properties on annotation managers. Now it's possible to set data-driven properties globally on annotation manager and specify per-annotation overrides.
+Previously user had to specify those properties on each annotation and couldn't specify them globally.
+
+In this case each even annotation will have random color, but others will use the global default specified in the annotation manager.
+```dart
+final circleAnnotationManager = await mapboxMap.annotations.createCircleAnnotationManager();
+var annotations = <CircleAnnotationOptions>[];
+for (var i = 0; i < 2000; i++){
+  var annotation = CircleAnnotationOptions(
+    geometry: createRandomPoint(),
+    circleColor: (i % 2 == 0) ? createRandomColor() : null,
+    );
+
+  annotations.add(annotation);
+}
+circleAnnotationManager.setCircleColor(Colors.blue.value);
+```
+* Expose `autoMaxZoom` property for `GeoJsonSource` to fix rendering issues with `FillExtrusionLayer` in some cases.
+* Expose experimental `ClipLayer` to remove 3D data (fill extrusions, landmarks, trees) and symbols.
+* Deprecate `SlotLayer.sourceId` and `SlotLayer.sourceLayer` as they have no effect in this layer.
+* Expose experimental `SymbolLayer.symbolElevationReference` and `SymbolLayer.symbolZOffset`.
+* Add missing `@experimental` annotations to `Layer`'s `Expression` properties.
+* Remove experimental `model-front-cutoff` property from `ModelLayer`.
+* Expose experimental `lineTrimColor` and `lineTrimFadeRange` on `LineLayer` which allow to set custom color for trimmed line and fade effect for trim.
+* Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switch fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
+* Add experimental `MapboxMap.setSnapshotLegacyMode()` to help avoiding `MapboxMap.snapshot()` native crash on some Samsung devices running Android 14. `MapboxMap.setSnapshotLegacyMode()` has no effect on iOS.
 * Print to console native Maps SDK logs in debug configuration.
 
 ### 2.3.0-beta.1

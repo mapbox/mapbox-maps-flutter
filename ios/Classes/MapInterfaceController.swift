@@ -14,6 +14,10 @@ final class MapInterfaceController: _MapInterface {
         self.mapView = mapView
     }
 
+    func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, any Error>) -> Void) {
+        completion(.success(()))
+    }
+
     func loadStyleURI(styleURI: String, completion: @escaping (Result<Void, Error>) -> Void) {
         self.mapboxMap.loadStyle(StyleURI(rawValue: styleURI)!) { error in
             if let error {

@@ -50,6 +50,7 @@ part 'src/style/layer/sky_layer.dart';
 part 'src/style/layer/symbol_layer.dart';
 part 'src/style/layer/slot_layer.dart';
 part 'src/style/layer/raster_particle_layer.dart';
+part 'src/style/layer/clip_layer.dart';
 part 'src/style/mapbox_styles.dart';
 part 'src/style/source/geojson_source.dart';
 part 'src/style/source/image_source.dart';

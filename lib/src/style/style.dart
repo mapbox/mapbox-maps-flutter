@@ -300,6 +300,18 @@ extension StyleLayer on StyleManager {
       case "symbol":
         layer = SymbolLayer.decode(properties);
         break;
+      case "model":
+        layer = ModelLayer.decode(properties);
+        break;
+      case "slot":
+        layer = SlotLayer.decode(properties);
+        break;
+      case "raster-particle":
+        layer = RasterParticleLayer.decode(properties);
+        break;
+      case "clip":
+        layer = ClipLayer.decode(properties);
+        break;
       default:
         print("Layer type: $type unknown.");
     }
