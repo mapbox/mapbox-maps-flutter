@@ -238,6 +238,16 @@ enum IconTranslateAnchor {
   VIEWPORT,
 }
 
+/// Selects the base of symbol-elevation.
+/// Default value: "ground".
+enum SymbolElevationReference {
+  /// Elevate symbols relative to the sea level.
+  SEA,
+
+  /// Elevate symbols relative to the ground's height below them.
+  GROUND,
+}
+
 /// Controls the frame of reference for `text-translate`.
 /// Default value: "map".
 enum TextTranslateAnchor {
@@ -278,12 +288,15 @@ class PointAnnotation {
     this.iconHaloColor,
     this.iconHaloWidth,
     this.iconImageCrossFade,
+    this.iconOcclusionOpacity,
     this.iconOpacity,
+    this.symbolZOffset,
     this.textColor,
     this.textEmissiveStrength,
     this.textHaloBlur,
     this.textHaloColor,
     this.textHaloWidth,
+    this.textOcclusionOpacity,
     this.textOpacity,
   });
 
@@ -395,9 +408,17 @@ class PointAnnotation {
   /// Default value: 0. Value range: [0, 1]
   double? iconImageCrossFade;
 
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  double? iconOcclusionOpacity;
+
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
+
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  double? symbolZOffset;
 
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -418,6 +439,10 @@ class PointAnnotation {
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
   /// Default value: 0. Minimum value: 0.
   double? textHaloWidth;
+
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  double? textOcclusionOpacity;
 
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
@@ -453,12 +478,15 @@ class PointAnnotation {
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     ];
   }
@@ -494,13 +522,16 @@ class PointAnnotation {
       iconHaloColor: result[25] as int?,
       iconHaloWidth: result[26] as double?,
       iconImageCrossFade: result[27] as double?,
-      iconOpacity: result[28] as double?,
-      textColor: result[29] as int?,
-      textEmissiveStrength: result[30] as double?,
-      textHaloBlur: result[31] as double?,
-      textHaloColor: result[32] as int?,
-      textHaloWidth: result[33] as double?,
-      textOpacity: result[34] as double?,
+      iconOcclusionOpacity: result[28] as double?,
+      iconOpacity: result[29] as double?,
+      symbolZOffset: result[30] as double?,
+      textColor: result[31] as int?,
+      textEmissiveStrength: result[32] as double?,
+      textHaloBlur: result[33] as double?,
+      textHaloColor: result[34] as int?,
+      textHaloWidth: result[35] as double?,
+      textOcclusionOpacity: result[36] as double?,
+      textOpacity: result[37] as double?,
     );
   }
 }
@@ -534,12 +565,15 @@ class PointAnnotationOptions {
     this.iconHaloColor,
     this.iconHaloWidth,
     this.iconImageCrossFade,
+    this.iconOcclusionOpacity,
     this.iconOpacity,
+    this.symbolZOffset,
     this.textColor,
     this.textEmissiveStrength,
     this.textHaloBlur,
     this.textHaloColor,
     this.textHaloWidth,
+    this.textOcclusionOpacity,
     this.textOpacity,
   });
 
@@ -648,9 +682,17 @@ class PointAnnotationOptions {
   /// Default value: 0. Value range: [0, 1]
   double? iconImageCrossFade;
 
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  double? iconOcclusionOpacity;
+
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? iconOpacity;
+
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  double? symbolZOffset;
 
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -671,6 +713,10 @@ class PointAnnotationOptions {
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
   /// Default value: 0. Minimum value: 0.
   double? textHaloWidth;
+
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  double? textOcclusionOpacity;
 
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
@@ -705,12 +751,15 @@ class PointAnnotationOptions {
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     ];
   }
@@ -745,13 +794,16 @@ class PointAnnotationOptions {
       iconHaloColor: result[24] as int?,
       iconHaloWidth: result[25] as double?,
       iconImageCrossFade: result[26] as double?,
-      iconOpacity: result[27] as double?,
-      textColor: result[28] as int?,
-      textEmissiveStrength: result[29] as double?,
-      textHaloBlur: result[30] as double?,
-      textHaloColor: result[31] as int?,
-      textHaloWidth: result[32] as double?,
-      textOpacity: result[33] as double?,
+      iconOcclusionOpacity: result[27] as double?,
+      iconOpacity: result[28] as double?,
+      symbolZOffset: result[29] as double?,
+      textColor: result[30] as int?,
+      textEmissiveStrength: result[31] as double?,
+      textHaloBlur: result[32] as double?,
+      textHaloColor: result[33] as int?,
+      textHaloWidth: result[34] as double?,
+      textOcclusionOpacity: result[35] as double?,
+      textOpacity: result[36] as double?,
     );
   }
 }
@@ -811,8 +863,11 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is IconTranslateAnchor) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is TextTranslateAnchor) {
+    } else if (value is SymbolElevationReference) {
       buffer.putUint8(146);
+      writeValue(buffer, value.index);
+    } else if (value is TextTranslateAnchor) {
+      buffer.putUint8(147);
       writeValue(buffer, value.index);
     } else {
       super.writeValue(buffer, value);
@@ -871,6 +926,9 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         final int? value = readValue(buffer) as int?;
         return value == null ? null : IconTranslateAnchor.values[value];
       case 146:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : SymbolElevationReference.values[value];
+      case 147:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TextTranslateAnchor.values[value];
       default:
@@ -1121,6 +1179,54 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setIconAnchor(String managerId, IconAnchor iconAnchor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAnchor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconAnchor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<IconAnchor?> getIconAnchor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAnchor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as IconAnchor?);
+    }
+  }
+
   Future<void> setIconIgnorePlacement(
       String managerId, bool iconIgnorePlacement) async {
     final String __pigeon_channelName =
@@ -1170,6 +1276,54 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setIconImage(String managerId, String iconImage) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImage$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconImage]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<String?> getIconImage(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImage$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
+    }
+  }
+
   Future<void> setIconKeepUpright(
       String managerId, bool iconKeepUpright) async {
     final String __pigeon_channelName =
@@ -1216,6 +1370,54 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as bool?);
+    }
+  }
+
+  Future<void> setIconOffset(String managerId, List<double?> iconOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<double?>?> getIconOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
@@ -1364,6 +1566,54 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setIconRotate(String managerId, double iconRotate) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotate$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconRotate]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconRotate(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotate$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setIconRotationAlignment(
       String managerId, IconRotationAlignment iconRotationAlignment) async {
     final String __pigeon_channelName =
@@ -1411,6 +1661,151 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as IconRotationAlignment?);
+    }
+  }
+
+  Future<void> setIconSize(String managerId, double iconSize) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSize$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconSize]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconSize(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSize$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setIconTextFit(String managerId, IconTextFit iconTextFit) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconTextFit]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<IconTextFit?> getIconTextFit(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFit$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as IconTextFit?);
+    }
+  }
+
+  Future<void> setIconTextFitPadding(
+      String managerId, List<double?> iconTextFitPadding) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconTextFitPadding]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<double?>?> getIconTextFitPadding(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
@@ -1509,6 +1904,54 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as SymbolPlacement?);
+    }
+  }
+
+  Future<void> setSymbolSortKey(String managerId, double symbolSortKey) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, symbolSortKey]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getSymbolSortKey(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
     }
   }
 
@@ -1706,6 +2149,102 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setTextAnchor(String managerId, TextAnchor textAnchor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAnchor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textAnchor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<TextAnchor?> getTextAnchor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAnchor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as TextAnchor?);
+    }
+  }
+
+  Future<void> setTextField(String managerId, String textField) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextField$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textField]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<String?> getTextField(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextField$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as String?);
+    }
+  }
+
   Future<void> setTextFont(String managerId, List<String?> textFont) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont$__pigeon_messageChannelSuffix';
@@ -1803,6 +2342,54 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setTextJustify(String managerId, TextJustify textJustify) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextJustify$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textJustify]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<TextJustify?> getTextJustify(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextJustify$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as TextJustify?);
+    }
+  }
+
   Future<void> setTextKeepUpright(
       String managerId, bool textKeepUpright) async {
     final String __pigeon_channelName =
@@ -1852,6 +2439,104 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setTextLetterSpacing(
+      String managerId, double textLetterSpacing) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLetterSpacing$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textLetterSpacing]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextLetterSpacing(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLetterSpacing$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextLineHeight(
+      String managerId, double textLineHeight) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLineHeight$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textLineHeight]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextLineHeight(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLineHeight$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setTextMaxAngle(String managerId, double textMaxAngle) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle$__pigeon_messageChannelSuffix';
@@ -1897,6 +2582,102 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextMaxWidth(String managerId, double textMaxWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textMaxWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextMaxWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextOffset(String managerId, List<double?> textOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<List<double?>?> getTextOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
@@ -2045,6 +2826,103 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setTextRadialOffset(
+      String managerId, double textRadialOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRadialOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textRadialOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextRadialOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRadialOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextRotate(String managerId, double textRotate) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotate$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textRotate]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextRotate(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotate$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setTextRotationAlignment(
       String managerId, TextRotationAlignment textRotationAlignment) async {
     final String __pigeon_channelName =
@@ -2092,6 +2970,151 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as TextRotationAlignment?);
+    }
+  }
+
+  Future<void> setTextSize(String managerId, double textSize) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSize$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textSize]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextSize(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSize$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextTransform(
+      String managerId, TextTransform textTransform) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textTransform]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<TextTransform?> getTextTransform(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTransform$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as TextTransform?);
+    }
+  }
+
+  Future<void> setIconColor(String managerId, int iconColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getIconColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
     }
   }
 
@@ -2144,6 +3167,248 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setIconEmissiveStrength(
+      String managerId, double iconEmissiveStrength) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconEmissiveStrength]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconEmissiveStrength(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setIconHaloBlur(String managerId, double iconHaloBlur) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconHaloBlur]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconHaloBlur(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setIconHaloColor(String managerId, int iconHaloColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconHaloColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getIconHaloColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setIconHaloWidth(String managerId, double iconHaloWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconHaloWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconHaloWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setIconImageCrossFade(
+      String managerId, double iconImageCrossFade) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImageCrossFade$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconImageCrossFade]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconImageCrossFade(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImageCrossFade$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setIconOcclusionOpacity(
       String managerId, double iconOcclusionOpacity) async {
     final String __pigeon_channelName =
@@ -2172,6 +3437,54 @@ class _PointAnnotationMessenger {
   Future<double?> getIconOcclusionOpacity(String managerId) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOcclusionOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setIconOpacity(String managerId, double iconOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, iconOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getIconOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOpacity$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -2291,6 +3604,345 @@ class _PointAnnotationMessenger {
     }
   }
 
+  Future<void> setSymbolElevationReference(String managerId,
+      SymbolElevationReference symbolElevationReference) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, symbolElevationReference]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<SymbolElevationReference?> getSymbolElevationReference(
+      String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as SymbolElevationReference?);
+    }
+  }
+
+  Future<void> setSymbolZOffset(String managerId, double symbolZOffset) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, symbolZOffset]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getSymbolZOffset(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOffset$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextColor(String managerId, int textColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getTextColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setTextEmissiveStrength(
+      String managerId, double textEmissiveStrength) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textEmissiveStrength]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextEmissiveStrength(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextHaloBlur(String managerId, double textHaloBlur) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textHaloBlur]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextHaloBlur(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextHaloColor(String managerId, int textHaloColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textHaloColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getTextHaloColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setTextHaloWidth(String managerId, double textHaloWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textHaloWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextHaloWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
   Future<void> setTextOcclusionOpacity(
       String managerId, double textOcclusionOpacity) async {
     final String __pigeon_channelName =
@@ -2319,6 +3971,54 @@ class _PointAnnotationMessenger {
   Future<double?> getTextOcclusionOpacity(String managerId) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOcclusionOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setTextOpacity(String managerId, double textOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, textOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getTextOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOpacity$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,

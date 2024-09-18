@@ -231,10 +231,20 @@ interface _PolygonAnnotationMessenger {
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setFillSortKey(managerId: String, fillSortKey: Double, callback: (Result<Unit>) -> Unit)
+  fun getFillSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setFillAntialias(managerId: String, fillAntialias: Boolean, callback: (Result<Unit>) -> Unit)
   fun getFillAntialias(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setFillColor(managerId: String, fillColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getFillColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setFillEmissiveStrength(managerId: String, fillEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
   fun getFillEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setFillOpacity(managerId: String, fillOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getFillOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setFillOutlineColor(managerId: String, fillOutlineColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getFillOutlineColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setFillPattern(managerId: String, fillPattern: String, callback: (Result<Unit>) -> Unit)
+  fun getFillPattern(managerId: String, callback: (Result<String?>) -> Unit)
   fun setFillTranslate(managerId: String, fillTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getFillTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -351,6 +361,46 @@ interface _PolygonAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillSortKeyArg = args[1] as Double
+            api.setFillSortKey(managerIdArg, fillSortKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillSortKey(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -391,6 +441,46 @@ interface _PolygonAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setFillColor(managerIdArg, fillColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -417,6 +507,126 @@ interface _PolygonAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getFillEmissiveStrength(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillOpacityArg = args[1] as Double
+            api.setFillOpacity(managerIdArg, fillOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOutlineColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillOutlineColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setFillOutlineColor(managerIdArg, fillOutlineColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOutlineColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillOutlineColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillPattern$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillPatternArg = args[1] as String
+            api.setFillPattern(managerIdArg, fillPatternArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillPattern$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillPattern(managerIdArg) { result: Result<String?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

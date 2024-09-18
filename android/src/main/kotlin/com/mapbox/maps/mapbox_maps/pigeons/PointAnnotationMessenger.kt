@@ -335,6 +335,23 @@ enum class IconTranslateAnchor(val raw: Int) {
 }
 
 /**
+ * Selects the base of symbol-elevation.
+ * Default value: "ground".
+ */
+enum class SymbolElevationReference(val raw: Int) {
+  /** Elevate symbols relative to the sea level. */
+  SEA(0),
+  /** Elevate symbols relative to the ground's height below them. */
+  GROUND(1);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Controls the frame of reference for `text-translate`.
  * Default value: "map".
  */
@@ -482,10 +499,20 @@ data class PointAnnotation(
    */
   val iconImageCrossFade: Double? = null,
   /**
+   * The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val iconOcclusionOpacity: Double? = null,
+  /**
    * The opacity at which the icon will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val iconOpacity: Double? = null,
+  /**
+   * Specifies an uniform elevation from the ground, in meters.
+   * Default value: 0. Minimum value: 0.
+   */
+  val symbolZOffset: Double? = null,
   /**
    * The color with which the text will be drawn.
    * Default value: "#000000".
@@ -511,6 +538,11 @@ data class PointAnnotation(
    * Default value: 0. Minimum value: 0.
    */
   val textHaloWidth: Double? = null,
+  /**
+   * The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val textOcclusionOpacity: Double? = null,
   /**
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
@@ -549,14 +581,17 @@ data class PointAnnotation(
       val iconHaloColor = __pigeon_list[25].let { num -> if (num is Int) num.toLong() else num as Long? }
       val iconHaloWidth = __pigeon_list[26] as Double?
       val iconImageCrossFade = __pigeon_list[27] as Double?
-      val iconOpacity = __pigeon_list[28] as Double?
-      val textColor = __pigeon_list[29].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textEmissiveStrength = __pigeon_list[30] as Double?
-      val textHaloBlur = __pigeon_list[31] as Double?
-      val textHaloColor = __pigeon_list[32].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textHaloWidth = __pigeon_list[33] as Double?
-      val textOpacity = __pigeon_list[34] as Double?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOpacity, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOpacity)
+      val iconOcclusionOpacity = __pigeon_list[28] as Double?
+      val iconOpacity = __pigeon_list[29] as Double?
+      val symbolZOffset = __pigeon_list[30] as Double?
+      val textColor = __pigeon_list[31].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textEmissiveStrength = __pigeon_list[32] as Double?
+      val textHaloBlur = __pigeon_list[33] as Double?
+      val textHaloColor = __pigeon_list[34].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textHaloWidth = __pigeon_list[35] as Double?
+      val textOcclusionOpacity = __pigeon_list[36] as Double?
+      val textOpacity = __pigeon_list[37] as Double?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
     }
   }
   fun toList(): List<Any?> {
@@ -589,12 +624,15 @@ data class PointAnnotation(
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     )
   }
@@ -729,10 +767,20 @@ data class PointAnnotationOptions(
    */
   val iconImageCrossFade: Double? = null,
   /**
+   * The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val iconOcclusionOpacity: Double? = null,
+  /**
    * The opacity at which the icon will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
   val iconOpacity: Double? = null,
+  /**
+   * Specifies an uniform elevation from the ground, in meters.
+   * Default value: 0. Minimum value: 0.
+   */
+  val symbolZOffset: Double? = null,
   /**
    * The color with which the text will be drawn.
    * Default value: "#000000".
@@ -758,6 +806,11 @@ data class PointAnnotationOptions(
    * Default value: 0. Minimum value: 0.
    */
   val textHaloWidth: Double? = null,
+  /**
+   * The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+   * Default value: 0. Value range: [0, 1]
+   */
+  val textOcclusionOpacity: Double? = null,
   /**
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
@@ -795,14 +848,17 @@ data class PointAnnotationOptions(
       val iconHaloColor = __pigeon_list[24].let { num -> if (num is Int) num.toLong() else num as Long? }
       val iconHaloWidth = __pigeon_list[25] as Double?
       val iconImageCrossFade = __pigeon_list[26] as Double?
-      val iconOpacity = __pigeon_list[27] as Double?
-      val textColor = __pigeon_list[28].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textEmissiveStrength = __pigeon_list[29] as Double?
-      val textHaloBlur = __pigeon_list[30] as Double?
-      val textHaloColor = __pigeon_list[31].let { num -> if (num is Int) num.toLong() else num as Long? }
-      val textHaloWidth = __pigeon_list[32] as Double?
-      val textOpacity = __pigeon_list[33] as Double?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOpacity, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOpacity)
+      val iconOcclusionOpacity = __pigeon_list[27] as Double?
+      val iconOpacity = __pigeon_list[28] as Double?
+      val symbolZOffset = __pigeon_list[29] as Double?
+      val textColor = __pigeon_list[30].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textEmissiveStrength = __pigeon_list[31] as Double?
+      val textHaloBlur = __pigeon_list[32] as Double?
+      val textHaloColor = __pigeon_list[33].let { num -> if (num is Int) num.toLong() else num as Long? }
+      val textHaloWidth = __pigeon_list[34] as Double?
+      val textOcclusionOpacity = __pigeon_list[35] as Double?
+      val textOpacity = __pigeon_list[36] as Double?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
     }
   }
   fun toList(): List<Any?> {
@@ -834,12 +890,15 @@ data class PointAnnotationOptions(
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     )
   }
@@ -934,6 +993,11 @@ private object PointAnnotationMessengerPigeonCodec : StandardMessageCodec() {
       }
       146.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
+          SymbolElevationReference.ofRaw(it)
+        }
+      }
+      147.toByte() -> {
+        return (readValue(buffer) as Int?)?.let {
           TextTranslateAnchor.ofRaw(it)
         }
       }
@@ -1010,8 +1074,12 @@ private object PointAnnotationMessengerPigeonCodec : StandardMessageCodec() {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is TextTranslateAnchor -> {
+      is SymbolElevationReference -> {
         stream.write(146)
+        writeValue(stream, value.raw)
+      }
+      is TextTranslateAnchor -> {
+        stream.write(147)
         writeValue(stream, value.raw)
       }
       else -> super.writeValue(stream, value)
@@ -1053,22 +1121,38 @@ interface _PointAnnotationMessenger {
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
   fun setIconAllowOverlap(managerId: String, iconAllowOverlap: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconAllowOverlap(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setIconAnchor(managerId: String, iconAnchor: IconAnchor, callback: (Result<Unit>) -> Unit)
+  fun getIconAnchor(managerId: String, callback: (Result<IconAnchor?>) -> Unit)
   fun setIconIgnorePlacement(managerId: String, iconIgnorePlacement: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconIgnorePlacement(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setIconImage(managerId: String, iconImage: String, callback: (Result<Unit>) -> Unit)
+  fun getIconImage(managerId: String, callback: (Result<String?>) -> Unit)
   fun setIconKeepUpright(managerId: String, iconKeepUpright: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconKeepUpright(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setIconOffset(managerId: String, iconOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getIconOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconOptional(managerId: String, iconOptional: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconOptional(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setIconPadding(managerId: String, iconPadding: Double, callback: (Result<Unit>) -> Unit)
   fun getIconPadding(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconPitchAlignment(managerId: String, iconPitchAlignment: IconPitchAlignment, callback: (Result<Unit>) -> Unit)
   fun getIconPitchAlignment(managerId: String, callback: (Result<IconPitchAlignment?>) -> Unit)
+  fun setIconRotate(managerId: String, iconRotate: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconRotate(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconRotationAlignment(managerId: String, iconRotationAlignment: IconRotationAlignment, callback: (Result<Unit>) -> Unit)
   fun getIconRotationAlignment(managerId: String, callback: (Result<IconRotationAlignment?>) -> Unit)
+  fun setIconSize(managerId: String, iconSize: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconTextFit(managerId: String, iconTextFit: IconTextFit, callback: (Result<Unit>) -> Unit)
+  fun getIconTextFit(managerId: String, callback: (Result<IconTextFit?>) -> Unit)
+  fun setIconTextFitPadding(managerId: String, iconTextFitPadding: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getIconTextFitPadding(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Boolean, callback: (Result<Unit>) -> Unit)
   fun getSymbolAvoidEdges(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, callback: (Result<Unit>) -> Unit)
   fun getSymbolPlacement(managerId: String, callback: (Result<SymbolPlacement?>) -> Unit)
+  fun setSymbolSortKey(managerId: String, symbolSortKey: Double, callback: (Result<Unit>) -> Unit)
+  fun getSymbolSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setSymbolSpacing(managerId: String, symbolSpacing: Double, callback: (Result<Unit>) -> Unit)
   fun getSymbolSpacing(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setSymbolZElevate(managerId: String, symbolZElevate: Boolean, callback: (Result<Unit>) -> Unit)
@@ -1077,32 +1161,84 @@ interface _PointAnnotationMessenger {
   fun getSymbolZOrder(managerId: String, callback: (Result<SymbolZOrder?>) -> Unit)
   fun setTextAllowOverlap(managerId: String, textAllowOverlap: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextAllowOverlap(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setTextAnchor(managerId: String, textAnchor: TextAnchor, callback: (Result<Unit>) -> Unit)
+  fun getTextAnchor(managerId: String, callback: (Result<TextAnchor?>) -> Unit)
+  fun setTextField(managerId: String, textField: String, callback: (Result<Unit>) -> Unit)
+  fun getTextField(managerId: String, callback: (Result<String?>) -> Unit)
   fun setTextFont(managerId: String, textFont: List<String?>, callback: (Result<Unit>) -> Unit)
   fun getTextFont(managerId: String, callback: (Result<List<String?>?>) -> Unit)
   fun setTextIgnorePlacement(managerId: String, textIgnorePlacement: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextIgnorePlacement(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setTextJustify(managerId: String, textJustify: TextJustify, callback: (Result<Unit>) -> Unit)
+  fun getTextJustify(managerId: String, callback: (Result<TextJustify?>) -> Unit)
   fun setTextKeepUpright(managerId: String, textKeepUpright: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextKeepUpright(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setTextLetterSpacing(managerId: String, textLetterSpacing: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextLetterSpacing(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextLineHeight(managerId: String, textLineHeight: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextLineHeight(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextMaxAngle(managerId: String, textMaxAngle: Double, callback: (Result<Unit>) -> Unit)
   fun getTextMaxAngle(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextMaxWidth(managerId: String, textMaxWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextMaxWidth(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextOffset(managerId: String, textOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getTextOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setTextOptional(managerId: String, textOptional: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextOptional(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setTextPadding(managerId: String, textPadding: Double, callback: (Result<Unit>) -> Unit)
   fun getTextPadding(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextPitchAlignment(managerId: String, textPitchAlignment: TextPitchAlignment, callback: (Result<Unit>) -> Unit)
   fun getTextPitchAlignment(managerId: String, callback: (Result<TextPitchAlignment?>) -> Unit)
+  fun setTextRadialOffset(managerId: String, textRadialOffset: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextRadialOffset(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextRotate(managerId: String, textRotate: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextRotate(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextRotationAlignment(managerId: String, textRotationAlignment: TextRotationAlignment, callback: (Result<Unit>) -> Unit)
   fun getTextRotationAlignment(managerId: String, callback: (Result<TextRotationAlignment?>) -> Unit)
+  fun setTextSize(managerId: String, textSize: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextTransform(managerId: String, textTransform: TextTransform, callback: (Result<Unit>) -> Unit)
+  fun getTextTransform(managerId: String, callback: (Result<TextTransform?>) -> Unit)
+  fun setIconColor(managerId: String, iconColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getIconColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setIconColorSaturation(managerId: String, iconColorSaturation: Double, callback: (Result<Unit>) -> Unit)
   fun getIconColorSaturation(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconEmissiveStrength(managerId: String, iconEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconHaloBlur(managerId: String, iconHaloBlur: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconHaloBlur(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconHaloColor(managerId: String, iconHaloColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getIconHaloColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setIconHaloWidth(managerId: String, iconHaloWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconHaloWidth(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconImageCrossFade(managerId: String, iconImageCrossFade: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconImageCrossFade(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconOcclusionOpacity(managerId: String, iconOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
   fun getIconOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconOpacity(managerId: String, iconOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getIconOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconTranslate(managerId: String, iconTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
+  fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getSymbolElevationReference(managerId: String, callback: (Result<SymbolElevationReference?>) -> Unit)
+  fun setSymbolZOffset(managerId: String, symbolZOffset: Double, callback: (Result<Unit>) -> Unit)
+  fun getSymbolZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextColor(managerId: String, textColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getTextColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setTextEmissiveStrength(managerId: String, textEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextEmissiveStrength(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextHaloBlur(managerId: String, textHaloBlur: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextHaloBlur(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextHaloColor(managerId: String, textHaloColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getTextHaloColor(managerId: String, callback: (Result<Long?>) -> Unit)
+  fun setTextHaloWidth(managerId: String, textHaloWidth: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextHaloWidth(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextOcclusionOpacity(managerId: String, textOcclusionOpacity: Double, callback: (Result<Unit>) -> Unit)
   fun getTextOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextOpacity(managerId: String, textOpacity: Double, callback: (Result<Unit>) -> Unit)
+  fun getTextOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextTranslate(managerId: String, textTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getTextTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, callback: (Result<Unit>) -> Unit)
@@ -1259,6 +1395,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAnchor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconAnchorArg = args[1] as IconAnchor
+            api.setIconAnchor(managerIdArg, iconAnchorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAnchor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconAnchor(managerIdArg) { result: Result<IconAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconIgnorePlacement$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1299,6 +1475,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImage$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconImageArg = args[1] as String
+            api.setIconImage(managerIdArg, iconImageArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImage$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconImage(managerIdArg) { result: Result<String?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconKeepUpright$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1325,6 +1541,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconKeepUpright(managerIdArg) { result: Result<Boolean?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconOffsetArg = args[1] as List<Double?>
+            api.setIconOffset(managerIdArg, iconOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconOffset(managerIdArg) { result: Result<List<Double?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1459,6 +1715,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconRotateArg = args[1] as Double
+            api.setIconRotate(managerIdArg, iconRotateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconRotate(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotationAlignment$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1485,6 +1781,126 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconRotationAlignment(managerIdArg) { result: Result<IconRotationAlignment?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSize$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconSizeArg = args[1] as Double
+            api.setIconSize(managerIdArg, iconSizeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSize$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconSize(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconTextFitArg = args[1] as IconTextFit
+            api.setIconTextFit(managerIdArg, iconTextFitArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFit$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconTextFit(managerIdArg) { result: Result<IconTextFit?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconTextFitPaddingArg = args[1] as List<Double?>
+            api.setIconTextFitPadding(managerIdArg, iconTextFitPaddingArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconTextFitPadding(managerIdArg) { result: Result<List<Double?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1565,6 +1981,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getSymbolPlacement(managerIdArg) { result: Result<SymbolPlacement?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val symbolSortKeyArg = args[1] as Double
+            api.setSymbolSortKey(managerIdArg, symbolSortKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSortKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getSymbolSortKey(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1739,6 +2195,86 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAnchor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textAnchorArg = args[1] as TextAnchor
+            api.setTextAnchor(managerIdArg, textAnchorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAnchor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextAnchor(managerIdArg) { result: Result<TextAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextField$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textFieldArg = args[1] as String
+            api.setTextField(managerIdArg, textFieldArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextField$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextField(managerIdArg) { result: Result<String?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1819,6 +2355,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextJustify$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textJustifyArg = args[1] as TextJustify
+            api.setTextJustify(managerIdArg, textJustifyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextJustify$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextJustify(managerIdArg) { result: Result<TextJustify?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextKeepUpright$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1859,6 +2435,86 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLetterSpacing$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textLetterSpacingArg = args[1] as Double
+            api.setTextLetterSpacing(managerIdArg, textLetterSpacingArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLetterSpacing$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextLetterSpacing(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLineHeight$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textLineHeightArg = args[1] as Double
+            api.setTextLineHeight(managerIdArg, textLineHeightArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLineHeight$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextLineHeight(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1885,6 +2541,86 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getTextMaxAngle(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textMaxWidthArg = args[1] as Double
+            api.setTextMaxWidth(managerIdArg, textMaxWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextMaxWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textOffsetArg = args[1] as List<Double?>
+            api.setTextOffset(managerIdArg, textOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextOffset(managerIdArg) { result: Result<List<Double?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2019,6 +2755,86 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRadialOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textRadialOffsetArg = args[1] as Double
+            api.setTextRadialOffset(managerIdArg, textRadialOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRadialOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextRadialOffset(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textRotateArg = args[1] as Double
+            api.setTextRotate(managerIdArg, textRotateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotate$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextRotate(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotationAlignment$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2045,6 +2861,126 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getTextRotationAlignment(managerIdArg) { result: Result<TextRotationAlignment?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSize$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textSizeArg = args[1] as Double
+            api.setTextSize(managerIdArg, textSizeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSize$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextSize(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textTransformArg = args[1] as TextTransform
+            api.setTextTransform(managerIdArg, textTransformArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTransform$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextTransform(managerIdArg) { result: Result<TextTransform?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setIconColor(managerIdArg, iconColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconColor(managerIdArg) { result: Result<Long?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2099,6 +3035,206 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconEmissiveStrength$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconEmissiveStrengthArg = args[1] as Double
+            api.setIconEmissiveStrength(managerIdArg, iconEmissiveStrengthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconEmissiveStrength$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconEmissiveStrength(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconHaloBlurArg = args[1] as Double
+            api.setIconHaloBlur(managerIdArg, iconHaloBlurArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconHaloBlur(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconHaloColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setIconHaloColor(managerIdArg, iconHaloColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconHaloColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconHaloWidthArg = args[1] as Double
+            api.setIconHaloWidth(managerIdArg, iconHaloWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconHaloWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImageCrossFade$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconImageCrossFadeArg = args[1] as Double
+            api.setIconImageCrossFade(managerIdArg, iconImageCrossFadeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImageCrossFade$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconImageCrossFade(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2125,6 +3261,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconOpacityArg = args[1] as Double
+            api.setIconOpacity(managerIdArg, iconOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconOpacity(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2219,6 +3395,286 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val symbolElevationReferenceArg = args[1] as SymbolElevationReference
+            api.setSymbolElevationReference(managerIdArg, symbolElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getSymbolElevationReference(managerIdArg) { result: Result<SymbolElevationReference?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val symbolZOffsetArg = args[1] as Double
+            api.setSymbolZOffset(managerIdArg, symbolZOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getSymbolZOffset(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setTextColor(managerIdArg, textColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextEmissiveStrength$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textEmissiveStrengthArg = args[1] as Double
+            api.setTextEmissiveStrength(managerIdArg, textEmissiveStrengthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextEmissiveStrength$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextEmissiveStrength(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textHaloBlurArg = args[1] as Double
+            api.setTextHaloBlur(managerIdArg, textHaloBlurArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloBlur$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextHaloBlur(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textHaloColorArg = args[1].let { num -> if (num is Int) num.toLong() else num as Long }
+            api.setTextHaloColor(managerIdArg, textHaloColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextHaloColor(managerIdArg) { result: Result<Long?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textHaloWidthArg = args[1] as Double
+            api.setTextHaloWidth(managerIdArg, textHaloWidthArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloWidth$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextHaloWidth(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -2245,6 +3701,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getTextOcclusionOpacity(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textOpacityArg = args[1] as Double
+            api.setTextOpacity(managerIdArg, textOpacityArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOpacity$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextOpacity(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

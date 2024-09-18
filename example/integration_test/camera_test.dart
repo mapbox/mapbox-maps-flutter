@@ -324,7 +324,7 @@ void main() {
   });
 
   testWidgets('getCameraState', (WidgetTester tester) async {
-    final mapFuture = app.runMapWithCustomCamera(initialCamera);
+    final mapFuture = app.main(camera: initialCamera);
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;

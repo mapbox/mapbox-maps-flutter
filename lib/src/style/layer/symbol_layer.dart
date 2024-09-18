@@ -119,6 +119,10 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconTranslateExpression,
     IconTranslateAnchor? this.iconTranslateAnchor,
     List<Object>? this.iconTranslateAnchorExpression,
+    SymbolElevationReference? this.symbolElevationReference,
+    List<Object>? this.symbolElevationReferenceExpression,
+    double? this.symbolZOffset,
+    List<Object>? this.symbolZOffsetExpression,
     int? this.textColor,
     List<Object>? this.textColorExpression,
     double? this.textEmissiveStrength,
@@ -537,13 +541,12 @@ class SymbolLayer extends Layer {
   /// Default value: 0. Value range: [0, 1]
   List<Object>? iconImageCrossFadeExpression;
 
-  /// The opacity at which the icon will be drawn in case of being depth occluded. Not supported on globe zoom levels.
-  /// Default value: 1. Value range: [0, 1]
-  @experimental
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
   double? iconOcclusionOpacity;
 
-  /// The opacity at which the icon will be drawn in case of being depth occluded. Not supported on globe zoom levels.
-  /// Default value: 1. Value range: [0, 1]
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? iconOcclusionOpacityExpression;
 
   /// The opacity at which the icon will be drawn.
@@ -569,6 +572,26 @@ class SymbolLayer extends Layer {
   /// Controls the frame of reference for `icon-translate`.
   /// Default value: "map".
   List<Object>? iconTranslateAnchorExpression;
+
+  /// Selects the base of symbol-elevation.
+  /// Default value: "ground".
+  @experimental
+  SymbolElevationReference? symbolElevationReference;
+
+  /// Selects the base of symbol-elevation.
+  /// Default value: "ground".
+  @experimental
+  List<Object>? symbolElevationReferenceExpression;
+
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
+  double? symbolZOffset;
+
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
+  List<Object>? symbolZOffsetExpression;
 
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
@@ -610,13 +633,12 @@ class SymbolLayer extends Layer {
   /// Default value: 0. Minimum value: 0.
   List<Object>? textHaloWidthExpression;
 
-  /// The opacity at which the text will be drawn in case of being depth occluded. Not supported on globe zoom levels.
-  /// Default value: 1. Value range: [0, 1]
-  @experimental
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
   double? textOcclusionOpacity;
 
-  /// The opacity at which the text will be drawn in case of being depth occluded. Not supported on globe zoom levels.
-  /// Default value: 1. Value range: [0, 1]
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
   List<Object>? textOcclusionOpacityExpression;
 
   /// The opacity at which the text will be drawn.
@@ -1038,6 +1060,21 @@ class SymbolLayer extends Layer {
           iconTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (symbolElevationReferenceExpression != null) {
+      paint["symbol-elevation-reference"] = symbolElevationReferenceExpression;
+    }
+    if (symbolElevationReference != null) {
+      paint["symbol-elevation-reference"] =
+          symbolElevationReference?.name.toLowerCase().replaceAll("_", "-");
+    }
+
+    if (symbolZOffsetExpression != null) {
+      paint["symbol-z-offset"] = symbolZOffsetExpression;
+    }
+    if (symbolZOffset != null) {
+      paint["symbol-z-offset"] = symbolZOffset;
+    }
+
     if (textColorExpression != null) {
       paint["text-color"] = textColorExpression;
     }
@@ -1368,6 +1405,18 @@ class SymbolLayer extends Layer {
               .contains(map["paint"]["icon-translate-anchor"])),
       iconTranslateAnchorExpression:
           _optionalCastList(map["paint"]["icon-translate-anchor"]),
+      symbolElevationReference:
+          map["paint"]["symbol-elevation-reference"] == null
+              ? null
+              : SymbolElevationReference.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["symbol-elevation-reference"])),
+      symbolElevationReferenceExpression:
+          _optionalCastList(map["paint"]["symbol-elevation-reference"]),
+      symbolZOffset: _optionalCast(map["paint"]["symbol-z-offset"]),
+      symbolZOffsetExpression:
+          _optionalCastList(map["paint"]["symbol-z-offset"]),
       textColor: (map["paint"]["text-color"] as List?)?.toRGBAInt(),
       textColorExpression: _optionalCastList(map["paint"]["text-color"]),
       textEmissiveStrength:

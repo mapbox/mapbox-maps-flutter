@@ -113,6 +113,13 @@ fun IconTranslateAnchor.toIconTranslateAnchor(): com.mapbox.maps.extension.style
     else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
   }
 }
+fun SymbolElevationReference.toSymbolElevationReference(): com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference {
+  return when (this) {
+    SymbolElevationReference.SEA -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.SEA
+    SymbolElevationReference.GROUND -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.GROUND
+    else -> throw(RuntimeException("Unsupported SymbolElevationReference: $this"))
+  }
+}
 fun TextTranslateAnchor.toTextTranslateAnchor(): com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor {
   return when (this) {
     TextTranslateAnchor.MAP -> com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.MAP
@@ -230,6 +237,13 @@ fun com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnc
     com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.MAP -> IconTranslateAnchor.MAP
     com.mapbox.maps.extension.style.layers.properties.generated.IconTranslateAnchor.VIEWPORT -> IconTranslateAnchor.VIEWPORT
     else -> throw(RuntimeException("Unsupported IconTranslateAnchor: $this"))
+  }
+}
+fun com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.toFLTSymbolElevationReference(): SymbolElevationReference {
+  return when (this) {
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.SEA -> SymbolElevationReference.SEA
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.GROUND -> SymbolElevationReference.GROUND
+    else -> throw(RuntimeException("Unsupported SymbolElevationReference: $this"))
   }
 }
 fun com.mapbox.maps.extension.style.layers.properties.generated.TextTranslateAnchor.toFLTTextTranslateAnchor(): TextTranslateAnchor {
