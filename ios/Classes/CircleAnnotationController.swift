@@ -115,6 +115,66 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
 
     // MARK: Properties
 
+    func getCircleSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleSortKey))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleSortKey(managerId: String, circleSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleSortKey = circleSortKey
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleBlur))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleBlur(managerId: String, circleBlur: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleBlur = circleBlur
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleColor?.intValue))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleColor(managerId: String, circleColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleColor = StyleColor(rgb: circleColor)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getCircleEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -128,6 +188,26 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.circleEmissiveStrength = circleEmissiveStrength
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleOpacity(managerId: String, circleOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleOpacity = circleOpacity
 
             completion(.success(()))
         } catch {
@@ -168,6 +248,86 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.circlePitchScale = MapboxMaps.CirclePitchScale(circlePitchScale)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleRadius(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleRadius))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleRadius(managerId: String, circleRadius: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleRadius = circleRadius
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeColor?.intValue))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeColor(managerId: String, circleStrokeColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeColor = StyleColor(rgb: circleStrokeColor)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeOpacity))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeOpacity(managerId: String, circleStrokeOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeOpacity = circleStrokeOpacity
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getCircleStrokeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.circleStrokeWidth))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleStrokeWidth(managerId: String, circleStrokeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.circleStrokeWidth = circleStrokeWidth
 
             completion(.success(()))
         } catch {

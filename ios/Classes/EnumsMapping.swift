@@ -361,6 +361,25 @@ extension MapboxMaps.IconTranslateAnchor {
         }
     }
 }
+extension MapboxMaps.SymbolElevationReference {
+
+    init?(_ fltValue: SymbolElevationReference?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .sEA: self = .sea
+        case .gROUND: self = .ground
+        }
+    }
+
+    func toFLTSymbolElevationReference() -> SymbolElevationReference? {
+        switch self {
+        case .sea: return .sEA
+        case .ground: return .gROUND
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.TextTranslateAnchor {
 
     init?(_ fltValue: TextTranslateAnchor?) {

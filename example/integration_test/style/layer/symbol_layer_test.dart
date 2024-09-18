@@ -79,6 +79,8 @@ void main() {
       iconOpacity: 1.0,
       iconTranslate: [0.0, 1.0],
       iconTranslateAnchor: IconTranslateAnchor.MAP,
+      symbolElevationReference: SymbolElevationReference.SEA,
+      symbolZOffset: 1.0,
       textColor: Colors.red.value,
       textEmissiveStrength: 1.0,
       textHaloBlur: 1.0,
@@ -148,6 +150,8 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
+    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
+    expect(layer.symbolZOffset, 1.0);
     expect(layer.textColor, Colors.red.value);
     expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);
@@ -254,6 +258,8 @@ void main() {
         [0.0, 1.0]
       ],
       iconTranslateAnchorExpression: ['string', 'map'],
+      symbolElevationReferenceExpression: ['string', 'sea'],
+      symbolZOffsetExpression: ['number', 1.0],
       textColorExpression: ['rgba', 255, 0, 0, 1],
       textEmissiveStrengthExpression: ['number', 1.0],
       textHaloBlurExpression: ['number', 1.0],
@@ -331,6 +337,8 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
+    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
+    expect(layer.symbolZOffset, 1.0);
     expect(layer.textColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.textEmissiveStrength, 1.0);
     expect(layer.textHaloBlur, 1.0);

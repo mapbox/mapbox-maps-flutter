@@ -55,6 +55,10 @@ class LineLayer extends Layer {
     List<Object>? this.lineTranslateExpression,
     LineTranslateAnchor? this.lineTranslateAnchor,
     List<Object>? this.lineTranslateAnchorExpression,
+    int? this.lineTrimColor,
+    List<Object>? this.lineTrimColorExpression,
+    List<double?>? this.lineTrimFadeRange,
+    List<Object>? this.lineTrimFadeRangeExpression,
     List<double?>? this.lineTrimOffset,
     List<Object>? this.lineTrimOffsetExpression,
     double? this.lineWidth,
@@ -120,6 +124,7 @@ class LineLayer extends Layer {
   double? lineZOffset;
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  @experimental
   List<Object>? lineZOffsetExpression;
 
   /// Blur applied to the line, in pixels.
@@ -194,7 +199,6 @@ class LineLayer extends Layer {
 
   /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
   /// Default value: 0. Value range: [0, 1]
-  @experimental
   double? lineOcclusionOpacity;
 
   /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling.
@@ -239,11 +243,31 @@ class LineLayer extends Layer {
   /// Default value: "map".
   List<Object>? lineTranslateAnchorExpression;
 
-  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  @experimental
+  int? lineTrimColor;
+
+  /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property.
+  /// Default value: "transparent".
+  @experimental
+  List<Object>? lineTrimColorExpression;
+
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
+  List<double?>? lineTrimFadeRange;
+
+  /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
+  /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
+  List<Object>? lineTrimFadeRangeExpression;
+
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   List<double?>? lineTrimOffset;
 
-  /// The line part between [trim-start, trim-end] will be marked as transparent to make a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
+  /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   List<Object>? lineTrimOffsetExpression;
 
@@ -415,6 +439,20 @@ class LineLayer extends Layer {
           lineTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (lineTrimColorExpression != null) {
+      paint["line-trim-color"] = lineTrimColorExpression;
+    }
+    if (lineTrimColor != null) {
+      paint["line-trim-color"] = lineTrimColor?.toRGBA();
+    }
+
+    if (lineTrimFadeRangeExpression != null) {
+      paint["line-trim-fade-range"] = lineTrimFadeRangeExpression;
+    }
+    if (lineTrimFadeRange != null) {
+      paint["line-trim-fade-range"] = lineTrimFadeRange;
+    }
+
     if (lineTrimOffsetExpression != null) {
       paint["line-trim-offset"] = lineTrimOffsetExpression;
     }
@@ -553,6 +591,14 @@ class LineLayer extends Layer {
               .contains(map["paint"]["line-translate-anchor"])),
       lineTranslateAnchorExpression:
           _optionalCastList(map["paint"]["line-translate-anchor"]),
+      lineTrimColor: (map["paint"]["line-trim-color"] as List?)?.toRGBAInt(),
+      lineTrimColorExpression:
+          _optionalCastList(map["paint"]["line-trim-color"]),
+      lineTrimFadeRange: (map["paint"]["line-trim-fade-range"] as List?)
+          ?.map<double?>((e) => e.toDouble())
+          .toList(),
+      lineTrimFadeRangeExpression:
+          _optionalCastList(map["paint"]["line-trim-fade-range"]),
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),

@@ -28,8 +28,6 @@ class ModelLayer extends Layer {
     List<Object>? this.modelCutoffFadeRangeExpression,
     double? this.modelEmissiveStrength,
     List<Object>? this.modelEmissiveStrengthExpression,
-    List<double?>? this.modelFrontCutoff,
-    List<Object>? this.modelFrontCutoffExpression,
     List<double?>? this.modelHeightBasedEmissiveStrengthMultiplier,
     List<Object>? this.modelHeightBasedEmissiveStrengthMultiplierExpression,
     double? this.modelOpacity,
@@ -73,6 +71,7 @@ class ModelLayer extends Layer {
 
   /// Model to render. It can be either a string referencing an element to the models root property or an internal or external URL
   /// Default value: "".
+  @experimental
   List<Object>? modelIdExpression;
 
   /// Intensity of the ambient occlusion if present in the 3D model.
@@ -82,6 +81,7 @@ class ModelLayer extends Layer {
 
   /// Intensity of the ambient occlusion if present in the 3D model.
   /// Default value: 1. Value range: [0, 1]
+  @experimental
   List<Object>? modelAmbientOcclusionIntensityExpression;
 
   /// Enable/Disable shadow casting for this layer
@@ -91,6 +91,7 @@ class ModelLayer extends Layer {
 
   /// Enable/Disable shadow casting for this layer
   /// Default value: true.
+  @experimental
   List<Object>? modelCastShadowsExpression;
 
   /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0.
@@ -100,6 +101,7 @@ class ModelLayer extends Layer {
 
   /// The tint color of the model layer. model-color-mix-intensity (defaults to 0) defines tint(mix) intensity - this means that, this color is not used unless model-color-mix-intensity gets value greater than 0.
   /// Default value: "#ffffff".
+  @experimental
   List<Object>? modelColorExpression;
 
   /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix.
@@ -109,6 +111,7 @@ class ModelLayer extends Layer {
 
   /// Intensity of model-color (on a scale from 0 to 1) in color mix with original 3D model's colors. Higher number will present a higher model-color contribution in mix.
   /// Default value: 0. Value range: [0, 1]
+  @experimental
   List<Object>? modelColorMixIntensityExpression;
 
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff  on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
@@ -118,6 +121,7 @@ class ModelLayer extends Layer {
 
   /// This parameter defines the range for the fade-out effect before an automatic content cutoff  on pitched map views. The automatic cutoff range is calculated according to the minimum required zoom level of the source and layer. The fade range is expressed in relation to the height of the map view. A value of 1.0 indicates that the content is faded to the same extent as the map's height in pixels, while a value close to zero represents a sharp cutoff. When the value is set to 0.0, the cutoff is completely disabled. Note: The property has no effect on the map if terrain is enabled.
   /// Default value: 0. Value range: [0, 1]
+  @experimental
   List<Object>? modelCutoffFadeRangeExpression;
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
@@ -127,16 +131,8 @@ class ModelLayer extends Layer {
 
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
-  List<Object>? modelEmissiveStrengthExpression;
-
-  /// An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled.
-  /// Default value: [0,0,1]. Minimum value: [0,0,0]. Maximum value: [1,1,1].
   @experimental
-  List<double?>? modelFrontCutoff;
-
-  /// An array for configuring the fade-out effect for the front cutoff of content on pitched map views. It contains three values: start, range and final opacity. The start parameter defines the point at which the fade-out effect begins, with smaller values causing the effect to start earlier. The range parameter specifies how long the fade-out effect will last. A value of 0.0 for range makes content disappear immediately without a fade-out effect. The final opacity determines content opacity at the end of the fade-out effect. A value of 1.0 for final opacity means that the cutoff is completely disabled.
-  /// Default value: [0,0,1]. Minimum value: [0,0,0]. Maximum value: [1,1,1].
-  List<Object>? modelFrontCutoffExpression;
+  List<Object>? modelEmissiveStrengthExpression;
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
@@ -145,6 +141,7 @@ class ModelLayer extends Layer {
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
+  @experimental
   List<Object>? modelHeightBasedEmissiveStrengthMultiplierExpression;
 
   /// The opacity of the model layer.
@@ -154,6 +151,7 @@ class ModelLayer extends Layer {
 
   /// The opacity of the model layer.
   /// Default value: 1. Value range: [0, 1]
+  @experimental
   List<Object>? modelOpacityExpression;
 
   /// Enable/Disable shadow receiving for this layer
@@ -163,6 +161,7 @@ class ModelLayer extends Layer {
 
   /// Enable/Disable shadow receiving for this layer
   /// Default value: true.
+  @experimental
   List<Object>? modelReceiveShadowsExpression;
 
   /// The rotation of the model in euler angles [lon, lat, z].
@@ -172,6 +171,7 @@ class ModelLayer extends Layer {
 
   /// The rotation of the model in euler angles [lon, lat, z].
   /// Default value: [0,0,0].
+  @experimental
   List<Object>? modelRotationExpression;
 
   /// Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batched-model source.
@@ -181,6 +181,7 @@ class ModelLayer extends Layer {
 
   /// Material roughness. Material is fully smooth for value 0, and fully rough for value 1. Affects only layers using batched-model source.
   /// Default value: 1. Value range: [0, 1]
+  @experimental
   List<Object>? modelRoughnessExpression;
 
   /// The scale of the model.
@@ -190,6 +191,7 @@ class ModelLayer extends Layer {
 
   /// The scale of the model.
   /// Default value: [1,1,1].
+  @experimental
   List<Object>? modelScaleExpression;
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
@@ -199,6 +201,7 @@ class ModelLayer extends Layer {
 
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
+  @experimental
   List<Object>? modelScaleModeExpression;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
@@ -208,6 +211,7 @@ class ModelLayer extends Layer {
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
   /// Default value: [0,0,0].
+  @experimental
   List<Object>? modelTranslationExpression;
 
   /// Defines rendering behavior of model in respect to other 3D scene objects.
@@ -217,6 +221,7 @@ class ModelLayer extends Layer {
 
   /// Defines rendering behavior of model in respect to other 3D scene objects.
   /// Default value: "common-3d".
+  @experimental
   List<Object>? modelTypeExpression;
 
   @override
@@ -281,13 +286,6 @@ class ModelLayer extends Layer {
     }
     if (modelEmissiveStrength != null) {
       paint["model-emissive-strength"] = modelEmissiveStrength;
-    }
-
-    if (modelFrontCutoffExpression != null) {
-      paint["model-front-cutoff"] = modelFrontCutoffExpression;
-    }
-    if (modelFrontCutoff != null) {
-      paint["model-front-cutoff"] = modelFrontCutoff;
     }
 
     if (modelHeightBasedEmissiveStrengthMultiplierExpression != null) {
@@ -428,11 +426,6 @@ class ModelLayer extends Layer {
           _optionalCast(map["paint"]["model-emissive-strength"]),
       modelEmissiveStrengthExpression:
           _optionalCastList(map["paint"]["model-emissive-strength"]),
-      modelFrontCutoff: (map["paint"]["model-front-cutoff"] as List?)
-          ?.map<double?>((e) => e.toDouble())
-          .toList(),
-      modelFrontCutoffExpression:
-          _optionalCastList(map["paint"]["model-front-cutoff"]),
       modelHeightBasedEmissiveStrengthMultiplier: (map["paint"]
               ["model-height-based-emissive-strength-multiplier"] as List?)
           ?.map<double?>((e) => e.toDouble())

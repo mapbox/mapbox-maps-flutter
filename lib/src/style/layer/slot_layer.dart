@@ -11,8 +11,8 @@ class SlotLayer extends Layer {
     double? minZoom,
     double? maxZoom,
     String? slot,
-    required String this.sourceId,
-    String? this.sourceLayer,
+    @Deprecated("This property has no effect on SlotLayer") String? sourceId,
+    @Deprecated("This property has no effect on SlotLayer") String? sourceLayer,
   }) : super(
             id: id,
             visibility: visibility,
@@ -26,9 +26,11 @@ class SlotLayer extends Layer {
   String getType() => "slot";
 
   /// The id of the source.
-  String sourceId;
+  @Deprecated("This property has no effect on SlotLayer")
+  String get sourceId => "";
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
+  @Deprecated("This property has no effect on SlotLayer")
   String? sourceLayer;
 
   @override
@@ -45,14 +47,10 @@ class SlotLayer extends Layer {
     var paint = {};
     var properties = {
       "id": id,
-      "source": sourceId,
       "type": getType(),
       "layout": layout,
       "paint": paint,
     };
-    if (sourceLayer != null) {
-      properties["source-layer"] = sourceLayer!;
-    }
     if (minZoom != null) {
       properties["minzoom"] = minZoom!;
     }
@@ -79,8 +77,6 @@ class SlotLayer extends Layer {
     }
     return SlotLayer(
       id: map["id"],
-      sourceId: map["source"],
-      sourceLayer: map["source-layer"],
       minZoom: map["minzoom"]?.toDouble(),
       maxZoom: map["maxzoom"]?.toDouble(),
       slot: map["slot"],
