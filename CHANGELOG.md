@@ -10,6 +10,7 @@ mapboxMap.style.addGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.updateGeoJSONSourceFeatures(sourceId, dataId, features)
 mapboxMap.style.removeGeoJSONSourceFeatures(sourceId, dataId, featureIds)
 ```
+* Add experimental `MapboxMap.setSnapshotLegacyMode()` to help avoiding `MapboxMap.snapshot()` native crash on some Samsung devices running Android 14.
 
 ### 2.3.0-beta.1
 
