@@ -3340,6 +3340,16 @@ interface _MapInterface {
   fun getElevation(coordinate: Point): Double?
   /** Returns array of tile identifiers that cover current map camera. */
   fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
+  /**
+   * Set whether legacy mode should be used for [snapshot].
+   *
+   * Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+   * but may help with vendor specific issues like described in
+   * https://github.com/mapbox/mapbox-maps-android/issues/2280.
+   *
+   * Note: This method has no effect on iOS platform.
+   */
+  fun setSnapshotLegacyMode(enabled: Boolean, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -3908,6 +3918,25 @@ interface _MapInterface {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            api.setSnapshotLegacyMode(enabledArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)
