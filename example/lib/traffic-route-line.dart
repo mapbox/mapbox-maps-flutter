@@ -28,6 +28,9 @@ class RouteLineState extends State<RouteLine> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+  }
+
+  _onStyleLoadedCallback(StyleLoadedEventData data) async {
     final data = await rootBundle.loadString('assets/sf_airport_route.geojson');
     await mapboxMap.style.addSource(GeoJsonSource(id: "line", data: data));
     await _addRouteLine();
@@ -94,10 +97,10 @@ class RouteLineState extends State<RouteLine> {
           ),
         ),
         body: MapWidget(
-          key: const ValueKey("mapWidget"),
-          cameraOptions: CameraOptions(center: _sfAirport, zoom: 11.0),
-          textureView: true,
-          onMapCreated: _onMapCreated,
-        ));
+            key: const ValueKey("mapWidget"),
+            cameraOptions: CameraOptions(center: _sfAirport, zoom: 11.0),
+            textureView: true,
+            onMapCreated: _onMapCreated,
+            onStyleLoadedListener: _onStyleLoadedCallback));
   }
 }

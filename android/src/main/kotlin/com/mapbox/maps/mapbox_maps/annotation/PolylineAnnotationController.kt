@@ -2,12 +2,7 @@
 package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.extension.style.utils.ColorUtils
-import com.mapbox.maps.mapbox_maps.pigeons.LineCap
-import com.mapbox.maps.mapbox_maps.pigeons.LineJoin
-import com.mapbox.maps.mapbox_maps.pigeons.LineTranslateAnchor
-import com.mapbox.maps.mapbox_maps.pigeons.PolylineAnnotation
-import com.mapbox.maps.mapbox_maps.pigeons.PolylineAnnotationOptions
-import com.mapbox.maps.mapbox_maps.pigeons._PolylineAnnotationMessenger
+import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import toFLTLineCap
 import toFLTLineJoin

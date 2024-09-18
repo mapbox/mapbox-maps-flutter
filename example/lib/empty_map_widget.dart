@@ -31,7 +31,7 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
 
   events = Events();
   runApp(MaterialApp(
-    home: Align(
+      home: Align(
     alignment: Alignment.topLeft,
     child: Container(
       width: width,
