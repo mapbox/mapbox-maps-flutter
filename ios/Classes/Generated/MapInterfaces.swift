@@ -3034,6 +3034,14 @@ protocol _MapInterface {
   func getElevation(coordinate: Point) throws -> Double?
   /// Returns array of tile identifiers that cover current map camera.
   func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3648,6 +3656,30 @@ class _MapInterfaceSetup {
       }
     } else {
       tileCoverChannel.setMessageHandler(nil)
+    }
+    /// Set whether legacy mode should be used for [snapshot].
+    ///
+    /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+    /// but may help with vendor specific issues like described in
+    /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+    ///
+    /// Note: This method has no effect on iOS platform.
+    let setSnapshotLegacyModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSnapshotLegacyModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        api.setSnapshotLegacyMode(enabled: enabledArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSnapshotLegacyModeChannel.setMessageHandler(nil)
     }
   }
 }

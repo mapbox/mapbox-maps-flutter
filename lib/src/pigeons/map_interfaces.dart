@@ -4042,6 +4042,37 @@ class _MapInterface {
           .cast<CanonicalTileID?>();
     }
   }
+
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  Future<void> setSnapshotLegacyMode(bool enabled) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[enabled]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }
 
 /// Collection of [Spherical Mercator](http://docs.openlayers.org/library/spherical_mercator.html) projection methods.

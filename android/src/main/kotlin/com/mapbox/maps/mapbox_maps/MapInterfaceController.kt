@@ -33,6 +33,12 @@ class MapInterfaceController(
   private val mapView: MapView,
   private val context: Context
 ) : _MapInterface {
+
+  override fun setSnapshotLegacyMode(enabled: Boolean, callback: (Result<Unit>) -> Unit) {
+    mapView.setSnapshotLegacyMode(enabled)
+    callback(Result.success(Unit))
+  }
+
   override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
       styleURI,

@@ -581,10 +581,16 @@ class MapboxMap extends ChangeNotifier {
   /// The snapshot is taken from the current state of the map.
   Future<Uint8List> snapshot() => _mapboxMapsPlatform.snapshot();
 
-  /// Add experimental MapView.setSnapshotLegacyMode function
-  /// to help avoiding MapView.snapshot native crash on some Samsung devices running Android 14.
-  Future<dynamic> setSnapshotLegacyMode(bool enable) =>
-      _mapboxMapsPlatform.setSnapshotLegacyMode(enable);
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  @experimental
+  Future<void> setSnapshotLegacyMode(bool enable) =>
+      _mapInterface.setSnapshotLegacyMode(enable);
 }
 
 class _GestureListener extends GestureListener {
