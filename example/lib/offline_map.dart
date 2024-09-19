@@ -48,7 +48,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
     // Note this will not remove the downloaded tile packs, instead, it will
     // just mark the tileset as not a part of a tile region. The tiles still
     // exists in a predictive cache in the TileStore.
-    tileStore?.removeRegion(_tileRegionId);
+    await tileStore?.removeRegion(_tileRegionId);
 
     // Set the disk quota to zero, so that tile regions are fully evicted
     // when removed.
@@ -59,7 +59,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
     // Note this will not remove the downloaded style pack, instead, it will
     // just mark the resources as not a part of the existing style pack. The
     // resources still exists in the disk cache.
-    offlineManager?.removeStylePack(MapboxStyles.SATELLITE_STREETS);
+    await offlineManager?.removeStylePack(MapboxStyles.SATELLITE_STREETS);
   }
 
   _downloadStylePack() async {

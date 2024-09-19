@@ -1,5 +1,19 @@
 ### main
 
+* Expose API to clear map data, and to set options to `TileStore`.
+
+You can now clear temporary map data from the data path defined in the given resource options, which is useful when you want reduce the disk usage or in case the disk cache contains invalid data.
+```dart
+await MapboxMapsOptions.clearData();
+```
+And you can now set additional options to a `TileStore`, for example, a maximum amount of bytes TileStore can use to store files., base URL to use for requests to the Mapbox API, or URL template for making tile requests.
+```dart
+// Set the disk quota to zero, so that tile regions are fully evicted
+// when removed.
+// This removes the tiles from the predictive cache.
+tileStore.setDiskQuota(0);
+```
+
 * Add support for partial GeoJSON updates. 
 
 Instead of setting a whole new GeoJSON object anew every time a single feature has changed, now you can apply more granular, partial GeoJSON updates.
