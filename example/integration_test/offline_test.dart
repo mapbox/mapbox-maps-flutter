@@ -57,8 +57,7 @@ void main() {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
 
-    final tmpDir = await getTemporaryDirectory().then((tmpDir) =>
-        tmpDir.createTemp("mapbox/tests/${widgetTester.testDescription}"));
+    final tmpDir = await getTemporaryDirectory();
     final tileStore = await TileStore.createAt(tmpDir.uri);
 
     final downloadedTileRegion = await tileStore.loadTileRegion(
