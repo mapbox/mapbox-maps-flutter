@@ -4,14 +4,14 @@ PODS:
     - Flutter
   - mapbox_maps_flutter (2.3.0-beta.1):
     - Flutter
-    - MapboxMaps (~> 11.7.0-beta.1)
+    - MapboxMaps (~> 11.7.0-rc.1)
     - Turf (= 3.0.0)
-  - MapboxCommon (24.7.0-beta.2)
-  - MapboxCoreMaps (11.7.0-beta.2):
-    - MapboxCommon (~> 24.7.0-beta)
-  - MapboxMaps (11.7.0-beta.1):
-    - MapboxCommon (= 24.7.0-beta.2)
-    - MapboxCoreMaps (= 11.7.0-beta.2)
+  - MapboxCommon (24.7.0-rc.2)
+  - MapboxCoreMaps (11.7.0-rc.2):
+    - MapboxCommon (~> 24.7.0-rc)
+  - MapboxMaps (11.7.0-rc.1):
+    - MapboxCommon (= 24.7.0-rc.2)
+    - MapboxCoreMaps (= 11.7.0-rc.2)
     - Turf (= 3.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -49,10 +49,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  mapbox_maps_flutter: 82d43a200b28f66979d77c05f27fbeb39373097f
-  MapboxCommon: ec5a4bc2cc197cd3d22ec2be8172b6715a51c62d
-  MapboxCoreMaps: a1aa1e6529d74853898463e60bd230c0863c203e
-  MapboxMaps: e50918c704e6a996310a6f374bf9c480d21a7206
+  mapbox_maps_flutter: 0c0afaaa72413cb02b70126646d79bfff9094ca0
+  MapboxCommon: 85c133c17aa073d6d57a14ee5676a2236d3df35a
+  MapboxCoreMaps: 35061f7cacdfc22accd89b2218bc66af1939f380
+  MapboxMaps: 1ab65689c868ac0c1065342ba840818087f1486b
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   Turf: a1604e74adce15c58462c9ae2acdbf049d5be35e
