@@ -1,4 +1,5 @@
 // This file is generated.
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -38,6 +39,10 @@ void main() {
     var lineCap = await manager.getLineCap();
     expect(LineCap.BUTT, lineCap);
 
+    await manager.setLineJoin(LineJoin.BEVEL);
+    var lineJoin = await manager.getLineJoin();
+    expect(LineJoin.BEVEL, lineJoin);
+
     await manager.setLineMiterLimit(1.0);
     var lineMiterLimit = await manager.getLineMiterLimit();
     expect(1.0, lineMiterLimit);
@@ -45,6 +50,30 @@ void main() {
     await manager.setLineRoundLimit(1.0);
     var lineRoundLimit = await manager.getLineRoundLimit();
     expect(1.0, lineRoundLimit);
+
+    await manager.setLineSortKey(1.0);
+    var lineSortKey = await manager.getLineSortKey();
+    expect(1.0, lineSortKey);
+
+    await manager.setLineZOffset(1.0);
+    var lineZOffset = await manager.getLineZOffset();
+    expect(1.0, lineZOffset);
+
+    await manager.setLineBlur(1.0);
+    var lineBlur = await manager.getLineBlur();
+    expect(1.0, lineBlur);
+
+    await manager.setLineBorderColor(Colors.red.value);
+    var lineBorderColor = await manager.getLineBorderColor();
+    expect(Colors.red.value, lineBorderColor);
+
+    await manager.setLineBorderWidth(1.0);
+    var lineBorderWidth = await manager.getLineBorderWidth();
+    expect(1.0, lineBorderWidth);
+
+    await manager.setLineColor(Colors.red.value);
+    var lineColor = await manager.getLineColor();
+    expect(Colors.red.value, lineColor);
 
     await manager.setLineDasharray([1.0, 2.0]);
     var lineDasharray = await manager.getLineDasharray();
@@ -58,9 +87,25 @@ void main() {
     var lineEmissiveStrength = await manager.getLineEmissiveStrength();
     expect(1.0, lineEmissiveStrength);
 
+    await manager.setLineGapWidth(1.0);
+    var lineGapWidth = await manager.getLineGapWidth();
+    expect(1.0, lineGapWidth);
+
     await manager.setLineOcclusionOpacity(1.0);
     var lineOcclusionOpacity = await manager.getLineOcclusionOpacity();
     expect(1.0, lineOcclusionOpacity);
+
+    await manager.setLineOffset(1.0);
+    var lineOffset = await manager.getLineOffset();
+    expect(1.0, lineOffset);
+
+    await manager.setLineOpacity(1.0);
+    var lineOpacity = await manager.getLineOpacity();
+    expect(1.0, lineOpacity);
+
+    await manager.setLinePattern("abc");
+    var linePattern = await manager.getLinePattern();
+    expect("abc", linePattern);
 
     await manager.setLineTranslate([0.0, 1.0]);
     var lineTranslate = await manager.getLineTranslate();
@@ -70,9 +115,21 @@ void main() {
     var lineTranslateAnchor = await manager.getLineTranslateAnchor();
     expect(LineTranslateAnchor.MAP, lineTranslateAnchor);
 
+    await manager.setLineTrimColor(Colors.red.value);
+    var lineTrimColor = await manager.getLineTrimColor();
+    expect(Colors.red.value, lineTrimColor);
+
+    await manager.setLineTrimFadeRange([0.0, 1.0]);
+    var lineTrimFadeRange = await manager.getLineTrimFadeRange();
+    expect([0.0, 1.0], lineTrimFadeRange);
+
     await manager.setLineTrimOffset([0.0, 1.0]);
     var lineTrimOffset = await manager.getLineTrimOffset();
     expect([0.0, 1.0], lineTrimOffset);
+
+    await manager.setLineWidth(1.0);
+    var lineWidth = await manager.getLineWidth();
+    expect(1.0, lineWidth);
   });
 }
 // End of generated file.

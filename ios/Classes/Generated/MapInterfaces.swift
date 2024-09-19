@@ -11,6 +11,7 @@ import Foundation
   #error("Unsupported platform.")
 #endif
 import struct Turf.Point
+import struct Turf.Feature
 
 /// Error class for passing custom error details to Dart side.
 final class MapInterfacesError: Error {
@@ -109,7 +110,7 @@ enum ViewportMode: Int {
 enum NorthOrientation: Int {
   /// Default, map oriented upwards
   case uPWARDS = 0
-  /// Map oriented righwards
+  /// Map oriented rightwards
   case rIGHTWARDS = 1
   /// Map oriented downwards
   case dOWNWARDS = 2
@@ -1697,231 +1698,233 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 129:
       return Point.fromList(self.readValue() as! [Any?])
     case 130:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+      return Feature.fromList(self.readValue() as! [Any?])
     case 131:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 132:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 133:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 134:
-      return CameraState.fromList(self.readValue() as! [Any?])
+      return CameraOptions.fromList(self.readValue() as! [Any?])
     case 135:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
+      return CameraState.fromList(self.readValue() as! [Any?])
     case 136:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
+      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
     case 137:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
+      return CameraBounds.fromList(self.readValue() as! [Any?])
     case 138:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
+      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
     case 139:
-      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 140:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
+      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
     case 141:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return MapDebugOptions.fromList(self.readValue() as! [Any?])
     case 142:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 143:
-      return MapOptions.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 144:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return MapOptions.fromList(self.readValue() as! [Any?])
     case 145:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 146:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 147:
-      return Size.fromList(self.readValue() as! [Any?])
+      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
     case 148:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 149:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 150:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 151:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
+      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
     case 152:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return LayerPosition.fromList(self.readValue() as! [Any?])
     case 153:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 154:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 155:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 158:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 159:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 160:
-      return FlatLight.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 161:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
+      return FlatLight.fromList(self.readValue() as! [Any?])
     case 162:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
     case 163:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return AmbientLight.fromList(self.readValue() as! [Any?])
     case 164:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 165:
-      return ImageContent.fromList(self.readValue() as! [Any?])
+      return ImageStretches.fromList(self.readValue() as! [Any?])
     case 166:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
+      return ImageContent.fromList(self.readValue() as! [Any?])
     case 167:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return TransitionOptions.fromList(self.readValue() as! [Any?])
     case 168:
-      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
     case 169:
+      return StylePropertyValue.fromList(self.readValue() as! [Any?])
+    case 170:
       var enumResult: GlyphsRasterizationMode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = GlyphsRasterizationMode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 170:
+    case 171:
       var enumResult: ContextMode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = ContextMode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 171:
+    case 172:
       var enumResult: ConstrainMode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = ConstrainMode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 172:
+    case 173:
       var enumResult: ViewportMode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = ViewportMode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 173:
+    case 174:
       var enumResult: NorthOrientation?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = NorthOrientation(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 174:
+    case 175:
       var enumResult: _MapWidgetDebugOptions?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = _MapWidgetDebugOptions(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 175:
+    case 176:
       var enumResult: MapDebugOptionsData?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = MapDebugOptionsData(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 176:
+    case 177:
       var enumResult: ViewAnnotationAnchor?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = ViewAnnotationAnchor(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 177:
+    case 178:
       var enumResult: Type?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = Type(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 178:
+    case 179:
       var enumResult: StylePackErrorType?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = StylePackErrorType(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 179:
+    case 180:
       var enumResult: ResponseErrorReason?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = ResponseErrorReason(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 180:
+    case 181:
       var enumResult: OfflineRegionDownloadState?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = OfflineRegionDownloadState(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 181:
+    case 182:
       var enumResult: TileStoreUsageMode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = TileStoreUsageMode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 182:
+    case 183:
       var enumResult: StylePropertyValueKind?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = StylePropertyValueKind(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 183:
+    case 184:
       var enumResult: StyleProjectionName?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = StyleProjectionName(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 184:
+    case 185:
       var enumResult: Anchor?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = Anchor(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 185:
+    case 186:
       var enumResult: HttpMethod?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = HttpMethod(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 186:
+    case 187:
       var enumResult: HttpRequestErrorType?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = HttpRequestErrorType(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 187:
+    case 188:
       var enumResult: DownloadErrorCode?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = DownloadErrorCode(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 188:
+    case 189:
       var enumResult: DownloadState?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = DownloadState(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 189:
+    case 190:
       var enumResult: TileRegionErrorType?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = TileRegionErrorType(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 190:
+    case 191:
       var enumResult: _MapEvent?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
@@ -1939,188 +1942,191 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     if let value = value as? Point {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? Feature {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
+    } else if let value = value as? CameraOptions {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
+    } else if let value = value as? CameraState {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? CameraBoundsOptions {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
+    } else if let value = value as? CameraBounds {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? MapAnimationOptions {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? _MapWidgetDebugOptionsBox {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? _MapWidgetDebugOptionsBox {
       super.writeByte(140)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(141)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(142)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(143)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? MapOptions {
       super.writeByte(144)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(145)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
+    } else if let value = value as? ScreenBox {
       super.writeByte(146)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? CoordinateBoundsZoom {
       super.writeByte(147)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(148)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(149)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(150)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(151)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? LayerPosition {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? StyleProjection {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? FlatLight {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? AmbientLight {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? MbxImage {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? ImageStretches {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? ImageContent {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationMode {
+    } else if let value = value as? StylePropertyValue {
       super.writeByte(169)
-      super.writeValue(value.rawValue)
-    } else if let value = value as? ContextMode {
+      super.writeValue(value.toList())
+    } else if let value = value as? GlyphsRasterizationMode {
       super.writeByte(170)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ConstrainMode {
+    } else if let value = value as? ContextMode {
       super.writeByte(171)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ViewportMode {
+    } else if let value = value as? ConstrainMode {
       super.writeByte(172)
       super.writeValue(value.rawValue)
-    } else if let value = value as? NorthOrientation {
+    } else if let value = value as? ViewportMode {
       super.writeByte(173)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapWidgetDebugOptions {
+    } else if let value = value as? NorthOrientation {
       super.writeByte(174)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MapDebugOptionsData {
+    } else if let value = value as? _MapWidgetDebugOptions {
       super.writeByte(175)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ViewAnnotationAnchor {
+    } else if let value = value as? MapDebugOptionsData {
       super.writeByte(176)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Type {
+    } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(177)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePackErrorType {
+    } else if let value = value as? Type {
       super.writeByte(178)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ResponseErrorReason {
+    } else if let value = value as? StylePackErrorType {
       super.writeByte(179)
       super.writeValue(value.rawValue)
-    } else if let value = value as? OfflineRegionDownloadState {
+    } else if let value = value as? ResponseErrorReason {
       super.writeByte(180)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileStoreUsageMode {
+    } else if let value = value as? OfflineRegionDownloadState {
       super.writeByte(181)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePropertyValueKind {
+    } else if let value = value as? TileStoreUsageMode {
       super.writeByte(182)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StyleProjectionName {
+    } else if let value = value as? StylePropertyValueKind {
       super.writeByte(183)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Anchor {
+    } else if let value = value as? StyleProjectionName {
       super.writeByte(184)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpMethod {
+    } else if let value = value as? Anchor {
       super.writeByte(185)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpRequestErrorType {
+    } else if let value = value as? HttpMethod {
       super.writeByte(186)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadErrorCode {
+    } else if let value = value as? HttpRequestErrorType {
       super.writeByte(187)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadState {
+    } else if let value = value as? DownloadErrorCode {
       super.writeByte(188)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileRegionErrorType {
+    } else if let value = value as? DownloadState {
       super.writeByte(189)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapEvent {
+    } else if let value = value as? TileRegionErrorType {
       super.writeByte(190)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? _MapEvent {
+      super.writeByte(191)
       super.writeValue(value.rawValue)
     } else {
       super.writeValue(value)
@@ -2965,7 +2971,7 @@ protocol _MapInterface {
   /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
   /// retain its previous value.
   ///
-  /// Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+  /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
   ///
   /// @param sourceId The style source identifier.
@@ -2988,7 +2994,7 @@ protocol _MapInterface {
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
   ///
-  /// Note that updates to feature state are asynchronous, so changes made by this method migth not be
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
   ///
   /// @param sourceId The style source identifier.
@@ -3006,6 +3012,14 @@ protocol _MapInterface {
   func getElevation(coordinate: Point) throws -> Double?
   /// Returns array of tile identifiers that cover current map camera.
   func tileCover(options: TileCoverOptions) throws -> [CanonicalTileID]
+  /// Set whether legacy mode should be used for [snapshot].
+  ///
+  /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+  /// but may help with vendor specific issues like described in
+  /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+  ///
+  /// Note: This method has no effect on iOS platform.
+  func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3484,7 +3498,7 @@ class _MapInterfaceSetup {
     /// `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
     /// retain its previous value.
     ///
-    /// Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+    /// Note that updates to feature `state` are asynchronous, so changes made by this method might not be
     /// immediately visible using `getStateFeature`.
     ///
     /// @param sourceId The style source identifier.
@@ -3544,7 +3558,7 @@ class _MapInterfaceSetup {
     /// Remove a specified property or all property from a feature's state object, depending on the value of
     /// `stateKey`.
     ///
-    /// Note that updates to feature state are asynchronous, so changes made by this method migth not be
+    /// Note that updates to feature state are asynchronous, so changes made by this method might not be
     /// immediately visible using `getStateFeature`.
     ///
     /// @param sourceId The style source identifier.
@@ -3620,6 +3634,30 @@ class _MapInterfaceSetup {
       }
     } else {
       tileCoverChannel.setMessageHandler(nil)
+    }
+    /// Set whether legacy mode should be used for [snapshot].
+    ///
+    /// Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+    /// but may help with vendor specific issues like described in
+    /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
+    ///
+    /// Note: This method has no effect on iOS platform.
+    let setSnapshotLegacyModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSnapshotLegacyModeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let enabledArg = args[0] as! Bool
+        api.setSnapshotLegacyMode(enabled: enabledArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSnapshotLegacyModeChannel.setMessageHandler(nil)
     }
   }
 }
@@ -4161,7 +4199,7 @@ protocol StyleManager {
   func getStyleDefaultCamera(completion: @escaping (Result<CameraOptions, Error>) -> Void)
   /// Returns the map style's transition options. By default, the style parser will attempt
   /// to read the style default transition options, if any, fallbacking to an immediate transition
-  /// otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+  /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
   /// reset once a new style has been loaded.
   ///
   /// The style transition is re-evaluated when a new style is loaded.
@@ -4334,6 +4372,84 @@ protocol StyleManager {
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   func setStyleSourceProperties(sourceId: String, properties: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Add additional features to a GeoJSON style source.
+  ///
+  /// The add operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  /// 
+  /// @param sourceId The identifier of the style source.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param features An array of GeoJSON features to be added to the source.
+  ///
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  func addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
+  /// Update existing features in a GeoJSON style source.
+  ///
+  /// The update operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  /// 
+  /// @param sourceId A style source identifier.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param features The GeoJSON features to be updated in the source.
+  /// 
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  func updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void)
+  /// Remove features from a GeoJSON style source.
+  ///
+  /// The remove operation will be scheduled and applied on a GeoJSON serialization queue.
+  ///
+  /// In order to capture events when actual data is drawn on the map please refer to Events API
+  /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+  /// or `onMapLoadingError` with `type = metadata` if an error has occurred.
+  ///
+  /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+  /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+  /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+  /// in a `map-loading-error`.
+  ///
+  /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+  /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+  /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+  /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+  /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+  /// call, the data ID in the `source-data-loaded`event will be null.
+  /// 
+  /// @param sourceId A style source identifier.
+  /// @param dataId An arbitrary string used to track the given GeoJSON data.
+  /// @param featureIds The Ids of the features that need to be removed from the source.
+  /// 
+  /// @return A string describing an error if the operation was not successful, empty otherwise.
+  func removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void)
   /// Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
   ///
   /// @param sourceId A style source identifier.
@@ -4608,7 +4724,7 @@ class StyleManagerSetup {
     }
     /// Returns the map style's transition options. By default, the style parser will attempt
     /// to read the style default transition options, if any, fallbacking to an immediate transition
-    /// otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+    /// otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
     /// reset once a new style has been loaded.
     ///
     /// The style transition is re-evaluated when a new style is loaded.
@@ -5176,6 +5292,138 @@ class StyleManagerSetup {
       }
     } else {
       setStyleSourcePropertiesChannel.setMessageHandler(nil)
+    }
+    /// Add additional features to a GeoJSON style source.
+    ///
+    /// The add operation will be scheduled and applied on a GeoJSON serialization queue.
+    ///
+    /// In order to capture events when actual data is drawn on the map please refer to Events API
+    /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+    /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+    ///
+    /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+    /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+    /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+    /// in a `map-loading-error`.
+    ///
+    /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+    /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+    /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+    /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+    /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+    /// call, the data ID in the `source-data-loaded`event will be null.
+    /// 
+    /// @param sourceId The identifier of the style source.
+    /// @param dataId An arbitrary string used to track the given GeoJSON data.
+    /// @param features An array of GeoJSON features to be added to the source.
+    ///
+    /// @return A string describing an error if the operation was not successful, empty otherwise.
+    let addGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let sourceIdArg = args[0] as! String
+        let dataIdArg = args[1] as! String
+        let featuresArg = args[2] as! [Feature]
+        api.addGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, features: featuresArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      addGeoJSONSourceFeaturesChannel.setMessageHandler(nil)
+    }
+    /// Update existing features in a GeoJSON style source.
+    ///
+    /// The update operation will be scheduled and applied on a GeoJSON serialization queue.
+    ///
+    /// In order to capture events when actual data is drawn on the map please refer to Events API
+    /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+    /// or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+    ///
+    /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+    /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+    /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+    /// in a `map-loading-error`.
+    ///
+    /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+    /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+    /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+    /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+    /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+    /// call, the data ID in the `source-data-loaded`event will be null.
+    /// 
+    /// @param sourceId A style source identifier.
+    /// @param dataId An arbitrary string used to track the given GeoJSON data.
+    /// @param features The GeoJSON features to be updated in the source.
+    /// 
+    /// @return A string describing an error if the operation was not successful, empty otherwise.
+    let updateGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      updateGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let sourceIdArg = args[0] as! String
+        let dataIdArg = args[1] as! String
+        let featuresArg = args[2] as! [Feature]
+        api.updateGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, features: featuresArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      updateGeoJSONSourceFeaturesChannel.setMessageHandler(nil)
+    }
+    /// Remove features from a GeoJSON style source.
+    ///
+    /// The remove operation will be scheduled and applied on a GeoJSON serialization queue.
+    ///
+    /// In order to capture events when actual data is drawn on the map please refer to Events API
+    /// and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+    /// or `onMapLoadingError` with `type = metadata` if an error has occurred.
+    ///
+    /// Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+    /// It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+    /// feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+    /// in a `map-loading-error`.
+    ///
+    /// - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+    /// `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+    /// for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+    /// updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+    /// each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+    /// call, the data ID in the `source-data-loaded`event will be null.
+    /// 
+    /// @param sourceId A style source identifier.
+    /// @param dataId An arbitrary string used to track the given GeoJSON data.
+    /// @param featureIds The Ids of the features that need to be removed from the source.
+    /// 
+    /// @return A string describing an error if the operation was not successful, empty otherwise.
+    let removeGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      removeGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let sourceIdArg = args[0] as! String
+        let dataIdArg = args[1] as! String
+        let featureIdsArg = args[2] as! [String]
+        api.removeGeoJSONSourceFeatures(sourceId: sourceIdArg, dataId: dataIdArg, featureIds: featureIdsArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      removeGeoJSONSourceFeaturesChannel.setMessageHandler(nil)
     }
     /// Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
     ///

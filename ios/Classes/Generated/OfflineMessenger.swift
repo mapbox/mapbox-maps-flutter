@@ -160,7 +160,7 @@ struct StylePack {
   var completedResourceSize: Int64
   /// The earliest point in time when any of the style package resources gets expired.
   ///
-  /// Unitialized for incomplete style packages or for complete style packages with all immutable resources.
+  /// Uninitialized for incomplete style packages or for complete style packages with all immutable resources.
   var expires: Int64?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -438,7 +438,7 @@ struct TileRegion {
   var completedResourceSize: Int64
   /// The earliest point in time when any of the region resources gets expired.
   ///
-  /// Unitialized for incomplete tile regions or for complete tile regions with all immutable resources.
+  /// Uninitialized for incomplete tile regions or for complete tile regions with all immutable resources.
   var expires: Int64?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -476,7 +476,7 @@ struct TileRegionEstimateResult {
   /// a value between 0 and 1. There is a 99.9% probability that the real value is contained
   /// in the interval [ (1 - errorMargin) * estimated value, (1 + errorMargin) * estimated value].
   ///
-  /// Note: the assumptions used to calculate the error margin may not hold true for sparce
+  /// Note: the assumptions used to calculate the error margin may not hold true for sparse
   /// datasets.
   var errorMargin: Double
   /// Estimated number of bytes that would have to be transferred from the network in order

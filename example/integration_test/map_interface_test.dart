@@ -118,8 +118,10 @@ void main() {
       expect(() async => await mapboxMap.getSize(), throwsPlatformException);
     } else {
       var size = await mapboxMap.getSize();
-      expect(size.width, closeTo(tester.binding.renderView.size.width, 1));
-      expect(size.height, closeTo(tester.binding.renderView.size.height, 1));
+      expect(
+          size.width, closeTo(tester.binding.renderViews.first.size.width, 1));
+      expect(size.height,
+          closeTo(tester.binding.renderViews.first.size.height, 1));
     }
   });
 
@@ -158,7 +160,7 @@ void main() {
     expect(options.viewportMode, ViewportMode.DEFAULT);
 
     expect(options.crossSourceCollisions, true);
-    expect(options.pixelRatio, tester.binding.window.devicePixelRatio);
+    expect(options.pixelRatio, tester.view.devicePixelRatio);
     expect(options.glyphsRasterizationOptions, isNull);
     expect(options.size!.width, isNotNull);
     expect(options.size!.height, isNotNull);
@@ -199,11 +201,10 @@ void main() {
     final mapFuture = app.main();
     await tester.pumpAndSettle();
     final mapboxMap = await mapFuture;
-    await mapboxMap.setDebug(
-        [MapDebugOptions(data: MapDebugOptionsData.TILE_BORDERS)], true);
-    var debugOptions = await mapboxMap.getDebug();
+    await mapboxMap.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
+    var debugOptions = await mapboxMap.getDebugOptions();
     expect(debugOptions.length, 1);
-    expect(debugOptions.first!.data, MapDebugOptionsData.TILE_BORDERS);
+    expect(debugOptions.first, MapWidgetDebugOptions.tileBorders);
   });
 
   testWidgets('featureState', (WidgetTester tester) async {

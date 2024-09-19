@@ -59,3 +59,31 @@ final class LineString extends turf.LineString {
   LineString.fromPoints({turf.BBox? bbox, required List<Point> points})
       : super.fromPoints(bbox: bbox, points: points);
 }
+
+final class Feature extends turf.Feature {
+  Feature(
+      {super.bbox,
+      required super.id,
+      super.properties,
+      required super.geometry,
+      super.fields});
+
+  Object encode() {
+    return [toJson()];
+  }
+
+  static Feature decode(Object result) {
+    result as List<Object?>;
+    return Feature.fromJson((result.first as Map).cast<String, dynamic>());
+  }
+
+  factory Feature.fromJson(Map<String, dynamic> json) {
+    final feature = turf.Feature.fromJson(json);
+    return Feature(
+        bbox: feature.bbox,
+        id: feature.id,
+        properties: feature.properties,
+        geometry: feature.geometry,
+        fields: feature.fields);
+  }
+}

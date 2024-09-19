@@ -57,7 +57,7 @@ class CircleAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? circleSortKey;
 
-  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
   double? circleBlur;
 
@@ -136,7 +136,7 @@ class CircleAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? circleSortKey;
 
-  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity.
+  /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
   double? circleBlur;
 
@@ -439,6 +439,150 @@ class _CircleAnnotationMessenger {
     }
   }
 
+  Future<void> setCircleSortKey(String managerId, double circleSortKey) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleSortKey]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleSortKey(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleSortKey$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setCircleBlur(String managerId, double circleBlur) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleBlur]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleBlur(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleBlur$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setCircleColor(String managerId, int circleColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getCircleColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
   Future<void> setCircleEmissiveStrength(
       String managerId, double circleEmissiveStrength) async {
     final String __pigeon_channelName =
@@ -467,6 +611,54 @@ class _CircleAnnotationMessenger {
   Future<double?> getCircleEmissiveStrength(String managerId) async {
     final String __pigeon_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleEmissiveStrength$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setCircleOpacity(String managerId, double circleOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleOpacity$__pigeon_messageChannelSuffix';
     final BasicMessageChannel<Object?> __pigeon_channel =
         BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -584,6 +776,201 @@ class _CircleAnnotationMessenger {
       );
     } else {
       return (__pigeon_replyList[0] as CirclePitchScale?);
+    }
+  }
+
+  Future<void> setCircleRadius(String managerId, double circleRadius) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleRadius$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleRadius]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleRadius(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleRadius$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setCircleStrokeColor(
+      String managerId, int circleStrokeColor) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleStrokeColor]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int?> getCircleStrokeColor(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeColor$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as int?);
+    }
+  }
+
+  Future<void> setCircleStrokeOpacity(
+      String managerId, double circleStrokeOpacity) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleStrokeOpacity]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleStrokeOpacity(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeOpacity$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
+    }
+  }
+
+  Future<void> setCircleStrokeWidth(
+      String managerId, double circleStrokeWidth) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleStrokeWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList = await __pigeon_channel
+        .send(<Object?>[managerId, circleStrokeWidth]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getCircleStrokeWidth(String managerId) async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleStrokeWidth$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return (__pigeon_replyList[0] as double?);
     }
   }
 

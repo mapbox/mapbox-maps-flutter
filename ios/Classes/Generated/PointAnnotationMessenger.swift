@@ -257,6 +257,15 @@ enum IconTranslateAnchor: Int {
   case vIEWPORT = 1
 }
 
+/// Selects the base of symbol-elevation.
+/// Default value: "ground".
+enum SymbolElevationReference: Int {
+  /// Elevate symbols relative to the sea level.
+  case sEA = 0
+  /// Elevate symbols relative to the ground's height below them.
+  case gROUND = 1
+}
+
 /// Controls the frame of reference for `text-translate`.
 /// Default value: "map".
 enum TextTranslateAnchor: Int {
@@ -348,9 +357,15 @@ struct PointAnnotation {
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
   var iconImageCrossFade: Double?
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  var iconOcclusionOpacity: Double?
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  var symbolZOffset: Double?
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
   var textColor: Int64?
@@ -366,6 +381,9 @@ struct PointAnnotation {
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
   /// Default value: 0. Minimum value: 0.
   var textHaloWidth: Double?
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  var textOcclusionOpacity: Double?
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
@@ -400,13 +418,16 @@ struct PointAnnotation {
     let iconHaloColor: Int64? = isNullish(__pigeon_list[25]) ? nil : (__pigeon_list[25] is Int64? ? __pigeon_list[25] as! Int64? : Int64(__pigeon_list[25] as! Int32))
     let iconHaloWidth: Double? = nilOrValue(__pigeon_list[26])
     let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[27])
-    let iconOpacity: Double? = nilOrValue(__pigeon_list[28])
-    let textColor: Int64? = isNullish(__pigeon_list[29]) ? nil : (__pigeon_list[29] is Int64? ? __pigeon_list[29] as! Int64? : Int64(__pigeon_list[29] as! Int32))
-    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[30])
-    let textHaloBlur: Double? = nilOrValue(__pigeon_list[31])
-    let textHaloColor: Int64? = isNullish(__pigeon_list[32]) ? nil : (__pigeon_list[32] is Int64? ? __pigeon_list[32] as! Int64? : Int64(__pigeon_list[32] as! Int32))
-    let textHaloWidth: Double? = nilOrValue(__pigeon_list[33])
-    let textOpacity: Double? = nilOrValue(__pigeon_list[34])
+    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[28])
+    let iconOpacity: Double? = nilOrValue(__pigeon_list[29])
+    let symbolZOffset: Double? = nilOrValue(__pigeon_list[30])
+    let textColor: Int64? = isNullish(__pigeon_list[31]) ? nil : (__pigeon_list[31] is Int64? ? __pigeon_list[31] as! Int64? : Int64(__pigeon_list[31] as! Int32))
+    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[32])
+    let textHaloBlur: Double? = nilOrValue(__pigeon_list[33])
+    let textHaloColor: Int64? = isNullish(__pigeon_list[34]) ? nil : (__pigeon_list[34] is Int64? ? __pigeon_list[34] as! Int64? : Int64(__pigeon_list[34] as! Int32))
+    let textHaloWidth: Double? = nilOrValue(__pigeon_list[35])
+    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[36])
+    let textOpacity: Double? = nilOrValue(__pigeon_list[37])
 
     return PointAnnotation(
       id: id,
@@ -437,12 +458,15 @@ struct PointAnnotation {
       iconHaloColor: iconHaloColor,
       iconHaloWidth: iconHaloWidth,
       iconImageCrossFade: iconImageCrossFade,
+      iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
+      symbolZOffset: symbolZOffset,
       textColor: textColor,
       textEmissiveStrength: textEmissiveStrength,
       textHaloBlur: textHaloBlur,
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
+      textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity
     )
   }
@@ -476,12 +500,15 @@ struct PointAnnotation {
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     ]
   }
@@ -567,9 +594,15 @@ struct PointAnnotationOptions {
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
   var iconImageCrossFade: Double?
+  /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  var iconOcclusionOpacity: Double?
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var iconOpacity: Double?
+  /// Specifies an uniform elevation from the ground, in meters.
+  /// Default value: 0. Minimum value: 0.
+  var symbolZOffset: Double?
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
   var textColor: Int64?
@@ -585,6 +618,9 @@ struct PointAnnotationOptions {
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
   /// Default value: 0. Minimum value: 0.
   var textHaloWidth: Double?
+  /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
+  /// Default value: 0. Value range: [0, 1]
+  var textOcclusionOpacity: Double?
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   var textOpacity: Double?
@@ -618,13 +654,16 @@ struct PointAnnotationOptions {
     let iconHaloColor: Int64? = isNullish(__pigeon_list[24]) ? nil : (__pigeon_list[24] is Int64? ? __pigeon_list[24] as! Int64? : Int64(__pigeon_list[24] as! Int32))
     let iconHaloWidth: Double? = nilOrValue(__pigeon_list[25])
     let iconImageCrossFade: Double? = nilOrValue(__pigeon_list[26])
-    let iconOpacity: Double? = nilOrValue(__pigeon_list[27])
-    let textColor: Int64? = isNullish(__pigeon_list[28]) ? nil : (__pigeon_list[28] is Int64? ? __pigeon_list[28] as! Int64? : Int64(__pigeon_list[28] as! Int32))
-    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[29])
-    let textHaloBlur: Double? = nilOrValue(__pigeon_list[30])
-    let textHaloColor: Int64? = isNullish(__pigeon_list[31]) ? nil : (__pigeon_list[31] is Int64? ? __pigeon_list[31] as! Int64? : Int64(__pigeon_list[31] as! Int32))
-    let textHaloWidth: Double? = nilOrValue(__pigeon_list[32])
-    let textOpacity: Double? = nilOrValue(__pigeon_list[33])
+    let iconOcclusionOpacity: Double? = nilOrValue(__pigeon_list[27])
+    let iconOpacity: Double? = nilOrValue(__pigeon_list[28])
+    let symbolZOffset: Double? = nilOrValue(__pigeon_list[29])
+    let textColor: Int64? = isNullish(__pigeon_list[30]) ? nil : (__pigeon_list[30] is Int64? ? __pigeon_list[30] as! Int64? : Int64(__pigeon_list[30] as! Int32))
+    let textEmissiveStrength: Double? = nilOrValue(__pigeon_list[31])
+    let textHaloBlur: Double? = nilOrValue(__pigeon_list[32])
+    let textHaloColor: Int64? = isNullish(__pigeon_list[33]) ? nil : (__pigeon_list[33] is Int64? ? __pigeon_list[33] as! Int64? : Int64(__pigeon_list[33] as! Int32))
+    let textHaloWidth: Double? = nilOrValue(__pigeon_list[34])
+    let textOcclusionOpacity: Double? = nilOrValue(__pigeon_list[35])
+    let textOpacity: Double? = nilOrValue(__pigeon_list[36])
 
     return PointAnnotationOptions(
       geometry: geometry,
@@ -654,12 +693,15 @@ struct PointAnnotationOptions {
       iconHaloColor: iconHaloColor,
       iconHaloWidth: iconHaloWidth,
       iconImageCrossFade: iconImageCrossFade,
+      iconOcclusionOpacity: iconOcclusionOpacity,
       iconOpacity: iconOpacity,
+      symbolZOffset: symbolZOffset,
       textColor: textColor,
       textEmissiveStrength: textEmissiveStrength,
       textHaloBlur: textHaloBlur,
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
+      textOcclusionOpacity: textOcclusionOpacity,
       textOpacity: textOpacity
     )
   }
@@ -692,12 +734,15 @@ struct PointAnnotationOptions {
       iconHaloColor,
       iconHaloWidth,
       iconImageCrossFade,
+      iconOcclusionOpacity,
       iconOpacity,
+      symbolZOffset,
       textColor,
       textEmissiveStrength,
       textHaloBlur,
       textHaloColor,
       textHaloWidth,
+      textOcclusionOpacity,
       textOpacity,
     ]
   }
@@ -810,6 +855,13 @@ private class PointAnnotationMessengerPigeonCodecReader: FlutterStandardReader {
       }
       return enumResult
     case 146:
+      var enumResult: SymbolElevationReference?
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
+      if let enumResultAsInt = enumResultAsInt {
+        enumResult = SymbolElevationReference(rawValue: enumResultAsInt)
+      }
+      return enumResult
+    case 147:
       var enumResult: TextTranslateAnchor?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
@@ -875,8 +927,11 @@ private class PointAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? IconTranslateAnchor {
       super.writeByte(145)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextTranslateAnchor {
+    } else if let value = value as? SymbolElevationReference {
       super.writeByte(146)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TextTranslateAnchor {
+      super.writeByte(147)
       super.writeValue(value.rawValue)
     } else {
       super.writeValue(value)
@@ -940,22 +995,38 @@ protocol _PointAnnotationMessenger {
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
   func setIconAllowOverlap(managerId: String, iconAllowOverlap: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconAllowOverlap(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setIconAnchor(managerId: String, iconAnchor: IconAnchor, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconAnchor(managerId: String, completion: @escaping (Result<IconAnchor?, Error>) -> Void)
   func setIconIgnorePlacement(managerId: String, iconIgnorePlacement: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconIgnorePlacement(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setIconImage(managerId: String, iconImage: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconImage(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
   func setIconKeepUpright(managerId: String, iconKeepUpright: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconKeepUpright(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setIconOffset(managerId: String, iconOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconOptional(managerId: String, iconOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setIconPadding(managerId: String, iconPadding: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconPadding(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconPitchAlignment(managerId: String, iconPitchAlignment: IconPitchAlignment, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconPitchAlignment(managerId: String, completion: @escaping (Result<IconPitchAlignment?, Error>) -> Void)
+  func setIconRotate(managerId: String, iconRotate: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconRotate(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconRotationAlignment(managerId: String, iconRotationAlignment: IconRotationAlignment, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconRotationAlignment(managerId: String, completion: @escaping (Result<IconRotationAlignment?, Error>) -> Void)
+  func setIconSize(managerId: String, iconSize: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconSize(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconTextFit(managerId: String, iconTextFit: IconTextFit, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconTextFit(managerId: String, completion: @escaping (Result<IconTextFit?, Error>) -> Void)
+  func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolAvoidEdges(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolPlacement(managerId: String, completion: @escaping (Result<SymbolPlacement?, Error>) -> Void)
+  func setSymbolSortKey(managerId: String, symbolSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getSymbolSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setSymbolSpacing(managerId: String, symbolSpacing: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolSpacing(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setSymbolZElevate(managerId: String, symbolZElevate: Bool, completion: @escaping (Result<Void, Error>) -> Void)
@@ -964,32 +1035,84 @@ protocol _PointAnnotationMessenger {
   func getSymbolZOrder(managerId: String, completion: @escaping (Result<SymbolZOrder?, Error>) -> Void)
   func setTextAllowOverlap(managerId: String, textAllowOverlap: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextAllowOverlap(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setTextAnchor(managerId: String, textAnchor: TextAnchor, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextAnchor(managerId: String, completion: @escaping (Result<TextAnchor?, Error>) -> Void)
+  func setTextField(managerId: String, textField: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextField(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
   func setTextFont(managerId: String, textFont: [String?], completion: @escaping (Result<Void, Error>) -> Void)
   func getTextFont(managerId: String, completion: @escaping (Result<[String?]?, Error>) -> Void)
   func setTextIgnorePlacement(managerId: String, textIgnorePlacement: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextIgnorePlacement(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setTextJustify(managerId: String, textJustify: TextJustify, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextJustify(managerId: String, completion: @escaping (Result<TextJustify?, Error>) -> Void)
   func setTextKeepUpright(managerId: String, textKeepUpright: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextKeepUpright(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setTextLetterSpacing(managerId: String, textLetterSpacing: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextLetterSpacing(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextLineHeight(managerId: String, textLineHeight: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextLineHeight(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextMaxAngle(managerId: String, textMaxAngle: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextMaxAngle(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextMaxWidth(managerId: String, textMaxWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextMaxWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextOffset(managerId: String, textOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setTextOptional(managerId: String, textOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setTextPadding(managerId: String, textPadding: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextPadding(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextPitchAlignment(managerId: String, textPitchAlignment: TextPitchAlignment, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextPitchAlignment(managerId: String, completion: @escaping (Result<TextPitchAlignment?, Error>) -> Void)
+  func setTextRadialOffset(managerId: String, textRadialOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextRadialOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextRotate(managerId: String, textRotate: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextRotate(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextRotationAlignment(managerId: String, textRotationAlignment: TextRotationAlignment, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextRotationAlignment(managerId: String, completion: @escaping (Result<TextRotationAlignment?, Error>) -> Void)
+  func setTextSize(managerId: String, textSize: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextSize(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextTransform(managerId: String, textTransform: TextTransform, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextTransform(managerId: String, completion: @escaping (Result<TextTransform?, Error>) -> Void)
+  func setIconColor(managerId: String, iconColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setIconColorSaturation(managerId: String, iconColorSaturation: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconColorSaturation(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconEmissiveStrength(managerId: String, iconEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconHaloBlur(managerId: String, iconHaloBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconHaloBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconHaloColor(managerId: String, iconHaloColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconHaloColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setIconHaloWidth(managerId: String, iconHaloWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconHaloWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconImageCrossFade(managerId: String, iconImageCrossFade: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconImageCrossFade(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconOcclusionOpacity(managerId: String, iconOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setIconOpacity(managerId: String, iconOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void)
+  func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
+  func getSymbolElevationReference(managerId: String, completion: @escaping (Result<SymbolElevationReference?, Error>) -> Void)
+  func setSymbolZOffset(managerId: String, symbolZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getSymbolZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextColor(managerId: String, textColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setTextEmissiveStrength(managerId: String, textEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextHaloBlur(managerId: String, textHaloBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextHaloBlur(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextHaloColor(managerId: String, textHaloColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextHaloColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
+  func setTextHaloWidth(managerId: String, textHaloWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextHaloWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextOcclusionOpacity(managerId: String, textOcclusionOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
+  func setTextOpacity(managerId: String, textOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextTranslate(managerId: String, textTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
   func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1126,6 +1249,41 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconAllowOverlapChannel.setMessageHandler(nil)
     }
+    let setIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconAnchorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconAnchorArg = args[1] as! IconAnchor
+        api.setIconAnchor(managerId: managerIdArg, iconAnchor: iconAnchorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconAnchorChannel.setMessageHandler(nil)
+    }
+    let getIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconAnchorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconAnchor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconAnchorChannel.setMessageHandler(nil)
+    }
     let setIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconIgnorePlacementChannel.setMessageHandler { message, reply in
@@ -1161,6 +1319,41 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconIgnorePlacementChannel.setMessageHandler(nil)
     }
+    let setIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconImageArg = args[1] as! String
+        api.setIconImage(managerId: managerIdArg, iconImage: iconImageArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconImageChannel.setMessageHandler(nil)
+    }
+    let getIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconImageChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconImage(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconImageChannel.setMessageHandler(nil)
+    }
     let setIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconKeepUprightChannel.setMessageHandler { message, reply in
@@ -1195,6 +1388,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconKeepUprightChannel.setMessageHandler(nil)
+    }
+    let setIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconOffsetArg = args[1] as! [Double?]
+        api.setIconOffset(managerId: managerIdArg, iconOffset: iconOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconOffsetChannel.setMessageHandler(nil)
+    }
+    let getIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconOffsetChannel.setMessageHandler(nil)
     }
     let setIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1301,6 +1529,41 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconPitchAlignmentChannel.setMessageHandler(nil)
     }
+    let setIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconRotateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconRotateArg = args[1] as! Double
+        api.setIconRotate(managerId: managerIdArg, iconRotate: iconRotateArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconRotateChannel.setMessageHandler(nil)
+    }
+    let getIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconRotateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconRotate(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconRotateChannel.setMessageHandler(nil)
+    }
     let setIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconRotationAlignmentChannel.setMessageHandler { message, reply in
@@ -1335,6 +1598,111 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconRotationAlignmentChannel.setMessageHandler(nil)
+    }
+    let setIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconSizeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconSizeArg = args[1] as! Double
+        api.setIconSize(managerId: managerIdArg, iconSize: iconSizeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconSizeChannel.setMessageHandler(nil)
+    }
+    let getIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconSizeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconSize(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconSizeChannel.setMessageHandler(nil)
+    }
+    let setIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconTextFitChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconTextFitArg = args[1] as! IconTextFit
+        api.setIconTextFit(managerId: managerIdArg, iconTextFit: iconTextFitArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconTextFitChannel.setMessageHandler(nil)
+    }
+    let getIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconTextFitChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconTextFit(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconTextFitChannel.setMessageHandler(nil)
+    }
+    let setIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconTextFitPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconTextFitPaddingArg = args[1] as! [Double?]
+        api.setIconTextFitPadding(managerId: managerIdArg, iconTextFitPadding: iconTextFitPaddingArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconTextFitPaddingChannel.setMessageHandler(nil)
+    }
+    let getIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconTextFitPaddingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconTextFitPadding(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconTextFitPaddingChannel.setMessageHandler(nil)
     }
     let setSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolAvoidEdges\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1405,6 +1773,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getSymbolPlacementChannel.setMessageHandler(nil)
+    }
+    let setSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSymbolSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let symbolSortKeyArg = args[1] as! Double
+        api.setSymbolSortKey(managerId: managerIdArg, symbolSortKey: symbolSortKeyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSymbolSortKeyChannel.setMessageHandler(nil)
+    }
+    let getSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getSymbolSortKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getSymbolSortKey(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getSymbolSortKeyChannel.setMessageHandler(nil)
     }
     let setSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1546,6 +1949,76 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextAllowOverlapChannel.setMessageHandler(nil)
     }
+    let setTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextAnchorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textAnchorArg = args[1] as! TextAnchor
+        api.setTextAnchor(managerId: managerIdArg, textAnchor: textAnchorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextAnchorChannel.setMessageHandler(nil)
+    }
+    let getTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextAnchorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextAnchor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextAnchorChannel.setMessageHandler(nil)
+    }
+    let setTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextFieldChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textFieldArg = args[1] as! String
+        api.setTextField(managerId: managerIdArg, textField: textFieldArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextFieldChannel.setMessageHandler(nil)
+    }
+    let getTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextFieldChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextField(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextFieldChannel.setMessageHandler(nil)
+    }
     let setTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextFontChannel.setMessageHandler { message, reply in
@@ -1616,6 +2089,41 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextIgnorePlacementChannel.setMessageHandler(nil)
     }
+    let setTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextJustifyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textJustifyArg = args[1] as! TextJustify
+        api.setTextJustify(managerId: managerIdArg, textJustify: textJustifyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextJustifyChannel.setMessageHandler(nil)
+    }
+    let getTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextJustifyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextJustify(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextJustifyChannel.setMessageHandler(nil)
+    }
     let setTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextKeepUprightChannel.setMessageHandler { message, reply in
@@ -1651,6 +2159,76 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextKeepUprightChannel.setMessageHandler(nil)
     }
+    let setTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextLetterSpacingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textLetterSpacingArg = args[1] as! Double
+        api.setTextLetterSpacing(managerId: managerIdArg, textLetterSpacing: textLetterSpacingArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextLetterSpacingChannel.setMessageHandler(nil)
+    }
+    let getTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextLetterSpacingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextLetterSpacing(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextLetterSpacingChannel.setMessageHandler(nil)
+    }
+    let setTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextLineHeightChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textLineHeightArg = args[1] as! Double
+        api.setTextLineHeight(managerId: managerIdArg, textLineHeight: textLineHeightArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextLineHeightChannel.setMessageHandler(nil)
+    }
+    let getTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextLineHeightChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextLineHeight(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextLineHeightChannel.setMessageHandler(nil)
+    }
     let setTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextMaxAngleChannel.setMessageHandler { message, reply in
@@ -1685,6 +2263,76 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextMaxAngleChannel.setMessageHandler(nil)
+    }
+    let setTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextMaxWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textMaxWidthArg = args[1] as! Double
+        api.setTextMaxWidth(managerId: managerIdArg, textMaxWidth: textMaxWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextMaxWidthChannel.setMessageHandler(nil)
+    }
+    let getTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextMaxWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextMaxWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextMaxWidthChannel.setMessageHandler(nil)
+    }
+    let setTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textOffsetArg = args[1] as! [Double?]
+        api.setTextOffset(managerId: managerIdArg, textOffset: textOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextOffsetChannel.setMessageHandler(nil)
+    }
+    let getTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextOffsetChannel.setMessageHandler(nil)
     }
     let setTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1791,6 +2439,76 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextPitchAlignmentChannel.setMessageHandler(nil)
     }
+    let setTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextRadialOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textRadialOffsetArg = args[1] as! Double
+        api.setTextRadialOffset(managerId: managerIdArg, textRadialOffset: textRadialOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextRadialOffsetChannel.setMessageHandler(nil)
+    }
+    let getTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextRadialOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextRadialOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextRadialOffsetChannel.setMessageHandler(nil)
+    }
+    let setTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextRotateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textRotateArg = args[1] as! Double
+        api.setTextRotate(managerId: managerIdArg, textRotate: textRotateArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextRotateChannel.setMessageHandler(nil)
+    }
+    let getTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextRotateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextRotate(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextRotateChannel.setMessageHandler(nil)
+    }
     let setTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextRotationAlignmentChannel.setMessageHandler { message, reply in
@@ -1825,6 +2543,111 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextRotationAlignmentChannel.setMessageHandler(nil)
+    }
+    let setTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextSizeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textSizeArg = args[1] as! Double
+        api.setTextSize(managerId: managerIdArg, textSize: textSizeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextSizeChannel.setMessageHandler(nil)
+    }
+    let getTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextSizeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextSize(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextSizeChannel.setMessageHandler(nil)
+    }
+    let setTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextTransformChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textTransformArg = args[1] as! TextTransform
+        api.setTextTransform(managerId: managerIdArg, textTransform: textTransformArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextTransformChannel.setMessageHandler(nil)
+    }
+    let getTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextTransformChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextTransform(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextTransformChannel.setMessageHandler(nil)
+    }
+    let setIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setIconColor(managerId: managerIdArg, iconColor: iconColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconColorChannel.setMessageHandler(nil)
+    }
+    let getIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconColorChannel.setMessageHandler(nil)
     }
     let setIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1861,6 +2684,181 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconColorSaturationChannel.setMessageHandler(nil)
     }
+    let setIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconEmissiveStrengthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconEmissiveStrengthArg = args[1] as! Double
+        api.setIconEmissiveStrength(managerId: managerIdArg, iconEmissiveStrength: iconEmissiveStrengthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let getIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconEmissiveStrengthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconEmissiveStrength(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let setIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconHaloBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconHaloBlurArg = args[1] as! Double
+        api.setIconHaloBlur(managerId: managerIdArg, iconHaloBlur: iconHaloBlurArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconHaloBlurChannel.setMessageHandler(nil)
+    }
+    let getIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconHaloBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconHaloBlur(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconHaloBlurChannel.setMessageHandler(nil)
+    }
+    let setIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconHaloColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconHaloColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setIconHaloColor(managerId: managerIdArg, iconHaloColor: iconHaloColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconHaloColorChannel.setMessageHandler(nil)
+    }
+    let getIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconHaloColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconHaloColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconHaloColorChannel.setMessageHandler(nil)
+    }
+    let setIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconHaloWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconHaloWidthArg = args[1] as! Double
+        api.setIconHaloWidth(managerId: managerIdArg, iconHaloWidth: iconHaloWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconHaloWidthChannel.setMessageHandler(nil)
+    }
+    let getIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconHaloWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconHaloWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconHaloWidthChannel.setMessageHandler(nil)
+    }
+    let setIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconImageCrossFadeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconImageCrossFadeArg = args[1] as! Double
+        api.setIconImageCrossFade(managerId: managerIdArg, iconImageCrossFade: iconImageCrossFadeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconImageCrossFadeChannel.setMessageHandler(nil)
+    }
+    let getIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconImageCrossFadeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconImageCrossFade(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconImageCrossFadeChannel.setMessageHandler(nil)
+    }
     let setIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOcclusionOpacityChannel.setMessageHandler { message, reply in
@@ -1895,6 +2893,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let setIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setIconOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let iconOpacityArg = args[1] as! Double
+        api.setIconOpacity(managerId: managerIdArg, iconOpacity: iconOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setIconOpacityChannel.setMessageHandler(nil)
+    }
+    let getIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getIconOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getIconOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getIconOpacityChannel.setMessageHandler(nil)
     }
     let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -1966,6 +2999,251 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
     }
+    let setSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSymbolElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let symbolElevationReferenceArg = args[1] as! SymbolElevationReference
+        api.setSymbolElevationReference(managerId: managerIdArg, symbolElevationReference: symbolElevationReferenceArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSymbolElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let getSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getSymbolElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getSymbolElevationReference(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getSymbolElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let setSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSymbolZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let symbolZOffsetArg = args[1] as! Double
+        api.setSymbolZOffset(managerId: managerIdArg, symbolZOffset: symbolZOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSymbolZOffsetChannel.setMessageHandler(nil)
+    }
+    let getSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getSymbolZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getSymbolZOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getSymbolZOffsetChannel.setMessageHandler(nil)
+    }
+    let setTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setTextColor(managerId: managerIdArg, textColor: textColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextColorChannel.setMessageHandler(nil)
+    }
+    let getTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextColorChannel.setMessageHandler(nil)
+    }
+    let setTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextEmissiveStrengthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textEmissiveStrengthArg = args[1] as! Double
+        api.setTextEmissiveStrength(managerId: managerIdArg, textEmissiveStrength: textEmissiveStrengthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let getTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextEmissiveStrengthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextEmissiveStrength(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextEmissiveStrengthChannel.setMessageHandler(nil)
+    }
+    let setTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextHaloBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textHaloBlurArg = args[1] as! Double
+        api.setTextHaloBlur(managerId: managerIdArg, textHaloBlur: textHaloBlurArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextHaloBlurChannel.setMessageHandler(nil)
+    }
+    let getTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextHaloBlurChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextHaloBlur(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextHaloBlurChannel.setMessageHandler(nil)
+    }
+    let setTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextHaloColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textHaloColorArg = args[1] is Int64 ? args[1] as! Int64 : Int64(args[1] as! Int32)
+        api.setTextHaloColor(managerId: managerIdArg, textHaloColor: textHaloColorArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextHaloColorChannel.setMessageHandler(nil)
+    }
+    let getTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextHaloColorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextHaloColor(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextHaloColorChannel.setMessageHandler(nil)
+    }
+    let setTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextHaloWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textHaloWidthArg = args[1] as! Double
+        api.setTextHaloWidth(managerId: managerIdArg, textHaloWidth: textHaloWidthArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextHaloWidthChannel.setMessageHandler(nil)
+    }
+    let getTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextHaloWidthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextHaloWidth(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextHaloWidthChannel.setMessageHandler(nil)
+    }
     let setTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOcclusionOpacityChannel.setMessageHandler { message, reply in
@@ -2000,6 +3278,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextOcclusionOpacityChannel.setMessageHandler(nil)
+    }
+    let setTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setTextOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let textOpacityArg = args[1] as! Double
+        api.setTextOpacity(managerId: managerIdArg, textOpacity: textOpacityArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setTextOpacityChannel.setMessageHandler(nil)
+    }
+    let getTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getTextOpacityChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getTextOpacity(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getTextOpacityChannel.setMessageHandler(nil)
     }
     let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

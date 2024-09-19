@@ -5,6 +5,7 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
@@ -120,7 +121,7 @@ enum class ViewportMode(val raw: Int) {
 enum class NorthOrientation(val raw: Int) {
   /** Default, map oriented upwards */
   UPWARDS(0),
-  /** Map oriented righwards */
+  /** Map oriented rightwards */
   RIGHTWARDS(1),
   /** Map oriented downwards */
   DOWNWARDS(2),
@@ -1874,305 +1875,310 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          FeatureDecoder.fromList(it)
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
+          CameraState.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          CameraBoundsOptions.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
+          CameraBounds.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          MapAnimationOptions.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _MapWidgetDebugOptionsBox.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
+          _MapWidgetDebugOptionsBox.fromList(it)
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          MapDebugOptions.fromList(it)
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          CoordinateBoundsZoom.fromList(it)
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          Size.fromList(it)
         }
       }
       149.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       154.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          RenderedQueryGeometry.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StylePropertyValue.fromList(it)
+          CanonicalTileID.fromList(it)
         }
       }
       169.toByte() -> {
-        return (readValue(buffer) as Int?)?.let {
-          GlyphsRasterizationMode.ofRaw(it)
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StylePropertyValue.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          ContextMode.ofRaw(it)
+          GlyphsRasterizationMode.ofRaw(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          ConstrainMode.ofRaw(it)
+          ContextMode.ofRaw(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          ViewportMode.ofRaw(it)
+          ConstrainMode.ofRaw(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          NorthOrientation.ofRaw(it)
+          ViewportMode.ofRaw(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          _MapWidgetDebugOptions.ofRaw(it)
+          NorthOrientation.ofRaw(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          MapDebugOptionsData.ofRaw(it)
+          _MapWidgetDebugOptions.ofRaw(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          ViewAnnotationAnchor.ofRaw(it)
+          MapDebugOptionsData.ofRaw(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          Type.ofRaw(it)
+          ViewAnnotationAnchor.ofRaw(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          StylePackErrorType.ofRaw(it)
+          Type.ofRaw(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          ResponseErrorReason.ofRaw(it)
+          StylePackErrorType.ofRaw(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          OfflineRegionDownloadState.ofRaw(it)
+          ResponseErrorReason.ofRaw(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          TileStoreUsageMode.ofRaw(it)
+          OfflineRegionDownloadState.ofRaw(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          StylePropertyValueKind.ofRaw(it)
+          TileStoreUsageMode.ofRaw(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          StyleProjectionName.ofRaw(it)
+          StylePropertyValueKind.ofRaw(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          Anchor.ofRaw(it)
+          StyleProjectionName.ofRaw(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          HttpMethod.ofRaw(it)
+          Anchor.ofRaw(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          HttpRequestErrorType.ofRaw(it)
+          HttpMethod.ofRaw(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          DownloadErrorCode.ofRaw(it)
+          HttpRequestErrorType.ofRaw(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          DownloadState.ofRaw(it)
+          DownloadErrorCode.ofRaw(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          TileRegionErrorType.ofRaw(it)
+          DownloadState.ofRaw(it)
         }
       }
       190.toByte() -> {
+        return (readValue(buffer) as Int?)?.let {
+          TileRegionErrorType.ofRaw(it)
+        }
+      }
+      191.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
           _MapEvent.ofRaw(it)
         }
@@ -2186,248 +2192,252 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is Feature -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is MbxEdgeInsets -> {
+      is TileCoverOptions -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is CameraOptions -> {
+      is MbxEdgeInsets -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is CameraState -> {
+      is CameraOptions -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
+      is CameraState -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is CameraBoundsOptions -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is MapAnimationOptions -> {
+      is CameraBounds -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is MapAnimationOptions -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is _MapWidgetDebugOptionsBox -> {
+      is CoordinateBounds -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is MapDebugOptions -> {
+      is _MapWidgetDebugOptionsBox -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is MapDebugOptions -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is MapOptions -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is ScreenCoordinate -> {
         stream.write(145)
         writeValue(stream, value.toList())
       }
-      is CoordinateBoundsZoom -> {
+      is ScreenBox -> {
         stream.write(146)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is CoordinateBoundsZoom -> {
         stream.write(147)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is Size -> {
         stream.write(148)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is RenderedQueryOptions -> {
         stream.write(149)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is SourceQueryOptions -> {
         stream.write(150)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is FeatureExtensionValue -> {
         stream.write(151)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is LayerPosition -> {
         stream.write(152)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is QueriedRenderedFeature -> {
         stream.write(153)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(154)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryGeometry -> {
+      is QueriedFeature -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is RenderedQueryGeometry -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is ProjectedMeters -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is MercatorCoordinate -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is StyleObjectInfo -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is StyleProjection -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is FlatLight -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is DirectionalLight -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is AmbientLight -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is MbxImage -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is ImageStretches -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is ImageContent -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is TransitionOptions -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is CanonicalTileID -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationMode -> {
+      is StylePropertyValue -> {
         stream.write(169)
-        writeValue(stream, value.raw)
+        writeValue(stream, value.toList())
       }
-      is ContextMode -> {
+      is GlyphsRasterizationMode -> {
         stream.write(170)
         writeValue(stream, value.raw)
       }
-      is ConstrainMode -> {
+      is ContextMode -> {
         stream.write(171)
         writeValue(stream, value.raw)
       }
-      is ViewportMode -> {
+      is ConstrainMode -> {
         stream.write(172)
         writeValue(stream, value.raw)
       }
-      is NorthOrientation -> {
+      is ViewportMode -> {
         stream.write(173)
         writeValue(stream, value.raw)
       }
-      is _MapWidgetDebugOptions -> {
+      is NorthOrientation -> {
         stream.write(174)
         writeValue(stream, value.raw)
       }
-      is MapDebugOptionsData -> {
+      is _MapWidgetDebugOptions -> {
         stream.write(175)
         writeValue(stream, value.raw)
       }
-      is ViewAnnotationAnchor -> {
+      is MapDebugOptionsData -> {
         stream.write(176)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is ViewAnnotationAnchor -> {
         stream.write(177)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is Type -> {
         stream.write(178)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is StylePackErrorType -> {
         stream.write(179)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is ResponseErrorReason -> {
         stream.write(180)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is OfflineRegionDownloadState -> {
         stream.write(181)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is TileStoreUsageMode -> {
         stream.write(182)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is StylePropertyValueKind -> {
         stream.write(183)
         writeValue(stream, value.raw)
       }
-      is Anchor -> {
+      is StyleProjectionName -> {
         stream.write(184)
         writeValue(stream, value.raw)
       }
-      is HttpMethod -> {
+      is Anchor -> {
         stream.write(185)
         writeValue(stream, value.raw)
       }
-      is HttpRequestErrorType -> {
+      is HttpMethod -> {
         stream.write(186)
         writeValue(stream, value.raw)
       }
-      is DownloadErrorCode -> {
+      is HttpRequestErrorType -> {
         stream.write(187)
         writeValue(stream, value.raw)
       }
-      is DownloadState -> {
+      is DownloadErrorCode -> {
         stream.write(188)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
+      is DownloadState -> {
         stream.write(189)
         writeValue(stream, value.raw)
       }
-      is _MapEvent -> {
+      is TileRegionErrorType -> {
         stream.write(190)
+        writeValue(stream, value.raw)
+      }
+      is _MapEvent -> {
+        stream.write(191)
         writeValue(stream, value.raw)
       }
       else -> super.writeValue(stream, value)
@@ -3255,7 +3265,7 @@ interface _MapInterface {
    * `state` object will be updated. A property in the feature `state` object that is not listed in `state` will
    * retain its previous value.
    *
-   * Note that updates to feature `state` are asynchronous, so changes made by this method migth not be
+   * Note that updates to feature `state` are asynchronous, so changes made by this method might not be
    * immediately visible using `getStateFeature`.
    *
    * @param sourceId The style source identifier.
@@ -3282,7 +3292,7 @@ interface _MapInterface {
    * Remove a specified property or all property from a feature's state object, depending on the value of
    * `stateKey`.
    *
-   * Note that updates to feature state are asynchronous, so changes made by this method migth not be
+   * Note that updates to feature state are asynchronous, so changes made by this method might not be
    * immediately visible using `getStateFeature`.
    *
    * @param sourceId The style source identifier.
@@ -3303,6 +3313,16 @@ interface _MapInterface {
   fun getElevation(coordinate: Point): Double?
   /** Returns array of tile identifiers that cover current map camera. */
   fun tileCover(options: TileCoverOptions): List<CanonicalTileID>
+  /**
+   * Set whether legacy mode should be used for [snapshot].
+   *
+   * Legacy mode is not that efficient (as it blocks map rendering when making the snapshot)
+   * but may help with vendor specific issues like described in
+   * https://github.com/mapbox/mapbox-maps-android/issues/2280.
+   *
+   * Note: This method has no effect on iOS platform.
+   */
+  fun setSnapshotLegacyMode(enabled: Boolean, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -3871,6 +3891,25 @@ interface _MapInterface {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val enabledArg = args[0] as Boolean
+            api.setSnapshotLegacyMode(enabledArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)
@@ -4468,7 +4507,7 @@ interface StyleManager {
   /**
    * Returns the map style's transition options. By default, the style parser will attempt
    * to read the style default transition options, if any, fallbacking to an immediate transition
-   * otherwise. Transition options can be overriden via `setStyleTransition`, but the options are
+   * otherwise. Transition options can be overridden via `setStyleTransition`, but the options are
    * reset once a new style has been loaded.
    *
    * The style transition is re-evaluated when a new style is loaded.
@@ -4688,6 +4727,90 @@ interface StyleManager {
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
   fun setStyleSourceProperties(sourceId: String, properties: String, callback: (Result<Unit>) -> Unit)
+  /**
+   * Add additional features to a GeoJSON style source.
+   *
+   * The add operation will be scheduled and applied on a GeoJSON serialization queue.
+   *
+   * In order to capture events when actual data is drawn on the map please refer to Events API
+   * and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+   * or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+   *
+   * Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+   * It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+   * feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+   * in a `map-loading-error`.
+   *
+   * - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+   * `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+   * for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+   * updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+   * each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+   * call, the data ID in the `source-data-loaded`event will be null.
+   *
+   * @param sourceId The identifier of the style source.
+   * @param dataId An arbitrary string used to track the given GeoJSON data.
+   * @param features An array of GeoJSON features to be added to the source.
+   *
+   * @return A string describing an error if the operation was not successful, empty otherwise.
+   */
+  fun addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
+  /**
+   * Update existing features in a GeoJSON style source.
+   *
+   * The update operation will be scheduled and applied on a GeoJSON serialization queue.
+   *
+   * In order to capture events when actual data is drawn on the map please refer to Events API
+   * and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+   * or `onMapLoadingError` with `type = metadata` if data parsing error has occurred.
+   *
+   * Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+   * It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+   * feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+   * in a `map-loading-error`.
+   *
+   * - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+   * `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+   * for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+   * updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+   * each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+   * call, the data ID in the `source-data-loaded`event will be null.
+   *
+   * @param sourceId A style source identifier.
+   * @param dataId An arbitrary string used to track the given GeoJSON data.
+   * @param features The GeoJSON features to be updated in the source.
+   *
+   * @return A string describing an error if the operation was not successful, empty otherwise.
+   */
+  fun updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: List<Feature>, callback: (Result<Unit>) -> Unit)
+  /**
+   * Remove features from a GeoJSON style source.
+   *
+   * The remove operation will be scheduled and applied on a GeoJSON serialization queue.
+   *
+   * In order to capture events when actual data is drawn on the map please refer to Events API
+   * and listen to `onSourceDataLoaded` (optionally pass the `dataId` parameter to filter the events)
+   * or `onMapLoadingError` with `type = metadata` if an error has occurred.
+   *
+   * Partially updating a GeoJSON source is not compatible with using shared cache and generated IDs.
+   * It is important to ensure that every feature in the GeoJSON style source, as well as the newly added
+   * feature, has a unique ID (or a unique promote ID if in use). Failure to provide unique IDs will result
+   * in a `map-loading-error`.
+   *
+   * - Note: The method allows the user to provide a data ID, which will be returned as the `dataId` parameter in the
+   * `source-data-loaded` event. However, it's important to note that multiple partial updates can be queued
+   * for the same GeoJSON source when ongoing source parsing is taking place. In these cases, the partial
+   * updates will be applied to the source in batches. Only the data ID provided in the most recent call within
+   * each batch will be included in the `source-data-loaded` event. If no data ID is provided in the most recent
+   * call, the data ID in the `source-data-loaded`event will be null.
+   *
+   * @param sourceId A style source identifier.
+   * @param dataId An arbitrary string used to track the given GeoJSON data.
+   * @param featureIds The Ids of the features that need to be removed from the source.
+   *
+   * @return A string describing an error if the operation was not successful, empty otherwise.
+   */
+  fun removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: List<String>, callback: (Result<Unit>) -> Unit)
   /**
    * Updates the image of an [image style source](https://docs.mapbox.com/mapbox-gl-js/style-spec/#sources-image).
    *
@@ -5466,6 +5589,69 @@ interface StyleManager {
             val sourceIdArg = args[0] as String
             val propertiesArg = args[1] as String
             api.setStyleSourceProperties(sourceIdArg, propertiesArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val sourceIdArg = args[0] as String
+            val dataIdArg = args[1] as String
+            val featuresArg = args[2] as List<Feature>
+            api.addGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featuresArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val sourceIdArg = args[0] as String
+            val dataIdArg = args[1] as String
+            val featuresArg = args[2] as List<Feature>
+            api.updateGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featuresArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val sourceIdArg = args[0] as String
+            val dataIdArg = args[1] as String
+            val featureIdsArg = args[2] as List<String>
+            api.removeGeoJSONSourceFeatures(sourceIdArg, dataIdArg, featureIdsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

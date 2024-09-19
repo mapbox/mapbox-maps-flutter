@@ -134,7 +134,6 @@ class RasterArraySource extends Source {
           return RasterDataLayer(
               entry.key as String, (entry.value as List).cast<String>());
         }).toList();
-        ;
       } else {
         return null;
       }

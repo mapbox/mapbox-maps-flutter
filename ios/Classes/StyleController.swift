@@ -210,6 +210,21 @@ final class StyleController: StyleManager {
         }
     }
 
+    func addGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.addGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataId)
+        completion(.success(()))
+    }
+
+    func updateGeoJSONSourceFeatures(sourceId: String, dataId: String, features: [Feature], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.updateGeoJSONSourceFeatures(forSourceId: sourceId, features: features, dataId: dataId)
+        completion(.success(()))
+    }
+
+    func removeGeoJSONSourceFeatures(sourceId: String, dataId: String, featureIds: [String], completion: @escaping (Result<Void, Error>) -> Void) {
+        styleManager.removeGeoJSONSourceFeatures(forSourceId: sourceId, featureIds: featureIds, dataId: dataId)
+        completion(.success(()))
+    }
+
     func updateStyleImageSourceImage(sourceId: String, image: MbxImage, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else { return }
         do {

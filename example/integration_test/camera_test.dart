@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -327,7 +324,7 @@ void main() {
   });
 
   testWidgets('getCameraState', (WidgetTester tester) async {
-    final mapFuture = app.runMapWithCustomCamera(initialCamera);
+    final mapFuture = app.main(camera: initialCamera);
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;

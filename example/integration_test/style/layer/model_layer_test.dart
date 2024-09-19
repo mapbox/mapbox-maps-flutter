@@ -1,7 +1,5 @@
 // This file is generated.
-import 'dart:convert';
 import 'package:flutter/material.dart' hide Visibility;
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -30,7 +28,6 @@ void main() {
       modelColorMixIntensity: 1.0,
       modelCutoffFadeRange: 1.0,
       modelEmissiveStrength: 1.0,
-      modelFrontCutoff: [0.0, 1.0, 2.0],
       modelHeightBasedEmissiveStrengthMultiplier: [0.0, 1.0, 2.0, 3.0, 4.0],
       modelOpacity: 1.0,
       modelReceiveShadows: true,
@@ -54,7 +51,6 @@ void main() {
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
     expect(layer.modelEmissiveStrength, 1.0);
-    expect(layer.modelFrontCutoff, [0.0, 1.0, 2.0]);
     expect(layer.modelHeightBasedEmissiveStrengthMultiplier,
         [0.0, 1.0, 2.0, 3.0, 4.0]);
     expect(layer.modelOpacity, 1.0);
@@ -92,10 +88,6 @@ void main() {
       modelColorMixIntensityExpression: ['number', 1.0],
       modelCutoffFadeRangeExpression: ['number', 1.0],
       modelEmissiveStrengthExpression: ['number', 1.0],
-      modelFrontCutoffExpression: [
-        'literal',
-        [0.0, 1.0, 2.0]
-      ],
       modelHeightBasedEmissiveStrengthMultiplierExpression: [
         'literal',
         [0.0, 1.0, 2.0, 3.0, 4.0]
@@ -136,7 +128,6 @@ void main() {
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
     expect(layer.modelEmissiveStrength, 1.0);
-    expect(layer.modelFrontCutoff, [0.0, 1.0, 2.0]);
     expect(layer.modelHeightBasedEmissiveStrengthMultiplier,
         [0.0, 1.0, 2.0, 3.0, 4.0]);
     expect(layer.modelOpacity, 1.0);

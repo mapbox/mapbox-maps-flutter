@@ -28,25 +28,24 @@ class ImageSourceWidgetState extends State<ImageSourceWidget> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
-    await mapboxMap.style
+  }
+
+  _onStyleLoaded(StyleLoadedEventData data) async {
+    await mapboxMap?.style
         .addSource(ImageSource(id: "image_source-id", coordinates: [
       [-80.11725, 25.7836],
       [-80.1397431334, 25.783548],
       [-80.13964, 25.7680],
       [-80.11725, 25.76795]
     ]));
-    await mapboxMap.style.addLayer(RasterLayer(
+    await mapboxMap?.style.addLayer(RasterLayer(
       id: "image_layer-id",
       sourceId: "image_source-id",
     ));
-  }
-
-  _onStyleLoaded(StyleLoadedEventData data) async {
     var imageSource =
         await mapboxMap?.style.getSource("image_source-id") as ImageSource;
     final ByteData bytes = await rootBundle.load('assets/miami_beach.png');
     final Uint8List list = bytes.buffer.asUint8List();
-    // TODO: Create MbxImage in an eaier way.
     imageSource.updateImage(MbxImage(width: 280, height: 203, data: list));
   }
 

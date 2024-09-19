@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -95,8 +93,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
 
-    tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions,
-        (progress) {
+    tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions, (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_tileRegionLoadProgress.isClosed) {
@@ -106,6 +103,14 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
       _tileRegionLoadProgress.sink.add(1);
       _tileRegionLoadProgress.sink.close();
     });
+  }
+
+  _initOfflineMap() async {
+    offlineManager = await OfflineManager.create();
+    tileStore = await TileStore.createDefault();
+
+    // Reset disk quota to default value
+    tileStore?.setDiskQuota(null);
   }
 
   @override
@@ -130,25 +135,15 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
                     styleUri: MapboxStyles.SATELLITE_STREETS,
                     cameraOptions:
                         CameraOptions(center: City.helsinki, zoom: 12.0),
-                    onMapLoadedListener: (MapLoadedEventData data) async {
-                      await _removeTileRegionAndStylePack();
-                    },
                   );
                 } else {
                   return TextButton(
                     style: ButtonStyle(
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                          WidgetStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: () async {
-                      offlineManager = await OfflineManager.create();
-
-                      final path = await getTemporaryDirectory();
-                      MapboxMapsOptions.setDataPath(path.path);
-                      tileStore = await TileStore.createAt(path.uri);
-                      // Reset disk quota to default value
-                      tileStore?.setDiskQuota(null);
-
+                      await _initOfflineMap();
                       await _downloadStylePack();
                       await _downloadTileRegion();
                     },

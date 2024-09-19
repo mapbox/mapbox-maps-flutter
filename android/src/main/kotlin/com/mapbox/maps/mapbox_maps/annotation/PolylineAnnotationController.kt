@@ -1,6 +1,7 @@
 // This file is generated.
 package com.mapbox.maps.mapbox_maps.annotation
 
+import com.mapbox.maps.extension.style.utils.ColorUtils
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import toFLTLineCap
@@ -178,8 +179,32 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<LineCap?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineCap != null) {
-      callback(Result.success(manager.lineCap!!.toFLTLineCap()))
+    val value = manager.lineCap
+    if (value != null) {
+      callback(Result.success(value.toFLTLineCap()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineJoin(
+    managerId: String,
+    lineJoin: LineJoin,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineJoin = lineJoin.toLineJoin()
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineJoin(
+    managerId: String,
+    callback: (Result<LineJoin?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineJoin
+    if (value != null) {
+      callback(Result.success(value.toFLTLineJoin()))
     } else {
       callback(Result.success(null))
     }
@@ -200,8 +225,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineMiterLimit != null) {
-      callback(Result.success(manager.lineMiterLimit!!))
+    val value = manager.lineMiterLimit
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -222,8 +248,147 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineRoundLimit != null) {
-      callback(Result.success(manager.lineRoundLimit!!))
+    val value = manager.lineRoundLimit
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineSortKey(
+    managerId: String,
+    lineSortKey: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineSortKey = lineSortKey
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineSortKey(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineSortKey
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineZOffset(
+    managerId: String,
+    lineZOffset: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineZOffset = lineZOffset
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineZOffset(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineZOffset
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineBlur(
+    managerId: String,
+    lineBlur: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineBlur = lineBlur
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineBlur(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineBlur
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineBorderColor(
+    managerId: String,
+    lineBorderColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineBorderColorInt = lineBorderColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineBorderColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineBorderColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineBorderWidth(
+    managerId: String,
+    lineBorderWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineBorderWidth = lineBorderWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineBorderWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineBorderWidth
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineColor(
+    managerId: String,
+    lineColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineColorInt = lineColor.toInt()
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineColorInt
+    if (value != null) {
+      callback(Result.success(value.toUInt().toLong()))
     } else {
       callback(Result.success(null))
     }
@@ -244,8 +409,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineDasharray != null) {
-      callback(Result.success(manager.lineDasharray!!))
+    val value = manager.lineDasharray
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -266,8 +432,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineDepthOcclusionFactor != null) {
-      callback(Result.success(manager.lineDepthOcclusionFactor!!))
+    val value = manager.lineDepthOcclusionFactor
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -288,8 +455,32 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineEmissiveStrength != null) {
-      callback(Result.success(manager.lineEmissiveStrength!!))
+    val value = manager.lineEmissiveStrength
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineGapWidth(
+    managerId: String,
+    lineGapWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineGapWidth = lineGapWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineGapWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineGapWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -310,8 +501,78 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<Double?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineOcclusionOpacity != null) {
-      callback(Result.success(manager.lineOcclusionOpacity!!))
+    val value = manager.lineOcclusionOpacity
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineOffset(
+    managerId: String,
+    lineOffset: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineOffset = lineOffset
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineOffset(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineOffset
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineOpacity(
+    managerId: String,
+    lineOpacity: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineOpacity = lineOpacity
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineOpacity(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineOpacity
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLinePattern(
+    managerId: String,
+    linePattern: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.linePattern = linePattern
+    callback(Result.success(Unit))
+  }
+
+  override fun getLinePattern(
+    managerId: String,
+    callback: (Result<String?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.linePattern
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -332,8 +593,9 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTranslate != null) {
-      callback(Result.success(manager.lineTranslate!!))
+    val value = manager.lineTranslate
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -354,8 +616,55 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<LineTranslateAnchor?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTranslateAnchor != null) {
-      callback(Result.success(manager.lineTranslateAnchor!!.toFLTLineTranslateAnchor()))
+    val value = manager.lineTranslateAnchor
+    if (value != null) {
+      callback(Result.success(value.toFLTLineTranslateAnchor()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineTrimColor(
+    managerId: String,
+    lineTrimColor: Long,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineTrimColor = lineTrimColor.let { ColorUtils.colorToRgbaString(it.toInt()) }
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineTrimColor(
+    managerId: String,
+    callback: (Result<Long?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineTrimColor
+    if (value != null) {
+      callback(Result.success(ColorUtils.rgbaToColor(value)?.toUInt()?.toLong()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineTrimFadeRange(
+    managerId: String,
+    lineTrimFadeRange: List<Double?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineTrimFadeRange = lineTrimFadeRange.mapNotNull { it }
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineTrimFadeRange(
+    managerId: String,
+    callback: (Result<List<Double?>?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineTrimFadeRange
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }
@@ -376,8 +685,32 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     callback: (Result<List<Double?>?>) -> Unit
   ) {
     val manager = delegate.getManager(managerId) as PolylineAnnotationManager
-    if (manager.lineTrimOffset != null) {
-      callback(Result.success(manager.lineTrimOffset!!))
+    val value = manager.lineTrimOffset
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineWidth(
+    managerId: String,
+    lineWidth: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineWidth = lineWidth
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineWidth(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineWidth
+    if (value != null) {
+      callback(Result.success(value))
     } else {
       callback(Result.success(null))
     }

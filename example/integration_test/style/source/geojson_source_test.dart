@@ -1,9 +1,5 @@
 // This file is generated.
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide Visibility;
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -102,12 +98,8 @@ void main() {
     var generateId = await source.generateId;
     expect(generateId, true);
 
-    // TODO: Investigate why this check is susceptible to fail on iOS
-    // https://mapbox.atlassian.net/browse/MAPSFLT-141
-    if (Platform.isAndroid) {
-      var prefetchZoomDelta = await source.prefetchZoomDelta;
-      expect(prefetchZoomDelta, 1.0);
-    }
+    var prefetchZoomDelta = await source.prefetchZoomDelta;
+    expect(prefetchZoomDelta, 1.0);
 
     var tileCacheBudget = await source.tileCacheBudget;
     expect(tileCacheBudget?.size,
