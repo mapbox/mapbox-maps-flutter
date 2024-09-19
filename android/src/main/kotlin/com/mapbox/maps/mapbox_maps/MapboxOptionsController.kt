@@ -5,6 +5,7 @@ import com.mapbox.common.MapboxCommonSettings
 import com.mapbox.common.MapboxOptions
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.MapboxMapsOptions
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterAssets
@@ -81,6 +82,12 @@ class MapboxOptionsController(
       settingsService.set(MapboxCommonSettings.LANGUAGE, Value.valueOf(language))
     } else {
       settingsService.erase(MapboxCommonSettings.LANGUAGE)
+    }
+  }
+
+  override fun clearData(callback: (Result<Unit>) -> Unit) {
+    MapboxMap.clearData {
+      it.handleResult(callback)
     }
   }
 }

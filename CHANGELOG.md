@@ -1,5 +1,32 @@
 ### main
 
+* Expose current map's camera state on `CameraChanged` event.
+
+You can now observe the map's camera updates with `onCameraChangeListener`
+
+```dart
+onCameraChangeListener(CameraChangedEventData data) {
+  print("CameraChangedEventData: timestamp: ${data.timestamp}, cameraState: ${data.cameraState}");
+}
+```
+* Print to console native Maps SDK logs in debug configuration.
+
+### 2.3.0-rc.1
+
+* Expose API to clear map data, and to set options to `TileStore`.
+
+You can now clear temporary map data from the data path defined in the given resource options, which is useful when you want reduce the disk usage or in case the disk cache contains invalid data.
+```dart
+await MapboxMapsOptions.clearData();
+```
+And you can now set additional options to a `TileStore`, for example, a maximum amount of bytes TileStore can use to store files., base URL to use for requests to the Mapbox API, or URL template for making tile requests.
+```dart
+// Set the disk quota to zero, so that tile regions are fully evicted
+// when removed.
+// This removes the tiles from the predictive cache.
+tileStore.setDiskQuota(0);
+```
+
 * Add support for partial GeoJSON updates. 
 
 Instead of setting a whole new GeoJSON object anew every time a single feature has changed, now you can apply more granular, partial GeoJSON updates.
@@ -37,7 +64,7 @@ circleAnnotationManager.setCircleColor(Colors.blue.value);
 * Expose experimental `lineTrimColor` and `lineTrimFadeRange` on `LineLayer` which allow to set custom color for trimmed line and fade effect for trim.
 * Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switch fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
 * Add experimental `MapboxMap.setSnapshotLegacyMode()` to help avoiding `MapboxMap.snapshot()` native crash on some Samsung devices running Android 14. `MapboxMap.setSnapshotLegacyMode()` has no effect on iOS.
-* Print to console native Maps SDK logs in debug configuration.
+* Bump Maps SDK to 11.7.0-rc.1
 
 ### 2.3.0-beta.1
 

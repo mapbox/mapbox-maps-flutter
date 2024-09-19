@@ -38,9 +38,9 @@ class MapboxMapController(
   mapInitOptions: MapInitOptions,
   private val lifecycleProvider: MapboxMapsPlugin.LifecycleProvider,
   messenger: BinaryMessenger,
-  channelSuffix: Int,
+  channelSuffix: Long,
   pluginVersion: String,
-  eventTypes: List<Int>
+  eventTypes: List<Long>
 ) : PlatformView,
   DefaultLifecycleObserver,
   MethodChannel.MethodCallHandler {

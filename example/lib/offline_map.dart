@@ -24,20 +24,51 @@ class OfflineMapWidget extends StatefulWidget {
 }
 
 class OfflineMapWidgetState extends State<OfflineMapWidget> {
-  MapboxMap? mapboxMap;
   final StreamController<double> _stylePackProgress =
       StreamController.broadcast();
   final StreamController<double> _tileRegionLoadProgress =
       StreamController.broadcast();
 
+  late final TileStore? tileStore;
+  late final OfflineManager? offlineManager;
+  final _tileRegionId = "my-tile-region";
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await OfflineSwitch.shared.setMapboxStackConnected(true);
+    await _removeTileRegionAndStylePack();
+  }
+
+  _removeTileRegionAndStylePack() async {
+    // Clean up after the example. Typically, you'll have custom business
+    // logic to decide when to evict tile regions and style packs
+
+    // Remove the tile region with the tile region ID.
+    // Note this will not remove the downloaded tile packs, instead, it will
+    // just mark the tileset as not a part of a tile region. The tiles still
+    // exists in a predictive cache in the TileStore.
+    await tileStore?.removeRegion(_tileRegionId);
+
+    // Set the disk quota to zero, so that tile regions are fully evicted
+    // when removed.
+    // This removes the tiles from the predictive cache.
+    tileStore?.setDiskQuota(0);
+
+    // Remove the style pack with the style uri.
+    // Note this will not remove the downloaded style pack, instead, it will
+    // just mark the resources as not a part of the existing style pack. The
+    // resources still exists in the disk cache.
+    await offlineManager?.removeStylePack(MapboxStyles.SATELLITE_STREETS);
+  }
+
   _downloadStylePack() async {
-    final offlineManager = await OfflineManager.create();
     final stylePackLoadOptions = StylePackLoadOptions(
         glyphsRasterizationMode:
             GlyphsRasterizationMode.IDEOGRAPHS_RASTERIZED_LOCALLY,
         metadata: {"tag": "test"},
         acceptExpired: false);
-    offlineManager.loadStylePack(
+    offlineManager?.loadStylePack(
         MapboxStyles.SATELLITE_STREETS, stylePackLoadOptions, (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
@@ -51,8 +82,6 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
   }
 
   _downloadTileRegion() async {
-    final path = await getTemporaryDirectory();
-    final tileStore = await TileStore.createAt(path.uri);
     final tileRegionLoadOptions = TileRegionLoadOptions(
         geometry: City.helsinki.toJson(),
         descriptorsOptions: [
@@ -64,8 +93,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
 
-    tileStore.loadTileRegion("my-tile-region", tileRegionLoadOptions,
-        (progress) {
+    tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions, (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_tileRegionLoadProgress.isClosed) {
@@ -75,6 +103,14 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
       _tileRegionLoadProgress.sink.add(1);
       _tileRegionLoadProgress.sink.close();
     });
+  }
+
+  _initOfflineMap() async {
+    offlineManager = await OfflineManager.create();
+    tileStore = await TileStore.createDefault();
+
+    // Reset disk quota to default value
+    tileStore?.setDiskQuota(null);
   }
 
   @override
@@ -107,9 +143,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
                           WidgetStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: () async {
-                      setState(() {
-                        downloadButtonText = "Downloading";
-                      });
+                      await _initOfflineMap();
                       await _downloadStylePack();
                       await _downloadTileRegion();
                     },

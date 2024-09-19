@@ -125,4 +125,8 @@ final class MapboxMapsOptions {
   static void setLanguage(String? language) {
     _options.setLanguage(language);
   }
+
+  static Future<void> clearData() {
+    return _options.clearData();
+  }
 }

@@ -226,7 +226,10 @@ final class StyleController: StyleManager {
     }
 
     func updateStyleImageSourceImage(sourceId: String, image: MbxImage, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else { return }
+        guard let image = UIImage(data: image.data.data, scale: UIScreen.main.scale) else {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
+            return
+        }
         do {
             try styleManager.updateImageSource(withId: sourceId, image: image)
             completion(.success(()))
@@ -295,7 +298,10 @@ final class StyleController: StyleManager {
     }
 
     func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let image = UIImage(data: image.data.data, scale: scale) else { return }
+        guard let image = UIImage(data: image.data.data, scale: scale) else {
+            completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
+            return
+        }
         var imageContent: MapboxMaps.ImageContent?
         if let content {
             imageContent = MapboxMaps.ImageContent(left: Float(content.left),
@@ -329,8 +335,8 @@ final class StyleController: StyleManager {
     }
 
     func hasStyleImage(imageId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let image = styleManager.image(withId: imageId)
-        completion(.success(image != nil))
+        let imageExists = styleManager.imageExists(withId: imageId)
+        completion(.success(imageExists))
     }
 
     func invalidateStyleCustomGeometrySourceTile(sourceId: String, tileId: CanonicalTileID, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -370,7 +376,7 @@ final class StyleController: StyleManager {
 
     func removeStyleImport(importId: String) throws {
         do {
-            try styleManager.removeStyleImport(for: importId)
+            try styleManager.removeStyleImport(withId: importId)
         } catch let styleError {
             throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
         }
