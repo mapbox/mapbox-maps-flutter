@@ -452,24 +452,6 @@ enum class DownloadState(val raw: Int) {
   }
 }
 
-/** Describes the tiles data domain. */
-enum class TileDataDomain(val raw: Int) {
-  /** Data for Maps. */
-  MAPS(0),
-  /** Data for Navigation. */
-  NAVIGATION(1),
-  /** Data for Search. */
-  SEARCH(2),
-  /** Data for ADAS */
-  ADAS(3);
-
-  companion object {
-    fun ofRaw(raw: Int): TileDataDomain? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 /** Describes the reason for a tile region download request failure. */
 enum class TileRegionErrorType(val raw: Int) {
   /** The operation was canceled. */
@@ -2193,15 +2175,10 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       190.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
-          TileDataDomain.ofRaw(it)
-        }
-      }
-      191.toByte() -> {
-        return (readValue(buffer) as Int?)?.let {
           TileRegionErrorType.ofRaw(it)
         }
       }
-      192.toByte() -> {
+      191.toByte() -> {
         return (readValue(buffer) as Int?)?.let {
           _MapEvent.ofRaw(it)
         }
@@ -2455,16 +2432,12 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(189)
         writeValue(stream, value.raw)
       }
-      is TileDataDomain -> {
+      is TileRegionErrorType -> {
         stream.write(190)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
-        stream.write(191)
-        writeValue(stream, value.raw)
-      }
       is _MapEvent -> {
-        stream.write(192)
+        stream.write(191)
         writeValue(stream, value.raw)
       }
       else -> super.writeValue(stream, value)
@@ -4169,6 +4142,7 @@ interface _MapboxMapsOptions {
   fun setWorldview(worldview: String?)
   fun getLanguage(): String?
   fun setLanguage(language: String?)
+  fun clearData(callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by _MapboxMapsOptions. */
@@ -4389,6 +4363,23 @@ interface _MapboxMapsOptions {
               wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.clearData { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)

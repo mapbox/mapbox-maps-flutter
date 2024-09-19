@@ -25,6 +25,10 @@ void main() {
       acceptExpired: true,
       networkRestriction: NetworkRestriction.NONE);
 
+  tearDown(() async {
+    await MapboxMapsOptions.clearData();
+  });
+
   testWidgets("test downloading style pack", (widgetTester) async {
     app.runEmpty();
     await widgetTester.pumpAndSettle();
@@ -55,6 +59,7 @@ void main() {
 
     final tmpDir = await getTemporaryDirectory();
     final tileStore = await TileStore.createAt(tmpDir.uri);
+
     final downloadedTileRegion = await tileStore.loadTileRegion(
         "my-tile-region-id", _tileRegionLoadOptions, null);
     expect(downloadedTileRegion.completedResourceCount,

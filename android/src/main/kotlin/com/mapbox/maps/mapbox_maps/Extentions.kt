@@ -696,6 +696,23 @@ fun com.mapbox.common.TileRegionEstimateProgress.toFLTTileRegionEstimateProgress
   )
 }
 
+fun _TileStoreOptionsKey.toTileStoreOptionsKey(): String {
+  return when (this) {
+    _TileStoreOptionsKey.DISK_QUOTA -> com.mapbox.common.TileStoreOptions.DISK_QUOTA
+    _TileStoreOptionsKey.MAPBOX_API_URL -> com.mapbox.common.TileStoreOptions.MAPBOX_APIURL
+    _TileStoreOptionsKey.TILE_URL_TEMPLATE -> com.mapbox.common.TileStoreOptions.TILE_URLTEMPLATE
+  }
+}
+
+fun TileDataDomain.toTileDataDomain(): com.mapbox.common.TileDataDomain {
+  return when (this) {
+    TileDataDomain.MAPS -> com.mapbox.common.TileDataDomain.MAPS
+    TileDataDomain.NAVIGATION -> com.mapbox.common.TileDataDomain.NAVIGATION
+    TileDataDomain.SEARCH -> com.mapbox.common.TileDataDomain.SEARCH
+    TileDataDomain.ADAS -> com.mapbox.common.TileDataDomain.ADAS
+  }
+}
+
 fun Expected<String, None>.handleResult(callback: (Result<Unit>) -> Unit) {
   if (this.isError) {
     callback(Result.failure(Throwable(this.error)))

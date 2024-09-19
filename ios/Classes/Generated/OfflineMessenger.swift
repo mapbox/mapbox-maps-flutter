@@ -75,6 +75,24 @@ enum NetworkRestriction: Int {
   case dISALLOWALL = 2
 }
 
+/// Describes the tiles data domain.
+enum TileDataDomain: Int {
+  /// Data for Maps.
+  case mAPS = 0
+  /// Data for Navigation.
+  case nAVIGATION = 1
+  /// Data for Search.
+  case sEARCH = 2
+  /// Data for ADAS
+  case aDAS = 3
+}
+
+enum _TileStoreOptionsKey: Int {
+  case dISKQUOTA = 0
+  case mAPBOXAPIURL = 1
+  case tILEURLTEMPLATE = 2
+}
+
 /// Describes the style package load option values.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -659,6 +677,20 @@ private class OfflineMessengerPigeonCodecReader: FlutterStandardReader {
         enumResult = NetworkRestriction(rawValue: enumResultAsInt)
       }
       return enumResult
+    case 142:
+      var enumResult: TileDataDomain?
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
+      if let enumResultAsInt = enumResultAsInt {
+        enumResult = TileDataDomain(rawValue: enumResultAsInt)
+      }
+      return enumResult
+    case 143:
+      var enumResult: _TileStoreOptionsKey?
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
+      if let enumResultAsInt = enumResultAsInt {
+        enumResult = _TileStoreOptionsKey(rawValue: enumResultAsInt)
+      }
+      return enumResult
     default:
       return super.readValue(ofType: type)
     }
@@ -705,6 +737,12 @@ private class OfflineMessengerPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.rawValue)
     } else if let value = value as? NetworkRestriction {
       super.writeByte(141)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? TileDataDomain {
+      super.writeByte(142)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? _TileStoreOptionsKey {
+      super.writeByte(143)
       super.writeValue(value.rawValue)
     } else {
       super.writeValue(value)
@@ -908,6 +946,7 @@ protocol _TileStore {
   func allTileRegions(completion: @escaping (Result<[TileRegion], Error>) -> Void)
   func tileRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
   func removeRegion(id: String, completion: @escaping (Result<TileRegion, Error>) -> Void)
+  func setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -1066,6 +1105,23 @@ class _TileStoreSetup {
       }
     } else {
       removeRegionChannel.setMessageHandler(nil)
+    }
+    let setOptionForKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setOptionForKeyChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let keyArg = args[0] as! _TileStoreOptionsKey
+        let domainArg: TileDataDomain? = nilOrValue(args[1])
+        let valueArg: Any? = args[2]
+        do {
+          try api.setOptionForKey(key: keyArg, domain: domainArg, value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setOptionForKeyChannel.setMessageHandler(nil)
     }
   }
 }

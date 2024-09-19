@@ -340,21 +340,6 @@ enum DownloadState {
   FINISHED,
 }
 
-/// Describes the tiles data domain.
-enum TileDataDomain {
-  /// Data for Maps.
-  MAPS,
-
-  /// Data for Navigation.
-  NAVIGATION,
-
-  /// Data for Search.
-  SEARCH,
-
-  /// Data for ADAS
-  ADAS,
-}
-
 /// Describes the reason for a tile region download request failure.
 enum TileRegionErrorType {
   /// The operation was canceled.
@@ -2036,14 +2021,11 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is DownloadState) {
       buffer.putUint8(189);
       writeValue(buffer, value.index);
-    } else if (value is TileDataDomain) {
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(190);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
-      buffer.putUint8(191);
-      writeValue(buffer, value.index);
     } else if (value is _MapEvent) {
-      buffer.putUint8(192);
+      buffer.putUint8(191);
       writeValue(buffer, value.index);
     } else {
       super.writeValue(buffer, value);
@@ -2197,11 +2179,8 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : DownloadState.values[value];
       case 190:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileDataDomain.values[value];
-      case 191:
-        final int? value = readValue(buffer) as int?;
         return value == null ? null : TileRegionErrorType.values[value];
-      case 192:
+      case 191:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _MapEvent.values[value];
       default:
@@ -4683,6 +4662,30 @@ class _MapboxMapsOptions {
     );
     final List<Object?>? __pigeon_replyList =
         await __pigeon_channel.send(<Object?>[language]) as List<Object?>?;
+    if (__pigeon_replyList == null) {
+      throw _createConnectionError(__pigeon_channelName);
+    } else if (__pigeon_replyList.length > 1) {
+      throw PlatformException(
+        code: __pigeon_replyList[0]! as String,
+        message: __pigeon_replyList[1] as String?,
+        details: __pigeon_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> clearData() async {
+    final String __pigeon_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData$__pigeon_messageChannelSuffix';
+    final BasicMessageChannel<Object?> __pigeon_channel =
+        BasicMessageChannel<Object?>(
+      __pigeon_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: __pigeon_binaryMessenger,
+    );
+    final List<Object?>? __pigeon_replyList =
+        await __pigeon_channel.send(null) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

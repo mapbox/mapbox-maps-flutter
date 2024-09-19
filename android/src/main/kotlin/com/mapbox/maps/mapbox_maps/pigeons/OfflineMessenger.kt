@@ -50,6 +50,36 @@ enum class NetworkRestriction(val raw: Int) {
   }
 }
 
+/** Describes the tiles data domain. */
+enum class TileDataDomain(val raw: Int) {
+  /** Data for Maps. */
+  MAPS(0),
+  /** Data for Navigation. */
+  NAVIGATION(1),
+  /** Data for Search. */
+  SEARCH(2),
+  /** Data for ADAS */
+  ADAS(3);
+
+  companion object {
+    fun ofRaw(raw: Int): TileDataDomain? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+enum class _TileStoreOptionsKey(val raw: Int) {
+  DISK_QUOTA(0),
+  MAPBOX_API_URL(1),
+  TILE_URL_TEMPLATE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): _TileStoreOptionsKey? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /**
  * Describes the style package load option values.
  *
@@ -705,6 +735,16 @@ private object OfflineMessengerPigeonCodec : StandardMessageCodec() {
           NetworkRestriction.ofRaw(it)
         }
       }
+      142.toByte() -> {
+        return (readValue(buffer) as Int?)?.let {
+          TileDataDomain.ofRaw(it)
+        }
+      }
+      143.toByte() -> {
+        return (readValue(buffer) as Int?)?.let {
+          _TileStoreOptionsKey.ofRaw(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -760,6 +800,14 @@ private object OfflineMessengerPigeonCodec : StandardMessageCodec() {
       }
       is NetworkRestriction -> {
         stream.write(141)
+        writeValue(stream, value.raw)
+      }
+      is TileDataDomain -> {
+        stream.write(142)
+        writeValue(stream, value.raw)
+      }
+      is _TileStoreOptionsKey -> {
+        stream.write(143)
         writeValue(stream, value.raw)
       }
       else -> super.writeValue(stream, value)
@@ -979,6 +1027,7 @@ interface _TileStore {
   fun allTileRegions(callback: (Result<List<TileRegion>>) -> Unit)
   fun tileRegion(id: String, callback: (Result<TileRegion>) -> Unit)
   fun removeRegion(id: String, callback: (Result<TileRegion>) -> Unit)
+  fun setOptionForKey(key: _TileStoreOptionsKey, domain: TileDataDomain?, value: Any?)
 
   companion object {
     /** The codec used by _TileStore. */
@@ -1162,6 +1211,26 @@ interface _TileStore {
                 reply.reply(wrapResult(data))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val keyArg = args[0] as _TileStoreOptionsKey
+            val domainArg = args[1] as TileDataDomain?
+            val valueArg = args[2]
+            val wrapped: List<Any?> = try {
+              api.setOptionForKey(keyArg, domainArg, valueArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

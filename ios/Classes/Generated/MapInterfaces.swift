@@ -331,18 +331,6 @@ enum DownloadState: Int {
   case fINISHED = 3
 }
 
-/// Describes the tiles data domain.
-enum TileDataDomain: Int {
-  /// Data for Maps.
-  case mAPS = 0
-  /// Data for Navigation.
-  case nAVIGATION = 1
-  /// Data for Search.
-  case sEARCH = 2
-  /// Data for ADAS
-  case aDAS = 3
-}
-
 /// Describes the reason for a tile region download request failure.
 enum TileRegionErrorType: Int {
   /// The operation was canceled.
@@ -1930,20 +1918,13 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
       }
       return enumResult
     case 190:
-      var enumResult: TileDataDomain?
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
-      if let enumResultAsInt = enumResultAsInt {
-        enumResult = TileDataDomain(rawValue: enumResultAsInt)
-      }
-      return enumResult
-    case 191:
       var enumResult: TileRegionErrorType?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
         enumResult = TileRegionErrorType(rawValue: enumResultAsInt)
       }
       return enumResult
-    case 192:
+    case 191:
       var enumResult: _MapEvent?
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as? Int)
       if let enumResultAsInt = enumResultAsInt {
@@ -2141,14 +2122,11 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? DownloadState {
       super.writeByte(189)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileDataDomain {
+    } else if let value = value as? TileRegionErrorType {
       super.writeByte(190)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileRegionErrorType {
-      super.writeByte(191)
-      super.writeValue(value.rawValue)
     } else if let value = value as? _MapEvent {
-      super.writeByte(192)
+      super.writeByte(191)
       super.writeValue(value.rawValue)
     } else {
       super.writeValue(value)
@@ -3911,6 +3889,7 @@ protocol _MapboxMapsOptions {
   func setWorldview(worldview: String?) throws
   func getLanguage() throws -> String?
   func setLanguage(language: String?) throws
+  func clearData(completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -4101,6 +4080,21 @@ class _MapboxMapsOptionsSetup {
       }
     } else {
       setLanguageChannel.setMessageHandler(nil)
+    }
+    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      clearDataChannel.setMessageHandler { _, reply in
+        api.clearData { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      clearDataChannel.setMessageHandler(nil)
     }
   }
 }

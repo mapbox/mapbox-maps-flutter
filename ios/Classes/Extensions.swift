@@ -1033,6 +1033,33 @@ extension MapboxCommon.NetworkRestriction {
         }
     }
 }
+
+extension _TileStoreOptionsKey {
+
+    func toTileStoreOptionsKey() -> String {
+        switch self {
+        case .dISKQUOTA:
+            return TileStoreOptions.diskQuota
+        case .mAPBOXAPIURL:
+            return TileStoreOptions.mapboxAPIURL
+        case .tILEURLTEMPLATE:
+            return TileStoreOptions.tileURLTemplate
+        }
+    }
+}
+
+extension TileDataDomain {
+
+    func toTileDataDomain() -> MapboxCommon.TileDataDomain {
+        switch self {
+        case .mAPS: return .maps
+        case .nAVIGATION: return .navigation
+        case .sEARCH: return .search
+        case .aDAS: return .adas
+        }
+    }
+}
+
 // MARK: Result
 extension Result where Failure == any Error {
     init(code: String, catchingFlutter body: () throws -> Success) {
