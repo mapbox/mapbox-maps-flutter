@@ -247,11 +247,12 @@ class StylePageBodyState extends State<StylePageBody> {
     return TextButton(
       child: Text('getStyleLayers'),
       onPressed: () {
-        mapboxMap?.style
-            .getStyleLayers()
-            .then((value) => value.forEach((element) {
-                  print(element?.id);
-                }));
+        mapboxMap?.style.getStyleLayers().then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("${value.map((e) => e?.id)}"),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  duration: Duration(seconds: 3),
+                )));
       },
     );
   }
@@ -390,7 +391,8 @@ class StylePageBodyState extends State<StylePageBody> {
       onPressed: () {
         mapboxMap?.style.getStyleDefaultCamera().then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("center: ${value.center}"),
+                  content: Text(
+                      "center: ${value.center?.coordinates.lat}, ${value.center?.coordinates.lng}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 3),
                 )));
@@ -435,7 +437,7 @@ class StylePageBodyState extends State<StylePageBody> {
       onPressed: () {
         mapboxMap?.style.getProjection().then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("getProjection: $value"),
+                  content: Text("getProjection: ${value?.name}"),
                   backgroundColor: Theme.of(context).primaryColor,
                   duration: Duration(seconds: 2),
                 )));
@@ -453,20 +455,6 @@ class StylePageBodyState extends State<StylePageBody> {
         } else {
           mapProject = StyleProjectionName.globe;
         }
-      },
-    );
-  }
-
-  Widget _changeLocale() {
-    return TextButton(
-      child: Text('changeLocale'),
-      onPressed: () {
-        if (locale == 'en') {
-          locale = 'de';
-        } else {
-          locale = 'en';
-        }
-        mapboxMap?.style.localizeLabels(locale, null);
       },
     );
   }
@@ -508,7 +496,6 @@ class StylePageBodyState extends State<StylePageBody> {
         _isStyleLoaded(),
         _getProjection(),
         _setProjection(),
-        _changeLocale(),
       ],
     );
 

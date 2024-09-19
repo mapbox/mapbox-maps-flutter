@@ -118,8 +118,10 @@ void main() {
       expect(() async => await mapboxMap.getSize(), throwsPlatformException);
     } else {
       var size = await mapboxMap.getSize();
-      expect(size.width, closeTo(tester.binding.renderViews.first.size.width, 1));
-      expect(size.height, closeTo(tester.binding.renderViews.first.size.height, 1));
+      expect(
+          size.width, closeTo(tester.binding.renderViews.first.size.width, 1));
+      expect(size.height,
+          closeTo(tester.binding.renderViews.first.size.height, 1));
     }
   });
 
