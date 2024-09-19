@@ -1,4 +1,4 @@
-### main
+### 2.3.0-rc.1
 
 * Expose API to clear map data, and to set options to `TileStore`.
 
@@ -51,6 +51,7 @@ circleAnnotationManager.setCircleColor(Colors.blue.value);
 * Expose experimental `lineTrimColor` and `lineTrimFadeRange` on `LineLayer` which allow to set custom color for trimmed line and fade effect for trim.
 * Add experimental `FillExtrusionLayer.fillExtrusionLineWidth` that can switch fill extrusion rendering into wall rendering mode. Use this property to render the feature with the given width over the outlines of the geometry.
 * Add experimental `MapboxMap.setSnapshotLegacyMode()` to help avoiding `MapboxMap.snapshot()` native crash on some Samsung devices running Android 14. `MapboxMap.setSnapshotLegacyMode()` has no effect on iOS.
+* Bump Maps SDK to 11.7.0-rc.1
 
 ### 2.3.0-beta.1
 
