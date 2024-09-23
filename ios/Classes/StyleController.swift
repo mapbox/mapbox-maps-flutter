@@ -335,8 +335,8 @@ final class StyleController: StyleManager {
     }
 
     func hasStyleImage(imageId: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        let image = styleManager.image(withId: imageId)
-        completion(.success(image != nil))
+        let imageExists = styleManager.imageExists(withId: imageId)
+        completion(.success(imageExists))
     }
 
     func invalidateStyleCustomGeometrySourceTile(sourceId: String, tileId: CanonicalTileID, completion: @escaping (Result<Void, Error>) -> Void) {
