@@ -363,15 +363,14 @@ class MapboxMap extends ChangeNotifier {
   /// Debug options for the widget associated with the map.
   Future<List<MapWidgetDebugOptions>> getDebugOptions() async {
     return _mapInterface.getDebugOptions().then((value) {
-      return value.map((e) => e?.option.widgetDebugOptions).nonNulls.toList();
+      return value.map((e) => e.widgetDebugOptions).toList();
     });
   }
 
   /// Set debug options for the widget associated with the map.
   Future<void> setDebugOptions(List<MapWidgetDebugOptions> debugOptions) {
-    return _mapInterface.setDebugOptions(debugOptions
-        .map((e) => _MapWidgetDebugOptionsBox(option: e.option))
-        .toList());
+    return _mapInterface
+        .setDebugOptions(debugOptions.map((e) => e.option).toList());
   }
 
   /// Returns the `map debug options`.

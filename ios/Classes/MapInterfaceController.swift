@@ -124,12 +124,12 @@ final class MapInterfaceController: _MapInterface {
         return self.mapboxMap.options.toFLTMapOptions()
     }
 
-    func getDebugOptions() throws -> [_MapWidgetDebugOptionsBox?] {
-        return mapView.debugOptions.toFLTDebugOptions().map(_MapWidgetDebugOptionsBox.init)
+    func getDebugOptions() throws -> [_MapWidgetDebugOptions] {
+        return mapView.debugOptions.toFLTDebugOptions()
     }
 
-    func setDebugOptions(debugOptions: [_MapWidgetDebugOptionsBox]) throws {
-        mapView.debugOptions = debugOptions.map(\.option).toDebugOptions()
+    func setDebugOptions(debugOptions: [_MapWidgetDebugOptions]) throws {
+        mapView.debugOptions = debugOptions.toDebugOptions()
     }
 
     func getDebug() throws -> [MapDebugOptions?] {

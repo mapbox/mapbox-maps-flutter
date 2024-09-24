@@ -25,7 +25,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInTiles
 import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
 import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
-import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptionsBox
+import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
 class MapInterfaceController(
@@ -123,14 +123,14 @@ class MapInterfaceController(
     return mapboxMap.getMapOptions().toFLTMapOptions(context)
   }
 
-  override fun getDebugOptions(): List<_MapWidgetDebugOptionsBox?> {
+  override fun getDebugOptions(): List<_MapWidgetDebugOptions> {
     return mapView.debugOptions.mapNotNull { nativeOption ->
-      nativeOption.toFLTDebugOptions()?.let { _MapWidgetDebugOptionsBox(it) }
+      nativeOption.toFLTDebugOptions()
     }
   }
 
-  override fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptionsBox>) {
-    mapView.debugOptions = debugOptions.map { it.option.toMapViewDebugOptions() }.toSet()
+  override fun setDebugOptions(debugOptions: List<_MapWidgetDebugOptions>) {
+    mapView.debugOptions = debugOptions.map { it.toMapViewDebugOptions() }.toSet()
   }
 
   override fun getDebug(): List<MapDebugOptions> {
