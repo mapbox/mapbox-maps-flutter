@@ -376,7 +376,7 @@ final class StyleController: StyleManager {
 
     func removeStyleImport(importId: String) throws {
         do {
-            try styleManager.removeStyleImport(for: importId)
+            try styleManager.removeStyleImport(withId: importId)
         } catch let styleError {
             throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
         }

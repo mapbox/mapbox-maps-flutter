@@ -5,7 +5,7 @@ import Flutter
 
 let COORDINATES = "coordinates"
 
-extension FlutterError: Error { }
+extension FlutterError: @retroactive Error { }
 
 // FLT to Mapbox
 
@@ -610,6 +610,7 @@ func convertDictionaryToString(dict: [String?: Any?]?) -> String {
 }
 
 func convertDictionaryToGeometry(dict: [String?: Any?]?) -> Geometry? {
+    guard let dict else { return nil }
     do {
         let jsonData = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions.init(rawValue: 0))
         let geometry = try JSONDecoder().decode(Geometry.self, from: jsonData)
