@@ -727,27 +727,6 @@ struct CoordinateBounds {
   }
 }
 
-/// This class is needed because Pigeon does not encode properly arrays of enums.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct _MapWidgetDebugOptionsBox {
-  var option: _MapWidgetDebugOptions
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> _MapWidgetDebugOptionsBox? {
-    let option = pigeonVar_list[0] as! _MapWidgetDebugOptions
-
-    return _MapWidgetDebugOptionsBox(
-      option: option
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      option
-    ]
-  }
-}
-
 /// Options for enabling debugging features in a map.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -1851,64 +1830,62 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 161:
       return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 162:
-      return _MapWidgetDebugOptionsBox.fromList(self.readValue() as! [Any?])
-    case 163:
       return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 164:
+    case 163:
       return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 165:
+    case 164:
       return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 166:
+    case 165:
       return MapOptions.fromList(self.readValue() as! [Any?])
-    case 167:
+    case 166:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
-    case 168:
+    case 167:
       return ScreenBox.fromList(self.readValue() as! [Any?])
-    case 169:
+    case 168:
       return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
-    case 170:
+    case 169:
       return Size.fromList(self.readValue() as! [Any?])
-    case 171:
+    case 170:
       return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
-    case 172:
+    case 171:
       return SourceQueryOptions.fromList(self.readValue() as! [Any?])
-    case 173:
+    case 172:
       return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
-    case 174:
+    case 173:
       return LayerPosition.fromList(self.readValue() as! [Any?])
-    case 175:
+    case 174:
       return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
-    case 176:
+    case 175:
       return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
-    case 177:
+    case 176:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
-    case 178:
+    case 177:
       return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 179:
+    case 178:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 180:
+    case 179:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 181:
+    case 180:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 182:
+    case 181:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 183:
+    case 182:
       return FlatLight.fromList(self.readValue() as! [Any?])
-    case 184:
+    case 183:
       return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 185:
+    case 184:
       return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 186:
+    case 185:
       return MbxImage.fromList(self.readValue() as! [Any?])
-    case 187:
+    case 186:
       return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 188:
+    case 187:
       return ImageContent.fromList(self.readValue() as! [Any?])
-    case 189:
+    case 188:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
-    case 190:
+    case 189:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 191:
+    case 190:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2017,95 +1994,92 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? CoordinateBounds {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? _MapWidgetDebugOptionsBox {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? MapOptions {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? ScreenBox {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? CoordinateBoundsZoom {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
+    } else if let value = value as? Size {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? LayerPosition {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? RenderedQueryGeometry {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? StyleProjection {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? FlatLight {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? AmbientLight {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? MbxImage {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? ImageStretches {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? ImageContent {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(190)
-      super.writeValue(value.toList())
     } else if let value = value as? StylePropertyValue {
-      super.writeByte(191)
+      super.writeByte(190)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -2887,8 +2861,8 @@ protocol _MapInterface {
   ///
   /// @return The map's `map options`.
   func getMapOptions() throws -> MapOptions
-  func getDebugOptions() throws -> [_MapWidgetDebugOptionsBox?]
-  func setDebugOptions(debugOptions: [_MapWidgetDebugOptionsBox]) throws
+  func getDebugOptions() throws -> [_MapWidgetDebugOptions]
+  func setDebugOptions(debugOptions: [_MapWidgetDebugOptions]) throws
   /// Returns the `map debug options`.
   ///
   /// @return An array of `map debug options` flags currently set to the map.
@@ -3291,7 +3265,7 @@ class _MapInterfaceSetup {
     if let api = api {
       setDebugOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let debugOptionsArg = args[0] as! [_MapWidgetDebugOptionsBox]
+        let debugOptionsArg = args[0] as! [_MapWidgetDebugOptions]
         do {
           try api.setDebugOptions(debugOptions: debugOptionsArg)
           reply(wrapResult(nil))
