@@ -36,7 +36,7 @@ class SnapshotterInstanceManager(
     )
     val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, suffix)
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
-    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger, eventTypes.map { it.toInt() })
+    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger, eventTypes.map { it })
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
     val mapboxStyleManager = MapboxStyleManager(
       styleManager,
