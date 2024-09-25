@@ -118,7 +118,7 @@ final class StyleController: StyleManager {
         completion(.success(exists))
     }
 
-    func getStyleLayers(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void) {
+    func getStyleLayers(completion: @escaping (Result<[StyleObjectInfo], Error>) -> Void) {
         let layerInfos = styleManager.allLayerIdentifiers.map {
             StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }
@@ -252,7 +252,7 @@ final class StyleController: StyleManager {
         completion(.success(exists))
     }
 
-    func getStyleSources(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void) {
+    func getStyleSources(completion: @escaping (Result<[StyleObjectInfo], Error>) -> Void) {
         let sourcesInfos = styleManager.allSourceIdentifiers.map {
             StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }
@@ -297,7 +297,7 @@ final class StyleController: StyleManager {
                                     data: data)))
     }
 
-    func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
+    func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches], stretchY: [ImageStretches], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let image = UIImage(data: image.data.data, scale: scale) else {
             completion(.failure(FlutterError(code: StyleController.errorCode, message: "Could not initialize the image from the specified data.", details: nil)))
             return
@@ -370,7 +370,7 @@ final class StyleController: StyleManager {
 
     // MARK: Style Imports
 
-    func getStyleImports() throws -> [StyleObjectInfo?] {
+    func getStyleImports() throws -> [StyleObjectInfo] {
         styleManager.styleImports.map { StyleObjectInfo(id: $0.id, type: $0.type) }
     }
 
@@ -429,7 +429,7 @@ final class StyleController: StyleManager {
 
     // MARK: Style Lights
 
-    func getStyleLights() throws -> [StyleObjectInfo?] {
+    func getStyleLights() throws -> [StyleObjectInfo] {
         styleManager.allLightIdentifiers.map {
             StyleObjectInfo(id: $0.id, type: $0.type.rawValue)
         }

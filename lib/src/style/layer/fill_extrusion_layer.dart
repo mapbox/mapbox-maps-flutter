@@ -53,7 +53,7 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionPatternExpression,
     bool? this.fillExtrusionRoundedRoof,
     List<Object>? this.fillExtrusionRoundedRoofExpression,
-    List<double?>? this.fillExtrusionTranslate,
+    List<double>? this.fillExtrusionTranslate,
     List<Object>? this.fillExtrusionTranslateExpression,
     FillExtrusionTranslateAnchor? this.fillExtrusionTranslateAnchor,
     List<Object>? this.fillExtrusionTranslateAnchorExpression,
@@ -261,7 +261,7 @@ class FillExtrusionLayer extends Layer {
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
   /// Default value: [0,0].
-  List<double?>? fillExtrusionTranslate;
+  List<double>? fillExtrusionTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
   /// Default value: [0,0].
@@ -630,7 +630,7 @@ class FillExtrusionLayer extends Layer {
           _optionalCastList(map["paint"]["fill-extrusion-rounded-roof"]),
       fillExtrusionTranslate:
           (map["paint"]["fill-extrusion-translate"] as List?)
-              ?.map<double?>((e) => e.toDouble())
+              ?.map<double>((e) => e.toDouble())
               .toList(),
       fillExtrusionTranslateExpression:
           _optionalCastList(map["paint"]["fill-extrusion-translate"]),

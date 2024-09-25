@@ -280,7 +280,7 @@ data class LocationPuck3D(
    * The position of the model.
    * Default value: [0,0].
    */
-  val position: List<Double?>? = null,
+  val position: List<Double>? = null,
   /**
    * The opacity of the model.
    * Default value: 1. Value range: [0, 1]
@@ -290,19 +290,19 @@ data class LocationPuck3D(
    * The scale of the model.
    * Default value: [1,1,1].
    */
-  val modelScale: List<Double?>? = null,
+  val modelScale: List<Double>? = null,
   /** The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom. */
   val modelScaleExpression: String? = null,
   /**
    * The translation of the model [lon, lat, z]
    * Default value: [0,0,0].
    */
-  val modelTranslation: List<Double?>? = null,
+  val modelTranslation: List<Double>? = null,
   /**
    * The rotation of the model.
    * Default value: [0,0,90].
    */
-  val modelRotation: List<Double?>? = null,
+  val modelRotation: List<Double>? = null,
   /**
    * Enable/Disable shadow casting for the 3D location puck.
    * Default value: true.
@@ -329,12 +329,12 @@ data class LocationPuck3D(
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LocationPuck3D {
       val modelUri = pigeonVar_list[0] as String?
-      val position = pigeonVar_list[1] as List<Double?>?
+      val position = pigeonVar_list[1] as List<Double>?
       val modelOpacity = pigeonVar_list[2] as Double?
-      val modelScale = pigeonVar_list[3] as List<Double?>?
+      val modelScale = pigeonVar_list[3] as List<Double>?
       val modelScaleExpression = pigeonVar_list[4] as String?
-      val modelTranslation = pigeonVar_list[5] as List<Double?>?
-      val modelRotation = pigeonVar_list[6] as List<Double?>?
+      val modelTranslation = pigeonVar_list[5] as List<Double>?
+      val modelRotation = pigeonVar_list[6] as List<Double>?
       val modelCastShadows = pigeonVar_list[7] as Boolean?
       val modelReceiveShadows = pigeonVar_list[8] as Boolean?
       val modelScaleMode = pigeonVar_list[9] as ModelScaleMode?

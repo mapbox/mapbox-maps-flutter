@@ -111,7 +111,7 @@ struct StylePackLoadOptions {
   /// be replaced with the new value.
   ///
   /// Developers can use this field to store custom metadata associated with a style package.
-  var metadata: [String?: Any?]?
+  var metadata: [String: Any?]?
   /// Accepts expired data when loading style resources.
   ///
   /// This flag should be set to true to accept expired responses. When a style resource is already loaded but expired,
@@ -122,7 +122,7 @@ struct StylePackLoadOptions {
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StylePackLoadOptions? {
     let glyphsRasterizationMode: GlyphsRasterizationMode? = nilOrValue(pigeonVar_list[0])
-    let metadata: [String?: Any?]? = nilOrValue(pigeonVar_list[1])
+    let metadata: [String: Any?]? = nilOrValue(pigeonVar_list[1])
     let acceptExpired = pigeonVar_list[2] as! Bool
 
     return StylePackLoadOptions(
@@ -275,7 +275,7 @@ struct TilesetDescriptorOptions {
   /// This property can be used to resolve extra tilesets that are not part of the original style
   /// represented by `styleURL`, it can be used also with the empty `styleURL`.
   /// The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
-  var tilesets: [String?]?
+  var tilesets: [String]?
   /// Style package load options, associated with the tileset descriptor.
   /// If provided, `offline manager` will create a style package while resolving the corresponding
   /// tileset descriptor and load all the resources as defined in the provided style package options,
@@ -287,7 +287,7 @@ struct TilesetDescriptorOptions {
   /// Style package creation requires nonempty `styleURL`, which will be the created style package identifier.
   var stylePackOptions: StylePackLoadOptions?
   /// Extra tileset descriptor options.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String: Any?]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TilesetDescriptorOptions? {
@@ -295,9 +295,9 @@ struct TilesetDescriptorOptions {
     let minZoom = pigeonVar_list[1] as! Int64
     let maxZoom = pigeonVar_list[2] as! Int64
     let pixelRatio: Double? = nilOrValue(pigeonVar_list[3])
-    let tilesets: [String?]? = nilOrValue(pigeonVar_list[4])
+    let tilesets: [String]? = nilOrValue(pigeonVar_list[4])
     let stylePackOptions: StylePackLoadOptions? = nilOrValue(pigeonVar_list[5])
-    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[6])
+    let extraOptions: [String: Any?]? = nilOrValue(pigeonVar_list[6])
 
     return TilesetDescriptorOptions(
       styleURI: styleURI,
@@ -333,14 +333,14 @@ struct TileRegionLoadOptions {
   /// for the tile region.
   ///
   /// Providing an empty geometry list is equivalent to removeTileRegion() call.
-  var geometry: [String?: Any?]?
+  var geometry: [String: Any?]?
   /// The tile region's tileset descriptors.
   ///
   /// If provided, updates the tile region's tileset descriptors that define
   /// the tilesets and zoom ranges of the tiles for the tile region.
   ///
   /// Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
-  var descriptorsOptions: [TilesetDescriptorOptions?]?
+  var descriptorsOptions: [TilesetDescriptorOptions]?
   /// A custom Mapbox Value associated with this tile region for storing metadata.
   ///
   /// If provided, the custom value value will be stored alongside the tile region. Previous values will
@@ -348,7 +348,7 @@ struct TileRegionLoadOptions {
   ///
   /// Developers can use this field to store custom metadata associated with a tile region. This value
   /// can be retrieved with getTileRegionMetadata().
-  var metadata: [String?: Any?]?
+  var metadata: [String: Any?]?
   /// Accepts expired data when loading tiles.
   ///
   /// This flag should be set to true to accept expired responses. When a tile is already loaded but expired, no
@@ -382,18 +382,18 @@ struct TileRegionLoadOptions {
   /// If provided, contains an object value with extra tile region load options.
   ///
   /// There are currently no extra options.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String: Any?]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionLoadOptions? {
-    let geometry: [String?: Any?]? = nilOrValue(pigeonVar_list[0])
-    let descriptorsOptions: [TilesetDescriptorOptions?]? = nilOrValue(pigeonVar_list[1])
-    let metadata: [String?: Any?]? = nilOrValue(pigeonVar_list[2])
+    let geometry: [String: Any?]? = nilOrValue(pigeonVar_list[0])
+    let descriptorsOptions: [TilesetDescriptorOptions]? = nilOrValue(pigeonVar_list[1])
+    let metadata: [String: Any?]? = nilOrValue(pigeonVar_list[2])
     let acceptExpired = pigeonVar_list[3] as! Bool
     let networkRestriction = pigeonVar_list[4] as! NetworkRestriction
     let startLocation: Point? = nilOrValue(pigeonVar_list[5])
     let averageBytesPerSecond: Int64? = nilOrValue(pigeonVar_list[6])
-    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[7])
+    let extraOptions: [String: Any?]? = nilOrValue(pigeonVar_list[7])
 
     return TileRegionLoadOptions(
       geometry: geometry,
@@ -486,14 +486,14 @@ struct TileRegionEstimateResult {
   /// is complete.
   var storageSize: Int64
   /// Reserved for future use.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String: Any?]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateResult? {
     let errorMargin = pigeonVar_list[0] as! Double
     let transferSize = pigeonVar_list[1] as! Int64
     let storageSize = pigeonVar_list[2] as! Int64
-    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[3])
+    let extraOptions: [String: Any?]? = nilOrValue(pigeonVar_list[3])
 
     return TileRegionEstimateResult(
       errorMargin: errorMargin,
@@ -527,14 +527,14 @@ struct TileRegionEstimateOptions {
   /// A value of 0 means no timeout. If unspecified, defaults to 0.
   var timeout: Double
   /// Reserved for future use.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String: Any?]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateOptions? {
     let errorMargin = pigeonVar_list[0] as! Double
     let preciseEstimationTimeout = pigeonVar_list[1] as! Double
     let timeout = pigeonVar_list[2] as! Double
-    let extraOptions: [String?: Any?]? = nilOrValue(pigeonVar_list[3])
+    let extraOptions: [String: Any?]? = nilOrValue(pigeonVar_list[3])
 
     return TileRegionEstimateOptions(
       errorMargin: errorMargin,

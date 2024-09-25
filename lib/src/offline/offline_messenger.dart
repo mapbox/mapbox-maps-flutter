@@ -60,7 +60,7 @@ class StylePackLoadOptions {
   /// be replaced with the new value.
   ///
   /// Developers can use this field to store custom metadata associated with a style package.
-  Map<String?, Object?>? metadata;
+  Map<String, Object?>? metadata;
 
   /// Accepts expired data when loading style resources.
   ///
@@ -81,7 +81,7 @@ class StylePackLoadOptions {
     result as List<Object?>;
     return StylePackLoadOptions(
       glyphsRasterizationMode: result[0] as GlyphsRasterizationMode?,
-      metadata: (result[1] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      metadata: (result[1] as Map<Object?, Object?>?)?.cast<String, Object?>(),
       acceptExpired: result[2]! as bool,
     );
   }
@@ -246,7 +246,7 @@ class TilesetDescriptorOptions {
   /// This property can be used to resolve extra tilesets that are not part of the original style
   /// represented by `styleURL`, it can be used also with the empty `styleURL`.
   /// The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
-  List<String?>? tilesets;
+  List<String>? tilesets;
 
   /// Style package load options, associated with the tileset descriptor.
   /// If provided, `offline manager` will create a style package while resolving the corresponding
@@ -260,7 +260,7 @@ class TilesetDescriptorOptions {
   StylePackLoadOptions? stylePackOptions;
 
   /// Extra tileset descriptor options.
-  Map<String?, Object?>? extraOptions;
+  Map<String, Object?>? extraOptions;
 
   Object encode() {
     return <Object?>[
@@ -281,10 +281,10 @@ class TilesetDescriptorOptions {
       minZoom: result[1]! as int,
       maxZoom: result[2]! as int,
       pixelRatio: result[3] as double?,
-      tilesets: (result[4] as List<Object?>?)?.cast<String?>(),
+      tilesets: (result[4] as List<Object?>?)?.cast<String>(),
       stylePackOptions: result[5] as StylePackLoadOptions?,
       extraOptions:
-          (result[6] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+          (result[6] as Map<Object?, Object?>?)?.cast<String, Object?>(),
     );
   }
 }
@@ -309,7 +309,7 @@ class TileRegionLoadOptions {
   /// for the tile region.
   ///
   /// Providing an empty geometry list is equivalent to removeTileRegion() call.
-  Map<String?, Object?>? geometry;
+  Map<String, Object?>? geometry;
 
   /// The tile region's tileset descriptors.
   ///
@@ -317,7 +317,7 @@ class TileRegionLoadOptions {
   /// the tilesets and zoom ranges of the tiles for the tile region.
   ///
   /// Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
-  List<TilesetDescriptorOptions?>? descriptorsOptions;
+  List<TilesetDescriptorOptions>? descriptorsOptions;
 
   /// A custom Mapbox Value associated with this tile region for storing metadata.
   ///
@@ -326,7 +326,7 @@ class TileRegionLoadOptions {
   ///
   /// Developers can use this field to store custom metadata associated with a tile region. This value
   /// can be retrieved with getTileRegionMetadata().
-  Map<String?, Object?>? metadata;
+  Map<String, Object?>? metadata;
 
   /// Accepts expired data when loading tiles.
   ///
@@ -365,7 +365,7 @@ class TileRegionLoadOptions {
   /// If provided, contains an object value with extra tile region load options.
   ///
   /// There are currently no extra options.
-  Map<String?, Object?>? extraOptions;
+  Map<String, Object?>? extraOptions;
 
   Object encode() {
     return <Object?>[
@@ -383,16 +383,16 @@ class TileRegionLoadOptions {
   static TileRegionLoadOptions decode(Object result) {
     result as List<Object?>;
     return TileRegionLoadOptions(
-      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+      geometry: (result[0] as Map<Object?, Object?>?)?.cast<String, Object?>(),
       descriptorsOptions:
-          (result[1] as List<Object?>?)?.cast<TilesetDescriptorOptions?>(),
-      metadata: (result[2] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+          (result[1] as List<Object?>?)?.cast<TilesetDescriptorOptions>(),
+      metadata: (result[2] as Map<Object?, Object?>?)?.cast<String, Object?>(),
       acceptExpired: result[3]! as bool,
       networkRestriction: result[4]! as NetworkRestriction,
       startLocation: result[5] as Point?,
       averageBytesPerSecond: result[6] as int?,
       extraOptions:
-          (result[7] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+          (result[7] as Map<Object?, Object?>?)?.cast<String, Object?>(),
     );
   }
 }
@@ -476,7 +476,7 @@ class TileRegionEstimateResult {
   int storageSize;
 
   /// Reserved for future use.
-  Map<String?, Object?>? extraOptions;
+  Map<String, Object?>? extraOptions;
 
   Object encode() {
     return <Object?>[
@@ -494,7 +494,7 @@ class TileRegionEstimateResult {
       transferSize: result[1]! as int,
       storageSize: result[2]! as int,
       extraOptions:
-          (result[3] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+          (result[3] as Map<Object?, Object?>?)?.cast<String, Object?>(),
     );
   }
 }
@@ -522,7 +522,7 @@ class TileRegionEstimateOptions {
   double timeout;
 
   /// Reserved for future use.
-  Map<String?, Object?>? extraOptions;
+  Map<String, Object?>? extraOptions;
 
   Object encode() {
     return <Object?>[
@@ -540,7 +540,7 @@ class TileRegionEstimateOptions {
       preciseEstimationTimeout: result[1]! as double,
       timeout: result[2]! as double,
       extraOptions:
-          (result[3] as Map<Object?, Object?>?)?.cast<String?, Object?>(),
+          (result[3] as Map<Object?, Object?>?)?.cast<String, Object?>(),
     );
   }
 }

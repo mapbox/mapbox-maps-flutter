@@ -21,7 +21,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
       messenger.create(id, annotation);
 
   /// Create multi annotations with the options.
-  Future<List<PointAnnotation?>> createMulti(
+  Future<List<PointAnnotation>> createMulti(
           List<PointAnnotationOptions> annotations) =>
       messenger.createMulti(id, annotations);
 
@@ -73,11 +73,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<bool?> getIconKeepUpright() => messenger.getIconKeepUpright(id);
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. Default value: [0,0].
-  Future<void> setIconOffset(List<double?> iconOffset) =>
+  Future<void> setIconOffset(List<double> iconOffset) =>
       messenger.setIconOffset(id, iconOffset);
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up. Default value: [0,0].
-  Future<List<double?>?> getIconOffset() => messenger.getIconOffset(id);
+  Future<List<double>?> getIconOffset() => messenger.getIconOffset(id);
 
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not. Default value: false.
   Future<void> setIconOptional(bool iconOptional) =>
@@ -132,11 +132,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconTextFit?> getIconTextFit() => messenger.getIconTextFit(id);
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0].
-  Future<void> setIconTextFitPadding(List<double?> iconTextFitPadding) =>
+  Future<void> setIconTextFitPadding(List<double> iconTextFitPadding) =>
       messenger.setIconTextFitPadding(id, iconTextFitPadding);
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0].
-  Future<List<double?>?> getIconTextFitPadding() =>
+  Future<List<double>?> getIconTextFitPadding() =>
       messenger.getIconTextFitPadding(id);
 
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries. Default value: false.
@@ -204,11 +204,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<String?> getTextField() => messenger.getTextField(id);
 
   /// Font stack to use for displaying text.
-  Future<void> setTextFont(List<String?> textFont) =>
+  Future<void> setTextFont(List<String> textFont) =>
       messenger.setTextFont(id, textFont);
 
   /// Font stack to use for displaying text.
-  Future<List<String?>?> getTextFont() => messenger.getTextFont(id);
+  Future<List<String>?> getTextFont() => messenger.getTextFont(id);
 
   /// If true, other symbols can be visible even if they collide with the text. Default value: false.
   Future<void> setTextIgnorePlacement(bool textIgnorePlacement) =>
@@ -261,11 +261,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getTextMaxWidth() => messenger.getTextMaxWidth(id);
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0].
-  Future<void> setTextOffset(List<double?> textOffset) =>
+  Future<void> setTextOffset(List<double> textOffset) =>
       messenger.setTextOffset(id, textOffset);
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0].
-  Future<List<double?>?> getTextOffset() => messenger.getTextOffset(id);
+  Future<List<double>?> getTextOffset() => messenger.getTextOffset(id);
 
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not. Default value: false.
   Future<void> setTextOptional(bool textOptional) =>
@@ -394,11 +394,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getIconOpacity() => messenger.getIconOpacity(id);
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
-  Future<void> setIconTranslate(List<double?> iconTranslate) =>
+  Future<void> setIconTranslate(List<double> iconTranslate) =>
       messenger.setIconTranslate(id, iconTranslate);
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
-  Future<List<double?>?> getIconTranslate() => messenger.getIconTranslate(id);
+  Future<List<double>?> getIconTranslate() => messenger.getIconTranslate(id);
 
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
   Future<void> setIconTranslateAnchor(
@@ -477,11 +477,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getTextOpacity() => messenger.getTextOpacity(id);
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
-  Future<void> setTextTranslate(List<double?> textTranslate) =>
+  Future<void> setTextTranslate(List<double> textTranslate) =>
       messenger.setTextTranslate(id, textTranslate);
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
-  Future<List<double?>?> getTextTranslate() => messenger.getTextTranslate(id);
+  Future<List<double>?> getTextTranslate() => messenger.getTextTranslate(id);
 
   /// Controls the frame of reference for `text-translate`. Default value: "map".
   Future<void> setTextTranslateAnchor(

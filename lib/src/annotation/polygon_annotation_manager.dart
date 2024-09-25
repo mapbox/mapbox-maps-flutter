@@ -22,7 +22,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
       messenger.create(id, annotation);
 
   /// Create multi annotations with the options.
-  Future<List<PolygonAnnotation?>> createMulti(
+  Future<List<PolygonAnnotation>> createMulti(
           List<PolygonAnnotationOptions> annotations) =>
       messenger.createMulti(id, annotations);
 
@@ -88,11 +88,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   Future<String?> getFillPattern() => messenger.getFillPattern(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<void> setFillTranslate(List<double?> fillTranslate) =>
+  Future<void> setFillTranslate(List<double> fillTranslate) =>
       messenger.setFillTranslate(id, fillTranslate);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<List<double?>?> getFillTranslate() => messenger.getFillTranslate(id);
+  Future<List<double>?> getFillTranslate() => messenger.getFillTranslate(id);
 
   /// Controls the frame of reference for `fill-translate`. Default value: "map".
   Future<void> setFillTranslateAnchor(

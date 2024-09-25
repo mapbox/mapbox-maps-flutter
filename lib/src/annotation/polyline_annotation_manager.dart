@@ -22,7 +22,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
       messenger.create(id, annotation);
 
   /// Create multi annotations with the options.
-  Future<List<PolylineAnnotation?>> createMulti(
+  Future<List<PolylineAnnotation>> createMulti(
           List<PolylineAnnotationOptions> annotations) =>
       messenger.createMulti(id, annotations);
 
@@ -107,11 +107,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<int?> getLineColor() => messenger.getLineColor(id);
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
-  Future<void> setLineDasharray(List<double?> lineDasharray) =>
+  Future<void> setLineDasharray(List<double> lineDasharray) =>
       messenger.setLineDasharray(id, lineDasharray);
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
-  Future<List<double?>?> getLineDasharray() => messenger.getLineDasharray(id);
+  Future<List<double>?> getLineDasharray() => messenger.getLineDasharray(id);
 
   /// Decrease line layer opacity based on occlusion from 3D objects. Value 0 disables occlusion, value 1 means fully occluded. Default value: 1. Value range: [0, 1]
   Future<void> setLineDepthOcclusionFactor(double lineDepthOcclusionFactor) =>
@@ -166,11 +166,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<String?> getLinePattern() => messenger.getLinePattern(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<void> setLineTranslate(List<double?> lineTranslate) =>
+  Future<void> setLineTranslate(List<double> lineTranslate) =>
       messenger.setLineTranslate(id, lineTranslate);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<List<double?>?> getLineTranslate() => messenger.getLineTranslate(id);
+  Future<List<double>?> getLineTranslate() => messenger.getLineTranslate(id);
 
   /// Controls the frame of reference for `line-translate`. Default value: "map".
   Future<void> setLineTranslateAnchor(
@@ -189,19 +189,19 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<int?> getLineTrimColor() => messenger.getLineTrimColor(id);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  Future<void> setLineTrimFadeRange(List<double?> lineTrimFadeRange) =>
+  Future<void> setLineTrimFadeRange(List<double> lineTrimFadeRange) =>
       messenger.setLineTrimFadeRange(id, lineTrimFadeRange);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  Future<List<double?>?> getLineTrimFadeRange() =>
+  Future<List<double>?> getLineTrimFadeRange() =>
       messenger.getLineTrimFadeRange(id);
 
   /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0]. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  Future<void> setLineTrimOffset(List<double?> lineTrimOffset) =>
+  Future<void> setLineTrimOffset(List<double> lineTrimOffset) =>
       messenger.setLineTrimOffset(id, lineTrimOffset);
 
   /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0]. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  Future<List<double?>?> getLineTrimOffset() => messenger.getLineTrimOffset(id);
+  Future<List<double>?> getLineTrimOffset() => messenger.getLineTrimOffset(id);
 
   /// Stroke thickness. Default value: 1. Minimum value: 0.
   Future<void> setLineWidth(double lineWidth) =>

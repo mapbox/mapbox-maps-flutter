@@ -27,7 +27,7 @@ class FillLayer extends Layer {
     List<Object>? this.fillOutlineColorExpression,
     String? this.fillPattern,
     List<Object>? this.fillPatternExpression,
-    List<double?>? this.fillTranslate,
+    List<double>? this.fillTranslate,
     List<Object>? this.fillTranslateExpression,
     FillTranslateAnchor? this.fillTranslateAnchor,
     List<Object>? this.fillTranslateAnchorExpression,
@@ -101,7 +101,7 @@ class FillLayer extends Layer {
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
-  List<double?>? fillTranslate;
+  List<double>? fillTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
@@ -260,7 +260,7 @@ class FillLayer extends Layer {
       fillPattern: _optionalCast(map["paint"]["fill-pattern"]),
       fillPatternExpression: _optionalCastList(map["paint"]["fill-pattern"]),
       fillTranslate: (map["paint"]["fill-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       fillTranslateExpression:
           _optionalCastList(map["paint"]["fill-translate"]),

@@ -241,8 +241,8 @@ interface _PolygonAnnotationMessenger {
   fun getFillOutlineColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setFillPattern(managerId: String, fillPattern: String, callback: (Result<Unit>) -> Unit)
   fun getFillPattern(managerId: String, callback: (Result<String?>) -> Unit)
-  fun setFillTranslate(managerId: String, fillTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getFillTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setFillTranslate(managerId: String, fillTranslate: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getFillTranslate(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getFillTranslateAnchor(managerId: String, callback: (Result<FillTranslateAnchor?>) -> Unit)
 
@@ -642,7 +642,7 @@ interface _PolygonAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val fillTranslateArg = args[1] as List<Double?>
+            val fillTranslateArg = args[1] as List<Double>
             api.setFillTranslate(managerIdArg, fillTranslateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -662,7 +662,7 @@ interface _PolygonAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getFillTranslate(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getFillTranslate(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

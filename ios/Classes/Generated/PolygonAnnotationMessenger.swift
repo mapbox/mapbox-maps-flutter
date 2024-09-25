@@ -286,8 +286,8 @@ protocol _PolygonAnnotationMessenger {
   func getFillOutlineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
   func setFillPattern(managerId: String, fillPattern: String, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillPattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
-  func setFillTranslate(managerId: String, fillTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setFillTranslate(managerId: String, fillTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillTranslateAnchor(managerId: String, completion: @escaping (Result<FillTranslateAnchor?, Error>) -> Void)
 }
@@ -637,7 +637,7 @@ class _PolygonAnnotationMessengerSetup {
       setFillTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let fillTranslateArg = args[1] as! [Double?]
+        let fillTranslateArg = args[1] as! [Double]
         api.setFillTranslate(managerId: managerIdArg, fillTranslate: fillTranslateArg) { result in
           switch result {
           case .success:

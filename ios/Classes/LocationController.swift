@@ -44,7 +44,7 @@ extension LocationOptions {
         } else if let puck3D = settings.locationPuck?.locationPuck3D {
             let model = Model(
                 uri: puck3D.modelUri.flatMap(URL.init(string:)),
-                position: puck3D.position?.compacted()
+                position: puck3D.position
             )
             var configuration = Puck3DConfiguration(
                 model: model

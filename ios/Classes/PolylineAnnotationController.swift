@@ -315,7 +315,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineDasharray(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getLineDasharray(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.lineDasharray))
@@ -324,7 +324,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func setLineDasharray(managerId: String, lineDasharray: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineDasharray(managerId: String, lineDasharray: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.lineDasharray = lineDasharray.compactMap { $0 }
@@ -475,7 +475,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getLineTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.lineTranslate))
@@ -484,7 +484,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func setLineTranslate(managerId: String, lineTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineTranslate(managerId: String, lineTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.lineTranslate = lineTranslate.compactMap { $0 }
@@ -535,7 +535,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.lineTrimFadeRange))
@@ -544,7 +544,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.lineTrimFadeRange = lineTrimFadeRange.compactMap { $0 }
@@ -555,7 +555,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.lineTrimOffset))
@@ -564,7 +564,7 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
-    func setLineTrimOffset(managerId: String, lineTrimOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setLineTrimOffset(managerId: String, lineTrimOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.lineTrimOffset = lineTrimOffset.compactMap { $0 }

@@ -335,7 +335,7 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         }
     }
 
-    func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.circleTranslate))
@@ -344,7 +344,7 @@ final class CircleAnnotationController: _CircleAnnotationMessenger {
         }
     }
 
-    func setCircleTranslate(managerId: String, circleTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setCircleTranslate(managerId: String, circleTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.circleTranslate = circleTranslate.compactMap { $0 }

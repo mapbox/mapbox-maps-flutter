@@ -370,8 +370,8 @@ protocol _CircleAnnotationMessenger {
   func getCircleStrokeOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setCircleStrokeWidth(managerId: String, circleStrokeWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleStrokeWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setCircleTranslate(managerId: String, circleTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setCircleTranslate(managerId: String, circleTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getCircleTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleTranslateAnchor(managerId: String, completion: @escaping (Result<CircleTranslateAnchor?, Error>) -> Void)
 }
@@ -861,7 +861,7 @@ class _CircleAnnotationMessengerSetup {
       setCircleTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let circleTranslateArg = args[1] as! [Double?]
+        let circleTranslateArg = args[1] as! [Double]
         api.setCircleTranslate(managerId: managerIdArg, circleTranslate: circleTranslateArg) { result in
           switch result {
           case .success:

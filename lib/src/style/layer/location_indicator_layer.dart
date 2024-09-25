@@ -33,7 +33,7 @@ class LocationIndicatorLayer extends Layer {
     List<Object>? this.emphasisCircleRadiusExpression,
     double? this.imagePitchDisplacement,
     List<Object>? this.imagePitchDisplacementExpression,
-    List<double?>? this.location,
+    List<double>? this.location,
     List<Object>? this.locationExpression,
     double? this.locationIndicatorOpacity,
     List<Object>? this.locationIndicatorOpacityExpression,
@@ -139,7 +139,7 @@ class LocationIndicatorLayer extends Layer {
 
   /// An array of [latitude, longitude, altitude] position of the location indicator.
   /// Default value: [0,0,0].
-  List<double?>? location;
+  List<double>? location;
 
   /// An array of [latitude, longitude, altitude] position of the location indicator.
   /// Default value: [0,0,0].
@@ -381,7 +381,7 @@ class LocationIndicatorLayer extends Layer {
       imagePitchDisplacementExpression:
           _optionalCastList(map["paint"]["image-pitch-displacement"]),
       location: (map["paint"]["location"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       locationExpression: _optionalCastList(map["paint"]["location"]),
       locationIndicatorOpacity:

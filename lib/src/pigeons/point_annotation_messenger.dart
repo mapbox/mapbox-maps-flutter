@@ -319,7 +319,7 @@ class PointAnnotation {
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  List<double?>? iconOffset;
+  List<double>? iconOffset;
 
   /// Rotates the icon clockwise.
   /// Default value: 0.
@@ -335,7 +335,7 @@ class PointAnnotation {
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
-  List<double?>? iconTextFitPadding;
+  List<double>? iconTextFitPadding;
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
@@ -366,7 +366,7 @@ class PointAnnotation {
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
-  List<double?>? textOffset;
+  List<double>? textOffset;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
@@ -499,11 +499,11 @@ class PointAnnotation {
       image: result[2] as Uint8List?,
       iconAnchor: result[3] as IconAnchor?,
       iconImage: result[4] as String?,
-      iconOffset: (result[5] as List<Object?>?)?.cast<double?>(),
+      iconOffset: (result[5] as List<Object?>?)?.cast<double>(),
       iconRotate: result[6] as double?,
       iconSize: result[7] as double?,
       iconTextFit: result[8] as IconTextFit?,
-      iconTextFitPadding: (result[9] as List<Object?>?)?.cast<double?>(),
+      iconTextFitPadding: (result[9] as List<Object?>?)?.cast<double>(),
       symbolSortKey: result[10] as double?,
       textAnchor: result[11] as TextAnchor?,
       textField: result[12] as String?,
@@ -511,7 +511,7 @@ class PointAnnotation {
       textLetterSpacing: result[14] as double?,
       textLineHeight: result[15] as double?,
       textMaxWidth: result[16] as double?,
-      textOffset: (result[17] as List<Object?>?)?.cast<double?>(),
+      textOffset: (result[17] as List<Object?>?)?.cast<double>(),
       textRadialOffset: result[18] as double?,
       textRotate: result[19] as double?,
       textSize: result[20] as double?,
@@ -593,7 +593,7 @@ class PointAnnotationOptions {
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  List<double?>? iconOffset;
+  List<double>? iconOffset;
 
   /// Rotates the icon clockwise.
   /// Default value: 0.
@@ -609,7 +609,7 @@ class PointAnnotationOptions {
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
-  List<double?>? iconTextFitPadding;
+  List<double>? iconTextFitPadding;
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   double? symbolSortKey;
@@ -640,7 +640,7 @@ class PointAnnotationOptions {
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
-  List<double?>? textOffset;
+  List<double>? textOffset;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
@@ -771,11 +771,11 @@ class PointAnnotationOptions {
       image: result[1] as Uint8List?,
       iconAnchor: result[2] as IconAnchor?,
       iconImage: result[3] as String?,
-      iconOffset: (result[4] as List<Object?>?)?.cast<double?>(),
+      iconOffset: (result[4] as List<Object?>?)?.cast<double>(),
       iconRotate: result[5] as double?,
       iconSize: result[6] as double?,
       iconTextFit: result[7] as IconTextFit?,
-      iconTextFitPadding: (result[8] as List<Object?>?)?.cast<double?>(),
+      iconTextFitPadding: (result[8] as List<Object?>?)?.cast<double>(),
       symbolSortKey: result[9] as double?,
       textAnchor: result[10] as TextAnchor?,
       textField: result[11] as String?,
@@ -783,7 +783,7 @@ class PointAnnotationOptions {
       textLetterSpacing: result[13] as double?,
       textLineHeight: result[14] as double?,
       textMaxWidth: result[15] as double?,
-      textOffset: (result[16] as List<Object?>?)?.cast<double?>(),
+      textOffset: (result[16] as List<Object?>?)?.cast<double>(),
       textRadialOffset: result[17] as double?,
       textRotate: result[18] as double?,
       textSize: result[19] as double?,
@@ -1377,7 +1377,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<void> setIconOffset(String managerId, List<double?> iconOffset) async {
+  Future<void> setIconOffset(String managerId, List<double> iconOffset) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1401,7 +1401,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getIconOffset(String managerId) async {
+  Future<List<double>?> getIconOffset(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1421,7 +1421,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -1765,7 +1765,7 @@ class _PointAnnotationMessenger {
   }
 
   Future<void> setIconTextFitPadding(
-      String managerId, List<double?> iconTextFitPadding) async {
+      String managerId, List<double> iconTextFitPadding) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1789,7 +1789,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getIconTextFitPadding(String managerId) async {
+  Future<List<double>?> getIconTextFitPadding(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1809,7 +1809,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -2249,7 +2249,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<void> setTextFont(String managerId, List<String?> textFont) async {
+  Future<void> setTextFont(String managerId, List<String> textFont) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -2273,7 +2273,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<String?>?> getTextFont(String managerId) async {
+  Future<List<String>?> getTextFont(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextFont$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -2293,7 +2293,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<String?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<String>();
     }
   }
 
@@ -2637,7 +2637,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<void> setTextOffset(String managerId, List<double?> textOffset) async {
+  Future<void> setTextOffset(String managerId, List<double> textOffset) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -2661,7 +2661,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getTextOffset(String managerId) async {
+  Future<List<double>?> getTextOffset(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -2681,7 +2681,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -3511,7 +3511,7 @@ class _PointAnnotationMessenger {
   }
 
   Future<void> setIconTranslate(
-      String managerId, List<double?> iconTranslate) async {
+      String managerId, List<double> iconTranslate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3535,7 +3535,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getIconTranslate(String managerId) async {
+  Future<List<double>?> getIconTranslate(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3555,7 +3555,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -4045,7 +4045,7 @@ class _PointAnnotationMessenger {
   }
 
   Future<void> setTextTranslate(
-      String managerId, List<double?> textTranslate) async {
+      String managerId, List<double> textTranslate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -4069,7 +4069,7 @@ class _PointAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getTextTranslate(String managerId) async {
+  Future<List<double>?> getTextTranslate(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -4089,7 +4089,7 @@ class _PointAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 

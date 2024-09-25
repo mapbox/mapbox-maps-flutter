@@ -979,7 +979,7 @@ class _CircleAnnotationMessenger {
   }
 
   Future<void> setCircleTranslate(
-      String managerId, List<double?> circleTranslate) async {
+      String managerId, List<double> circleTranslate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1003,7 +1003,7 @@ class _CircleAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getCircleTranslate(String managerId) async {
+  Future<List<double>?> getCircleTranslate(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1023,7 +1023,7 @@ class _CircleAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 

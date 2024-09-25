@@ -131,7 +131,7 @@ final class Snapshotter {
           pitch: pitch);
 
   /// Returns array of tile identifiers that cover current map camera.
-  Future<List<CanonicalTileID?>> tileCover(TileCoverOptions options) =>
+  Future<List<CanonicalTileID>> tileCover(TileCoverOptions options) =>
       _snapshotterMessenger.tileCover(options);
 
   /// Clears temporary map data.

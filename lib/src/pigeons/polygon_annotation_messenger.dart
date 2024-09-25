@@ -704,7 +704,7 @@ class _PolygonAnnotationMessenger {
   }
 
   Future<void> setFillTranslate(
-      String managerId, List<double?> fillTranslate) async {
+      String managerId, List<double> fillTranslate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -728,7 +728,7 @@ class _PolygonAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getFillTranslate(String managerId) async {
+  Future<List<double>?> getFillTranslate(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -748,7 +748,7 @@ class _PolygonAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 

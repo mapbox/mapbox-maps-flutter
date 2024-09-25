@@ -266,21 +266,21 @@ struct LocationPuck3D {
   var modelUri: String?
   /// The position of the model.
   /// Default value: [0,0].
-  var position: [Double?]?
+  var position: [Double]?
   /// The opacity of the model.
   /// Default value: 1. Value range: [0, 1]
   var modelOpacity: Double?
   /// The scale of the model.
   /// Default value: [1,1,1].
-  var modelScale: [Double?]?
+  var modelScale: [Double]?
   /// The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom.
   var modelScaleExpression: String?
   /// The translation of the model [lon, lat, z]
   /// Default value: [0,0,0].
-  var modelTranslation: [Double?]?
+  var modelTranslation: [Double]?
   /// The rotation of the model.
   /// Default value: [0,0,90].
-  var modelRotation: [Double?]?
+  var modelRotation: [Double]?
   /// Enable/Disable shadow casting for the 3D location puck.
   /// Default value: true.
   var modelCastShadows: Bool?
@@ -299,12 +299,12 @@ struct LocationPuck3D {
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck3D? {
     let modelUri: String? = nilOrValue(pigeonVar_list[0])
-    let position: [Double?]? = nilOrValue(pigeonVar_list[1])
+    let position: [Double]? = nilOrValue(pigeonVar_list[1])
     let modelOpacity: Double? = nilOrValue(pigeonVar_list[2])
-    let modelScale: [Double?]? = nilOrValue(pigeonVar_list[3])
+    let modelScale: [Double]? = nilOrValue(pigeonVar_list[3])
     let modelScaleExpression: String? = nilOrValue(pigeonVar_list[4])
-    let modelTranslation: [Double?]? = nilOrValue(pigeonVar_list[5])
-    let modelRotation: [Double?]? = nilOrValue(pigeonVar_list[6])
+    let modelTranslation: [Double]? = nilOrValue(pigeonVar_list[5])
+    let modelRotation: [Double]? = nilOrValue(pigeonVar_list[6])
     let modelCastShadows: Bool? = nilOrValue(pigeonVar_list[7])
     let modelReceiveShadows: Bool? = nilOrValue(pigeonVar_list[8])
     let modelScaleMode: ModelScaleMode? = nilOrValue(pigeonVar_list[9])

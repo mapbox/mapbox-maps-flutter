@@ -355,8 +355,8 @@ interface _CircleAnnotationMessenger {
   fun getCircleStrokeOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setCircleStrokeWidth(managerId: String, circleStrokeWidth: Double, callback: (Result<Unit>) -> Unit)
   fun getCircleStrokeWidth(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setCircleTranslate(managerId: String, circleTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getCircleTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setCircleTranslate(managerId: String, circleTranslate: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getCircleTranslate(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setCircleTranslateAnchor(managerId: String, circleTranslateAnchor: CircleTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getCircleTranslateAnchor(managerId: String, callback: (Result<CircleTranslateAnchor?>) -> Unit)
 
@@ -916,7 +916,7 @@ interface _CircleAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val circleTranslateArg = args[1] as List<Double?>
+            val circleTranslateArg = args[1] as List<Double>
             api.setCircleTranslate(managerIdArg, circleTranslateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -936,7 +936,7 @@ interface _CircleAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getCircleTranslate(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getCircleTranslate(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

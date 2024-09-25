@@ -23,7 +23,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconImageExpression,
     bool? this.iconKeepUpright,
     List<Object>? this.iconKeepUprightExpression,
-    List<double?>? this.iconOffset,
+    List<double>? this.iconOffset,
     List<Object>? this.iconOffsetExpression,
     bool? this.iconOptional,
     List<Object>? this.iconOptionalExpression,
@@ -39,7 +39,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconSizeExpression,
     IconTextFit? this.iconTextFit,
     List<Object>? this.iconTextFitExpression,
-    List<double?>? this.iconTextFitPadding,
+    List<double>? this.iconTextFitPadding,
     List<Object>? this.iconTextFitPaddingExpression,
     bool? this.symbolAvoidEdges,
     List<Object>? this.symbolAvoidEdgesExpression,
@@ -59,7 +59,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.textAnchorExpression,
     String? this.textField,
     List<Object>? this.textFieldExpression,
-    List<String?>? this.textFont,
+    List<String>? this.textFont,
     List<Object>? this.textFontExpression,
     bool? this.textIgnorePlacement,
     List<Object>? this.textIgnorePlacementExpression,
@@ -75,7 +75,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.textMaxAngleExpression,
     double? this.textMaxWidth,
     List<Object>? this.textMaxWidthExpression,
-    List<double?>? this.textOffset,
+    List<double>? this.textOffset,
     List<Object>? this.textOffsetExpression,
     bool? this.textOptional,
     List<Object>? this.textOptionalExpression,
@@ -93,9 +93,9 @@ class SymbolLayer extends Layer {
     List<Object>? this.textSizeExpression,
     TextTransform? this.textTransform,
     List<Object>? this.textTransformExpression,
-    List<String?>? this.textVariableAnchor,
+    List<String>? this.textVariableAnchor,
     List<Object>? this.textVariableAnchorExpression,
-    List<String?>? this.textWritingMode,
+    List<String>? this.textWritingMode,
     List<Object>? this.textWritingModeExpression,
     int? this.iconColor,
     List<Object>? this.iconColorExpression,
@@ -115,7 +115,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconOcclusionOpacityExpression,
     double? this.iconOpacity,
     List<Object>? this.iconOpacityExpression,
-    List<double?>? this.iconTranslate,
+    List<double>? this.iconTranslate,
     List<Object>? this.iconTranslateExpression,
     IconTranslateAnchor? this.iconTranslateAnchor,
     List<Object>? this.iconTranslateAnchorExpression,
@@ -137,7 +137,7 @@ class SymbolLayer extends Layer {
     List<Object>? this.textOcclusionOpacityExpression,
     double? this.textOpacity,
     List<Object>? this.textOpacityExpression,
-    List<double?>? this.textTranslate,
+    List<double>? this.textTranslate,
     List<Object>? this.textTranslateExpression,
     TextTranslateAnchor? this.textTranslateAnchor,
     List<Object>? this.textTranslateAnchorExpression,
@@ -199,7 +199,7 @@ class SymbolLayer extends Layer {
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  List<double?>? iconOffset;
+  List<double>? iconOffset;
 
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
@@ -263,7 +263,7 @@ class SymbolLayer extends Layer {
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
-  List<double?>? iconTextFitPadding;
+  List<double>? iconTextFitPadding;
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
@@ -340,7 +340,7 @@ class SymbolLayer extends Layer {
   List<Object>? textFieldExpression;
 
   /// Font stack to use for displaying text.
-  List<String?>? textFont;
+  List<String>? textFont;
 
   /// Font stack to use for displaying text.
   List<Object>? textFontExpression;
@@ -403,7 +403,7 @@ class SymbolLayer extends Layer {
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
-  List<double?>? textOffset;
+  List<double>? textOffset;
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
@@ -474,13 +474,13 @@ class SymbolLayer extends Layer {
   List<Object>? textTransformExpression;
 
   /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
-  List<String?>? textVariableAnchor;
+  List<String>? textVariableAnchor;
 
   /// To increase the chance of placing high-priority labels on the map, you can provide an array of `text-anchor` locations: the renderer will attempt to place the label at each location, in order, before moving onto the next label. Use `text-justify: auto` to choose justification based on anchor position. To apply an offset, use the `text-radial-offset` or the two-dimensional `text-offset`.
   List<Object>? textVariableAnchorExpression;
 
   /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
-  List<String?>? textWritingMode;
+  List<String>? textWritingMode;
 
   /// The property allows control over a symbol's orientation. Note that the property values act as a hint, so that a symbol whose language doesn’t support the provided orientation will be laid out in its natural orientation. Example: English point symbol will be rendered horizontally even if array value contains single 'vertical' enum value. For symbol with point placement, the order of elements in an array define priority order for the placement of an orientation variant. For symbol with line placement, the default text writing mode is either ['horizontal', 'vertical'] or ['vertical', 'horizontal'], the order doesn't affect the placement.
   List<Object>? textWritingModeExpression;
@@ -559,7 +559,7 @@ class SymbolLayer extends Layer {
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   /// Default value: [0,0].
-  List<double?>? iconTranslate;
+  List<double>? iconTranslate;
 
   /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   /// Default value: [0,0].
@@ -651,7 +651,7 @@ class SymbolLayer extends Layer {
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   /// Default value: [0,0].
-  List<double?>? textTranslate;
+  List<double>? textTranslate;
 
   /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up.
   /// Default value: [0,0].
@@ -1208,7 +1208,7 @@ class SymbolLayer extends Layer {
       iconKeepUprightExpression:
           _optionalCastList(map["layout"]["icon-keep-upright"]),
       iconOffset: (map["layout"]["icon-offset"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       iconOffsetExpression: _optionalCastList(map["layout"]["icon-offset"]),
       iconOptional: _optionalCast(map["layout"]["icon-optional"]),
@@ -1243,7 +1243,7 @@ class SymbolLayer extends Layer {
               .contains(map["layout"]["icon-text-fit"])),
       iconTextFitExpression: _optionalCastList(map["layout"]["icon-text-fit"]),
       iconTextFitPadding: (map["layout"]["icon-text-fit-padding"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       iconTextFitPaddingExpression:
           _optionalCastList(map["layout"]["icon-text-fit-padding"]),
@@ -1288,7 +1288,7 @@ class SymbolLayer extends Layer {
       textField: _optionalCast(map["layout"]["text-field"]),
       textFieldExpression: _optionalCastList(map["layout"]["text-field"]),
       textFont: (map["layout"]["text-font"] as List?)
-          ?.map<String?>((e) => e.toString())
+          ?.map<String>((e) => e.toString())
           .toList(),
       textFontExpression: _optionalCastList(map["layout"]["text-font"]),
       textIgnorePlacement:
@@ -1318,7 +1318,7 @@ class SymbolLayer extends Layer {
       textMaxWidthExpression:
           _optionalCastList(map["layout"]["text-max-width"]),
       textOffset: (map["layout"]["text-offset"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       textOffsetExpression: _optionalCastList(map["layout"]["text-offset"]),
       textOptional: _optionalCast(map["layout"]["text-optional"]),
@@ -1357,12 +1357,12 @@ class SymbolLayer extends Layer {
       textTransformExpression:
           _optionalCastList(map["layout"]["text-transform"]),
       textVariableAnchor: (map["layout"]["text-variable-anchor"] as List?)
-          ?.map<String?>((e) => e.toString())
+          ?.map<String>((e) => e.toString())
           .toList(),
       textVariableAnchorExpression:
           _optionalCastList(map["layout"]["text-variable-anchor"]),
       textWritingMode: (map["layout"]["text-writing-mode"] as List?)
-          ?.map<String?>((e) => e.toString())
+          ?.map<String>((e) => e.toString())
           .toList(),
       textWritingModeExpression:
           _optionalCastList(map["layout"]["text-writing-mode"]),
@@ -1393,7 +1393,7 @@ class SymbolLayer extends Layer {
       iconOpacity: _optionalCast(map["paint"]["icon-opacity"]),
       iconOpacityExpression: _optionalCastList(map["paint"]["icon-opacity"]),
       iconTranslate: (map["paint"]["icon-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       iconTranslateExpression:
           _optionalCastList(map["paint"]["icon-translate"]),
@@ -1438,7 +1438,7 @@ class SymbolLayer extends Layer {
       textOpacity: _optionalCast(map["paint"]["text-opacity"]),
       textOpacityExpression: _optionalCastList(map["paint"]["text-opacity"]),
       textTranslate: (map["paint"]["text-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       textTranslateExpression:
           _optionalCastList(map["paint"]["text-translate"]),

@@ -988,7 +988,7 @@ class _PolylineAnnotationMessenger {
   }
 
   Future<void> setLineDasharray(
-      String managerId, List<double?> lineDasharray) async {
+      String managerId, List<double> lineDasharray) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDasharray$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1012,7 +1012,7 @@ class _PolylineAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getLineDasharray(String managerId) async {
+  Future<List<double>?> getLineDasharray(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDasharray$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1032,7 +1032,7 @@ class _PolylineAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -1376,7 +1376,7 @@ class _PolylineAnnotationMessenger {
   }
 
   Future<void> setLineTranslate(
-      String managerId, List<double?> lineTranslate) async {
+      String managerId, List<double> lineTranslate) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1400,7 +1400,7 @@ class _PolylineAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getLineTranslate(String managerId) async {
+  Future<List<double>?> getLineTranslate(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1420,7 +1420,7 @@ class _PolylineAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
@@ -1522,7 +1522,7 @@ class _PolylineAnnotationMessenger {
   }
 
   Future<void> setLineTrimFadeRange(
-      String managerId, List<double?> lineTrimFadeRange) async {
+      String managerId, List<double> lineTrimFadeRange) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1546,7 +1546,7 @@ class _PolylineAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getLineTrimFadeRange(String managerId) async {
+  Future<List<double>?> getLineTrimFadeRange(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1566,12 +1566,12 @@ class _PolylineAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 
   Future<void> setLineTrimOffset(
-      String managerId, List<double?> lineTrimOffset) async {
+      String managerId, List<double> lineTrimOffset) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1595,7 +1595,7 @@ class _PolylineAnnotationMessenger {
     }
   }
 
-  Future<List<double?>?> getLineTrimOffset(String managerId) async {
+  Future<List<double>?> getLineTrimOffset(String managerId) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimOffset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -1615,7 +1615,7 @@ class _PolylineAnnotationMessenger {
         details: pigeonVar_replyList[2],
       );
     } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
+      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double>();
     }
   }
 

@@ -83,7 +83,7 @@ class OfflineMapWidgetState extends State<OfflineMapWidget> {
 
   _downloadTileRegion() async {
     final tileRegionLoadOptions = TileRegionLoadOptions(
-        geometry: City.helsinki.toJson(),
+        geometry: City.helsinki.toJson().cast<String, Object>(),
         descriptorsOptions: [
           // If you are using a raster tileset you may need to set a different pixelRatio.
           // The default is UIScreen.main.scale on iOS and displayMetrics's density on Android.

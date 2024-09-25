@@ -22,7 +22,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
       messenger.create(id, annotation);
 
   /// Create multi annotations with the options.
-  Future<List<CircleAnnotation?>> createMulti(
+  Future<List<CircleAnnotation>> createMulti(
           List<CircleAnnotationOptions> annotations) =>
       messenger.createMulti(id, annotations);
 
@@ -120,11 +120,11 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   Future<double?> getCircleStrokeWidth() => messenger.getCircleStrokeWidth(id);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<void> setCircleTranslate(List<double?> circleTranslate) =>
+  Future<void> setCircleTranslate(List<double> circleTranslate) =>
       messenger.setCircleTranslate(id, circleTranslate);
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
-  Future<List<double?>?> getCircleTranslate() =>
+  Future<List<double>?> getCircleTranslate() =>
       messenger.getCircleTranslate(id);
 
   /// Controls the frame of reference for `circle-translate`. Default value: "map".

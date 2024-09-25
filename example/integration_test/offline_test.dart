@@ -16,7 +16,7 @@ void main() {
   );
 
   final _tileRegionLoadOptions = TileRegionLoadOptions(
-      geometry: City.helsinki.toJson(),
+      geometry: City.helsinki.toJson().cast<String, Object>(),
       descriptorsOptions: [
         TilesetDescriptorOptions(
             styleURI: MapboxStyles.OUTDOORS, minZoom: 0, maxZoom: 16),

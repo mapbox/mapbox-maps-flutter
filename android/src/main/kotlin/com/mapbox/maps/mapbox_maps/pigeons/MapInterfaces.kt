@@ -1106,13 +1106,13 @@ data class Size(
  */
 data class RenderedQueryOptions(
   /** Layer IDs to include in the query. */
-  val layerIds: List<String?>? = null,
+  val layerIds: List<String>? = null,
   /** Filters the returned features with an expression */
   val filter: String? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RenderedQueryOptions {
-      val layerIds = pigeonVar_list[0] as List<String?>?
+      val layerIds = pigeonVar_list[0] as List<String>?
       val filter = pigeonVar_list[1] as String?
       return RenderedQueryOptions(layerIds, filter)
     }
@@ -1132,13 +1132,13 @@ data class RenderedQueryOptions(
  */
 data class SourceQueryOptions(
   /** Source layer IDs to include in the query. */
-  val sourceLayerIds: List<String?>? = null,
+  val sourceLayerIds: List<String>? = null,
   /** Filters the returned features with an expression */
   val filter: String
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): SourceQueryOptions {
-      val sourceLayerIds = pigeonVar_list[0] as List<String?>?
+      val sourceLayerIds = pigeonVar_list[0] as List<String>?
       val filter = pigeonVar_list[1] as String
       return SourceQueryOptions(sourceLayerIds, filter)
     }
@@ -1160,12 +1160,12 @@ data class FeatureExtensionValue(
   /** An optional value of a feature extension */
   val value: String? = null,
   /** An optional array of features from a feature extension. */
-  val featureCollection: List<Map<String?, Any?>?>? = null
+  val featureCollection: List<Map<String, Any?>>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): FeatureExtensionValue {
       val value = pigeonVar_list[0] as String?
-      val featureCollection = pigeonVar_list[1] as List<Map<String?, Any?>?>?
+      val featureCollection = pigeonVar_list[1] as List<Map<String, Any?>>?
       return FeatureExtensionValue(value, featureCollection)
     }
   }
@@ -1221,12 +1221,12 @@ data class QueriedRenderedFeature(
    * If the feature has been rendered in multiple layers, multiple Ids will be provided.
    * If the feature is only rendered in one layer, a single Id will be provided.
    */
-  val layers: List<String?>
+  val layers: List<String>
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): QueriedRenderedFeature {
       val queriedFeature = pigeonVar_list[0] as QueriedFeature
-      val layers = pigeonVar_list[1] as List<String?>
+      val layers = pigeonVar_list[1] as List<String>
       return QueriedRenderedFeature(queriedFeature, layers)
     }
   }
@@ -1269,7 +1269,7 @@ data class QueriedSourceFeature(
  */
 data class QueriedFeature(
   /** Feature returned by the query. */
-  val feature: Map<String?, Any?>,
+  val feature: Map<String, Any?>,
   /** Source id for a queried feature. */
   val source: String,
   /**
@@ -1285,7 +1285,7 @@ data class QueriedFeature(
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): QueriedFeature {
-      val feature = pigeonVar_list[0] as Map<String?, Any?>
+      val feature = pigeonVar_list[0] as Map<String, Any?>
       val source = pigeonVar_list[1] as String
       val sourceLayer = pigeonVar_list[2] as String?
       val state = pigeonVar_list[3] as String
@@ -1448,7 +1448,7 @@ data class FlatLight(
   /** Transition property for `intensity` */
   val intensityTransition: TransitionOptions? = null,
   /** Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below). */
-  val position: List<Double?>? = null,
+  val position: List<Double>? = null,
   /** Transition property for `position` */
   val positionTransition: TransitionOptions? = null
 ) {
@@ -1460,7 +1460,7 @@ data class FlatLight(
       val colorTransition = pigeonVar_list[3] as TransitionOptions?
       val intensity = pigeonVar_list[4] as Double?
       val intensityTransition = pigeonVar_list[5] as TransitionOptions?
-      val position = pigeonVar_list[6] as List<Double?>?
+      val position = pigeonVar_list[6] as List<Double>?
       val positionTransition = pigeonVar_list[7] as TransitionOptions?
       return FlatLight(id, anchor, color, colorTransition, intensity, intensityTransition, position, positionTransition)
     }
@@ -1496,7 +1496,7 @@ data class DirectionalLight(
   /** Transition property for `color` */
   val colorTransition: TransitionOptions? = null,
   /** Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below). */
-  val direction: List<Double?>? = null,
+  val direction: List<Double>? = null,
   /** Transition property for `direction` */
   val directionTransition: TransitionOptions? = null,
   /** A multiplier for the color of the directional light. */
@@ -1514,7 +1514,7 @@ data class DirectionalLight(
       val castShadows = pigeonVar_list[1] as Boolean?
       val color = pigeonVar_list[2] as Long?
       val colorTransition = pigeonVar_list[3] as TransitionOptions?
-      val direction = pigeonVar_list[4] as List<Double?>?
+      val direction = pigeonVar_list[4] as List<Double>?
       val directionTransition = pigeonVar_list[5] as TransitionOptions?
       val intensity = pigeonVar_list[6] as Double?
       val intensityTransition = pigeonVar_list[7] as TransitionOptions?
@@ -2563,7 +2563,7 @@ interface _CameraManager {
    *
    * @return The `camera options` object representing the provided parameters.
    */
-  fun cameraForGeometry(geometry: Map<String?, Any?>, padding: MbxEdgeInsets, bearing: Double?, pitch: Double?): CameraOptions
+  fun cameraForGeometry(geometry: Map<String, Any?>, padding: MbxEdgeInsets, bearing: Double?, pitch: Double?): CameraOptions
   /**
    * Returns the `coordinate bounds` for a given camera.
    *
@@ -2645,7 +2645,7 @@ interface _CameraManager {
    *
    * @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
    */
-  fun pixelsForCoordinates(coordinates: List<Point>): List<ScreenCoordinate?>
+  fun pixelsForCoordinates(coordinates: List<Point>): List<ScreenCoordinate>
   /**
    * Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
    * to `screen coordinates`.
@@ -2657,7 +2657,7 @@ interface _CameraManager {
    *
    * @return A `geographical coordinates` that correspond to a given `screen coordinates`.
    */
-  fun coordinatesForPixels(pixels: List<ScreenCoordinate?>): List<Point>
+  fun coordinatesForPixels(pixels: List<ScreenCoordinate>): List<Point>
   /**
    * Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
    * The map will retain its current values for any details not passed via the camera options argument.
@@ -2786,7 +2786,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val geometryArg = args[0] as Map<String?, Any?>
+            val geometryArg = args[0] as Map<String, Any?>
             val paddingArg = args[1] as MbxEdgeInsets
             val bearingArg = args[2] as Double?
             val pitchArg = args[3] as Double?
@@ -2925,7 +2925,7 @@ interface _CameraManager {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val pixelsArg = args[0] as List<ScreenCoordinate?>
+            val pixelsArg = args[0] as List<ScreenCoordinate>
             val wrapped: List<Any?> = try {
               listOf(api.coordinatesForPixels(pixelsArg))
             } catch (exception: Throwable) {
@@ -3086,7 +3086,7 @@ interface _MapInterface {
    *
    * @return An array of `map debug options` flags currently set to the map.
    */
-  fun getDebug(): List<MapDebugOptions?>
+  fun getDebug(): List<MapDebugOptions>
   /**
    * Sets the `map debug options` and enables debug mode based on the passed value.
    *
@@ -3094,7 +3094,7 @@ interface _MapInterface {
    * @param value A `boolean` value representing the state for a given `map debug options`.
    *
    */
-  fun setDebug(debugOptions: List<MapDebugOptions?>, value: Boolean)
+  fun setDebug(debugOptions: List<MapDebugOptions>, value: Boolean)
   /**
    * Queries the map for rendered features.
    *
@@ -3103,7 +3103,7 @@ interface _MapInterface {
    * @param completion The `query features completion` called when the query completes.
    * @return A `cancelable` object that could be used to cancel the pending query.
    */
-  fun queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
+  fun queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature>>) -> Unit)
   /**
    * Queries the map for source features.
    *
@@ -3111,7 +3111,7 @@ interface _MapInterface {
    * @param options The `source query options` for querying source features.
    * @param completion The `query features completion` called when the query completes.
    */
-  fun querySourceFeatures(sourceId: String, options: SourceQueryOptions, callback: (Result<List<QueriedSourceFeature?>>) -> Unit)
+  fun querySourceFeatures(sourceId: String, options: SourceQueryOptions, callback: (Result<List<QueriedSourceFeature>>) -> Unit)
   /**
    * Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
    * to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3125,7 +3125,7 @@ interface _MapInterface {
    * @param completion The result will be returned through the completion block.
    *         The result is a feature collection or a string describing an error if the operation was not successful.
    */
-  fun getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: Map<String?, Any?>, limit: Long?, offset: Long?, callback: (Result<FeatureExtensionValue>) -> Unit)
+  fun getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: Map<String, Any?>, limit: Long?, offset: Long?, callback: (Result<FeatureExtensionValue>) -> Unit)
   /**
    * Returns the children (original points or clusters) of a cluster (on the next zoom level)
    * given its id (cluster_id value from feature properties) from a GeoJsonSource.
@@ -3137,7 +3137,7 @@ interface _MapInterface {
    * @param completion The result will be returned through the completion block.
    *         The result is a feature collection or a string describing an error if the operation was not successful.
    */
-  fun getGeoJsonClusterChildren(sourceIdentifier: String, cluster: Map<String?, Any?>, callback: (Result<FeatureExtensionValue>) -> Unit)
+  fun getGeoJsonClusterChildren(sourceIdentifier: String, cluster: Map<String, Any?>, callback: (Result<FeatureExtensionValue>) -> Unit)
   /**
    * Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
    * given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
@@ -3149,7 +3149,7 @@ interface _MapInterface {
    * @param completion The result will be returned through the completion block.
    *         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
    */
-  fun getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: Map<String?, Any?>, callback: (Result<FeatureExtensionValue>) -> Unit)
+  fun getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: Map<String, Any?>, callback: (Result<FeatureExtensionValue>) -> Unit)
   /**
    * Updates the state object of a feature within a style source.
    *
@@ -3551,7 +3551,7 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val debugOptionsArg = args[0] as List<MapDebugOptions?>
+            val debugOptionsArg = args[0] as List<MapDebugOptions>
             val valueArg = args[1] as Boolean
             val wrapped: List<Any?> = try {
               api.setDebug(debugOptionsArg, valueArg)
@@ -3572,7 +3572,7 @@ interface _MapInterface {
             val args = message as List<Any?>
             val geometryArg = args[0] as RenderedQueryGeometry
             val optionsArg = args[1] as RenderedQueryOptions
-            api.queryRenderedFeatures(geometryArg, optionsArg) { result: Result<List<QueriedRenderedFeature?>> ->
+            api.queryRenderedFeatures(geometryArg, optionsArg) { result: Result<List<QueriedRenderedFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3593,7 +3593,7 @@ interface _MapInterface {
             val args = message as List<Any?>
             val sourceIdArg = args[0] as String
             val optionsArg = args[1] as SourceQueryOptions
-            api.querySourceFeatures(sourceIdArg, optionsArg) { result: Result<List<QueriedSourceFeature?>> ->
+            api.querySourceFeatures(sourceIdArg, optionsArg) { result: Result<List<QueriedSourceFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3613,7 +3613,7 @@ interface _MapInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdentifierArg = args[0] as String
-            val clusterArg = args[1] as Map<String?, Any?>
+            val clusterArg = args[1] as Map<String, Any?>
             val limitArg = args[2] as Long?
             val offsetArg = args[3] as Long?
             api.getGeoJsonClusterLeaves(sourceIdentifierArg, clusterArg, limitArg, offsetArg) { result: Result<FeatureExtensionValue> ->
@@ -3636,7 +3636,7 @@ interface _MapInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdentifierArg = args[0] as String
-            val clusterArg = args[1] as Map<String?, Any?>
+            val clusterArg = args[1] as Map<String, Any?>
             api.getGeoJsonClusterChildren(sourceIdentifierArg, clusterArg) { result: Result<FeatureExtensionValue> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -3657,7 +3657,7 @@ interface _MapInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val sourceIdentifierArg = args[0] as String
-            val clusterArg = args[1] as Map<String?, Any?>
+            val clusterArg = args[1] as Map<String, Any?>
             api.getGeoJsonClusterExpansionZoom(sourceIdentifierArg, clusterArg) { result: Result<FeatureExtensionValue> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -4408,7 +4408,7 @@ interface StyleManager {
    */
   fun getStyleTransition(callback: (Result<TransitionOptions>) -> Unit)
   /** Returns the list containing information about existing style import objects. */
-  fun getStyleImports(): List<StyleObjectInfo?>
+  fun getStyleImports(): List<StyleObjectInfo>
   /**
    * Removes an existing style import.
    *
@@ -4531,7 +4531,7 @@ interface StyleManager {
    *
    * @return The list containing the information about existing style layer objects.
    */
-  fun getStyleLayers(callback: (Result<List<StyleObjectInfo?>>) -> Unit)
+  fun getStyleLayers(callback: (Result<List<StyleObjectInfo>>) -> Unit)
   /**
    * Gets the value of style layer property.
    *
@@ -4731,9 +4731,9 @@ interface StyleManager {
    *
    * @return The list containing the information about existing style source objects.
    */
-  fun getStyleSources(callback: (Result<List<StyleObjectInfo?>>) -> Unit)
+  fun getStyleSources(callback: (Result<List<StyleObjectInfo>>) -> Unit)
   /** Returns an ordered list of the current style lights. */
-  fun getStyleLights(): List<StyleObjectInfo?>
+  fun getStyleLights(): List<StyleObjectInfo>
   /**
    * Set global directional lightning.
    *
@@ -4820,7 +4820,7 @@ interface StyleManager {
    *
    * @return A string describing an error if the operation was not successful, empty otherwise.
    */
-  fun addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Boolean, stretchX: List<ImageStretches?>, stretchY: List<ImageStretches?>, content: ImageContent?, callback: (Result<Unit>) -> Unit)
+  fun addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Boolean, stretchX: List<ImageStretches>, stretchY: List<ImageStretches>, content: ImageContent?, callback: (Result<Unit>) -> Unit)
   /**
    * Removes an image from the style.
    *
@@ -5295,7 +5295,7 @@ interface StyleManager {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            api.getStyleLayers { result: Result<List<StyleObjectInfo?>> ->
+            api.getStyleLayers { result: Result<List<StyleObjectInfo>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5619,7 +5619,7 @@ interface StyleManager {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            api.getStyleSources { result: Result<List<StyleObjectInfo?>> ->
+            api.getStyleSources { result: Result<List<StyleObjectInfo>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5815,8 +5815,8 @@ interface StyleManager {
             val scaleArg = args[1] as Double
             val imageArg = args[2] as MbxImage
             val sdfArg = args[3] as Boolean
-            val stretchXArg = args[4] as List<ImageStretches?>
-            val stretchYArg = args[5] as List<ImageStretches?>
+            val stretchXArg = args[4] as List<ImageStretches>
+            val stretchYArg = args[5] as List<ImageStretches>
             val contentArg = args[6] as ImageContent?
             api.addStyleImage(imageIdArg, scaleArg, imageArg, sdfArg, stretchXArg, stretchYArg, contentArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()

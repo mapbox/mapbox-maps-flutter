@@ -35,7 +35,7 @@ class CircleLayer extends Layer {
     List<Object>? this.circleStrokeOpacityExpression,
     double? this.circleStrokeWidth,
     List<Object>? this.circleStrokeWidthExpression,
-    List<double?>? this.circleTranslate,
+    List<double>? this.circleTranslate,
     List<Object>? this.circleTranslateExpression,
     CircleTranslateAnchor? this.circleTranslateAnchor,
     List<Object>? this.circleTranslateAnchorExpression,
@@ -145,7 +145,7 @@ class CircleLayer extends Layer {
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
-  List<double?>? circleTranslate;
+  List<double>? circleTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
@@ -357,7 +357,7 @@ class CircleLayer extends Layer {
       circleStrokeWidthExpression:
           _optionalCastList(map["paint"]["circle-stroke-width"]),
       circleTranslate: (map["paint"]["circle-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       circleTranslateExpression:
           _optionalCastList(map["paint"]["circle-translate"]),

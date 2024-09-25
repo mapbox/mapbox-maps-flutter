@@ -215,7 +215,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getIconOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getIconOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.iconOffset))
@@ -224,7 +224,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setIconOffset(managerId: String, iconOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setIconOffset(managerId: String, iconOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconOffset = iconOffset.compactMap { $0 }
@@ -375,7 +375,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.iconTextFitPadding))
@@ -384,7 +384,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconTextFitPadding = iconTextFitPadding.compactMap { $0 }
@@ -575,7 +575,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getTextFont(managerId: String, completion: @escaping (Result<[String?]?, Error>) -> Void) {
+    func getTextFont(managerId: String, completion: @escaping (Result<[String]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.textFont))
@@ -584,7 +584,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setTextFont(managerId: String, textFont: [String?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setTextFont(managerId: String, textFont: [String], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textFont = textFont.compactMap { $0 }
@@ -735,7 +735,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getTextOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getTextOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.textOffset))
@@ -744,7 +744,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setTextOffset(managerId: String, textOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setTextOffset(managerId: String, textOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textOffset = textOffset.compactMap { $0 }
@@ -1095,7 +1095,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getIconTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.iconTranslate))
@@ -1104,7 +1104,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setIconTranslate(managerId: String, iconTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.iconTranslate = iconTranslate.compactMap { $0 }
@@ -1315,7 +1315,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getTextTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.textTranslate))
@@ -1324,7 +1324,7 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
-    func setTextTranslate(managerId: String, textTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setTextTranslate(managerId: String, textTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.textTranslate = textTranslate.compactMap { $0 }

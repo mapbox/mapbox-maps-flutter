@@ -117,7 +117,6 @@ extension OfflineManager {
         .init(
             geometry: convertDictionaryToGeometry(dict: fltValue.geometry),
             descriptors: fltValue.descriptorsOptions?.compactMap { descriptorOptions in
-                guard let descriptorOptions else { return nil }
                 return MapboxCoreMaps.TilesetDescriptorOptions(fltValue: descriptorOptions).map(createTilesetDescriptor(for:))
             },
             metadata: fltValue.metadata,

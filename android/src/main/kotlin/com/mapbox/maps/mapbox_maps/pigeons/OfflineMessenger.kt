@@ -104,7 +104,7 @@ data class StylePackLoadOptions(
    *
    * Developers can use this field to store custom metadata associated with a style package.
    */
-  val metadata: Map<String?, Any?>? = null,
+  val metadata: Map<String, Any?>? = null,
   /**
    * Accepts expired data when loading style resources.
    *
@@ -117,7 +117,7 @@ data class StylePackLoadOptions(
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): StylePackLoadOptions {
       val glyphsRasterizationMode = pigeonVar_list[0] as GlyphsRasterizationMode?
-      val metadata = pigeonVar_list[1] as Map<String?, Any?>?
+      val metadata = pigeonVar_list[1] as Map<String, Any?>?
       val acceptExpired = pigeonVar_list[2] as Boolean
       return StylePackLoadOptions(glyphsRasterizationMode, metadata, acceptExpired)
     }
@@ -276,7 +276,7 @@ data class TilesetDescriptorOptions(
    * represented by `styleURL`, it can be used also with the empty `styleURL`.
    * The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
    */
-  val tilesets: List<String?>? = null,
+  val tilesets: List<String>? = null,
   /**
    * Style package load options, associated with the tileset descriptor.
    * If provided, `offline manager` will create a style package while resolving the corresponding
@@ -290,7 +290,7 @@ data class TilesetDescriptorOptions(
    */
   val stylePackOptions: StylePackLoadOptions? = null,
   /** Extra tileset descriptor options. */
-  val extraOptions: Map<String?, Any?>? = null
+  val extraOptions: Map<String, Any?>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): TilesetDescriptorOptions {
@@ -298,9 +298,9 @@ data class TilesetDescriptorOptions(
       val minZoom = pigeonVar_list[1] as Long
       val maxZoom = pigeonVar_list[2] as Long
       val pixelRatio = pigeonVar_list[3] as Double?
-      val tilesets = pigeonVar_list[4] as List<String?>?
+      val tilesets = pigeonVar_list[4] as List<String>?
       val stylePackOptions = pigeonVar_list[5] as StylePackLoadOptions?
-      val extraOptions = pigeonVar_list[6] as Map<String?, Any?>?
+      val extraOptions = pigeonVar_list[6] as Map<String, Any?>?
       return TilesetDescriptorOptions(styleURI, minZoom, maxZoom, pixelRatio, tilesets, stylePackOptions, extraOptions)
     }
   }
@@ -332,7 +332,7 @@ data class TileRegionLoadOptions(
    *
    * Providing an empty geometry list is equivalent to removeTileRegion() call.
    */
-  val geometry: Map<String?, Any?>? = null,
+  val geometry: Map<String, Any?>? = null,
   /**
    * The tile region's tileset descriptors.
    *
@@ -341,7 +341,7 @@ data class TileRegionLoadOptions(
    *
    * Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
    */
-  val descriptorsOptions: List<TilesetDescriptorOptions?>? = null,
+  val descriptorsOptions: List<TilesetDescriptorOptions>? = null,
   /**
    * A custom Mapbox Value associated with this tile region for storing metadata.
    *
@@ -351,7 +351,7 @@ data class TileRegionLoadOptions(
    * Developers can use this field to store custom metadata associated with a tile region. This value
    * can be retrieved with getTileRegionMetadata().
    */
-  val metadata: Map<String?, Any?>? = null,
+  val metadata: Map<String, Any?>? = null,
   /**
    * Accepts expired data when loading tiles.
    *
@@ -395,18 +395,18 @@ data class TileRegionLoadOptions(
    *
    * There are currently no extra options.
    */
-  val extraOptions: Map<String?, Any?>? = null
+  val extraOptions: Map<String, Any?>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): TileRegionLoadOptions {
-      val geometry = pigeonVar_list[0] as Map<String?, Any?>?
-      val descriptorsOptions = pigeonVar_list[1] as List<TilesetDescriptorOptions?>?
-      val metadata = pigeonVar_list[2] as Map<String?, Any?>?
+      val geometry = pigeonVar_list[0] as Map<String, Any?>?
+      val descriptorsOptions = pigeonVar_list[1] as List<TilesetDescriptorOptions>?
+      val metadata = pigeonVar_list[2] as Map<String, Any?>?
       val acceptExpired = pigeonVar_list[3] as Boolean
       val networkRestriction = pigeonVar_list[4] as NetworkRestriction
       val startLocation = pigeonVar_list[5] as Point?
       val averageBytesPerSecond = pigeonVar_list[6] as Long?
-      val extraOptions = pigeonVar_list[7] as Map<String?, Any?>?
+      val extraOptions = pigeonVar_list[7] as Map<String, Any?>?
       return TileRegionLoadOptions(geometry, descriptorsOptions, metadata, acceptExpired, networkRestriction, startLocation, averageBytesPerSecond, extraOptions)
     }
   }
@@ -500,14 +500,14 @@ data class TileRegionEstimateResult(
    */
   val storageSize: Long,
   /** Reserved for future use. */
-  val extraOptions: Map<String?, Any?>? = null
+  val extraOptions: Map<String, Any?>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): TileRegionEstimateResult {
       val errorMargin = pigeonVar_list[0] as Double
       val transferSize = pigeonVar_list[1] as Long
       val storageSize = pigeonVar_list[2] as Long
-      val extraOptions = pigeonVar_list[3] as Map<String?, Any?>?
+      val extraOptions = pigeonVar_list[3] as Map<String, Any?>?
       return TileRegionEstimateResult(errorMargin, transferSize, storageSize, extraOptions)
     }
   }
@@ -542,14 +542,14 @@ data class TileRegionEstimateOptions(
    */
   val timeout: Double,
   /** Reserved for future use. */
-  val extraOptions: Map<String?, Any?>? = null
+  val extraOptions: Map<String, Any?>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): TileRegionEstimateOptions {
       val errorMargin = pigeonVar_list[0] as Double
       val preciseEstimationTimeout = pigeonVar_list[1] as Double
       val timeout = pigeonVar_list[2] as Double
-      val extraOptions = pigeonVar_list[3] as Map<String?, Any?>?
+      val extraOptions = pigeonVar_list[3] as Map<String, Any?>?
       return TileRegionEstimateOptions(errorMargin, preciseEstimationTimeout, timeout, extraOptions)
     }
   }

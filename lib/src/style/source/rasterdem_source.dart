@@ -7,8 +7,8 @@ class RasterDemSource extends Source {
   RasterDemSource({
     required String id,
     String? url,
-    List<String?>? tiles,
-    List<double?>? bounds,
+    List<String>? tiles,
+    List<double>? bounds,
     double? minzoom,
     double? maxzoom,
     double? tileSize,
@@ -55,10 +55,10 @@ class RasterDemSource extends Source {
     });
   }
 
-  List<String?>? _tiles;
+  List<String>? _tiles;
 
   /// An array of one or more tile source URLs, as in the TileJSON spec. Required if `url` is not provided.
-  Future<List<String?>?> get tiles async {
+  Future<List<String>?> get tiles async {
     return _style?.getStyleSourceProperty(id, "tiles").then((value) {
       if (value.value != null) {
         return (value.value as List<dynamic>).cast();
@@ -68,11 +68,11 @@ class RasterDemSource extends Source {
     });
   }
 
-  List<double?>? _bounds;
+  List<double>? _bounds;
 
   /// An array containing the longitude and latitude of the southwest and northeast corners of the source's bounding box in the following order: `[sw.lng, sw.lat, ne.lng, ne.lat]`. When this property is included in a source, no tiles outside of the given bounds are requested by Mapbox GL.
   /// Default value: [-180,-85.051129,180,85.051129].
-  Future<List<double?>?> get bounds async {
+  Future<List<double>?> get bounds async {
     return _style?.getStyleSourceProperty(id, "bounds").then((value) {
       if (value.value != null) {
         return (value.value as List<dynamic>).cast();

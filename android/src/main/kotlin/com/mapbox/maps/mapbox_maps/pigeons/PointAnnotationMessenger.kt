@@ -390,7 +390,7 @@ data class PointAnnotation(
    * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
    * Default value: [0,0].
    */
-  val iconOffset: List<Double?>? = null,
+  val iconOffset: List<Double>? = null,
   /**
    * Rotates the icon clockwise.
    * Default value: 0.
@@ -410,7 +410,7 @@ data class PointAnnotation(
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
    * Default value: [0,0,0,0].
    */
-  val iconTextFitPadding: List<Double?>? = null,
+  val iconTextFitPadding: List<Double>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
   /**
@@ -447,7 +447,7 @@ data class PointAnnotation(
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
    * Default value: [0,0].
    */
-  val textOffset: List<Double?>? = null,
+  val textOffset: List<Double>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
    * Default value: 0.
@@ -556,11 +556,11 @@ data class PointAnnotation(
       val image = pigeonVar_list[2] as ByteArray?
       val iconAnchor = pigeonVar_list[3] as IconAnchor?
       val iconImage = pigeonVar_list[4] as String?
-      val iconOffset = pigeonVar_list[5] as List<Double?>?
+      val iconOffset = pigeonVar_list[5] as List<Double>?
       val iconRotate = pigeonVar_list[6] as Double?
       val iconSize = pigeonVar_list[7] as Double?
       val iconTextFit = pigeonVar_list[8] as IconTextFit?
-      val iconTextFitPadding = pigeonVar_list[9] as List<Double?>?
+      val iconTextFitPadding = pigeonVar_list[9] as List<Double>?
       val symbolSortKey = pigeonVar_list[10] as Double?
       val textAnchor = pigeonVar_list[11] as TextAnchor?
       val textField = pigeonVar_list[12] as String?
@@ -568,7 +568,7 @@ data class PointAnnotation(
       val textLetterSpacing = pigeonVar_list[14] as Double?
       val textLineHeight = pigeonVar_list[15] as Double?
       val textMaxWidth = pigeonVar_list[16] as Double?
-      val textOffset = pigeonVar_list[17] as List<Double?>?
+      val textOffset = pigeonVar_list[17] as List<Double>?
       val textRadialOffset = pigeonVar_list[18] as Double?
       val textRotate = pigeonVar_list[19] as Double?
       val textSize = pigeonVar_list[20] as Double?
@@ -656,7 +656,7 @@ data class PointAnnotationOptions(
    * Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
    * Default value: [0,0].
    */
-  val iconOffset: List<Double?>? = null,
+  val iconOffset: List<Double>? = null,
   /**
    * Rotates the icon clockwise.
    * Default value: 0.
@@ -676,7 +676,7 @@ data class PointAnnotationOptions(
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
    * Default value: [0,0,0,0].
    */
-  val iconTextFitPadding: List<Double?>? = null,
+  val iconTextFitPadding: List<Double>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
   val symbolSortKey: Double? = null,
   /**
@@ -713,7 +713,7 @@ data class PointAnnotationOptions(
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
    * Default value: [0,0].
    */
-  val textOffset: List<Double?>? = null,
+  val textOffset: List<Double>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
    * Default value: 0.
@@ -821,11 +821,11 @@ data class PointAnnotationOptions(
       val image = pigeonVar_list[1] as ByteArray?
       val iconAnchor = pigeonVar_list[2] as IconAnchor?
       val iconImage = pigeonVar_list[3] as String?
-      val iconOffset = pigeonVar_list[4] as List<Double?>?
+      val iconOffset = pigeonVar_list[4] as List<Double>?
       val iconRotate = pigeonVar_list[5] as Double?
       val iconSize = pigeonVar_list[6] as Double?
       val iconTextFit = pigeonVar_list[7] as IconTextFit?
-      val iconTextFitPadding = pigeonVar_list[8] as List<Double?>?
+      val iconTextFitPadding = pigeonVar_list[8] as List<Double>?
       val symbolSortKey = pigeonVar_list[9] as Double?
       val textAnchor = pigeonVar_list[10] as TextAnchor?
       val textField = pigeonVar_list[11] as String?
@@ -833,7 +833,7 @@ data class PointAnnotationOptions(
       val textLetterSpacing = pigeonVar_list[13] as Double?
       val textLineHeight = pigeonVar_list[14] as Double?
       val textMaxWidth = pigeonVar_list[15] as Double?
-      val textOffset = pigeonVar_list[16] as List<Double?>?
+      val textOffset = pigeonVar_list[16] as List<Double>?
       val textRadialOffset = pigeonVar_list[17] as Double?
       val textRotate = pigeonVar_list[18] as Double?
       val textSize = pigeonVar_list[19] as Double?
@@ -1125,8 +1125,8 @@ interface _PointAnnotationMessenger {
   fun getIconImage(managerId: String, callback: (Result<String?>) -> Unit)
   fun setIconKeepUpright(managerId: String, iconKeepUpright: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconKeepUpright(managerId: String, callback: (Result<Boolean?>) -> Unit)
-  fun setIconOffset(managerId: String, iconOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getIconOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setIconOffset(managerId: String, iconOffset: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getIconOffset(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setIconOptional(managerId: String, iconOptional: Boolean, callback: (Result<Unit>) -> Unit)
   fun getIconOptional(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setIconPadding(managerId: String, iconPadding: Double, callback: (Result<Unit>) -> Unit)
@@ -1141,8 +1141,8 @@ interface _PointAnnotationMessenger {
   fun getIconSize(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconTextFit(managerId: String, iconTextFit: IconTextFit, callback: (Result<Unit>) -> Unit)
   fun getIconTextFit(managerId: String, callback: (Result<IconTextFit?>) -> Unit)
-  fun setIconTextFitPadding(managerId: String, iconTextFitPadding: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getIconTextFitPadding(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setIconTextFitPadding(managerId: String, iconTextFitPadding: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getIconTextFitPadding(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Boolean, callback: (Result<Unit>) -> Unit)
   fun getSymbolAvoidEdges(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, callback: (Result<Unit>) -> Unit)
@@ -1161,8 +1161,8 @@ interface _PointAnnotationMessenger {
   fun getTextAnchor(managerId: String, callback: (Result<TextAnchor?>) -> Unit)
   fun setTextField(managerId: String, textField: String, callback: (Result<Unit>) -> Unit)
   fun getTextField(managerId: String, callback: (Result<String?>) -> Unit)
-  fun setTextFont(managerId: String, textFont: List<String?>, callback: (Result<Unit>) -> Unit)
-  fun getTextFont(managerId: String, callback: (Result<List<String?>?>) -> Unit)
+  fun setTextFont(managerId: String, textFont: List<String>, callback: (Result<Unit>) -> Unit)
+  fun getTextFont(managerId: String, callback: (Result<List<String>?>) -> Unit)
   fun setTextIgnorePlacement(managerId: String, textIgnorePlacement: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextIgnorePlacement(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setTextJustify(managerId: String, textJustify: TextJustify, callback: (Result<Unit>) -> Unit)
@@ -1177,8 +1177,8 @@ interface _PointAnnotationMessenger {
   fun getTextMaxAngle(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextMaxWidth(managerId: String, textMaxWidth: Double, callback: (Result<Unit>) -> Unit)
   fun getTextMaxWidth(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setTextOffset(managerId: String, textOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getTextOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setTextOffset(managerId: String, textOffset: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getTextOffset(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setTextOptional(managerId: String, textOptional: Boolean, callback: (Result<Unit>) -> Unit)
   fun getTextOptional(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setTextPadding(managerId: String, textPadding: Double, callback: (Result<Unit>) -> Unit)
@@ -1213,8 +1213,8 @@ interface _PointAnnotationMessenger {
   fun getIconOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setIconOpacity(managerId: String, iconOpacity: Double, callback: (Result<Unit>) -> Unit)
   fun getIconOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setIconTranslate(managerId: String, iconTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setIconTranslate(managerId: String, iconTranslate: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getIconTranslate(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
   fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
@@ -1235,8 +1235,8 @@ interface _PointAnnotationMessenger {
   fun getTextOcclusionOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextOpacity(managerId: String, textOpacity: Double, callback: (Result<Unit>) -> Unit)
   fun getTextOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setTextTranslate(managerId: String, textTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getTextTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setTextTranslate(managerId: String, textTranslate: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getTextTranslate(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getTextTranslateAnchor(managerId: String, callback: (Result<TextTranslateAnchor?>) -> Unit)
 
@@ -1556,7 +1556,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val iconOffsetArg = args[1] as List<Double?>
+            val iconOffsetArg = args[1] as List<Double>
             api.setIconOffset(managerIdArg, iconOffsetArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -1576,7 +1576,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getIconOffset(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getIconOffset(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1876,7 +1876,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val iconTextFitPaddingArg = args[1] as List<Double?>
+            val iconTextFitPaddingArg = args[1] as List<Double>
             api.setIconTextFitPadding(managerIdArg, iconTextFitPaddingArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -1896,7 +1896,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getIconTextFitPadding(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getIconTextFitPadding(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2276,7 +2276,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val textFontArg = args[1] as List<String?>
+            val textFontArg = args[1] as List<String>
             api.setTextFont(managerIdArg, textFontArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -2296,7 +2296,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getTextFont(managerIdArg) { result: Result<List<String?>?> ->
+            api.getTextFont(managerIdArg) { result: Result<List<String>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2596,7 +2596,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val textOffsetArg = args[1] as List<Double?>
+            val textOffsetArg = args[1] as List<Double>
             api.setTextOffset(managerIdArg, textOffsetArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -2616,7 +2616,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getTextOffset(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getTextOffset(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3316,7 +3316,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val iconTranslateArg = args[1] as List<Double?>
+            val iconTranslateArg = args[1] as List<Double>
             api.setIconTranslate(managerIdArg, iconTranslateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -3336,7 +3336,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getIconTranslate(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getIconTranslate(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3756,7 +3756,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val textTranslateArg = args[1] as List<Double?>
+            val textTranslateArg = args[1] as List<Double>
             api.setTextTranslate(managerIdArg, textTranslateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -3776,7 +3776,7 @@ interface _PointAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getTextTranslate(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getTextTranslate(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

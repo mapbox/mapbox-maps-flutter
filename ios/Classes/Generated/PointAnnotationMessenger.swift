@@ -291,7 +291,7 @@ struct PointAnnotation {
   var iconImage: String?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  var iconOffset: [Double?]?
+  var iconOffset: [Double]?
   /// Rotates the icon clockwise.
   /// Default value: 0.
   var iconRotate: Double?
@@ -303,7 +303,7 @@ struct PointAnnotation {
   var iconTextFit: IconTextFit?
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
-  var iconTextFitPadding: [Double?]?
+  var iconTextFitPadding: [Double]?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
   /// Part of the text placed closest to the anchor.
@@ -326,7 +326,7 @@ struct PointAnnotation {
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
-  var textOffset: [Double?]?
+  var textOffset: [Double]?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
   var textRadialOffset: Double?
@@ -395,11 +395,11 @@ struct PointAnnotation {
     let image: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[2])
     let iconAnchor: IconAnchor? = nilOrValue(pigeonVar_list[3])
     let iconImage: String? = nilOrValue(pigeonVar_list[4])
-    let iconOffset: [Double?]? = nilOrValue(pigeonVar_list[5])
+    let iconOffset: [Double]? = nilOrValue(pigeonVar_list[5])
     let iconRotate: Double? = nilOrValue(pigeonVar_list[6])
     let iconSize: Double? = nilOrValue(pigeonVar_list[7])
     let iconTextFit: IconTextFit? = nilOrValue(pigeonVar_list[8])
-    let iconTextFitPadding: [Double?]? = nilOrValue(pigeonVar_list[9])
+    let iconTextFitPadding: [Double]? = nilOrValue(pigeonVar_list[9])
     let symbolSortKey: Double? = nilOrValue(pigeonVar_list[10])
     let textAnchor: TextAnchor? = nilOrValue(pigeonVar_list[11])
     let textField: String? = nilOrValue(pigeonVar_list[12])
@@ -407,7 +407,7 @@ struct PointAnnotation {
     let textLetterSpacing: Double? = nilOrValue(pigeonVar_list[14])
     let textLineHeight: Double? = nilOrValue(pigeonVar_list[15])
     let textMaxWidth: Double? = nilOrValue(pigeonVar_list[16])
-    let textOffset: [Double?]? = nilOrValue(pigeonVar_list[17])
+    let textOffset: [Double]? = nilOrValue(pigeonVar_list[17])
     let textRadialOffset: Double? = nilOrValue(pigeonVar_list[18])
     let textRotate: Double? = nilOrValue(pigeonVar_list[19])
     let textSize: Double? = nilOrValue(pigeonVar_list[20])
@@ -528,7 +528,7 @@ struct PointAnnotationOptions {
   var iconImage: String?
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  var iconOffset: [Double?]?
+  var iconOffset: [Double]?
   /// Rotates the icon clockwise.
   /// Default value: 0.
   var iconRotate: Double?
@@ -540,7 +540,7 @@ struct PointAnnotationOptions {
   var iconTextFit: IconTextFit?
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
   /// Default value: [0,0,0,0].
-  var iconTextFitPadding: [Double?]?
+  var iconTextFitPadding: [Double]?
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
   var symbolSortKey: Double?
   /// Part of the text placed closest to the anchor.
@@ -563,7 +563,7 @@ struct PointAnnotationOptions {
   var textMaxWidth: Double?
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
   /// Default value: [0,0].
-  var textOffset: [Double?]?
+  var textOffset: [Double]?
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
   /// Default value: 0.
   var textRadialOffset: Double?
@@ -631,11 +631,11 @@ struct PointAnnotationOptions {
     let image: FlutterStandardTypedData? = nilOrValue(pigeonVar_list[1])
     let iconAnchor: IconAnchor? = nilOrValue(pigeonVar_list[2])
     let iconImage: String? = nilOrValue(pigeonVar_list[3])
-    let iconOffset: [Double?]? = nilOrValue(pigeonVar_list[4])
+    let iconOffset: [Double]? = nilOrValue(pigeonVar_list[4])
     let iconRotate: Double? = nilOrValue(pigeonVar_list[5])
     let iconSize: Double? = nilOrValue(pigeonVar_list[6])
     let iconTextFit: IconTextFit? = nilOrValue(pigeonVar_list[7])
-    let iconTextFitPadding: [Double?]? = nilOrValue(pigeonVar_list[8])
+    let iconTextFitPadding: [Double]? = nilOrValue(pigeonVar_list[8])
     let symbolSortKey: Double? = nilOrValue(pigeonVar_list[9])
     let textAnchor: TextAnchor? = nilOrValue(pigeonVar_list[10])
     let textField: String? = nilOrValue(pigeonVar_list[11])
@@ -643,7 +643,7 @@ struct PointAnnotationOptions {
     let textLetterSpacing: Double? = nilOrValue(pigeonVar_list[13])
     let textLineHeight: Double? = nilOrValue(pigeonVar_list[14])
     let textMaxWidth: Double? = nilOrValue(pigeonVar_list[15])
-    let textOffset: [Double?]? = nilOrValue(pigeonVar_list[16])
+    let textOffset: [Double]? = nilOrValue(pigeonVar_list[16])
     let textRadialOffset: Double? = nilOrValue(pigeonVar_list[17])
     let textRotate: Double? = nilOrValue(pigeonVar_list[18])
     let textSize: Double? = nilOrValue(pigeonVar_list[19])
@@ -988,8 +988,8 @@ protocol _PointAnnotationMessenger {
   func getIconImage(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
   func setIconKeepUpright(managerId: String, iconKeepUpright: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconKeepUpright(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
-  func setIconOffset(managerId: String, iconOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getIconOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setIconOffset(managerId: String, iconOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setIconOptional(managerId: String, iconOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setIconPadding(managerId: String, iconPadding: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1004,8 +1004,8 @@ protocol _PointAnnotationMessenger {
   func getIconSize(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconTextFit(managerId: String, iconTextFit: IconTextFit, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTextFit(managerId: String, completion: @escaping (Result<IconTextFit?, Error>) -> Void)
-  func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolAvoidEdges(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1024,8 +1024,8 @@ protocol _PointAnnotationMessenger {
   func getTextAnchor(managerId: String, completion: @escaping (Result<TextAnchor?, Error>) -> Void)
   func setTextField(managerId: String, textField: String, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextField(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
-  func setTextFont(managerId: String, textFont: [String?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getTextFont(managerId: String, completion: @escaping (Result<[String?]?, Error>) -> Void)
+  func setTextFont(managerId: String, textFont: [String], completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextFont(managerId: String, completion: @escaping (Result<[String]?, Error>) -> Void)
   func setTextIgnorePlacement(managerId: String, textIgnorePlacement: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextIgnorePlacement(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setTextJustify(managerId: String, textJustify: TextJustify, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1040,8 +1040,8 @@ protocol _PointAnnotationMessenger {
   func getTextMaxAngle(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextMaxWidth(managerId: String, textMaxWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextMaxWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setTextOffset(managerId: String, textOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getTextOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setTextOffset(managerId: String, textOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setTextOptional(managerId: String, textOptional: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextOptional(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
   func setTextPadding(managerId: String, textPadding: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1076,8 +1076,8 @@ protocol _PointAnnotationMessenger {
   func getIconOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setIconOpacity(managerId: String, iconOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setIconTranslate(managerId: String, iconTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setIconTranslate(managerId: String, iconTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getIconTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void)
   func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1098,8 +1098,8 @@ protocol _PointAnnotationMessenger {
   func getTextOcclusionOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextOpacity(managerId: String, textOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setTextTranslate(managerId: String, textTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getTextTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setTextTranslate(managerId: String, textTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getTextTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setTextTranslateAnchor(managerId: String, textTranslateAnchor: TextTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextTranslateAnchor(managerId: String, completion: @escaping (Result<TextTranslateAnchor?, Error>) -> Void)
 }
@@ -1379,7 +1379,7 @@ class _PointAnnotationMessengerSetup {
       setIconOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let iconOffsetArg = args[1] as! [Double?]
+        let iconOffsetArg = args[1] as! [Double]
         api.setIconOffset(managerId: managerIdArg, iconOffset: iconOffsetArg) { result in
           switch result {
           case .success:
@@ -1659,7 +1659,7 @@ class _PointAnnotationMessengerSetup {
       setIconTextFitPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let iconTextFitPaddingArg = args[1] as! [Double?]
+        let iconTextFitPaddingArg = args[1] as! [Double]
         api.setIconTextFitPadding(managerId: managerIdArg, iconTextFitPadding: iconTextFitPaddingArg) { result in
           switch result {
           case .success:
@@ -2009,7 +2009,7 @@ class _PointAnnotationMessengerSetup {
       setTextFontChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let textFontArg = args[1] as! [String?]
+        let textFontArg = args[1] as! [String]
         api.setTextFont(managerId: managerIdArg, textFont: textFontArg) { result in
           switch result {
           case .success:
@@ -2289,7 +2289,7 @@ class _PointAnnotationMessengerSetup {
       setTextOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let textOffsetArg = args[1] as! [Double?]
+        let textOffsetArg = args[1] as! [Double]
         api.setTextOffset(managerId: managerIdArg, textOffset: textOffsetArg) { result in
           switch result {
           case .success:
@@ -2919,7 +2919,7 @@ class _PointAnnotationMessengerSetup {
       setIconTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let iconTranslateArg = args[1] as! [Double?]
+        let iconTranslateArg = args[1] as! [Double]
         api.setIconTranslate(managerId: managerIdArg, iconTranslate: iconTranslateArg) { result in
           switch result {
           case .success:
@@ -3304,7 +3304,7 @@ class _PointAnnotationMessengerSetup {
       setTextTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let textTranslateArg = args[1] as! [Double?]
+        let textTranslateArg = args[1] as! [Double]
         api.setTextTranslate(managerId: managerIdArg, textTranslate: textTranslateArg) { result in
           switch result {
           case .success:

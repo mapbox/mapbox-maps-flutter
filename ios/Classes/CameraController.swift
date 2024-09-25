@@ -48,7 +48,7 @@ final class CameraController: _CameraManager {
         return cameraOptions.toFLTCameraOptions()
     }
 
-    func cameraForGeometry(geometry: [String?: Any?], padding: MbxEdgeInsets, bearing: Double?, pitch: Double?) throws -> CameraOptions {
+    func cameraForGeometry(geometry: [String: Any?], padding: MbxEdgeInsets, bearing: Double?, pitch: Double?) throws -> CameraOptions {
         let cameraOptions = mapboxMap.camera(
             for: convertDictionaryToGeometry(dict: geometry)!,
             padding: padding.toUIEdgeInsets(),
@@ -88,13 +88,13 @@ final class CameraController: _CameraManager {
         return Point(coordinate)
     }
 
-    func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate?] {
+    func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate] {
         let points = self.mapboxMap.points(for: coordinates.map(\.coordinates))
         return points.map({$0.toFLTScreenCoordinate()})
     }
 
-    func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [Point] {
-        let coordinates = self.mapboxMap.coordinates(for: pixels.compactMap({$0?.toCGPoint()}) )
+    func coordinatesForPixels(pixels: [ScreenCoordinate]) throws -> [Point] {
+        let coordinates = self.mapboxMap.coordinates(for: pixels.compactMap({$0.toCGPoint()}) )
         return coordinates.map(Point.init)
     }
 

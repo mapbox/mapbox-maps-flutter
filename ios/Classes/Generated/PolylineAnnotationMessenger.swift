@@ -418,8 +418,8 @@ protocol _PolylineAnnotationMessenger {
   func getLineBorderWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineColor(managerId: String, lineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
-  func setLineDasharray(managerId: String, lineDasharray: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineDasharray(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setLineDasharray(managerId: String, lineDasharray: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineDasharray(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setLineDepthOcclusionFactor(managerId: String, lineDepthOcclusionFactor: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineDepthOcclusionFactor(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -434,16 +434,16 @@ protocol _PolylineAnnotationMessenger {
   func getLineOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLinePattern(managerId: String, linePattern: String, completion: @escaping (Result<Void, Error>) -> Void)
   func getLinePattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void)
-  func setLineTranslate(managerId: String, lineTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setLineTranslate(managerId: String, lineTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTranslateAnchor(managerId: String, completion: @escaping (Result<LineTranslateAnchor?, Error>) -> Void)
   func setLineTrimColor(managerId: String, lineTrimColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineTrimColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void)
-  func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
-  func setLineTrimOffset(managerId: String, lineTrimOffset: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
+  func setLineTrimFadeRange(managerId: String, lineTrimFadeRange: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTrimFadeRange(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
+  func setLineTrimOffset(managerId: String, lineTrimOffset: [Double], completion: @escaping (Result<Void, Error>) -> Void)
+  func getLineTrimOffset(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void)
   func setLineWidth(managerId: String, lineWidth: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineWidth(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
 }
@@ -898,7 +898,7 @@ class _PolylineAnnotationMessengerSetup {
       setLineDasharrayChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let lineDasharrayArg = args[1] as! [Double?]
+        let lineDasharrayArg = args[1] as! [Double]
         api.setLineDasharray(managerId: managerIdArg, lineDasharray: lineDasharrayArg) { result in
           switch result {
           case .success:
@@ -1178,7 +1178,7 @@ class _PolylineAnnotationMessengerSetup {
       setLineTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let lineTranslateArg = args[1] as! [Double?]
+        let lineTranslateArg = args[1] as! [Double]
         api.setLineTranslate(managerId: managerIdArg, lineTranslate: lineTranslateArg) { result in
           switch result {
           case .success:
@@ -1283,7 +1283,7 @@ class _PolylineAnnotationMessengerSetup {
       setLineTrimFadeRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let lineTrimFadeRangeArg = args[1] as! [Double?]
+        let lineTrimFadeRangeArg = args[1] as! [Double]
         api.setLineTrimFadeRange(managerId: managerIdArg, lineTrimFadeRange: lineTrimFadeRangeArg) { result in
           switch result {
           case .success:
@@ -1318,7 +1318,7 @@ class _PolylineAnnotationMessengerSetup {
       setLineTrimOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let managerIdArg = args[0] as! String
-        let lineTrimOffsetArg = args[1] as! [Double?]
+        let lineTrimOffsetArg = args[1] as! [Double]
         api.setLineTrimOffset(managerId: managerIdArg, lineTrimOffset: lineTrimOffsetArg) { result in
           switch result {
           case .success:

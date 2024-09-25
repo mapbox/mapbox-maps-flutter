@@ -28,21 +28,21 @@ class ModelLayer extends Layer {
     List<Object>? this.modelCutoffFadeRangeExpression,
     double? this.modelEmissiveStrength,
     List<Object>? this.modelEmissiveStrengthExpression,
-    List<double?>? this.modelHeightBasedEmissiveStrengthMultiplier,
+    List<double>? this.modelHeightBasedEmissiveStrengthMultiplier,
     List<Object>? this.modelHeightBasedEmissiveStrengthMultiplierExpression,
     double? this.modelOpacity,
     List<Object>? this.modelOpacityExpression,
     bool? this.modelReceiveShadows,
     List<Object>? this.modelReceiveShadowsExpression,
-    List<double?>? this.modelRotation,
+    List<double>? this.modelRotation,
     List<Object>? this.modelRotationExpression,
     double? this.modelRoughness,
     List<Object>? this.modelRoughnessExpression,
-    List<double?>? this.modelScale,
+    List<double>? this.modelScale,
     List<Object>? this.modelScaleExpression,
     ModelScaleMode? this.modelScaleMode,
     List<Object>? this.modelScaleModeExpression,
-    List<double?>? this.modelTranslation,
+    List<double>? this.modelTranslation,
     List<Object>? this.modelTranslationExpression,
     ModelType? this.modelType,
     List<Object>? this.modelTypeExpression,
@@ -137,7 +137,7 @@ class ModelLayer extends Layer {
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
   @experimental
-  List<double?>? modelHeightBasedEmissiveStrengthMultiplier;
+  List<double>? modelHeightBasedEmissiveStrengthMultiplier;
 
   /// Emissive strength multiplier along model height (gradient begin, gradient end, value at begin, value at end, gradient curve power (logarithmic scale, curve power = pow(10, val)).
   /// Default value: [1,1,1,1,0].
@@ -167,7 +167,7 @@ class ModelLayer extends Layer {
   /// The rotation of the model in euler angles [lon, lat, z].
   /// Default value: [0,0,0].
   @experimental
-  List<double?>? modelRotation;
+  List<double>? modelRotation;
 
   /// The rotation of the model in euler angles [lon, lat, z].
   /// Default value: [0,0,0].
@@ -187,7 +187,7 @@ class ModelLayer extends Layer {
   /// The scale of the model.
   /// Default value: [1,1,1].
   @experimental
-  List<double?>? modelScale;
+  List<double>? modelScale;
 
   /// The scale of the model.
   /// Default value: [1,1,1].
@@ -207,7 +207,7 @@ class ModelLayer extends Layer {
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
   /// Default value: [0,0,0].
   @experimental
-  List<double?>? modelTranslation;
+  List<double>? modelTranslation;
 
   /// The translation of the model in meters in form of [longitudal, latitudal, altitude] offsets.
   /// Default value: [0,0,0].
@@ -428,7 +428,7 @@ class ModelLayer extends Layer {
           _optionalCastList(map["paint"]["model-emissive-strength"]),
       modelHeightBasedEmissiveStrengthMultiplier: (map["paint"]
               ["model-height-based-emissive-strength-multiplier"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       modelHeightBasedEmissiveStrengthMultiplierExpression: _optionalCastList(
           map["paint"]["model-height-based-emissive-strength-multiplier"]),
@@ -438,7 +438,7 @@ class ModelLayer extends Layer {
       modelReceiveShadowsExpression:
           _optionalCastList(map["paint"]["model-receive-shadows"]),
       modelRotation: (map["paint"]["model-rotation"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       modelRotationExpression:
           _optionalCastList(map["paint"]["model-rotation"]),
@@ -446,7 +446,7 @@ class ModelLayer extends Layer {
       modelRoughnessExpression:
           _optionalCastList(map["paint"]["model-roughness"]),
       modelScale: (map["paint"]["model-scale"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       modelScaleExpression: _optionalCastList(map["paint"]["model-scale"]),
       modelScaleMode: map["paint"]["model-scale-mode"] == null
@@ -458,7 +458,7 @@ class ModelLayer extends Layer {
       modelScaleModeExpression:
           _optionalCastList(map["paint"]["model-scale-mode"]),
       modelTranslation: (map["paint"]["model-translation"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       modelTranslationExpression:
           _optionalCastList(map["paint"]["model-translation"]),

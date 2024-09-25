@@ -14,9 +14,9 @@ class ClipLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
-    List<String?>? this.clipLayerScope,
+    List<String>? this.clipLayerScope,
     List<Object>? this.clipLayerScopeExpression,
-    List<String?>? this.clipLayerTypes,
+    List<String>? this.clipLayerTypes,
     List<Object>? this.clipLayerTypesExpression,
   }) : super(
             id: id,
@@ -39,7 +39,7 @@ class ClipLayer extends Layer {
   /// Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
   /// Default value: [].
   @experimental
-  List<String?>? clipLayerScope;
+  List<String>? clipLayerScope;
 
   /// Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
   /// Default value: [].
@@ -49,7 +49,7 @@ class ClipLayer extends Layer {
   /// Layer types that will also be removed if fallen below this clip layer.
   /// Default value: [].
   @experimental
-  List<String?>? clipLayerTypes;
+  List<String>? clipLayerTypes;
 
   /// Layer types that will also be removed if fallen below this clip layer.
   /// Default value: [].
@@ -132,12 +132,12 @@ class ClipLayer extends Layer {
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
       clipLayerScope: (map["layout"]["clip-layer-scope"] as List?)
-          ?.map<String?>((e) => e.toString())
+          ?.map<String>((e) => e.toString())
           .toList(),
       clipLayerScopeExpression:
           _optionalCastList(map["layout"]["clip-layer-scope"]),
       clipLayerTypes: (map["layout"]["clip-layer-types"] as List?)
-          ?.map<String?>((e) => e.toString())
+          ?.map<String>((e) => e.toString())
           .toList(),
       clipLayerTypesExpression:
           _optionalCastList(map["layout"]["clip-layer-types"]),

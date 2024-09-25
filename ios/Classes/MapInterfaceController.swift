@@ -132,15 +132,15 @@ final class MapInterfaceController: _MapInterface {
         mapView.debugOptions = debugOptions.toDebugOptions()
     }
 
-    func getDebug() throws -> [MapDebugOptions?] {
+    func getDebug() throws -> [MapDebugOptions] {
         return self.mapboxMap.debugOptions.map {$0.toFLTMapDebugOptions()}
     }
 
-    func setDebug(debugOptions: [MapDebugOptions?], value: Bool) throws {
-        self.mapboxMap.debugOptions = debugOptions.compactMap {$0?.toMapDebugOptions()}
+    func setDebug(debugOptions: [MapDebugOptions], value: Bool) throws {
+        self.mapboxMap.debugOptions = debugOptions.compactMap {$0.toMapDebugOptions()}
     }
 
-    func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {
+    func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature], Error>) -> Void) {
         do {
             if geometry.type == .sCREENBOX {
                 let screenBoxArray = convertStringToDictionary(properties: geometry.value)
@@ -197,7 +197,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void) {
+    func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature], Error>) -> Void) {
         do {
             try self.mapboxMap.querySourceFeatures(for: sourceId, options: options.toSourceQueryOptions()) { result in
                 switch result {
@@ -212,7 +212,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String?: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
+    func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
             completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return
@@ -227,7 +227,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
+    func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
             completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return
@@ -242,7 +242,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
+    func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void) {
         guard let feature = convertDictionaryToFeature(dict: cluster) else {
             completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Feature format error", details: convertDictionaryToString(dict: cluster))))
             return

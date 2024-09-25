@@ -875,13 +875,6 @@ extension String {
     }
 }
 
-extension Array {
-
-    func compacted<T>() -> [T] where Element == T? {
-        compactMap { $0 }
-    }
-}
-
 extension Date {
 
     var miliSecondsSince1970: TimeInterval {
@@ -958,7 +951,7 @@ extension MapboxCoreMaps.TilesetDescriptorOptions {
             styleURI: styleURI,
             zoomRange: UInt8(fltValue.minZoom)...UInt8(fltValue.maxZoom),
             pixelRatio: fltValue.pixelRatio.map(Float.init),
-            tilesets: fltValue.tilesets?.compacted(),
+            tilesets: fltValue.tilesets,
             stylePackOptions: fltValue.stylePackOptions.flatMap(MapboxCoreMaps.StylePackLoadOptions.init(fltValue:)),
             extraOptions: fltValue.extraOptions)
     }

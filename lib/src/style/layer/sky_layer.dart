@@ -15,13 +15,13 @@ class SkyLayer extends Layer {
     List<Object>? this.skyAtmosphereColorExpression,
     int? this.skyAtmosphereHaloColor,
     List<Object>? this.skyAtmosphereHaloColorExpression,
-    List<double?>? this.skyAtmosphereSun,
+    List<double>? this.skyAtmosphereSun,
     List<Object>? this.skyAtmosphereSunExpression,
     double? this.skyAtmosphereSunIntensity,
     List<Object>? this.skyAtmosphereSunIntensityExpression,
     int? this.skyGradient,
     List<Object>? this.skyGradientExpression,
-    List<double?>? this.skyGradientCenter,
+    List<double>? this.skyGradientCenter,
     List<Object>? this.skyGradientCenterExpression,
     double? this.skyGradientRadius,
     List<Object>? this.skyGradientRadiusExpression,
@@ -59,7 +59,7 @@ class SkyLayer extends Layer {
 
   /// Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0 degree is directly above, at zenith, and 90 degree at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
   /// Minimum value: [0,0]. Maximum value: [360,180].
-  List<double?>? skyAtmosphereSun;
+  List<double>? skyAtmosphereSun;
 
   /// Position of the sun center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the sun relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the sun, where 0 degree is directly above, at zenith, and 90 degree at the horizon. When this property is ommitted, the sun center is directly inherited from the light position.
   /// Minimum value: [0,0]. Maximum value: [360,180].
@@ -83,7 +83,7 @@ class SkyLayer extends Layer {
 
   /// Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0 degree is directly above, at zenith, and 90 degree at the horizon.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [360,180].
-  List<double?>? skyGradientCenter;
+  List<double>? skyGradientCenter;
 
   /// Position of the gradient center [a azimuthal angle, p polar angle]. The azimuthal angle indicates the position of the gradient center relative to 0 degree north, where degrees proceed clockwise. The polar angle indicates the height of the gradient center, where 0 degree is directly above, at zenith, and 90 degree at the horizon.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [360,180].
@@ -241,7 +241,7 @@ class SkyLayer extends Layer {
       skyAtmosphereHaloColorExpression:
           _optionalCastList(map["paint"]["sky-atmosphere-halo-color"]),
       skyAtmosphereSun: (map["paint"]["sky-atmosphere-sun"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       skyAtmosphereSunExpression:
           _optionalCastList(map["paint"]["sky-atmosphere-sun"]),
@@ -252,7 +252,7 @@ class SkyLayer extends Layer {
       skyGradient: (map["paint"]["sky-gradient"] as List?)?.toRGBAInt(),
       skyGradientExpression: _optionalCastList(map["paint"]["sky-gradient"]),
       skyGradientCenter: (map["paint"]["sky-gradient-center"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       skyGradientCenterExpression:
           _optionalCastList(map["paint"]["sky-gradient-center"]),

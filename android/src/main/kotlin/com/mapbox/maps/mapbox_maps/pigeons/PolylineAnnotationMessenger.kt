@@ -403,8 +403,8 @@ interface _PolylineAnnotationMessenger {
   fun getLineBorderWidth(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineColor(managerId: String, lineColor: Long, callback: (Result<Unit>) -> Unit)
   fun getLineColor(managerId: String, callback: (Result<Long?>) -> Unit)
-  fun setLineDasharray(managerId: String, lineDasharray: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getLineDasharray(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setLineDasharray(managerId: String, lineDasharray: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getLineDasharray(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setLineDepthOcclusionFactor(managerId: String, lineDepthOcclusionFactor: Double, callback: (Result<Unit>) -> Unit)
   fun getLineDepthOcclusionFactor(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineEmissiveStrength(managerId: String, lineEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
@@ -419,16 +419,16 @@ interface _PolylineAnnotationMessenger {
   fun getLineOpacity(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLinePattern(managerId: String, linePattern: String, callback: (Result<Unit>) -> Unit)
   fun getLinePattern(managerId: String, callback: (Result<String?>) -> Unit)
-  fun setLineTranslate(managerId: String, lineTranslate: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getLineTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setLineTranslate(managerId: String, lineTranslate: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getLineTranslate(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setLineTranslateAnchor(managerId: String, lineTranslateAnchor: LineTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getLineTranslateAnchor(managerId: String, callback: (Result<LineTranslateAnchor?>) -> Unit)
   fun setLineTrimColor(managerId: String, lineTrimColor: Long, callback: (Result<Unit>) -> Unit)
   fun getLineTrimColor(managerId: String, callback: (Result<Long?>) -> Unit)
-  fun setLineTrimFadeRange(managerId: String, lineTrimFadeRange: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getLineTrimFadeRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
-  fun setLineTrimOffset(managerId: String, lineTrimOffset: List<Double?>, callback: (Result<Unit>) -> Unit)
-  fun getLineTrimOffset(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
+  fun setLineTrimFadeRange(managerId: String, lineTrimFadeRange: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getLineTrimFadeRange(managerId: String, callback: (Result<List<Double>?>) -> Unit)
+  fun setLineTrimOffset(managerId: String, lineTrimOffset: List<Double>, callback: (Result<Unit>) -> Unit)
+  fun getLineTrimOffset(managerId: String, callback: (Result<List<Double>?>) -> Unit)
   fun setLineWidth(managerId: String, lineWidth: Double, callback: (Result<Unit>) -> Unit)
   fun getLineWidth(managerId: String, callback: (Result<Double?>) -> Unit)
 
@@ -948,7 +948,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val lineDasharrayArg = args[1] as List<Double?>
+            val lineDasharrayArg = args[1] as List<Double>
             api.setLineDasharray(managerIdArg, lineDasharrayArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -968,7 +968,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getLineDasharray(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getLineDasharray(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1268,7 +1268,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val lineTranslateArg = args[1] as List<Double?>
+            val lineTranslateArg = args[1] as List<Double>
             api.setLineTranslate(managerIdArg, lineTranslateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -1288,7 +1288,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getLineTranslate(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getLineTranslate(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1388,7 +1388,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val lineTrimFadeRangeArg = args[1] as List<Double?>
+            val lineTrimFadeRangeArg = args[1] as List<Double>
             api.setLineTrimFadeRange(managerIdArg, lineTrimFadeRangeArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -1408,7 +1408,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getLineTrimFadeRange(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getLineTrimFadeRange(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -1428,7 +1428,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            val lineTrimOffsetArg = args[1] as List<Double?>
+            val lineTrimOffsetArg = args[1] as List<Double>
             api.setLineTrimOffset(managerIdArg, lineTrimOffsetArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -1448,7 +1448,7 @@ interface _PolylineAnnotationMessenger {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
-            api.getLineTrimOffset(managerIdArg) { result: Result<List<Double?>?> ->
+            api.getLineTrimOffset(managerIdArg) { result: Result<List<Double>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

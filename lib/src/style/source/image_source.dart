@@ -7,7 +7,7 @@ class ImageSource extends Source {
   ImageSource({
     required String id,
     String? url,
-    List<List<double?>?>? coordinates,
+    List<List<double>>? coordinates,
     double? prefetchZoomDelta,
   }) : super(id: id) {
     _url = url;
@@ -31,10 +31,10 @@ class ImageSource extends Source {
     });
   }
 
-  List<List<double?>?>? _coordinates;
+  List<List<double>>? _coordinates;
 
   /// Corners of image specified in longitude, latitude pairs. Note: When using globe projection, the image will be centered at the North or South Pole in the respective hemisphere if the average latitude value exceeds 85 degrees or falls below -85 degrees.
-  Future<List<List<double?>?>?> get coordinates async {
+  Future<List<List<double>>?> get coordinates async {
     return _style?.getStyleSourceProperty(id, "coordinates").then((value) {
       if (value.value != null) {
         return List<List<double>>.from((value.value as List<dynamic>)

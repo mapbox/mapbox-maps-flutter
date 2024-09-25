@@ -1045,7 +1045,7 @@ class RenderedQueryOptions {
   });
 
   /// Layer IDs to include in the query.
-  List<String?>? layerIds;
+  List<String>? layerIds;
 
   /// Filters the returned features with an expression
   String? filter;
@@ -1060,7 +1060,7 @@ class RenderedQueryOptions {
   static RenderedQueryOptions decode(Object result) {
     result as List<Object?>;
     return RenderedQueryOptions(
-      layerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      layerIds: (result[0] as List<Object?>?)?.cast<String>(),
       filter: result[1] as String?,
     );
   }
@@ -1074,7 +1074,7 @@ class SourceQueryOptions {
   });
 
   /// Source layer IDs to include in the query.
-  List<String?>? sourceLayerIds;
+  List<String>? sourceLayerIds;
 
   /// Filters the returned features with an expression
   String filter;
@@ -1089,7 +1089,7 @@ class SourceQueryOptions {
   static SourceQueryOptions decode(Object result) {
     result as List<Object?>;
     return SourceQueryOptions(
-      sourceLayerIds: (result[0] as List<Object?>?)?.cast<String?>(),
+      sourceLayerIds: (result[0] as List<Object?>?)?.cast<String>(),
       filter: result[1]! as String,
     );
   }
@@ -1106,7 +1106,7 @@ class FeatureExtensionValue {
   String? value;
 
   /// An optional array of features from a feature extension.
-  List<Map<String?, Object?>?>? featureCollection;
+  List<Map<String, Object?>>? featureCollection;
 
   Object encode() {
     return <Object?>[
@@ -1121,7 +1121,7 @@ class FeatureExtensionValue {
       value: result[0] as String?,
       featureCollection: (result[1] as List<Object?>?)?.map((e) {
         return Map<Object?, Object?>.from(e as Map<dynamic, dynamic>)
-            .cast<String?, Object?>();
+            .cast<String, Object?>();
       }).toList(),
     );
   }
@@ -1176,7 +1176,7 @@ class QueriedRenderedFeature {
   /// An array of layer Ids for the queried feature.
   /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
   /// If the feature is only rendered in one layer, a single Id will be provided.
-  List<String?> layers;
+  List<String> layers;
 
   Object encode() {
     return <Object?>[
@@ -1189,7 +1189,7 @@ class QueriedRenderedFeature {
     result as List<Object?>;
     return QueriedRenderedFeature(
       queriedFeature: result[0]! as QueriedFeature,
-      layers: (result[1] as List<Object?>?)!.cast<String?>(),
+      layers: (result[1] as List<Object?>?)!.cast<String>(),
     );
   }
 }
@@ -1229,7 +1229,7 @@ class QueriedFeature {
   });
 
   /// Feature returned by the query.
-  Map<String?, Object?> feature;
+  Map<String, Object?> feature;
 
   /// Source id for a queried feature.
   String source;
@@ -1254,7 +1254,7 @@ class QueriedFeature {
   static QueriedFeature decode(Object result) {
     result as List<Object?>;
     return QueriedFeature(
-      feature: (result[0] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      feature: (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>(),
       source: result[1]! as String,
       sourceLayer: result[2] as String?,
       state: result[3]! as String,
@@ -1437,7 +1437,7 @@ class FlatLight {
   TransitionOptions? intensityTransition;
 
   /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  List<double?>? position;
+  List<double>? position;
 
   /// Transition property for `position`
   TransitionOptions? positionTransition;
@@ -1464,7 +1464,7 @@ class FlatLight {
       colorTransition: result[3] as TransitionOptions?,
       intensity: result[4] as double?,
       intensityTransition: result[5] as TransitionOptions?,
-      position: (result[6] as List<Object?>?)?.cast<double?>(),
+      position: (result[6] as List<Object?>?)?.cast<double>(),
       positionTransition: result[7] as TransitionOptions?,
     );
   }
@@ -1500,7 +1500,7 @@ class DirectionalLight {
   TransitionOptions? colorTransition;
 
   /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  List<double?>? direction;
+  List<double>? direction;
 
   /// Transition property for `direction`
   TransitionOptions? directionTransition;
@@ -1539,7 +1539,7 @@ class DirectionalLight {
       castShadows: result[1] as bool?,
       color: result[2] as int?,
       colorTransition: result[3] as TransitionOptions?,
-      direction: (result[4] as List<Object?>?)?.cast<double?>(),
+      direction: (result[4] as List<Object?>?)?.cast<double>(),
       directionTransition: result[5] as TransitionOptions?,
       intensity: result[6] as double?,
       intensityTransition: result[7] as TransitionOptions?,
@@ -2556,7 +2556,7 @@ class _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  Future<CameraOptions> cameraForGeometry(Map<String?, Object?> geometry,
+  Future<CameraOptions> cameraForGeometry(Map<String, Object?> geometry,
       MbxEdgeInsets padding, double? bearing, double? pitch) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForGeometry$pigeonVar_messageChannelSuffix';
@@ -2825,7 +2825,7 @@ class _CameraManager {
   /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
   ///
   /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
       List<Point> coordinates) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates$pigeonVar_messageChannelSuffix';
@@ -2852,7 +2852,7 @@ class _CameraManager {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<ScreenCoordinate?>();
+          .cast<ScreenCoordinate>();
     }
   }
 
@@ -2866,7 +2866,7 @@ class _CameraManager {
   ///
   /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
   Future<List<Point>> coordinatesForPixels(
-      List<ScreenCoordinate?> pixels) async {
+      List<ScreenCoordinate> pixels) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3544,7 +3544,7 @@ class _MapInterface {
   ///
   /// @return An array of `map debug options` flags currently set to the map.
   @Deprecated("Use [MapboxMap.debugOptions] instead")
-  Future<List<MapDebugOptions?>> getDebug() async {
+  Future<List<MapDebugOptions>> getDebug() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3570,7 +3570,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<MapDebugOptions?>();
+          .cast<MapDebugOptions>();
     }
   }
 
@@ -3580,7 +3580,7 @@ class _MapInterface {
   /// @param value A `boolean` value representing the state for a given `map debug options`.
   ///
   @Deprecated("Use [MapboxMap.debugOptions] instead")
-  Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) async {
+  Future<void> setDebug(List<MapDebugOptions> debugOptions, bool value) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3610,7 +3610,7 @@ class _MapInterface {
   /// @param options The `render query options` for querying rendered features.
   /// @param completion The `query features completion` called when the query completes.
   /// @return A `cancelable` object that could be used to cancel the pending query.
-  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+  Future<List<QueriedRenderedFeature>> queryRenderedFeatures(
       RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures$pigeonVar_messageChannelSuffix';
@@ -3637,7 +3637,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<QueriedRenderedFeature?>();
+          .cast<QueriedRenderedFeature>();
     }
   }
 
@@ -3646,7 +3646,7 @@ class _MapInterface {
   /// @param sourceId The style source identifier used to query for source features.
   /// @param options The `source query options` for querying source features.
   /// @param completion The `query features completion` called when the query completes.
-  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+  Future<List<QueriedSourceFeature>> querySourceFeatures(
       String sourceId, SourceQueryOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures$pigeonVar_messageChannelSuffix';
@@ -3673,7 +3673,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<QueriedSourceFeature?>();
+          .cast<QueriedSourceFeature>();
     }
   }
 
@@ -3689,7 +3689,7 @@ class _MapInterface {
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(String sourceIdentifier,
-      Map<String?, Object?> cluster, int? limit, int? offset) async {
+      Map<String, Object?> cluster, int? limit, int? offset) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3729,7 +3729,7 @@ class _MapInterface {
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
-      String sourceIdentifier, Map<String?, Object?> cluster) async {
+      String sourceIdentifier, Map<String, Object?> cluster) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3768,7 +3768,7 @@ class _MapInterface {
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
-      String sourceIdentifier, Map<String?, Object?> cluster) async {
+      String sourceIdentifier, Map<String, Object?> cluster) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -4970,7 +4970,7 @@ class StyleManager {
   }
 
   /// Returns the list containing information about existing style import objects.
-  Future<List<StyleObjectInfo?>> getStyleImports() async {
+  Future<List<StyleObjectInfo>> getStyleImports() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -4996,7 +4996,7 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<StyleObjectInfo?>();
+          .cast<StyleObjectInfo>();
     }
   }
 
@@ -5426,7 +5426,7 @@ class StyleManager {
   /// Returns the existing style layers.
   ///
   /// @return The list containing the information about existing style layer objects.
-  Future<List<StyleObjectInfo?>> getStyleLayers() async {
+  Future<List<StyleObjectInfo>> getStyleLayers() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -5452,7 +5452,7 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<StyleObjectInfo?>();
+          .cast<StyleObjectInfo>();
     }
   }
 
@@ -6003,7 +6003,7 @@ class StyleManager {
   /// Returns the existing style sources.
   ///
   /// @return The list containing the information about existing style source objects.
-  Future<List<StyleObjectInfo?>> getStyleSources() async {
+  Future<List<StyleObjectInfo>> getStyleSources() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -6029,12 +6029,12 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<StyleObjectInfo?>();
+          .cast<StyleObjectInfo>();
     }
   }
 
   /// Returns an ordered list of the current style lights.
-  Future<List<StyleObjectInfo?>> getStyleLights() async {
+  Future<List<StyleObjectInfo>> getStyleLights() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -6060,7 +6060,7 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<StyleObjectInfo?>();
+          .cast<StyleObjectInfo>();
     }
   }
 
@@ -6334,8 +6334,8 @@ class StyleManager {
       double scale,
       MbxImage image,
       bool sdf,
-      List<ImageStretches?> stretchX,
-      List<ImageStretches?> stretchY,
+      List<ImageStretches> stretchX,
+      List<ImageStretches> stretchY,
       ImageContent? content) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImage$pigeonVar_messageChannelSuffix';

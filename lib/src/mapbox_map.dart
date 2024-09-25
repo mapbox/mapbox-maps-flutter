@@ -228,7 +228,7 @@ class MapboxMap extends ChangeNotifier {
           coordinates, camera, box);
 
   /// Convenience method that returns the `camera options` object for given parameters.
-  Future<CameraOptions> cameraForGeometry(Map<String?, Object?> geometry,
+  Future<CameraOptions> cameraForGeometry(Map<String, Object?> geometry,
           MbxEdgeInsets padding, double? bearing, double? pitch) =>
       _cameraManager.cameraForGeometry(geometry, padding, bearing, pitch);
 
@@ -277,7 +277,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// The `screen coordinates` are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<List<ScreenCoordinate?>> pixelsForCoordinates(
+  Future<List<ScreenCoordinate>> pixelsForCoordinates(
           List<Point> coordinates) =>
       _cameraManager.pixelsForCoordinates(coordinates);
 
@@ -286,7 +286,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// The screen coordinates are in `logical pixels` relative to the top left corner
   /// of the map (not of the whole screen).
-  Future<List<Point?>> coordinatesForPixels(List<ScreenCoordinate?> pixels) =>
+  Future<List<Point>> coordinatesForPixels(List<ScreenCoordinate> pixels) =>
       _cameraManager.coordinatesForPixels(pixels);
 
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
@@ -375,20 +375,20 @@ class MapboxMap extends ChangeNotifier {
 
   /// Returns the `map debug options`.
   @Deprecated("Use 'getDebugOptions()' instead")
-  Future<List<MapDebugOptions?>> getDebug() => _mapInterface.getDebug();
+  Future<List<MapDebugOptions>> getDebug() => _mapInterface.getDebug();
 
   /// Sets the `map debug options` and enables debug mode based on the passed value.
   @Deprecated("Use 'setDebugOptions()' instead")
-  Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) =>
+  Future<void> setDebug(List<MapDebugOptions> debugOptions, bool value) =>
       _mapInterface.setDebug(debugOptions, value);
 
   /// Queries the map for rendered features.
-  Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
+  Future<List<QueriedRenderedFeature>> queryRenderedFeatures(
           RenderedQueryGeometry geometry, RenderedQueryOptions options) =>
       _mapInterface.queryRenderedFeatures(geometry, options);
 
   /// Queries the map for source features.
-  Future<List<QueriedSourceFeature?>> querySourceFeatures(
+  Future<List<QueriedSourceFeature>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
       _mapInterface.querySourceFeatures(sourceId, options);
 
@@ -397,7 +397,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(String sourceIdentifier,
-          Map<String?, Object?> cluster, int? limit, int? offset) =>
+          Map<String, Object?> cluster, int? limit, int? offset) =>
       _mapInterface.getGeoJsonClusterLeaves(
           sourceIdentifier, cluster, limit, offset);
 
@@ -406,7 +406,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
-          String sourceIdentifier, Map<String?, Object?> cluster) =>
+          String sourceIdentifier, Map<String, Object?> cluster) =>
       _mapInterface.getGeoJsonClusterChildren(sourceIdentifier, cluster);
 
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
@@ -414,7 +414,7 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// Requires configuring the source as a cluster by calling [GeoJsonSource.Builder#cluster(boolean)].
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
-          String sourceIdentifier, Map<String?, Object?> cluster) =>
+          String sourceIdentifier, Map<String, Object?> cluster) =>
       _mapInterface.getGeoJsonClusterExpansionZoom(sourceIdentifier, cluster);
 
   /// Updates the state object of a feature within a style source.

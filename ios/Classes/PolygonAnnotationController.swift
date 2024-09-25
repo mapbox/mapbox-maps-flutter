@@ -255,7 +255,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         }
     }
 
-    func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+    func getFillTranslate(managerId: String, completion: @escaping (Result<[Double]?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             completion(.success(manager.fillTranslate))
@@ -264,7 +264,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
         }
     }
 
-    func setFillTranslate(managerId: String, fillTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setFillTranslate(managerId: String, fillTranslate: [Double], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
             manager.fillTranslate = fillTranslate.compactMap { $0 }

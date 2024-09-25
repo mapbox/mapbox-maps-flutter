@@ -21,9 +21,9 @@ class RasterLayer extends Layer {
     List<Object>? this.rasterBrightnessMinExpression,
     int? this.rasterColor,
     List<Object>? this.rasterColorExpression,
-    List<double?>? this.rasterColorMix,
+    List<double>? this.rasterColorMix,
     List<Object>? this.rasterColorMixExpression,
-    List<double?>? this.rasterColorRange,
+    List<double>? this.rasterColorRange,
     List<Object>? this.rasterColorRangeExpression,
     double? this.rasterContrast,
     List<Object>? this.rasterContrastExpression,
@@ -91,14 +91,14 @@ class RasterLayer extends Layer {
 
   /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r - src.r + mix.g - src.g + mix.b - src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is -not- multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
   /// Default value: [0.2126,0.7152,0.0722,0].
-  List<double?>? rasterColorMix;
+  List<double>? rasterColorMix;
 
   /// When `raster-color` is active, specifies the combination of source RGB channels used to compute the raster value. Computed using the equation `mix.r - src.r + mix.g - src.g + mix.b - src.b + mix.a`. The first three components specify the mix of source red, green, and blue channels, respectively. The fourth component serves as a constant offset and is -not- multipled by source alpha. Source alpha is instead carried through and applied as opacity to the colorized result. Default value corresponds to RGB luminosity.
   /// Default value: [0.2126,0.7152,0.0722,0].
   List<Object>? rasterColorMixExpression;
 
   /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`. For `rasterarray` sources, if `raster-color-range` is unspecified, the source's stated data range is used.
-  List<double?>? rasterColorRange;
+  List<double>? rasterColorRange;
 
   /// When `raster-color` is active, specifies the range over which `raster-color` is tabulated. Units correspond to the computed raster value via `raster-color-mix`. For `rasterarray` sources, if `raster-color-range` is unspecified, the source's stated data range is used.
   List<Object>? rasterColorRangeExpression;
@@ -341,12 +341,12 @@ class RasterLayer extends Layer {
       rasterColor: (map["paint"]["raster-color"] as List?)?.toRGBAInt(),
       rasterColorExpression: _optionalCastList(map["paint"]["raster-color"]),
       rasterColorMix: (map["paint"]["raster-color-mix"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       rasterColorMixExpression:
           _optionalCastList(map["paint"]["raster-color-mix"]),
       rasterColorRange: (map["paint"]["raster-color-range"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       rasterColorRangeExpression:
           _optionalCastList(map["paint"]["raster-color-range"]),

@@ -248,7 +248,7 @@ class LocationPuck3D {
 
   /// The position of the model.
   /// Default value: [0,0].
-  List<double?>? position;
+  List<double>? position;
 
   /// The opacity of the model.
   /// Default value: 1. Value range: [0, 1]
@@ -256,18 +256,18 @@ class LocationPuck3D {
 
   /// The scale of the model.
   /// Default value: [1,1,1].
-  List<double?>? modelScale;
+  List<double>? modelScale;
 
   /// The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom.
   String? modelScaleExpression;
 
   /// The translation of the model [lon, lat, z]
   /// Default value: [0,0,0].
-  List<double?>? modelTranslation;
+  List<double>? modelTranslation;
 
   /// The rotation of the model.
   /// Default value: [0,0,90].
-  List<double?>? modelRotation;
+  List<double>? modelRotation;
 
   /// Enable/Disable shadow casting for the 3D location puck.
   /// Default value: true.
@@ -309,12 +309,12 @@ class LocationPuck3D {
     result as List<Object?>;
     return LocationPuck3D(
       modelUri: result[0] as String?,
-      position: (result[1] as List<Object?>?)?.cast<double?>(),
+      position: (result[1] as List<Object?>?)?.cast<double>(),
       modelOpacity: result[2] as double?,
-      modelScale: (result[3] as List<Object?>?)?.cast<double?>(),
+      modelScale: (result[3] as List<Object?>?)?.cast<double>(),
       modelScaleExpression: result[4] as String?,
-      modelTranslation: (result[5] as List<Object?>?)?.cast<double?>(),
-      modelRotation: (result[6] as List<Object?>?)?.cast<double?>(),
+      modelTranslation: (result[5] as List<Object?>?)?.cast<double>(),
+      modelRotation: (result[6] as List<Object?>?)?.cast<double>(),
       modelCastShadows: result[7] as bool?,
       modelReceiveShadows: result[8] as bool?,
       modelScaleMode: result[9] as ModelScaleMode?,

@@ -971,13 +971,13 @@ struct Size {
 /// Generated class from Pigeon that represents data sent in messages.
 struct RenderedQueryOptions {
   /// Layer IDs to include in the query.
-  var layerIds: [String?]?
+  var layerIds: [String]?
   /// Filters the returned features with an expression
   var filter: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> RenderedQueryOptions? {
-    let layerIds: [String?]? = nilOrValue(pigeonVar_list[0])
+    let layerIds: [String]? = nilOrValue(pigeonVar_list[0])
     let filter: String? = nilOrValue(pigeonVar_list[1])
 
     return RenderedQueryOptions(
@@ -998,13 +998,13 @@ struct RenderedQueryOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct SourceQueryOptions {
   /// Source layer IDs to include in the query.
-  var sourceLayerIds: [String?]?
+  var sourceLayerIds: [String]?
   /// Filters the returned features with an expression
   var filter: String
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> SourceQueryOptions? {
-    let sourceLayerIds: [String?]? = nilOrValue(pigeonVar_list[0])
+    let sourceLayerIds: [String]? = nilOrValue(pigeonVar_list[0])
     let filter = pigeonVar_list[1] as! String
 
     return SourceQueryOptions(
@@ -1027,12 +1027,12 @@ struct FeatureExtensionValue {
   /// An optional value of a feature extension
   var value: String?
   /// An optional array of features from a feature extension.
-  var featureCollection: [[String?: Any?]?]?
+  var featureCollection: [[String: Any?]]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeatureExtensionValue? {
     let value: String? = nilOrValue(pigeonVar_list[0])
-    let featureCollection: [[String?: Any?]?]? = nilOrValue(pigeonVar_list[1])
+    let featureCollection: [[String: Any?]]? = nilOrValue(pigeonVar_list[1])
 
     return FeatureExtensionValue(
       value: value,
@@ -1089,12 +1089,12 @@ struct QueriedRenderedFeature {
   /// An array of layer Ids for the queried feature.
   /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
   /// If the feature is only rendered in one layer, a single Id will be provided.
-  var layers: [String?]
+  var layers: [String]
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
     let queriedFeature = pigeonVar_list[0] as! QueriedFeature
-    let layers = pigeonVar_list[1] as! [String?]
+    let layers = pigeonVar_list[1] as! [String]
 
     return QueriedRenderedFeature(
       queriedFeature: queriedFeature,
@@ -1138,7 +1138,7 @@ struct QueriedSourceFeature {
 /// Generated class from Pigeon that represents data sent in messages.
 struct QueriedFeature {
   /// Feature returned by the query.
-  var feature: [String?: Any?]
+  var feature: [String: Any?]
   /// Source id for a queried feature.
   var source: String
   /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
@@ -1150,7 +1150,7 @@ struct QueriedFeature {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedFeature? {
-    let feature = pigeonVar_list[0] as! [String?: Any?]
+    let feature = pigeonVar_list[0] as! [String: Any?]
     let source = pigeonVar_list[1] as! String
     let sourceLayer: String? = nilOrValue(pigeonVar_list[2])
     let state = pigeonVar_list[3] as! String
@@ -1322,7 +1322,7 @@ struct FlatLight {
   /// Transition property for `intensity`
   var intensityTransition: TransitionOptions?
   /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var position: [Double?]?
+  var position: [Double]?
   /// Transition property for `position`
   var positionTransition: TransitionOptions?
 
@@ -1334,7 +1334,7 @@ struct FlatLight {
     let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[3])
     let intensity: Double? = nilOrValue(pigeonVar_list[4])
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
-    let position: [Double?]? = nilOrValue(pigeonVar_list[6])
+    let position: [Double]? = nilOrValue(pigeonVar_list[6])
     let positionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
 
     return FlatLight(
@@ -1377,7 +1377,7 @@ struct DirectionalLight {
   /// Transition property for `color`
   var colorTransition: TransitionOptions?
   /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var direction: [Double?]?
+  var direction: [Double]?
   /// Transition property for `direction`
   var directionTransition: TransitionOptions?
   /// A multiplier for the color of the directional light.
@@ -1395,7 +1395,7 @@ struct DirectionalLight {
     let castShadows: Bool? = nilOrValue(pigeonVar_list[1])
     let color: Int64? = nilOrValue(pigeonVar_list[2])
     let colorTransition: TransitionOptions? = nilOrValue(pigeonVar_list[3])
-    let direction: [Double?]? = nilOrValue(pigeonVar_list[4])
+    let direction: [Double]? = nilOrValue(pigeonVar_list[4])
     let directionTransition: TransitionOptions? = nilOrValue(pigeonVar_list[5])
     let intensity: Double? = nilOrValue(pigeonVar_list[6])
     let intensityTransition: TransitionOptions? = nilOrValue(pigeonVar_list[7])
@@ -2289,7 +2289,7 @@ protocol _CameraManager {
   /// @param pitch The pitch of the camera.
   ///
   /// @return The `camera options` object representing the provided parameters.
-  func cameraForGeometry(geometry: [String?: Any?], padding: MbxEdgeInsets, bearing: Double?, pitch: Double?) throws -> CameraOptions
+  func cameraForGeometry(geometry: [String: Any?], padding: MbxEdgeInsets, bearing: Double?, pitch: Double?) throws -> CameraOptions
   /// Returns the `coordinate bounds` for a given camera.
   ///
   /// Note that if the given `camera` shows the antimeridian, the returned wrapped `coordinate bounds`
@@ -2357,7 +2357,7 @@ protocol _CameraManager {
   /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
   ///
   /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
-  func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate?]
+  func pixelsForCoordinates(coordinates: [Point]) throws -> [ScreenCoordinate]
   /// Calculates geographical `coordinates` (i.e., longitude-latitude pairs) that correspond
   /// to `screen coordinates`.
   ///
@@ -2367,7 +2367,7 @@ protocol _CameraManager {
   /// @param pixels A `screen coordinates` in `logical pixels`.
   ///
   /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
-  func coordinatesForPixels(pixels: [ScreenCoordinate?]) throws -> [Point]
+  func coordinatesForPixels(pixels: [ScreenCoordinate]) throws -> [Point]
   /// Changes the map view by any combination of center, zoom, bearing, and pitch, without an animated transition.
   /// The map will retain its current values for any details not passed via the camera options argument.
   /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
@@ -2525,7 +2525,7 @@ class _CameraManagerSetup {
     if let api = api {
       cameraForGeometryChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let geometryArg = args[0] as! [String?: Any?]
+        let geometryArg = args[0] as! [String: Any?]
         let paddingArg = args[1] as! MbxEdgeInsets
         let bearingArg: Double? = nilOrValue(args[2])
         let pitchArg: Double? = nilOrValue(args[3])
@@ -2718,7 +2718,7 @@ class _CameraManagerSetup {
     if let api = api {
       coordinatesForPixelsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let pixelsArg = args[0] as! [ScreenCoordinate?]
+        let pixelsArg = args[0] as! [ScreenCoordinate]
         do {
           let result = try api.coordinatesForPixels(pixels: pixelsArg)
           reply(wrapResult(result))
@@ -2866,26 +2866,26 @@ protocol _MapInterface {
   /// Returns the `map debug options`.
   ///
   /// @return An array of `map debug options` flags currently set to the map.
-  func getDebug() throws -> [MapDebugOptions?]
+  func getDebug() throws -> [MapDebugOptions]
   /// Sets the `map debug options` and enables debug mode based on the passed value.
   ///
   /// @param debugOptions An array of `map debug options` to be set.
   /// @param value A `boolean` value representing the state for a given `map debug options`.
   ///
-  func setDebug(debugOptions: [MapDebugOptions?], value: Bool) throws
+  func setDebug(debugOptions: [MapDebugOptions], value: Bool) throws
   /// Queries the map for rendered features.
   ///
   /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
   /// @param options The `render query options` for querying rendered features.
   /// @param completion The `query features completion` called when the query completes.
   /// @return A `cancelable` object that could be used to cancel the pending query.
-  func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
+  func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature], Error>) -> Void)
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
   /// @param options The `source query options` for querying source features.
   /// @param completion The `query features completion` called when the query completes.
-  func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void)
+  func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature], Error>) -> Void)
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
   ///
@@ -2897,7 +2897,7 @@ protocol _MapInterface {
   /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
-  func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String?: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
+  func getGeoJsonClusterLeaves(sourceIdentifier: String, cluster: [String: Any?], limit: Int64?, offset: Int64?, completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   /// Returns the children (original points or clusters) of a cluster (on the next zoom level)
   /// given its id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
@@ -2907,7 +2907,7 @@ protocol _MapInterface {
   /// @param cluster cluster from which to retrieve children from
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature collection or a string describing an error if the operation was not successful.
-  func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
+  func getGeoJsonClusterChildren(sourceIdentifier: String, cluster: [String: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   /// Returns the zoom on which the cluster expands into several children (useful for "click to zoom" feature)
   /// given the cluster's cluster_id (cluster_id value from feature properties) from a GeoJsonSource.
   ///
@@ -2917,7 +2917,7 @@ protocol _MapInterface {
   /// @param cluster cluster from which to retrieve the expansion zoom from
   /// @param completion The result will be returned through the completion block.
   ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
-  func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String?: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
+  func getGeoJsonClusterExpansionZoom(sourceIdentifier: String, cluster: [String: Any?], completion: @escaping (Result<FeatureExtensionValue, Error>) -> Void)
   /// Updates the state object of a feature within a style source.
   ///
   /// Update entries in the `state` object of a given feature within a style source. Only properties of the
@@ -3301,7 +3301,7 @@ class _MapInterfaceSetup {
     if let api = api {
       setDebugChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let debugOptionsArg = args[0] as! [MapDebugOptions?]
+        let debugOptionsArg = args[0] as! [MapDebugOptions]
         let valueArg = args[1] as! Bool
         do {
           try api.setDebug(debugOptions: debugOptionsArg, value: valueArg)
@@ -3376,7 +3376,7 @@ class _MapInterfaceSetup {
       getGeoJsonClusterLeavesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdentifierArg = args[0] as! String
-        let clusterArg = args[1] as! [String?: Any?]
+        let clusterArg = args[1] as! [String: Any?]
         let limitArg: Int64? = nilOrValue(args[2])
         let offsetArg: Int64? = nilOrValue(args[3])
         api.getGeoJsonClusterLeaves(sourceIdentifier: sourceIdentifierArg, cluster: clusterArg, limit: limitArg, offset: offsetArg) { result in
@@ -3405,7 +3405,7 @@ class _MapInterfaceSetup {
       getGeoJsonClusterChildrenChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdentifierArg = args[0] as! String
-        let clusterArg = args[1] as! [String?: Any?]
+        let clusterArg = args[1] as! [String: Any?]
         api.getGeoJsonClusterChildren(sourceIdentifier: sourceIdentifierArg, cluster: clusterArg) { result in
           switch result {
           case .success(let res):
@@ -3432,7 +3432,7 @@ class _MapInterfaceSetup {
       getGeoJsonClusterExpansionZoomChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let sourceIdentifierArg = args[0] as! String
-        let clusterArg = args[1] as! [String?: Any?]
+        let clusterArg = args[1] as! [String: Any?]
         api.getGeoJsonClusterExpansionZoom(sourceIdentifier: sourceIdentifierArg, cluster: clusterArg) { result in
           switch result {
           case .success(let res):
@@ -4160,7 +4160,7 @@ protocol StyleManager {
   /// @return The `transition options` of the current style in use.
   func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void)
   /// Returns the list containing information about existing style import objects.
-  func getStyleImports() throws -> [StyleObjectInfo?]
+  func getStyleImports() throws -> [StyleObjectInfo]
   /// Removes an existing style import.
   ///
   /// @param importId Identifier of the style import to remove.
@@ -4255,7 +4255,7 @@ protocol StyleManager {
   /// Returns the existing style layers.
   ///
   /// @return The list containing the information about existing style layer objects.
-  func getStyleLayers(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void)
+  func getStyleLayers(completion: @escaping (Result<[StyleObjectInfo], Error>) -> Void)
   /// Gets the value of style layer property.
   ///
   /// @param layerId A style layer identifier.
@@ -4423,9 +4423,9 @@ protocol StyleManager {
   /// Returns the existing style sources.
   ///
   /// @return The list containing the information about existing style source objects.
-  func getStyleSources(completion: @escaping (Result<[StyleObjectInfo?], Error>) -> Void)
+  func getStyleSources(completion: @escaping (Result<[StyleObjectInfo], Error>) -> Void)
   /// Returns an ordered list of the current style lights.
-  func getStyleLights() throws -> [StyleObjectInfo?]
+  func getStyleLights() throws -> [StyleObjectInfo]
   /// Set global directional lightning.
   ///
   /// @param flatLight The flat light source.
@@ -4494,7 +4494,7 @@ protocol StyleManager {
   /// icon uses icon-text-fit, the symbol's text will be fit inside the content box.
   ///
   /// @return A string describing an error if the operation was not successful, empty otherwise.
-  func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches?], stretchY: [ImageStretches?], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void)
+  func addStyleImage(imageId: String, scale: Double, image: MbxImage, sdf: Bool, stretchX: [ImageStretches], stretchY: [ImageStretches], content: ImageContent?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Removes an image from the style.
   ///
   /// @param imageId The identifier of the image to remove.
@@ -5681,8 +5681,8 @@ class StyleManagerSetup {
         let scaleArg = args[1] as! Double
         let imageArg = args[2] as! MbxImage
         let sdfArg = args[3] as! Bool
-        let stretchXArg = args[4] as! [ImageStretches?]
-        let stretchYArg = args[5] as! [ImageStretches?]
+        let stretchXArg = args[4] as! [ImageStretches]
+        let stretchYArg = args[5] as! [ImageStretches]
         let contentArg: ImageContent? = nilOrValue(args[6])
         api.addStyleImage(imageId: imageIdArg, scale: scaleArg, image: imageArg, sdf: sdfArg, stretchX: stretchXArg, stretchY: stretchYArg, content: contentArg) { result in
           switch result {

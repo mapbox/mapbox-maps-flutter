@@ -33,7 +33,7 @@ class LineLayer extends Layer {
     List<Object>? this.lineBorderWidthExpression,
     int? this.lineColor,
     List<Object>? this.lineColorExpression,
-    List<double?>? this.lineDasharray,
+    List<double>? this.lineDasharray,
     List<Object>? this.lineDasharrayExpression,
     double? this.lineDepthOcclusionFactor,
     List<Object>? this.lineDepthOcclusionFactorExpression,
@@ -51,15 +51,15 @@ class LineLayer extends Layer {
     List<Object>? this.lineOpacityExpression,
     String? this.linePattern,
     List<Object>? this.linePatternExpression,
-    List<double?>? this.lineTranslate,
+    List<double>? this.lineTranslate,
     List<Object>? this.lineTranslateExpression,
     LineTranslateAnchor? this.lineTranslateAnchor,
     List<Object>? this.lineTranslateAnchorExpression,
     int? this.lineTrimColor,
     List<Object>? this.lineTrimColorExpression,
-    List<double?>? this.lineTrimFadeRange,
+    List<double>? this.lineTrimFadeRange,
     List<Object>? this.lineTrimFadeRangeExpression,
-    List<double?>? this.lineTrimOffset,
+    List<double>? this.lineTrimOffset,
     List<Object>? this.lineTrimOffsetExpression,
     double? this.lineWidth,
     List<Object>? this.lineWidthExpression,
@@ -161,7 +161,7 @@ class LineLayer extends Layer {
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   /// Minimum value: 0.
-  List<double?>? lineDasharray;
+  List<double>? lineDasharray;
 
   /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   /// Minimum value: 0.
@@ -229,7 +229,7 @@ class LineLayer extends Layer {
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
-  List<double?>? lineTranslate;
+  List<double>? lineTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0].
@@ -256,7 +256,7 @@ class LineLayer extends Layer {
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
   @experimental
-  List<double?>? lineTrimFadeRange;
+  List<double>? lineTrimFadeRange;
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property.
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
@@ -265,7 +265,7 @@ class LineLayer extends Layer {
 
   /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
-  List<double?>? lineTrimOffset;
+  List<double>? lineTrimOffset;
 
   /// The line part between [trim-start, trim-end] will be painted using `line-trim-color,` which is transparent by default to produce a route vanishing effect. The line trim-off offset is based on the whole line range [0.0, 1.0].
   /// Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
@@ -552,7 +552,7 @@ class LineLayer extends Layer {
       lineColor: (map["paint"]["line-color"] as List?)?.toRGBAInt(),
       lineColorExpression: _optionalCastList(map["paint"]["line-color"]),
       lineDasharray: (map["paint"]["line-dasharray"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       lineDasharrayExpression:
           _optionalCastList(map["paint"]["line-dasharray"]),
@@ -579,7 +579,7 @@ class LineLayer extends Layer {
       linePattern: _optionalCast(map["paint"]["line-pattern"]),
       linePatternExpression: _optionalCastList(map["paint"]["line-pattern"]),
       lineTranslate: (map["paint"]["line-translate"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       lineTranslateExpression:
           _optionalCastList(map["paint"]["line-translate"]),
@@ -595,12 +595,12 @@ class LineLayer extends Layer {
       lineTrimColorExpression:
           _optionalCastList(map["paint"]["line-trim-color"]),
       lineTrimFadeRange: (map["paint"]["line-trim-fade-range"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       lineTrimFadeRangeExpression:
           _optionalCastList(map["paint"]["line-trim-fade-range"]),
       lineTrimOffset: (map["paint"]["line-trim-offset"] as List?)
-          ?.map<double?>((e) => e.toDouble())
+          ?.map<double>((e) => e.toDouble())
           .toList(),
       lineTrimOffsetExpression:
           _optionalCastList(map["paint"]["line-trim-offset"]),
