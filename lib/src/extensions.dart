@@ -10,6 +10,27 @@ extension Conversion on CameraState {
       pitch: pitch,
     );
   }
+
+  static CameraState fromJson(Map<String, dynamic> json) {
+    return CameraState(
+        center: Point.fromJson(json['center']),
+        padding: MbxEdgeInsetsCodable.fromJson(json['padding']),
+        zoom: json['zoom'].toDouble(),
+        bearing: json['bearing'].toDouble(),
+        pitch: json['pitch'].toDouble());
+  }
+}
+
+extension MbxEdgeInsetsCodable on MbxEdgeInsets {
+
+  static MbxEdgeInsets fromJson(Map<String, dynamic> json) {
+    return MbxEdgeInsets(
+      top: json["top"].toDouble(),
+      left: json["left"].toDouble(),
+      bottom: json["bottom"].toDouble(),
+      right: json["right"].toDouble(),
+    );
+  }
 }
 
 extension ScreenBoxToJson on ScreenBox {
