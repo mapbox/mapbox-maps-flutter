@@ -2,7 +2,6 @@ library mapbox_maps_flutter;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
