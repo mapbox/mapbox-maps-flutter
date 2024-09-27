@@ -2,7 +2,7 @@
 
 * Expose current map's camera state on `CameraChanged` event.
 
-You can now observe map's camera updates with `onCameraChangeListener`
+You can now observe the map's camera updates with `onCameraChangeListener`
 
 ```dart
 onCameraChangeListener(CameraChangedEventData data) {
