@@ -37,7 +37,7 @@ import java.util.Date
 class MapboxEventHandler(
   private val eventProvider: Observable,
   binaryMessenger: BinaryMessenger,
-  eventTypes: List<Long>
+  eventTypes: List<Int>
 ) : MethodChannel.MethodCallHandler {
   private val channel: MethodChannel
   private val cancellables = HashSet<Cancelable>()
@@ -50,7 +50,9 @@ class MapboxEventHandler(
     channel = MethodChannel(binaryMessenger, "com.mapbox.maps.flutter.map_events")
     channel.setMethodCallHandler(this)
 
-    eventTypes.mapNotNull { _MapEvent.ofRaw(it.toInt()) }
+    eventTypes
+      .map { _MapEvent.ofRaw(it) }
+      .filterNotNull()
       .forEach { subscribeToEvent(it) }
   }
 
@@ -59,9 +61,11 @@ class MapboxEventHandler(
       cancellables.forEach { it.cancel() }
       cancellables.clear()
 
-      val rawEventTypes = methodCall.arguments as List<Long>
+      val rawEventTypes = methodCall.arguments as List<Int>
 
-      rawEventTypes.mapNotNull { _MapEvent.ofRaw(it.toInt()) }
+      rawEventTypes
+        .map { _MapEvent.ofRaw(it) }
+        .filterNotNull()
         .forEach { subscribeToEvent(it) }
       result.success(null)
     } else {
