@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/helpers.dart';
 
 import 'page.dart';
 

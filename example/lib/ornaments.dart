@@ -4,7 +4,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'main.dart';
 import 'page.dart';
 
-import 'package:turf/helpers.dart';
 
 class OrnamentsPage extends ExamplePage {
   OrnamentsPage() : super(const Icon(Icons.map), 'Ornaments');

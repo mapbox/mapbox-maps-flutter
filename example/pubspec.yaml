@@ -23,6 +23,7 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   http: ^0.13.5
 
+  turf: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -30,7 +31,7 @@ dev_dependencies:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-  turf: ^0.0.7
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

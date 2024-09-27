@@ -4,19 +4,17 @@ PODS:
     - Flutter
   - mapbox_maps_flutter (0.6.0):
     - Flutter
-    - MapboxMaps (~> 10.17.0)
-  - MapboxCommon (23.9.2)
-  - MapboxCoreMaps (10.17.0):
-    - MapboxCommon (~> 23.9)
-  - MapboxMaps (10.17.0):
-    - MapboxCommon (= 23.9.2)
-    - MapboxCoreMaps (= 10.17.0)
-    - MapboxMobileEvents (= 1.0.10)
-    - Turf (= 2.7.0)
-  - MapboxMobileEvents (1.0.10)
+    - MapboxMaps (~> 11.5.0-beta.1)
+  - MapboxCommon (24.5.0)
+  - MapboxCoreMaps (11.5.3):
+    - MapboxCommon (~> 24.5)
+  - MapboxMaps (11.5.2):
+    - MapboxCommon (= 24.5.0)
+    - MapboxCoreMaps (= 11.5.3)
+    - Turf (= 2.8.0)
   - permission_handler_apple (9.0.4):
     - Flutter
-  - Turf (2.7.0)
+  - Turf (2.8.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -29,7 +27,6 @@ SPEC REPOS:
     - MapboxCommon
     - MapboxCoreMaps
     - MapboxMaps
-    - MapboxMobileEvents
     - Turf
 
 EXTERNAL SOURCES:
@@ -43,16 +40,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: 13825b8a9334a850581300559b8839134b124670
-  mapbox_maps_flutter: 1b0f2c21a17107d39e0d3e7d956590af6983bd1b
-  MapboxCommon: 768660d6fca8193529ecf82eb6f5f9ae7a5acdf9
-  MapboxCoreMaps: be412ff97b16aa7820922c818115a9a0d8211caa
-  MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
-  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  mapbox_maps_flutter: 9c20ec7cb09c6d477351e274dfb23a4317a78701
+  MapboxCommon: c69a04a1accd77650372c96d8978a15ed1d95186
+  MapboxCoreMaps: 127a3a6f68bc54d21008835b1bdf94be7a79792a
+  MapboxMaps: c781bae1bcb8b17dd63b0f130ef80605ceb72ac9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
+  Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
 
-PODFILE CHECKSUM: 04c8a50f0eb98e8e64bc4237a0712e89ba6c14b8
+PODFILE CHECKSUM: 59200008a5348a471be702918078ef9cc4006b25
 
 COCOAPODS: 1.15.2
