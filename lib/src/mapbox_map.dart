@@ -1,5 +1,33 @@
 part of mapbox_maps_flutter;
 
+/// Geometry for querying rendered features.
+class RenderedQueryGeometry {
+  @Deprecated(
+      'Use RenderedQueryGeometry.fromList()/fromScreenBox()/fromScreenCoordinated() instead')
+  RenderedQueryGeometry({
+    required this.value,
+    required this.type,
+  });
+
+  RenderedQueryGeometry.fromList(List<ScreenCoordinate> points)
+      : value = jsonEncode(points.map((e) => e.toJson()).toList()),
+        type = Type.LIST;
+
+  RenderedQueryGeometry.fromScreenBox(ScreenBox box)
+      : value = jsonEncode(box.toJson()),
+        type = Type.SCREEN_BOX;
+
+  RenderedQueryGeometry.fromScreenCoordinate(ScreenCoordinate point)
+      : value = jsonEncode(point.toJson()),
+        type = Type.SCREEN_COORDINATE;
+
+  /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
+  String value;
+
+  /// Type of the geometry encoded in [value].
+  Type type;
+}
+
 /// Options for enabling debugging features in a map.
 class MapWidgetDebugOptions {
   final _MapWidgetDebugOptions option;
@@ -385,7 +413,9 @@ class MapboxMap extends ChangeNotifier {
   /// Queries the map for rendered features.
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
           RenderedQueryGeometry geometry, RenderedQueryOptions options) =>
-      _mapInterface.queryRenderedFeatures(geometry, options);
+      _mapInterface.queryRenderedFeatures(
+          _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
+          options);
 
   /// Queries the map for source features.
   Future<List<QueriedSourceFeature?>> querySourceFeatures(

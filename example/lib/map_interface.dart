@@ -278,11 +278,11 @@ class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
     return TextButton(
       child: Text('queryRenderedFeatures'),
       onPressed: () {
-        var screenBox = ScreenBox(
+        final screenBox = ScreenBox(
             min: ScreenCoordinate(x: 0.0, y: 0.0),
             max: ScreenCoordinate(x: 150.0, y: 510.0));
-        var renderedQueryGeometry = RenderedQueryGeometry(
-            value: json.encode(screenBox.toJson()), type: Type.SCREEN_BOX);
+        final renderedQueryGeometry =
+            RenderedQueryGeometry.fromScreenBox(screenBox);
         mapboxMap
             ?.queryRenderedFeatures(
                 renderedQueryGeometry,
