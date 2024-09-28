@@ -85,7 +85,8 @@ jobs:
               --use-orchestrator \
               --num-flaky-test-attempts 3 \
               --no-record-video \
-              --no-performance-metrics
+              --no-performance-metrics \
+              --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}"
 
   build-ios:
     parameters:
@@ -146,7 +147,8 @@ jobs:
               --test << parameters.workspace-path >>/build_products.zip \
               --device model=iphone13pro,version=15.7 \
               --timeout 5m \
-              --num-flaky-test-attempts 3 2>&1 | tee firebase_test_lab_run.log
+              --num-flaky-test-attempts 3 \
+              --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}" 2>&1 | tee firebase_test_lab_run.log
       - run:
           name: Download XCResults
           command: |
