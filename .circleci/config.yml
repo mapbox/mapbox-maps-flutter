@@ -18,7 +18,7 @@ commands:
   setup-gcloud:
     steps:
       - gcp-cli/setup:
-          version: 489.0.0
+          version: 494.0.0
           gcloud_service_key: GCLOUD_SERVICE_ACCOUNT_JSON
 
   add-mapbox-submodules-key:
