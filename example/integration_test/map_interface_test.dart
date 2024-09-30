@@ -326,8 +326,7 @@ void main() {
     var screenBox = ScreenBox(
         min: ScreenCoordinate(x: 0.0, y: 0.0),
         max: ScreenCoordinate(x: 500.0, y: 1000.0));
-    var renderedQueryGeometry = RenderedQueryGeometry(
-        value: json.encode(screenBox.toJson()), type: Type.SCREEN_BOX);
+    var renderedQueryGeometry = RenderedQueryGeometry.fromScreenBox(screenBox);
     var query = await mapboxMap.queryRenderedFeatures(renderedQueryGeometry,
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, greaterThan(0));
@@ -335,18 +334,15 @@ void main() {
     expect(query[0]!.queriedFeature.feature['id'], 'point');
 
     query = await mapboxMap.queryRenderedFeatures(
-        RenderedQueryGeometry(
-            value: json.encode(ScreenCoordinate(x: 0.0, y: 0.0).toJson()),
-            type: Type.SCREEN_COORDINATE),
+        RenderedQueryGeometry.fromScreenCoordinate(
+            ScreenCoordinate(x: 0.0, y: 0.0)),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 0);
     query = await mapboxMap.queryRenderedFeatures(
-        RenderedQueryGeometry(
-            value: json.encode([
-              ScreenCoordinate(x: 0.0, y: 0.0).toJson(),
-              ScreenCoordinate(x: 1.0, y: 1.0).toJson()
-            ]),
-            type: Type.LIST),
+        RenderedQueryGeometry.fromList([
+          ScreenCoordinate(x: 0.0, y: 0.0),
+          ScreenCoordinate(x: 1.0, y: 1.0),
+        ]),
         RenderedQueryOptions(layerIds: ['points'], filter: null));
     expect(query.length, 0);
   });

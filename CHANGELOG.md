@@ -9,6 +9,23 @@ onCameraChangeListener(CameraChangedEventData data) {
   print("CameraChangedEventData: timestamp: ${data.timestamp}, cameraState: ${data.cameraState}");
 }
 ```
+* Deprecate untyped default constructor of `RenderedQueryGeometry` with typed constructors: `RenderedQueryGeometry.fromList()/fromScreenBox()/fromScreenCoordinate()`.
+
+This change improves type safety and clarity in the code. By using specific constructors, you can ensure that the `RenderedQueryGeometry` is created with the correct type of data, reducing the risk of runtime errors and making the code easier to understand and maintain.
+
+**Example:**
+
+*Before:*
+```dart
+// Using the untyped default constructor
+final geometry = RenderedQueryGeometry(type: Type.SCREEN_COORDINATE, value jsonEncode(screenCoordinate.encode()));
+```
+
+*After:*
+```dart
+// Using a typed constructor
+final geometry = RenderedQueryGeometry.fromScreenCoordinate(screenCoordinate);
+```
 * Print to console native Maps SDK logs in debug configuration.
 
 ### 2.3.0-rc.1

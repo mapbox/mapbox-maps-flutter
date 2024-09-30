@@ -1263,8 +1263,8 @@ class QueriedFeature {
 }
 
 /// Geometry for querying rendered features.
-class RenderedQueryGeometry {
-  RenderedQueryGeometry({
+class _RenderedQueryGeometry {
+  _RenderedQueryGeometry({
     required this.value,
     required this.type,
   });
@@ -1281,9 +1281,9 @@ class RenderedQueryGeometry {
     ];
   }
 
-  static RenderedQueryGeometry decode(Object result) {
+  static _RenderedQueryGeometry decode(Object result) {
     result as List<Object?>;
-    return RenderedQueryGeometry(
+    return _RenderedQueryGeometry(
       value: result[0]! as String,
       type: result[1]! as Type,
     );
@@ -1963,7 +1963,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is QueriedFeature) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
     } else if (value is ProjectedMeters) {
@@ -2132,7 +2132,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 176:
         return QueriedFeature.decode(readValue(buffer)!);
       case 177:
-        return RenderedQueryGeometry.decode(readValue(buffer)!);
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
       case 178:
         return ProjectedMeters.decode(readValue(buffer)!);
       case 179:
@@ -3611,7 +3611,7 @@ class _MapInterface {
   /// @param completion The `query features completion` called when the query completes.
   /// @return A `cancelable` object that could be used to cancel the pending query.
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
-      RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
+      _RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
