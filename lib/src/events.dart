@@ -95,6 +95,7 @@ class EventTimeInterval {
 class CameraChangedEventData {
   /// The time when the camera was changed.
   final int timestamp;
+
   /// The current state of the camera.
   final CameraState cameraState;
 

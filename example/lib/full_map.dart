@@ -144,14 +144,12 @@ class FullMapState extends State<FullMap> {
 }
 
 extension on CameraChangedEventData {
-
   String get debugInfo {
     return "timestamp ${DateTime.fromMicrosecondsSinceEpoch(timestamp)}, camera: ${cameraState.debugInfo}";
   }
 }
 
 extension on CameraState {
-
   String get debugInfo {
     return "lat: ${center.coordinates.lat}, lng: ${center.coordinates.lng}, zoom: ${zoom}, bearing: ${bearing}, pitch: ${pitch}";
   }

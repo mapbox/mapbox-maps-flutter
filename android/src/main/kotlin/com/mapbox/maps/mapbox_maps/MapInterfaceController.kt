@@ -16,7 +16,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedRenderedFeature
 import com.mapbox.maps.mapbox_maps.pigeons.QueriedSourceFeature
-import com.mapbox.maps.mapbox_maps.pigeons.RenderedQueryGeometry
 import com.mapbox.maps.mapbox_maps.pigeons.RenderedQueryOptions
 import com.mapbox.maps.mapbox_maps.pigeons.Size
 import com.mapbox.maps.mapbox_maps.pigeons.SourceQueryOptions
@@ -26,6 +25,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
 import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
+import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
 
 class MapInterfaceController(
@@ -142,7 +142,7 @@ class MapInterfaceController(
   }
 
   override fun queryRenderedFeatures(
-    geometry: RenderedQueryGeometry,
+    geometry: _RenderedQueryGeometry,
     options: RenderedQueryOptions,
     callback: (Result<List<QueriedRenderedFeature?>>) -> Unit
   ) {

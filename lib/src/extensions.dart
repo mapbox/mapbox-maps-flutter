@@ -22,7 +22,6 @@ extension Conversion on CameraState {
 }
 
 extension MbxEdgeInsetsCodable on MbxEdgeInsets {
-
   static MbxEdgeInsets fromJson(Map<String, dynamic> json) {
     return MbxEdgeInsets(
       top: json["top"].toDouble(),
