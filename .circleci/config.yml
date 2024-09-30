@@ -18,7 +18,7 @@ commands:
   setup-gcloud:
     steps:
       - gcp-cli/setup:
-          version: 489.0.0
+          version: 494.0.0
           gcloud_service_key: GCLOUD_SERVICE_ACCOUNT_JSON
 
   add-mapbox-submodules-key:
@@ -53,7 +53,6 @@ jobs:
           name: "Build Android integration tests"
           working_directory: example/android
           command: |
-            flutter build apk
             ./gradlew app:assembleAndroidTest --stacktrace
             ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n "ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" | base64 -w 0)" --stacktrace
       - persist_to_workspace:
@@ -85,7 +84,8 @@ jobs:
               --use-orchestrator \
               --num-flaky-test-attempts 3 \
               --no-record-video \
-              --no-performance-metrics
+              --no-performance-metrics \
+              --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}"
 
   build-ios:
     parameters:
@@ -146,7 +146,8 @@ jobs:
               --test << parameters.workspace-path >>/build_products.zip \
               --device model=iphone13pro,version=15.7 \
               --timeout 5m \
-              --num-flaky-test-attempts 3 2>&1 | tee firebase_test_lab_run.log
+              --num-flaky-test-attempts 3 \
+              --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}" 2>&1 | tee firebase_test_lab_run.log
       - run:
           name: Download XCResults
           command: |

@@ -140,14 +140,16 @@ final class MapInterfaceController: _MapInterface {
         self.mapboxMap.debugOptions = debugOptions.compactMap {$0?.toMapDebugOptions()}
     }
 
-    func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {
+    func queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void) {
         do {
-            if geometry.type == .sCREENBOX {
+            switch geometry.type {
+            case .sCREENBOX:
                 let screenBoxArray = convertStringToDictionary(properties: geometry.value)
                 guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return }
                 guard let maxCoord = screenBoxArray["max"] as? [String: Double] else { return }
                 guard let minX = minCoord["x"], let minY = minCoord["y"],
                       let maxX = maxCoord["x"], let maxY = maxCoord["y"] else {
+                    completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
                     return
                 }
                 let screenBox = ScreenBox(min: ScreenCoordinate(x: minX, y: minY),
@@ -162,9 +164,10 @@ final class MapInterfaceController: _MapInterface {
                         completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                     }
                 }
-            } else if geometry.type == .sCREENCOORDINATE {
+            case .sCREENCOORDINATE:
                 guard let pointDict = convertStringToDictionary(properties: geometry.value) as? [String: Double],
                       let x = pointDict["x"], let y = pointDict["y"] else {
+                    completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
                     return
                 }
                 let cgPoint = CGPoint(x: x, y: y)
@@ -177,8 +180,12 @@ final class MapInterfaceController: _MapInterface {
                         completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
                     }
                 }
-            } else {
-                let rawPoints = try JSONDecoder().decode([[String: Double]].self, from: geometry.value.data(using: String.Encoding.utf8)!)
+            case .lIST:
+                guard let data = geometry.value.data(using: .utf8),
+                      let rawPoints = try? JSONDecoder().decode([[String: Double]].self, from: data) else {
+                    completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
+                    return
+                }
                 let cgPoints = rawPoints.compactMap {
                     guard let x = $0["x"], let y = $0["y"] else { return Optional<CGPoint>.none }
                     return CGPoint(x: x, y: y)
