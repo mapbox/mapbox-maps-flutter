@@ -778,28 +778,6 @@ class CoordinateBounds {
   }
 }
 
-/// This class is needed because Pigeon does not encode properly arrays of enums.
-class _MapWidgetDebugOptionsBox {
-  _MapWidgetDebugOptionsBox({
-    required this.option,
-  });
-
-  _MapWidgetDebugOptions option;
-
-  Object encode() {
-    return <Object?>[
-      option,
-    ];
-  }
-
-  static _MapWidgetDebugOptionsBox decode(Object result) {
-    result as List<Object?>;
-    return _MapWidgetDebugOptionsBox(
-      option: result[0]! as _MapWidgetDebugOptions,
-    );
-  }
-}
-
 /// Options for enabling debugging features in a map.
 @Deprecated("Use 'MapWidgetDebugOptions' instead")
 class MapDebugOptions {
@@ -1940,95 +1918,92 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is CoordinateBounds) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is _MapWidgetDebugOptionsBox) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is MapOptions) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is CoordinateBoundsZoom) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
+    } else if (value is Size) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is RenderedQueryGeometry) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryGeometry) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is FlatLight) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is MbxImage) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is ImageContent) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(190);
-      writeValue(buffer, value.encode());
     } else if (value is StylePropertyValue) {
-      buffer.putUint8(191);
+      buffer.putUint8(190);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2127,64 +2102,62 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 161:
         return CoordinateBounds.decode(readValue(buffer)!);
       case 162:
-        return _MapWidgetDebugOptionsBox.decode(readValue(buffer)!);
-      case 163:
         return MapDebugOptions.decode(readValue(buffer)!);
-      case 164:
+      case 163:
         return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 165:
+      case 164:
         return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 166:
+      case 165:
         return MapOptions.decode(readValue(buffer)!);
-      case 167:
+      case 166:
         return ScreenCoordinate.decode(readValue(buffer)!);
-      case 168:
+      case 167:
         return ScreenBox.decode(readValue(buffer)!);
-      case 169:
+      case 168:
         return CoordinateBoundsZoom.decode(readValue(buffer)!);
-      case 170:
+      case 169:
         return Size.decode(readValue(buffer)!);
-      case 171:
+      case 170:
         return RenderedQueryOptions.decode(readValue(buffer)!);
-      case 172:
+      case 171:
         return SourceQueryOptions.decode(readValue(buffer)!);
-      case 173:
+      case 172:
         return FeatureExtensionValue.decode(readValue(buffer)!);
-      case 174:
+      case 173:
         return LayerPosition.decode(readValue(buffer)!);
-      case 175:
+      case 174:
         return QueriedRenderedFeature.decode(readValue(buffer)!);
-      case 176:
+      case 175:
         return QueriedSourceFeature.decode(readValue(buffer)!);
-      case 177:
+      case 176:
         return QueriedFeature.decode(readValue(buffer)!);
-      case 178:
+      case 177:
         return RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 179:
+      case 178:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 180:
+      case 179:
         return MercatorCoordinate.decode(readValue(buffer)!);
-      case 181:
+      case 180:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 182:
+      case 181:
         return StyleProjection.decode(readValue(buffer)!);
-      case 183:
+      case 182:
         return FlatLight.decode(readValue(buffer)!);
-      case 184:
+      case 183:
         return DirectionalLight.decode(readValue(buffer)!);
-      case 185:
+      case 184:
         return AmbientLight.decode(readValue(buffer)!);
-      case 186:
+      case 185:
         return MbxImage.decode(readValue(buffer)!);
-      case 187:
+      case 186:
         return ImageStretches.decode(readValue(buffer)!);
-      case 188:
+      case 187:
         return ImageContent.decode(readValue(buffer)!);
-      case 189:
+      case 188:
         return TransitionOptions.decode(readValue(buffer)!);
-      case 190:
+      case 189:
         return CanonicalTileID.decode(readValue(buffer)!);
-      case 191:
+      case 190:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3512,7 +3485,7 @@ class _MapInterface {
     }
   }
 
-  Future<List<_MapWidgetDebugOptionsBox?>> getDebugOptions() async {
+  Future<List<_MapWidgetDebugOptions>> getDebugOptions() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -3538,12 +3511,12 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<_MapWidgetDebugOptionsBox?>();
+          .cast<_MapWidgetDebugOptions>();
     }
   }
 
   Future<void> setDebugOptions(
-      List<_MapWidgetDebugOptionsBox> debugOptions) async {
+      List<_MapWidgetDebugOptions> debugOptions) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
