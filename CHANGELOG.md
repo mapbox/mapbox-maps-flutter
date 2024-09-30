@@ -27,6 +27,7 @@ final geometry = RenderedQueryGeometry(type: Type.SCREEN_COORDINATE, value jsonE
 final geometry = RenderedQueryGeometry.fromScreenCoordinate(screenCoordinate);
 ```
 * Bump Maps SDK to 11.7.0.
+* Print to console native Maps SDK logs in debug configuration.
 
 ### 2.3.0-rc.1
 

@@ -69,7 +69,9 @@ class MapWidget extends StatefulWidget {
     this.onTapListener,
     this.onLongTapListener,
     this.onScrollListener,
-  }) : super(key: key) {}
+  }) : super(key: key) {
+    LogConfiguration._setupDebugLoggingIfNeeded();
+  }
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
