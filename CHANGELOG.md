@@ -1,3 +1,15 @@
+### main
+
+* Expose current map's camera state on `CameraChanged` event.
+
+You can now observe the map's camera updates with `onCameraChangeListener`
+
+```dart
+onCameraChangeListener(CameraChangedEventData data) {
+  print("CameraChangedEventData: timestamp: ${data.timestamp}, cameraState: ${data.cameraState}");
+}
+```
+
 ### 2.3.0-rc.1
 
 * Expose API to clear map data, and to set options to `TileStore`.

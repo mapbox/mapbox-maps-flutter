@@ -15,6 +15,19 @@ extension EventTimeInterval {
     }
 }
 
+extension MapboxMaps.CameraState {
+
+    var toJSON: [String: Any] {
+        return [
+            "center": center.toDict(),
+            "padding": ["top": padding.top, "left": padding.left, "bottom": padding.bottom, "right": padding.right],
+            "zoom": zoom,
+            "bearing": bearing,
+            "pitch": pitch
+        ]
+    }
+}
+
 extension MapboxMaps.CanonicalTileID {
     var toJSON: [String: Any] {
         [
@@ -65,7 +78,8 @@ extension StyleDataLoaded: MapEventEncodable {
 extension CameraChanged: MapEventEncodable {
     var toJSON: [String: Any?] {
         [
-            "timestamp": timestamp.microsecondsSince1970
+            "timestamp": timestamp.microsecondsSince1970,
+            "cameraState": cameraState.toJSON,
         ]
     }
 }

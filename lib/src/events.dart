@@ -95,9 +95,12 @@ class EventTimeInterval {
 class CameraChangedEventData {
   /// The time when the camera was changed.
   final int timestamp;
+  /// The current state of the camera.
+  final CameraState cameraState;
 
   CameraChangedEventData.fromJson(Map<String, dynamic> json)
-      : timestamp = json['timestamp'];
+      : timestamp = json['timestamp'],
+        cameraState = Conversion.fromJson(json['cameraState']);
 }
 
 /// The class for map-idle event in Observer

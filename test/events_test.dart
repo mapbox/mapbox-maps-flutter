@@ -3,9 +3,26 @@ import 'package:test/test.dart';
 
 void main() {
   test('CameraChangedEventData fromJson', () {
-    var cameraChangedEventData =
-        CameraChangedEventData.fromJson(<String, dynamic>{'timestamp': 1});
+    final json = {
+      'timestamp': 1,
+      'cameraState': {
+        'center': {'coordinates': [0, 0]},
+        'padding': {'top': 0, 'left': 1, 'bottom': 2, 'right': 3},
+        'zoom': 11,
+        'bearing': 0,
+        'pitch': 0,
+      },
+    };
+    var cameraChangedEventData = CameraChangedEventData.fromJson(json);
     expect(cameraChangedEventData.timestamp, 1);
+    expect(cameraChangedEventData.cameraState.center.coordinates, Position.of([0, 0]));
+    expect(cameraChangedEventData.cameraState.padding.top, 0);
+    expect(cameraChangedEventData.cameraState.padding.left, 1);
+    expect(cameraChangedEventData.cameraState.padding.bottom, 2);
+    expect(cameraChangedEventData.cameraState.padding.right, 3);
+    expect(cameraChangedEventData.cameraState.zoom, 11);
+    expect(cameraChangedEventData.cameraState.bearing, 0);
+    expect(cameraChangedEventData.cameraState.pitch, 0);
   });
 
   test('MapIdleEventData fromJson', () {
