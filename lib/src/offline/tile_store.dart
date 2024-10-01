@@ -19,9 +19,9 @@ final class TileStore {
   late final _TileStore _api;
 
   TileStore._() {
-    final messenger =
-        ProxyBinaryMessenger(suffix: "tilestore/${_suffix.toString()}");
-    _api = _TileStore(binaryMessenger: messenger);
+    _api = _TileStore(
+        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+        messageChannelSuffix: "tilestore/${_suffix.toString()}");
   }
 
   /// Returns a shared [TileStore] at the given storage [filePath].

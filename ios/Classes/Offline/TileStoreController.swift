@@ -7,14 +7,14 @@ final class TileStoreController: _TileStore {
         case invalidTileRegionLoadOptions
     }
 
-    private let proxy: ProxyBinaryMessenger
+    private let proxy: FlutterBinaryMessenger
     private let tileStore: TileStore
 
     private lazy var offlineManager = OfflineManager()
     private var tileRegionLoadProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
     private var tileRegionEstimateProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
 
-    init(proxy: ProxyBinaryMessenger, tileStore: TileStore) {
+    init(proxy: FlutterBinaryMessenger, tileStore: TileStore) {
         self.proxy = proxy
         self.tileStore = tileStore
     }
@@ -36,7 +36,7 @@ final class TileStoreController: _TileStore {
 
     func addTileRegionLoadProgressListener(id: String) throws {
         let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/tilestore/tile-region-\(id)", binaryMessenger: proxy.messenger)
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/tilestore/tile-region-\(id)", binaryMessenger: proxy)
         eventChannel.setStreamHandler(handler)
         tileRegionLoadProgressHandlers[id] = handler
     }
@@ -62,7 +62,7 @@ final class TileStoreController: _TileStore {
 
     func addTileRegionEstimateProgressListener(id: String) throws {
         let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/tilestore/tile-region-estimate-\(id)", binaryMessenger: proxy.messenger)
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/tilestore/tile-region-estimate-\(id)", binaryMessenger: proxy)
         eventChannel.setStreamHandler(handler)
         tileRegionEstimateProgressHandlers[id] = handler
     }

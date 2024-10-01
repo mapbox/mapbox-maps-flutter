@@ -12,8 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' as turf;
 
-import 'src/proxy_binary_messenger.dart' show ProxyBinaryMessenger;
-
 export 'package:turf/helpers.dart';
 
 part 'src/annotation/circle_annotation_manager.dart';

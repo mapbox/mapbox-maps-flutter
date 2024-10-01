@@ -17,9 +17,9 @@ final class OfflineManager {
   });
 
   OfflineManager._() {
-    final messenger =
-        ProxyBinaryMessenger(suffix: "offline-manager/${_suffix.toString()}");
-    _api = _OfflineManager(binaryMessenger: messenger);
+    _api = _OfflineManager(
+        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+        messageChannelSuffix: "offline-manager/${_suffix.toString()}");
   }
 
   /// Creates a new instance of [OfflineManager].

@@ -4,11 +4,13 @@ part of mapbox_maps_flutter;
 /// The PointAnnotationManager to add/update/delete PointAnnotationAnnotations on the map.
 class PointAnnotationManager extends BaseAnnotationManager {
   PointAnnotationManager(
-      {required String id, required BinaryMessenger messenger})
-      : super(id: id, messenger: messenger);
+      {required String id,
+      required BinaryMessenger messenger,
+      String? channelSuffix})
+      : super(id: id, messenger: messenger, channelSuffix: channelSuffix);
 
-  late _PointAnnotationMessenger messenger =
-      _PointAnnotationMessenger(binaryMessenger: _messenger);
+  late _PointAnnotationMessenger messenger = _PointAnnotationMessenger(
+      binaryMessenger: _messenger, messageChannelSuffix: channelSuffix);
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPointAnnotationClickListener(

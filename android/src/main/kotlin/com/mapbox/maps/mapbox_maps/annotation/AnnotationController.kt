@@ -94,31 +94,31 @@ class AnnotationController(private val mapView: MapView) :
     result.success(null)
   }
 
-  fun setup(messenger: BinaryMessenger) {
-    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger)
-    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger)
-    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger)
-    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger)
-    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController)
+  fun setup(messenger: BinaryMessenger, channelSuffix: String) {
+    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger, channelSuffix)
+    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger, channelSuffix)
+    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger, channelSuffix)
+    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger, channelSuffix)
+    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController, channelSuffix)
     _CircleAnnotationMessenger.setUp(
       messenger,
-      circleAnnotationController
+      circleAnnotationController, channelSuffix
     )
     _PolylineAnnotationMessenger.setUp(
       messenger,
-      polylineAnnotationController
+      polylineAnnotationController, channelSuffix
     )
     _PolygonAnnotationMessenger.setUp(
       messenger,
-      polygonAnnotationController
+      polygonAnnotationController, channelSuffix
     )
   }
 
-  fun dispose(messenger: BinaryMessenger) {
-    _PointAnnotationMessenger.setUp(messenger, null)
-    _CircleAnnotationMessenger.setUp(messenger, null)
-    _PolylineAnnotationMessenger.setUp(messenger, null)
-    _PolygonAnnotationMessenger.setUp(messenger, null)
+  fun dispose(messenger: BinaryMessenger, channelSuffix: String) {
+    _PointAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _CircleAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _PolylineAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _PolygonAnnotationMessenger.setUp(messenger, null, channelSuffix)
   }
 
   override fun getManager(managerId: String): AnnotationManager<*, *, *, *, *, *, *> {

@@ -4,11 +4,13 @@ part of mapbox_maps_flutter;
 /// The PolygonAnnotationManager to add/update/delete PolygonAnnotationAnnotations on the map.
 class PolygonAnnotationManager extends BaseAnnotationManager {
   PolygonAnnotationManager(
-      {required String id, required BinaryMessenger messenger})
-      : super(id: id, messenger: messenger);
+      {required String id,
+      required BinaryMessenger messenger,
+      String? channelSuffix})
+      : super(id: id, messenger: messenger, channelSuffix: channelSuffix);
 
-  late _PolygonAnnotationMessenger messenger =
-      _PolygonAnnotationMessenger(binaryMessenger: _messenger);
+  late _PolygonAnnotationMessenger messenger = _PolygonAnnotationMessenger(
+      binaryMessenger: _messenger, messageChannelSuffix: channelSuffix);
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolygonAnnotationClickListener(
