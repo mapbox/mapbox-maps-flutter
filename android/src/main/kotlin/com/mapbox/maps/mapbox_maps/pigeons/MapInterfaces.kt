@@ -1378,7 +1378,7 @@ data class QueriedFeature(
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class RenderedQueryGeometry(
+data class _RenderedQueryGeometry(
   /** ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode. */
   val value: String,
   val type: Type
@@ -1386,10 +1386,10 @@ data class RenderedQueryGeometry(
 ) {
   companion object {
     @Suppress("LocalVariableName")
-    fun fromList(__pigeon_list: List<Any?>): RenderedQueryGeometry {
+    fun fromList(__pigeon_list: List<Any?>): _RenderedQueryGeometry {
       val value = __pigeon_list[0] as String
       val type = __pigeon_list[1] as Type
-      return RenderedQueryGeometry(value, type)
+      return _RenderedQueryGeometry(value, type)
     }
   }
   fun toList(): List<Any?> {
@@ -2005,7 +2005,7 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryGeometry.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       157.toByte() -> {
@@ -2296,7 +2296,7 @@ private object MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryGeometry -> {
+      is _RenderedQueryGeometry -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
@@ -3211,7 +3211,7 @@ interface _MapInterface {
    * @param completion The `query features completion` called when the query completes.
    * @return A `cancelable` object that could be used to cancel the pending query.
    */
-  fun queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
+  fun queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
    * Queries the map for source features.
    *
@@ -3678,7 +3678,7 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val geometryArg = args[0] as RenderedQueryGeometry
+            val geometryArg = args[0] as _RenderedQueryGeometry
             val optionsArg = args[1] as RenderedQueryOptions
             api.queryRenderedFeatures(geometryArg, optionsArg) { result: Result<List<QueriedRenderedFeature?>> ->
               val error = result.exceptionOrNull()

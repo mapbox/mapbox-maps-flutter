@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -78,8 +78,8 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 }
 
 dependencies {
-    implementation "com.mapbox.maps:android:11.7.0-rc.1"
+    implementation "com.mapbox.maps:android:11.7.0"
 
-    implementation "androidx.annotation:annotation:1.8.2"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.4"
+    implementation "androidx.annotation:annotation:1.5.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
 }

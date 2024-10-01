@@ -1196,17 +1196,17 @@ struct QueriedFeature {
 /// Geometry for querying rendered features.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
-struct RenderedQueryGeometry {
+struct _RenderedQueryGeometry {
   /// ScreenCoordinate/List<ScreenCoordinate>/ScreenBox in Json mode.
   var value: String
   var type: Type
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ __pigeon_list: [Any?]) -> RenderedQueryGeometry? {
+  static func fromList(_ __pigeon_list: [Any?]) -> _RenderedQueryGeometry? {
     let value = __pigeon_list[0] as! String
     let type = __pigeon_list[1] as! Type
 
-    return RenderedQueryGeometry(
+    return _RenderedQueryGeometry(
       value: value,
       type: type
     )
@@ -1750,7 +1750,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 155:
       return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 156:
-      return RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 157:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 158:
@@ -2020,7 +2020,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? QueriedFeature {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryGeometry {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(156)
       super.writeValue(value.toList())
     } else if let value = value as? ProjectedMeters {
@@ -2926,7 +2926,7 @@ protocol _MapInterface {
   /// @param options The `render query options` for querying rendered features.
   /// @param completion The `query features completion` called when the query completes.
   /// @return A `cancelable` object that could be used to cancel the pending query.
-  func queryRenderedFeatures(geometry: RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
+  func queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
@@ -3370,7 +3370,7 @@ class _MapInterfaceSetup {
     if let api = api {
       queryRenderedFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let geometryArg = args[0] as! RenderedQueryGeometry
+        let geometryArg = args[0] as! _RenderedQueryGeometry
         let optionsArg = args[1] as! RenderedQueryOptions
         api.queryRenderedFeatures(geometry: geometryArg, options: optionsArg) { result in
           switch result {

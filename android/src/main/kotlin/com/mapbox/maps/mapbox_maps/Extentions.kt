@@ -12,7 +12,6 @@ import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
-import com.mapbox.maps.extension.style.expressions.dsl.generated.min
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
@@ -235,7 +234,7 @@ fun SourceQueryOptions.toSourceQueryOptions(): com.mapbox.maps.SourceQueryOption
   return com.mapbox.maps.SourceQueryOptions(sourceLayerIds, filter.toValue())
 }
 
-fun RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): com.mapbox.maps.RenderedQueryGeometry {
+fun _RenderedQueryGeometry.toRenderedQueryGeometry(context: Context): com.mapbox.maps.RenderedQueryGeometry {
   return when (type) {
     Type.SCREEN_BOX -> com.mapbox.maps.RenderedQueryGeometry.valueOf(
       Gson().fromJson(
