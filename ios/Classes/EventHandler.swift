@@ -45,12 +45,13 @@ final class MapboxEventHandler {
     private let channel: FlutterMethodChannel
     private var cancelables = Set<AnyCancelable>()
 
-    init(eventProvider: EventProvider, binaryMessenger: FlutterBinaryMessenger, eventTypes: [Int]) {
+    init(eventProvider: EventProvider, binaryMessenger: FlutterBinaryMessenger, eventTypes: [Int], channelSuffix: String = "") {
         self.eventProvider = eventProvider
         self.binaryMessenger = binaryMessenger
 
+        let channelSuffix = channelSuffix.isEmpty ? "" : ".\(channelSuffix)"
         channel = FlutterMethodChannel(
-            name: "com.mapbox.maps.flutter.map_events",
+            name: "com.mapbox.maps.flutter.map_events\(channelSuffix)",
             binaryMessenger: binaryMessenger
         )
         channel.setMethodCallHandler { [weak self] methodCall, result in

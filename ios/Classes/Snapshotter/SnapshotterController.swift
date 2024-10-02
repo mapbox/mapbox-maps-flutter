@@ -16,7 +16,8 @@ final class SnapshotterController: _SnapshotterMessenger {
         eventHandler = MapboxEventHandler(
             eventProvider: snapshotter,
             binaryMessenger: binaryMessenger,
-            eventTypes: eventTypes
+            eventTypes: eventTypes,
+            channelSuffix: "snapshot"
         )
     }
 

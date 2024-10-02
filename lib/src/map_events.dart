@@ -40,8 +40,9 @@ final class _MapEvents {
     return listenersMap.values.toList();
   }
 
-  _MapEvents({BinaryMessenger? binaryMessenger}) {
-    _channel = MethodChannel('com.mapbox.maps.flutter.map_events',
+  _MapEvents({BinaryMessenger? binaryMessenger, String channelSuffix = ''}) {
+    final pigeon_channelSuffix = channelSuffix.length > 0 ? '.${channelSuffix}' : '';
+    _channel = MethodChannel('com.mapbox.maps.flutter.map_events${pigeon_channelSuffix}',
         const StandardMethodCodec(), binaryMessenger);
     _channel.setMethodCallHandler(_handleMethodCall);
   }

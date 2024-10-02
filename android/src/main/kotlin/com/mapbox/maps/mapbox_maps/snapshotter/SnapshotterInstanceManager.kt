@@ -32,7 +32,7 @@ class SnapshotterInstanceManager(
       overlayOptions = options.toSnapshotOverlayOptions()
     )
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
-    val eventHandler = MapboxEventHandler(styleManager, messenger, eventTypes.map { it })
+    val eventHandler = MapboxEventHandler(styleManager, messenger, eventTypes.map { it }, "snapshot")
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
     val mapboxStyleManager = MapboxStyleManager(
       styleManager,
