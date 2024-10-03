@@ -48,8 +48,8 @@ class MapboxEventHandler(
     .create()
 
   init {
-    val pigeon_channelSuffix = if (channelSuffix.isNotEmpty()) ".${channelSuffix}" else ""
-    channel = MethodChannel(binaryMessenger, "com.mapbox.maps.flutter.map_events${pigeon_channelSuffix}")
+    val pigeon_channelSuffix = if (channelSuffix.isNotEmpty()) ".$channelSuffix" else ""
+    channel = MethodChannel(binaryMessenger, "com.mapbox.maps.flutter.map_events$pigeon_channelSuffix")
     channel.setMethodCallHandler(this)
 
     eventTypes.mapNotNull { _MapEvent.ofRaw(it.toInt()) }
