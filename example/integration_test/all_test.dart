@@ -46,6 +46,7 @@ import 'attribution_test.dart' as attribution_test;
 import 'compass_test.dart' as compass_test;
 import 'scale_bar_test.dart' as scale_bar_test;
 import 'offline_test.dart' as offline_test;
+import 'snapshotter/snapshotter_test.dart' as snapshotter_test;
 
 void main() {
   animation_test.main();
@@ -97,6 +98,9 @@ void main() {
   rasterarray_source_test.main();
   image_source_test.main();
   geojson_source_test.main();
+
+  // snapshotter tests
+  snapshotter_test.main();
 
   // location test has to be at the bottom as on iOS it triggers location permission dialog
   // to be shown which makes tests that rely on QRF/QSF fail
