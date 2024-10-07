@@ -133,11 +133,11 @@ class AnnotationController: ControllerDelegate {
         onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
     }
 
-    func tearDown(messenger: FlutterBinaryMessenger) {
-        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+    func tearDown(messenger: SuffixBinaryMessenger) {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
         onPointAnnotationClickListener = nil
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil
