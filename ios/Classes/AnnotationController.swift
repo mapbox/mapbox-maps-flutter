@@ -134,10 +134,10 @@ class AnnotationController: ControllerDelegate {
     }
 
     func tearDown(messenger: SuffixBinaryMessenger) {
-        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
         onPointAnnotationClickListener = nil
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil
