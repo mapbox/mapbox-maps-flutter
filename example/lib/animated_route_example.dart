@@ -10,25 +10,19 @@ import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class AnimatedRoutePage extends ExamplePage {
-  AnimatedRoutePage() : super(const Icon(Icons.map), 'Animated route line');
+class AnimatedRouteExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'High level animation';
 
   @override
-  Widget build(BuildContext context) {
-    return const AnimatedRoute();
-  }
+  State createState() => AnimatedRouteExampleState();
 }
 
-class AnimatedRoute extends StatefulWidget {
-  const AnimatedRoute();
-
-  @override
-  State createState() => AnimatedRouteState();
-}
-
-class AnimatedRouteState extends State<AnimatedRoute>
+class AnimatedRouteExampleState extends State<AnimatedRouteExample>
     with TickerProviderStateMixin
     implements OnPointAnnotationClickListener {
   final defaultEdgeInsets =

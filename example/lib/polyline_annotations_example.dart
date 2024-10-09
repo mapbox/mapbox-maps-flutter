@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/utils.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class PolylineAnnotationPage extends ExamplePage {
-  PolylineAnnotationPage()
-      : super(const Icon(Icons.map), 'Polyline Annotations');
+class PolylineAnnotationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Polyline Annotations';
 
   @override
-  Widget build(BuildContext context) {
-    return const PolylineAnnotationPageBody();
-  }
+  State<StatefulWidget> createState() => PolylineAnnotationExampleState();
 }
 
 class AnnotationClickListener extends OnPolylineAnnotationClickListener {
@@ -21,17 +21,7 @@ class AnnotationClickListener extends OnPolylineAnnotationClickListener {
   }
 }
 
-class PolylineAnnotationPageBody extends StatefulWidget {
-  const PolylineAnnotationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => PolylineAnnotationPageBodyState();
-}
-
-class PolylineAnnotationPageBodyState
-    extends State<PolylineAnnotationPageBody> {
-  PolylineAnnotationPageBodyState();
-
+class PolylineAnnotationExampleState extends State<PolylineAnnotationExample> {
   MapboxMap? mapboxMap;
   PolylineAnnotation? polylineAnnotation;
   PolylineAnnotationManager? polylineAnnotationManager;

@@ -1,28 +1,20 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class StyleClustersPage extends ExamplePage {
-  StyleClustersPage() : super(const Icon(Icons.map), 'StyleClusters');
+class StyleClustersExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'StyleClusters';
 
   @override
-  Widget build(BuildContext context) {
-    return const StyleClustersPageBody();
-  }
+  State<StatefulWidget> createState() => StyleClustersExampleState();
 }
 
-class StyleClustersPageBody extends StatefulWidget {
-  const StyleClustersPageBody();
-
-  @override
-  State<StatefulWidget> createState() => StyleClustersPageBodyState();
-}
-
-class StyleClustersPageBodyState extends State<StyleClustersPageBody> {
-  StyleClustersPageBodyState();
+class StyleClustersExampleState extends State<StyleClustersExample> {
+  StyleClustersExampleState();
 
   MapboxMap? mapboxMap;
 

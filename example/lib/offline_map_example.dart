@@ -2,28 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
-import 'page.dart';
+import 'example.dart';
 import 'utils.dart';
 
-class OfflineMapPage extends ExamplePage {
-  OfflineMapPage() : super(const Icon(Icons.wifi_off), 'Offline Map');
+class OfflineMapExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.wifi_off);
+  @override
+  final String title = 'Offline Map';
 
   @override
-  Widget build(BuildContext context) {
-    return const OfflineMapWidget();
-  }
+  State createState() => OfflineMapExampleState();
 }
 
-class OfflineMapWidget extends StatefulWidget {
-  const OfflineMapWidget();
-
-  @override
-  State createState() => OfflineMapWidgetState();
-}
-
-class OfflineMapWidgetState extends State<OfflineMapWidget> {
+class OfflineMapExampleState extends State<OfflineMapExample> {
   final StreamController<double> _stylePackProgress =
       StreamController.broadcast();
   final StreamController<double> _tileRegionLoadProgress =

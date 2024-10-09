@@ -1,57 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_example/animated_route.dart';
-import 'package:mapbox_maps_example/animation.dart';
-import 'package:mapbox_maps_example/camera.dart';
-import 'package:mapbox_maps_example/circle_annotations.dart';
-import 'package:mapbox_maps_example/cluster.dart';
-import 'package:mapbox_maps_example/offline_map.dart';
-import 'package:mapbox_maps_example/model_layer.dart';
-import 'package:mapbox_maps_example/ornaments.dart';
-import 'package:mapbox_maps_example/geojson_line.dart';
-import 'package:mapbox_maps_example/image_source.dart';
-import 'package:mapbox_maps_example/map_interface.dart';
-import 'package:mapbox_maps_example/polygon_annotations.dart';
-import 'package:mapbox_maps_example/polyline_annotations.dart';
-import 'package:mapbox_maps_example/snapshotter.dart';
-import 'package:mapbox_maps_example/traffic-route-line.dart';
-import 'package:mapbox_maps_example/tile_json.dart';
-import 'package:mapbox_maps_example/vector_tile_source.dart';
+import 'package:mapbox_maps_example/animated_route_example.dart';
+import 'package:mapbox_maps_example/animation_example.dart';
+import 'package:mapbox_maps_example/camera_example.dart';
+import 'package:mapbox_maps_example/circle_annotations_example.dart';
+import 'package:mapbox_maps_example/cluster_example.dart';
+import 'package:mapbox_maps_example/offline_map_example.dart';
+import 'package:mapbox_maps_example/model_layer_example.dart';
+import 'package:mapbox_maps_example/ornaments_example.dart';
+import 'package:mapbox_maps_example/geojson_line_example.dart';
+import 'package:mapbox_maps_example/image_source_example.dart';
+import 'package:mapbox_maps_example/map_interface_example.dart';
+import 'package:mapbox_maps_example/polygon_annotations_example.dart';
+import 'package:mapbox_maps_example/polyline_annotations_example.dart';
+import 'package:mapbox_maps_example/snapshotter_example.dart';
+import 'package:mapbox_maps_example/traffic_route_line_example.dart';
+import 'package:mapbox_maps_example/tile_json_example.dart';
+import 'package:mapbox_maps_example/vector_tile_source_example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'full_map.dart';
-import 'location.dart';
-import 'page.dart';
-import 'point_annotations.dart';
-import 'projection.dart';
-import 'style.dart';
-import 'gestures.dart';
-import 'debug_options.dart';
+import 'full_map_example.dart';
+import 'location_example.dart';
+import 'example.dart';
+import 'point_annotations_example.dart';
+import 'projection_example.dart';
+import 'style_example.dart';
+import 'gestures_example.dart';
+import 'debug_options_example.dart';
 
-final List<ExamplePage> _allPages = <ExamplePage>[
-  FullMapPage(),
-  StylePage(),
-  CameraPage(),
-  ProjectionPage(),
-  MapInterfacePage(),
-  StyleClustersPage(),
-  AnimationPage(),
-  PointAnnotationPage(),
-  CircleAnnotationPage(),
-  PolylineAnnotationPage(),
-  PolygonAnnotationPage(),
-  VectorTileSourcePage(),
-  DrawGeoJsonLinePage(),
-  ImageSourcePage(),
-  TileJsonPage(),
-  LocationPage(),
-  GesturesPage(),
-  OrnamentsPage(),
-  AnimatedRoutePage(),
-  SnapshotterPage(),
-  TrafficRouteLinePage(),
-  OfflineMapPage(),
-  ModelLayerPage(),
-  DebugOptionsPage(),
+final List<Example> _allPages = <Example>[
+  FullMapExample(),
+  StyleExample(),
+  CameraExample(),
+  ProjectionExample(),
+  MapInterfaceExample(),
+  StyleClustersExample(),
+  AnimationExample(),
+  PointAnnotationExample(),
+  CircleAnnotationExample(),
+  PolylineAnnotationExample(),
+  PolygonAnnotationExample(),
+  VectorTileSourceExample(),
+  DrawGeoJsonLineExample(),
+  ImageSourceExample(),
+  TileJsonExample(),
+  LocationExample(),
+  GesturesExample(),
+  OrnamentsExample(),
+  AnimatedRouteExample(),
+  SnapshotterExample(),
+  TrafficRouteLineExample(),
+  OfflineMapExample(),
+  ModelLayerExample(),
+  DebugOptionsExample(),
 ];
 
 class MapsDemo extends StatelessWidget {
@@ -64,7 +64,7 @@ class MapsDemo extends StatelessWidget {
   // in the following line with your access token directly.
   static const String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 
-  void _pushPage(BuildContext context, ExamplePage page) async {
+  void _pushPage(BuildContext context, Example page) async {
     Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (_) => Scaffold(
               appBar: AppBar(title: Text(page.title)),

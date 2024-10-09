@@ -3,26 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class LocationPage extends ExamplePage {
-  LocationPage() : super(const Icon(Icons.map), 'Location Component');
+class LocationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Location Component';
 
   @override
-  Widget build(BuildContext context) {
-    return const LocationPageBody();
-  }
+  State<StatefulWidget> createState() => LocationExampleState();
 }
 
-class LocationPageBody extends StatefulWidget {
-  const LocationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => LocationPageBodyState();
-}
-
-class LocationPageBodyState extends State<LocationPageBody> {
-  LocationPageBodyState();
+class LocationExampleState extends State<LocationExample> {
+  LocationExampleState();
 
   final colors = [Colors.amber, Colors.black, Colors.blue];
 

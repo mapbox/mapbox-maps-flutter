@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mapbox_maps_example/page.dart';
+import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-class TrafficRouteLinePage extends ExamplePage {
-  TrafficRouteLinePage()
-      : super(
-            const Icon(Icons.turn_sharp_left), 'Style a route showing traffic');
+class TrafficRouteLineExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.turn_sharp_left);
+  @override
+  final String title = 'Style a route showing traffic';
 
   @override
-  Widget build(BuildContext context) {
-    return const RouteLine();
-  }
+  State createState() => TrafficRouteLineExampleState();
 }
 
-class RouteLine extends StatefulWidget {
-  const RouteLine();
-
-  @override
-  State createState() => RouteLineState();
-}
-
-class RouteLineState extends State<RouteLine> {
+class TrafficRouteLineExampleState extends State<TrafficRouteLineExample> {
   late MapboxMap mapboxMap;
   final _sfAirport =
       Point(coordinates: Position(-122.39470445734368, 37.7080221537549));

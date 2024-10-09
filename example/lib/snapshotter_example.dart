@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class SnapshotterPage extends ExamplePage {
-  SnapshotterPage()
-      : super(const Icon(Icons.camera_alt_outlined),
-            'Create a static map snapshot');
+class SnapshotterExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.camera_alt_outlined);
+  @override
+  final String title = 'Create a static map snapshot';
 
   @override
-  Widget build(BuildContext context) {
-    return const SnapshotterPageBody();
-  }
+  State<StatefulWidget> createState() => SnapshotterExampleState();
 }
 
-class SnapshotterPageBody extends StatefulWidget {
-  const SnapshotterPageBody();
-
-  @override
-  State<StatefulWidget> createState() => SnapshotterPageBodyState();
-}
-
-class SnapshotterPageBodyState extends State<SnapshotterPageBody> {
-  SnapshotterPageBodyState();
+class SnapshotterExampleState extends State<SnapshotterExample> {
+  SnapshotterExampleState();
 
   GlobalKey _snapshotKey = GlobalKey();
   MapboxMap? mapboxMap;

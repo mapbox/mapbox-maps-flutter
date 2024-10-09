@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class AnimationPage extends ExamplePage {
-  AnimationPage() : super(const Icon(Icons.map), 'High level animation');
+class AnimationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'High level animation';
 
   @override
-  Widget build(BuildContext context) {
-    return const AnimationPageBody();
-  }
+  State<StatefulWidget> createState() => AnimationExampleState();
 }
 
-class AnimationPageBody extends StatefulWidget {
-  const AnimationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => AnimationPageBodyState();
-}
-
-class AnimationPageBodyState extends State<AnimationPageBody> {
-  AnimationPageBodyState();
-
+class AnimationExampleState extends State<AnimationExample> {
   MapboxMap? mapboxMap;
 
   _onMapCreated(MapboxMap mapboxMap) {
