@@ -28,6 +28,11 @@ import 'gestures_example.dart';
 import 'debug_options_example.dart';
 
 final List<Example> _allPages = <Example>[
+  SnapshotterExample(),
+  TrafficRouteLineExample(),
+  OfflineMapExample(),
+  ModelLayerExample(),
+  DebugOptionsExample(),
   FullMapExample(),
   StyleExample(),
   CameraExample(),
@@ -47,11 +52,6 @@ final List<Example> _allPages = <Example>[
   GesturesExample(),
   OrnamentsExample(),
   AnimatedRouteExample(),
-  SnapshotterExample(),
-  TrafficRouteLineExample(),
-  OfflineMapExample(),
-  ModelLayerExample(),
-  DebugOptionsExample(),
 ];
 
 class MapsDemo extends StatelessWidget {
