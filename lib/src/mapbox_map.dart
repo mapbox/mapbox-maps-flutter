@@ -150,57 +150,59 @@ class MapboxMap extends ChangeNotifier {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.
-  late StyleManager style = StyleManager(
+  late final StyleManager style = StyleManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the location puck.
-  late LocationSettings location = LocationSettings._(
+  late final LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
 
-  late _CameraManager _cameraManager = _CameraManager(
+  late final _CameraManager _cameraManager = _CameraManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late _MapInterface _mapInterface = _MapInterface(
+  late final _MapInterface _mapInterface = _MapInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late _AnimationManager _animationManager = _AnimationManager(
+  late final _AnimationManager _animationManager = _AnimationManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late final ViewportManager viewport = ViewportManager(
+      _ViewportManager(binaryMessenger: _mapboxMapsPlatform.binaryMessenger));
 
   /// The interface to create and set annotations.
   late final AnnotationManager annotations;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  late Projection projection = Projection(
+  late final Projection projection = Projection(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the gesture settings.
-  late GesturesSettingsInterface gestures = GesturesSettingsInterface(
+  late final GesturesSettingsInterface gestures = GesturesSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the logo settings.
-  late LogoSettingsInterface logo = LogoSettingsInterface(
+  late final LogoSettingsInterface logo = LogoSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late CompassSettingsInterface compass = CompassSettingsInterface(
+  late final CompassSettingsInterface compass = CompassSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
+  late final ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the attribution settings.
-  late AttributionSettingsInterface attribution = AttributionSettingsInterface(
+  late final AttributionSettingsInterface attribution = AttributionSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
