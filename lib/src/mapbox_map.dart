@@ -160,6 +160,9 @@ class MapboxMap extends ChangeNotifier {
       _LocationComponentSettingsInterface(
           binaryMessenger: _proxyBinaryMessenger));
 
+  late ViewportManager viewport = ViewportManager(
+      _ViewportManager(binaryMessenger: _proxyBinaryMessenger));
+
   late BinaryMessenger _proxyBinaryMessenger;
 
   late _CameraManager _cameraManager =
