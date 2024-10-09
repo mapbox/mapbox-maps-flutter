@@ -4,7 +4,7 @@ part of mapbox_maps_flutter;
 class LocationSettings {
   final _LocationComponentSettingsInterface _api;
 
-  LocationSettings(this._api);
+  LocationSettings._(this._api);
 
   /// Returns [LocationComponentSettings] allowing to show location indicator on the map,
   /// customize indicator's appearance and position.

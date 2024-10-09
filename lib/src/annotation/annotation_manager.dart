@@ -1,9 +1,9 @@
 part of mapbox_maps_flutter;
 
-class _AnnotationManager {
+class AnnotationManager {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
-  _AnnotationManager({required _MapboxMapsPlatform mapboxMapsPlatform})
+  AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
@@ -14,7 +14,7 @@ class _AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('point', id: id, belowLayerId: below)
-        .then((value) => PointAnnotationManager(
+        .then((value) => PointAnnotationManager._(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
@@ -26,7 +26,7 @@ class _AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('circle', id: id, belowLayerId: below)
-        .then((value) => CircleAnnotationManager(
+        .then((value) => CircleAnnotationManager._(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
@@ -38,7 +38,7 @@ class _AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('polyline', id: id, belowLayerId: below)
-        .then((value) => PolylineAnnotationManager(
+        .then((value) => PolylineAnnotationManager._(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
@@ -50,7 +50,7 @@ class _AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('polygon', id: id, belowLayerId: below)
-        .then((value) => PolygonAnnotationManager(
+        .then((value) => PolygonAnnotationManager._(
             id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
   }
 
@@ -67,10 +67,9 @@ class _AnnotationManager {
 
 /// The super class for all AnnotationManagers.
 class BaseAnnotationManager {
-  BaseAnnotationManager(
-      {required String id, required BinaryMessenger messenger})
-      : this.id = id,
-        _messenger = messenger;
+  BaseAnnotationManager._(
+      {required this.id, required BinaryMessenger messenger})
+      : _messenger = messenger;
   final String id;
   final BinaryMessenger _messenger;
 }
