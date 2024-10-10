@@ -88,7 +88,8 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
 
-    _tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions, (progress) {
+    _tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions,
+        (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_tileRegionLoadProgress.isClosed) {

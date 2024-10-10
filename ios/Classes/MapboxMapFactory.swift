@@ -27,53 +27,35 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
         arguments args: Any?
     ) -> FlutterPlatformView {
 
-        var mapInitOptions = MapInitOptions()
-        var pluginVersion = ""
-        var channelSuffix = 0
-
         guard let args = args as? [String: Any] else {
             return MapboxMapController(
                 withFrame: frame,
-                mapInitOptions: mapInitOptions,
-                channelSuffix: channelSuffix,
-                arguments: args,
+                mapInitOptions: MapInitOptions(),
+                channelSuffix: 0,
                 registrar: registrar,
-                pluginVersion: pluginVersion,
+                pluginVersion: "",
                 eventTypes: []
             )
         }
-        var styleURI: StyleURI? = .streets
-        if let styleURIString = args["styleUri"] as? String {
-            styleURI = StyleURI(rawValue: styleURIString)
-        }
+
+        let styleURI = (args["styleUri"] as? String).map(StyleURI.init(rawValue:))
         let mapOptions = args["mapOptions"] as? MapOptions
         let cameraOptions = args["cameraOptions"] as? CameraOptions
 
-        mapInitOptions = MapInitOptions(
+        let mapInitOptions = MapInitOptions(
             mapOptions: mapOptions?.toMapOptions() ?? MapboxMaps.MapOptions(),
             cameraOptions: cameraOptions?.toCameraOptions(),
-            styleURI: styleURI
+            styleURI: styleURI ?? .standard
         )
-
-        if let version = args["mapboxPluginVersion"] as? String {
-            pluginVersion = version
-        }
-
-        if let suffix = args["channelSuffix"] as? Int {
-            channelSuffix = suffix
-        }
-
-        let eventTypes = args["eventTypes"] as? [Int] ?? []
 
         Self.mapCounter.increment()
         return MapboxMapController(
             withFrame: frame,
             mapInitOptions: mapInitOptions,
-            channelSuffix: channelSuffix,
-            arguments: args,
+            channelSuffix: args["channelSuffix"] as? Int ?? 0,
             registrar: registrar,
-            pluginVersion: pluginVersion,
-            eventTypes: eventTypes
+            pluginVersion: args["mapboxPluginVersion"] as? String ?? "",
+            eventTypes: args["eventTypes"] as? [Int] ?? []
         )
     }
 }

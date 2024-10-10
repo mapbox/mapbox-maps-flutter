@@ -171,10 +171,8 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
   late final _MapboxMapsPlatform _mapboxMapsPlatform =
-      _MapboxMapsPlatform(binaryMessenger: _binaryMessenger);
+      _MapboxMapsPlatform.instance(_suffixesRegistry.getSuffix());
   final int _suffix = _suffixesRegistry.getSuffix();
-  late final BinaryMessenger _binaryMessenger =
-      ProxyBinaryMessenger(suffix: _suffix.toString());
   late final _MapEvents _events;
 
   MapboxMap? mapboxMap;
@@ -186,7 +184,7 @@ class _MapWidgetState extends State<MapWidget> {
       'cameraOptions': widget.cameraOptions,
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
-      'channelSuffix': _suffix,
+      'channelSuffix': _mapboxMapsPlatform.channelSuffix,
       'mapboxPluginVersion': '2.3.0',
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
     };
@@ -199,7 +197,7 @@ class _MapWidgetState extends State<MapWidget> {
   void initState() {
     super.initState();
 
-    _events = _MapEvents(binaryMessenger: _binaryMessenger);
+    _events = _MapEvents(binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
     _updateEventListeners();
   }
 
