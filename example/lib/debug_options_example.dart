@@ -25,6 +25,15 @@ class DebugOptionsExampleState extends State<DebugOptionsExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+    final defaultDebugOptions = [
+      MapWidgetDebugOptions.tileBorders,
+      MapWidgetDebugOptions.parseStatus,
+      MapWidgetDebugOptions.timestamps,
+      MapWidgetDebugOptions.camera,
+      MapWidgetDebugOptions.padding,
+    ];
+    mapboxMap.setDebugOptions(defaultDebugOptions);
+    _onOptionsUpdate(defaultDebugOptions.length);
   }
 
   void _onOptionsUpdate(int value) {
