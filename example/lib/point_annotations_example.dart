@@ -3,22 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/utils.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class PointAnnotationPage extends ExamplePage {
-  PointAnnotationPage() : super(const Icon(Icons.map), 'Point Annotations');
+class PointAnnotationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Point Annotations';
 
   @override
-  Widget build(BuildContext context) {
-    return const PointAnnotationPageBody();
-  }
-}
-
-class PointAnnotationPageBody extends StatefulWidget {
-  const PointAnnotationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => PointAnnotationPageBodyState();
+  State<StatefulWidget> createState() => PointAnnotationExampleState();
 }
 
 class AnnotationClickListener extends OnPointAnnotationClickListener {
@@ -28,8 +22,8 @@ class AnnotationClickListener extends OnPointAnnotationClickListener {
   }
 }
 
-class PointAnnotationPageBodyState extends State<PointAnnotationPageBody> {
-  PointAnnotationPageBodyState();
+class PointAnnotationExampleState extends State<PointAnnotationExample> {
+  PointAnnotationExampleState();
 
   MapboxMap? mapboxMap;
   PointAnnotation? pointAnnotation;

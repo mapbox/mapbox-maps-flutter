@@ -2,22 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class PolygonAnnotationPage extends ExamplePage {
-  PolygonAnnotationPage() : super(const Icon(Icons.map), 'Polygon Annotations');
+class PolygonAnnotationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Polygon Annotations';
 
   @override
-  Widget build(BuildContext context) {
-    return const PolygonAnnotationPageBody();
-  }
-}
-
-class PolygonAnnotationPageBody extends StatefulWidget {
-  const PolygonAnnotationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => PolygonAnnotationPageBodyState();
+  State<StatefulWidget> createState() => PolygonAnnotationExampleState();
 }
 
 class AnnotationClickListener extends OnPolygonAnnotationClickListener {
@@ -34,8 +28,8 @@ class AnnotationClickListener extends OnPolygonAnnotationClickListener {
   }
 }
 
-class PolygonAnnotationPageBodyState extends State<PolygonAnnotationPageBody> {
-  PolygonAnnotationPageBodyState();
+class PolygonAnnotationExampleState extends State<PolygonAnnotationExample> {
+  PolygonAnnotationExampleState();
 
   MapboxMap? mapboxMap;
   PolygonAnnotation? polygonAnnotation;

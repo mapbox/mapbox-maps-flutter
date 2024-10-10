@@ -2,25 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class DrawGeoJsonLinePage extends ExamplePage {
-  DrawGeoJsonLinePage() : super(const Icon(Icons.map), 'Draw GeoJson Line');
+class DrawGeoJsonLineExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Draw GeoJson Line';
 
   @override
-  Widget build(BuildContext context) {
-    return const DrawGeoJsonLineWidget();
-  }
+  State createState() => DrawGeoJsonLineExampleState();
 }
 
-class DrawGeoJsonLineWidget extends StatefulWidget {
-  const DrawGeoJsonLineWidget();
-
-  @override
-  State createState() => DrawGeoJsonLineWidgetState();
-}
-
-class DrawGeoJsonLineWidgetState extends State<DrawGeoJsonLineWidget> {
+class DrawGeoJsonLineExampleState extends State<DrawGeoJsonLineExample> {
   MapboxMap? mapboxMap;
   var isLight = true;
 

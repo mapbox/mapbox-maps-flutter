@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class GesturesPage extends ExamplePage {
-  GesturesPage() : super(const Icon(Icons.map), 'Gestures');
+class GesturesExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Gestures';
 
   @override
-  Widget build(BuildContext context) {
-    return const GesturesPageBody();
-  }
+  State<StatefulWidget> createState() => GesturesExampleState();
 }
 
-class GesturesPageBody extends StatefulWidget {
-  const GesturesPageBody();
-
-  @override
-  State<StatefulWidget> createState() => GesturesPageBodyState();
-}
-
-class GesturesPageBodyState extends State<GesturesPageBody> {
-  GesturesPageBodyState();
+class GesturesExampleState extends State<GesturesExample> {
+  GesturesExampleState();
 
   final colors = [Colors.amber, Colors.black, Colors.blue];
 

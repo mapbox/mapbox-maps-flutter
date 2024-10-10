@@ -2,27 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class DebugOptionsPage extends ExamplePage {
-  DebugOptionsPage()
-      : super(const Icon(Icons.construction), 'Map debug options');
+class DebugOptionsExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.construction);
+  @override
+  final String title = 'Map debug options';
 
   @override
-  Widget build(BuildContext context) {
-    return const DebugOptionsPageBody();
-  }
+  State createState() => DebugOptionsExampleState();
 }
 
-class DebugOptionsPageBody extends StatefulWidget {
-  const DebugOptionsPageBody();
-
-  @override
-  State createState() => DebugOptionsPageBodyState();
-}
-
-class DebugOptionsPageBodyState extends State<DebugOptionsPageBody> {
-  DebugOptionsPageBodyState();
+class DebugOptionsExampleState extends State<DebugOptionsExample> {
+  DebugOptionsExampleState();
 
   MapboxMap? mapboxMap;
   int enabledOptions = 0;

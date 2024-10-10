@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class OrnamentsPage extends ExamplePage {
-  OrnamentsPage() : super(const Icon(Icons.map), 'Ornaments');
+class OrnamentsExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Ornaments';
 
   @override
-  Widget build(BuildContext context) {
-    return const OrnamentsPageBody();
-  }
+  State<StatefulWidget> createState() => OrnamentsExampleState();
 }
 
-class OrnamentsPageBody extends StatefulWidget {
-  const OrnamentsPageBody();
-
-  @override
-  State<StatefulWidget> createState() => OrnamentsPageBodyState();
-}
-
-class OrnamentsPageBodyState extends State<OrnamentsPageBody> {
-  OrnamentsPageBodyState();
+class OrnamentsExampleState extends State<OrnamentsExample> {
+  OrnamentsExampleState();
 
   final colors = [Colors.amber, Colors.black, Colors.blue];
 
