@@ -237,7 +237,7 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    final MapboxMap controller = MapboxMap(
+    final MapboxMap controller = MapboxMap._(
       mapboxMapsPlatform: _mapboxMapsPlatform,
       onMapTapListener: widget.onTapListener,
       onMapLongTapListener: widget.onLongTapListener,

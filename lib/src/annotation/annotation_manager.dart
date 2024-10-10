@@ -1,9 +1,9 @@
 part of mapbox_maps_flutter;
 
-class _AnnotationManager {
+class AnnotationManager {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
-  _AnnotationManager({required _MapboxMapsPlatform mapboxMapsPlatform})
+  AnnotationManager._({required _MapboxMapsPlatform mapboxMapsPlatform})
       : _mapboxMapsPlatform = mapboxMapsPlatform;
 
   /// Create a [PointAnnotationManager] to add/remove/update [PointAnnotation]s on the map.
