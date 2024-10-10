@@ -8,6 +8,8 @@ class StyleClustersExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'StyleClusters';
+  @override
+  final String? subtitle = null;
 
   @override
   State<StatefulWidget> createState() => StyleClustersExampleState();

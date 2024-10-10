@@ -7,6 +7,8 @@ class FullMapExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Full screen map';
+  @override
+  final String? subtitle = null;
 
   @override
   State createState() => FullMapExampleState();

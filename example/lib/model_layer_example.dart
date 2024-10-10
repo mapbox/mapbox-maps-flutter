@@ -8,7 +8,9 @@ class ModelLayerExample extends StatefulWidget implements Example {
   @override
   final Widget leading = const Icon(Icons.view_in_ar);
   @override
-  final String title = 'Model layer';
+  final String title = 'Display a 3D model in a model layer';
+  @override
+  final String subtitle = 'Showcase the usage of a 3D model layer.';
 
   @override
   State<StatefulWidget> createState() => _ModelLayerExampleState();

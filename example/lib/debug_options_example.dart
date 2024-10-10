@@ -9,6 +9,9 @@ class DebugOptionsExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.construction);
   @override
   final String title = 'Map debug options';
+  @override
+  final String subtitle =
+      'This example shows how the map looks with different debug options.';
 
   @override
   State createState() => DebugOptionsExampleState();

@@ -8,6 +8,8 @@ class TileJsonExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Tile Json';
+  @override
+  final String? subtitle = null;
 
   @override
   State createState() => TileJsonExampleState();
