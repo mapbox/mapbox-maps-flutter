@@ -5,26 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class StylePage extends ExamplePage {
-  StylePage() : super(const Icon(Icons.map), 'Style interface');
+class StyleExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Style interface';
 
   @override
-  Widget build(BuildContext context) {
-    return const StylePageBody();
-  }
+  State<StatefulWidget> createState() => StyleExampleState();
 }
 
-class StylePageBody extends StatefulWidget {
-  const StylePageBody();
-
-  @override
-  State<StatefulWidget> createState() => StylePageBodyState();
-}
-
-class StylePageBodyState extends State<StylePageBody> {
-  StylePageBodyState();
+class StyleExampleState extends State<StyleExample> {
+  StyleExampleState();
 
   MapboxMap? mapboxMap;
   var mapProject = StyleProjectionName.globe;

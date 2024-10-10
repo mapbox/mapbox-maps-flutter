@@ -4,26 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class MapInterfacePage extends ExamplePage {
-  MapInterfacePage() : super(const Icon(Icons.map), 'MapInterface');
+class MapInterfaceExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'MapInterface';
 
   @override
-  Widget build(BuildContext context) {
-    return const MapInterfacePageBody();
-  }
+  State<StatefulWidget> createState() => MapInterfaceExampleState();
 }
 
-class MapInterfacePageBody extends StatefulWidget {
-  const MapInterfacePageBody();
-
-  @override
-  State<StatefulWidget> createState() => MapInterfacePageBodyState();
-}
-
-class MapInterfacePageBodyState extends State<MapInterfacePageBody> {
-  MapInterfacePageBodyState();
+class MapInterfaceExampleState extends State<MapInterfaceExample> {
+  MapInterfaceExampleState();
 
   MapboxMap? mapboxMap;
 

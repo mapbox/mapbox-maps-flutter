@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class FullMapPage extends ExamplePage {
-  FullMapPage() : super(const Icon(Icons.map), 'Full screen map');
+class FullMapExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Full screen map';
 
   @override
-  Widget build(BuildContext context) {
-    return const FullMap();
-  }
+  State createState() => FullMapExampleState();
 }
 
-class FullMap extends StatefulWidget {
-  const FullMap();
-
-  @override
-  State createState() => FullMapState();
-}
-
-class FullMapState extends State<FullMap> {
+class FullMapExampleState extends State<FullMapExample> {
   MapboxMap? mapboxMap;
   var isLight = true;
 

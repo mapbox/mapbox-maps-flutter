@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class TileJsonPage extends ExamplePage {
-  TileJsonPage() : super(const Icon(Icons.map), 'Tile Json');
+class TileJsonExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Tile Json';
 
   @override
-  Widget build(BuildContext context) {
-    return const TileJsonWidget();
-  }
+  State createState() => TileJsonExampleState();
 }
 
-class TileJsonWidget extends StatefulWidget {
-  const TileJsonWidget();
-
-  @override
-  State createState() => TileJsonWidgetState();
-}
-
-class TileJsonWidgetState extends State<TileJsonWidget> {
+class TileJsonExampleState extends State<TileJsonExample> {
   MapboxMap? mapboxMap;
   var isLight = true;
 

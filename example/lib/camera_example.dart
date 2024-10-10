@@ -1,26 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class CameraPage extends ExamplePage {
-  CameraPage() : super(const Icon(Icons.map), 'CameraManager interface');
+class CameraExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'CameraManager interface';
 
   @override
-  Widget build(BuildContext context) {
-    return const CameraPageBody();
-  }
+  State<StatefulWidget> createState() => CameraExampleState();
 }
 
-class CameraPageBody extends StatefulWidget {
-  const CameraPageBody();
-
-  @override
-  State<StatefulWidget> createState() => CameraPageBodyState();
-}
-
-class CameraPageBodyState extends State<CameraPageBody> {
-  CameraPageBodyState();
-
+class CameraExampleState extends State<CameraExample> {
   MapboxMap? mapboxMap;
 
   _onMapCreated(MapboxMap mapboxMap) {

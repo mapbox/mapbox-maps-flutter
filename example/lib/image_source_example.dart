@@ -4,25 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class ImageSourcePage extends ExamplePage {
-  ImageSourcePage() : super(const Icon(Icons.map), 'Image source');
+class ImageSourceExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Image source';
 
   @override
-  Widget build(BuildContext context) {
-    return const ImageSourceWidget();
-  }
+  State createState() => ImageSourceExampleState();
 }
 
-class ImageSourceWidget extends StatefulWidget {
-  const ImageSourceWidget();
-
-  @override
-  State createState() => ImageSourceWidgetState();
-}
-
-class ImageSourceWidgetState extends State<ImageSourceWidget> {
+class ImageSourceExampleState extends State<ImageSourceExample> {
   MapboxMap? mapboxMap;
   var isLight = true;
 

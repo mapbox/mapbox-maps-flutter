@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class ProjectionPage extends ExamplePage {
-  ProjectionPage() : super(const Icon(Icons.map), 'Projection interface');
+class ProjectionExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Projection interface';
 
   @override
-  Widget build(BuildContext context) {
-    return const ProjectionPageBody();
-  }
+  State<StatefulWidget> createState() => ProjectionExampleState();
 }
 
-class ProjectionPageBody extends StatefulWidget {
-  const ProjectionPageBody();
-
-  @override
-  State<StatefulWidget> createState() => ProjectionPageBodyState();
-}
-
-class ProjectionPageBodyState extends State<ProjectionPageBody> {
-  ProjectionPageBodyState();
+class ProjectionExampleState extends State<ProjectionExample> {
+  ProjectionExampleState();
 
   MapboxMap? mapboxMap;
 

@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import 'page.dart';
+import 'example.dart';
 
-class VectorTileSourcePage extends ExamplePage {
-  VectorTileSourcePage() : super(const Icon(Icons.map), 'Vector Tile Source');
+class VectorTileSourceExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Vector Tile Source';
 
   @override
-  Widget build(BuildContext context) {
-    return const VectorTileSourceWidget();
-  }
+  State createState() => VectorTileSourceExampleState();
 }
 
-class VectorTileSourceWidget extends StatefulWidget {
-  const VectorTileSourceWidget();
-
-  @override
-  State createState() => VectorTileSourceWidgetState();
-}
-
-class VectorTileSourceWidgetState extends State<VectorTileSourceWidget> {
+class VectorTileSourceExampleState extends State<VectorTileSourceExample> {
   MapboxMap? mapboxMap;
 
   _onMapCreated(MapboxMap mapboxMap) async {

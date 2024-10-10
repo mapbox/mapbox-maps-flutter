@@ -5,7 +5,7 @@ final class MapboxOptions {
   static _MapboxOptions _options = () {
     LogConfiguration._setupDebugLoggingIfNeeded();
     return _MapboxOptions();
-  } ();
+  }();
 
   /// The access token that is used to access resources provided by Mapbox services.
   static Future<String> getAccessToken() {

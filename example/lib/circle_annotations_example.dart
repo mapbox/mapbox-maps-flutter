@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class CircleAnnotationPage extends ExamplePage {
-  CircleAnnotationPage() : super(const Icon(Icons.map), 'Circle Annotations');
+class CircleAnnotationExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Circle annotations';
 
   @override
-  Widget build(BuildContext context) {
-    return const CircleAnnotationPageBody();
-  }
-}
-
-class CircleAnnotationPageBody extends StatefulWidget {
-  const CircleAnnotationPageBody();
-
-  @override
-  State<StatefulWidget> createState() => CircleAnnotationPageBodyState();
+  State<StatefulWidget> createState() => CircleAnnotationExampleState();
 }
 
 class AnnotationClickListener extends OnCircleAnnotationClickListener {
@@ -33,8 +27,8 @@ class AnnotationClickListener extends OnCircleAnnotationClickListener {
   }
 }
 
-class CircleAnnotationPageBodyState extends State<CircleAnnotationPageBody> {
-  CircleAnnotationPageBodyState();
+class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
+  CircleAnnotationExampleState();
 
   MapboxMap? mapboxMap;
   CircleAnnotation? circleAnnotation;
