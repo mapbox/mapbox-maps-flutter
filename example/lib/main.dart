@@ -12,6 +12,7 @@ import 'package:mapbox_maps_example/image_source_example.dart';
 import 'package:mapbox_maps_example/map_interface_example.dart';
 import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
+import 'package:mapbox_maps_example/simple_map_example.dart';
 import 'package:mapbox_maps_example/snapshotter_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
@@ -28,6 +29,7 @@ import 'gestures_example.dart';
 import 'debug_options_example.dart';
 
 final List<Example> _allPages = <Example>[
+  SimpleMapExample(),
   SnapshotterExample(),
   TrafficRouteLineExample(),
   OfflineMapExample(),
