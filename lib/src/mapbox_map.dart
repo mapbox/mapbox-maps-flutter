@@ -30,9 +30,9 @@ class RenderedQueryGeometry {
 
 /// Options for enabling debugging features in a map.
 class MapWidgetDebugOptions {
-  final _MapWidgetDebugOptions option;
+  final _MapWidgetDebugOptions _option;
 
-  const MapWidgetDebugOptions._(this.option);
+  const MapWidgetDebugOptions._(this._option);
 
   /// Edges of tile boundaries are shown as thick, red lines to help diagnose
   /// tile clipping issues.
@@ -137,7 +137,7 @@ extension on _MapWidgetDebugOptions {
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier {
-  MapboxMap({
+  MapboxMap._({
     required _MapboxMapsPlatform mapboxMapsPlatform,
     this.onMapTapListener,
     this.onMapLongTapListener,
@@ -145,7 +145,7 @@ class MapboxMap extends ChangeNotifier {
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
     _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
 
-    annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
+    annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
   }
 
@@ -156,7 +156,7 @@ class MapboxMap extends ChangeNotifier {
       StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  late LocationSettings location = LocationSettings(
+  late LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
           binaryMessenger: _proxyBinaryMessenger));
 
@@ -170,7 +170,7 @@ class MapboxMap extends ChangeNotifier {
       _AnimationManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to create and set annotations.
-  late final _AnnotationManager annotations;
+  late final AnnotationManager annotations;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
@@ -398,7 +398,7 @@ class MapboxMap extends ChangeNotifier {
   /// Set debug options for the widget associated with the map.
   Future<void> setDebugOptions(List<MapWidgetDebugOptions> debugOptions) {
     return _mapInterface
-        .setDebugOptions(debugOptions.map((e) => e.option).toList());
+        .setDebugOptions(debugOptions.map((e) => e._option).toList());
   }
 
   /// Returns the `map debug options`.

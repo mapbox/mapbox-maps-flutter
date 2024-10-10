@@ -191,39 +191,6 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
     );
   }
 
-  Widget _setDebugOptions() {
-    return TextButton(
-        child: Text('setDebugOptions'),
-        onPressed: () {
-          if (showTileBorders == false) {
-            mapboxMap?.setDebugOptions([MapWidgetDebugOptions.tileBorders]);
-          } else {
-            mapboxMap?.setDebugOptions([]);
-          }
-          showTileBorders = !showTileBorders;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("showTileBorders: $showTileBorders"),
-            backgroundColor: Theme.of(context).primaryColor,
-            duration: Duration(seconds: 2),
-          ));
-        });
-  }
-
-  Widget _getDebugOptions() {
-    return TextButton(
-      child: Text('getDebugOptions'),
-      onPressed: () {
-        mapboxMap?.getDebugOptions().then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "getDebugOptions: ${value.firstOrNull?.option.name ?? "none"}"),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  duration: Duration(seconds: 2),
-                )));
-      },
-    );
-  }
-
   Widget _getMapOptions() {
     return TextButton(
       child: Text('getMapOptions'),
@@ -322,8 +289,6 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
         _getSize(),
         _getMapOptions(),
         _getResourceOptions(),
-        _setDebugOptions(),
-        _getDebugOptions(),
         _reduceMemoryUse(),
         _getGestureInProgress(),
         _setGestureInProgress(),
