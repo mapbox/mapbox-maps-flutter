@@ -71,11 +71,7 @@ class AnnotationController(private val mapView: MapView) :
         mapView.annotations.createPolylineAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener { annotation ->
-<<<<<<< HEAD
-              onPolylineAnnotationController.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
-=======
               onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
->>>>>>> f2ff4b7 (reset annotation click listeners on dispose)
               true
             }
           )
@@ -102,7 +98,7 @@ class AnnotationController(private val mapView: MapView) :
     onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger, channelSuffix)
     onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger, channelSuffix)
     onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger, channelSuffix)
-    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger, channelSuffix)
+    onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(messenger, channelSuffix)
     _PointAnnotationMessenger.setUp(messenger, pointAnnotationController, channelSuffix)
     _CircleAnnotationMessenger.setUp(
       messenger,
