@@ -8,6 +8,8 @@ class VectorTileSourceExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Vector Tile Source';
+  @override
+  final String? subtitle = null;
 
   @override
   State createState() => VectorTileSourceExampleState();

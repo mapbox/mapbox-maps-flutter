@@ -80,13 +80,18 @@ class MapsDemo extends StatelessWidget {
           ? buildAccessTokenWarning()
           : ListView.separated(
               itemCount: _allPages.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(height: 1),
-              itemBuilder: (_, int index) => ListTile(
-                leading: _allPages[index].leading,
-                title: Text(_allPages[index].title),
-                onTap: () => _pushPage(context, _allPages[index]),
-              ),
+              separatorBuilder: (_, __) => const Divider(height: 1),
+              itemBuilder: (_, int index) {
+                final example = _allPages[index];
+                return ListTile(
+                  leading: example.leading,
+                  title: Text(example.title),
+                  subtitle: (example.subtitle?.isNotEmpty == true)
+                      ? Text(example.subtitle!, maxLines: 2, overflow: TextOverflow.ellipsis,)
+                      : null,
+                  onTap: () => _pushPage(context, _allPages[index]),
+                );
+              },
             ),
     );
   }

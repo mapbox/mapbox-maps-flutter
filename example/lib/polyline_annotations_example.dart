@@ -9,6 +9,8 @@ class PolylineAnnotationExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Polyline Annotations';
+  @override
+  final String? subtitle = null;
 
   @override
   State<StatefulWidget> createState() => PolylineAnnotationExampleState();

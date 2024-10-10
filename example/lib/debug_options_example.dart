@@ -9,6 +9,9 @@ class DebugOptionsExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.construction);
   @override
   final String title = 'Map debug options';
+  @override
+  final String subtitle =
+      'This example shows how the map looks with different debug options.';
 
   @override
   State createState() => DebugOptionsExampleState();
@@ -22,6 +25,15 @@ class DebugOptionsExampleState extends State<DebugOptionsExample> {
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
+    final defaultDebugOptions = [
+      MapWidgetDebugOptions.tileBorders,
+      MapWidgetDebugOptions.parseStatus,
+      MapWidgetDebugOptions.timestamps,
+      MapWidgetDebugOptions.camera,
+      MapWidgetDebugOptions.padding,
+    ];
+    mapboxMap.setDebugOptions(defaultDebugOptions);
+    _onOptionsUpdate(defaultDebugOptions.length);
   }
 
   void _onOptionsUpdate(int value) {

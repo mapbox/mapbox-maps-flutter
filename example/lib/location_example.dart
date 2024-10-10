@@ -10,6 +10,8 @@ class LocationExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Location Component';
+  @override
+  final String? subtitle = null;
 
   @override
   State<StatefulWidget> createState() => LocationExampleState();

@@ -8,6 +8,8 @@ class TrafficRouteLineExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.turn_sharp_left);
   @override
   final String title = 'Style a route showing traffic';
+  @override
+  final String subtitle = "Use LineLayer to style a route line with traffic data.";
 
   @override
   State createState() => TrafficRouteLineExampleState();
@@ -29,51 +31,34 @@ class TrafficRouteLineExampleState extends State<TrafficRouteLineExample> {
   }
 
   _addRouteLine() async {
+
     await mapboxMap.style.addLayer(LineLayer(
       id: "line-layer",
       sourceId: "line",
       lineBorderColor: Colors.black.value,
+      // Defines a line-width, line-border-width and line-color at different zoom extents
+      // by interpolating exponentially between stops.
+      // Doc: https://docs.mapbox.com/style-spec/reference/expressions/
+      lineWidthExpression: [
+        'interpolate', ['exponential', 1.5], ['zoom'],
+        4.0, 6.0,
+        10.0, 7.0,
+        13.0, 9.0,
+        16.0, 3.0,
+        19.0, 7.0,
+        22.0, 21.0,
+      ],
+      lineBorderWidthExpression: [
+        'interpolate', ['exponential', 1.5], ['zoom'],
+        9.0, 1.0,
+        16.0, 3.0,
+      ],
+      lineColorExpression: [
+        'interpolate', ['linear'], ['zoom'],
+        8.0, 'rgb(51, 102, 255)',
+        11.0, ['coalesce', ['get', 'route-color'], 'rgb(51, 102, 255)'],
+      ],
     ));
-    // Defines a line-width, line-border-width and line-color at different zoom extents
-    // by interpolating exponentially between stops.
-    // Doc: https://docs.mapbox.com/style-spec/reference/expressions/
-    await mapboxMap.style.setStyleLayerProperty(
-        "line-layer",
-        "line-width",
-        '''
-        ["interpolate", ["exponential", 1.5], ["zoom"],
-        4.0, ["*", 6.0, 1.0],
-        10.0, ["*", 7.0, 1.0],
-        13.0, ["*", 9.0, 1.0],
-        16.0, ["*", 13.0, 1.0],
-        19.0, ["*", 17.0, 1.0],
-        22.0, ["*", 21.0, 1.0]
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
-    await mapboxMap.style.setStyleLayerProperty(
-        "line-layer",
-        "line-border-width",
-        '''
-        ["interpolate", ["exponential", 1.5], ["zoom"],
-        9.0, ["*", 1.0, 1.0],
-        16.0, ["*", 3.0, 1.0]
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
-    await mapboxMap.style.setStyleLayerProperty(
-        "line-layer",
-        "line-color",
-        '''
-        ["interpolate", ["linear"], ["zoom"],
-        8.0, "rgb(51, 102, 255)",
-        11.0, ["coalesce", ["get", "route-color"], "rgb(51, 102, 255)"]
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
   }
 
   @override
