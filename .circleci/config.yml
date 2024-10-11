@@ -64,6 +64,15 @@ commands:
                       ]
                     }
                   ]
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "cc @maps-flutter"
+                    }
+                  ]
                 }
               ]
             }
