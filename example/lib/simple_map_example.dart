@@ -4,6 +4,8 @@ import 'package:turf/turf.dart' as turf;
 import 'example.dart';
 
 class SimpleMapExample extends StatefulWidget implements Example {
+  const SimpleMapExample({super.key});
+
   @override
   final Widget leading = const Icon(Icons.map_outlined);
   @override
@@ -23,13 +25,21 @@ class _SimpleMapState extends State<SimpleMapExample> {
   }
 
   void _onStyleLoaded(StyleLoadedEventData styleLoadedEventData) {
-
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return MapWidget(
-        key: ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(center: Point(coordinates: Position.named(lat: 60.167488, lng: 24.942747)), zoom: 11, bearing: 12, pitch: 60),);
+      key: ValueKey("mapWidget"),
+      cameraOptions: CameraOptions(
+          center: Point(
+              coordinates: Position.named(lat: 60.167488, lng: 24.942747)),
+          zoom: 11,
+          bearing: 12,
+          pitch: 60),
+      onMapCreated: _onMapCreated,
+      onStyleLoadedListener: _onStyleLoaded,
+    );
   }
 }

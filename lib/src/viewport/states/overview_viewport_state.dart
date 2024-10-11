@@ -26,18 +26,18 @@ class OverviewViewportState implements ViewportState {
   final OverviewViewportStateOptions options;
 
   OverviewViewportState._(this.options);
-  
+
   @override
   Cancelable observeDataSource(OnViewportCameraChange cameraChangeHandler) {
     // TODO: implement observeDataSource
     throw UnimplementedError();
   }
-  
+
   @override
   void startUpdatingCamera() {
     // TODO: implement startUpdatingCamera
   }
-  
+
   @override
   void stopUpdatingCamera() {
     // TODO: implement stopUpdatingCamera

@@ -9,9 +9,10 @@ enum _ViewportStatusChangeReason {
 }
 
 abstract interface class ViewportStatusObserver {
-  void onViewportStatusChanged(ViewportStatus from, ViewportStatus to, ViewportStatusChangeReason reason);
+  void onViewportStatusChanged(ViewportStatus from, ViewportStatus to,
+      ViewportStatusChangeReason reason);
 }
- 
+
 class ViewportStatusChangeReason {
   final _ViewportStatusChangeReason reason;
 
@@ -20,11 +21,14 @@ class ViewportStatusChangeReason {
   static const ViewportStatusChangeReason idleRequested =
       ViewportStatusChangeReason._(_ViewportStatusChangeReason.idleRequested);
   static const ViewportStatusChangeReason transitionStarted =
-      ViewportStatusChangeReason._(_ViewportStatusChangeReason.transitionStarted);
+      ViewportStatusChangeReason._(
+          _ViewportStatusChangeReason.transitionStarted);
   static const ViewportStatusChangeReason transitionSucceeded =
-      ViewportStatusChangeReason._(_ViewportStatusChangeReason.transitionSucceeded);
+      ViewportStatusChangeReason._(
+          _ViewportStatusChangeReason.transitionSucceeded);
   static const ViewportStatusChangeReason transitionFailed =
-      ViewportStatusChangeReason._(_ViewportStatusChangeReason.transitionFailed);
+      ViewportStatusChangeReason._(
+          _ViewportStatusChangeReason.transitionFailed);
   static const ViewportStatusChangeReason userInteraction =
       ViewportStatusChangeReason._(_ViewportStatusChangeReason.userInteraction);
 }
@@ -34,6 +38,7 @@ abstract interface class ViewportTransition {
 }
 
 typedef bool OnViewportCameraChange();
+
 abstract interface class ViewportState {
   Cancelable observeDataSource(OnViewportCameraChange cameraChangeHandler);
   void startUpdatingCamera();
@@ -41,13 +46,14 @@ abstract interface class ViewportState {
 }
 
 sealed class ViewportStatus {}
-class ViewportStatusIdle extends ViewportStatus {
 
-}
+class ViewportStatusIdle extends ViewportStatus {}
+
 class ViewportStatusState extends ViewportStatus {
   final ViewportState state;
   ViewportStatusState(this.state);
 }
+
 class ViewportStatusTransition extends ViewportStatus {
   final ViewportTransition transition;
   ViewportStatusTransition(this.transition);
@@ -59,7 +65,8 @@ class ViewportManager {
   ViewportManager(this._viewportManager);
 
   Future<ViewportOptions> getOptions() => _viewportManager.getOptions();
-  Future<void> setOptions(ViewportOptions options) => _viewportManager.setOptions(options);
+  Future<void> setOptions(ViewportOptions options) =>
+      _viewportManager.setOptions(options);
 
   Future<ViewportStatus> getViewportStatus() async {
     throw UnimplementedError();
@@ -85,19 +92,25 @@ class ViewportManager {
     throw UnimplementedError();
   }
 
-  void transition(ViewportState toState, {ViewportTransition? transition, Function(bool success)? completion}) {
-    throw UnimplementedError();
-  }
-  
-  Future<OverviewViewportState> makeOverviewViewportState(OverviewViewportStateOptions options) async {
+  void transition(ViewportState toState,
+      {ViewportTransition? transition, Function(bool success)? completion}) {
     throw UnimplementedError();
   }
 
-  Future<FollowPuckViewportState> makeFollowPuckViewportState({FollowPuckViewportStateOptions options = const FollowPuckViewportStateOptions()}) async {
+  Future<OverviewViewportState> makeOverviewViewportState(
+      OverviewViewportStateOptions options) async {
     throw UnimplementedError();
   }
 
-  Future<DefaultViewportTransition> makeDefaultViewportTransition({DefaultViewportTransitionOptions options = const DefaultViewportTransitionOptions()}) async {
+  Future<FollowPuckViewportState> makeFollowPuckViewportState(
+      {FollowPuckViewportStateOptions options =
+          const FollowPuckViewportStateOptions()}) async {
+    throw UnimplementedError();
+  }
+
+  Future<DefaultViewportTransition> makeDefaultViewportTransition(
+      {DefaultViewportTransitionOptions options =
+          const DefaultViewportTransitionOptions()}) async {
     throw UnimplementedError();
   }
 

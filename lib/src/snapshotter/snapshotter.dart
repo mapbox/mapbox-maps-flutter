@@ -79,7 +79,8 @@ final class Snapshotter {
         snapshotter._mapEvents.eventTypes.map((e) => e.index).toList(),
         options);
 
-    Snapshotter._finalizer.attach(snapshotter, snapshotter._suffix, detach: snapshotter);
+    Snapshotter._finalizer
+        .attach(snapshotter, snapshotter._suffix, detach: snapshotter);
     return snapshotter;
   }
 
