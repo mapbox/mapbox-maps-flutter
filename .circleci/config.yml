@@ -1,9 +1,10 @@
 version: 2.1
 
 orbs:
-  flutter: circleci/flutter@2.0.4
-  macos: circleci/macos@2.5.2
-  gcp-cli: circleci/gcp-cli@3.2.1
+  flutter: circleci/flutter@2
+  macos: circleci/macos@2
+  gcp-cli: circleci/gcp-cli@3
+  slack: circleci/slack@5
 
 commands:
 
@@ -26,6 +27,46 @@ commands:
       - add_ssh_keys:
           fingerprints:
             - "9d:db:07:0b:62:81:11:c3:46:21:8e:fa:51:99:80:2d"
+
+  slack-notify-failure-if-any:
+    steps:
+      - slack/notify:
+          event: fail
+          branch_pattern: ^(main|release.*)$
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":flutter: Maps SDK Flutter :red_circle:",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "`$CIRCLE_JOB` <$CIRCLE_BUILD_URL|failed> for <https://github.com/mapbox/mapbox-maps-flutter/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:6}> by `$(git log --format='%an' -n 1 $CIRCLE_SHA1)` on $(if [ \"$CIRCLE_BRANCH\" == \"main\" ]; then echo 'the'; fi) `${CIRCLE_TAG:-$CIRCLE_BRANCH}` ${CIRCLE_TAG:+tag}${CIRCLE_TAG:-branch}."
+                  }
+                },
+                {
+                  "type": "rich_text",
+                  "elements": [
+                    {
+                      "type": "rich_text_quote",
+                      "elements": [
+                        {
+                          "type": "text",
+                          "text": "$(git log --format=%s -n 1 $CIRCLE_SHA1)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
 
 jobs:
 
@@ -60,6 +101,8 @@ jobs:
           paths:
             - debug/app-debug.apk
             - androidTest/debug/app-debug-androidTest.apk
+      - slack-notify-failure-if-any
+
 
   run-android-tests-firebase:
     parameters:
@@ -86,6 +129,7 @@ jobs:
               --no-record-video \
               --no-performance-metrics \
               --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}"
+      - slack-notify-failure-if-any
 
   build-ios:
     parameters:
@@ -127,6 +171,7 @@ jobs:
           root: << parameters.workspace-path >>
           paths:
             - build_products.zip
+      - slack-notify-failure-if-any
 
   run-ios-tests-firebase:
     parameters:
@@ -163,7 +208,7 @@ jobs:
           path: testlab_results.zip
       - store_test_results:
           path: testlab_results
-
+      - slack-notify-failure-if-any
 
 
 
