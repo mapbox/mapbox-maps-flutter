@@ -29,6 +29,12 @@ class ProxyBinaryMessenger: NSObject, FlutterBinaryMessenger {
     }
 }
 
+extension FlutterBinaryMessenger {
+    func unproxy() -> FlutterBinaryMessenger {
+        return (self as? ProxyBinaryMessenger)?.messenger ?? self
+    }
+}
+
 final class MapboxMapController: NSObject, FlutterPlatformView {
     private let registrar: FlutterPluginRegistrar
     private let mapView: MapView
@@ -107,6 +113,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(messenger: proxyBinaryMessenger)
 
+        let viewportController = ViewportController(
+            viewportManager: mapView.viewport,
+            binaryMessenger: proxyBinaryMessenger.unproxy()
+        )
+        _ViewportManagerMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: viewportController)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -153,5 +165,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
         annotationController?.tearDown(messenger: proxyBinaryMessenger)
+        _ViewportManagerMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: nil)
     }
 }

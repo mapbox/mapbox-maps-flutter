@@ -1,14 +1,14 @@
 part of mapbox_maps_flutter;
 
 class OverviewViewportStateOptions {
-  final turf.GeometryObject geometry;
-  final EdgeInsets geometryPadding;
-  final double? bearing;
-  final double? pitch;
-  final EdgeInsets? padding;
-  final double? maxZoom;
-  final ScreenCoordinate? offset;
-  final Duration animationDuration;
+  turf.GeometryObject geometry;
+  EdgeInsets geometryPadding;
+  double? bearing;
+  double? pitch;
+  EdgeInsets? padding;
+  double? maxZoom;
+  ScreenCoordinate? offset;
+  Duration animationDuration;
 
   OverviewViewportStateOptions({
     required this.geometry,
@@ -23,23 +23,58 @@ class OverviewViewportStateOptions {
 }
 
 class OverviewViewportState implements ViewportState {
-  final OverviewViewportStateOptions options;
+  final _OverviewViewportMessenger _messenger;
 
-  OverviewViewportState._(this.options);
+  OverviewViewportState._(this._messenger);
+
+  Future<OverviewViewportStateOptions> getOptions() async {
+    return _messenger.getInternalOptions().then((value) => value._options);
+  }
+
+  Future<void> setOptions(OverviewViewportStateOptions options) {
+    return _messenger.setInternalOptions(options._internalOptions);
+  }
 
   @override
   Cancelable observeDataSource(OnViewportCameraChange cameraChangeHandler) {
-    // TODO: implement observeDataSource
-    throw UnimplementedError();
+    return Cancelable();
   }
 
   @override
-  void startUpdatingCamera() {
-    // TODO: implement startUpdatingCamera
-  }
+  void startUpdatingCamera() {}
 
   @override
-  void stopUpdatingCamera() {
-    // TODO: implement stopUpdatingCamera
+  void stopUpdatingCamera() {}
+}
+
+extension on _OverviewViewportStateOptions {
+  OverviewViewportStateOptions get _options {
+    return OverviewViewportStateOptions(
+      geometry: turf.GeometryObject.deserialize(jsonDecode(geometry)),
+      geometryPadding: geometryPadding.toEdgeInsets(),
+      bearing: bearing,
+      pitch: pitch,
+      padding: padding?.toEdgeInsets(),
+      maxZoom: maxZoom,
+      offset: offset,
+      animationDuration: Duration(milliseconds: animationDurationMs),
+    );
+  }
+}
+
+extension on OverviewViewportStateOptions {
+  _OverviewViewportStateOptions get _internalOptions {
+    return _OverviewViewportStateOptions(
+      geometry: jsonEncode(geometry),
+      geometryPadding: _MbxEdgeInsetsCodable.fromEdgeInsets(geometryPadding),
+      bearing: bearing,
+      pitch: pitch,
+      padding: padding != null
+          ? _MbxEdgeInsetsCodable.fromEdgeInsets(padding!)
+          : null,
+      maxZoom: maxZoom,
+      offset: offset,
+      animationDurationMs: animationDuration.inMilliseconds,
+    );
   }
 }

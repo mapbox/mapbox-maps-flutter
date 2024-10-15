@@ -32,17 +32,105 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class FlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+}
+
+enum class _FollowPuckViewportStateBearing(val raw: Int) {
+  CONSTANT(0),
+  HEADING(1),
+  COURSE(2);
+
+  companion object {
+    fun ofRaw(raw: Int): _FollowPuckViewportStateBearing? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _DefaultViewportTransitionOptions(
+  val maxDurationMs: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _DefaultViewportTransitionOptions {
+      val maxDurationMs = pigeonVar_list[0] as Long
+      return _DefaultViewportTransitionOptions(maxDurationMs)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      maxDurationMs,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _OverviewViewportStateOptions(
+  val geometry: String,
+  val geometryPadding: MbxEdgeInsets,
+  val bearing: Double? = null,
+  val pitch: Double? = null,
+  val padding: MbxEdgeInsets? = null,
+  val maxZoom: Double? = null,
+  val offset: ScreenCoordinate? = null,
+  val animationDurationMs: Long
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _OverviewViewportStateOptions {
+      val geometry = pigeonVar_list[0] as String
+      val geometryPadding = pigeonVar_list[1] as MbxEdgeInsets
+      val bearing = pigeonVar_list[2] as Double?
+      val pitch = pigeonVar_list[3] as Double?
+      val padding = pigeonVar_list[4] as MbxEdgeInsets?
+      val maxZoom = pigeonVar_list[5] as Double?
+      val offset = pigeonVar_list[6] as ScreenCoordinate?
+      val animationDurationMs = pigeonVar_list[7] as Long
+      return _OverviewViewportStateOptions(geometry, geometryPadding, bearing, pitch, padding, maxZoom, offset, animationDurationMs)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      geometry,
+      geometryPadding,
+      bearing,
+      pitch,
+      padding,
+      maxZoom,
+      offset,
+      animationDurationMs,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _FollowPuckViewportStateOptions(
+  val padding: MbxEdgeInsets? = null,
+  val zoom: Double? = null,
+  val bearingValue: Double? = null,
+  val bearing: _FollowPuckViewportStateBearing? = null,
+  val pitch: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _FollowPuckViewportStateOptions {
+      val padding = pigeonVar_list[0] as MbxEdgeInsets?
+      val zoom = pigeonVar_list[1] as Double?
+      val bearingValue = pigeonVar_list[2] as Double?
+      val bearing = pigeonVar_list[3] as _FollowPuckViewportStateBearing?
+      val pitch = pigeonVar_list[4] as Double?
+      return _FollowPuckViewportStateOptions(padding, zoom, bearingValue, bearing, pitch)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      padding,
+      zoom,
+      bearingValue,
+      bearing,
+      pitch,
+    )
+  }
+}
 
 /**
  * Configuration options for [ViewportManager].
@@ -76,6 +164,36 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
+        return (readValue(buffer) as Long?)?.let {
+          _FollowPuckViewportStateBearing.ofRaw(it.toInt())
+        }
+      }
+      130.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MbxEdgeInsets.fromList(it)
+        }
+      }
+      131.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ScreenCoordinate.fromList(it)
+        }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _DefaultViewportTransitionOptions.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _OverviewViewportStateOptions.fromList(it)
+        }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _FollowPuckViewportStateOptions.fromList(it)
+        }
+      }
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ViewportOptions.fromList(it)
         }
@@ -85,8 +203,32 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is ViewportOptions -> {
+      is _FollowPuckViewportStateBearing -> {
         stream.write(129)
+        writeValue(stream, value.raw)
+      }
+      is MbxEdgeInsets -> {
+        stream.write(130)
+        writeValue(stream, value.toList())
+      }
+      is ScreenCoordinate -> {
+        stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is _DefaultViewportTransitionOptions -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is _OverviewViewportStateOptions -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is _FollowPuckViewportStateOptions -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is ViewportOptions -> {
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -95,23 +237,207 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface _ViewportManager {
+interface _DefaultViewportTransitionMessenger {
+  fun getInternalOptions(): _DefaultViewportTransitionOptions
+  fun setInternalOptions(options: _DefaultViewportTransitionOptions)
+
+  companion object {
+    /** The codec used by _DefaultViewportTransitionMessenger. */
+    val codec: MessageCodec<Any?> by lazy {
+      ViewportInternalPigeonCodec()
+    }
+    /** Sets up an instance of `_DefaultViewportTransitionMessenger` to handle messages through the `binaryMessenger`. */
+    @JvmOverloads
+    fun setUp(binaryMessenger: BinaryMessenger, api: _DefaultViewportTransitionMessenger?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.getInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getInternalOptions())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.setInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _DefaultViewportTransitionOptions
+            val wrapped: List<Any?> = try {
+              api.setInternalOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _OverviewViewportMessenger {
+  fun getInternalOptions(): _OverviewViewportStateOptions
+  fun setInternalOptions(options: _OverviewViewportStateOptions)
+
+  companion object {
+    /** The codec used by _OverviewViewportMessenger. */
+    val codec: MessageCodec<Any?> by lazy {
+      ViewportInternalPigeonCodec()
+    }
+    /** Sets up an instance of `_OverviewViewportMessenger` to handle messages through the `binaryMessenger`. */
+    @JvmOverloads
+    fun setUp(binaryMessenger: BinaryMessenger, api: _OverviewViewportMessenger?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.getInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getInternalOptions())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.setInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _OverviewViewportStateOptions
+            val wrapped: List<Any?> = try {
+              api.setInternalOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _FollowPuckViewportMessenger {
+  fun getInternalOptions(): _FollowPuckViewportStateOptions
+  fun setInternalOptions(options: _FollowPuckViewportStateOptions)
+
+  companion object {
+    /** The codec used by _FollowPuckViewportMessenger. */
+    val codec: MessageCodec<Any?> by lazy {
+      ViewportInternalPigeonCodec()
+    }
+    /** Sets up an instance of `_FollowPuckViewportMessenger` to handle messages through the `binaryMessenger`. */
+    @JvmOverloads
+    fun setUp(binaryMessenger: BinaryMessenger, api: _FollowPuckViewportMessenger?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.getInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getInternalOptions())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.setInternalOptions$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _FollowPuckViewportStateOptions
+            val wrapped: List<Any?> = try {
+              api.setInternalOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+    }
+  }
+}
+/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
+class _TransitionCompletionHandler(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
+  companion object {
+    /** The codec used by _TransitionCompletionHandler. */
+    val codec: MessageCodec<Any?> by lazy {
+      ViewportInternalPigeonCodec()
+    }
+  }
+  fun completion(successArg: Boolean, callback: (Result<Unit>) -> Unit) {
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._TransitionCompletionHandler.completion$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(successArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _ViewportManagerMessenger {
   /** Get configuration options for adjusting the behavior of [ViewportManager]. */
   fun getOptions(): ViewportOptions
   /** Set configuration options for adjusting the behavior of [ViewportManager]. */
   fun setOptions(options: ViewportOptions)
+  fun setupOverviewViewportState(options: _OverviewViewportStateOptions, identifier: Long)
+  fun teardownOverviewViewportState(identifier: Long)
+  fun setupFollowPuckViewportState(options: _FollowPuckViewportStateOptions, identifier: Long)
+  fun teardownFollowPuckViewportState(identifier: Long)
+  fun setupDefaultTransition(options: _DefaultViewportTransitionOptions, identifier: Long)
+  fun teardownDefaultTransition(identifier: Long)
+  fun setupImmediateTransition(identifier: Long)
+  fun teardownImmediateTransition(identifier: Long)
+  fun transition(toViewportIdentifier: Long, transitionIdentifier: Long?, completionIdentifier: Long?)
 
   companion object {
-    /** The codec used by _ViewportManager. */
+    /** The codec used by _ViewportManagerMessenger. */
     val codec: MessageCodec<Any?> by lazy {
       ViewportInternalPigeonCodec()
     }
-    /** Sets up an instance of `_ViewportManager` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `_ViewportManagerMessenger` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: _ViewportManager?, messageChannelSuffix: String = "") {
+    fun setUp(binaryMessenger: BinaryMessenger, api: _ViewportManagerMessenger?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManager.getOptions$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.getOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -126,13 +452,180 @@ interface _ViewportManager {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManager.setOptions$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setOptions$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val optionsArg = args[0] as ViewportOptions
             val wrapped: List<Any?> = try {
               api.setOptions(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupOverviewViewportState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _OverviewViewportStateOptions
+            val identifierArg = args[1] as Long
+            val wrapped: List<Any?> = try {
+              api.setupOverviewViewportState(optionsArg, identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownOverviewViewportState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val identifierArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              api.teardownOverviewViewportState(identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupFollowPuckViewportState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _FollowPuckViewportStateOptions
+            val identifierArg = args[1] as Long
+            val wrapped: List<Any?> = try {
+              api.setupFollowPuckViewportState(optionsArg, identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownFollowPuckViewportState$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val identifierArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              api.teardownFollowPuckViewportState(identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupDefaultTransition$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as _DefaultViewportTransitionOptions
+            val identifierArg = args[1] as Long
+            val wrapped: List<Any?> = try {
+              api.setupDefaultTransition(optionsArg, identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownDefaultTransition$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val identifierArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              api.teardownDefaultTransition(identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupImmediateTransition$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val identifierArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              api.setupImmediateTransition(identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownImmediateTransition$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val identifierArg = args[0] as Long
+            val wrapped: List<Any?> = try {
+              api.teardownImmediateTransition(identifierArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val toViewportIdentifierArg = args[0] as Long
+            val transitionIdentifierArg = args[1] as Long?
+            val completionIdentifierArg = args[2] as Long?
+            val wrapped: List<Any?> = try {
+              api.transition(toViewportIdentifierArg, transitionIdentifierArg, completionIdentifierArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

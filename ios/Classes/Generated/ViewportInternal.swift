@@ -55,6 +55,10 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
+private func createConnectionError(withChannelName channelName: String) -> ViewportInternalError {
+  return ViewportInternalError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
+}
+
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -62,6 +66,113 @@ private func isNullish(_ value: Any?) -> Bool {
 private func nilOrValue<T>(_ value: Any?) -> T? {
   if value is NSNull { return nil }
   return value as! T?
+}
+
+enum _FollowPuckViewportStateBearing: Int {
+  case constant = 0
+  case heading = 1
+  case course = 2
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _DefaultViewportTransitionOptions {
+  var maxDurationMs: Int64
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _DefaultViewportTransitionOptions? {
+    let maxDurationMs = pigeonVar_list[0] as! Int64
+
+    return _DefaultViewportTransitionOptions(
+      maxDurationMs: maxDurationMs
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      maxDurationMs
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _OverviewViewportStateOptions {
+  var geometry: String
+  var geometryPadding: MbxEdgeInsets
+  var bearing: Double?
+  var pitch: Double?
+  var padding: MbxEdgeInsets?
+  var maxZoom: Double?
+  var offset: ScreenCoordinate?
+  var animationDurationMs: Int64
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _OverviewViewportStateOptions? {
+    let geometry = pigeonVar_list[0] as! String
+    let geometryPadding = pigeonVar_list[1] as! MbxEdgeInsets
+    let bearing: Double? = nilOrValue(pigeonVar_list[2])
+    let pitch: Double? = nilOrValue(pigeonVar_list[3])
+    let padding: MbxEdgeInsets? = nilOrValue(pigeonVar_list[4])
+    let maxZoom: Double? = nilOrValue(pigeonVar_list[5])
+    let offset: ScreenCoordinate? = nilOrValue(pigeonVar_list[6])
+    let animationDurationMs = pigeonVar_list[7] as! Int64
+
+    return _OverviewViewportStateOptions(
+      geometry: geometry,
+      geometryPadding: geometryPadding,
+      bearing: bearing,
+      pitch: pitch,
+      padding: padding,
+      maxZoom: maxZoom,
+      offset: offset,
+      animationDurationMs: animationDurationMs
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      geometry,
+      geometryPadding,
+      bearing,
+      pitch,
+      padding,
+      maxZoom,
+      offset,
+      animationDurationMs,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _FollowPuckViewportStateOptions {
+  var padding: MbxEdgeInsets?
+  var zoom: Double?
+  var bearingValue: Double?
+  var bearing: _FollowPuckViewportStateBearing?
+  var pitch: Double?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _FollowPuckViewportStateOptions? {
+    let padding: MbxEdgeInsets? = nilOrValue(pigeonVar_list[0])
+    let zoom: Double? = nilOrValue(pigeonVar_list[1])
+    let bearingValue: Double? = nilOrValue(pigeonVar_list[2])
+    let bearing: _FollowPuckViewportStateBearing? = nilOrValue(pigeonVar_list[3])
+    let pitch: Double? = nilOrValue(pigeonVar_list[4])
+
+    return _FollowPuckViewportStateOptions(
+      padding: padding,
+      zoom: zoom,
+      bearingValue: bearingValue,
+      bearing: bearing,
+      pitch: pitch
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      padding,
+      zoom,
+      bearingValue,
+      bearing,
+      pitch,
+    ]
+  }
 }
 
 /// Configuration options for [ViewportManager].
@@ -95,6 +206,22 @@ private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return _FollowPuckViewportStateBearing(rawValue: enumResultAsInt)
+      }
+      return nil
+    case 130:
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+    case 131:
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+    case 132:
+      return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
+    case 133:
+      return _OverviewViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 134:
+      return _FollowPuckViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 135:
       return ViewportOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -104,8 +231,26 @@ private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
 
 private class ViewportInternalPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? ViewportOptions {
+    if let value = value as? _FollowPuckViewportStateBearing {
       super.writeByte(129)
+      super.writeValue(value.rawValue)
+    } else if let value = value as? MbxEdgeInsets {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? ScreenCoordinate {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? _DefaultViewportTransitionOptions {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? _OverviewViewportStateOptions {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? _FollowPuckViewportStateOptions {
+      super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? ViewportOptions {
+      super.writeByte(135)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -128,21 +273,189 @@ class ViewportInternalPigeonCodec: FlutterStandardMessageCodec, @unchecked Senda
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _ViewportManager {
+protocol _DefaultViewportTransitionMessenger {
+  func getInternalOptions() throws -> _DefaultViewportTransitionOptions
+  func setInternalOptions(options: _DefaultViewportTransitionOptions) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _DefaultViewportTransitionMessengerSetup {
+  static var codec: FlutterStandardMessageCodec { ViewportInternalPigeonCodec.shared }
+  /// Sets up an instance of `_DefaultViewportTransitionMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _DefaultViewportTransitionMessenger?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.getInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getInternalOptionsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getInternalOptions()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getInternalOptionsChannel.setMessageHandler(nil)
+    }
+    let setInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.setInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setInternalOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _DefaultViewportTransitionOptions
+        do {
+          try api.setInternalOptions(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setInternalOptionsChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _OverviewViewportMessenger {
+  func getInternalOptions() throws -> _OverviewViewportStateOptions
+  func setInternalOptions(options: _OverviewViewportStateOptions) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _OverviewViewportMessengerSetup {
+  static var codec: FlutterStandardMessageCodec { ViewportInternalPigeonCodec.shared }
+  /// Sets up an instance of `_OverviewViewportMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _OverviewViewportMessenger?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.getInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getInternalOptionsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getInternalOptions()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getInternalOptionsChannel.setMessageHandler(nil)
+    }
+    let setInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.setInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setInternalOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _OverviewViewportStateOptions
+        do {
+          try api.setInternalOptions(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setInternalOptionsChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _FollowPuckViewportMessenger {
+  func getInternalOptions() throws -> _FollowPuckViewportStateOptions
+  func setInternalOptions(options: _FollowPuckViewportStateOptions) throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _FollowPuckViewportMessengerSetup {
+  static var codec: FlutterStandardMessageCodec { ViewportInternalPigeonCodec.shared }
+  /// Sets up an instance of `_FollowPuckViewportMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _FollowPuckViewportMessenger?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let getInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.getInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getInternalOptionsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getInternalOptions()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getInternalOptionsChannel.setMessageHandler(nil)
+    }
+    let setInternalOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.setInternalOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setInternalOptionsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _FollowPuckViewportStateOptions
+        do {
+          try api.setInternalOptions(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setInternalOptionsChannel.setMessageHandler(nil)
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
+protocol _TransitionCompletionHandlerProtocol {
+  func completion(success successArg: Bool, completion: @escaping (Result<Void, ViewportInternalError>) -> Void)
+}
+class _TransitionCompletionHandler: _TransitionCompletionHandlerProtocol {
+  private let binaryMessenger: FlutterBinaryMessenger
+  private let messageChannelSuffix: String
+  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
+    self.binaryMessenger = binaryMessenger
+    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+  }
+  var codec: ViewportInternalPigeonCodec {
+    return ViewportInternalPigeonCodec.shared
+  }
+  func completion(success successArg: Bool, completion: @escaping (Result<Void, ViewportInternalError>) -> Void) {
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._TransitionCompletionHandler.completion\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([successArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(ViewportInternalError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(Void()))
+      }
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _ViewportManagerMessenger {
   /// Get configuration options for adjusting the behavior of [ViewportManager].
   func getOptions() throws -> ViewportOptions
   /// Set configuration options for adjusting the behavior of [ViewportManager].
   func setOptions(options: ViewportOptions) throws
+  func setupOverviewViewportState(options: _OverviewViewportStateOptions, identifier: Int64) throws
+  func teardownOverviewViewportState(identifier: Int64) throws
+  func setupFollowPuckViewportState(options: _FollowPuckViewportStateOptions, identifier: Int64) throws
+  func teardownFollowPuckViewportState(identifier: Int64) throws
+  func setupDefaultTransition(options: _DefaultViewportTransitionOptions, identifier: Int64) throws
+  func teardownDefaultTransition(identifier: Int64) throws
+  func setupImmediateTransition(identifier: Int64) throws
+  func teardownImmediateTransition(identifier: Int64) throws
+  func transition(toViewportIdentifier: Int64, transitionIdentifier: Int64?, completionIdentifier: Int64?) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class _ViewportManagerSetup {
+class _ViewportManagerMessengerSetup {
   static var codec: FlutterStandardMessageCodec { ViewportInternalPigeonCodec.shared }
-  /// Sets up an instance of `_ViewportManager` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _ViewportManager?, messageChannelSuffix: String = "") {
+  /// Sets up an instance of `_ViewportManagerMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _ViewportManagerMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
     /// Get configuration options for adjusting the behavior of [ViewportManager].
-    let getOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManager.getOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.getOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getOptionsChannel.setMessageHandler { _, reply in
         do {
@@ -156,7 +469,7 @@ class _ViewportManagerSetup {
       getOptionsChannel.setMessageHandler(nil)
     }
     /// Set configuration options for adjusting the behavior of [ViewportManager].
-    let setOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManager.setOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -170,6 +483,146 @@ class _ViewportManagerSetup {
       }
     } else {
       setOptionsChannel.setMessageHandler(nil)
+    }
+    let setupOverviewViewportStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupOverviewViewportState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setupOverviewViewportStateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _OverviewViewportStateOptions
+        let identifierArg = args[1] as! Int64
+        do {
+          try api.setupOverviewViewportState(options: optionsArg, identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setupOverviewViewportStateChannel.setMessageHandler(nil)
+    }
+    let teardownOverviewViewportStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownOverviewViewportState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      teardownOverviewViewportStateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let identifierArg = args[0] as! Int64
+        do {
+          try api.teardownOverviewViewportState(identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      teardownOverviewViewportStateChannel.setMessageHandler(nil)
+    }
+    let setupFollowPuckViewportStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupFollowPuckViewportState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setupFollowPuckViewportStateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _FollowPuckViewportStateOptions
+        let identifierArg = args[1] as! Int64
+        do {
+          try api.setupFollowPuckViewportState(options: optionsArg, identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setupFollowPuckViewportStateChannel.setMessageHandler(nil)
+    }
+    let teardownFollowPuckViewportStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownFollowPuckViewportState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      teardownFollowPuckViewportStateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let identifierArg = args[0] as! Int64
+        do {
+          try api.teardownFollowPuckViewportState(identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      teardownFollowPuckViewportStateChannel.setMessageHandler(nil)
+    }
+    let setupDefaultTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupDefaultTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setupDefaultTransitionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! _DefaultViewportTransitionOptions
+        let identifierArg = args[1] as! Int64
+        do {
+          try api.setupDefaultTransition(options: optionsArg, identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setupDefaultTransitionChannel.setMessageHandler(nil)
+    }
+    let teardownDefaultTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownDefaultTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      teardownDefaultTransitionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let identifierArg = args[0] as! Int64
+        do {
+          try api.teardownDefaultTransition(identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      teardownDefaultTransitionChannel.setMessageHandler(nil)
+    }
+    let setupImmediateTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupImmediateTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setupImmediateTransitionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let identifierArg = args[0] as! Int64
+        do {
+          try api.setupImmediateTransition(identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setupImmediateTransitionChannel.setMessageHandler(nil)
+    }
+    let teardownImmediateTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownImmediateTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      teardownImmediateTransitionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let identifierArg = args[0] as! Int64
+        do {
+          try api.teardownImmediateTransition(identifier: identifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      teardownImmediateTransitionChannel.setMessageHandler(nil)
+    }
+    let transitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      transitionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let toViewportIdentifierArg = args[0] as! Int64
+        let transitionIdentifierArg: Int64? = nilOrValue(args[1])
+        let completionIdentifierArg: Int64? = nilOrValue(args[2])
+        do {
+          try api.transition(toViewportIdentifier: toViewportIdentifierArg, transitionIdentifier: transitionIdentifierArg, completionIdentifier: completionIdentifierArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      transitionChannel.setMessageHandler(nil)
     }
   }
 }

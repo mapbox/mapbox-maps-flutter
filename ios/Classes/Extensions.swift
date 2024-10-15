@@ -259,6 +259,16 @@ extension MbxEdgeInsets {
 
 // Mapbox to FLT
 
+extension UIEdgeInsets {
+    func toMbxEdgeInsets() -> MbxEdgeInsets {
+        return MbxEdgeInsets(
+            top: self.top,
+            left: self.left,
+            bottom: self.bottom,
+            right: self.right)
+    }
+}
+
 extension MapViewDebugOptions {
     func toFLTDebugOptions() -> [_MapWidgetDebugOptions] {
         var debugOptions = [_MapWidgetDebugOptions]()
@@ -287,12 +297,7 @@ extension MapboxMaps.CameraState {
     func toFLTCameraState() -> CameraState {
         return CameraState(
             center: Point(center),
-            padding: MbxEdgeInsets(
-                top: padding.top,
-                left: padding.left,
-                bottom: padding.bottom,
-                right: padding.right
-            ),
+            padding: padding.toMbxEdgeInsets(),
             zoom: zoom,
             bearing: bearing,
             pitch: pitch
@@ -456,18 +461,10 @@ extension MapboxMaps.CoordinateBounds {
 }
 extension MapboxMaps.CameraOptions {
     func toFLTCameraOptions() -> CameraOptions {
-        let padding = self.padding != nil ? MbxEdgeInsets(
-            top: padding!.top,
-            left: padding!.left,
-            bottom: padding!.bottom,
-            right: padding!.right) : nil
-
-        let anchor = self.anchor != nil ? ScreenCoordinate(x: self.anchor!.x, y: self.anchor!.y) : nil
-
         return CameraOptions(
             center: center.map(Point.init),
-            padding: padding,
-            anchor: anchor,
+            padding: padding?.toMbxEdgeInsets(),
+            anchor: anchor?.toFLTScreenCoordinate(),
             zoom: zoom.map(Double.init),
             bearing: bearing,
             pitch: pitch.map(Double.init)

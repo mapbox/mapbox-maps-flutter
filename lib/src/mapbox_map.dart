@@ -152,24 +152,24 @@ class MapboxMap extends ChangeNotifier {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.
-  late StyleManager style =
+  late final StyleManager style =
       StyleManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to set the location puck.
-  late LocationSettings location = LocationSettings._(
+  late final LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
           binaryMessenger: _proxyBinaryMessenger));
 
-  late ViewportManager viewport =
-      ViewportManager(_ViewportManager(binaryMessenger: _proxyBinaryMessenger));
+  late final ViewportManager viewport = ViewportManager._(
+      _ViewportManagerMessenger(binaryMessenger: _proxyBinaryMessenger));
 
-  late BinaryMessenger _proxyBinaryMessenger;
+  late final BinaryMessenger _proxyBinaryMessenger;
 
-  late _CameraManager _cameraManager =
+  late final _CameraManager _cameraManager =
       _CameraManager(binaryMessenger: _proxyBinaryMessenger);
-  late _MapInterface _mapInterface =
+  late final _MapInterface _mapInterface =
       _MapInterface(binaryMessenger: _proxyBinaryMessenger);
-  late _AnimationManager _animationManager =
+  late final _AnimationManager _animationManager =
       _AnimationManager(binaryMessenger: _proxyBinaryMessenger);
 
   /// The interface to create and set annotations.

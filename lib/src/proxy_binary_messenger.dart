@@ -34,3 +34,12 @@ class ProxyBinaryMessenger implements BinaryMessenger {
     _binaryMessenger.setMessageHandler("$channel$_suffix", handler);
   }
 }
+
+extension on BinaryMessenger {
+  BinaryMessenger unproxy() {
+    if (this is ProxyBinaryMessenger) {
+      return (this as ProxyBinaryMessenger)._binaryMessenger;
+    }
+    return this;
+  }
+}
