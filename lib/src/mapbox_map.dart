@@ -143,8 +143,7 @@ class MapboxMap extends ChangeNotifier {
     this.onMapLongTapListener,
     this.onMapScrollListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
-    annotations = _AnnotationManager(mapboxMapsPlatform: _mapboxMapsPlatform);
-
+    annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
   }
 
