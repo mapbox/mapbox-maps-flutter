@@ -11,6 +11,8 @@ class OfflineMapExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.wifi_off);
   @override
   final String title = 'Offline Map';
+  @override
+  final String subtitle = "Shows how to use OfflineManager and TileStore to download regions for offline use.";
 
   @override
   State createState() => OfflineMapExampleState();

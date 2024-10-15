@@ -8,6 +8,8 @@ class SnapshotterExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.camera_alt_outlined);
   @override
   final String title = 'Create a static map snapshot';
+  @override
+  final String subtitle = "Create a static, non-interactive image of a map style with specified camera position.";
 
   @override
   State<StatefulWidget> createState() => SnapshotterExampleState();

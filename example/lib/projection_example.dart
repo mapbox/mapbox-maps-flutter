@@ -7,6 +7,8 @@ class ProjectionExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Projection interface';
+  @override
+  final String? subtitle = null;
 
   @override
   State<StatefulWidget> createState() => ProjectionExampleState();

@@ -9,6 +9,8 @@ class PolygonAnnotationExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Polygon Annotations';
+  @override
+  final String? subtitle = null;
 
   @override
   State<StatefulWidget> createState() => PolygonAnnotationExampleState();

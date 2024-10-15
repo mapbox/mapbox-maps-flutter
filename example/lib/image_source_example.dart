@@ -11,6 +11,8 @@ class ImageSourceExample extends StatefulWidget implements Example {
   final Widget leading = const Icon(Icons.map);
   @override
   final String title = 'Image source';
+  @override
+  final String? subtitle = null;
 
   @override
   State createState() => ImageSourceExampleState();
