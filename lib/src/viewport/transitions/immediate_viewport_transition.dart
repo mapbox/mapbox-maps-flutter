@@ -5,6 +5,6 @@ class ImmediateViewportTransition implements ViewportTransition {
 
   @override
   Cancelable run(ViewportState toState, Function(bool success) completion) {
-    throw UnimplementedError();
+    return Cancelable();
   }
 }

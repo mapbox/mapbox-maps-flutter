@@ -7,6 +7,12 @@ struct SuffixBinaryMessenger {
     let suffix: String
 }
 
+extension FlutterBinaryMessenger {
+    func unproxy() -> FlutterBinaryMessenger {
+        return (self as? ProxyBinaryMessenger)?.messenger ?? self
+    }
+}
+
 final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
@@ -82,6 +88,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+        let viewportController = ViewportController(
+            viewportManager: mapView.viewport,
+            binaryMessenger: proxyBinaryMessenger.unproxy()
+        )
+        _ViewportManagerMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: viewportController)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -116,6 +128,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
     private func releaseMethodChannels() {
         channel.setMethodCallHandler(nil)
+
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _CameraManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         _MapInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
@@ -128,5 +141,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
+        _ViewportManagerMessengerSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }
