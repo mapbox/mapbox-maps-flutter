@@ -48,7 +48,7 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "`$CIRCLE_JOB` <$CIRCLE_BUILD_URL|failed> for <https://github.com/mapbox/mapbox-maps-flutter/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:6}> by `$(git log --format='%an' -n 1 $CIRCLE_SHA1)` on $(if [ \"$CIRCLE_BRANCH\" == \"main\" ]; then echo 'the'; fi) `${CIRCLE_TAG:-$CIRCLE_BRANCH}` ${CIRCLE_TAG:+tag}${CIRCLE_TAG:-branch}."
+                    "text": "`$CIRCLE_JOB` <$CIRCLE_BUILD_URL|failed> for <https://github.com/mapbox/mapbox-maps-flutter/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:6}> by `$(git log --format='%an' -n 1 $CIRCLE_SHA1)` on $(if [ \"$CIRCLE_BRANCH\" == \"main\" ]; then echo 'the'; fi) `${CIRCLE_TAG:-$CIRCLE_BRANCH}` ${CIRCLE_TAG:+tag}${CIRCLE_BRANCH:+branch}."
                   }
                 },
                 {
