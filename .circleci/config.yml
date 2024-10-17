@@ -219,11 +219,22 @@ jobs:
           path: testlab_results
       - slack-notify-failure-if-any
 
-
+  sanity-check:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - checkout
+      - flutter/install_sdk_and_pub:
+          version: 3.24.3
+      - run:
+          name: Run dart analyze
+          command: dart analyze
 
 workflows:
   build:
     jobs:
+      - sanity-check
       - build-android
       - run-android-tests-firebase:
           requires:
