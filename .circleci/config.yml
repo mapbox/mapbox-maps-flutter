@@ -230,6 +230,10 @@ jobs:
       - run:
           name: Run dart analyze
           command: dart analyze
+      - run:
+          name: Check all tests are in the test suite
+          command: dart ../scripts/check_test_suite.dart
+          working_directory: example
 
 workflows:
   build:
