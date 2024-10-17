@@ -12,6 +12,7 @@ onCameraChangeListener(CameraChangedEventData data) {
 * Print to console native Maps SDK logs in debug configuration.
 Logs are proxied only in debug configuration and can be disabled completely by passing environment flag `MAPBOX_LOG_DEBUG` with false value.
 * Fix rare crash in `Snapshotter`. The crash could happen when creating/destroying multiple instances of `Snapshotter` in succession.
+* Fix a crash that occurs when the widget state is updated before the platform view is created.
 
 # 2.3.0
 
