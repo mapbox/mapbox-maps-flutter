@@ -87,7 +87,11 @@ class MapsDemo extends StatelessWidget {
                   leading: example.leading,
                   title: Text(example.title),
                   subtitle: (example.subtitle?.isNotEmpty == true)
-                      ? Text(example.subtitle!, maxLines: 2, overflow: TextOverflow.ellipsis,)
+                      ? Text(
+                          example.subtitle!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        )
                       : null,
                   onTap: () => _pushPage(context, _allPages[index]),
                 );

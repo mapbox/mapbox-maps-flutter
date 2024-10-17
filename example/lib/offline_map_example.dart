@@ -12,7 +12,8 @@ class OfflineMapExample extends StatefulWidget implements Example {
   @override
   final String title = 'Offline Map';
   @override
-  final String subtitle = "Shows how to use OfflineManager and TileStore to download regions for offline use.";
+  final String subtitle =
+      "Shows how to use OfflineManager and TileStore to download regions for offline use.";
 
   @override
   State createState() => OfflineMapExampleState();
@@ -88,7 +89,8 @@ class OfflineMapExampleState extends State<OfflineMapExample> {
         acceptExpired: true,
         networkRestriction: NetworkRestriction.NONE);
 
-    _tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions, (progress) {
+    _tileStore?.loadTileRegion(_tileRegionId, tileRegionLoadOptions,
+        (progress) {
       final percentage =
           progress.completedResourceCount / progress.requiredResourceCount;
       if (!_tileRegionLoadProgress.isClosed) {

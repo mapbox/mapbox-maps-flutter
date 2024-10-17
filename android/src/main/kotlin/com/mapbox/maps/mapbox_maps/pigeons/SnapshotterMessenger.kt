@@ -82,61 +82,66 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          GlyphsRasterizationMode.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          Size.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          CameraState.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CanonicalTileID.fromList(it)
+        }
+      }
+      141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MapSnapshotOptions.fromList(it)
         }
@@ -146,52 +151,56 @@ private open class SnapshotterMessengerPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is Point -> {
+      is GlyphsRasterizationMode -> {
         stream.write(129)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is MbxEdgeInsets -> {
+      is Point -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is MbxEdgeInsets -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is CameraOptions -> {
+      is ScreenCoordinate -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is CameraOptions -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is Size -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is CameraState -> {
+      is CoordinateBounds -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is CameraState -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is MbxImage -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is TileCoverOptions -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is MapSnapshotOptions -> {
+      is CanonicalTileID -> {
         stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is MapSnapshotOptions -> {
+        stream.write(141)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
