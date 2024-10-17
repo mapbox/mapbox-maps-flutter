@@ -59,7 +59,7 @@ class TileStoreController(
   }
 
   override fun addTileRegionLoadProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/${messageChannel}/tile-region-$id")
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$messageChannel/tile-region-$id")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
@@ -99,7 +99,7 @@ class TileStoreController(
   }
 
   override fun addTileRegionEstimateProgressListener(id: String) {
-    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/${messageChannel}/tile-region-estimate$id")
+    val eventChannel = EventChannel(binaryMessenger, "com.mapbox.maps.flutter/$messageChannel/tile-region-estimate$id")
     eventChannel.setStreamHandler(
       object : EventChannel.StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
