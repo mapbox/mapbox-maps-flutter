@@ -38,7 +38,7 @@ class MapboxEventHandler(
   private val eventProvider: Observable,
   binaryMessenger: BinaryMessenger,
   eventTypes: List<Long>,
-  channelSuffix: String = "",
+  channelSuffix: String,
 ) : MethodChannel.MethodCallHandler {
   private val channel: MethodChannel
   private val cancellables = HashSet<Cancelable>()

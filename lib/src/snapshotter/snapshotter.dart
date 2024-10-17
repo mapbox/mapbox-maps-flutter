@@ -48,7 +48,7 @@ final class Snapshotter {
     _snapshotterMessenger =
         _SnapshotterMessenger(messageChannelSuffix: _suffix.toString());
     style = StyleManager(messageChannelSuffix: _suffix.toString());
-    _mapEvents = _MapEvents(channelSuffix: 'snapshot');
+    _mapEvents = _MapEvents(channelSuffix: _suffix.toString());
   }
 
   /// Creates a new [Snapshotter] instance.

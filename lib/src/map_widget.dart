@@ -171,7 +171,7 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
   late final _MapboxMapsPlatform _mapboxMapsPlatform =
-      _MapboxMapsPlatform.instance(_suffixesRegistry.getSuffix());
+      _MapboxMapsPlatform.instance(_suffix);
   final int _suffix = _suffixesRegistry.getSuffix();
   late final _MapEvents _events;
 
@@ -197,7 +197,7 @@ class _MapWidgetState extends State<MapWidget> {
   void initState() {
     super.initState();
 
-    _events = _MapEvents(binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+    _events = _MapEvents(binaryMessenger: _mapboxMapsPlatform.binaryMessenger, channelSuffix: _suffix.toString());
     _updateEventListeners();
   }
 

@@ -10,14 +10,14 @@ final class SnapshotterController: _SnapshotterMessenger {
     private var snapshotter: Snapshotter!
     private let eventHandler: MapboxEventHandler
 
-    init(snapshotter: Snapshotter, eventTypes: [Int], binaryMessenger: FlutterBinaryMessenger) {
+    init(snapshotter: Snapshotter, eventTypes: [Int], binaryMessenger: FlutterBinaryMessenger, channelSuffix: String) {
         self.snapshotter = snapshotter
 
         eventHandler = MapboxEventHandler(
             eventProvider: snapshotter,
             binaryMessenger: binaryMessenger,
             eventTypes: eventTypes,
-            channelSuffix: "snapshot"
+            channelSuffix: channelSuffix
         )
     }
 

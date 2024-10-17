@@ -14,7 +14,7 @@ class AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('point', id: id, belowLayerId: below)
-        .then((value) => PointAnnotationManager(
+        .then((value) => PointAnnotationManager._(
             id: value,
             messenger: _mapboxMapsPlatform.binaryMessenger,
             channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
@@ -28,7 +28,7 @@ class AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('circle', id: id, belowLayerId: below)
-        .then((value) => CircleAnnotationManager(
+        .then((value) => CircleAnnotationManager._(
             id: value,
             messenger: _mapboxMapsPlatform.binaryMessenger,
             channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
@@ -42,7 +42,7 @@ class AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('polyline', id: id, belowLayerId: below)
-        .then((value) => PolylineAnnotationManager(
+        .then((value) => PolylineAnnotationManager._(
             id: value,
             messenger: _mapboxMapsPlatform.binaryMessenger,
             channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
@@ -56,7 +56,7 @@ class AnnotationManager {
       {String? id, String? below}) async {
     return _mapboxMapsPlatform
         .createAnnotationManager('polygon', id: id, belowLayerId: below)
-        .then((value) => PolygonAnnotationManager(
+        .then((value) => PolygonAnnotationManager._(
             id: value,
             messenger: _mapboxMapsPlatform.binaryMessenger,
             channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
@@ -75,14 +75,14 @@ class AnnotationManager {
 
 /// The super class for all AnnotationManagers.
 class BaseAnnotationManager {
-  BaseAnnotationManager(
+  BaseAnnotationManager._(
       {required String id,
       required BinaryMessenger messenger,
-      String? channelSuffix})
+      required String channelSuffix})
       : this.id = id,
         _messenger = messenger,
-        this.channelSuffix = channelSuffix ?? '';
+        this._channelSuffix = channelSuffix;
   final String id;
   final BinaryMessenger _messenger;
-  final String channelSuffix;
+  final String _channelSuffix;
 }

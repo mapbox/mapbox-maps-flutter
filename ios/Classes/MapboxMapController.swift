@@ -42,7 +42,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         self.eventHandler = MapboxEventHandler(
             eventProvider: mapboxMap,
             binaryMessenger: binaryMessenger.messenger,
-            eventTypes: eventTypes
+            eventTypes: eventTypes,
+            channelSuffix: String(channelSuffix)
         )
 
         let styleController = StyleController(styleManager: mapboxMap)

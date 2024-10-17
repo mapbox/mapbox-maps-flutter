@@ -15,7 +15,8 @@ final class SnapshotterInstanceManager: _SnapshotterInstanceManager {
         let snapshotterController = SnapshotterController(
             snapshotter: snapshotter,
             eventTypes: eventTypes.map(Int.init),
-            binaryMessenger: binaryMessenger
+            binaryMessenger: binaryMessenger,
+            channelSuffix: suffix
         )
         let snapshotStyleController = StyleController(styleManager: snapshotter)
 
