@@ -80,9 +80,7 @@ class BaseAnnotationManager {
       required BinaryMessenger messenger,
       required String channelSuffix})
       : this.id = id,
-        _messenger = messenger,
-        this._channelSuffix = channelSuffix;
+        _messenger = messenger;
   final String id;
   final BinaryMessenger _messenger;
-  final String _channelSuffix;
 }
