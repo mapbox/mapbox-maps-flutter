@@ -59,41 +59,44 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is Point) {
+    } else if (value is GlyphsRasterizationMode) {
       buffer.putUint8(129);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is Size) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is CameraState) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is MbxImage) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is MapSnapshotOptions) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(140);
+      writeValue(buffer, value.encode());
+    } else if (value is MapSnapshotOptions) {
+      buffer.putUint8(141);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -104,28 +107,31 @@ class SnapshotterMessenger_PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : GlyphsRasterizationMode.values[value];
       case 130:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 131:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 132:
-        return CameraOptions.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 133:
-        return Size.decode(readValue(buffer)!);
+        return CameraOptions.decode(readValue(buffer)!);
       case 134:
-        return CoordinateBounds.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 135:
-        return CameraState.decode(readValue(buffer)!);
+        return CoordinateBounds.decode(readValue(buffer)!);
       case 136:
-        return MbxImage.decode(readValue(buffer)!);
+        return CameraState.decode(readValue(buffer)!);
       case 137:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+        return MbxImage.decode(readValue(buffer)!);
       case 138:
-        return TileCoverOptions.decode(readValue(buffer)!);
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
       case 139:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return TileCoverOptions.decode(readValue(buffer)!);
       case 140:
+        return CanonicalTileID.decode(readValue(buffer)!);
+      case 141:
         return MapSnapshotOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
