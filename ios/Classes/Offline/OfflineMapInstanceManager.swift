@@ -13,7 +13,7 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
     }
 
     func setupOfflineManager(channelSuffix: String) throws {
-        let offlineController = OfflineController(messenger: binaryMessenger)
+        let offlineController = OfflineController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix))
         _OfflineManagerSetup.setUp(binaryMessenger: binaryMessenger, api: offlineController, messageChannelSuffix: channelSuffix)
     }
 
@@ -30,7 +30,7 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
         }
 
         MapboxMapsOptions.tileStore = tileStore
-        let tileStoreController = TileStoreController(proxy: binaryMessenger, tileStore: tileStore)
+        let tileStoreController = TileStoreController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix), tileStore: tileStore)
 
         _TileStoreSetup.setUp(binaryMessenger: binaryMessenger, api: tileStoreController, messageChannelSuffix: channelSuffix)
     }

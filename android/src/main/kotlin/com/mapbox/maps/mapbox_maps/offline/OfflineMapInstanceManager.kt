@@ -12,7 +12,7 @@ class OfflineMapInstanceManager(
 ) : _OfflineMapInstanceManager, _TileStoreInstanceManager {
 
   override fun setupOfflineManager(channelSuffix: String) {
-    val offlineControler = OfflineController(context, messenger)
+    val offlineControler = OfflineController(context, messenger, channelSuffix)
     _OfflineManager.setUp(messenger, offlineControler, channelSuffix)
   }
 
@@ -23,7 +23,7 @@ class OfflineMapInstanceManager(
   override fun setupTileStore(channelSuffix: String, filePath: String?) {
     val tileStore = filePath?.let { TileStore.create(it) } ?: TileStore.create()
     MapboxMapsOptions.tileStore = tileStore
-    val tileStoreController = TileStoreController(context, messenger, tileStore)
+    val tileStoreController = TileStoreController(context, messenger, channelSuffix, tileStore)
     _TileStore.setUp(messenger, tileStoreController, channelSuffix)
   }
 

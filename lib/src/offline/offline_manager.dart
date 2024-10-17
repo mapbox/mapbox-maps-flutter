@@ -6,6 +6,7 @@ final _OfflineMapInstanceManager _offlineMapInstanceManager =
 /// The [OfflineManager] provides a configuration interface and entrypoint for offline map functionality.
 final class OfflineManager {
   final int _suffix = _suffixesRegistry.getSuffix();
+  String get _messageChannel => "offline-manager/${_suffix.toString()}";
   late final _OfflineManager _api;
 
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
@@ -19,14 +20,14 @@ final class OfflineManager {
   OfflineManager._() {
     _api = _OfflineManager(
         binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
-        messageChannelSuffix: "offline-manager/${_suffix.toString()}");
+        messageChannelSuffix: _messageChannel);
   }
 
   /// Creates a new instance of [OfflineManager].
   static Future<OfflineManager> create() async {
     final manager = OfflineManager._();
     await _offlineMapInstanceManager
-        .setupOfflineManager("offline-manager/${manager._suffix.toString()}");
+        .setupOfflineManager(manager._messageChannel);
     _finalizer.attach(manager, manager._suffix, detach: manager);
 
     return manager;
@@ -65,7 +66,7 @@ final class OfflineManager {
     if (progressListener != null) {
       await _api.addStylePackLoadProgressListener(styleURI);
       final eventChannel =
-          EventChannel("com.mapbox.maps.flutter/offline/${styleURI}");
+          EventChannel("com.mapbox.maps.flutter/${_messageChannel}/${styleURI}");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(StylePackLoadProgress.decode(event));
       });
