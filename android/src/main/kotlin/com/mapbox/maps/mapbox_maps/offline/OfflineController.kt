@@ -13,16 +13,17 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.StreamHandler
 
-private const val EVENT_CHANNEL_PREFIX = "com.mapbox.maps.flutter/offline"
-
 class OfflineController(
   private val context: Context,
-  private val messenger: BinaryMessenger
+  private val messenger: BinaryMessenger,
+  private val channelSuffix: String,
 ) : _OfflineManager {
 
   private val offlineManager = OfflineManager()
   private var progressHandlers = HashMap<String, EventChannel.EventSink>()
   private val mainHandler = Handler(context.mainLooper)
+
+  private val messageChannel = "offline-manager/$channelSuffix"
 
   override fun loadStylePack(
     styleURI: String,
@@ -57,7 +58,7 @@ class OfflineController(
   }
 
   override fun addStylePackLoadProgressListener(styleURI: String) {
-    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/offline/$styleURI")
+    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/$messageChannel/$styleURI")
     eventChannel.setStreamHandler(
       object : StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {

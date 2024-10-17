@@ -6,10 +6,17 @@ class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
       'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
   final BinaryMessenger binaryMessenger;
+  final int channelSuffix;
 
-  _MapboxMapsPlatform({required this.binaryMessenger}) {
+  _MapboxMapsPlatform(
+      {required this.binaryMessenger, required this.channelSuffix}) {
     _channel.setMethodCallHandler(_handleMethodCall);
   }
+
+  _MapboxMapsPlatform.instance(int channelSuffix)
+      : this(
+            binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+            channelSuffix: channelSuffix);
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     print(

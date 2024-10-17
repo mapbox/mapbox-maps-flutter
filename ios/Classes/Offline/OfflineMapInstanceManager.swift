@@ -7,26 +7,21 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
     }
 
     private let binaryMessenger: FlutterBinaryMessenger
-    private var proxies: [String: ProxyBinaryMessenger] = [:]
 
     init(binaryMessenger: FlutterBinaryMessenger) {
         self.binaryMessenger = binaryMessenger
     }
 
     func setupOfflineManager(channelSuffix: String) throws {
-        let proxy = ProxyBinaryMessenger(with: binaryMessenger, channelSuffix: channelSuffix)
-        let offlineController = OfflineController(messenger: binaryMessenger)
-        _OfflineManagerSetup.setUp(binaryMessenger: proxy, api: offlineController)
-        proxies["offline-manager/\(channelSuffix)"] = proxy
+        let offlineController = OfflineController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix))
+        _OfflineManagerSetup.setUp(binaryMessenger: binaryMessenger, api: offlineController, messageChannelSuffix: channelSuffix)
     }
 
     func tearDownOfflineManager(channelSuffix: String) throws {
-        guard let proxy = proxies.removeValue(forKey: "offline-manager/\(channelSuffix)") else { return }
-        _OfflineManagerSetup.setUp(binaryMessenger: proxy, api: nil)
+        _OfflineManagerSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: channelSuffix)
     }
 
     func setupTileStore(channelSuffix: String, filePath: String?) throws {
-        let proxy = ProxyBinaryMessenger(with: binaryMessenger, channelSuffix: channelSuffix)
         let tileStore: TileStore
         if let filePath {
             tileStore = .shared(for: URL(fileURLWithPath: filePath))
@@ -35,15 +30,13 @@ final class OfflineMapInstanceManager: _OfflineMapInstanceManager, _TileStoreIns
         }
 
         MapboxMapsOptions.tileStore = tileStore
-        let tileStoreController = TileStoreController(proxy: proxy, tileStore: tileStore)
+        let tileStoreController = TileStoreController(messenger: SuffixBinaryMessenger(messenger: binaryMessenger, suffix: channelSuffix), tileStore: tileStore)
 
-        _TileStoreSetup.setUp(binaryMessenger: proxy, api: tileStoreController)
-        proxies["tilestore/\(channelSuffix)"] = proxy
+        _TileStoreSetup.setUp(binaryMessenger: binaryMessenger, api: tileStoreController, messageChannelSuffix: channelSuffix)
     }
 
     func tearDownTileStore(channelSuffix: String) throws {
-        guard let proxy = proxies.removeValue(forKey: "tilestore/\(channelSuffix)") else { return }
-        _TileStoreSetup.setUp(binaryMessenger: proxy, api: nil)
+        _TileStoreSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: channelSuffix)
         MapboxMapsOptions.tileStore = nil
     }
 }

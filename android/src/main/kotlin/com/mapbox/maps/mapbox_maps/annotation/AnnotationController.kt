@@ -22,10 +22,10 @@ class AnnotationController(private val mapView: MapView) :
   private val circleAnnotationController = CircleAnnotationController(this)
   private val polygonAnnotationController = PolygonAnnotationController(this)
   private val polylineAnnotationController = PolylineAnnotationController(this)
-  private lateinit var onPointAnnotationClickListener: OnPointAnnotationClickListener
-  private lateinit var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener
-  private lateinit var onPolylineAnnotationController: OnPolylineAnnotationClickListener
-  private lateinit var onCircleAnnotationClickListener: OnCircleAnnotationClickListener
+  private var onPointAnnotationClickListener: OnPointAnnotationClickListener? = null
+  private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener? = null
+  private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener? = null
+  private var onCircleAnnotationClickListener: OnCircleAnnotationClickListener? = null
   private var index = 0
   fun handleCreateManager(call: MethodCall, result: MethodChannel.Result) {
     val id = call.argument<String>("id") ?: (index++).toString()
@@ -41,7 +41,7 @@ class AnnotationController(private val mapView: MapView) :
         mapView.annotations.createCircleAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnCircleAnnotationClickListener { annotation ->
-              onCircleAnnotationClickListener.onCircleAnnotationClick(annotation.toFLTCircleAnnotation()) {}
+              onCircleAnnotationClickListener?.onCircleAnnotationClick(annotation.toFLTCircleAnnotation()) {}
               true
             }
           )
@@ -51,7 +51,7 @@ class AnnotationController(private val mapView: MapView) :
         mapView.annotations.createPointAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
-              onPointAnnotationClickListener.onPointAnnotationClick(annotation.toFLTPointAnnotation()) {}
+              onPointAnnotationClickListener?.onPointAnnotationClick(annotation.toFLTPointAnnotation()) {}
               true
             }
           )
@@ -61,7 +61,7 @@ class AnnotationController(private val mapView: MapView) :
         mapView.annotations.createPolygonAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener { annotation ->
-              onPolygonAnnotationClickListener.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation()) {}
+              onPolygonAnnotationClickListener?.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation()) {}
               true
             }
           )
@@ -71,7 +71,7 @@ class AnnotationController(private val mapView: MapView) :
         mapView.annotations.createPolylineAnnotationManager(AnnotationConfig(belowLayerId, id, id)).apply {
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener { annotation ->
-              onPolylineAnnotationController.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
+              onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
               true
             }
           )
@@ -94,31 +94,35 @@ class AnnotationController(private val mapView: MapView) :
     result.success(null)
   }
 
-  fun setup(messenger: BinaryMessenger) {
-    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger)
-    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger)
-    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger)
-    onPolylineAnnotationController = OnPolylineAnnotationClickListener(messenger)
-    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController)
+  fun setup(messenger: BinaryMessenger, channelSuffix: String) {
+    onPointAnnotationClickListener = OnPointAnnotationClickListener(messenger, channelSuffix)
+    onCircleAnnotationClickListener = OnCircleAnnotationClickListener(messenger, channelSuffix)
+    onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(messenger, channelSuffix)
+    onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(messenger, channelSuffix)
+    _PointAnnotationMessenger.setUp(messenger, pointAnnotationController, channelSuffix)
     _CircleAnnotationMessenger.setUp(
       messenger,
-      circleAnnotationController
+      circleAnnotationController, channelSuffix
     )
     _PolylineAnnotationMessenger.setUp(
       messenger,
-      polylineAnnotationController
+      polylineAnnotationController, channelSuffix
     )
     _PolygonAnnotationMessenger.setUp(
       messenger,
-      polygonAnnotationController
+      polygonAnnotationController, channelSuffix
     )
   }
 
-  fun dispose(messenger: BinaryMessenger) {
-    _PointAnnotationMessenger.setUp(messenger, null)
-    _CircleAnnotationMessenger.setUp(messenger, null)
-    _PolylineAnnotationMessenger.setUp(messenger, null)
-    _PolygonAnnotationMessenger.setUp(messenger, null)
+  fun dispose(messenger: BinaryMessenger, channelSuffix: String) {
+    _PointAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _CircleAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _PolylineAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    _PolygonAnnotationMessenger.setUp(messenger, null, channelSuffix)
+    onPointAnnotationClickListener = null
+    onCircleAnnotationClickListener = null
+    onPolygonAnnotationClickListener = null
+    onPolylineAnnotationClickListener = null
   }
 
   override fun getManager(managerId: String): AnnotationManager<*, *, *, *, *, *, *> {

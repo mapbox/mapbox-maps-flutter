@@ -8,6 +8,7 @@ final _TileStoreInstanceManager _tileStoreInstanceManager =
 /// app developer to set the disk quota. The rest of TileStore API is intended for native SDK consumption only.
 final class TileStore {
   final int _suffix = _suffixesRegistry.getSuffix();
+  String get _messageChannel => "tilestore/${_suffix.toString()}";
   static final Finalizer<int> _finalizer = Finalizer((suffix) {
     try {
       _tileStoreInstanceManager
@@ -19,9 +20,9 @@ final class TileStore {
   late final _TileStore _api;
 
   TileStore._() {
-    final messenger =
-        ProxyBinaryMessenger(suffix: "tilestore/${_suffix.toString()}");
-    _api = _TileStore(binaryMessenger: messenger);
+    _api = _TileStore(
+        binaryMessenger: ServicesBinding.instance.defaultBinaryMessenger,
+        messageChannelSuffix: _messageChannel);
   }
 
   /// Returns a shared [TileStore] at the given storage [filePath].
@@ -31,7 +32,7 @@ final class TileStore {
   static Future<TileStore> createAt(Uri filePath) async {
     final tileStore = TileStore._();
     await _tileStoreInstanceManager.setupTileStore(
-        "tilestore/${tileStore._suffix.toString()}", filePath.path);
+        tileStore._messageChannel, filePath.path);
     _finalizer.attach(tileStore, tileStore._suffix, detach: tileStore);
     return tileStore;
   }
@@ -41,7 +42,7 @@ final class TileStore {
   static Future<TileStore> createDefault() async {
     final tileStore = TileStore._();
     await _tileStoreInstanceManager.setupTileStore(
-        "tilestore/${tileStore._suffix.toString()}", null);
+        tileStore._messageChannel, null);
     _finalizer.attach(tileStore, tileStore._suffix, detach: tileStore);
     return tileStore;
   }
@@ -88,7 +89,7 @@ final class TileStore {
     if (progressListener != null) {
       await _api.addTileRegionLoadProgressListener(id);
       final eventChannel =
-          EventChannel("com.mapbox.maps.flutter/tilestore/tile-region-${id}");
+          EventChannel("com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionLoadProgress.decode(event));
       });
@@ -118,7 +119,7 @@ final class TileStore {
     if (progressListener != null) {
       await _api.addTileRegionEstimateProgressListener(id);
       final eventChannel = EventChannel(
-          "com.mapbox.maps.flutter/tilestore/tile-region-estimate-${id}");
+          "com.mapbox.maps.flutter/${_messageChannel}/tile-region-estimate-${id}");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionEstimateProgress.decode(event));
       });

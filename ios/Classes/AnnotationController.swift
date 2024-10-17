@@ -122,22 +122,22 @@ class AnnotationController: ControllerDelegate {
         result(nil)
     }
 
-    func setup(messenger: FlutterBinaryMessenger) {
-        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: circleAnnotationController)
-        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: pointAnnotationController)
-        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polygonAnnotationController)
-        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: polylineAnnotationController)
-        onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: messenger)
-        onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: messenger)
-        onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: messenger)
-        onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: messenger)
+    func setup(binaryMessenger: SuffixBinaryMessenger) {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: circleAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: pointAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: polygonAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: polylineAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
+        onPointAnnotationClickListener = OnPointAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+        onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+        onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+        onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
     }
 
-    func tearDown(messenger: FlutterBinaryMessenger) {
-        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
-        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger, api: nil)
+    func tearDown(messenger: SuffixBinaryMessenger) {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
         onPointAnnotationClickListener = nil
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil
