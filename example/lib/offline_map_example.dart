@@ -12,7 +12,8 @@ class OfflineMapExample extends StatefulWidget implements Example {
   @override
   final String title = 'Offline Map';
   @override
-  final String subtitle = "Shows how to use OfflineManager and TileStore to download regions for offline use.";
+  final String subtitle =
+      "Shows how to use OfflineManager and TileStore to download regions for offline use.";
 
   @override
   State createState() => OfflineMapExampleState();

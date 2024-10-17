@@ -116,28 +116,34 @@ private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return GlyphsRasterizationMode(rawValue: enumResultAsInt)
+      }
+      return nil
     case 130:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 131:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 132:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 133:
-      return Size.fromList(self.readValue() as! [Any?])
+      return CameraOptions.fromList(self.readValue() as! [Any?])
     case 134:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 135:
-      return CameraState.fromList(self.readValue() as! [Any?])
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 136:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return CameraState.fromList(self.readValue() as! [Any?])
     case 137:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 138:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 139:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 140:
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+    case 141:
       return MapSnapshotOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -147,41 +153,44 @@ private class SnapshotterMessengerPigeonCodecReader: FlutterStandardReader {
 
 private class SnapshotterMessengerPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? Point {
+    if let value = value as? GlyphsRasterizationMode {
       super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? CameraOptions {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? Size {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? CameraState {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? MbxImage {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? MapSnapshotOptions {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(140)
+      super.writeValue(value.toList())
+    } else if let value = value as? MapSnapshotOptions {
+      super.writeByte(141)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

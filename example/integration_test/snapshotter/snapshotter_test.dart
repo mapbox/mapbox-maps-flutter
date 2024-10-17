@@ -48,7 +48,7 @@ void main() {
     final snapshotter = await Snapshotter.create(
       options: options,
       onStyleLoadedListener: styleLoaded.complete,
-      onStyleDataLoadedListener: styleDataLoaded.complete,
+      onStyleDataLoadedListener: (e) { if(!styleDataLoaded.isCompleted) styleDataLoaded.complete(e); },
     );
 
     await snapshotter.style.setStyleURI(MapboxStyles.LIGHT);
