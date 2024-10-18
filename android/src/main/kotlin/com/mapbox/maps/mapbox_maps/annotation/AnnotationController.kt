@@ -62,7 +62,7 @@ class AnnotationController(private val mapView: MapView) :
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener { annotation ->
               onPolygonAnnotationClickListener.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation()) {}
-              true
+              false
             }
           )
         }
