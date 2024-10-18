@@ -23,8 +23,6 @@ class OfflineController(
   private var progressHandlers = HashMap<String, EventChannel.EventSink>()
   private val mainHandler = Handler(context.mainLooper)
 
-  private val messageChannel = "offline-manager/$channelSuffix"
-
   override fun loadStylePack(
     styleURI: String,
     loadOptions: StylePackLoadOptions,
@@ -58,7 +56,7 @@ class OfflineController(
   }
 
   override fun addStylePackLoadProgressListener(styleURI: String) {
-    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/$messageChannel/$styleURI")
+    val eventChannel = EventChannel(messenger, "com.mapbox.maps.flutter/$channelSuffix/$styleURI")
     eventChannel.setStreamHandler(
       object : StreamHandler {
         override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {

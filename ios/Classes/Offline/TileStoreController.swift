@@ -14,8 +14,6 @@ final class TileStoreController: _TileStore {
     private var tileRegionLoadProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
     private var tileRegionEstimateProgressHandlers: [String: AnyFlutterStreamHandler] = [:]
 
-    private var messageChannelSuffix: String { "tilestore/\(messenger.suffix)" }
-
     init(messenger: SuffixBinaryMessenger, tileStore: TileStore) {
         self.messenger = messenger
         self.tileStore = tileStore
@@ -38,7 +36,7 @@ final class TileStoreController: _TileStore {
 
     func addTileRegionLoadProgressListener(id: String) throws {
         let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messageChannelSuffix)/tile-region-\(id)", binaryMessenger: messenger.messenger)
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-\(id)", binaryMessenger: messenger.messenger)
         eventChannel.setStreamHandler(handler)
         tileRegionLoadProgressHandlers[id] = handler
     }
@@ -64,7 +62,7 @@ final class TileStoreController: _TileStore {
 
     func addTileRegionEstimateProgressListener(id: String) throws {
         let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messageChannelSuffix)/tile-region-estimate-\(id)", binaryMessenger: messenger.messenger)
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/tile-region-estimate-\(id)", binaryMessenger: messenger.messenger)
         eventChannel.setStreamHandler(handler)
         tileRegionEstimateProgressHandlers[id] = handler
     }
