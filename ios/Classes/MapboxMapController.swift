@@ -36,7 +36,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(
-            name: "plugins.flutter.io",
+            name: "plugins.flutter.io.\(channelSuffix)",
             binaryMessenger: binaryMessenger.messenger
         )
         self.eventHandler = MapboxEventHandler(

@@ -4,7 +4,9 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
-      'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
+      'plugins.flutter.io.${channelSuffix.toString()}',
+      const StandardMethodCodec(),
+      binaryMessenger);
   final BinaryMessenger binaryMessenger;
   final int channelSuffix;
 

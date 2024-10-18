@@ -161,7 +161,7 @@ class MapboxMapController(
     ScaleBarSettingsInterface.setUp(messenger, scaleBarController, this.channelSuffix)
     CompassSettingsInterface.setUp(messenger, compassController, this.channelSuffix)
 
-    methodChannel = MethodChannel(messenger, "plugins.flutter.io")
+    methodChannel = MethodChannel(messenger, "plugins.flutter.io.$channelSuffix")
     methodChannel.setMethodCallHandler(this)
   }
 

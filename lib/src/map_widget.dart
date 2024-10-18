@@ -197,7 +197,9 @@ class _MapWidgetState extends State<MapWidget> {
   void initState() {
     super.initState();
 
-    _events = _MapEvents(binaryMessenger: _mapboxMapsPlatform.binaryMessenger, channelSuffix: _suffix.toString());
+    _events = _MapEvents(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        channelSuffix: _suffix.toString());
     _updateEventListeners();
   }
 

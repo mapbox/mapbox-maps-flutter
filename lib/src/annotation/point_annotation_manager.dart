@@ -6,7 +6,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
   PointAnnotationManager._(
       {required super.id,
       required super.messenger,
-      required super.channelSuffix})
+      required String channelSuffix})
       : _annotationMessenger = _PointAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();

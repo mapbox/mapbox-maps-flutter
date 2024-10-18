@@ -6,7 +6,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   PolygonAnnotationManager._(
       {required super.id,
       required super.messenger,
-      required super.channelSuffix})
+      required String channelSuffix})
       : _annotationMessenger = _PolygonAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();

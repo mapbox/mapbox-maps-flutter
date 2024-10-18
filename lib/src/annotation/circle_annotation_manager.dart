@@ -6,7 +6,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   CircleAnnotationManager._(
       {required super.id,
       required super.messenger,
-      required super.channelSuffix})
+      required String channelSuffix})
       : _annotationMessenger = _CircleAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();

@@ -6,7 +6,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   PolylineAnnotationManager._(
       {required super.id,
       required super.messenger,
-      required super.channelSuffix})
+      required String channelSuffix})
       : _annotationMessenger = _PolylineAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();
