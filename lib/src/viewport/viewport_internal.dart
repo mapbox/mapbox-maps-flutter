@@ -10,6 +10,14 @@ enum _FollowPuckViewportStateBearing {
   course,
 }
 
+enum _ViewportStateType {
+  idle,
+  overview,
+  followPuck,
+  styleDefault,
+  camera,
+}
+
 class _DefaultViewportTransitionOptions {
   _DefaultViewportTransitionOptions({
     required this.maxDurationMs,
@@ -128,6 +136,32 @@ class _FollowPuckViewportStateOptions {
   }
 }
 
+class _ViewportStateStorage {
+  _ViewportStateStorage({
+    required this.type,
+    this.options,
+  });
+
+  _ViewportStateType type;
+
+  Object? options;
+
+  Object encode() {
+    return <Object?>[
+      type,
+      options,
+    ];
+  }
+
+  static _ViewportStateStorage decode(Object result) {
+    result as List<Object?>;
+    return _ViewportStateStorage(
+      type: result[0]! as _ViewportStateType,
+      options: result[1],
+    );
+  }
+}
+
 /// Configuration options for [ViewportManager].
 class ViewportOptions {
   ViewportOptions({
@@ -166,23 +200,29 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
     } else if (value is _FollowPuckViewportStateBearing) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is _ViewportStateType) {
       buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+      writeValue(buffer, value.index);
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is _DefaultViewportTransitionOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is _OverviewViewportStateOptions) {
+    } else if (value is _DefaultViewportTransitionOptions) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is _FollowPuckViewportStateOptions) {
+    } else if (value is _OverviewViewportStateOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is ViewportOptions) {
+    } else if (value is _FollowPuckViewportStateOptions) {
       buffer.putUint8(135);
+      writeValue(buffer, value.encode());
+    } else if (value is _ViewportStateStorage) {
+      buffer.putUint8(136);
+      writeValue(buffer, value.encode());
+    } else if (value is ViewportOptions) {
+      buffer.putUint8(137);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -198,276 +238,24 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
             ? null
             : _FollowPuckViewportStateBearing.values[value];
       case 130:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : _ViewportStateType.values[value];
       case 131:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 132:
-        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 133:
-        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
+        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
       case 134:
-        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
       case 135:
+        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+      case 136:
+        return _ViewportStateStorage.decode(readValue(buffer)!);
+      case 137:
         return ViewportOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
-    }
-  }
-}
-
-class _DefaultViewportTransitionMessenger {
-  /// Constructor for [_DefaultViewportTransitionMessenger].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  _DefaultViewportTransitionMessenger(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? pigeonVar_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      ViewportInternal_PigeonCodec();
-
-  final String pigeonVar_messageChannelSuffix;
-
-  Future<_DefaultViewportTransitionOptions> getInternalOptions() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.getInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as _DefaultViewportTransitionOptions?)!;
-    }
-  }
-
-  Future<void> setInternalOptions(
-      _DefaultViewportTransitionOptions options) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._DefaultViewportTransitionMessenger.setInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[options]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
-class _OverviewViewportMessenger {
-  /// Constructor for [_OverviewViewportMessenger].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  _OverviewViewportMessenger(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? pigeonVar_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      ViewportInternal_PigeonCodec();
-
-  final String pigeonVar_messageChannelSuffix;
-
-  Future<_OverviewViewportStateOptions> getInternalOptions() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.getInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as _OverviewViewportStateOptions?)!;
-    }
-  }
-
-  Future<void> setInternalOptions(_OverviewViewportStateOptions options) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OverviewViewportMessenger.setInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[options]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
-class _FollowPuckViewportMessenger {
-  /// Constructor for [_FollowPuckViewportMessenger].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  _FollowPuckViewportMessenger(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? pigeonVar_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      ViewportInternal_PigeonCodec();
-
-  final String pigeonVar_messageChannelSuffix;
-
-  Future<_FollowPuckViewportStateOptions> getInternalOptions() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.getInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as _FollowPuckViewportStateOptions?)!;
-    }
-  }
-
-  Future<void> setInternalOptions(
-      _FollowPuckViewportStateOptions options) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._FollowPuckViewportMessenger.setInternalOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[options]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-}
-
-abstract class _TransitionCompletionHandler {
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      ViewportInternal_PigeonCodec();
-
-  void completion(bool success);
-
-  static void setUp(
-    _TransitionCompletionHandler? api, {
-    BinaryMessenger? binaryMessenger,
-    String messageChannelSuffix = '',
-  }) {
-    messageChannelSuffix =
-        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-    {
-      final BasicMessageChannel<
-          Object?> pigeonVar_channel = BasicMessageChannel<
-              Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter._TransitionCompletionHandler.completion$messageChannelSuffix',
-          pigeonChannelCodec,
-          binaryMessenger: binaryMessenger);
-      if (api == null) {
-        pigeonVar_channel.setMessageHandler(null);
-      } else {
-        pigeonVar_channel.setMessageHandler((Object? message) async {
-          assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._TransitionCompletionHandler.completion was null.');
-          final List<Object?> args = (message as List<Object?>?)!;
-          final bool? arg_success = (args[0] as bool?);
-          assert(arg_success != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._TransitionCompletionHandler.completion was null, expected non-null bool.');
-          try {
-            api.completion(arg_success!);
-            return wrapResponse(empty: true);
-          } on PlatformException catch (e) {
-            return wrapResponse(error: e);
-          } catch (e) {
-            return wrapResponse(
-                error: PlatformException(code: 'error', message: e.toString()));
-          }
-        });
-      }
     }
   }
 }
@@ -543,203 +331,8 @@ class _ViewportManagerMessenger {
     }
   }
 
-  Future<void> setupOverviewViewportState(
-      _OverviewViewportStateOptions options, int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupOverviewViewportState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[options, identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> teardownOverviewViewportState(int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownOverviewViewportState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> setupFollowPuckViewportState(
-      _FollowPuckViewportStateOptions options, int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupFollowPuckViewportState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[options, identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> teardownFollowPuckViewportState(int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownFollowPuckViewportState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> setupDefaultTransition(
-      _DefaultViewportTransitionOptions options, int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupDefaultTransition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[options, identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> teardownDefaultTransition(int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownDefaultTransition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> setupImmediateTransition(int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setupImmediateTransition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> teardownImmediateTransition(int identifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.teardownImmediateTransition$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[identifier]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> transition(int toViewportIdentifier, int? transitionIdentifier,
-      int? completionIdentifier) async {
+  Future<bool> transition(
+      _ViewportStateStorage stateStorage, int? transitionIdentifier) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -749,11 +342,7 @@ class _ViewportManagerMessenger {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[
-      toViewportIdentifier,
-      transitionIdentifier,
-      completionIdentifier
-    ]) as List<Object?>?;
+        .send(<Object?>[stateStorage, transitionIdentifier]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -762,8 +351,13 @@ class _ViewportManagerMessenger {
         message: pigeonVar_replyList[1] as String?,
         details: pigeonVar_replyList[2],
       );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
     } else {
-      return;
+      return (pigeonVar_replyList[0] as bool?)!;
     }
   }
 }

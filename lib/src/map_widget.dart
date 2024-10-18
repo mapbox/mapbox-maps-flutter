@@ -30,6 +30,16 @@ enum AndroidPlatformViewHostingMode {
   VD,
 }
 
+Object? _viewportAnimation;
+
+extension Foo on State {
+  void setStateWithViewportAnimation(VoidCallback fn, Object viewportAnimation, void Function(bool) completion) {
+
+    // ignore: invalid_use_of_protected_member
+    setState(fn);
+  }
+}
+
 /// A MapWidget provides an embeddable map interface.
 /// You use this class to display map information and to manipulate the map contents from your application.
 /// You can center the map on a given coordinate, specify the size of the area you want to display,
@@ -41,9 +51,10 @@ enum AndroidPlatformViewHostingMode {
 /// <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
 /// and for ensuring your use adheres to the relevant terms of use.
 class MapWidget extends StatefulWidget {
-  MapWidget({
-    Key? key,
+  const MapWidget({
+    super.key,
     this.mapOptions,
+    @Deprecated('Use viewport with [CameraViewportState] instead.')
     this.cameraOptions,
     // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
     // As a workaround default is true.
@@ -69,14 +80,14 @@ class MapWidget extends StatefulWidget {
     this.onTapListener,
     this.onLongTapListener,
     this.onScrollListener,
-  }) : super(key: key) {
-    LogConfiguration._setupDebugLoggingIfNeeded();
-  }
+    this.viewport,
+  });
 
   /// Describes the map options value when using a MapWidget.
   final MapOptions? mapOptions;
 
   /// The Initial Camera options when creating a MapWidget.
+  @Deprecated('Use viewport with [CameraViewportState] instead.')
   final CameraOptions? cameraOptions;
 
   /// Flag indicating to use a TextureView as render surface for the MapWidget.
@@ -155,18 +166,17 @@ class MapWidget extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  final _mapWidgetState = _MapWidgetState();
+  final ViewportState? viewport;
 
   final OnMapTapListener? onTapListener;
   final OnMapLongTapListener? onLongTapListener;
   final OnMapScrollListener? onScrollListener;
 
   @override
-  State createState() {
-    return _mapWidgetState;
-  }
+  State createState() => _MapWidgetState();
 
-  MapboxMap? getMapboxMap() => _mapWidgetState.mapboxMap;
+  @Deprecated('Subscribe to onMapCreated to receive an instanc of MapboxMap instead')
+  MapboxMap? getMapboxMap() => null;
 }
 
 class _MapWidgetState extends State<MapWidget> {
@@ -176,6 +186,7 @@ class _MapWidgetState extends State<MapWidget> {
   late final BinaryMessenger _binaryMessenger =
       ProxyBinaryMessenger(suffix: _suffix.toString());
   late final _MapEvents _events;
+  ViewportState? currentViewport;
 
   MapboxMap? mapboxMap;
 
@@ -196,14 +207,6 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    _events = _MapEvents(binaryMessenger: _binaryMessenger);
-    _updateEventListeners();
-  }
-
-  @override
   void dispose() {
     mapboxMap?.dispose();
     _suffixesRegistry.releaseSuffix(_suffix);
@@ -213,11 +216,50 @@ class _MapWidgetState extends State<MapWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    LogConfiguration._setupDebugLoggingIfNeeded();
+    _events = _MapEvents(binaryMessenger: _binaryMessenger);
+    
+    // Here we mark the state as needing an update to ensure 
+    // the widget configuration is propagated to the platform side.
+    //
+    // No need to call _updateStateIfNeeded() here as the platform view is not yet created.
+    _markNeedsStateUpdate();
+  }
+
+  bool _needsStateUpdate = false;
+  void _markNeedsStateUpdate() {
+    _needsStateUpdate = true;
+  }
+
+  void _updateStateIfNeeded({MapWidget? oldWidget}) {
+    if (!_needsStateUpdate) {
+      return;
+    }
+    _updateViewportState(oldWidget);
+    _updateEventListeners();
+    _events.updateSubscriptions();
+    _needsStateUpdate = false;
+  }
+
+  @override
   void didUpdateWidget(MapWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _updateEventListeners();
-    _events.updateSubscriptions();
+    // Widget properties have changed, mark the state as needing an update
+    // and update the state(if platform view has been created already).
+    _markNeedsStateUpdate();
+    _updateStateIfNeeded(oldWidget: oldWidget);
+  }
+
+  void _updateViewportState(MapWidget? oldWidget) {
+    final currentViewport = widget.viewport;
+    if (currentViewport == oldWidget?.viewport || currentViewport == null) {
+      return;
+    }
+    mapboxMap?.viewport.transition(currentViewport);
   }
 
   void _updateEventListeners() {
@@ -249,5 +291,8 @@ class _MapWidgetState extends State<MapWidget> {
       widget.onMapCreated!(controller);
     }
     mapboxMap = controller;
+
+    // The platform view is created, update the state if there were any requests.
+    _updateStateIfNeeded();
   }
 }

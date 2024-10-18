@@ -8,24 +8,7 @@ class DefaultViewportTransitionOptions {
   });
 }
 
-class DefaultViewportTransition implements ViewportTransition {
-  final _DefaultViewportTransitionMessenger _messenger;
-
-  DefaultViewportTransition._(this._messenger);
-
-  Future<DefaultViewportTransitionOptions> getOptions() async {
-    return _messenger.getInternalOptions().then((value) => value._options);
-  }
-
-  Future<void> setOptions(DefaultViewportTransitionOptions options) {
-    return _messenger.setInternalOptions(options._internalOptions);
-  }
-
-  @override
-  Cancelable run(ViewportState toState, Function(bool success) completion) {
-    return Cancelable();
-  }
-}
+class DefaultViewportTransition implements ViewportTransition { }
 
 extension on _DefaultViewportTransitionOptions {
   DefaultViewportTransitionOptions get _options {
