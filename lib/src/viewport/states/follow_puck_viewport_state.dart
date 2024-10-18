@@ -8,7 +8,7 @@ class FollowPuckViewportStateBearingConstant
     extends FollowPuckViewportStateBearing {
   final double bearing;
 
-  FollowPuckViewportStateBearingConstant(this.bearing);
+  const FollowPuckViewportStateBearingConstant(this.bearing);
 }
 
 class FollowPuckViewportStateBearingHeading
@@ -18,110 +18,31 @@ class FollowPuckViewportStateBearingHeading
 
 // Works only on iOS
 class FollowPuckViewportStateBearingCourse
-    extends FollowPuckViewportStateBearing {}
+    extends FollowPuckViewportStateBearing {
+  const FollowPuckViewportStateBearingCourse();
+}
 
-class FollowPuckViewportStateOptions {
-  EdgeInsets? padding;
-  double? zoom;
-  FollowPuckViewportStateBearing? bearing;
-  double? pitch;
+final class FollowPuckViewportState extends ViewportState {
+  final double? zoom;
+  final FollowPuckViewportStateBearing? bearing;
+  final double? pitch;
 
-  FollowPuckViewportStateOptions({
-    this.padding,
+  const FollowPuckViewportState({
     this.zoom = 16.35,
     this.bearing = const FollowPuckViewportStateBearingHeading(),
     this.pitch = 45,
-  });
+  }) : super();
 }
 
-class FollowPuckViewportState implements ViewportState {
-  final _FollowPuckViewportMessenger _messenger;
-
-  FollowPuckViewportState._(this._messenger);
-
-  Future<FollowPuckViewportStateOptions> getOptions() async {
-    return _messenger.getInternalOptions().then((value) => value._options);
-  }
-
-  Future<void> setOptions(FollowPuckViewportStateOptions options) {
-    return _messenger.setInternalOptions(options._internalOptions);
-  }
-
-  @override
-  Cancelable observeDataSource(OnViewportCameraChange cameraChangeHandler) {
-    return Cancelable();
-  }
-
-  @override
-  void startUpdatingCamera() {}
-
-  @override
-  void stopUpdatingCamera() {}
-}
-
-extension on _FollowPuckViewportStateOptions {
-  FollowPuckViewportStateOptions get _options {
-    final FollowPuckViewportStateBearing? bearing;
-    switch (this.bearing) {
-      case _FollowPuckViewportStateBearing.constant:
-        bearing = FollowPuckViewportStateBearingConstant(bearingValue!);
-        break;
-      case _FollowPuckViewportStateBearing.heading:
-        bearing = FollowPuckViewportStateBearingHeading();
-        break;
-      case _FollowPuckViewportStateBearing.course:
-        bearing = FollowPuckViewportStateBearingCourse();
-        break;
-      default:
-        bearing = null;
-    }
-
-    return FollowPuckViewportStateOptions(
-      padding: padding?.toEdgeInsets(),
-      zoom: zoom,
-      bearing: bearing,
-      pitch: pitch,
-    );
-  }
-}
-
-extension on FollowPuckViewportStateOptions {
-  _FollowPuckViewportStateOptions get _internalOptions {
-    final _FollowPuckViewportStateBearing? bearing;
-    double? bearingValue;
-
-    switch (this.bearing) {
+extension on FollowPuckViewportStateBearing {
+  (_FollowPuckViewportStateBearing, double?) get _internalBearing {
+    switch (this) {
       case FollowPuckViewportStateBearingConstant(bearing: var bearingConstant):
-        bearing = _FollowPuckViewportStateBearing.constant;
-        bearingValue = bearingConstant;
-        break;
+        return (_FollowPuckViewportStateBearing.constant, bearingConstant);
       case FollowPuckViewportStateBearingHeading():
-        bearing = _FollowPuckViewportStateBearing.heading;
-        break;
+        return (_FollowPuckViewportStateBearing.heading, null);
       case FollowPuckViewportStateBearingCourse():
-        bearing = _FollowPuckViewportStateBearing.course;
-        break;
-      default:
-        bearing = null;
+        return (_FollowPuckViewportStateBearing.course, null);
     }
-
-    return _FollowPuckViewportStateOptions(
-      padding: padding?.toMbxEdgeInsets(),
-      zoom: zoom,
-      bearingValue: bearingValue,
-      bearing: bearing,
-      pitch: pitch,
-    );
-  }
-}
-
-extension on EdgeInsets {
-  MbxEdgeInsets toMbxEdgeInsets() {
-    return MbxEdgeInsets(
-      top: top,
-      left: left,
-      bottom: bottom,
-      right: right,
-    );
   }
 }

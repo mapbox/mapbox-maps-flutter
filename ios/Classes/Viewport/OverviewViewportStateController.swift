@@ -2,22 +2,6 @@ import Foundation
 import MapboxMaps
 import Flutter
 
-final class OverviewViewportStateController: _OverviewViewportMessenger {
-    private let overviewState: OverviewViewportState
-
-    init(overviewState: OverviewViewportState) {
-        self.overviewState = overviewState
-    }
-
-    func getInternalOptions() throws -> _OverviewViewportStateOptions {
-        return overviewState.options.toFLTOptions()
-    }
-
-    func setInternalOptions(options: _OverviewViewportStateOptions) throws {
-        overviewState.options = options.toOptions()
-    }
-}
-
 extension OverviewViewportStateOptions {
     func toFLTOptions() -> _OverviewViewportStateOptions {
         let data = try! JSONEncoder().encode(geometry)

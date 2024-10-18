@@ -3,22 +3,6 @@ import MapboxMaps
 import Flutter
 @_implementationOnly import MapboxCommon_Private.MBXLog_Internal
 
-final class FollowPuckViewportStateController: _FollowPuckViewportMessenger {
-    private let state: FollowPuckViewportState
-
-    init(state: FollowPuckViewportState) {
-        self.state = state
-    }
-
-    func getInternalOptions() throws -> _FollowPuckViewportStateOptions {
-        return state.options.toFLTOptions()
-    }
-
-    func setInternalOptions(options: _FollowPuckViewportStateOptions) throws {
-        state.options = options.toOptions()
-    }
-}
-
 extension FollowPuckViewportStateOptions {
     func toFLTOptions() -> _FollowPuckViewportStateOptions {
         let bearing: _FollowPuckViewportStateBearing?
