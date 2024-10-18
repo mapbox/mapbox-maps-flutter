@@ -1,6 +1,8 @@
 ### main
 
-* Expose current map's camera state on `CameraChanged` event.
+# 2.4.0-beta.1
+
+* Expose current map's camera state on `CameraChanged` event. [#704](https://github.com/mapbox/mapbox-maps-flutter/pull/704)
 
 You can now observe the map's camera updates with `onCameraChangeListener`
 
@@ -9,11 +11,12 @@ onCameraChangeListener(CameraChangedEventData data) {
   print("CameraChangedEventData: timestamp: ${data.timestamp}, cameraState: ${data.cameraState}");
 }
 ```
-* Print to console native Maps SDK logs in debug configuration.
+* Print to console native Maps SDK logs in debug configuration. [#710](https://github.com/mapbox/mapbox-maps-flutter/pull/710)
 Logs are proxied only in debug configuration and can be disabled completely by passing environment flag `MAPBOX_LOG_DEBUG` with false value.
-* Fix rare crash in `Snapshotter`. The crash could happen when creating/destroying multiple instances of `Snapshotter` in succession.
-* Fix a crash that occurs when the widget state is updated before the platform view is created.
-* Fix a crash in Snapshotter when GlyphsRasterizationMode is specified in MapSnapshotOptions.
+* Fix rare crash in `Snapshotter`. The crash could happen when creating/destroying multiple instances of `Snapshotter` in succession. [#728](https://github.com/mapbox/mapbox-maps-flutter/pull/728)
+* Fix a crash that occurs when the widget state is updated before the platform view is created. [#724](https://github.com/mapbox/mapbox-maps-flutter/pull/724)
+* Fix a crash in Snapshotter when GlyphsRasterizationMode is specified in MapSnapshotOptions. [#738](https://github.com/mapbox/mapbox-maps-flutter/pull/738)
+* Remove `ProxyBinaryMessenger`, instead setup channel with a `messageChannelSuffix`. [#715](https://github.com/mapbox/mapbox-maps-flutter/pull/715).
 
 # 2.3.0
 
