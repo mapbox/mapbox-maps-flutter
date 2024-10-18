@@ -9,9 +9,9 @@ final class OfflineController: _OfflineManager {
 
     private lazy var offlineManager = MapboxCoreMaps.OfflineManager()
     private var progressHandlers: [String: AnyFlutterStreamHandler] = [:]
-    private let messenger: FlutterBinaryMessenger
+    private let messenger: SuffixBinaryMessenger
 
-    init(messenger: FlutterBinaryMessenger) {
+    init(messenger: SuffixBinaryMessenger) {
         self.messenger = messenger
     }
 
@@ -41,7 +41,7 @@ final class OfflineController: _OfflineManager {
 
     func addStylePackLoadProgressListener(styleURI: String) {
         let handler = AnyFlutterStreamHandler()
-        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/offline/\(styleURI)", binaryMessenger: messenger)
+        let eventChannel = FlutterEventChannel(name: "com.mapbox.maps.flutter/\(messenger.suffix)/\(styleURI)", binaryMessenger: messenger.messenger)
         eventChannel.setStreamHandler(handler)
         progressHandlers[styleURI] = handler
     }

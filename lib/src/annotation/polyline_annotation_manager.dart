@@ -3,9 +3,12 @@ part of mapbox_maps_flutter;
 
 /// The PolylineAnnotationManager to add/update/delete PolylineAnnotationAnnotations on the map.
 class PolylineAnnotationManager extends BaseAnnotationManager {
-  PolylineAnnotationManager._({required super.id, required super.messenger})
-      : _annotationMessenger =
-            _PolylineAnnotationMessenger(binaryMessenger: messenger),
+  PolylineAnnotationManager._(
+      {required super.id,
+      required super.messenger,
+      required String channelSuffix})
+      : _annotationMessenger = _PolylineAnnotationMessenger(
+            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();
 
   final _PolylineAnnotationMessenger _annotationMessenger;

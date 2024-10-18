@@ -32,8 +32,8 @@ class GestureController(private val mapView: MapView, private val context: Conte
   private var onLongClickListener: OnMapLongClickListener? = null
   private var onMoveListener: OnMoveListener? = null
 
-  fun addListeners(messenger: BinaryMessenger) {
-    fltGestureListener = GestureListener(messenger)
+  fun addListeners(messenger: BinaryMessenger, channelSuffix: String) {
+    fltGestureListener = GestureListener(messenger, channelSuffix)
 
     removeListeners()
 

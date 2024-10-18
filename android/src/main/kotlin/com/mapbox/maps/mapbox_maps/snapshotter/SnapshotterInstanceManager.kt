@@ -5,7 +5,6 @@ import android.content.Context
 import com.mapbox.maps.MapboxStyleManager
 import com.mapbox.maps.Snapshotter
 import com.mapbox.maps.mapbox_maps.MapboxEventHandler
-import com.mapbox.maps.mapbox_maps.ProxyBinaryMessenger
 import com.mapbox.maps.mapbox_maps.StyleController
 import com.mapbox.maps.mapbox_maps.pigeons.MapSnapshotOptions
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
@@ -21,8 +20,6 @@ class SnapshotterInstanceManager(
   private val messenger: BinaryMessenger,
 ) : _SnapshotterInstanceManager {
 
-  private var proxyMessengers = HashMap<String, ProxyBinaryMessenger>()
-
   @SuppressLint("RestrictedApi")
   override fun setupSnapshotterForSuffix(
     suffix: String,
@@ -34,9 +31,8 @@ class SnapshotterInstanceManager(
       options = options.toSnapshotOptions(context),
       overlayOptions = options.toSnapshotOverlayOptions()
     )
-    val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, suffix)
     val styleManager: com.mapbox.maps.StyleManager = snapshotter.styleManager() // TODO: expose this on Android
-    val eventHandler = MapboxEventHandler(styleManager, proxyBinaryMessenger, eventTypes.map { it })
+    val eventHandler = MapboxEventHandler(styleManager, messenger, eventTypes.map { it }, suffix)
     val snapshotterController = SnapshotterController(context, snapshotter, eventHandler)
     val mapboxStyleManager = MapboxStyleManager(
       styleManager,
@@ -45,16 +41,12 @@ class SnapshotterInstanceManager(
     )
     val snapshotterStyleController = StyleController(context, mapboxStyleManager)
 
-    _SnapshotterMessenger.setUp(proxyBinaryMessenger, snapshotterController)
-    StyleManager.setUp(proxyBinaryMessenger, snapshotterStyleController)
-
-    proxyMessengers[suffix] = proxyBinaryMessenger
+    _SnapshotterMessenger.setUp(messenger, snapshotterController, suffix)
+    StyleManager.setUp(messenger, snapshotterStyleController, suffix)
   }
 
   override fun tearDownSnapshotterForSuffix(suffix: String) {
-    val proxyBinaryMessenger = proxyMessengers[suffix] ?: return
-
-    _SnapshotterMessenger.setUp(proxyBinaryMessenger, null)
-    StyleManager.setUp(proxyBinaryMessenger, null)
+    _SnapshotterMessenger.setUp(messenger, null, suffix)
+    StyleManager.setUp(messenger, null, suffix)
   }
 }

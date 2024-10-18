@@ -143,8 +143,6 @@ class MapboxMap extends ChangeNotifier {
     this.onMapLongTapListener,
     this.onMapScrollListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
-    _proxyBinaryMessenger = _mapboxMapsPlatform.binaryMessenger;
-
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
   }
@@ -152,50 +150,59 @@ class MapboxMap extends ChangeNotifier {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.
-  late StyleManager style =
-      StyleManager(binaryMessenger: _proxyBinaryMessenger);
+  late StyleManager style = StyleManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the location puck.
   late LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
-          binaryMessenger: _proxyBinaryMessenger));
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
 
-  late BinaryMessenger _proxyBinaryMessenger;
-
-  late _CameraManager _cameraManager =
-      _CameraManager(binaryMessenger: _proxyBinaryMessenger);
-  late _MapInterface _mapInterface =
-      _MapInterface(binaryMessenger: _proxyBinaryMessenger);
-  late _AnimationManager _animationManager =
-      _AnimationManager(binaryMessenger: _proxyBinaryMessenger);
+  late _CameraManager _cameraManager = _CameraManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late _MapInterface _mapInterface = _MapInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late _AnimationManager _animationManager = _AnimationManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to create and set annotations.
   late final AnnotationManager annotations;
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  late Projection projection =
-      Projection(binaryMessenger: _proxyBinaryMessenger);
+  late Projection projection = Projection(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the gesture settings.
-  late GesturesSettingsInterface gestures =
-      GesturesSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late GesturesSettingsInterface gestures = GesturesSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the logo settings.
-  late LogoSettingsInterface logo =
-      LogoSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late LogoSettingsInterface logo = LogoSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late CompassSettingsInterface compass =
-      CompassSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late CompassSettingsInterface compass = CompassSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late ScaleBarSettingsInterface scaleBar =
-      ScaleBarSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the attribution settings.
-  late AttributionSettingsInterface attribution =
-      AttributionSettingsInterface(binaryMessenger: _proxyBinaryMessenger);
+  late AttributionSettingsInterface attribution = AttributionSettingsInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
@@ -204,7 +211,9 @@ class MapboxMap extends ChangeNotifier {
   @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
-    GestureListener.setUp(null, binaryMessenger: _proxyBinaryMessenger);
+    GestureListener.setUp(null,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
     super.dispose();
   }
@@ -586,7 +595,8 @@ class MapboxMap extends ChangeNotifier {
             onMapLongTapListener: onMapLongTapListener,
             onMapScrollListener: onMapScrollListener,
           ),
-          binaryMessenger: _mapboxMapsPlatform.binaryMessenger);
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
       _mapboxMapsPlatform.addGestureListeners();
     }
   }

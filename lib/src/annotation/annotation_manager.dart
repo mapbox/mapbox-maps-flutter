@@ -15,7 +15,9 @@ class AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('point', id: id, belowLayerId: below)
         .then((value) => PointAnnotationManager._(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            messenger: _mapboxMapsPlatform.binaryMessenger,
+            channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
   }
 
   /// Create a [CircleAnnotationManager] to add/remove/update [CircleAnnotation]s on the map.
@@ -27,7 +29,9 @@ class AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('circle', id: id, belowLayerId: below)
         .then((value) => CircleAnnotationManager._(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            messenger: _mapboxMapsPlatform.binaryMessenger,
+            channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
   }
 
   /// Create a [PolylineAnnotationManager] to add/remove/update [PolylineAnnotation]s on the map.
@@ -39,7 +43,9 @@ class AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('polyline', id: id, belowLayerId: below)
         .then((value) => PolylineAnnotationManager._(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            messenger: _mapboxMapsPlatform.binaryMessenger,
+            channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
   }
 
   /// Create a [PolygonAnnotationManager] to add/remove/update [PolygonAnnotation]s on the map.
@@ -51,7 +57,9 @@ class AnnotationManager {
     return _mapboxMapsPlatform
         .createAnnotationManager('polygon', id: id, belowLayerId: below)
         .then((value) => PolygonAnnotationManager._(
-            id: value, messenger: _mapboxMapsPlatform.binaryMessenger));
+            id: value,
+            messenger: _mapboxMapsPlatform.binaryMessenger,
+            channelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
   }
 
   /// Remove an [AnnotationManager] and all the annotations created by it.
@@ -68,8 +76,10 @@ class AnnotationManager {
 /// The super class for all AnnotationManagers.
 class BaseAnnotationManager {
   BaseAnnotationManager._(
-      {required this.id, required BinaryMessenger messenger})
-      : _messenger = messenger;
+      {required String id,
+      required BinaryMessenger messenger})
+      : this.id = id,
+        _messenger = messenger;
   final String id;
   final BinaryMessenger _messenger;
 }

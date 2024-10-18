@@ -3,9 +3,12 @@ part of mapbox_maps_flutter;
 
 /// The CircleAnnotationManager to add/update/delete CircleAnnotationAnnotations on the map.
 class CircleAnnotationManager extends BaseAnnotationManager {
-  CircleAnnotationManager._({required super.id, required super.messenger})
-      : _annotationMessenger =
-            _CircleAnnotationMessenger(binaryMessenger: messenger),
+  CircleAnnotationManager._(
+      {required super.id,
+      required super.messenger,
+      required String channelSuffix})
+      : _annotationMessenger = _CircleAnnotationMessenger(
+            binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
         super._();
 
   final _CircleAnnotationMessenger _annotationMessenger;
