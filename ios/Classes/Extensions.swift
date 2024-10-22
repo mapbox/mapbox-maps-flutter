@@ -5,7 +5,11 @@ import Flutter
 
 let COORDINATES = "coordinates"
 
+#if hasFeature(RetroactiveAttribute)
 extension FlutterError: @retroactive Error { }
+#else
+extension FlutterError: Error { }
+#endif
 
 // FLT to Mapbox
 
