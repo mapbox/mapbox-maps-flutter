@@ -263,6 +263,22 @@ fun RenderedQueryOptions.toRenderedQueryOptions(): com.mapbox.maps.RenderedQuery
   return com.mapbox.maps.RenderedQueryOptions(layerIds, filter?.toValue())
 }
 
+fun FeaturesetFeatureId.toFeaturesetFeatureId(): com.mapbox.maps.FeaturesetFeatureId {
+  return com.mapbox.maps.FeaturesetFeatureId(id, namespace)
+}
+
+fun FeaturesetDescriptor.toFeatureSetDescriptor(): com.mapbox.maps.FeaturesetDescriptor {
+  return com.mapbox.maps.FeaturesetDescriptor(featuresetId, importId, layerId)
+}
+
+fun FeaturesetQueryTarget.toFeaturesetQueryTarget(): com.mapbox.maps.FeaturesetQueryTarget {
+  return com.mapbox.maps.FeaturesetQueryTarget(featureset.toFeatureSetDescriptor(), filter?.toValue(), id)
+}
+
+// fun FeaturesetFeature.toFeaturesetFeature(): com.mapbox.maps.interactions.FeaturesetFeature<> {
+//  return com.mapbox.maps.interactions.FeaturesetFeature(id, descriptor, state, originalFeature)
+// }
+
 fun MapDebugOptions.toMapDebugOptions(): com.mapbox.maps.MapDebugOptions {
   return com.mapbox.maps.MapDebugOptions.values()[data.ordinal]
 }

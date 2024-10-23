@@ -24,7 +24,11 @@ class Events {
 var events = Events();
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
-Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
+Future<MapboxMap> main(
+    {double? width,
+    double? height,
+    CameraOptions? camera,
+    Alignment alignment = Alignment.topLeft}) {
   final completer = Completer<MapboxMap>();
 
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
@@ -32,7 +36,7 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
   events = Events();
   runApp(MaterialApp(
       home: Align(
-    alignment: Alignment.topLeft,
+    alignment: alignment,
     child: Container(
       width: width,
       height: height,
