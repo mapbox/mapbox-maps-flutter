@@ -1263,19 +1263,27 @@ data class QueriedRenderedFeature(
    * If the feature has been rendered in multiple layers, multiple Ids will be provided.
    * If the feature is only rendered in one layer, a single Id will be provided.
    */
-  val layers: List<String?>
+  val layers: List<String?>,
+  /**
+   * An array of feature query targets that correspond to this queried feature.
+   *
+   * - Note: Returned query targets will omit the original `filter` data.
+   */
+  val queryTargets: List<FeaturesetQueryTarget>? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): QueriedRenderedFeature {
       val queriedFeature = pigeonVar_list[0] as QueriedFeature
       val layers = pigeonVar_list[1] as List<String?>
-      return QueriedRenderedFeature(queriedFeature, layers)
+      val queryTargets = pigeonVar_list[2] as List<FeaturesetQueryTarget>?
+      return QueriedRenderedFeature(queriedFeature, layers, queryTargets)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       queriedFeature,
       layers,
+      queryTargets,
     )
   }
 }
@@ -1340,6 +1348,167 @@ data class QueriedFeature(
       source,
       sourceLayer,
       state,
+    )
+  }
+}
+
+/**
+ * Represents a unique identifier for a feature in one exported featureset or a layer.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetFeatureId(
+  /**
+   * The `featureId` uniquely identifies a feature within a featureset or layer.
+   * Note: The Identifier of the feature is not guaranteed to be persistent
+   * and can change depending on the source that is used.
+   */
+  val id: String,
+  /**
+   * An optional field that represents the feature namespace defined by
+   * the Selector within a Featureset to which this feature belongs.
+   * If the underlying source is the same for multiple selectors within a Featureset,
+   * the same `featureNamespace` should be used across those selectors.
+   * This practice ensures the uniqueness of `FeaturesetFeatureId` across the style.
+   * Defining a `featureNamespace` value for the Selector is recommended,
+   * especially when multiple selectors exist in a Featureset,
+   * as it can enhance the efficiency of feature operations.
+   */
+  val namespace: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeatureId {
+      val id = pigeonVar_list[0] as String
+      val namespace = pigeonVar_list[1] as String?
+      return FeaturesetFeatureId(id, namespace)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      namespace,
+    )
+  }
+}
+
+/**
+ * Represents an identifier for a single exported featureset or a layer.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetDescriptor(
+  /**
+   * An optional unique identifier for the featureset within the style.
+   * This id is used to reference a specific featureset.
+   *
+   * * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+   * * meaning `layerId` will not be considered even if it has a valid value.
+   */
+  val featuresetId: String? = null,
+  /**
+   * An optional import id that is required if the featureset is defined within an imported style.
+   * If the featureset belongs to the current style, this field should be set to a null string.
+   *
+   * Note: `importId` is only applicable when used in conjunction with `featuresetId`
+   * and has no effect when used with `layerId`.
+   */
+  val importId: String? = null,
+  /**
+   * An optional unique identifier for the layer within the current style.
+   *
+   * Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+   * Additionally, `importId` does not apply when using `layerId`.
+   */
+  val layerId: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetDescriptor {
+      val featuresetId = pigeonVar_list[0] as String?
+      val importId = pigeonVar_list[1] as String?
+      val layerId = pigeonVar_list[2] as String?
+      return FeaturesetDescriptor(featuresetId, importId, layerId)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetId,
+      importId,
+      layerId,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class FeaturesetFeature(
+  /**
+   * Optional identifier holding feature id and feature namespace.
+   * It could be NULL when underlying [Feature.id] is null.
+   */
+  val id: FeaturesetFeatureId? = null,
+  /**
+   * The [TypedFeaturesetDescriptor] this concrete feature comes from.
+   * List of supported featuresets could be found in the nested classes
+   * (e.g. [TypedFeaturesetDescriptor.Featureset], [TypedFeaturesetDescriptor.Layer], etc).
+   */
+  val featureset: FeaturesetDescriptor,
+  /**
+   * A feature geometry.
+   * Feature JSON properties.
+   * The geoJSON feature.
+   */
+  val geoJSONFeature: Feature,
+  /**
+   * Current feature state stored as a concrete instance of [FeatureState].
+   * Important: this state is immutable and represents the feature state
+   * at the precise moment of the interaction callback.
+   */
+  val state: Map<String, Any?>
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeature {
+      val id = pigeonVar_list[0] as FeaturesetFeatureId?
+      val featureset = pigeonVar_list[1] as FeaturesetDescriptor
+      val geoJSONFeature = pigeonVar_list[2] as Feature
+      val state = pigeonVar_list[3] as Map<String, Any?>
+      return FeaturesetFeature(id, featureset, geoJSONFeature, state)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      featureset,
+      geoJSONFeature,
+      state,
+    )
+  }
+}
+
+/**
+ * Defines the parameters for querying features from a Featureset with an optional filter and id.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetQueryTarget(
+  /** The FeaturesetDescriptor that specifies the featureset to be included in the query. */
+  val featureset: FeaturesetDescriptor,
+  /** An optional filter expression used to refine the query results based on conditions related to the specified featureset. */
+  val filter: String? = null,
+  /** An optional unique identifier associated with the FeaturesetQueryTarget. */
+  val id: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetQueryTarget {
+      val featureset = pigeonVar_list[0] as FeaturesetDescriptor
+      val filter = pigeonVar_list[1] as String?
+      val id = pigeonVar_list[2] as Long?
+      return FeaturesetQueryTarget(featureset, filter, id)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featureset,
+      filter,
+      id,
     )
   }
 }
@@ -3174,6 +3343,69 @@ interface _MapInterface {
    */
   fun queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
+   * Queries the map for rendered features using featureset descriptors.
+   *
+   * This method allows to query both featureset from imported styles and user layers in the root style.
+   * The results can be additionally filtered per-featureset.
+   *
+   * ```dart
+   * let targets = [
+   *     FeaturesetQueryTarget(
+   *         featureset: .layer("my-layer"),
+   *         filter: Exp(.eq) {
+   *             Exp(.get) { "type" }
+   *             "hotel"
+   *         }
+   *     ),
+   *     FeaturesetQueryTarget(featureset: .featureset("poi", importId: "basemap"))
+   * ]
+   * mapView.mapboxMap.queryRenderedFeatures(with: CGPoint(x: 0, y: 0),
+   *                            targets: targets) { result in
+   *     // handle features in result
+   * }
+   * ```
+   *
+   * - Important: This is a low-level method. If you need to handle basic gestures on map content, please prefer to use Interactions API (see ``MapboxMap/addInteraction(_:)``) or  ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``.
+   *
+   * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+   * @param targets An array of targets to query with.
+   * @param completion Callback called when the query completes.
+   */
+  fun queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: List<FeaturesetQueryTarget>, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
+  /**
+   * Queries the map for rendered features with one typed featureset.
+   *
+   * The results array will contain features of the type specified by this featureset.
+   *
+   * ```swift
+   * mapView.mapboxMap.queryRenderedFeatures(
+   *   with: CGPoint(x: 0, y: 0),
+   *   featureset: .standardBuildings) { result in
+   *     // handle buildings in result
+   * }
+   * ```
+   *
+   * - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+   *
+   * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+   * @param featureset A typed featureset to query with.
+   * @param filter An additional filter for features.
+   * @param completion Callback called when the query completes.
+   */
+  fun queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
+  /**
+   * Queries all rendered features in current viewport, using one typed featureset.
+   *
+   * This is same as ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)`` called with geometry matching the current viewport.
+   *
+   * - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+   *
+   * @param featureset A typed featureset to query with.
+   * @param filter An additional filter for features.
+   * @param completion Callback called when the query completes.
+   */
+  fun queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
+  /**
    * Queries the map for source features.
    *
    * @param sourceId The style source identifier used to query for source features.
@@ -3181,6 +3413,13 @@ interface _MapInterface {
    * @param completion The `query features completion` called when the query completes.
    */
   fun querySourceFeatures(sourceId: String, options: SourceQueryOptions, callback: (Result<List<QueriedSourceFeature?>>) -> Unit)
+  /**
+   * Queries  the source features for a given featureset.
+   *
+   * @param target A featureset query target.
+   * @param completion Callback called when the query completes.
+   */
+  fun querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature?>>) -> Unit)
   /**
    * Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
    * to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3236,6 +3475,32 @@ interface _MapInterface {
    */
   fun setFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, state: String, callback: (Result<Unit>) -> Unit)
   /**
+   * Update the state map of a feature within a featureset.
+   * Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+   * will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+   *
+   * @param featureset The featureset to look the feature in.
+   * @param featureId Identifier of the feature whose state should be updated.
+   * @param state Map of entries to update with their respective new values
+   * @param callback The `feature state operation callback` called when the operation completes or ends.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
+   */
+  fun setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  /**
+   * Update the state map of an individual feature.
+   *
+   * The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+   * the operation will be no-op and callback will receive an error.
+   *
+   * @param feature The feature to update.
+   * @param state Map of entries to update with their respective new values
+   * @param callback The `feature state operation callback` called when the operation completes or ends.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
+   */
+  fun setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  /**
    * Gets the state map of a feature within a style source.
    *
    * Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -3247,6 +3512,24 @@ interface _MapInterface {
    * @param completion The `query feature state completion` called when the query completes.
    */
   fun getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, callback: (Result<String>) -> Unit)
+  /**
+   * Get the state map of a feature within a style source.
+   *
+   * @param featureset A featureset the feature belongs to.
+   * @param featureId Identifier of the feature whose state should be queried.
+   *
+   * @return A `Cancelable` object that could be used to cancel the pending query.
+   */
+  fun getFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, callback: (Result<Map<String, Any?>>) -> Unit)
+  /**
+   * Get the state map of a feature within a style source.
+   *
+   * @param feature An interactive feature to query the state from.
+   * @param completion Feature's state map or an empty map if the feature could not be found.
+   *
+   * @return A `Cancelable` object that could be used to cancel the pending query.
+   */
+  fun getFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, callback: (Result<Map<String, Any?>>) -> Unit)
   /**
    * Removes entries from a feature state object.
    *
@@ -3262,6 +3545,41 @@ interface _MapInterface {
    * @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
    */
   fun removeFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, stateKey: String?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Removes entries from a feature state object of a feature in the specified featureset.
+   * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+   *
+   * @param featureset A featureset the feature belongs to.
+   * @param featureId Identifier of the feature whose state should be removed.
+   * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+   * @param callback The `feature state operation callback` called when the operation completes or ends.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
+   */
+  fun removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, callback: (Result<Unit>) -> Unit)
+  /**
+   * Removes entries from a specified Feature.
+   * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+   *
+   * @param feature An interactive feature to update.
+   * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+   * @param callback The `feature state operation callback` called when the operation completes or ends.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
+   */
+  fun removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, callback: (Result<Unit>) -> Unit)
+  /**
+   * Reset all the feature states within a featureset.
+   *
+   * Note that updates to feature state are asynchronous, so changes made by this method might not be
+   * immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+   *
+   * @param featureset A featureset descriptor
+   * @param callback The `feature state operation callback` called when the operation completes or ends.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
+   */
+  fun resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, callback: (Result<Unit>) -> Unit)
   /** Reduces memory use. Useful to call when the application gets paused or sent to background. */
   fun reduceMemoryUse()
   /**
@@ -3670,6 +3988,70 @@ interface _MapInterface {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForTargets$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val geometryArg = args[0] as _RenderedQueryGeometry
+            val targetsArg = args[1] as List<FeaturesetQueryTarget>
+            api.queryRenderedFeaturesForTargets(geometryArg, targetsArg) { result: Result<List<QueriedRenderedFeature?>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val geometryArg = args[0] as _RenderedQueryGeometry
+            val featuresetArg = args[1] as FeaturesetDescriptor
+            val filterArg = args[2] as String?
+            api.queryRenderedFeaturesForFeatureset(geometryArg, featuresetArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesInViewport$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val filterArg = args[1] as String?
+            api.queryRenderedFeaturesInViewport(featuresetArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3677,6 +4059,26 @@ interface _MapInterface {
             val sourceIdArg = args[0] as String
             val optionsArg = args[1] as SourceQueryOptions
             api.querySourceFeatures(sourceIdArg, optionsArg) { result: Result<List<QueriedSourceFeature?>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val targetArg = args[0] as FeaturesetQueryTarget
+            api.querySourceFeaturesForFeatureset(targetArg) { result: Result<List<QueriedSourceFeature?>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3778,6 +4180,47 @@ interface _MapInterface {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeatureDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            val stateArg = args[2] as Map<String, Any?>
+            api.setFeatureStateForFeaturesetFeatureDescriptor(featuresetArg, featureIdArg, stateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            val stateArg = args[1] as Map<String, Any?>
+            api.setFeatureStateForFeaturesetFeature(featureArg, stateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3786,6 +4229,47 @@ interface _MapInterface {
             val sourceLayerIdArg = args[1] as String?
             val featureIdArg = args[2] as String
             api.getFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg) { result: Result<String> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            api.getFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg) { result: Result<Map<String, Any?>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            api.getFeatureStateForFeaturesetFeature(featureArg) { result: Result<Map<String, Any?>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3809,6 +4293,66 @@ interface _MapInterface {
             val featureIdArg = args[2] as String
             val stateKeyArg = args[3] as String?
             api.removeFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            val stateKeyArg = args[2] as String
+            api.removeFeatureStateForFeaturesetFeatureDescriptor(featuresetArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            val stateKeyArg = args[1] as String
+            api.removeFeatureStateForFeaturesetFeature(featureArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            api.resetFeatureStatesForFeatureset(featuresetArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5025,6 +5569,12 @@ interface StyleManager {
    * @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
    */
   fun localizeLabels(locale: String, layerIds: List<String>?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Returns the available featuresets in the currently loaded style.
+   *
+   * - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+   */
+  fun getFeaturesets(): List<FeaturesetDescriptor>
 
   companion object {
     /** The codec used by StyleManager. */
@@ -6131,6 +6681,21 @@ interface StyleManager {
                 reply.reply(wrapResult(null))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getFeaturesets())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

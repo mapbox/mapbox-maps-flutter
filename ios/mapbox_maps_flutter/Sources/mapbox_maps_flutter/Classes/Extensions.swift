@@ -154,6 +154,99 @@ extension RenderedQueryOptions {
         return MapboxCoreMaps.RenderedQueryOptions(layerIds: layerIds?.compactMap { $0 }, filter: filterExp)
     }
 }
+
+extension String {
+    func toExp() throws -> Exp {
+        guard let data = self.data(using: .utf8) else {
+            throw DecodingError.valueNotFound(String.self, DecodingError.Context(codingPath: [], debugDescription: "Could not decode string to Exp"))
+        }
+        return try JSONDecoder().decode(Expression.self, from: data)
+    }
+}
+
+extension _RenderedQueryGeometry: RenderedQueryGeometryConvertible {
+    var geometry: MapboxMaps.RenderedQueryGeometry {
+        // TODO
+        switch type {
+        case .sCREENBOX:
+            guard let cgRect = convertValueToCGRect(value) else { fallthrough }
+            return RenderedQueryGeometry(boundingBox: cgRect)
+        case .sCREENCOORDINATE:
+            guard let cgPoint = convertValueToCGPoint(value) else { fallthrough }
+            return RenderedQueryGeometry(point: cgPoint)
+        case .lIST:
+            guard let cgPoints = convertValueToCGPoints(value) else { fallthrough }
+            return RenderedQueryGeometry(shape: cgPoints)
+        default:
+            // TODO Fix this
+            return RenderedQueryGeometry(shape: [])
+        }
+    }
+}
+
+/// Convert to extension?
+func convertValueToCGRect(_ value: String) -> CGRect? {
+    let screenBoxArray = convertStringToDictionary(properties: value)
+    guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return nil }
+    guard let maxCoord = screenBoxArray["max"] as? [String: Double] else { return nil }
+    guard let minX = minCoord["x"], let minY = minCoord["y"],
+          let maxX = maxCoord["x"], let maxY = maxCoord["y"] else {
+        return nil
+    }
+    let screenBox = ScreenBox(min: ScreenCoordinate(x: minX, y: minY),
+                              max: ScreenCoordinate(x: maxX, y: maxY))
+    return screenBox.toCGRect()
+}
+
+func convertValueToCGPoint(_ value: String) -> CGPoint? {
+    guard let pointDict = convertStringToDictionary(properties: value) as? [String: Double],
+          let x = pointDict["x"], let y = pointDict["y"] else {
+        return nil
+    }
+    return CGPoint(x: x, y: y)
+}
+
+func convertValueToCGPoints(_ value: String) -> [CGPoint]? {
+    guard let data = value.data(using: .utf8),
+          let rawPoints = try? JSONDecoder().decode([[String: Double]].self, from: data) else {
+        return nil
+    }
+    let cgPoints = rawPoints.compactMap {
+        guard let x = $0["x"], let y = $0["y"] else { return Optional<CGPoint>.none }
+        return CGPoint(x: x, y: y)
+    }
+    return cgPoints
+}
+
+extension FeaturesetFeatureId {
+    func toMapFeaturesetFeatureId() -> MapboxMaps.FeaturesetFeatureId {
+        return MapboxMaps.FeaturesetFeatureId(id: id, namespace: namespace)
+    }
+}
+
+extension FeaturesetQueryTarget {
+    func toMapFeaturesetQueryTarget() -> MapboxMaps.FeaturesetQueryTarget {
+        let filterExpression = try? filter.flatMap { try $0.toExp() }
+        return MapboxMaps.FeaturesetQueryTarget(featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression, id: id.map { UInt64($0) })
+    }
+}
+
+extension FeaturesetDescriptor {
+    func toMapFeaturesetDescriptor() -> MapboxMaps.FeaturesetDescriptor<MapboxMaps.FeaturesetFeature> {
+        return MapboxMaps.FeaturesetDescriptor(featuresetId2: featuresetId, importId2: importId, layerId2: layerId)
+    }
+}
+
+extension FeaturesetFeature {
+    func toMapFeaturesetFeature() -> MapboxMaps.FeaturesetFeature {
+        return MapboxMaps.FeaturesetFeature(
+            id: id?.toMapFeaturesetFeatureId(),
+            featureset: featureset.toMapFeaturesetDescriptor(),
+            geoJsonFeature: geoJSONFeature,
+            state: JSONObject.init(turfRawValue: state)!)
+    }
+}
+
 extension MercatorCoordinate {
     func toMercatorCoordinate() -> MapboxMaps.MercatorCoordinate {
         return MapboxMaps.MercatorCoordinate(x: x, y: y)
@@ -374,9 +467,17 @@ extension MapboxMaps.QueriedSourceFeature {
         return QueriedSourceFeature(queriedFeature: queriedFeature.toFLTQueriedFeature())
     }
 }
+extension MapboxMaps.FeaturesetQueryTarget {
+    func toFLTFeaturesetQueryTarget() -> FeaturesetQueryTarget {
+        return FeaturesetQueryTarget(featureset: featureset.toFLTFeaturesetDescriptor(), filter: filter?.description, id: id.map { Int64($0) })
+    }
+}
 extension MapboxMaps.QueriedRenderedFeature {
     func toFLTQueriedRenderedFeature() -> QueriedRenderedFeature {
-        return QueriedRenderedFeature(queriedFeature: queriedFeature.toFLTQueriedFeature(), layers: layers)
+        return QueriedRenderedFeature(
+            queriedFeature: queriedFeature.toFLTQueriedFeature(),
+            layers: layers,
+            queryTargets: queryTargets.map({$0.toFLTFeaturesetQueryTarget()}))
     }
 }
 extension MapboxMaps.QueriedFeature {
@@ -423,6 +524,36 @@ extension MapboxMaps.MapOptions {
         )
     }
 }
+extension MapboxMaps.FeaturesetFeatureId {
+    func toFLTFeaturesetFeatureId() -> FeaturesetFeatureId {
+        return FeaturesetFeatureId(
+            id: self.id,
+            namespace: self.namespace)
+    }
+}
+
+extension MapboxMaps.FeaturesetDescriptor {
+    func toFLTFeaturesetDescriptor() -> FeaturesetDescriptor {
+        return FeaturesetDescriptor(
+            featuresetId: featuresetId,
+            importId: importId,
+            layerId: layerId)
+    }
+}
+
+extension MapboxMaps.FeaturesetFeature {
+    func toFLTFeaturesetFeature() -> FeaturesetFeature {
+        var feature = Feature(geometry: geometry)
+        feature.properties = properties
+
+        return FeaturesetFeature(
+            id: id?.toFLTFeaturesetFeatureId(),
+            featureset: featureset.toFLTFeaturesetDescriptor(),
+            geoJSONFeature: feature,
+            state: state.turfRawValue)
+    }
+}
+
 extension MapboxMaps.CameraBounds {
     func toFLTCameraBounds() -> CameraBounds {
         return CameraBounds(

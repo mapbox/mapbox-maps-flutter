@@ -5,12 +5,16 @@ import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.interactions.FeatureState
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
 import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeature
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetQueryTarget
 import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
@@ -22,6 +26,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.SourceQueryOptions
 import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInMegabytes
 import com.mapbox.maps.mapbox_maps.pigeons.TileCacheBudgetInTiles
 import com.mapbox.maps.mapbox_maps.pigeons.TileCoverOptions
+import com.mapbox.maps.mapbox_maps.pigeons.TypedFeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.ViewportMode
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
@@ -166,6 +171,29 @@ class MapInterfaceController(
     }
   }
 
+  override fun queryRenderedFeaturesForGeometry(
+    geometry: _RenderedQueryGeometry,
+    targets: List<FeaturesetQueryTarget>,
+    callback: (Result<List<QueriedRenderedFeature?>>) -> Unit
+  ) {
+    mapboxMap.queryRenderedFeatures(
+      geometry.toRenderedQueryGeometry(context),
+      targets.map {
+        it.toFeaturesetQueryTarget()
+      }
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(
+          Result.success(
+            it.value!!.map { feature -> feature.toFLTQueriedRenderedFeature() }.toMutableList()
+          )
+        )
+      }
+    }
+  }
+
   override fun querySourceFeatures(
     sourceId: String,
     options: SourceQueryOptions,
@@ -253,6 +281,27 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class)
+  override fun setFeatureStateForFeatureStateFeature(
+    feature: FeaturesetFeature,
+    state: String,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    mapboxMap.setFeatureState(
+      com.mapbox.maps.interactions.TypedFeaturesetDescriptor.Featureset(
+        feature.descriptor!!.descriptor.featuresetId!!, feature.descriptor.descriptor.importId
+      ),
+      feature.id!!.toFeaturesetFeatureId(),
+      FeatureState { feature.state }
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
+  }
+
   override fun getFeatureState(
     sourceId: String,
     sourceLayerId: String?,
@@ -266,6 +315,22 @@ class MapInterfaceController(
         } else {
           it(Result.success(expected.value!!.toJson()))
         }
+      }
+    }
+  }
+  @OptIn(MapboxExperimental::class)
+  override fun getFeatureStateForFeaturesetFeature(
+    feature: FeaturesetFeature,
+    callback: (Result<String>) -> Unit
+  ) {
+    mapboxMap.getFeatureState(
+      com.mapbox.maps.interactions.TypedFeaturesetDescriptor.Featureset(
+        feature.descriptor!!.descriptor.featuresetId!!, feature.descriptor.descriptor.importId
+      ),
+      feature.id!!.toFeaturesetFeatureId()
+    ) { expected ->
+      callback.let {
+        it(Result.success(expected.asJsonString()))
       }
     }
   }

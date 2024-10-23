@@ -153,17 +153,10 @@ final class MapInterfaceController: _MapInterface {
         do {
             switch geometry.type {
             case .sCREENBOX:
-                let screenBoxArray = convertStringToDictionary(properties: geometry.value)
-                guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return }
-                guard let maxCoord = screenBoxArray["max"] as? [String: Double] else { return }
-                guard let minX = minCoord["x"], let minY = minCoord["y"],
-                      let maxX = maxCoord["x"], let maxY = maxCoord["y"] else {
+                guard let cgRect = convertValueToCGRect(geometry.value) else {
                     completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
                     return
                 }
-                let screenBox = ScreenBox(min: ScreenCoordinate(x: minX, y: minY),
-                                          max: ScreenCoordinate(x: maxX, y: maxY))
-                let cgRect = screenBox.toCGRect()
                 let queryOptions = try options.toRenderedQueryOptions()
                 self.mapboxMap.queryRenderedFeatures(with: cgRect, options: queryOptions) { result in
                     switch result {
@@ -174,13 +167,10 @@ final class MapInterfaceController: _MapInterface {
                     }
                 }
             case .sCREENCOORDINATE:
-                guard let pointDict = convertStringToDictionary(properties: geometry.value) as? [String: Double],
-                      let x = pointDict["x"], let y = pointDict["y"] else {
+                guard let cgPoint = convertValueToCGPoint(geometry.value) else {
                     completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
                     return
                 }
-                let cgPoint = CGPoint(x: x, y: y)
-
                 try self.mapboxMap.queryRenderedFeatures(with: cgPoint, options: options.toRenderedQueryOptions()) { result in
                     switch result {
                     case .success(let features):
@@ -190,14 +180,9 @@ final class MapInterfaceController: _MapInterface {
                     }
                 }
             case .lIST:
-                guard let data = geometry.value.data(using: .utf8),
-                      let rawPoints = try? JSONDecoder().decode([[String: Double]].self, from: data) else {
+                guard let cgPoints = convertValueToCGPoints(geometry.value) else {
                     completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "Geometry format error", details: geometry.value)))
                     return
-                }
-                let cgPoints = rawPoints.compactMap {
-                    guard let x = $0["x"], let y = $0["y"] else { return Optional<CGPoint>.none }
-                    return CGPoint(x: x, y: y)
                 }
                 try self.mapboxMap.queryRenderedFeatures(with: cgPoints, options: options.toRenderedQueryOptions()) { result in
                     switch result {
@@ -213,6 +198,41 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
+    func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature?], any Error>) -> Void) {
+        self.mapboxMap.queryRenderedFeatures(with: geometry, targets: targets.map({$0.toMapFeaturesetQueryTarget()})) { result in
+            switch result {
+            case .success(let features):
+                completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
+        }
+    }
+
+    func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
+        let filterExpression = try? filter.flatMap { try $0.toExp() }
+        self.mapboxMap.queryRenderedFeatures(with: geometry, featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression) { result in
+            switch result {
+            case .success(let features):
+                completion(.success(features.map({$0.toFLTFeaturesetFeature()})))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
+        }
+    }
+
+    func queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
+        let filterExpression = try? filter.flatMap { try $0.toExp() }
+        self.mapboxMap.queryRenderedFeatures(featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression) { result in
+            switch result {
+            case .success(let features):
+                completion(.success(features.map({$0.toFLTFeaturesetFeature()})))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
+        }
+    }
+
     func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void) {
         do {
             try self.mapboxMap.querySourceFeatures(for: sourceId, options: options.toSourceQueryOptions()) { result in
@@ -225,6 +245,17 @@ final class MapInterfaceController: _MapInterface {
             }
         } catch {
             completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+        }
+    }
+
+    func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature?], any Error>) -> Void) {
+        self.mapboxMap.querySourceFeatures(for: target.toMapFeaturesetQueryTarget()) { result in
+            switch result {
+            case .success(let features):
+                completion(.success(features.map({$0.toFLTQueriedSourceFeature()})))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
         }
     }
 
@@ -284,11 +315,67 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
+    func setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
+        guard let state = JSONObject.init(turfRawValue: state) else {
+            return
+        }
+        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
+            if let error {
+                completion(.failure(FlutterError(
+                    code: "setFeatureStateError",
+                    message: error.localizedDescription,
+                    details: nil
+                )))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let state = JSONObject.init(turfRawValue: state) else {
+            return
+        }
+        self.mapboxMap.setFeatureState<FeaturesetFeature>(feature.toMapFeaturesetFeature(), state: state) { error in
+            if let error {
+                completion(.failure(FlutterError(
+                    code: "setFeatureStateError",
+                    message: error.localizedDescription,
+                    details: nil
+                )))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
     func getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, completion: @escaping (Result<String, Error>) -> Void) {
         self.mapboxMap.getFeatureState(sourceId: sourceId, sourceLayerId: sourceLayerId, featureId: featureId) { result in
             switch result {
             case .success(let map):
                 completion(.success(convertDictionaryToString(dict: map)))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
+        }
+    }
+
+    func getFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, completion: @escaping (Result<[String: Any?], any Error>) -> Void) {
+        self.mapboxMap.getFeatureState(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId()) { result in
+            switch result {
+            case .success(let state):
+                completion(.success(state.mapValues { $0?.rawValue }))
+            case .failure(let error):
+                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+            }
+        }
+    }
+
+    func getFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, completion: @escaping (Result<[String: Any?], any Error>) -> Void) {
+        self.mapboxMap.getFeatureState(feature.toMapFeaturesetFeature()) { result in
+            switch result {
+            case .success(let state):
+                completion(.success(state.mapValues { $0?.rawValue }))
             case .failure(let error):
                 completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
@@ -302,6 +389,48 @@ final class MapInterfaceController: _MapInterface {
                 completion(.success(()))
             case .failure(let error):
                 completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: error.localizedDescription, details: nil)))
+            }
+        }
+    }
+
+    func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        self.mapboxMap.removeFeatureState(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), stateKey: stateKey) { error in
+            if let error {
+                completion(.failure(FlutterError(
+                    code: "removeFeatureStateError",
+                    message: error.localizedDescription,
+                    details: nil
+                )))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+        self.mapboxMap.removeFeatureState(feature.toMapFeaturesetFeature(), stateKey: stateKey) { error in
+            if let error {
+                completion(.failure(FlutterError(
+                    code: "removeFeatureStateError",
+                    message: error.localizedDescription,
+                    details: nil
+                )))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
+    func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, any Error>) -> Void) {
+        self.mapboxMap.resetFeatureStates(featureset: featureset.toMapFeaturesetDescriptor()) { error in
+            if let error {
+                completion(.failure(FlutterError(
+                    code: "resetFeatureStateError",
+                    message: error.localizedDescription,
+                    details: nil
+                )))
+            } else {
+                completion(.success(()))
             }
         }
     }

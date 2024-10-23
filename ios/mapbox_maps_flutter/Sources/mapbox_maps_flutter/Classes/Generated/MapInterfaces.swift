@@ -1114,21 +1114,28 @@ struct QueriedRenderedFeature {
   /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
   /// If the feature is only rendered in one layer, a single Id will be provided.
   var layers: [String?]
+  /// An array of feature query targets that correspond to this queried feature.
+  ///
+  /// - Note: Returned query targets will omit the original `filter` data.
+  var queryTargets: [FeaturesetQueryTarget]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
     let queriedFeature = pigeonVar_list[0] as! QueriedFeature
     let layers = pigeonVar_list[1] as! [String?]
+    let queryTargets: [FeaturesetQueryTarget]? = nilOrValue(pigeonVar_list[2])
 
     return QueriedRenderedFeature(
       queriedFeature: queriedFeature,
-      layers: layers
+      layers: layers,
+      queryTargets: queryTargets
     )
   }
   func toList() -> [Any?] {
     return [
       queriedFeature,
       layers,
+      queryTargets,
     ]
   }
 }
@@ -1192,6 +1199,159 @@ struct QueriedFeature {
       source,
       sourceLayer,
       state,
+    ]
+  }
+}
+
+/// Represents a unique identifier for a feature in one exported featureset or a layer.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetFeatureId {
+  /// The `featureId` uniquely identifies a feature within a featureset or layer. 
+  /// Note: The Identifier of the feature is not guaranteed to be persistent 
+  /// and can change depending on the source that is used.
+  var id: String
+  /// An optional field that represents the feature namespace defined by 
+  /// the Selector within a Featureset to which this feature belongs. 
+  /// If the underlying source is the same for multiple selectors within a Featureset, 
+  /// the same `featureNamespace` should be used across those selectors. 
+  /// This practice ensures the uniqueness of `FeaturesetFeatureId` across the style. 
+  /// Defining a `featureNamespace` value for the Selector is recommended, 
+  /// especially when multiple selectors exist in a Featureset, 
+  /// as it can enhance the efficiency of feature operations.
+  var namespace: String?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeatureId? {
+    let id = pigeonVar_list[0] as! String
+    let namespace: String? = nilOrValue(pigeonVar_list[1])
+
+    return FeaturesetFeatureId(
+      id: id,
+      namespace: namespace
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      namespace,
+    ]
+  }
+}
+
+/// Represents an identifier for a single exported featureset or a layer. 
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetDescriptor {
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  /// 
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
+  var featuresetId: String?
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
+  /// 
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
+  var importId: String?
+  /// An optional unique identifier for the layer within the current style.
+  /// 
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
+  var layerId: String?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetDescriptor? {
+    let featuresetId: String? = nilOrValue(pigeonVar_list[0])
+    let importId: String? = nilOrValue(pigeonVar_list[1])
+    let layerId: String? = nilOrValue(pigeonVar_list[2])
+
+    return FeaturesetDescriptor(
+      featuresetId: featuresetId,
+      importId: importId,
+      layerId: layerId
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featuresetId,
+      importId,
+      layerId,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetFeature {
+  /// Optional identifier holding feature id and feature namespace.
+  /// It could be NULL when underlying [Feature.id] is null.
+  var id: FeaturesetFeatureId?
+  /// The [TypedFeaturesetDescriptor] this concrete feature comes from.
+  /// List of supported featuresets could be found in the nested classes 
+  /// (e.g. [TypedFeaturesetDescriptor.Featureset], [TypedFeaturesetDescriptor.Layer], etc).
+  var featureset: FeaturesetDescriptor
+  /// A feature geometry.
+  /// Feature JSON properties.
+  /// The geoJSON feature.
+  var geoJSONFeature: Feature
+  /// Current feature state stored as a concrete instance of [FeatureState].
+  /// Important: this state is immutable and represents the feature state 
+  /// at the precise moment of the interaction callback.
+  var state: [String: Any?]
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeature? {
+    let id: FeaturesetFeatureId? = nilOrValue(pigeonVar_list[0])
+    let featureset = pigeonVar_list[1] as! FeaturesetDescriptor
+    let geoJSONFeature = pigeonVar_list[2] as! Feature
+    let state = pigeonVar_list[3] as! [String: Any?]
+
+    return FeaturesetFeature(
+      id: id,
+      featureset: featureset,
+      geoJSONFeature: geoJSONFeature,
+      state: state
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      id,
+      featureset,
+      geoJSONFeature,
+      state,
+    ]
+  }
+}
+
+/// Defines the parameters for querying features from a Featureset with an optional filter and id. 
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct FeaturesetQueryTarget {
+  /// The FeaturesetDescriptor that specifies the featureset to be included in the query.
+  var featureset: FeaturesetDescriptor
+  /// An optional filter expression used to refine the query results based on conditions related to the specified featureset.
+  var filter: String?
+  /// An optional unique identifier associated with the FeaturesetQueryTarget.
+  var id: Int64?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetQueryTarget? {
+    let featureset = pigeonVar_list[0] as! FeaturesetDescriptor
+    let filter: String? = nilOrValue(pigeonVar_list[1])
+    let id: Int64? = nilOrValue(pigeonVar_list[2])
+
+    return FeaturesetQueryTarget(
+      featureset: featureset,
+      filter: filter,
+      id: id
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featureset,
+      filter,
+      id,
     ]
   }
 }
@@ -2931,12 +3091,74 @@ protocol _MapInterface {
   /// @param completion The `query features completion` called when the query completes.
   /// @return A `cancelable` object that could be used to cancel the pending query.
   func queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
+  /// Queries the map for rendered features using featureset descriptors.
+  ///
+  /// This method allows to query both featureset from imported styles and user layers in the root style.
+  /// The results can be additionally filtered per-featureset.
+  ///
+  /// ```dart
+  /// let targets = [
+  ///     FeaturesetQueryTarget(
+  ///         featureset: .layer("my-layer"),
+  ///         filter: Exp(.eq) {
+  ///             Exp(.get) { "type" }
+  ///             "hotel"
+  ///         }
+  ///     ),
+  ///     FeaturesetQueryTarget(featureset: .featureset("poi", importId: "basemap"))
+  /// ]
+  /// mapView.mapboxMap.queryRenderedFeatures(with: CGPoint(x: 0, y: 0),
+  ///                            targets: targets) { result in
+  ///     // handle features in result
+  /// }
+  /// ```
+  ///
+  /// - Important: This is a low-level method. If you need to handle basic gestures on map content, please prefer to use Interactions API (see ``MapboxMap/addInteraction(_:)``) or  ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``.
+  ///
+  /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+  /// @param targets An array of targets to query with.
+  /// @param completion Callback called when the query completes.
+  func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
+  /// Queries the map for rendered features with one typed featureset.
+  ///
+  /// The results array will contain features of the type specified by this featureset.
+  ///
+  /// ```swift
+  /// mapView.mapboxMap.queryRenderedFeatures(
+  ///   with: CGPoint(x: 0, y: 0),
+  ///   featureset: .standardBuildings) { result in
+  ///     // handle buildings in result
+  /// }
+  /// ```
+  ///
+  /// - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+  ///
+  /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+  /// @param featureset A typed featureset to query with.
+  /// @param filter An additional filter for features.
+  /// @param completion Callback called when the query completes.
+  func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
+  /// Queries all rendered features in current viewport, using one typed featureset.
+  ///
+  /// This is same as ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)`` called with geometry matching the current viewport.
+  ///
+  /// - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+  ///
+  /// @param featureset A typed featureset to query with.
+  /// @param filter An additional filter for features.
+  /// @param completion Callback called when the query completes.
+  func queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
   /// @param options The `source query options` for querying source features.
   /// @param completion The `query features completion` called when the query completes.
   func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void)
+  /// Queries  the source features for a given featureset.
+  ///
+  /// @param target A featureset query target.
+  /// @param completion Callback called when the query completes.
+  func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void)
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
   ///
@@ -2983,6 +3205,28 @@ protocol _MapInterface {
   /// @param featureId The feature identifier of the feature whose state should be updated.
   /// @param state The `state` object with properties to update with their respective new values.
   func setFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, state: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Update the state map of a feature within a featureset.
+  /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+  /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  /// 
+  /// @param featureset The featureset to look the feature in.
+  /// @param featureId Identifier of the feature whose state should be updated.
+  /// @param state Map of entries to update with their respective new values
+  /// @param callback The `feature state operation callback` called when the operation completes or ends.
+  /// 
+  /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  func setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
+  /// Update the state map of an individual feature.
+  /// 
+  /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+  /// the operation will be no-op and callback will receive an error.
+  /// 
+  /// @param feature The feature to update.
+  /// @param state Map of entries to update with their respective new values
+  /// @param callback The `feature state operation callback` called when the operation completes or ends.
+  /// 
+  /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  func setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
   /// Gets the state map of a feature within a style source.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -2993,6 +3237,20 @@ protocol _MapInterface {
   /// @param featureId The feature identifier of the feature whose state should be queried.
   /// @param completion The `query feature state completion` called when the query completes.
   func getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, completion: @escaping (Result<String, Error>) -> Void)
+  /// Get the state map of a feature within a style source.
+  ///
+  /// @param featureset A featureset the feature belongs to.
+  /// @param featureId Identifier of the feature whose state should be queried.
+  /// 
+  /// @return  A `Cancelable` object that could be used to cancel the pending query.
+  func getFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, completion: @escaping (Result<[String: Any?], Error>) -> Void)
+  /// Get the state map of a feature within a style source.
+  ///
+  /// @param feature An interactive feature to query the state from.
+  /// @param completion Feature's state map or an empty map if the feature could not be found.
+  /// 
+  /// @return  A `Cancelable` object that could be used to cancel the pending query.
+  func getFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, completion: @escaping (Result<[String: Any?], Error>) -> Void)
   /// Removes entries from a feature state object.
   ///
   /// Remove a specified property or all property from a feature's state object, depending on the value of
@@ -3006,6 +3264,35 @@ protocol _MapInterface {
   /// @param featureId The feature identifier of the feature whose state should be removed.
   /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
   func removeFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Removes entries from a feature state object of a feature in the specified featureset.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  /// 
+  /// @param featureset A featureset the feature belongs to.
+  /// @param featureId Identifier of the feature whose state should be removed.
+  /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+  /// @param callback The `feature state operation callback` called when the operation completes or ends.
+  /// 
+  /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Removes entries from a specified Feature.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  /// 
+  /// @param feature An interactive feature to update.
+  /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+  /// @param callback The `feature state operation callback` called when the operation completes or ends.
+  /// 
+  /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Reset all the feature states within a featureset.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+  /// 
+  /// @param featureset A featureset descriptor
+  /// @param callback The `feature state operation callback` called when the operation completes or ends.
+  /// 
+  /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, Error>) -> Void)
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   func reduceMemoryUse() throws
   /// Gets elevation for the given coordinate.
@@ -3398,6 +3685,115 @@ class _MapInterfaceSetup {
     } else {
       queryRenderedFeaturesChannel.setMessageHandler(nil)
     }
+    /// Queries the map for rendered features using featureset descriptors.
+    ///
+    /// This method allows to query both featureset from imported styles and user layers in the root style.
+    /// The results can be additionally filtered per-featureset.
+    ///
+    /// ```dart
+    /// let targets = [
+    ///     FeaturesetQueryTarget(
+    ///         featureset: .layer("my-layer"),
+    ///         filter: Exp(.eq) {
+    ///             Exp(.get) { "type" }
+    ///             "hotel"
+    ///         }
+    ///     ),
+    ///     FeaturesetQueryTarget(featureset: .featureset("poi", importId: "basemap"))
+    /// ]
+    /// mapView.mapboxMap.queryRenderedFeatures(with: CGPoint(x: 0, y: 0),
+    ///                            targets: targets) { result in
+    ///     // handle features in result
+    /// }
+    /// ```
+    ///
+    /// - Important: This is a low-level method. If you need to handle basic gestures on map content, please prefer to use Interactions API (see ``MapboxMap/addInteraction(_:)``) or  ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``.
+    ///
+    /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+    /// @param targets An array of targets to query with.
+    /// @param completion Callback called when the query completes.
+    let queryRenderedFeaturesForTargetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForTargets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      queryRenderedFeaturesForTargetsChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let geometryArg = args[0] as! _RenderedQueryGeometry
+        let targetsArg = args[1] as! [FeaturesetQueryTarget]
+        api.queryRenderedFeaturesForTargets(geometry: geometryArg, targets: targetsArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      queryRenderedFeaturesForTargetsChannel.setMessageHandler(nil)
+    }
+    /// Queries the map for rendered features with one typed featureset.
+    ///
+    /// The results array will contain features of the type specified by this featureset.
+    ///
+    /// ```swift
+    /// mapView.mapboxMap.queryRenderedFeatures(
+    ///   with: CGPoint(x: 0, y: 0),
+    ///   featureset: .standardBuildings) { result in
+    ///     // handle buildings in result
+    /// }
+    /// ```
+    ///
+    /// - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+    ///
+    /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+    /// @param featureset A typed featureset to query with.
+    /// @param filter An additional filter for features.
+    /// @param completion Callback called when the query completes.
+    let queryRenderedFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      queryRenderedFeaturesForFeaturesetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let geometryArg = args[0] as! _RenderedQueryGeometry
+        let featuresetArg = args[1] as! FeaturesetDescriptor
+        let filterArg: String? = nilOrValue(args[2])
+        api.queryRenderedFeaturesForFeatureset(geometry: geometryArg, featureset: featuresetArg, filter: filterArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      queryRenderedFeaturesForFeaturesetChannel.setMessageHandler(nil)
+    }
+    /// Queries all rendered features in current viewport, using one typed featureset.
+    ///
+    /// This is same as ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)`` called with geometry matching the current viewport.
+    ///
+    /// - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+    ///
+    /// @param featureset A typed featureset to query with.
+    /// @param filter An additional filter for features.
+    /// @param completion Callback called when the query completes.
+    let queryRenderedFeaturesInViewportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesInViewport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      queryRenderedFeaturesInViewportChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let filterArg: String? = nilOrValue(args[1])
+        api.queryRenderedFeaturesInViewport(featureset: featuresetArg, filter: filterArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      queryRenderedFeaturesInViewportChannel.setMessageHandler(nil)
+    }
     /// Queries the map for source features.
     ///
     /// @param sourceId The style source identifier used to query for source features.
@@ -3420,6 +3816,27 @@ class _MapInterfaceSetup {
       }
     } else {
       querySourceFeaturesChannel.setMessageHandler(nil)
+    }
+    /// Queries  the source features for a given featureset.
+    ///
+    /// @param target A featureset query target.
+    /// @param completion Callback called when the query completes.
+    let querySourceFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      querySourceFeaturesForFeaturesetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let targetArg = args[0] as! FeaturesetQueryTarget
+        api.querySourceFeaturesForFeatureset(target: targetArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      querySourceFeaturesForFeaturesetChannel.setMessageHandler(nil)
     }
     /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
     /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3539,6 +3956,63 @@ class _MapInterfaceSetup {
     } else {
       setFeatureStateChannel.setMessageHandler(nil)
     }
+    /// Update the state map of a feature within a featureset.
+    /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+    /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+    /// 
+    /// @param featureset The featureset to look the feature in.
+    /// @param featureId Identifier of the feature whose state should be updated.
+    /// @param state Map of entries to update with their respective new values
+    /// @param callback The `feature state operation callback` called when the operation completes or ends.
+    /// 
+    /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+    let setFeatureStateForFeaturesetFeatureDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeatureDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let featureIdArg = args[1] as! FeaturesetFeatureId
+        let stateArg = args[2] as! [String: Any?]
+        api.setFeatureStateForFeaturesetFeatureDescriptor(featureset: featuresetArg, featureId: featureIdArg, state: stateArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler(nil)
+    }
+    /// Update the state map of an individual feature.
+    /// 
+    /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+    /// the operation will be no-op and callback will receive an error.
+    /// 
+    /// @param feature The feature to update.
+    /// @param state Map of entries to update with their respective new values
+    /// @param callback The `feature state operation callback` called when the operation completes or ends.
+    /// 
+    /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+    let setFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featureArg = args[0] as! FeaturesetFeature
+        let stateArg = args[1] as! [String: Any?]
+        api.setFeatureStateForFeaturesetFeature(feature: featureArg, state: stateArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFeatureStateForFeaturesetFeatureChannel.setMessageHandler(nil)
+    }
     /// Gets the state map of a feature within a style source.
     ///
     /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -3566,6 +4040,53 @@ class _MapInterfaceSetup {
       }
     } else {
       getFeatureStateChannel.setMessageHandler(nil)
+    }
+    /// Get the state map of a feature within a style source.
+    ///
+    /// @param featureset A featureset the feature belongs to.
+    /// @param featureId Identifier of the feature whose state should be queried.
+    /// 
+    /// @return  A `Cancelable` object that could be used to cancel the pending query.
+    let getFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let featureIdArg = args[1] as! FeaturesetFeatureId
+        api.getFeatureStateForFeaturesetDescriptor(featureset: featuresetArg, featureId: featureIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFeatureStateForFeaturesetDescriptorChannel.setMessageHandler(nil)
+    }
+    /// Get the state map of a feature within a style source.
+    ///
+    /// @param feature An interactive feature to query the state from.
+    /// @param completion Feature's state map or an empty map if the feature could not be found.
+    /// 
+    /// @return  A `Cancelable` object that could be used to cancel the pending query.
+    let getFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featureArg = args[0] as! FeaturesetFeature
+        api.getFeatureStateForFeaturesetFeature(feature: featureArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFeatureStateForFeaturesetFeatureChannel.setMessageHandler(nil)
     }
     /// Removes entries from a feature state object.
     ///
@@ -3598,6 +4119,86 @@ class _MapInterfaceSetup {
       }
     } else {
       removeFeatureStateChannel.setMessageHandler(nil)
+    }
+    /// Removes entries from a feature state object of a feature in the specified featureset.
+    /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+    /// 
+    /// @param featureset A featureset the feature belongs to.
+    /// @param featureId Identifier of the feature whose state should be removed.
+    /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+    /// @param callback The `feature state operation callback` called when the operation completes or ends.
+    /// 
+    /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+    let removeFeatureStateForFeaturesetFeatureDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      removeFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let featureIdArg = args[1] as! FeaturesetFeatureId
+        let stateKeyArg = args[2] as! String
+        api.removeFeatureStateForFeaturesetFeatureDescriptor(featureset: featuresetArg, featureId: featureIdArg, stateKey: stateKeyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      removeFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler(nil)
+    }
+    /// Removes entries from a specified Feature.
+    /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+    /// 
+    /// @param feature An interactive feature to update.
+    /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+    /// @param callback The `feature state operation callback` called when the operation completes or ends.
+    /// 
+    /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+    let removeFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      removeFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featureArg = args[0] as! FeaturesetFeature
+        let stateKeyArg = args[1] as! String
+        api.removeFeatureStateForFeaturesetFeature(feature: featureArg, stateKey: stateKeyArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      removeFeatureStateForFeaturesetFeatureChannel.setMessageHandler(nil)
+    }
+    /// Reset all the feature states within a featureset.
+    ///
+    /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+    /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+    /// 
+    /// @param featureset A featureset descriptor
+    /// @param callback The `feature state operation callback` called when the operation completes or ends.
+    /// 
+    /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+    let resetFeatureStatesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      resetFeatureStatesForFeaturesetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        api.resetFeatureStatesForFeatureset(featureset: featuresetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      resetFeatureStatesForFeaturesetChannel.setMessageHandler(nil)
     }
     /// Reduces memory use. Useful to call when the application gets paused or sent to background.
     let reduceMemoryUseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
@@ -4660,6 +5261,10 @@ protocol StyleManager {
   /// @param locale The locale to apply for localization
   /// @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
   func localizeLabels(locale: String, layerIds: [String]?, completion: @escaping (Result<Void, Error>) -> Void)
+  /// Returns the available featuresets in the currently loaded style.
+  ///
+  /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+  func getFeaturesets() throws -> [FeaturesetDescriptor]
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -6016,6 +6621,22 @@ class StyleManagerSetup {
       }
     } else {
       localizeLabelsChannel.setMessageHandler(nil)
+    }
+    /// Returns the available featuresets in the currently loaded style.
+    ///
+    /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+    let getFeaturesetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFeaturesetsChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.getFeaturesets()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      getFeaturesetsChannel.setMessageHandler(nil)
     }
   }
 }

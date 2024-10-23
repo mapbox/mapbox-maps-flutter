@@ -443,10 +443,39 @@ class MapboxMap extends ChangeNotifier {
           _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
           options);
 
+  /// Queries the map for rendered features using featureset descriptors.
+  Future<List<QueriedRenderedFeature?>> queryRenderedFeaturesForTargets(
+          RenderedQueryGeometry geometry,
+          List<FeaturesetQueryTarget> targets) async =>
+      _mapInterface.queryRenderedFeaturesForTargets(
+          _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
+          targets);
+
+  /// Queries the map for rendered features with one typed featureset.
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
+          {required RenderedQueryGeometry geometry,
+          required FeaturesetDescriptor featureset,
+          String? filter = null}) async =>
+      _mapInterface.queryRenderedFeaturesForFeatureset(
+          _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
+          featureset,
+          filter);
+
+  /// Queries all rendered features in current viewport, using one typed featureset.
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesInViewport(
+          {required FeaturesetDescriptor featureset,
+          String? filter = null}) async =>
+      _mapInterface.queryRenderedFeaturesInViewport(featureset, filter);
+
   /// Queries the map for source features.
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
       _mapInterface.querySourceFeatures(sourceId, options);
+
+  /// Queries the source features for a given featureset.
+  Future<List<QueriedSourceFeature?>> querySourceFeaturesForFeatureset(
+          FeaturesetQueryTarget target) async =>
+      _mapInterface.querySourceFeaturesForFeatureset(target);
 
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -485,6 +514,24 @@ class MapboxMap extends ChangeNotifier {
           String featureId, String state) =>
       _mapInterface.setFeatureState(sourceId, sourceLayerId, featureId, state);
 
+  /// Update the state map of a feature within a featureset.
+  /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+  /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  Future<void> setFeatureStateForFeaturesetFeatureDescriptor(
+          FeaturesetDescriptor featureset,
+          FeaturesetFeatureId featureId,
+          Map<String, Object?> state) =>
+      _mapInterface.setFeatureStateForFeaturesetFeatureDescriptor(
+          featureset, featureId, state);
+
+  /// Update the state map of an individual feature.
+  ///
+  /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+  /// the operation will be no-op and callback will receive an error.
+  Future<void> setFeatureStateForFeaturesetFeature(
+          FeaturesetFeature feature, Map<String, Object?> state) =>
+      _mapInterface.setFeatureStateForFeaturesetFeature(feature, state);
+
   /// Gets the state map of a feature within a style source.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -492,6 +539,17 @@ class MapboxMap extends ChangeNotifier {
   Future<String> getFeatureState(
           String sourceId, String? sourceLayerId, String featureId) =>
       _mapInterface.getFeatureState(sourceId, sourceLayerId, featureId);
+
+  /// Get the state map of a feature within a style source.
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+          FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) =>
+      _mapInterface.getFeatureStateForFeaturesetDescriptor(
+          featureset, featureId);
+
+  /// Get the state map of a feature within a style source.
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+          FeaturesetFeature feature) =>
+      _mapInterface.getFeatureStateForFeaturesetFeature(feature);
 
   /// Removes entries from a feature state object.
   ///
@@ -504,6 +562,29 @@ class MapboxMap extends ChangeNotifier {
           String featureId, String? stateKey) =>
       _mapInterface.removeFeatureState(
           sourceId, sourceLayerId, featureId, stateKey);
+
+  /// Removes entries from a feature state object of a feature in the specified featureset.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  Future<void> removeFeatureStateForFeaturesetFeatureDescriptor(
+          FeaturesetDescriptor featureset,
+          FeaturesetFeatureId featureId,
+          String stateKey) =>
+      _mapInterface.removeFeatureStateForFeaturesetFeatureDescriptor(
+          featureset, featureId, stateKey);
+
+  /// Removes entries from a specified Feature.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  Future<void> removeFeatureStateForFeaturesetFeature(
+          FeaturesetFeature feature, String stateKey) =>
+      _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
+
+  /// Reset all the feature states within a featureset.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+  Future<void> resetFeatureStatesForFeatureset(
+          FeaturesetDescriptor featureset) =>
+      _mapInterface.resetFeatureStatesForFeatureset(featureset);
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
