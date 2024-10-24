@@ -64,6 +64,12 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+enum _ViewportTransitionType: Int {
+  case defaultTransition = 0
+  case fly = 1
+  case easing = 2
+}
+
 enum _FollowPuckViewportStateBearing: Int {
   case constant = 0
   case heading = 1
@@ -93,6 +99,83 @@ struct _DefaultViewportTransitionOptions {
   func toList() -> [Any?] {
     return [
       maxDurationMs
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _FlyViewportTransitionOptions {
+  var durationMs: Int64?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _FlyViewportTransitionOptions? {
+    let durationMs: Int64? = nilOrValue(pigeonVar_list[0])
+
+    return _FlyViewportTransitionOptions(
+      durationMs: durationMs
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      durationMs
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _EasingViewportTransitionOptions {
+  var durationMs: Int64
+  var a: Double
+  var b: Double
+  var c: Double
+  var d: Double
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _EasingViewportTransitionOptions? {
+    let durationMs = pigeonVar_list[0] as! Int64
+    let a = pigeonVar_list[1] as! Double
+    let b = pigeonVar_list[2] as! Double
+    let c = pigeonVar_list[3] as! Double
+    let d = pigeonVar_list[4] as! Double
+
+    return _EasingViewportTransitionOptions(
+      durationMs: durationMs,
+      a: a,
+      b: b,
+      c: c,
+      d: d
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      durationMs,
+      a,
+      b,
+      c,
+      d,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct _ViewportTransitionStorage {
+  var type: _ViewportTransitionType
+  var options: Any?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _ViewportTransitionStorage? {
+    let type = pigeonVar_list[0] as! _ViewportTransitionType
+    let options: Any? = pigeonVar_list[1]
+
+    return _ViewportTransitionStorage(
+      type: type,
+      options: options
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      type,
+      options,
     ]
   }
 }
@@ -146,7 +229,6 @@ struct _OverviewViewportStateOptions {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct _FollowPuckViewportStateOptions {
-  var padding: MbxEdgeInsets?
   var zoom: Double?
   var bearingValue: Double?
   var bearing: _FollowPuckViewportStateBearing?
@@ -154,14 +236,12 @@ struct _FollowPuckViewportStateOptions {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _FollowPuckViewportStateOptions? {
-    let padding: MbxEdgeInsets? = nilOrValue(pigeonVar_list[0])
-    let zoom: Double? = nilOrValue(pigeonVar_list[1])
-    let bearingValue: Double? = nilOrValue(pigeonVar_list[2])
-    let bearing: _FollowPuckViewportStateBearing? = nilOrValue(pigeonVar_list[3])
-    let pitch: Double? = nilOrValue(pigeonVar_list[4])
+    let zoom: Double? = nilOrValue(pigeonVar_list[0])
+    let bearingValue: Double? = nilOrValue(pigeonVar_list[1])
+    let bearing: _FollowPuckViewportStateBearing? = nilOrValue(pigeonVar_list[2])
+    let pitch: Double? = nilOrValue(pigeonVar_list[3])
 
     return _FollowPuckViewportStateOptions(
-      padding: padding,
       zoom: zoom,
       bearingValue: bearingValue,
       bearing: bearing,
@@ -170,7 +250,6 @@ struct _FollowPuckViewportStateOptions {
   }
   func toList() -> [Any?] {
     return [
-      padding,
       zoom,
       bearingValue,
       bearing,
@@ -202,62 +281,45 @@ struct _ViewportStateStorage {
   }
 }
 
-/// Configuration options for [ViewportManager].
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct ViewportOptions {
-  /// Indicates whether the [ViewportManager] should idle when the user interacts with the map using gestures.
-  ///
-  /// Set this property to [false] to enable building a custom [ViewportState] that
-  /// can work simultaneously with certain types of gestures.
-  ///
-  /// Defaults to [true].
-  var transitionsToIdleUponUserInteraction: Bool
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> ViewportOptions? {
-    let transitionsToIdleUponUserInteraction = pigeonVar_list[0] as! Bool
-
-    return ViewportOptions(
-      transitionsToIdleUponUserInteraction: transitionsToIdleUponUserInteraction
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      transitionsToIdleUponUserInteraction
-    ]
-  }
-}
-
 private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _FollowPuckViewportStateBearing(rawValue: enumResultAsInt)
+        return _ViewportTransitionType(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _ViewportStateType(rawValue: enumResultAsInt)
+        return _FollowPuckViewportStateBearing(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return _ViewportStateType(rawValue: enumResultAsInt)
+      }
+      return nil
     case 132:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 133:
-      return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 134:
-      return _OverviewViewportStateOptions.fromList(self.readValue() as! [Any?])
+      return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 135:
-      return _FollowPuckViewportStateOptions.fromList(self.readValue() as! [Any?])
+      return _FlyViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 136:
-      return _ViewportStateStorage.fromList(self.readValue() as! [Any?])
+      return _EasingViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 137:
-      return ViewportOptions.fromList(self.readValue() as! [Any?])
+      return _ViewportTransitionStorage.fromList(self.readValue() as! [Any?])
+    case 138:
+      return _OverviewViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 139:
+      return _FollowPuckViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 140:
+      return _ViewportStateStorage.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -266,32 +328,41 @@ private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
 
 private class ViewportInternalPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? _FollowPuckViewportStateBearing {
+    if let value = value as? _ViewportTransitionType {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _ViewportStateType {
+    } else if let value = value as? _FollowPuckViewportStateBearing {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? MbxEdgeInsets {
+    } else if let value = value as? _ViewportStateType {
       super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? _DefaultViewportTransitionOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? _OverviewViewportStateOptions {
+    } else if let value = value as? _DefaultViewportTransitionOptions {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? _FollowPuckViewportStateOptions {
+    } else if let value = value as? _FlyViewportTransitionOptions {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? _ViewportStateStorage {
+    } else if let value = value as? _EasingViewportTransitionOptions {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? ViewportOptions {
+    } else if let value = value as? _ViewportTransitionStorage {
       super.writeByte(137)
+      super.writeValue(value.toList())
+    } else if let value = value as? _OverviewViewportStateOptions {
+      super.writeByte(138)
+      super.writeValue(value.toList())
+    } else if let value = value as? _FollowPuckViewportStateOptions {
+      super.writeByte(139)
+      super.writeValue(value.toList())
+    } else if let value = value as? _ViewportStateStorage {
+      super.writeByte(140)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -314,61 +385,29 @@ class ViewportInternalPigeonCodec: FlutterStandardMessageCodec, @unchecked Senda
 }
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol _ViewportManagerMessenger {
-  /// Get configuration options for adjusting the behavior of [ViewportManager].
-  func getOptions() throws -> ViewportOptions
-  /// Set configuration options for adjusting the behavior of [ViewportManager].
-  func setOptions(options: ViewportOptions) throws
-  func transition(stateStorage: _ViewportStateStorage, transitionIdentifier: Int64?) throws -> Bool
+protocol _ViewportMessenger {
+  func transition(stateStorage: _ViewportStateStorage, transitionStorage: _ViewportTransitionStorage?, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class _ViewportManagerMessengerSetup {
+class _ViewportMessengerSetup {
   static var codec: FlutterStandardMessageCodec { ViewportInternalPigeonCodec.shared }
-  /// Sets up an instance of `_ViewportManagerMessenger` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _ViewportManagerMessenger?, messageChannelSuffix: String = "") {
+  /// Sets up an instance of `_ViewportMessenger` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _ViewportMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// Get configuration options for adjusting the behavior of [ViewportManager].
-    let getOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.getOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getOptionsChannel.setMessageHandler { _, reply in
-        do {
-          let result = try api.getOptions()
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      getOptionsChannel.setMessageHandler(nil)
-    }
-    /// Set configuration options for adjusting the behavior of [ViewportManager].
-    let setOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setOptionsChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let optionsArg = args[0] as! ViewportOptions
-        do {
-          try api.setOptions(options: optionsArg)
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      setOptionsChannel.setMessageHandler(nil)
-    }
-    let transitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let transitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportMessenger.transition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       transitionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let stateStorageArg = args[0] as! _ViewportStateStorage
-        let transitionIdentifierArg: Int64? = nilOrValue(args[1])
-        do {
-          let result = try api.transition(stateStorage: stateStorageArg, transitionIdentifier: transitionIdentifierArg)
-          reply(wrapResult(result))
-        } catch {
-          reply(wrapError(error))
+        let transitionStorageArg: _ViewportTransitionStorage? = nilOrValue(args[1])
+        api.transition(stateStorage: stateStorageArg, transitionStorage: transitionStorageArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
         }
       }
     } else {

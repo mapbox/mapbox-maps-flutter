@@ -26,6 +26,9 @@ import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
+import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
+import com.mapbox.maps.plugin.animation.camera
+import com.mapbox.maps.plugin.viewport.viewport
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -60,6 +63,7 @@ class MapboxMapController(
   private val attributionController: AttributionController
   private val scaleBarController: ScaleBarController
   private val compassController: CompassController
+  private val viewportController: ViewportController
 
   private val proxyBinaryMessenger = ProxyBinaryMessenger(messenger, "$channelSuffix")
   private val eventHandler: MapboxEventHandler
@@ -139,6 +143,7 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
+    viewportController = ViewportController(mapView.viewport, mapView.camera, context)
 
     changeUserAgent(pluginVersion)
 
@@ -154,6 +159,7 @@ class MapboxMapController(
     AttributionSettingsInterface.setUp(proxyBinaryMessenger, attributionController)
     ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, scaleBarController)
     CompassSettingsInterface.setUp(proxyBinaryMessenger, compassController)
+    _ViewportMessenger.setUp(proxyBinaryMessenger, viewportController)
 
     methodChannel = MethodChannel(proxyBinaryMessenger, "plugins.flutter.io")
     methodChannel.setMethodCallHandler(this)
@@ -203,6 +209,7 @@ class MapboxMapController(
     CompassSettingsInterface.setUp(proxyBinaryMessenger, null)
     ScaleBarSettingsInterface.setUp(proxyBinaryMessenger, null)
     AttributionSettingsInterface.setUp(proxyBinaryMessenger, null)
+    _ViewportMessenger.setUp(proxyBinaryMessenger, null)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

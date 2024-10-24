@@ -8,7 +8,6 @@ final class CameraViewportState extends ViewportState {
   final double? bearing;
   final double? pitch;
 
-
   const CameraViewportState({
     this.center,
     this.padding,

@@ -4,6 +4,12 @@
 
 part of mapbox_maps_flutter;
 
+enum _ViewportTransitionType {
+  defaultTransition,
+  fly,
+  easing,
+}
+
 enum _FollowPuckViewportStateBearing {
   constant,
   heading,
@@ -35,6 +41,94 @@ class _DefaultViewportTransitionOptions {
     result as List<Object?>;
     return _DefaultViewportTransitionOptions(
       maxDurationMs: result[0]! as int,
+    );
+  }
+}
+
+class _FlyViewportTransitionOptions {
+  _FlyViewportTransitionOptions({
+    this.durationMs,
+  });
+
+  int? durationMs;
+
+  Object encode() {
+    return <Object?>[
+      durationMs,
+    ];
+  }
+
+  static _FlyViewportTransitionOptions decode(Object result) {
+    result as List<Object?>;
+    return _FlyViewportTransitionOptions(
+      durationMs: result[0] as int?,
+    );
+  }
+}
+
+class _EasingViewportTransitionOptions {
+  _EasingViewportTransitionOptions({
+    required this.durationMs,
+    required this.a,
+    required this.b,
+    required this.c,
+    required this.d,
+  });
+
+  int durationMs;
+
+  double a;
+
+  double b;
+
+  double c;
+
+  double d;
+
+  Object encode() {
+    return <Object?>[
+      durationMs,
+      a,
+      b,
+      c,
+      d,
+    ];
+  }
+
+  static _EasingViewportTransitionOptions decode(Object result) {
+    result as List<Object?>;
+    return _EasingViewportTransitionOptions(
+      durationMs: result[0]! as int,
+      a: result[1]! as double,
+      b: result[2]! as double,
+      c: result[3]! as double,
+      d: result[4]! as double,
+    );
+  }
+}
+
+class _ViewportTransitionStorage {
+  _ViewportTransitionStorage({
+    required this.type,
+    this.options,
+  });
+
+  _ViewportTransitionType type;
+
+  Object? options;
+
+  Object encode() {
+    return <Object?>[
+      type,
+      options,
+    ];
+  }
+
+  static _ViewportTransitionStorage decode(Object result) {
+    result as List<Object?>;
+    return _ViewportTransitionStorage(
+      type: result[0]! as _ViewportTransitionType,
+      options: result[1],
     );
   }
 }
@@ -97,14 +191,11 @@ class _OverviewViewportStateOptions {
 
 class _FollowPuckViewportStateOptions {
   _FollowPuckViewportStateOptions({
-    this.padding,
     this.zoom,
     this.bearingValue,
     this.bearing,
     this.pitch,
   });
-
-  MbxEdgeInsets? padding;
 
   double? zoom;
 
@@ -116,7 +207,6 @@ class _FollowPuckViewportStateOptions {
 
   Object encode() {
     return <Object?>[
-      padding,
       zoom,
       bearingValue,
       bearing,
@@ -127,11 +217,10 @@ class _FollowPuckViewportStateOptions {
   static _FollowPuckViewportStateOptions decode(Object result) {
     result as List<Object?>;
     return _FollowPuckViewportStateOptions(
-      padding: result[0] as MbxEdgeInsets?,
-      zoom: result[1] as double?,
-      bearingValue: result[2] as double?,
-      bearing: result[3] as _FollowPuckViewportStateBearing?,
-      pitch: result[4] as double?,
+      zoom: result[0] as double?,
+      bearingValue: result[1] as double?,
+      bearing: result[2] as _FollowPuckViewportStateBearing?,
+      pitch: result[3] as double?,
     );
   }
 }
@@ -162,34 +251,6 @@ class _ViewportStateStorage {
   }
 }
 
-/// Configuration options for [ViewportManager].
-class ViewportOptions {
-  ViewportOptions({
-    required this.transitionsToIdleUponUserInteraction,
-  });
-
-  /// Indicates whether the [ViewportManager] should idle when the user interacts with the map using gestures.
-  ///
-  /// Set this property to [false] to enable building a custom [ViewportState] that
-  /// can work simultaneously with certain types of gestures.
-  ///
-  /// Defaults to [true].
-  bool transitionsToIdleUponUserInteraction;
-
-  Object encode() {
-    return <Object?>[
-      transitionsToIdleUponUserInteraction,
-    ];
-  }
-
-  static ViewportOptions decode(Object result) {
-    result as List<Object?>;
-    return ViewportOptions(
-      transitionsToIdleUponUserInteraction: result[0]! as bool,
-    );
-  }
-}
-
 class ViewportInternal_PigeonCodec extends StandardMessageCodec {
   const ViewportInternal_PigeonCodec();
   @override
@@ -197,32 +258,41 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is _FollowPuckViewportStateBearing) {
+    } else if (value is _ViewportTransitionType) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is _ViewportStateType) {
+    } else if (value is _FollowPuckViewportStateBearing) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is _ViewportStateType) {
       buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+      writeValue(buffer, value.index);
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is _DefaultViewportTransitionOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is _OverviewViewportStateOptions) {
+    } else if (value is _DefaultViewportTransitionOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is _FollowPuckViewportStateOptions) {
+    } else if (value is _FlyViewportTransitionOptions) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is _ViewportStateStorage) {
+    } else if (value is _EasingViewportTransitionOptions) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is ViewportOptions) {
+    } else if (value is _ViewportTransitionStorage) {
       buffer.putUint8(137);
+      writeValue(buffer, value.encode());
+    } else if (value is _OverviewViewportStateOptions) {
+      buffer.putUint8(138);
+      writeValue(buffer, value.encode());
+    } else if (value is _FollowPuckViewportStateOptions) {
+      buffer.putUint8(139);
+      writeValue(buffer, value.encode());
+    } else if (value is _ViewportStateStorage) {
+      buffer.putUint8(140);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -234,37 +304,44 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
+        return value == null ? null : _ViewportTransitionType.values[value];
+      case 130:
+        final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : _FollowPuckViewportStateBearing.values[value];
-      case 130:
+      case 131:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : _ViewportStateType.values[value];
-      case 131:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 132:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 133:
-        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 134:
-        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
+        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
       case 135:
-        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+        return _FlyViewportTransitionOptions.decode(readValue(buffer)!);
       case 136:
-        return _ViewportStateStorage.decode(readValue(buffer)!);
+        return _EasingViewportTransitionOptions.decode(readValue(buffer)!);
       case 137:
-        return ViewportOptions.decode(readValue(buffer)!);
+        return _ViewportTransitionStorage.decode(readValue(buffer)!);
+      case 138:
+        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
+      case 139:
+        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+      case 140:
+        return _ViewportStateStorage.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
-class _ViewportManagerMessenger {
-  /// Constructor for [_ViewportManagerMessenger].  The [binaryMessenger] named argument is
+class _ViewportMessenger {
+  /// Constructor for [_ViewportMessenger].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  _ViewportManagerMessenger(
+  _ViewportMessenger(
       {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix =
@@ -276,65 +353,10 @@ class _ViewportManagerMessenger {
 
   final String pigeonVar_messageChannelSuffix;
 
-  /// Get configuration options for adjusting the behavior of [ViewportManager].
-  Future<ViewportOptions> getOptions() async {
+  Future<bool> transition(_ViewportStateStorage stateStorage,
+      _ViewportTransitionStorage? transitionStorage) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.getOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as ViewportOptions?)!;
-    }
-  }
-
-  /// Set configuration options for adjusting the behavior of [ViewportManager].
-  Future<void> setOptions(ViewportOptions options) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setOptions$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[options]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<bool> transition(
-      _ViewportStateStorage stateStorage, int? transitionIdentifier) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._ViewportMessenger.transition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -342,7 +364,7 @@ class _ViewportManagerMessenger {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[stateStorage, transitionIdentifier]) as List<Object?>?;
+        .send(<Object?>[stateStorage, transitionStorage]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
