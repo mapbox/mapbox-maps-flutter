@@ -10,6 +10,7 @@ import 'package:mapbox_maps_example/ornaments_example.dart';
 import 'package:mapbox_maps_example/geojson_line_example.dart';
 import 'package:mapbox_maps_example/image_source_example.dart';
 import 'package:mapbox_maps_example/map_interface_example.dart';
+import 'package:mapbox_maps_example/interactive_features_example.dart';
 import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
 import 'package:mapbox_maps_example/snapshotter_example.dart';
@@ -35,6 +36,7 @@ final List<Example> _allPages = <Example>[
   DebugOptionsExample(),
   FullMapExample(),
   StyleExample(),
+  InteractiveFeaturesExample(),
   CameraExample(),
   ProjectionExample(),
   MapInterfaceExample(),

@@ -3,26 +3,23 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'page.dart';
+import 'example.dart';
 
-class InteractiveFeaturesPage extends ExamplePage {
-  InteractiveFeaturesPage()
-      : super(const Icon(Icons.map), 'Interactive features map');
+class InteractiveFeaturesExample extends StatefulWidget implements Example {
+  @override
+  final Widget leading = const Icon(Icons.map);
+  @override
+  final String title = 'Interactive Features';
+  @override
+  final String? subtitle = null;
 
   @override
-  Widget build(BuildContext context) {
-    return const InteractiveFeatures();
-  }
+  State<StatefulWidget> createState() => InteractiveFeaturesState();
 }
 
-class InteractiveFeatures extends StatefulWidget {
-  const InteractiveFeatures();
+class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
+  InteractiveFeaturesState();
 
-  @override
-  State createState() => InteractiveFeaturesState();
-}
-
-class InteractiveFeaturesState extends State<InteractiveFeatures> {
   MapboxMap? mapboxMap;
   var isLight = true;
   var feature = Feature(
@@ -34,15 +31,6 @@ class InteractiveFeaturesState extends State<InteractiveFeatures> {
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
-  }
-
-  _onStyleLoadedCallback(StyleLoadedEventData data) {
-    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //   content: Text("Style loaded :), time: ${data.timeInterval}"),
-    //   backgroundColor: Theme.of(context).primaryColor,
-    //   duration: Duration(seconds: 1),
-    // ));
-    print("styleLoaded");
   }
 
   _onTap(context) async {
@@ -62,18 +50,8 @@ class InteractiveFeaturesState extends State<InteractiveFeatures> {
     print("feature");
     print(feature?.feature);
 
-    // Get FeatureState
-    // var typedFeatures = Feature.fromQueriedFeature(feature!);
-
     Map<String, Object?> data = {
       "highlight": true,
-    };
-
-    String jsonString = jsonEncode(data);
-
-    var geometry = {
-      "type": "Point",
-      "coordinates": [1, 2]
     };
 
     Feature featured =
@@ -92,41 +70,9 @@ class InteractiveFeaturesState extends State<InteractiveFeatures> {
 
     await Future.delayed(Duration(seconds: 2));
 
-    var featuerState =
+    var featureState =
         await mapboxMap?.getFeatureStateForFeaturesetFeature(featureSetFeature);
-    print("yello");
-    print(featuerState);
-  }
-
-  _onLongClick(context) async {
-    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap?.style.setStyleJSON(styleJson);
-    print("longclick");
-
-    var clicked = await mapboxMap?.pixelForCoordinate(context.point);
-
-    var filter = '["=",["get", "type"],"A"]';
-    var featuresetFilterQuery =
-        await mapboxMap?.queryRenderedFeaturesForFeatureset(
-            geometry: RenderedQueryGeometry.fromScreenCoordinate(clicked!),
-            featureset:
-                FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
-            filter: filter);
-
-    print(featuresetFilterQuery?[0].geoJSONFeature.properties?["name"]);
-    print(featuresetFilterQuery?[0].geoJSONFeature.properties?["class"]);
-
-    var renderedQueryGeometry =
-        RenderedQueryGeometry.fromScreenCoordinate(clicked!);
-
-    var target = FeaturesetQueryTarget(
-        featureset: FeaturesetDescriptor(
-            featuresetId: "buildings", importId: "basemap"));
-    var targets = [target];
-
-    var query = await mapboxMap?.queryRenderedFeaturesForTargets(
-        renderedQueryGeometry, targets);
-    print(query?.first?.queriedFeature.feature);
+    print(featureState);
   }
 
   @override
@@ -161,12 +107,9 @@ class InteractiveFeaturesState extends State<InteractiveFeatures> {
                   coordinates: Position(24.94180921290157, 60.171227338006844)),
               zoom: 15.0,
               pitch: 30),
-          styleUri:
-              "",
+          styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
           textureView: true,
           onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoadedCallback,
-          onLongTapListener: _onLongClick,
           onTapListener: _onTap,
         ));
   }
