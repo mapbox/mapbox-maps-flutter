@@ -70,6 +70,36 @@ extension Feature {
     }
 }
 
+extension Geometry {
+    static func fromList(_ list: [Any?]) -> Geometry? {
+        guard let raw = list.first as? [String: Any],
+              let jsonData = try? JSONSerialization.data(withJSONObject: raw, options: []),
+              let geometry = try? JSONDecoder().decode(Geometry.self, from: jsonData) else { return nil }
+
+        return geometry
+    }
+
+    func toList() -> [Any?] {
+        return [
+            self.toMap()
+        ]
+    }
+}
+
+extension JSONObject {
+    static func fromList(_ list: [Any?]) -> JSONObject? {
+        guard let raw = list.first as? [String: Any] else { return nil }
+
+        return JSONObject(turfRawValue: raw)
+    }
+
+    static func fromString(_ string: String) -> JSONObject? {
+        guard let data = string.data(using: .utf8) else { return nil }
+
+        return try? JSONDecoder().decode(JSONObject.self, from: data)
+    }
+}
+
 extension LocationCoordinate2D {
 
     fileprivate init(values: [Double]) {

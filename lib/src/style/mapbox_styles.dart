@@ -36,6 +36,10 @@ class MapboxStyles {
   /// improve the style.
   static const String SATELLITE_STREETS =
       "mapbox://styles/mapbox/satellite-streets-v12";
+  
+  /// NOT FOR PRODUCTION USE. An experimental version of the Mapbox Standard style.
+  /// This style is used for testing new features and changes to the Mapbox Standard style. The style may change or be removed at any time.
+  static const String STANDARD_EXPERIMENTAL = "mapbox://styles/mapbox-map-design/standard-experimental-ime";
 }
 
 /// A pre-specified location in the style where layer will be added to.
