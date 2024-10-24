@@ -30,11 +30,16 @@ enum AndroidPlatformViewHostingMode {
   VD,
 }
 
-Object? _viewportAnimation;
+ViewportTransition? _viewportTransition;
+Function(bool)? _viewportTransitionCompletion;
 
 extension Foo on State {
-  void setStateWithViewportAnimation(VoidCallback fn, Object viewportAnimation, void Function(bool) completion) {
-
+  void setStateWithViewportAnimation(VoidCallback fn,
+      {required ViewportTransition? transition,
+      void Function(bool)? completion}) {
+    _viewportTransition = transition;
+    _viewportTransitionCompletion?.call(false);
+    _viewportTransitionCompletion = completion;
     // ignore: invalid_use_of_protected_member
     setState(fn);
   }
@@ -175,7 +180,8 @@ class MapWidget extends StatefulWidget {
   @override
   State createState() => _MapWidgetState();
 
-  @Deprecated('Subscribe to onMapCreated to receive an instanc of MapboxMap instead')
+  @Deprecated(
+      'Subscribe to onMapCreated to receive an instanc of MapboxMap instead')
   MapboxMap? getMapboxMap() => null;
 }
 
@@ -188,6 +194,7 @@ class _MapWidgetState extends State<MapWidget> {
   ViewportState? currentViewport;
 
   MapboxMap? mapboxMap;
+  GlobalKey key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +209,8 @@ class _MapWidgetState extends State<MapWidget> {
     };
 
     return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
-        creationParams, onPlatformViewCreated, widget.gestureRecognizers);
+        creationParams, onPlatformViewCreated, widget.gestureRecognizers,
+        key: key);
   }
 
   @override
@@ -255,12 +263,26 @@ class _MapWidgetState extends State<MapWidget> {
     _updateStateIfNeeded(oldWidget: oldWidget);
   }
 
-  void _updateViewportState(MapWidget? oldWidget) {
+  void _updateViewportState(MapWidget? oldWidget) async {
+    final mapboxMap = this.mapboxMap;
+    if (mapboxMap == null) {
+      return;
+    }
     final currentViewport = widget.viewport;
     if (currentViewport == oldWidget?.viewport || currentViewport == null) {
       return;
     }
-    mapboxMap?.viewport.transition(currentViewport);
+    final viewportAnimation = _viewportTransition;
+    _viewportTransition = null;
+    final completion = _viewportTransitionCompletion;
+
+    final result = await mapboxMap._viewportMessenger.transition(
+        currentViewport._toStorage(), viewportAnimation?._toStorage());
+
+    if (_viewportTransitionCompletion == completion) {
+      _viewportTransitionCompletion = null;
+      completion?.call(result);
+    }
   }
 
   void _updateEventListeners() {
@@ -294,6 +316,29 @@ class _MapWidgetState extends State<MapWidget> {
     mapboxMap = controller;
 
     // The platform view is created, update the state if there were any requests.
-    _updateStateIfNeeded();
+    //
+    // WARNING: Because platform view is not sized at this moment(at least on iOS),
+    // it is not safe to call methods that depend on the size of the platform view,
+    // e.g. `setCamera` or any high-level API built on top of it(animations, viewport).
+    //
+    // One way to address it would be to defer the update until the platform view is resized.
+    // * On iOS, this can be achieved by wrapping the `MapView` in a `UIView` and listening
+    // for `didMoveToWindow` event - the frame seems to be set at this point.
+    // * On Android, it is still to be determined how to detect when the platform view is resized for the first time.
+    // _updateStateIfNeeded();
+
+    // This seems to address the points from the comment above.
+    // Tested in debug and release modes on iOS.
+    // Need to check on Android.
+    if (Platform.isIOS) {
+      final size = key.currentContext?.size;
+      if (size != null) {
+        await _mapboxMapsPlatform.submitViewSizeHint(
+            width: size.width, height: size.height);
+        _updateStateIfNeeded();
+      } else {
+        _updateStateIfNeeded();
+      }
+    }
   }
 }

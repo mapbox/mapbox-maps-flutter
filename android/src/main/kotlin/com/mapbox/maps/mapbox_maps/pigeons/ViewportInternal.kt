@@ -32,6 +32,18 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
+enum class _ViewportTransitionType(val raw: Int) {
+  DEFAULT_TRANSITION(0),
+  FLY(1),
+  EASING(2);
+
+  companion object {
+    fun ofRaw(raw: Int): _ViewportTransitionType? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 enum class _FollowPuckViewportStateBearing(val raw: Int) {
   CONSTANT(0),
   HEADING(1),
@@ -76,6 +88,72 @@ data class _DefaultViewportTransitionOptions(
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class _FlyViewportTransitionOptions(
+  val durationMs: Long? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _FlyViewportTransitionOptions {
+      val durationMs = pigeonVar_list[0] as Long?
+      return _FlyViewportTransitionOptions(durationMs)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      durationMs,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _EasingViewportTransitionOptions(
+  val durationMs: Long,
+  val a: Double,
+  val b: Double,
+  val c: Double,
+  val d: Double
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _EasingViewportTransitionOptions {
+      val durationMs = pigeonVar_list[0] as Long
+      val a = pigeonVar_list[1] as Double
+      val b = pigeonVar_list[2] as Double
+      val c = pigeonVar_list[3] as Double
+      val d = pigeonVar_list[4] as Double
+      return _EasingViewportTransitionOptions(durationMs, a, b, c, d)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      durationMs,
+      a,
+      b,
+      c,
+      d,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class _ViewportTransitionStorage(
+  val type: _ViewportTransitionType,
+  val options: Any? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _ViewportTransitionStorage {
+      val type = pigeonVar_list[0] as _ViewportTransitionType
+      val options = pigeonVar_list[1]
+      return _ViewportTransitionStorage(type, options)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      type,
+      options,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class _OverviewViewportStateOptions(
   val geometry: String,
   val geometryPadding: MbxEdgeInsets,
@@ -115,7 +193,6 @@ data class _OverviewViewportStateOptions(
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class _FollowPuckViewportStateOptions(
-  val padding: MbxEdgeInsets? = null,
   val zoom: Double? = null,
   val bearingValue: Double? = null,
   val bearing: _FollowPuckViewportStateBearing? = null,
@@ -123,17 +200,15 @@ data class _FollowPuckViewportStateOptions(
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): _FollowPuckViewportStateOptions {
-      val padding = pigeonVar_list[0] as MbxEdgeInsets?
-      val zoom = pigeonVar_list[1] as Double?
-      val bearingValue = pigeonVar_list[2] as Double?
-      val bearing = pigeonVar_list[3] as _FollowPuckViewportStateBearing?
-      val pitch = pigeonVar_list[4] as Double?
-      return _FollowPuckViewportStateOptions(padding, zoom, bearingValue, bearing, pitch)
+      val zoom = pigeonVar_list[0] as Double?
+      val bearingValue = pigeonVar_list[1] as Double?
+      val bearing = pigeonVar_list[2] as _FollowPuckViewportStateBearing?
+      val pitch = pigeonVar_list[3] as Double?
+      return _FollowPuckViewportStateOptions(zoom, bearingValue, bearing, pitch)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
-      padding,
       zoom,
       bearingValue,
       bearing,
@@ -161,81 +236,67 @@ data class _ViewportStateStorage(
     )
   }
 }
-
-/**
- * Configuration options for [ViewportManager].
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class ViewportOptions(
-  /**
-   * Indicates whether the [ViewportManager] should idle when the user interacts with the map using gestures.
-   *
-   * Set this property to [false] to enable building a custom [ViewportState] that
-   * can work simultaneously with certain types of gestures.
-   *
-   * Defaults to [true].
-   */
-  val transitionsToIdleUponUserInteraction: Boolean
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): ViewportOptions {
-      val transitionsToIdleUponUserInteraction = pigeonVar_list[0] as Boolean
-      return ViewportOptions(transitionsToIdleUponUserInteraction)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      transitionsToIdleUponUserInteraction,
-    )
-  }
-}
 private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _FollowPuckViewportStateBearing.ofRaw(it.toInt())
+          _ViewportTransitionType.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _ViewportStateType.ofRaw(it.toInt())
+          _FollowPuckViewportStateBearing.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          _ViewportStateType.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _DefaultViewportTransitionOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _OverviewViewportStateOptions.fromList(it)
+          _DefaultViewportTransitionOptions.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _FollowPuckViewportStateOptions.fromList(it)
+          _FlyViewportTransitionOptions.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _ViewportStateStorage.fromList(it)
+          _EasingViewportTransitionOptions.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ViewportOptions.fromList(it)
+          _ViewportTransitionStorage.fromList(it)
+        }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _OverviewViewportStateOptions.fromList(it)
+        }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _FollowPuckViewportStateOptions.fromList(it)
+        }
+      }
+      140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _ViewportStateStorage.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -243,40 +304,52 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is _FollowPuckViewportStateBearing -> {
+      is _ViewportTransitionType -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is _ViewportStateType -> {
+      is _FollowPuckViewportStateBearing -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is MbxEdgeInsets -> {
+      is _ViewportStateType -> {
         stream.write(131)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is ScreenCoordinate -> {
+      is MbxEdgeInsets -> {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is _DefaultViewportTransitionOptions -> {
+      is ScreenCoordinate -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is _OverviewViewportStateOptions -> {
+      is _DefaultViewportTransitionOptions -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is _FollowPuckViewportStateOptions -> {
+      is _FlyViewportTransitionOptions -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is _ViewportStateStorage -> {
+      is _EasingViewportTransitionOptions -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is ViewportOptions -> {
+      is _ViewportTransitionStorage -> {
         stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is _OverviewViewportStateOptions -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is _FollowPuckViewportStateOptions -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      is _ViewportStateStorage -> {
+        stream.write(140)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -285,68 +358,34 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
 }
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface _ViewportManagerMessenger {
-  /** Get configuration options for adjusting the behavior of [ViewportManager]. */
-  fun getOptions(): ViewportOptions
-  /** Set configuration options for adjusting the behavior of [ViewportManager]. */
-  fun setOptions(options: ViewportOptions)
-  fun transition(stateStorage: _ViewportStateStorage, transitionIdentifier: Long?): Boolean
+interface _ViewportMessenger {
+  fun transition(stateStorage: _ViewportStateStorage, transitionStorage: _ViewportTransitionStorage?, callback: (Result<Boolean>) -> Unit)
 
   companion object {
-    /** The codec used by _ViewportManagerMessenger. */
+    /** The codec used by _ViewportMessenger. */
     val codec: MessageCodec<Any?> by lazy {
       ViewportInternalPigeonCodec()
     }
-    /** Sets up an instance of `_ViewportManagerMessenger` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `_ViewportMessenger` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: _ViewportManagerMessenger?, messageChannelSuffix: String = "") {
+    fun setUp(binaryMessenger: BinaryMessenger, api: _ViewportMessenger?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.getOptions$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getOptions())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.setOptions$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val optionsArg = args[0] as ViewportOptions
-            val wrapped: List<Any?> = try {
-              api.setOptions(optionsArg)
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportManagerMessenger.transition$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._ViewportMessenger.transition$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val stateStorageArg = args[0] as _ViewportStateStorage
-            val transitionIdentifierArg = args[1] as Long?
-            val wrapped: List<Any?> = try {
-              listOf(api.transition(stateStorageArg, transitionIdentifierArg))
-            } catch (exception: Throwable) {
-              wrapError(exception)
+            val transitionStorageArg = args[1] as _ViewportTransitionStorage?
+            api.transition(stateStorageArg, transitionStorageArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
             }
-            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

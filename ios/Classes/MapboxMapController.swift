@@ -90,9 +90,10 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
         let viewportController = ViewportController(
             viewportManager: mapView.viewport,
-            binaryMessenger: proxyBinaryMessenger.unproxy()
+            cameraManager: mapView.camera,
+            mapboxMap: mapboxMap
         )
-        _ViewportManagerMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: viewportController)
+        _ViewportMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: viewportController)
 
         super.init()
 
@@ -121,6 +122,20 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             } catch {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
+        case "mapView#submitViewSizeHint":
+            if let arguments = methodCall.arguments as? [String: Double],
+               let width = arguments["width"], let height = arguments["height"] {
+                let size = CGSize(width: width, height: height)
+                guard size != .zero else { return }
+
+                // This is a bit of a hack to size the map view as early as possible,
+                // Flutter is quite slow with it
+                // This should be remedied with passing MapWidget state in the creation params,
+                // instead of current situation when we rely on state updates,
+                // which are quite slow
+                mapView.superview?.frame = CGRect(origin: .zero, size: size)
+            }
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -141,6 +156,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
-        _ViewportManagerMessengerSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }

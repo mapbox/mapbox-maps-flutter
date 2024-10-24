@@ -2,23 +2,6 @@ import Foundation
 import MapboxMaps
 import Flutter
 
-extension OverviewViewportStateOptions {
-    func toFLTOptions() -> _OverviewViewportStateOptions {
-        let data = try! JSONEncoder().encode(geometry)
-        let bar = _OverviewViewportStateOptions(
-            geometry: String(decoding: data, as: UTF8.self),
-            geometryPadding: geometryPadding.toMbxEdgeInsets(),
-            bearing: bearing,
-            pitch: pitch.map(Double.init),
-            padding: padding?.toMbxEdgeInsets(),
-            maxZoom: maxZoom,
-            offset: offset?.toFLTScreenCoordinate(),
-            animationDurationMs: Int64(animationDuration * 1000)
-        )
-        return bar
-    }
-}
-
 extension _OverviewViewportStateOptions {
     func toOptions() -> OverviewViewportStateOptions {
         let geometry = try! JSONDecoder().decode(Geometry.self, from: geometry.data(using: .utf8)!)

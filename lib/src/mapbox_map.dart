@@ -169,10 +169,10 @@ class MapboxMap extends ChangeNotifier {
   late final _AnimationManager _animationManager = _AnimationManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late final ViewportManager viewport = ViewportManager._(
-      _ViewportManagerMessenger(
-        binaryMessenger: _mapboxMapsPlatform.binaryMessenger, 
-        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
+  late final _ViewportMessenger _viewportMessenger =
+      _ViewportMessenger(
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to create and set annotations.
   late final AnnotationManager annotations;
