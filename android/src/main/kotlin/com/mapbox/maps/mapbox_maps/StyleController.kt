@@ -19,6 +19,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.CameraOptions
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.CoordinateBounds
 import com.mapbox.maps.mapbox_maps.pigeons.DirectionalLight
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.FlatLight
 import com.mapbox.maps.mapbox_maps.pigeons.ImageContent
 import com.mapbox.maps.mapbox_maps.pigeons.ImageStretches
@@ -586,6 +587,10 @@ class StyleController(private val context: Context, private val styleManager: Ma
   ) {
     styleManager.localizeLabels(Locale(locale), layerIds)
     callback(Result.success(Unit))
+  }
+
+  override fun getFeaturesets(): List<FeaturesetDescriptor> {
+    TODO("no implemented on Android")
   }
 
   override fun addStyleImage(
