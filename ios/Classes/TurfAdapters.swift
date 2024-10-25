@@ -70,11 +70,11 @@ extension Feature {
     }
 }
 
-extension Geometry {
-    static func fromList(_ list: [Any?]) -> Geometry? {
+extension Turf.Geometry {
+    static func fromList(_ list: [Any?]) -> Turf.Geometry? {
         guard let raw = list.first as? [String: Any],
               let jsonData = try? JSONSerialization.data(withJSONObject: raw, options: []),
-              let geometry = try? JSONDecoder().decode(Geometry.self, from: jsonData) else { return nil }
+              let geometry = try? JSONDecoder().decode(Turf.Geometry.self, from: jsonData) else { return nil }
 
         return geometry
     }

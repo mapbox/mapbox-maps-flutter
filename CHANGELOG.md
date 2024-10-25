@@ -1,5 +1,10 @@
 ### main
 
+* Introduce experimental low-level requirements for creating and manipulating interactive features:
+  * New methods: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
+  * New types: `FeaturesetFeature`, `FeaturesetFeatureId`, `FeaturesetDescriptor`, `FeaturesetQueryTarget`, 
+  * For more guidance with using these new features see `interactive_features_example.dart`
+
 # 2.4.0-beta.1
 
 * Expose current map's camera state on `CameraChanged` event. [#704](https://github.com/mapbox/mapbox-maps-flutter/pull/704)
