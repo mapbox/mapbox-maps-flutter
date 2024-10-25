@@ -1,7 +1,10 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
+import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.mapbox.bindgen.Value
 import com.mapbox.common.toValue
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
@@ -9,8 +12,14 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxDelicateApi
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.RenderedQueryGeometry
+import com.mapbox.maps.ScreenBox
+import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.mapbox.maps.interactions.FeatureState
+import com.mapbox.maps.interactions.FeatureStateKey
 import com.mapbox.maps.interactions.TypedFeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
@@ -35,6 +44,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
+import org.json.JSONObject
 
 class MapInterfaceController(
   private val mapboxMap: MapboxMap,
@@ -182,13 +192,18 @@ class MapInterfaceController(
   ) {
     mapboxMap.queryRenderedFeatures(
       geometry.toRenderedQueryGeometry(context),
-      targets.map { target -> target.toFeaturesetQueryTarget() }) {
+      targets.map { target ->
+        target.toFeaturesetQueryTarget()
+      }
+    ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {
         callback(
           Result.success(
-            it.value!!.map { feature -> feature.toFLTQueriedRenderedFeature() }.toMutableList()
+            it.value!!.map { feature ->
+              feature.toFLTQueriedRenderedFeature()
+            }.toMutableList()
           )
         )
       }
@@ -202,67 +217,38 @@ class MapInterfaceController(
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
-    featureset.featuresetId?.let {
-      mapboxMap.queryRenderedFeatures(
-        geometry.toRenderedQueryGeometry(context),
-        TypedFeaturesetDescriptor.Featureset(
-          featureset.featuresetId, featureset.importId
-        ),
-        filter.toValue()
-      ) {
-        callback(
-          Result.success(
-            it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
-          )
+    mapboxMap.queryRenderedFeatures(
+      geometry.toRenderedQueryGeometry(context),
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      filter?.let { Expression.fromRaw(filter) }
+    ) {
+      callback(
+        Result.success(
+          it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
         )
-      }
-    } ?: {
-      featureset.layerId?.let { it ->
-        mapboxMap.queryRenderedFeatures(
-          geometry.toRenderedQueryGeometry(context),
-          TypedFeaturesetDescriptor.Layer(
-            featureset.layerId
-          ),
-          filter.toValue()
-        ) {
-          callback(
-            Result.success(
-              it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
-            )
-          )
-        }
-      }
+      )
+
     }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun queryRenderedFeaturesInViewport(
     featureset: FeaturesetDescriptor,
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
-    TODO(reason = "convenience")
-  }
-
-  fun queryRenderedFeaturesForGeometry(
-    geometry: _RenderedQueryGeometry,
-    targets: List<FeaturesetQueryTarget>,
-    callback: (Result<List<QueriedRenderedFeature?>>) -> Unit
-  ) {
+    val size = getSize()
+    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0,0.0), ScreenCoordinate(size.width, size.height)))
     mapboxMap.queryRenderedFeatures(
-      geometry.toRenderedQueryGeometry(context),
-      targets.map {
-        it.toFeaturesetQueryTarget()
-      }
+      geometry,
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      filter?.let { Expression.fromRaw(filter) }
     ) {
-      if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
-      } else {
-        callback(
-          Result.success(
-            it.value!!.map { feature -> feature.toFLTQueriedRenderedFeature() }.toMutableList()
-          )
+      callback(
+        Result.success(
+          it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
         )
-      }
+      )
     }
   }
 
@@ -284,11 +270,26 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun querySourceFeaturesForFeatureset(
     target: FeaturesetQueryTarget,
     callback: (Result<List<QueriedSourceFeature?>>) -> Unit
   ) {
-    TODO("Not yet implemented")
+
+    mapboxMap.querySourceFeatures(
+      target.featureset.toTypedFeaturesetDescriptor(),
+      target.filter?.let { Expression.fromRaw(target.filter) },
+      target.id) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(
+          Result.success(
+            it.value!!.map { feature -> feature.toFLTQueriedSourceFeature() }.toMutableList()
+          )
+        )
+      }
+    }
   }
 
   override fun getGeoJsonClusterLeaves(
@@ -360,21 +361,34 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun setFeatureStateForFeaturesetFeatureDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    val statee = state.toFeatureState();
+    Log.d("jkl", statee.toString());
+    mapboxMap.setFeatureState(
+      // TODO: Allow for TypedFeaturesetDescriptor.Layer
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+      featureId.toFeaturesetFeatureId(),
+      statee
+    ) { callback(Result.success(Unit)) }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun setFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    val mapsFeature = feature.toFeaturesetFeature()
+    mapboxMap.setFeatureState(
+      mapsFeature,
+      state.toFeatureState()
+    ) { callback(Result.success(Unit)) }
   }
 
   override fun getFeatureState(
@@ -394,19 +408,38 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun getFeatureStateForFeaturesetDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    mapboxMap.getFeatureState(
+      featureset.toTypedFeaturesetDescriptor(),
+      featureId.toFeaturesetFeatureId()
+    ) {
+      callback(
+        Result.success(
+          it.toMap()
+        )
+      )
+    }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun getFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    mapboxMap.getFeatureState(
+      feature.toFeaturesetFeature()
+    ) {
+      callback(
+        Result.success(
+          it.toMap()
+        )
+      )
+    }
   }
 
   override fun removeFeatureState(
@@ -425,28 +458,60 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun removeFeatureStateForFeaturesetFeatureDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
     stateKey: String,
     callback: (Result<Unit>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    mapboxMap.removeFeatureState(
+      // TODO: Allow for TypedFeaturesetDescriptor.Layer
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+      featureId.toFeaturesetFeatureId(),
+      FeatureStateKey.create(stateKey)
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun removeFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     stateKey: String,
     callback: (Result<Unit>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    mapboxMap.removeFeatureState(
+      feature.toFeaturesetFeature(),
+      FeatureStateKey.create(stateKey)
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
   }
 
+  @OptIn(MapboxExperimental::class)
   override fun resetFeatureStatesForFeatureset(
     featureset: FeaturesetDescriptor,
     callback: (Result<Unit>) -> Unit
   ) {
-    TODO("Not yet implemented")
+    mapboxMap.resetFeatureStates(
+      // TODO: Allow for TypedFeaturesetDescriptor.Layer
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable(it.error)))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
   }
 
   override fun reduceMemoryUse() {
