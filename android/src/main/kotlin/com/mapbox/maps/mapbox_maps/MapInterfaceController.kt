@@ -494,8 +494,8 @@ class MapInterfaceController(
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.resetFeatureStates(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      ) {
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>
+    ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {
