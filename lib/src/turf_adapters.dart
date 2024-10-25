@@ -74,8 +74,7 @@ final class Feature extends turf.Feature {
 
   static Feature decode(Object result) {
     result as List<Object?>;
-    var valid = convertToValidMap(result.first as Map<Object?, Object?>);
-    return Feature.fromJson(valid);
+    return Feature.fromJson(jsonDecode(result.first as String));
   }
 
   factory Feature.fromJson(Map<String, dynamic> json) {
@@ -92,35 +91,8 @@ final class Feature extends turf.Feature {
     var valid = convertToValidMap(feature as Map<Object?, Object?>);
     return Feature.fromJson(valid);
   }
-
-  // factory Feature.fromQueriedFeature(QueriedFeature queriedFeature) {
-  //   final feature =
-  //       queriedFeature.feature.convertToValidMap(queriedFeature.feature);
-  //   // print(queriedFeature.feature);
-  //   // print(feature);
-  //   return Feature.fromJson(feature);
-  // }
 }
 
-// extension on List<Object?> {
-//   Map<String, dynamic> convertToValidMap(List<Object?> input) {
-//     return
-//     return input.map((key, value) {
-//       //  print(value.runtimeType);
-//       if (key is! String) {
-//         throw Exception(
-//             "Invalid key type. Expected String but got ${key.runtimeType}");
-//       }
-//       if (value is Map<Object?, Object?>) {
-//         // Recursively convert nested maps
-//         return MapEntry(key, convertToValidMap(value));
-//       }
-//       return MapEntry(key, value);
-//     });
-//   }
-// }
-
-//extension on Map<String?, Object?> {
 Map<String, dynamic> convertToValidMap(Map<Object?, Object?> input) {
   return input.map((key, value) {
     if (key is! String) {
@@ -134,6 +106,5 @@ Map<String, dynamic> convertToValidMap(Map<Object?, Object?> input) {
     return MapEntry(key, value);
   });
 }
-//}
 
 typedef JSONObject = Map<String, dynamic>;

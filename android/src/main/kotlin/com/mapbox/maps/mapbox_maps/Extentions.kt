@@ -3,7 +3,10 @@ package com.mapbox.maps.mapbox_maps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.mapbox.bindgen.Expected
 import com.mapbox.bindgen.None
 import com.mapbox.bindgen.Value
@@ -16,6 +19,7 @@ import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
 import com.mapbox.maps.extension.style.expressions.dsl.generated.id
+import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
@@ -277,25 +281,64 @@ fun FeaturesetDescriptor.toFeatureSetDescriptor(): com.mapbox.maps.FeaturesetDes
   return com.mapbox.maps.FeaturesetDescriptor(featuresetId, importId, layerId)
 }
 
-fun FeaturesetQueryTarget.toFeaturesetQueryTarget(): com.mapbox.maps.FeaturesetQueryTarget {
-  return com.mapbox.maps.FeaturesetQueryTarget(featureset.toFeatureSetDescriptor(), filter?.toValue(), id)
+@OptIn(MapboxExperimental::class)
+fun FeaturesetDescriptor.toTypedFeaturesetDescriptor(): TypedFeaturesetDescriptor<*, *> {
+  featuresetId?.let {
+    return TypedFeaturesetDescriptor.Featureset(
+      featuresetId, importId
+    )
+  }
+  return TypedFeaturesetDescriptor.Layer(
+    layerId!! // If there is not a featuresetId there will be a layerId
+  )
 }
 
-//@OptIn(MapboxExperimental::class)
-//@SuppressLint("RestrictedApi")
-//fun FeaturesetFeature.toFeaturesetFeature(): com.mapbox.maps.interactions.FeaturesetFeature<FeatureState> {
-//  // TODO: layers
-//  featureset.featuresetId?.let {
-//    return com.mapbox.maps.interactions.FeaturesetFeature(
-//      id?.toFeaturesetFeatureId(),
-//      TypedFeaturesetDescriptor.Featureset(
-//        featureset.featuresetId, featureset.importId
-//      ),
-//      state = FeatureState { state },
-//      originalFeature = geoJSONFeature
-//    )
-//  }
-//}
+fun FeaturesetQueryTarget.toFeaturesetQueryTarget(): com.mapbox.maps.FeaturesetQueryTarget {
+  return com.mapbox.maps.FeaturesetQueryTarget(featureset.toFeatureSetDescriptor(), filter?.let { Expression.fromRaw(filter) }, id)
+}
+
+@OptIn(MapboxExperimental::class)
+fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureState {
+  val map = this
+  return FeatureState {
+    for ((key, value) in map) {
+      when (value) {
+        is String -> {
+          addStringState(key, value)
+        }
+        is Long -> {
+          addLongState(key, value)
+        }
+        is Double -> {
+          addDoubleState(key, value)
+        }
+        is Boolean -> {
+          addBooleanState(key, value)
+        }
+        else -> throw (RuntimeException("Unsupported (key, value): ($key, $value)"))
+      }
+    }
+  }
+}
+
+@OptIn(MapboxExperimental::class)
+@SuppressLint("RestrictedApi")
+fun FeaturesetFeature.toFeaturesetFeature(): com.mapbox.maps.interactions.FeaturesetFeature<FeatureState> {
+  featureset.featuresetId?.let {
+    return com.mapbox.maps.interactions.FeaturesetFeature(
+      id?.toFeaturesetFeatureId(),
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+      state.toFeatureState(),
+      geoJSONFeature
+    )
+  }
+  return com.mapbox.maps.interactions.FeaturesetFeature(
+    id?.toFeaturesetFeatureId(),
+    featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Layer,
+    state.toFeatureState(),
+    geoJSONFeature
+  )
+}
 
 fun MapDebugOptions.toMapDebugOptions(): com.mapbox.maps.MapDebugOptions {
   return com.mapbox.maps.MapDebugOptions.values()[data.ordinal]
@@ -534,8 +577,13 @@ fun com.mapbox.maps.QueriedFeature.toFLTQueriedFeature(): QueriedFeature {
   return QueriedFeature(JSONObject(this.feature.toJson()).toMap(), source, sourceLayer, state.toJson())
 }
 
+fun com.mapbox.maps.FeaturesetQueryTarget.toFLTFeaturesetQueryTarget(): FeaturesetQueryTarget {
+  return FeaturesetQueryTarget(featureset.toFLTFeaturesetDescriptor(), filter?.toString(), id)
+}
+
 fun com.mapbox.maps.QueriedRenderedFeature.toFLTQueriedRenderedFeature(): QueriedRenderedFeature {
-  return QueriedRenderedFeature(queriedFeature.toFLTQueriedFeature(), layers)
+  val queryTargets = targets.map { it.toFLTFeaturesetQueryTarget() }
+  return QueriedRenderedFeature(queriedFeature.toFLTQueriedFeature(), layers, queryTargets)
 }
 
 fun com.mapbox.maps.FeaturesetFeatureId.toFLTFeaturesetFeatureId(): FeaturesetFeatureId {
@@ -546,15 +594,21 @@ fun com.mapbox.maps.FeaturesetDescriptor.toFLTFeaturesetDescriptor(): Featureset
   return FeaturesetDescriptor(featuresetId, importId, layerId)
 }
 
+@OptIn(MapboxExperimental::class)
+fun com.mapbox.maps.interactions.FeatureState.toMap(): Map<String, Any?> {
+  return JSONObject(this.asJsonString()).toMap()
+    .filterKeys { it != null } // Filter out null keys
+    .mapKeys { it.key!! }
+}
+
 @SuppressLint("RestrictedApi")
 @OptIn(MapboxExperimental::class)
 fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFltFeaturesetFeature(): FeaturesetFeature {
-  // TODO: need access to original feature or properties
-  val feature = Feature.fromGeometry(geometry);
-
-  val map: Map<String, Any?> = JSONObject(state.asJsonString()).toMap()
-    .filterKeys { it != null } // Filter out null keys
-    .mapKeys { it.key!! }
+// TODO: need access to original feature or better conversion to JsonObject from JSONObject
+  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject();
+  val feature = Feature.fromGeometry(geometry, jsonObject);
+  properties.toMap()
+  val map: Map<String, Any?> = state.toMap()
 
   return FeaturesetFeature(
     id?.toFLTFeaturesetFeatureId(),

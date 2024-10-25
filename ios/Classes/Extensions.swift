@@ -233,7 +233,11 @@ extension FeaturesetQueryTarget {
 
 extension FeaturesetDescriptor {
     func toMapFeaturesetDescriptor() -> MapboxMaps.FeaturesetDescriptor<MapboxMaps.FeaturesetFeature> {
-        return MapboxMaps.FeaturesetDescriptor(featuresetId2: featuresetId, importId2: importId, layerId2: layerId)
+        if let featuresetId {
+            return MapboxMaps.FeaturesetDescriptor.featureset(featuresetId, importId: importId)
+        } else {
+            return MapboxMaps.FeaturesetDescriptor.layer(layerId ?? "layer")
+        }
     }
 }
 
