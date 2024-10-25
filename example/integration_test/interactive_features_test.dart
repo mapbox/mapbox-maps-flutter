@@ -21,8 +21,7 @@ void main() {
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
     mapboxMap.style.setStyleJSON(styleJson);
 
-    await app.events.onMapLoaded.future;
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 3));
 
     // test queryRenderedFeaturesForFeatureset
     var coord = await mapboxMap
@@ -33,9 +32,9 @@ void main() {
             FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
 
     expect(featuresetQuery.length, 2);
-    expect(featuresetQuery.first.geoJSONFeature.properties?["name"], "nest2");
-    expect(featuresetQuery[1].geoJSONFeature.properties?["name"], "nest1");
-    expect(featuresetQuery[0].geoJSONFeature.properties?["class"], "poi");
+    expect(featuresetQuery.first.properties["name"], "nest2");
+    expect(featuresetQuery[1].properties["name"], "nest1");
+    expect(featuresetQuery[0].properties["class"], "poi");
 
     // test queryRenderedFeaturesForFeatureset with filter
     var filter = '["==",["get", "type"], "A"]';
@@ -47,19 +46,19 @@ void main() {
             filter: filter);
 
     expect(featuresetFilterQuery.length, 1);
-    expect(featuresetFilterQuery[0].geoJSONFeature.properties?["name"], "nest1");
-    expect(featuresetFilterQuery[0].geoJSONFeature.properties?["class"], "poi");
+    expect(featuresetFilterQuery[0].properties["name"], "nest1");
+    expect(featuresetFilterQuery[0].properties["class"], "poi");
 
-    // test queryRenderedFeaturesInViewport
-    // var viewportQuery = await mapboxMap.queryRenderedFeaturesInViewport(
-    //     featureset:
-    //         FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
+    //test queryRenderedFeaturesInViewport
+    var viewportQuery = await mapboxMap.queryRenderedFeaturesInViewport(
+        featureset:
+            FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
 
-    // expect(viewportQuery.length, 3);
-    // expect(viewportQuery[0].geoJSONFeature.properties?["name"], "nest2");
-    // expect(viewportQuery[1].geoJSONFeature.properties?["name"], "nest1");
-    // expect(viewportQuery[2].geoJSONFeature.properties?["name"], "nest3");
-    // expect(viewportQuery[2].geoJSONFeature.properties?["class"], "poi");
+    expect(viewportQuery.length, 3);
+    expect(viewportQuery[0].properties["name"], "nest2");
+    expect(viewportQuery[1].properties["name"], "nest1");
+    expect(viewportQuery[2].properties["name"], "nest3");
+    expect(viewportQuery[2].properties["class"], "poi");
   });
 
   testWidgets('test_featurestate_methods', (WidgetTester tester) async {
@@ -77,13 +76,12 @@ void main() {
 
     await app.events.onMapLoaded.future;
 
-    var geoJSONFeature = Feature(
-        id: "feature", geometry: Point(coordinates: Position(0.01, 0.01)));
     var feature = FeaturesetFeature(
         id: FeaturesetFeatureId(id: "11", namespace: "A"),
         featureset:
             FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
-        geoJSONFeature: geoJSONFeature,
+        geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
+        properties: {},
         state: {});
     Map<String, Object?> state = {
       "highlight": true,
@@ -158,70 +156,70 @@ void main() {
     expect(returnedFeatureState2, {});
   });
 
-  // testWidgets('test_state_is_queried', (WidgetTester tester) async {
-  //   // load style and position camera
-  //   final mapFuture = app.main(
-  //       width: 200,
-  //       height: 200,
-  //       camera:
-  //           CameraOptions(center: Point(coordinates: Position(0, 0)), zoom: 10),
-  //       alignment: Alignment(100, 100));
-  //   await tester.pumpAndSettle();
-  //   final mapboxMap = await mapFuture;
-  //   var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-  //   mapboxMap.style.setStyleJSON(styleJson);
+  testWidgets('test_state_is_queried', (WidgetTester tester) async {
+    // load style and position camera
+    final mapFuture = app.main(
+        width: 200,
+        height: 200,
+        camera:
+            CameraOptions(center: Point(coordinates: Position(0, 0)), zoom: 10),
+        alignment: Alignment(100, 100));
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
 
-  //   await app.events.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
-  //   var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
-  //   var featuresetDescriptor =
-  //       FeaturesetDescriptor(featuresetId: "poi", importId: "nested");
-  //   Map<String, Object?> state = {
-  //     "hide": true,
-  //   };
-  //   var filter = '["==",["get", "type"], "A"]';
-  //   Map<String, Object?> expectedProperties = {
-  //     "name": "nest1",
-  //     "type": "A",
-  //     "class": "poi"
-  //   };
+    var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
+    var featuresetDescriptor =
+        FeaturesetDescriptor(featuresetId: "poi", importId: "nested");
+    Map<String, Object?> state = {
+      "hide": true,
+    };
+    var filter = '["==",["get", "type"], "A"]';
+    Map<String, Object?> expectedProperties = {
+      "name": "nest1",
+      "type": "A",
+      "class": "poi"
+    };
 
-  //   await mapboxMap.setFeatureStateForFeaturesetFeatureDescriptor(
-  //       featuresetDescriptor, featuresetID, state);
-    // var queryResult = await mapboxMap.queryRenderedFeaturesInViewport(
-    //     featureset: featuresetDescriptor, filter: filter);
-    // var poi = queryResult.first;
-    // var point = Point.fromJson(poi.geoJSONFeature.geometry!.toJson());
+    await mapboxMap.setFeatureStateForFeaturesetFeatureDescriptor(
+        featuresetDescriptor, featuresetID, state);
+    var queryResult = await mapboxMap.queryRenderedFeaturesInViewport(
+        featureset: featuresetDescriptor, filter: filter);
+    var poi = queryResult.first;
+    var point = Point.decode(poi.geometry);
 
-    // expect(queryResult.length, 1);
-    // expect(poi.id?.id, featuresetID.id);
-    // expect(poi.id?.namespace, featuresetID.namespace);
-    // expect(poi.state, state);
-    // expect(point.coordinates.lat, closeTo(0.01, 0.05));
-    // expect(point.coordinates.lng, closeTo(0.01, 0.05));
-    // expect(poi.geoJSONFeature.properties, expectedProperties);
-  // });
+    expect(queryResult.length, 1);
+    expect(poi.id?.id, featuresetID.id);
+    expect(poi.id?.namespace, featuresetID.namespace);
+    expect(poi.state, state);
+    expect(point.coordinates.lat, closeTo(0.01, 0.05));
+    expect(point.coordinates.lng, closeTo(0.01, 0.05));
+    expect(poi.properties, expectedProperties);
+  });
 
-  // testWidgets('test_getFeaturesets', (WidgetTester tester) async {
-  //   // load style and position camera
-  //   final mapFuture = app.main(
-  //       width: 200,
-  //       height: 200,
-  //       camera:
-  //           CameraOptions(center: Point(coordinates: Position(0, 0)), zoom: 10),
-  //       alignment: Alignment(100, 100));
-  //   await tester.pumpAndSettle();
-  //   final mapboxMap = await mapFuture;
-  //   var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-  //   mapboxMap.style.setStyleJSON(styleJson);
+  testWidgets('test_getFeaturesets', (WidgetTester tester) async {
+    // load style and position camera
+    final mapFuture = app.main(
+        width: 200,
+        height: 200,
+        camera:
+            CameraOptions(center: Point(coordinates: Position(0, 0)), zoom: 10),
+        alignment: Alignment(100, 100));
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
+    mapboxMap.style.setStyleJSON(styleJson);
 
-  //   await app.events.onMapLoaded.future;
+    await app.events.onMapLoaded.future;
 
-  //   var returnedFeaturesets = await mapboxMap.style.getFeaturesets();
+    var returnedFeaturesets = await mapboxMap.style.getFeaturesets();
 
-  //   expect(returnedFeaturesets.length, 1);
-  //   expect(returnedFeaturesets.first.importId, "nested");
-  // });
+    expect(returnedFeaturesets.length, 1);
+    expect(returnedFeaturesets.first.importId, "nested");
+  });
 
   testWidgets('test_query_featureset_target', (WidgetTester tester) async {
     // load style and position camera
@@ -237,6 +235,7 @@ void main() {
     mapboxMap.style.setStyleJSON(styleJson);
 
     await app.events.onMapLoaded.future;
+    await Future.delayed(Duration(seconds: 1));
 
     var featuresetFilter = '["==", ["get", "type"], "B"]';
     var layerFilter = '["==", ["get", "filter"], true]';
@@ -251,28 +250,33 @@ void main() {
       FeaturesetQueryTarget(
           featureset: featuresetLayer, filter: layerFilter, id: 2)
     ];
+    Map<String, Object?> expectedProperties = {
+      "name": "qux",
+      "filter": true,
+      "bar": 2
+    };
+    Map<String, Object?> expectedProperties2 = {
+      "type": "B",
+      "class": "poi",
+      "name": "nest2"
+    };
 
     var returnedQuery = await mapboxMap.queryRenderedFeaturesForTargets(
         RenderedQueryGeometry.fromScreenCoordinate(coord), targets);
-    var firstFeature =
-        Feature.fromFeature(returnedQuery[0]!.queriedFeature.feature);
-    var secondFeature =
-        Feature.fromFeature(returnedQuery[1]!.queriedFeature.feature);
 
     expect(returnedQuery.length, 2);
     expect(returnedQuery[0]?.queryTargets?.length, 1);
     expect(returnedQuery[0]?.queryTargets?.last.id, 2);
     expect(returnedQuery[0]?.queryTargets?.last.featureset.layerId, "circle-2");
     expect(returnedQuery[0]?.queryTargets?.last.filter, null);
-    expect(firstFeature.id, "2");
-    expect(firstFeature.properties?["name"], "qux");
+    //expect(returnedQuery[0]!.queriedFeature.feature["id"], 2);
+    expect(returnedQuery[0]!.queriedFeature.feature["properties"], expectedProperties);
     expect(returnedQuery[1]?.queryTargets?.length, 1);
     expect(returnedQuery[1]?.queryTargets?.last.id, 1);
     expect(returnedQuery[1]?.queryTargets?.last.featureset.featuresetId, "poi");
     expect(returnedQuery[1]?.queryTargets?.last.featureset.importId, "nested");
     expect(returnedQuery[1]?.queryTargets?.last.filter, null);
-    expect(secondFeature.id, "12");
-    expect(secondFeature.properties?["class"], "poi");
-    expect(secondFeature.properties?["name"], "nest2");
+    //expect(returnedQuery[1]!.queriedFeature.feature["id"], 12);
+    expect(returnedQuery[1]!.queriedFeature.feature["properties"], expectedProperties2);
   });
 }

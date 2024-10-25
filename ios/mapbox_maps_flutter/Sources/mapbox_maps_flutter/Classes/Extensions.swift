@@ -243,10 +243,12 @@ extension FeaturesetDescriptor {
 
 extension FeaturesetFeature {
     func toMapFeaturesetFeature() -> MapboxMaps.FeaturesetFeature {
+        var feature = Feature(geometry: convertDictionaryToGeometry(dict: geometry))
+        feature.properties = JSONObject.init(turfRawValue: properties)
         return MapboxMaps.FeaturesetFeature(
             id: id?.toMapFeaturesetFeatureId(),
             featureset: featureset.toMapFeaturesetDescriptor(),
-            geoJsonFeature: geoJSONFeature,
+            geoJsonFeature: feature,
             state: JSONObject.init(turfRawValue: state)!)
     }
 }
@@ -547,13 +549,11 @@ extension MapboxMaps.FeaturesetDescriptor {
 
 extension MapboxMaps.FeaturesetFeature {
     func toFLTFeaturesetFeature() -> FeaturesetFeature {
-        var feature = Feature(geometry: geometry)
-        feature.properties = properties
-
         return FeaturesetFeature(
             id: id?.toFLTFeaturesetFeatureId(),
             featureset: featureset.toFLTFeaturesetDescriptor(),
-            geoJSONFeature: feature,
+            geometry: geometry.toMap(),
+            properties: properties.turfRawValue,
             state: state.turfRawValue)
     }
 }

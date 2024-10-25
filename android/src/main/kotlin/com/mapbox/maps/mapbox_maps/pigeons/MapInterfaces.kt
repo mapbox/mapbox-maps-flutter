@@ -1353,27 +1353,22 @@ data class QueriedFeature(
 }
 
 /**
- * Represents a unique identifier for a feature in one exported featureset or a layer.
+ * Identifies a feature in a featureset.
+ *
+ * Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
+ *
+ * In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
+ * The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
+ *
+ * - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
+ * If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class FeaturesetFeatureId(
-  /**
-   * The `featureId` uniquely identifies a feature within a featureset or layer.
-   * Note: The Identifier of the feature is not guaranteed to be persistent
-   * and can change depending on the source that is used.
-   */
+  /** A feature id coming from the feature itself.exp */
   val id: String,
-  /**
-   * An optional field that represents the feature namespace defined by
-   * the Selector within a Featureset to which this feature belongs.
-   * If the underlying source is the same for multiple selectors within a Featureset,
-   * the same `featureNamespace` should be used across those selectors.
-   * This practice ensures the uniqueness of `FeaturesetFeatureId` across the style.
-   * Defining a `featureNamespace` value for the Selector is recommended,
-   * especially when multiple selectors exist in a Featureset,
-   * as it can enhance the efficiency of feature operations.
-   */
+  /** A namespace of the feature */
   val namespace: String? = null
 ) {
   companion object {
@@ -1392,7 +1387,10 @@ data class FeaturesetFeatureId(
 }
 
 /**
- * Represents an identifier for a single exported featureset or a layer.
+ * A featureset descriptor.
+ *
+ * The descriptor instance acts as a universal target for interactions or querying rendered features (see
+ * ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``).
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
@@ -1438,29 +1436,30 @@ data class FeaturesetDescriptor(
   }
 }
 
-/** Generated class from Pigeon that represents data sent in messages. */
+/**
+ * A basic feature of a featureset.
+ *
+ * The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
 data class FeaturesetFeature(
   /**
-   * Optional identifier holding feature id and feature namespace.
-   * It could be NULL when underlying [Feature.id] is null.
+   * An identifier of the feature.
+   *
+   * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+   * In this case it's impossible to set a feature state for an individual feature.
    */
   val id: FeaturesetFeatureId? = null,
-  /**
-   * The [TypedFeaturesetDescriptor] this concrete feature comes from.
-   * List of supported featuresets could be found in the nested classes
-   * (e.g. [TypedFeaturesetDescriptor.Featureset], [TypedFeaturesetDescriptor.Layer], etc).
-   */
+  /** A featureset descriptor denoting a featureset this feature belongs to. */
   val featureset: FeaturesetDescriptor,
+  val geometry: Map<String?, Any?>,
+  val properties: Map<String, Any?>,
   /**
-   * A feature geometry.
-   * Feature JSON properties.
-   * The geoJSON feature.
-   */
-  val geoJSONFeature: Feature,
-  /**
-   * Current feature state stored as a concrete instance of [FeatureState].
-   * Important: this state is immutable and represents the feature state
-   * at the precise moment of the interaction callback.
+   * A feature state.
+   *
+   * This is a **snapshot** of the state that the feature had when it was interacted with.
+   * To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
    */
   val state: Map<String, Any?>
 ) {
@@ -1468,16 +1467,18 @@ data class FeaturesetFeature(
     fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeature {
       val id = pigeonVar_list[0] as FeaturesetFeatureId?
       val featureset = pigeonVar_list[1] as FeaturesetDescriptor
-      val geoJSONFeature = pigeonVar_list[2] as Feature
-      val state = pigeonVar_list[3] as Map<String, Any?>
-      return FeaturesetFeature(id, featureset, geoJSONFeature, state)
+      val geometry = pigeonVar_list[2] as Map<String?, Any?>
+      val properties = pigeonVar_list[3] as Map<String, Any?>
+      val state = pigeonVar_list[4] as Map<String, Any?>
+      return FeaturesetFeature(id, featureset, geometry, properties, state)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       id,
       featureset,
-      geoJSONFeature,
+      geometry,
+      properties,
       state,
     )
   }
@@ -1489,11 +1490,11 @@ data class FeaturesetFeature(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class FeaturesetQueryTarget(
-  /** The FeaturesetDescriptor that specifies the featureset to be included in the query. */
+  /** A `FeaturesetDescriptor` that specifies the featureset to be included in the query. */
   val featureset: FeaturesetDescriptor,
   /** An optional filter expression used to refine the query results based on conditions related to the specified featureset. */
   val filter: String? = null,
-  /** An optional unique identifier associated with the FeaturesetQueryTarget. */
+  /** An optional unique identifier associated with the target. */
   val id: Long? = null
 ) {
   companion object {
@@ -3348,28 +3349,10 @@ interface _MapInterface {
    * This method allows to query both featureset from imported styles and user layers in the root style.
    * The results can be additionally filtered per-featureset.
    *
-   * ```dart
-   * let targets = [
-   *     FeaturesetQueryTarget(
-   *         featureset: .layer("my-layer"),
-   *         filter: Exp(.eq) {
-   *             Exp(.get) { "type" }
-   *             "hotel"
-   *         }
-   *     ),
-   *     FeaturesetQueryTarget(featureset: .featureset("poi", importId: "basemap"))
-   * ]
-   * mapView.mapboxMap.queryRenderedFeatures(with: CGPoint(x: 0, y: 0),
-   *                            targets: targets) { result in
-   *     // handle features in result
-   * }
-   * ```
-   *
-   * - Important: This is a low-level method. If you need to handle basic gestures on map content, please prefer to use Interactions API (see ``MapboxMap/addInteraction(_:)``) or  ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``.
+   * - Important: This is a low-level method. If you need to handle basic gestures on map content, please prefer ``MapboxMap/ queryRenderedFeaturesForFeatureset()``.
    *
    * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
    * @param targets An array of targets to query with.
-   * @param completion Callback called when the query completes.
    */
   fun queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: List<FeaturesetQueryTarget>, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
@@ -3377,32 +3360,18 @@ interface _MapInterface {
    *
    * The results array will contain features of the type specified by this featureset.
    *
-   * ```swift
-   * mapView.mapboxMap.queryRenderedFeatures(
-   *   with: CGPoint(x: 0, y: 0),
-   *   featureset: .standardBuildings) { result in
-   *     // handle buildings in result
-   * }
-   * ```
-   *
-   * - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
-   *
    * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
    * @param featureset A typed featureset to query with.
    * @param filter An additional filter for features.
-   * @param completion Callback called when the query completes.
    */
   fun queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
   /**
    * Queries all rendered features in current viewport, using one typed featureset.
    *
-   * This is same as ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)`` called with geometry matching the current viewport.
-   *
-   * - Important: If you need to handle basic gestures on map content, please prefer to use Interactions API, see ``MapboxMap/addInteraction(_:)``.
+   * This is same as `MapboxMap/ queryRenderedFeaturesForFeatureset()`` called with geometry matching the current viewport.
    *
    * @param featureset A typed featureset to query with.
    * @param filter An additional filter for features.
-   * @param completion Callback called when the query completes.
    */
   fun queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
   /**
@@ -3417,7 +3386,6 @@ interface _MapInterface {
    * Queries  the source features for a given featureset.
    *
    * @param target A featureset query target.
-   * @param completion Callback called when the query completes.
    */
   fun querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature?>>) -> Unit)
   /**
@@ -3482,7 +3450,6 @@ interface _MapInterface {
    * @param featureset The featureset to look the feature in.
    * @param featureId Identifier of the feature whose state should be updated.
    * @param state Map of entries to update with their respective new values
-   * @param callback The `feature state operation callback` called when the operation completes or ends.
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
@@ -3495,7 +3462,6 @@ interface _MapInterface {
    *
    * @param feature The feature to update.
    * @param state Map of entries to update with their respective new values
-   * @param callback The `feature state operation callback` called when the operation completes or ends.
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
@@ -3509,7 +3475,8 @@ interface _MapInterface {
    * @param sourceId The style source identifier.
    * @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
    * @param featureId The feature identifier of the feature whose state should be queried.
-   * @param completion The `query feature state completion` called when the query completes.
+   *
+   * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
   fun getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, callback: (Result<String>) -> Unit)
   /**
@@ -3525,7 +3492,6 @@ interface _MapInterface {
    * Get the state map of a feature within a style source.
    *
    * @param feature An interactive feature to query the state from.
-   * @param completion Feature's state map or an empty map if the feature could not be found.
    *
    * @return A `Cancelable` object that could be used to cancel the pending query.
    */
@@ -3552,7 +3518,6 @@ interface _MapInterface {
    * @param featureset A featureset the feature belongs to.
    * @param featureId Identifier of the feature whose state should be removed.
    * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
-   * @param callback The `feature state operation callback` called when the operation completes or ends.
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
@@ -3563,7 +3528,6 @@ interface _MapInterface {
    *
    * @param feature An interactive feature to update.
    * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
-   * @param callback The `feature state operation callback` called when the operation completes or ends.
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
@@ -3572,10 +3536,9 @@ interface _MapInterface {
    * Reset all the feature states within a featureset.
    *
    * Note that updates to feature state are asynchronous, so changes made by this method might not be
-   * immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+   * immediately visible using ``MapboxMap/getFeatureState()``.
    *
    * @param featureset A featureset descriptor
-   * @param callback The `feature state operation callback` called when the operation completes or ends.
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */

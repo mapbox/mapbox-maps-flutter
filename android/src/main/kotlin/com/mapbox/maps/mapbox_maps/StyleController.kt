@@ -590,7 +590,7 @@ class StyleController(private val context: Context, private val styleManager: Ma
   }
 
   override fun getFeaturesets(): List<FeaturesetDescriptor> {
-    TODO("no implemented on Android")
+    return styleManager.styleManager.styleFeaturesets.map { it.toFLTFeaturesetDescriptor() }
   }
 
   override fun addStyleImage(

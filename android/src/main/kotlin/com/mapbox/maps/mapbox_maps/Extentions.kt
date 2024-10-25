@@ -322,19 +322,20 @@ fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureStat
 @OptIn(MapboxExperimental::class)
 @SuppressLint("RestrictedApi")
 fun FeaturesetFeature.toFeaturesetFeature(): com.mapbox.maps.interactions.FeaturesetFeature<FeatureState> {
+  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject()
   featureset.featuresetId?.let {
     return com.mapbox.maps.interactions.FeaturesetFeature(
       id?.toFeaturesetFeatureId(),
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
       state.toFeatureState(),
-      geoJSONFeature
+      Feature.fromGeometry(geometry.toGeometry(), jsonObject)
     )
   }
   return com.mapbox.maps.interactions.FeaturesetFeature(
     id?.toFeaturesetFeatureId(),
     featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Layer,
     state.toFeatureState(),
-    geoJSONFeature
+    Feature.fromGeometry(geometry.toGeometry(), jsonObject)
   )
 }
 
@@ -453,6 +454,38 @@ fun CameraBoundsOptions.toCameraBoundsOptions(): com.mapbox.maps.CameraBoundsOpt
     .minPitch(minPitch)
     .minZoom(minZoom)
     .build()
+
+fun Geometry.toMap(): Map<String?, Any?> {
+  return when (this) {
+    is Point -> mapOf(
+      "coordinates" to listOf(this.latitude(), this.longitude())
+    )
+    is LineString -> mapOf(
+      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+    )
+    is Polygon -> mapOf(
+      "coordinates" to this.coordinates().map { ring ->
+        ring.map { listOf(it.latitude(), it.longitude()) }
+      }
+    )
+    is MultiPoint -> mapOf(
+      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+    )
+    is MultiLineString -> mapOf(
+      "coordinates" to this.coordinates().map { line ->
+        line.map { listOf(it.latitude(), it.longitude()) }
+      }
+    )
+    is MultiPolygon -> mapOf(
+      "coordinates" to this.coordinates().map { polygon ->
+        polygon.map { ring ->
+          ring.map { listOf(it.latitude(), it.longitude()) }
+        }
+      }
+    )
+    else -> throw IllegalArgumentException("Unsupported geometry type")
+  }
+}
 
 fun Map<String?, Any?>.toGeometry(): Geometry {
   when {
@@ -592,27 +625,15 @@ fun com.mapbox.maps.FeaturesetDescriptor.toFLTFeaturesetDescriptor(): Featureset
   return FeaturesetDescriptor(featuresetId, importId, layerId)
 }
 
-@OptIn(MapboxExperimental::class)
-fun com.mapbox.maps.interactions.FeatureState.toMap(): Map<String, Any?> {
-  return JSONObject(this.asJsonString()).toMap()
-    .filterKeys { it != null } // Filter out null keys
-    .mapKeys { it.key!! }
-}
-
 @SuppressLint("RestrictedApi")
 @OptIn(MapboxExperimental::class)
-fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFltFeaturesetFeature(): FeaturesetFeature {
-// TODO: need access to original feature or better conversion to JsonObject from JSONObject
-  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject()
-  val feature = Feature.fromGeometry(geometry, jsonObject)
-  properties.toMap()
-  val map: Map<String, Any?> = state.toMap()
-
+fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFLTFeaturesetFeature(): FeaturesetFeature {
   return FeaturesetFeature(
     id?.toFLTFeaturesetFeatureId(),
     descriptor.toFeaturesetDescriptor().toFLTFeaturesetDescriptor(),
-    feature,
-    map
+    geometry.toMap(),
+    properties.toFilteredMap(),
+    JSONObject(state.asJsonString()).toFilteredMap()
   )
 }
 
@@ -704,6 +725,13 @@ fun JSONObject.toMap(): Map<String?, Any?> = keys().asSequence().associateWith {
     JSONObject.NULL -> null
     else -> value
   }
+}
+
+@OptIn(MapboxExperimental::class)
+fun JSONObject.toFilteredMap(): Map<String, Any?> {
+  return this.toMap()
+    .filterKeys { it != null } // Filter out null keys
+    .mapKeys { it.key!! }
 }
 
 fun Number.toLogicalPixels(context: Context): Double {

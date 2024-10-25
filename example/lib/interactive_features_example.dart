@@ -1,7 +1,5 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
 
@@ -54,14 +52,14 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
       "highlight": true,
     };
 
-    Feature featured =
-        Feature(id: "id", geometry: Point(coordinates: Position(1, 2)));
+    var geometry = (Point(coordinates: Position(1, 2))).toJson();
 
     var featureSetFeature = FeaturesetFeature(
         id: FeaturesetFeatureId(id: "1225951980"),
         featureset: FeaturesetDescriptor(
             featuresetId: "buildings", importId: "basemap"),
-        geoJSONFeature: featured,
+        geometry: geometry,
+        properties: {},
         state: data);
 
     // Set FeatureState

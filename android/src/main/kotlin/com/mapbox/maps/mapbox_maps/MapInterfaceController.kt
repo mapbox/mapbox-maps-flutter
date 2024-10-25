@@ -41,6 +41,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
+import org.json.JSONObject
 
 class MapInterfaceController(
   private val mapboxMap: MapboxMap,
@@ -220,7 +221,7 @@ class MapInterfaceController(
     ) {
       callback(
         Result.success(
-          it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
+          it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
         )
       )
     }
@@ -232,8 +233,7 @@ class MapInterfaceController(
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
-    val size = getSize()
-    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size.width, size.height)))
+    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(mapView.width.toDouble(), mapView.height.toDouble())))
     mapboxMap.queryRenderedFeatures(
       geometry,
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
@@ -241,7 +241,7 @@ class MapInterfaceController(
     ) {
       callback(
         Result.success(
-          it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
+          it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
         )
       )
     }
@@ -364,8 +364,7 @@ class MapInterfaceController(
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.setFeatureState(
-      // TODO: Allow for TypedFeaturesetDescriptor.Layer
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
       featureId.toFeaturesetFeatureId(),
       state.toFeatureState()
     ) { callback(Result.success(Unit)) }
@@ -413,7 +412,7 @@ class MapInterfaceController(
     ) {
       callback(
         Result.success(
-          it.toMap()
+          JSONObject(it.asJsonString()).toFilteredMap()
         )
       )
     }
@@ -429,7 +428,7 @@ class MapInterfaceController(
     ) {
       callback(
         Result.success(
-          it.toMap()
+          JSONObject(it.asJsonString()).toFilteredMap()
         )
       )
     }
@@ -459,8 +458,7 @@ class MapInterfaceController(
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.removeFeatureState(
-      // TODO: Allow for TypedFeaturesetDescriptor.Layer
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
       featureId.toFeaturesetFeatureId(),
       FeatureStateKey.create(stateKey)
     ) {
@@ -496,9 +494,8 @@ class MapInterfaceController(
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.resetFeatureStates(
-      // TODO: Allow for TypedFeaturesetDescriptor.Layer
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
-    ) {
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {
