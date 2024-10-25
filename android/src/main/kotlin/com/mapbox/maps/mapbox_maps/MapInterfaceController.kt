@@ -2,7 +2,6 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.google.gson.Gson
-import com.mapbox.common.toValue
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
