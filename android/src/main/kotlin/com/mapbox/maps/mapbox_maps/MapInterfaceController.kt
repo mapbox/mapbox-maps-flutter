@@ -1,7 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
 import com.mapbox.common.toValue
 import com.mapbox.geojson.Feature
@@ -279,8 +278,8 @@ class MapInterfaceController(
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {
-        callback (
-          Result.success (
+        callback(
+          Result.success(
             it.value!!.map { feature -> feature.toFLTQueriedSourceFeature() }.toMutableList()
           )
         )
