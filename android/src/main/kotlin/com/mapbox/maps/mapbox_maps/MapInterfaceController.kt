@@ -3,8 +3,6 @@ package com.mapbox.maps.mapbox_maps
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.mapbox.bindgen.Value
 import com.mapbox.common.toValue
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
@@ -44,7 +42,6 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
-import org.json.JSONObject
 
 class MapInterfaceController(
   private val mapboxMap: MapboxMap,
@@ -227,7 +224,6 @@ class MapInterfaceController(
           it.map { feature -> feature.toFltFeaturesetFeature() }.toMutableList()
         )
       )
-
     }
   }
 
@@ -238,7 +234,7 @@ class MapInterfaceController(
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
     val size = getSize()
-    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0,0.0), ScreenCoordinate(size.width, size.height)))
+    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(size.width, size.height)))
     mapboxMap.queryRenderedFeatures(
       geometry,
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
@@ -275,16 +271,16 @@ class MapInterfaceController(
     target: FeaturesetQueryTarget,
     callback: (Result<List<QueriedSourceFeature?>>) -> Unit
   ) {
-
     mapboxMap.querySourceFeatures(
       target.featureset.toTypedFeaturesetDescriptor(),
       target.filter?.let { Expression.fromRaw(target.filter) },
-      target.id) {
+      target.id
+    ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {
-        callback(
-          Result.success(
+        callback (
+          Result.success (
             it.value!!.map { feature -> feature.toFLTQueriedSourceFeature() }.toMutableList()
           )
         )
@@ -368,13 +364,11 @@ class MapInterfaceController(
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    val statee = state.toFeatureState();
-    Log.d("jkl", statee.toString());
     mapboxMap.setFeatureState(
       // TODO: Allow for TypedFeaturesetDescriptor.Layer
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor.Featureset,
       featureId.toFeaturesetFeatureId(),
-      statee
+      state.toFeatureState()
     ) { callback(Result.success(Unit)) }
   }
 

@@ -574,8 +574,7 @@ extension CGPoint {
     }
 }
 
-extension MapboxMaps.MapContentGestureContext {
-
+extension MapboxMaps.InteractionContext {
     func toFLTMapContentGestureContext() -> MapContentGestureContext {
         MapContentGestureContext(
             touchPosition: point.toFLTScreenCoordinate(),

@@ -3,7 +3,6 @@ package com.mapbox.maps.mapbox_maps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -18,7 +17,6 @@ import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
-import com.mapbox.maps.extension.style.expressions.dsl.generated.id
 import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
@@ -605,8 +603,8 @@ fun com.mapbox.maps.interactions.FeatureState.toMap(): Map<String, Any?> {
 @OptIn(MapboxExperimental::class)
 fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFltFeaturesetFeature(): FeaturesetFeature {
 // TODO: need access to original feature or better conversion to JsonObject from JSONObject
-  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject();
-  val feature = Feature.fromGeometry(geometry, jsonObject);
+  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject()
+  val feature = Feature.fromGeometry(geometry, jsonObject)
   properties.toMap()
   val map: Map<String, Any?> = state.toMap()
 
