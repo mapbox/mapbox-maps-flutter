@@ -1451,9 +1451,11 @@ data class FeaturesetFeature(
    * In this case it's impossible to set a feature state for an individual feature.
    */
   val id: FeaturesetFeatureId? = null,
-  /** A featureset descriptor denoting a featureset this feature belongs to. */
+  /** A featureset descriptor denoting the featureset this feature belongs to. */
   val featureset: FeaturesetDescriptor,
+  /** A feature geometry. */
   val geometry: Map<String?, Any?>,
+  /** Feature JSON properties. */
   val properties: Map<String, Any?>,
   /**
    * A feature state.
@@ -3521,7 +3523,7 @@ interface _MapInterface {
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
-  fun removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, callback: (Result<Unit>) -> Unit)
+  fun removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, callback: (Result<Unit>) -> Unit)
   /**
    * Removes entries from a specified Feature.
    * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
@@ -3531,7 +3533,7 @@ interface _MapInterface {
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
-  fun removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, callback: (Result<Unit>) -> Unit)
+  fun removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, callback: (Result<Unit>) -> Unit)
   /**
    * Reset all the feature states within a featureset.
    *
@@ -4275,7 +4277,7 @@ interface _MapInterface {
             val args = message as List<Any?>
             val featuresetArg = args[0] as FeaturesetDescriptor
             val featureIdArg = args[1] as FeaturesetFeatureId
-            val stateKeyArg = args[2] as String
+            val stateKeyArg = args[2] as String?
             api.removeFeatureStateForFeaturesetFeatureDescriptor(featuresetArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
@@ -4295,7 +4297,7 @@ interface _MapInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val featureArg = args[0] as FeaturesetFeature
-            val stateKeyArg = args[1] as String
+            val stateKeyArg = args[1] as String?
             api.removeFeatureStateForFeaturesetFeature(featureArg, stateKeyArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {

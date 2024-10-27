@@ -453,13 +453,13 @@ class MapInterfaceController(
   override fun removeFeatureStateForFeaturesetFeatureDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
-    stateKey: String,
+    stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.removeFeatureState(
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
       featureId.toFeaturesetFeatureId(),
-      FeatureStateKey.create(stateKey)
+      stateKey?.let { FeatureStateKey.create(it) }
     ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
@@ -472,12 +472,12 @@ class MapInterfaceController(
   @OptIn(MapboxExperimental::class)
   override fun removeFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
-    stateKey: String,
+    stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
     mapboxMap.removeFeatureState(
       feature.toFeaturesetFeature(),
-      FeatureStateKey.create(stateKey)
+      stateKey?.let { FeatureStateKey.create(it) }
     ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))

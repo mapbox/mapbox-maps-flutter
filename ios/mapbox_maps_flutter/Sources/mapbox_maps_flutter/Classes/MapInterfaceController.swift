@@ -393,7 +393,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.removeFeatureState(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), stateKey: stateKey) { error in
             if let error {
                 completion(.failure(FlutterError(
@@ -407,7 +407,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.removeFeatureState(feature.toMapFeaturesetFeature(), stateKey: stateKey) { error in
             if let error {
                 completion(.failure(FlutterError(

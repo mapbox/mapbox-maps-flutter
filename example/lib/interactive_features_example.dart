@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
@@ -9,7 +8,7 @@ class InteractiveFeaturesExample extends StatefulWidget implements Example {
   @override
   final String title = 'Interactive Features';
   @override
-  final String? subtitle = null;
+  final String? subtitle = 'Click to select buildings, long-click to unselect';
 
   @override
   State<StatefulWidget> createState() => InteractiveFeaturesState();
@@ -17,14 +16,7 @@ class InteractiveFeaturesExample extends StatefulWidget implements Example {
 
 class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
   InteractiveFeaturesState();
-
   MapboxMap? mapboxMap;
-  var isLight = true;
-  var feature = Feature(
-      id: "addedFeature",
-      geometry:
-          Point(coordinates: Position(24.94180921290157, 60.171227338006844)),
-      properties: {"test": "data"});
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -32,83 +24,69 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
   }
 
   _onTap(context) async {
-    print("tap");
-
-    // QRF
+    // Define the geometry to query, in this case the point where the user clicked.
     var clicked = await mapboxMap?.pixelForCoordinate(context.point);
     var renderedQueryGeometry =
         RenderedQueryGeometry.fromScreenCoordinate(clicked!);
-    var target = FeaturesetQueryTarget(
-        featureset: FeaturesetDescriptor(
-            featuresetId: "buildings", importId: "basemap"));
-    var targets = [target];
-    var query = await mapboxMap?.queryRenderedFeaturesForTargets(
-        renderedQueryGeometry, targets);
-    var feature = query?.first?.queriedFeature;
-    print("feature");
-    print(feature?.feature);
 
-    Map<String, Object?> data = {
-      "highlight": true,
-    };
+    // Define the featureset to query. In this case "buildings", which is defined in the
+    // Standard Experimental style.
+    var featureset =
+        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
 
-    var geometry = (Point(coordinates: Position(1, 2))).toJson();
+    // Query the featureset for the geometry
+    var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
+        geometry: renderedQueryGeometry, featureset: featureset);
+    var featuresetFeatureId = queriedFeatures?.first.id;
 
-    var featureSetFeature = FeaturesetFeature(
-        id: FeaturesetFeatureId(id: "1225951980"),
-        featureset: FeaturesetDescriptor(
-            featuresetId: "buildings", importId: "basemap"),
-        geometry: geometry,
-        properties: {},
-        state: data);
+    if (featuresetFeatureId != null) {
+      // Define the state to set for the feature, in this case highlighting
+      // Set that featurestate on that featuresetFeature
+      Map<String, Object?> state = {
+        "highlight": true,
+      };
+      await mapboxMap?.setFeatureStateForFeaturesetFeatureDescriptor(
+          featureset, featuresetFeatureId, state);
+    }
+  }
 
-    // Set FeatureState
-    await mapboxMap?.setFeatureStateForFeaturesetFeature(
-        featureSetFeature, data);
+  _onLongTap(context) async {
+    // Define the geometry to query, in this case the point where the user clicked.
+    var clicked = await mapboxMap?.pixelForCoordinate(context.point);
+    var renderedQueryGeometry =
+        RenderedQueryGeometry.fromScreenCoordinate(clicked!);
 
-    await Future.delayed(Duration(seconds: 2));
+    // Query the featureset for the geometry
+    var featureset = FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
+    var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
+        geometry: renderedQueryGeometry,
+        featureset: featureset);
+    var featuresetFeatureId = queriedFeatures?.first.id;
 
-    var featureState =
-        await mapboxMap?.getFeatureStateForFeaturesetFeature(featureSetFeature);
-    print(featureState);
+    // Remove that feature state
+    if (featuresetFeatureId != null) {
+      mapboxMap?.removeFeatureStateForFeaturesetFeatureDescriptor(featureId: featuresetFeatureId, featureset: featureset);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: Icon(Icons.swap_horiz),
-                  heroTag: null,
-                  onPressed: () {
-                    setState(
-                      () => isLight = !isLight,
-                    );
-                    if (isLight) {
-                      mapboxMap?.loadStyleURI(MapboxStyles.LIGHT);
-                    } else {
-                      mapboxMap?.loadStyleURI(MapboxStyles.DARK);
-                    }
-                  }),
-              SizedBox(height: 10),
-            ],
-          ),
-        ),
+    return Scaffold(
         body: MapWidget(
-          key: ValueKey("mapWidget"),
-          cameraOptions: CameraOptions(
-              center: Point(
-                  coordinates: Position(24.94180921290157, 60.171227338006844)),
-              zoom: 15.0,
-              pitch: 30),
-          styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
-          textureView: true,
-          onMapCreated: _onMapCreated,
-          onTapListener: _onTap,
-        ));
+      key: ValueKey("mapWidget"),
+      cameraOptions: CameraOptions(
+          center: Point(coordinates: Position(24.9453, 60.1718)),
+          bearing: 49.92,
+          zoom: 16.35,
+          pitch: 40),
+
+      /// DON'T USE Standard Experimental style in production, it will break over time.
+      /// Currently this feature is in preview.
+      styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
+      textureView: true,
+      onMapCreated: _onMapCreated,
+      onTapListener: _onTap,
+      onLongTapListener: _onLongTap,
+    ));
   }
 }

@@ -557,24 +557,27 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
-  Future<void> removeFeatureState(String sourceId, String? sourceLayerId,
-          String featureId, String? stateKey) =>
+  Future<void> removeFeatureState(
+          {required String sourceId,
+          required String? sourceLayerId,
+          required String featureId,
+          String? stateKey}) =>
       _mapInterface.removeFeatureState(
           sourceId, sourceLayerId, featureId, stateKey);
 
   /// Removes entries from a feature state object of a feature in the specified featureset.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
   Future<void> removeFeatureStateForFeaturesetFeatureDescriptor(
-          FeaturesetDescriptor featureset,
-          FeaturesetFeatureId featureId,
-          String stateKey) =>
+          {required FeaturesetDescriptor featureset,
+          required FeaturesetFeatureId featureId,
+          String? stateKey}) =>
       _mapInterface.removeFeatureStateForFeaturesetFeatureDescriptor(
           featureset, featureId, stateKey);
 
   /// Removes entries from a specified Feature.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
   Future<void> removeFeatureStateForFeaturesetFeature(
-          FeaturesetFeature feature, String stateKey) =>
+          {required FeaturesetFeature feature, String? stateKey}) =>
       _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
 
   /// Reset all the feature states within a featureset.
