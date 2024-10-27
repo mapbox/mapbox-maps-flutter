@@ -1271,9 +1271,11 @@ struct FeaturesetFeature {
   /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
   /// In this case it's impossible to set a feature state for an individual feature.
   var id: FeaturesetFeatureId?
-  /// A featureset descriptor denoting a featureset this feature belongs to.
+  /// A featureset descriptor denoting the featureset this feature belongs to.
   var featureset: FeaturesetDescriptor
+  /// A feature geometry.
   var geometry: [String?: Any?]
+  /// Feature JSON properties.
   var properties: [String: Any?]
   /// A feature state.
   ///
@@ -3214,7 +3216,7 @@ protocol _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Removes entries from a specified Feature.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
   /// 
@@ -3222,7 +3224,7 @@ protocol _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Reset all the feature states within a featureset.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
@@ -4028,7 +4030,7 @@ class _MapInterfaceSetup {
         let args = message as! [Any?]
         let featuresetArg = args[0] as! FeaturesetDescriptor
         let featureIdArg = args[1] as! FeaturesetFeatureId
-        let stateKeyArg = args[2] as! String
+        let stateKeyArg: String? = nilOrValue(args[2])
         api.removeFeatureStateForFeaturesetFeatureDescriptor(featureset: featuresetArg, featureId: featureIdArg, stateKey: stateKeyArg) { result in
           switch result {
           case .success:
@@ -4053,7 +4055,7 @@ class _MapInterfaceSetup {
       removeFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let featureArg = args[0] as! FeaturesetFeature
-        let stateKeyArg = args[1] as! String
+        let stateKeyArg: String? = nilOrValue(args[1])
         api.removeFeatureStateForFeaturesetFeature(feature: featureArg, stateKey: stateKeyArg) { result in
           switch result {
           case .success:

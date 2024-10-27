@@ -95,7 +95,7 @@ void main() {
 
     // test remove featurestate
     await mapboxMap.removeFeatureStateForFeaturesetFeature(
-        feature, "highlight");
+        feature: feature, stateKey: "highlight");
     var returnedFeatureState2 =
         await mapboxMap.getFeatureStateForFeaturesetFeature(feature);
     expect(returnedFeatureState2, {});
@@ -149,7 +149,9 @@ void main() {
 
     // test remove featurestate
     await mapboxMap.removeFeatureStateForFeaturesetFeatureDescriptor(
-        featuresetDescriptor, featuresetID, "highlight");
+        featureset: featuresetDescriptor,
+        featureId: featuresetID,
+        stateKey: "highlight");
     var returnedFeatureState2 =
         await mapboxMap.getFeatureStateForFeaturesetDescriptor(
             featuresetDescriptor, featuresetID);
@@ -270,13 +272,15 @@ void main() {
     expect(returnedQuery[0]?.queryTargets?.last.featureset.layerId, "circle-2");
     expect(returnedQuery[0]?.queryTargets?.last.filter, null);
     //expect(returnedQuery[0]!.queriedFeature.feature["id"], 2);
-    expect(returnedQuery[0]!.queriedFeature.feature["properties"], expectedProperties);
+    expect(returnedQuery[0]!.queriedFeature.feature["properties"],
+        expectedProperties);
     expect(returnedQuery[1]?.queryTargets?.length, 1);
     expect(returnedQuery[1]?.queryTargets?.last.id, 1);
     expect(returnedQuery[1]?.queryTargets?.last.featureset.featuresetId, "poi");
     expect(returnedQuery[1]?.queryTargets?.last.featureset.importId, "nested");
     expect(returnedQuery[1]?.queryTargets?.last.filter, null);
     //expect(returnedQuery[1]!.queriedFeature.feature["id"], 12);
-    expect(returnedQuery[1]!.queriedFeature.feature["properties"], expectedProperties2);
+    expect(returnedQuery[1]!.queriedFeature.feature["properties"],
+        expectedProperties2);
   });
 }

@@ -1375,11 +1375,13 @@ class FeaturesetFeature {
   /// In this case it's impossible to set a feature state for an individual feature.
   FeaturesetFeatureId? id;
 
-  /// A featureset descriptor denoting a featureset this feature belongs to.
+  /// A featureset descriptor denoting the featureset this feature belongs to.
   FeaturesetDescriptor featureset;
 
+  /// A feature geometry.
   Map<String?, Object?> geometry;
 
+  /// Feature JSON properties.
   Map<String, Object?> properties;
 
   /// A feature state.
@@ -4424,7 +4426,7 @@ class _MapInterface {
   Future<void> removeFeatureStateForFeaturesetFeatureDescriptor(
       FeaturesetDescriptor featureset,
       FeaturesetFeatureId featureId,
-      String stateKey) async {
+      String? stateKey) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -4456,7 +4458,7 @@ class _MapInterface {
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
   Future<void> removeFeatureStateForFeaturesetFeature(
-      FeaturesetFeature feature, String stateKey) async {
+      FeaturesetFeature feature, String? stateKey) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
