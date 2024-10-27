@@ -557,11 +557,8 @@ class MapboxMap extends ChangeNotifier {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using `getStateFeature`.
-  Future<void> removeFeatureState(
-          {required String sourceId,
-          required String? sourceLayerId,
-          required String featureId,
-          String? stateKey}) =>
+  Future<void> removeFeatureState(String sourceId, String? sourceLayerId,
+          String featureId, String? stateKey) =>
       _mapInterface.removeFeatureState(
           sourceId, sourceLayerId, featureId, stateKey);
 
