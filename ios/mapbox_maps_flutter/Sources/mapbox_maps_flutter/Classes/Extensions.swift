@@ -166,7 +166,6 @@ extension String {
 
 extension _RenderedQueryGeometry: RenderedQueryGeometryConvertible {
     var geometry: MapboxMaps.RenderedQueryGeometry {
-        // TODO
         switch type {
         case .sCREENBOX:
             guard let cgRect = convertValueToCGRect(value) else { fallthrough }
@@ -178,13 +177,11 @@ extension _RenderedQueryGeometry: RenderedQueryGeometryConvertible {
             guard let cgPoints = convertValueToCGPoints(value) else { fallthrough }
             return RenderedQueryGeometry(shape: cgPoints)
         default:
-            // TODO Fix this
             return RenderedQueryGeometry(shape: [])
         }
     }
 }
 
-/// Convert to extension?
 func convertValueToCGRect(_ value: String) -> CGRect? {
     let screenBoxArray = convertStringToDictionary(properties: value)
     guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return nil }
@@ -646,7 +643,6 @@ extension MapboxMaps.StylePropertyValue {
 }
 
 extension MapboxMaps.Geometry {
-
     func toMap() -> [String: Any] {
         switch self {
         case .point(let point):
@@ -655,7 +651,13 @@ extension MapboxMaps.Geometry {
             return line.toMap()
         case .polygon(let polygon):
             return polygon.toMap()
-        case .multiPoint, .multiLineString, .multiPolygon, .geometryCollection:
+        case .multiPoint(let multiPoint):
+            return multiPoint.toMap()
+        case .multiLineString(let multiLineString):
+            return multiLineString.toMap()
+        case .multiPolygon(let multiPolygon):
+            return multiPolygon.toMap()
+        case .geometryCollection:
             return [:]
         }
     }
@@ -663,19 +665,62 @@ extension MapboxMaps.Geometry {
 
 extension Point {
     func toMap() -> [String: Any] {
-        return [COORDINATES: [coordinates.longitude, coordinates.latitude]]
+        return [
+            "type": "Point",
+            COORDINATES: [coordinates.longitude, coordinates.latitude]
+        ]
     }
 }
+
 extension LineString {
     func toMap() -> [String: Any] {
-        return [COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})]
+        return [
+            "type": "LineString",
+            COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})
+        ]
     }
 }
+
 extension Polygon {
     func toMap() -> [String: Any] {
-        return [COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})]
+        return [
+            "type": "Polygon",
+            COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})
+        ]
     }
 }
+
+extension MultiPoint {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiPoint",
+            COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})
+        ]
+    }
+}
+
+extension MultiLineString {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiLineString",
+            COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})
+        ]
+    }
+}
+
+extension MultiPolygon {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiPolygon",
+            COORDINATES: coordinates.map({ polygon in
+                polygon.map({ ring in
+                    ring.map({[$0.longitude, $0.latitude]})
+                })
+            })
+        ]
+    }
+}
+
 extension CLLocationCoordinate2D {
     func toDict() -> [String: Any] {
         return [COORDINATES: [self.longitude, self.latitude]]

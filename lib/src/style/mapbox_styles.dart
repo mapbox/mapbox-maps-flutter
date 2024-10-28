@@ -39,6 +39,7 @@ class MapboxStyles {
 
   /// NOT FOR PRODUCTION USE. An experimental version of the Mapbox Standard style.
   /// This style is used for testing new features and changes to the Mapbox Standard style. The style may change or be removed at any time.
+  @experimental
   static const String STANDARD_EXPERIMENTAL =
       "mapbox://styles/mapbox-map-design/standard-experimental-ime";
 }

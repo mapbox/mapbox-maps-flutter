@@ -184,7 +184,7 @@ class MapInterfaceController(
   override fun queryRenderedFeaturesForTargets(
     geometry: _RenderedQueryGeometry,
     targets: List<FeaturesetQueryTarget>,
-    callback: (Result<List<QueriedRenderedFeature?>>) -> Unit
+    callback: (Result<List<QueriedRenderedFeature>>) -> Unit
   ) {
     mapboxMap.queryRenderedFeatures(
       geometry.toRenderedQueryGeometry(context),
@@ -267,7 +267,7 @@ class MapInterfaceController(
   @OptIn(MapboxExperimental::class)
   override fun querySourceFeaturesForFeatureset(
     target: FeaturesetQueryTarget,
-    callback: (Result<List<QueriedSourceFeature?>>) -> Unit
+    callback: (Result<List<QueriedSourceFeature>>) -> Unit
   ) {
     mapboxMap.querySourceFeatures(
       target.featureset.toTypedFeaturesetDescriptor(),

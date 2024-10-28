@@ -3356,7 +3356,7 @@ interface _MapInterface {
    * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
    * @param targets An array of targets to query with.
    */
-  fun queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: List<FeaturesetQueryTarget>, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
+  fun queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: List<FeaturesetQueryTarget>, callback: (Result<List<QueriedRenderedFeature>>) -> Unit)
   /**
    * Queries the map for rendered features with one typed featureset.
    *
@@ -3389,7 +3389,7 @@ interface _MapInterface {
    *
    * @param target A featureset query target.
    */
-  fun querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature?>>) -> Unit)
+  fun querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature>>) -> Unit)
   /**
    * Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
    * to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3959,7 +3959,7 @@ interface _MapInterface {
             val args = message as List<Any?>
             val geometryArg = args[0] as _RenderedQueryGeometry
             val targetsArg = args[1] as List<FeaturesetQueryTarget>
-            api.queryRenderedFeaturesForTargets(geometryArg, targetsArg) { result: Result<List<QueriedRenderedFeature?>> ->
+            api.queryRenderedFeaturesForTargets(geometryArg, targetsArg) { result: Result<List<QueriedRenderedFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -4043,7 +4043,7 @@ interface _MapInterface {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val targetArg = args[0] as FeaturesetQueryTarget
-            api.querySourceFeaturesForFeatureset(targetArg) { result: Result<List<QueriedSourceFeature?>> ->
+            api.querySourceFeaturesForFeatureset(targetArg) { result: Result<List<QueriedSourceFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

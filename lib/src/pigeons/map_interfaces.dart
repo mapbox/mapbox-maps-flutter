@@ -3883,7 +3883,7 @@ class _MapInterface {
   ///
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param targets An array of targets to query with.
-  Future<List<QueriedRenderedFeature?>> queryRenderedFeaturesForTargets(
+  Future<List<QueriedRenderedFeature>> queryRenderedFeaturesForTargets(
       _RenderedQueryGeometry geometry,
       List<FeaturesetQueryTarget> targets) async {
     final String pigeonVar_channelName =
@@ -3911,7 +3911,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<QueriedRenderedFeature?>();
+          .cast<QueriedRenderedFeature>();
     }
   }
 
@@ -4031,7 +4031,7 @@ class _MapInterface {
   /// Queries  the source features for a given featureset.
   ///
   /// @param target A featureset query target.
-  Future<List<QueriedSourceFeature?>> querySourceFeaturesForFeatureset(
+  Future<List<QueriedSourceFeature>> querySourceFeaturesForFeatureset(
       FeaturesetQueryTarget target) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
@@ -4058,7 +4058,7 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<QueriedSourceFeature?>();
+          .cast<QueriedSourceFeature>();
     }
   }
 

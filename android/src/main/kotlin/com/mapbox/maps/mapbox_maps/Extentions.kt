@@ -457,25 +457,31 @@ fun CameraBoundsOptions.toCameraBoundsOptions(): com.mapbox.maps.CameraBoundsOpt
 fun Geometry.toMap(): Map<String?, Any?> {
   return when (this) {
     is Point -> mapOf(
+      "type" to "Point",
       "coordinates" to listOf(this.latitude(), this.longitude())
     )
     is LineString -> mapOf(
+      "type" to "LineString",
       "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
     )
     is Polygon -> mapOf(
+      "type" to "Polygon",
       "coordinates" to this.coordinates().map { ring ->
         ring.map { listOf(it.latitude(), it.longitude()) }
       }
     )
     is MultiPoint -> mapOf(
+      "type" to "MultiPoint",
       "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
     )
     is MultiLineString -> mapOf(
+      "type" to "MultiLineString",
       "coordinates" to this.coordinates().map { line ->
         line.map { listOf(it.latitude(), it.longitude()) }
       }
     )
     is MultiPolygon -> mapOf(
+      "type" to "MultiPolygon",
       "coordinates" to this.coordinates().map { polygon ->
         polygon.map { ring ->
           ring.map { listOf(it.latitude(), it.longitude()) }

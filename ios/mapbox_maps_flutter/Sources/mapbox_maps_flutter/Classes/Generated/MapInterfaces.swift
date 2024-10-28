@@ -3110,7 +3110,7 @@ protocol _MapInterface {
   ///
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param targets An array of targets to query with.
-  func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature?], Error>) -> Void)
+  func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature], Error>) -> Void)
   /// Queries the map for rendered features with one typed featureset.
   ///
   /// The results array will contain features of the type specified by this featureset.
@@ -3135,7 +3135,7 @@ protocol _MapInterface {
   /// Queries  the source features for a given featureset.
   ///
   /// @param target A featureset query target.
-  func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void)
+  func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], Error>) -> Void)
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
   ///

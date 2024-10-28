@@ -198,7 +198,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature?], any Error>) -> Void) {
+    func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature], any Error>) -> Void) {
         self.mapboxMap.queryRenderedFeatures(with: geometry, targets: targets.map({$0.toMapFeaturesetQueryTarget()})) { result in
             switch result {
             case .success(let features):
@@ -248,7 +248,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature?], any Error>) -> Void) {
+    func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], any Error>) -> Void) {
         self.mapboxMap.querySourceFeatures(for: target.toMapFeaturesetQueryTarget()) { result in
             switch result {
             case .success(let features):
