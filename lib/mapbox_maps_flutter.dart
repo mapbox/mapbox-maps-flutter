@@ -3,7 +3,10 @@ library mapbox_maps_flutter;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
-
+import 'dart:ffi';
+import 'dart:ui';
+import 'package:ffi/ffi.dart';
+import 'package:bindgen_support/bindgen_support.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -70,3 +73,4 @@ part 'src/offline/offline_manager.dart';
 part 'src/offline/tile_store.dart';
 part 'src/offline/offline_switch.dart';
 part 'src/utils.dart';
+part 'src/native/map.dart';

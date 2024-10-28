@@ -1,6 +1,8 @@
 import Flutter
 @_spi(Experimental) import MapboxMaps
 import UIKit
+import ObjectiveC
+@_implementationOnly import MapboxCoreMaps_Private
 
 class ProxyBinaryMessenger: NSObject, FlutterBinaryMessenger {
 
@@ -34,6 +36,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
+    private let nativeMapChannel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
     private let proxyBinaryMessenger: ProxyBinaryMessenger
@@ -61,10 +64,18 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
         self.registrar = registrar
 
+        let nativeMap = mapboxMap.nativeMap as! MapboxCoreMaps_Private.Map
         channel = FlutterMethodChannel(
             name: "plugins.flutter.io",
             binaryMessenger: proxyBinaryMessenger
         )
+        nativeMapChannel = FlutterMethodChannel(
+            name: "nativeMapChannel",
+            binaryMessenger: proxyBinaryMessenger
+        )
+        let nativeMapHandle = nativeMap.getHandle()
+        nativeMapChannel.invokeMethod("nativeMapHandle", arguments: nativeMapHandle)
+
         self.eventHandler = MapboxEventHandler(
             eventProvider: mapboxMap,
             binaryMessenger: proxyBinaryMessenger,

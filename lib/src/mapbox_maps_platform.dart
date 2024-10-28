@@ -5,15 +5,28 @@ typedef OnPlatformViewCreatedCallback = void Function(int);
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
       'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
+late final MethodChannel _nativeMapChannel = MethodChannel(
+      'nativeMapChannel', const StandardMethodCodec(), binaryMessenger);
+
   final BinaryMessenger binaryMessenger;
 
   _MapboxMapsPlatform({required this.binaryMessenger}) {
     _channel.setMethodCallHandler(_handleMethodCall);
+    _nativeMapChannel.setMethodCallHandler(_handleMethodCall);
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) async {
-    print(
-        "Handle method call ${call.method}, arguments: ${call.arguments} not supported");
+    if (call.method.startsWith("nativeMapHandle")) {
+      final int handle = call.arguments;
+      await runOnPlatformThread(() {
+        Context.init("dart.framework/dart");
+        print("Running on platform thread");
+        final NativeMap nativeMap = MapMarshaller.toDart(Pointer<Void>.fromAddress(handle));
+        print("Map created, attempting to call 'render' method");
+        nativeMap.render();
+        print("Render method called");
+      });
+    }
   }
 
   Widget buildView(

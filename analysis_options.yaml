@@ -8,6 +8,7 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   errors:
-    library_private_types_in_public_api: error
+    library_private_types_in_public_api: ignore error
+    camel_case_types: ignore
 
 # Additional information can be found at https://dart.dev/guides/language/analysis-options
