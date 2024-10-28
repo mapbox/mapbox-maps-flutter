@@ -252,35 +252,51 @@ void main() {
       FeaturesetQueryTarget(
           featureset: featuresetLayer, filter: layerFilter, id: 2)
     ];
-    Map<String, Object?> expectedProperties = {
-      "name": "qux",
-      "filter": true,
-      "bar": 2
+    
+    Map<String?, Object?> expectedFeatureRaw = {
+      "id": "2",
+      "type": "Feature",
+      "properties": {
+          "bar": 2,
+          "filter": true,
+          "name": "qux"
+      },
+      "geometry": {
+          "type": "Point",
+          "coordinates": [ 0.01, 0.01 ]
+      }
     };
-    Map<String, Object?> expectedProperties2 = {
-      "type": "B",
-      "class": "poi",
-      "name": "nest2"
+    var expectedFeature = Feature.fromFeature(expectedFeatureRaw);
+    Map<String, Object?> expectedFeatureRaw2 = {
+      "type": "Feature",
+      "properties": {
+          "name": "nest2",
+          "type": "B"
+      },
+      "geometry": {
+          "type": "Point",
+          "coordinates": [ 0.01, 0.01 ]
+      },
+      "id": "12"
     };
+    var expectedFeature2 = Feature.fromFeature(expectedFeatureRaw2);
 
     var returnedQuery = await mapboxMap.queryRenderedFeaturesForTargets(
-        RenderedQueryGeometry.fromScreenCoordinate(coord), targets);
-
+        RenderedQueryGeometry.fromScreenCoordinate(coord), targets);    
+    var firstFeature = Feature.fromFeature(returnedQuery[0]!.queriedFeature.feature);
+    var secondFeature = Feature.fromFeature(returnedQuery[1]!.queriedFeature.feature);
+    
     expect(returnedQuery.length, 2);
     expect(returnedQuery[0]?.queryTargets?.length, 1);
     expect(returnedQuery[0]?.queryTargets?.last.id, 2);
     expect(returnedQuery[0]?.queryTargets?.last.featureset.layerId, "circle-2");
     expect(returnedQuery[0]?.queryTargets?.last.filter, null);
-    //expect(returnedQuery[0]!.queriedFeature.feature["id"], 2);
-    expect(returnedQuery[0]!.queriedFeature.feature["properties"],
-        expectedProperties);
+    expect(expectedFeature, firstFeature);
     expect(returnedQuery[1]?.queryTargets?.length, 1);
     expect(returnedQuery[1]?.queryTargets?.last.id, 1);
     expect(returnedQuery[1]?.queryTargets?.last.featureset.featuresetId, "poi");
     expect(returnedQuery[1]?.queryTargets?.last.featureset.importId, "nested");
     expect(returnedQuery[1]?.queryTargets?.last.filter, null);
-    //expect(returnedQuery[1]!.queriedFeature.feature["id"], 12);
-    expect(returnedQuery[1]!.queriedFeature.feature["properties"],
-        expectedProperties2);
+    expect(expectedFeature2, secondFeature);
   });
 }

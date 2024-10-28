@@ -37,16 +37,15 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     // Query the featureset for the geometry
     var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
         geometry: renderedQueryGeometry, featureset: featureset);
-    var featuresetFeatureId = queriedFeatures?.first.id;
+    var featuresetFeature = queriedFeatures?.first;
 
-    if (featuresetFeatureId != null) {
+    if (featuresetFeature != null) {
       // Define the state to set for the feature, in this case highlighting
       // Set that featurestate on that featuresetFeature
       Map<String, Object?> state = {
         "highlight": true,
       };
-      await mapboxMap?.setFeatureStateForFeaturesetFeatureDescriptor(
-          featureset, featuresetFeatureId, state);
+      mapboxMap?.setFeatureStateForFeaturesetFeature(featuresetFeature, state);
     }
   }
 
@@ -57,15 +56,16 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
         RenderedQueryGeometry.fromScreenCoordinate(clicked!);
 
     // Query the featureset for the geometry
-    var featureset = FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
+    var featureset =
+        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
     var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
-        geometry: renderedQueryGeometry,
-        featureset: featureset);
+        geometry: renderedQueryGeometry, featureset: featureset);
     var featuresetFeatureId = queriedFeatures?.first.id;
 
     // Remove that feature state
     if (featuresetFeatureId != null) {
-      mapboxMap?.removeFeatureStateForFeaturesetFeatureDescriptor(featureId: featuresetFeatureId, featureset: featureset);
+      mapboxMap?.removeFeatureStateForFeaturesetFeatureDescriptor(
+          featureId: featuresetFeatureId, featureset: featureset);
     }
   }
 

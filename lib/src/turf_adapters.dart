@@ -77,6 +77,11 @@ final class Feature extends turf.Feature {
     return Feature.fromJson(jsonDecode(result.first as String));
   }
 
+  factory Feature.fromFeature(Map<String?, Object?> feature) {
+    var valid = convertToValidMap(feature as Map<Object?, Object?>);
+    return Feature.fromJson(valid);
+  }
+
   factory Feature.fromJson(Map<String, dynamic> json) {
     final feature = turf.Feature.fromJson(json);
     return Feature(
@@ -86,4 +91,18 @@ final class Feature extends turf.Feature {
         geometry: feature.geometry,
         fields: feature.fields);
   }
+}
+
+Map<String, dynamic> convertToValidMap(Map<Object?, Object?> input) {
+  return input.map((key, value) {
+    if (key is! String) {
+      throw Exception(
+          "Invalid key type. Expected String but got ${key.runtimeType}");
+    }
+    if (value is Map<Object?, Object?>) {
+      // Recursively convert nested maps
+      return MapEntry(key, convertToValidMap(value));
+    }
+    return MapEntry(key, value);
+  });
 }
