@@ -64,8 +64,8 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     // Remove that feature state
     if (featuresetFeatureId != null) {
-      mapboxMap?.removeFeatureStateForFeaturesetFeatureDescriptor(
-          featureId: featuresetFeatureId, featureset: featureset);
+      mapboxMap?.removeFeatureStateForFeaturesetDescriptor(
+          featureset: featureset, featureId: featuresetFeatureId);
     }
   }
 
