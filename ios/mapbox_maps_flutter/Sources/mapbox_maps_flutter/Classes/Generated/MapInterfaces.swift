@@ -3135,7 +3135,7 @@ protocol _MapInterface {
   /// Queries  the source features for a given featureset.
   ///
   /// @param target A featureset query target.
-  func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], Error>) -> Void)
+  func querySourceFeaturesForTargets(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], Error>) -> Void)
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
   ///
@@ -3191,7 +3191,7 @@ protocol _MapInterface {
   /// @param state Map of entries to update with their respective new values
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
+  func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
   /// Update the state map of an individual feature.
   /// 
   /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
@@ -3247,7 +3247,7 @@ protocol _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
+  func removeFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, Error>) -> Void)
   /// Removes entries from a specified Feature.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
   /// 
@@ -3760,12 +3760,12 @@ class _MapInterfaceSetup {
     /// Queries  the source features for a given featureset.
     ///
     /// @param target A featureset query target.
-    let querySourceFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let querySourceFeaturesForTargetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForTargets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      querySourceFeaturesForFeaturesetChannel.setMessageHandler { message, reply in
+      querySourceFeaturesForTargetsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let targetArg = args[0] as! FeaturesetQueryTarget
-        api.querySourceFeaturesForFeatureset(target: targetArg) { result in
+        api.querySourceFeaturesForTargets(target: targetArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -3775,7 +3775,7 @@ class _MapInterfaceSetup {
         }
       }
     } else {
-      querySourceFeaturesForFeaturesetChannel.setMessageHandler(nil)
+      querySourceFeaturesForTargetsChannel.setMessageHandler(nil)
     }
     /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
     /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3904,14 +3904,14 @@ class _MapInterfaceSetup {
     /// @param state Map of entries to update with their respective new values
     /// 
     /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-    let setFeatureStateForFeaturesetFeatureDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeatureDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      setFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler { message, reply in
+      setFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let featuresetArg = args[0] as! FeaturesetDescriptor
         let featureIdArg = args[1] as! FeaturesetFeatureId
         let stateArg = args[2] as! [String: Any?]
-        api.setFeatureStateForFeaturesetFeatureDescriptor(featureset: featuresetArg, featureId: featureIdArg, state: stateArg) { result in
+        api.setFeatureStateForFeaturesetDescriptor(featureset: featuresetArg, featureId: featureIdArg, state: stateArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -3921,7 +3921,7 @@ class _MapInterfaceSetup {
         }
       }
     } else {
-      setFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler(nil)
+      setFeatureStateForFeaturesetDescriptorChannel.setMessageHandler(nil)
     }
     /// Update the state map of an individual feature.
     /// 
@@ -4065,14 +4065,14 @@ class _MapInterfaceSetup {
     /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
     /// 
     /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-    let removeFeatureStateForFeaturesetFeatureDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      removeFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler { message, reply in
+      removeFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
         let featuresetArg = args[0] as! FeaturesetDescriptor
         let featureIdArg = args[1] as! FeaturesetFeatureId
         let stateKeyArg: String? = nilOrValue(args[2])
-        api.removeFeatureStateForFeaturesetFeatureDescriptor(featureset: featuresetArg, featureId: featureIdArg, stateKey: stateKeyArg) { result in
+        api.removeFeatureStateForFeaturesetDescriptor(featureset: featuresetArg, featureId: featureIdArg, stateKey: stateKeyArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
@@ -4082,7 +4082,7 @@ class _MapInterfaceSetup {
         }
       }
     } else {
-      removeFeatureStateForFeaturesetFeatureDescriptorChannel.setMessageHandler(nil)
+      removeFeatureStateForFeaturesetDescriptorChannel.setMessageHandler(nil)
     }
     /// Removes entries from a specified Feature.
     /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.

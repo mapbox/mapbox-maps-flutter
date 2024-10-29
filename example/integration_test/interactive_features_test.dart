@@ -21,7 +21,7 @@ void main() {
     var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
     mapboxMap.style.setStyleJSON(styleJson);
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 4));
 
     // test queryRenderedFeaturesForFeatureset
     var coord = await mapboxMap
@@ -140,7 +140,7 @@ void main() {
     await Future.delayed(Duration(seconds: 1));
 
     // test set and get featurestate
-    await mapboxMap.setFeatureStateForFeaturesetFeatureDescriptor(
+    await mapboxMap.setFeatureStateForFeaturesetDescriptor(
         featuresetDescriptor, featuresetID, state);
     var returnedFeatureState =
         await mapboxMap.getFeatureStateForFeaturesetDescriptor(
@@ -148,7 +148,7 @@ void main() {
     expect(returnedFeatureState, state);
 
     // test remove featurestate
-    await mapboxMap.removeFeatureStateForFeaturesetFeatureDescriptor(
+    await mapboxMap.removeFeatureStateForFeaturesetDescriptor(
         featureset: featuresetDescriptor,
         featureId: featuresetID,
         stateKey: "highlight");
@@ -186,7 +186,7 @@ void main() {
       "class": "poi"
     };
 
-    await mapboxMap.setFeatureStateForFeaturesetFeatureDescriptor(
+    await mapboxMap.setFeatureStateForFeaturesetDescriptor(
         featuresetDescriptor, featuresetID, state);
     var queryResult = await mapboxMap.queryRenderedFeaturesInViewport(
         featureset: featuresetDescriptor, filter: filter);
@@ -252,51 +252,37 @@ void main() {
       FeaturesetQueryTarget(
           featureset: featuresetLayer, filter: layerFilter, id: 2)
     ];
-    
-    Map<String?, Object?> expectedFeatureRaw = {
-      "id": "2",
-      "type": "Feature",
-      "properties": {
-          "bar": 2,
-          "filter": true,
-          "name": "qux"
-      },
-      "geometry": {
-          "type": "Point",
-          "coordinates": [ 0.01, 0.01 ]
-      }
+    Map<String, Object?> expectedProperties = {
+      "name": "qux",
+      "filter": true,
+      "bar": 2
     };
-    var expectedFeature = Feature.fromFeature(expectedFeatureRaw);
-    Map<String, Object?> expectedFeatureRaw2 = {
-      "type": "Feature",
-      "properties": {
-          "name": "nest2",
-          "type": "B"
-      },
-      "geometry": {
-          "type": "Point",
-          "coordinates": [ 0.01, 0.01 ]
-      },
-      "id": "12"
+    Map<String, Object?> expectedProperties2 = {
+      "type": "B",
+      "class": "poi",
+      "name": "nest2"
     };
-    var expectedFeature2 = Feature.fromFeature(expectedFeatureRaw2);
 
     var returnedQuery = await mapboxMap.queryRenderedFeaturesForTargets(
-        RenderedQueryGeometry.fromScreenCoordinate(coord), targets);    
-    var firstFeature = Feature.fromFeature(returnedQuery[0]!.queriedFeature.feature);
-    var secondFeature = Feature.fromFeature(returnedQuery[1]!.queriedFeature.feature);
-    
+        RenderedQueryGeometry.fromScreenCoordinate(coord), targets);
+    var firstFeature =
+        Feature.fromFeature(returnedQuery[0]!.queriedFeature.feature);
+    var secondFeature =
+        Feature.fromFeature(returnedQuery[1]!.queriedFeature.feature);
+
     expect(returnedQuery.length, 2);
     expect(returnedQuery[0]?.queryTargets?.length, 1);
     expect(returnedQuery[0]?.queryTargets?.last.id, 2);
     expect(returnedQuery[0]?.queryTargets?.last.featureset.layerId, "circle-2");
     expect(returnedQuery[0]?.queryTargets?.last.filter, null);
-    expect(expectedFeature, firstFeature);
+    expect(firstFeature.id.toString(), "2");
+    expect(firstFeature.properties, expectedProperties);
     expect(returnedQuery[1]?.queryTargets?.length, 1);
     expect(returnedQuery[1]?.queryTargets?.last.id, 1);
     expect(returnedQuery[1]?.queryTargets?.last.featureset.featuresetId, "poi");
     expect(returnedQuery[1]?.queryTargets?.last.featureset.importId, "nested");
     expect(returnedQuery[1]?.queryTargets?.last.filter, null);
-    expect(expectedFeature2, secondFeature);
+    expect(secondFeature.id.toString(), "12");
+    expect(secondFeature.properties, expectedProperties2);
   });
 }

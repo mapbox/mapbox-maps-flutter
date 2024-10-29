@@ -248,7 +248,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], any Error>) -> Void) {
+    func querySourceFeaturesForTargets(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], any Error>) -> Void) {
         self.mapboxMap.querySourceFeatures(for: target.toMapFeaturesetQueryTarget()) { result in
             switch result {
             case .success(let features):
@@ -315,7 +315,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
+    func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
         guard let state = JSONObject.init(turfRawValue: state) else {
             return
         }
@@ -393,7 +393,7 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
+    func removeFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.removeFeatureState(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), stateKey: stateKey) { error in
             if let error {
                 completion(.failure(FlutterError(

@@ -265,7 +265,7 @@ class MapInterfaceController(
   }
 
   @OptIn(MapboxExperimental::class)
-  override fun querySourceFeaturesForFeatureset(
+  override fun querySourceFeaturesForTargets(
     target: FeaturesetQueryTarget,
     callback: (Result<List<QueriedSourceFeature>>) -> Unit
   ) {
@@ -356,7 +356,7 @@ class MapInterfaceController(
   }
 
   @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
-  override fun setFeatureStateForFeaturesetFeatureDescriptor(
+  override fun setFeatureStateForFeaturesetDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
     state: Map<String, Any?>,
@@ -450,7 +450,7 @@ class MapInterfaceController(
   }
 
   @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
-  override fun removeFeatureStateForFeaturesetFeatureDescriptor(
+  override fun removeFeatureStateForFeaturesetDescriptor(
     featureset: FeaturesetDescriptor,
     featureId: FeaturesetFeatureId,
     stateKey: String?,

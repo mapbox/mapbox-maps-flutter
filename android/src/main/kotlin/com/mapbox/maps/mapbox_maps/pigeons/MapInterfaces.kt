@@ -3389,7 +3389,7 @@ interface _MapInterface {
    *
    * @param target A featureset query target.
    */
-  fun querySourceFeaturesForFeatureset(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature>>) -> Unit)
+  fun querySourceFeaturesForTargets(target: FeaturesetQueryTarget, callback: (Result<List<QueriedSourceFeature>>) -> Unit)
   /**
    * Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
    * to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -3455,7 +3455,7 @@ interface _MapInterface {
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
-  fun setFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  fun setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
   /**
    * Update the state map of an individual feature.
    *
@@ -3523,7 +3523,7 @@ interface _MapInterface {
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
-  fun removeFeatureStateForFeaturesetFeatureDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, callback: (Result<Unit>) -> Unit)
+  fun removeFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, callback: (Result<Unit>) -> Unit)
   /**
    * Removes entries from a specified Feature.
    * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
@@ -4038,12 +4038,12 @@ interface _MapInterface {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForTargets$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val targetArg = args[0] as FeaturesetQueryTarget
-            api.querySourceFeaturesForFeatureset(targetArg) { result: Result<List<QueriedSourceFeature>> ->
+            api.querySourceFeaturesForTargets(targetArg) { result: Result<List<QueriedSourceFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -4145,14 +4145,14 @@ interface _MapInterface {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeatureDescriptor$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val featuresetArg = args[0] as FeaturesetDescriptor
             val featureIdArg = args[1] as FeaturesetFeatureId
             val stateArg = args[2] as Map<String, Any?>
-            api.setFeatureStateForFeaturesetFeatureDescriptor(featuresetArg, featureIdArg, stateArg) { result: Result<Unit> ->
+            api.setFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg, stateArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -4271,14 +4271,14 @@ interface _MapInterface {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val featuresetArg = args[0] as FeaturesetDescriptor
             val featureIdArg = args[1] as FeaturesetFeatureId
             val stateKeyArg = args[2] as String?
-            api.removeFeatureStateForFeaturesetFeatureDescriptor(featuresetArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
+            api.removeFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

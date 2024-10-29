@@ -1209,6 +1209,7 @@ class QueriedRenderedFeature {
   /// An array of feature query targets that correspond to this queried feature.
   ///
   /// - Note: Returned query targets will omit the original `filter` data.
+  @experimental
   List<FeaturesetQueryTarget>? queryTargets;
 
   Object encode() {
@@ -1307,6 +1308,7 @@ class QueriedFeature {
 ///
 /// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
 /// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
+@experimental
 class FeaturesetFeatureId {
   FeaturesetFeatureId({
     required this.id,
@@ -1339,6 +1341,7 @@ class FeaturesetFeatureId {
 ///
 /// The descriptor instance acts as a universal target for interactions or querying rendered features (see
 /// ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``).
+@experimental
 class FeaturesetDescriptor {
   FeaturesetDescriptor({
     this.featuresetId,
@@ -1387,6 +1390,7 @@ class FeaturesetDescriptor {
 /// A basic feature of a featureset.
 ///
 /// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+@experimental
 class FeaturesetFeature {
   FeaturesetFeature({
     this.id,
@@ -1441,6 +1445,7 @@ class FeaturesetFeature {
 }
 
 /// Defines the parameters for querying features from a Featureset with an optional filter and id.
+@experimental
 class FeaturesetQueryTarget {
   FeaturesetQueryTarget({
     required this.featureset,
@@ -3883,6 +3888,7 @@ class _MapInterface {
   ///
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param targets An array of targets to query with.
+  @experimental
   Future<List<QueriedRenderedFeature>> queryRenderedFeaturesForTargets(
       _RenderedQueryGeometry geometry,
       List<FeaturesetQueryTarget> targets) async {
@@ -3922,6 +3928,7 @@ class _MapInterface {
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
+  @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
       _RenderedQueryGeometry geometry,
       FeaturesetDescriptor featureset,
@@ -3961,6 +3968,7 @@ class _MapInterface {
   ///
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
+  @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesInViewport(
       FeaturesetDescriptor featureset, String? filter) async {
     final String pigeonVar_channelName =
@@ -4031,10 +4039,11 @@ class _MapInterface {
   /// Queries  the source features for a given featureset.
   ///
   /// @param target A featureset query target.
-  Future<List<QueriedSourceFeature>> querySourceFeaturesForFeatureset(
+  @experimental
+  Future<List<QueriedSourceFeature>> querySourceFeaturesForTargets(
       FeaturesetQueryTarget target) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeaturesForTargets$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4230,12 +4239,13 @@ class _MapInterface {
   /// @param state Map of entries to update with their respective new values
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  Future<void> setFeatureStateForFeaturesetFeatureDescriptor(
+  @experimental
+  Future<void> setFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset,
       FeaturesetFeatureId featureId,
       Map<String, Object?> state) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeatureDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4266,6 +4276,7 @@ class _MapInterface {
   /// @param state Map of entries to update with their respective new values
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  @experimental
   Future<void> setFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, Map<String, Object?> state) async {
     final String pigeonVar_channelName =
@@ -4337,6 +4348,7 @@ class _MapInterface {
   /// @param featureId Identifier of the feature whose state should be queried.
   ///
   /// @return  A `Cancelable` object that could be used to cancel the pending query.
+  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) async {
     final String pigeonVar_channelName =
@@ -4373,6 +4385,7 @@ class _MapInterface {
   /// @param feature An interactive feature to query the state from.
   ///
   /// @return  A `Cancelable` object that could be used to cancel the pending query.
+  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature) async {
     final String pigeonVar_channelName =
@@ -4450,12 +4463,13 @@ class _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  Future<void> removeFeatureStateForFeaturesetFeatureDescriptor(
+  @experimental
+  Future<void> removeFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset,
       FeaturesetFeatureId featureId,
       String? stateKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeatureDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4484,6 +4498,7 @@ class _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  @experimental
   Future<void> removeFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, String? stateKey) async {
     final String pigeonVar_channelName =
@@ -4517,6 +4532,7 @@ class _MapInterface {
   /// @param featureset A featureset descriptor
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
+  @experimental
   Future<void> resetFeatureStatesForFeatureset(
       FeaturesetDescriptor featureset) async {
     final String pigeonVar_channelName =
@@ -7364,6 +7380,7 @@ class StyleManager {
   /// Returns the available featuresets in the currently loaded style.
   ///
   /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+  @experimental
   Future<List<FeaturesetDescriptor>> getFeaturesets() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
