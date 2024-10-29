@@ -18,14 +18,14 @@ late final MethodChannel _nativeMapChannel = MethodChannel(
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     if (call.method.startsWith("nativeMapHandle")) {
       final int handle = call.arguments;
-      await runOnPlatformThread(() {
+      // await runOnPlatformThread(() {
         Context.init("dart.framework/dart");
         print("Running on platform thread");
-        final NativeMap nativeMap = MapMarshaller.toDart(Pointer<Void>.fromAddress(handle));
+        final WrapperMap nativeMap = WrapperMap(handle);
         print("Map created, attempting to call 'render' method");
         nativeMap.render();
         print("Render method called");
-      });
+      // });
     }
   }
 
