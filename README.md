@@ -54,24 +54,9 @@ The Maps Flutter SDK is compatible with applications:
 
 ### Configure credentials
 To run the Maps Flutter SDK you will need to configure the Mapbox Access Tokens. 
-Read more about access tokens and public/secret scopes in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
+Read more about access tokens in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
 
-#### Secret token
-To access platform SDKs you will need to create a secret access token with the `Downloads:Read` scope and then:
- - to download the Android SDK add the token configuration to `~/.gradle/gradle.properties` : 
-```
-  SDK_REGISTRY_TOKEN=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
-```
- - to download the iOS SDK add the token configuration to `~/.netrc` :
-```
-  machine api.mapbox.com
-  login mapbox
-  password YOUR_SECRET_MAPBOX_ACCESS_TOKEN
-```
-
-To learn more about configuring your secret tokens for iOS, please see step 3 of the [configure credentials section](https://docs.mapbox.com/ios/maps/guides/install/#step-3-configure-your-secret-token) of the iOS Installation Guide.
-
-#### Public token
+#### Access token
 You can set the access token for Mapbox Maps Flutter SDK(as well as for every Mapbox SDK) via `MapboxOptions`:
 ```
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
@@ -82,13 +67,13 @@ It's a good practice to retrieve access tokens from some external source.
 You can pass access token via the command line arguments when either building : 
 
 ```
-flutter build <platform> --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter build <platform> --dart-define ACCESS_TOKEN=...
 ```
 
 or running the application : 
 
 ```
-flutter run --dart-define PUBLIC_ACCESS_TOKEN=...
+flutter run --dart-define ACCESS_TOKEN=...
 ```
 
 You can also persist token in launch.json : 
@@ -97,7 +82,7 @@ You can also persist token in launch.json :
     {
         ...
         "args": [
-            "--dart-define", "PUBLIC_ACCESS_TOKEN=..."
+            "--dart-define", "ACCESS_TOKEN=..."
         ],
     }
 ]
