@@ -229,6 +229,17 @@ enum class ViewAnnotationAnchor(val raw: Int) {
   }
 }
 
+enum class InteractionType(val raw: Int) {
+  CLICK(0),
+  LONG_CLICK(1);
+
+  companion object {
+    fun ofRaw(raw: Int): InteractionType? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Type information of the variant's content */
 enum class Type(val raw: Int) {
   SCREEN_BOX(0),
@@ -1386,6 +1397,49 @@ data class FeaturesetFeatureId(
   }
 }
 
+/** Generated class from Pigeon that represents data sent in messages. */
+data class Interaction(
+  val typedFeaturesetDescriptor: TypedFeaturesetDescriptor,
+  val interactionType: InteractionType,
+  val filter: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): Interaction {
+      val typedFeaturesetDescriptor = pigeonVar_list[0] as TypedFeaturesetDescriptor
+      val interactionType = pigeonVar_list[1] as InteractionType
+      val filter = pigeonVar_list[2] as String?
+      return Interaction(typedFeaturesetDescriptor, interactionType, filter)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      typedFeaturesetDescriptor,
+      interactionType,
+      filter,
+    )
+  }
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class TypedFeaturesetDescriptor(
+  val featuresetDescriptor: FeaturesetDescriptor,
+  val featuresetType: String
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): TypedFeaturesetDescriptor {
+      val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor
+      val featuresetType = pigeonVar_list[1] as String
+      return TypedFeaturesetDescriptor(featuresetDescriptor, featuresetType)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetDescriptor,
+      featuresetType,
+    )
+  }
+}
+
 /**
  * A featureset descriptor.
  *
@@ -2025,7 +2079,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Type.ofRaw(it.toInt())
+          InteractionType.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
@@ -2305,6 +2359,21 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          ImageContent.fromList(it)
+        }
+      }
+      195.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TransitionOptions.fromList(it)
+        }
+      }
+      196.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CanonicalTileID.fromList(it)
+        }
+      }
+      197.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
       }
@@ -2345,7 +2414,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is InteractionType -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
@@ -2571,6 +2640,18 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       is StylePropertyValue -> {
         stream.write(193)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(195)
+        writeValue(stream, value.toList())
+      }
+      is CanonicalTileID -> {
+        stream.write(196)
+        writeValue(stream, value.toList())
+      }
+      is StylePropertyValue -> {
+        stream.write(197)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3455,7 +3536,7 @@ interface _MapInterface {
    *
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
-  fun setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  fun setFeatureStateForFeaturesetDescriptor(featureset: TypedFeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
   /**
    * Update the state map of an individual feature.
    *
@@ -3545,6 +3626,7 @@ interface _MapInterface {
    * @return A `Cancelable` object  that could be used to cancel the pending operation.
    */
   fun resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, callback: (Result<Unit>) -> Unit)
+  fun addInteraction(interaction: Interaction, callback: (Result<FeaturesetFeature>) -> Unit)
   /** Reduces memory use. Useful to call when the application gets paused or sent to background. */
   fun reduceMemoryUse()
   /**
@@ -4149,7 +4231,7 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featuresetArg = args[0] as TypedFeaturesetDescriptor
             val featureIdArg = args[1] as FeaturesetFeatureId
             val stateArg = args[2] as Map<String, Any?>
             api.setFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg, stateArg) { result: Result<Unit> ->
@@ -4323,6 +4405,26 @@ interface _MapInterface {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.addInteraction$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val interactionArg = args[0] as Interaction
+            api.addInteraction(interactionArg) { result: Result<FeaturesetFeature> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

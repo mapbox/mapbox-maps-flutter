@@ -186,6 +186,11 @@ enum ViewAnnotationAnchor: Int {
   case cENTER = 8
 }
 
+enum InteractionType: Int {
+  case cLICK = 0
+  case lONGCLICK = 1
+}
+
 /// Type information of the variant's content
 enum Type: Int {
   case sCREENBOX = 0
@@ -1238,6 +1243,56 @@ struct FeaturesetFeatureId {
   }
 }
 
+/// Generated class from Pigeon that represents data sent in messages.
+struct Interaction {
+  var typedFeaturesetDescriptor: TypedFeaturesetDescriptor
+  var interactionType: InteractionType
+  var filter: String?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> Interaction? {
+    let typedFeaturesetDescriptor = pigeonVar_list[0] as! TypedFeaturesetDescriptor
+    let interactionType = pigeonVar_list[1] as! InteractionType
+    let filter: String? = nilOrValue(pigeonVar_list[2])
+
+    return Interaction(
+      typedFeaturesetDescriptor: typedFeaturesetDescriptor,
+      interactionType: interactionType,
+      filter: filter
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      typedFeaturesetDescriptor,
+      interactionType,
+      filter,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct TypedFeaturesetDescriptor {
+  var featuresetDescriptor: FeaturesetDescriptor
+  var featuresetType: String
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TypedFeaturesetDescriptor? {
+    let featuresetDescriptor = pigeonVar_list[0] as! FeaturesetDescriptor
+    let featuresetType = pigeonVar_list[1] as! String
+
+    return TypedFeaturesetDescriptor(
+      featuresetDescriptor: featuresetDescriptor,
+      featuresetType: featuresetType
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featuresetDescriptor,
+      featuresetType,
+    ]
+  }
+}
+
 /// A featureset descriptor.
 ///
 /// The descriptor instance acts as a universal target for interactions or querying rendered features (see 
@@ -1920,7 +1975,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Type(rawValue: enumResultAsInt)
+        return InteractionType(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
@@ -2131,7 +2186,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Type {
+    } else if let value = value as? InteractionType {
       super.writeByte(137)
       super.writeValue(value.rawValue)
     } else if let value = value as? FillExtrusionBaseAlignment {
@@ -2301,6 +2356,15 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? StylePropertyValue {
       super.writeByte(193)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(195)
+      super.writeValue(value.toList())
+    } else if let value = value as? CanonicalTileID {
+      super.writeByte(196)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(197)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3191,7 +3255,7 @@ protocol _MapInterface {
   /// @param state Map of entries to update with their respective new values
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
+  func setFeatureStateForFeaturesetDescriptor(featureset: TypedFeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
   /// Update the state map of an individual feature.
   /// 
   /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
@@ -3265,6 +3329,7 @@ protocol _MapInterface {
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
   func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, Error>) -> Void)
+  func addInteraction(interaction: Interaction, completion: @escaping (Result<FeaturesetFeature, Error>) -> Void)
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   func reduceMemoryUse() throws
   /// Gets elevation for the given coordinate.
@@ -3908,7 +3973,7 @@ class _MapInterfaceSetup {
     if let api = api {
       setFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let featuresetArg = args[0] as! TypedFeaturesetDescriptor
         let featureIdArg = args[1] as! FeaturesetFeatureId
         let stateArg = args[2] as! [String: Any?]
         api.setFeatureStateForFeaturesetDescriptor(featureset: featuresetArg, featureId: featureIdArg, state: stateArg) { result in
@@ -4133,6 +4198,23 @@ class _MapInterfaceSetup {
       }
     } else {
       resetFeatureStatesForFeaturesetChannel.setMessageHandler(nil)
+    }
+    let addInteractionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.addInteraction\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addInteractionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let interactionArg = args[0] as! Interaction
+        api.addInteraction(interaction: interactionArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      addInteractionChannel.setMessageHandler(nil)
     }
     /// Reduces memory use. Useful to call when the application gets paused or sent to background.
     let reduceMemoryUseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

@@ -250,6 +250,27 @@ extension FeaturesetFeature {
     }
 }
 
+extension Interaction {
+    func toMapInteraction(completion: @escaping (FeaturesetFeature) -> Void) -> MapboxMaps.Interaction {
+        let filterExpression = try? filter.flatMap { try $0.toExp() }
+
+        switch interactionType {
+        case .cLICK:
+            return TapInteraction.init(typedFeaturesetDescriptor.featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression) { _, _ in
+                // TODO: figure out how to pass typed completion with pigeon
+                print("tapped")
+                return true
+            }
+        case .lONGCLICK:
+            return LongPressInteraction.init(typedFeaturesetDescriptor.featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression) { featuresetFeature, _ in
+                
+                completion(featuresetFeature.toFLTFeaturesetFeature())
+                return true
+            }
+        }
+    }
+}
+
 extension MercatorCoordinate {
     func toMercatorCoordinate() -> MapboxMaps.MercatorCoordinate {
         return MapboxMaps.MercatorCoordinate(x: x, y: y)

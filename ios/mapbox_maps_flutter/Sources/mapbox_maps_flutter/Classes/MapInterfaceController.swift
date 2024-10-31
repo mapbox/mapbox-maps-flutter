@@ -315,11 +315,11 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
+    func setFeatureStateForFeaturesetDescriptor(featureset: TypedFeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
         guard let state = JSONObject.init(turfRawValue: state) else {
             return
         }
-        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
+        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.featuresetDescriptor.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
             if let error {
                 completion(.failure(FlutterError(
                     code: "setFeatureStateError",
@@ -433,6 +433,12 @@ final class MapInterfaceController: _MapInterface {
                 completion(.success(()))
             }
         }
+    }
+
+    func addInteraction(interaction: Interaction, completion: @escaping (Result<FeaturesetFeature, any Error>) -> Void) {
+        mapboxMap.addInteraction(interaction.toMapInteraction(completion: { _ in
+            print("no op")
+        }))
     }
 
     func reduceMemoryUse() throws {

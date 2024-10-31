@@ -168,6 +168,11 @@ enum ViewAnnotationAnchor {
   CENTER,
 }
 
+enum InteractionType {
+  CLICK,
+  LONG_CLICK,
+}
+
 /// Type information of the variant's content
 enum Type {
   SCREEN_BOX,
@@ -1209,7 +1214,6 @@ class QueriedRenderedFeature {
   /// An array of feature query targets that correspond to this queried feature.
   ///
   /// - Note: Returned query targets will omit the original `filter` data.
-  @experimental
   List<FeaturesetQueryTarget>? queryTargets;
 
   Object encode() {
@@ -1308,7 +1312,6 @@ class QueriedFeature {
 ///
 /// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
 /// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
-@experimental
 class FeaturesetFeatureId {
   FeaturesetFeatureId({
     required this.id,
@@ -1337,11 +1340,67 @@ class FeaturesetFeatureId {
   }
 }
 
+class Interaction {
+  Interaction({
+    required this.typedFeaturesetDescriptor,
+    required this.interactionType,
+    this.filter,
+  });
+
+  TypedFeaturesetDescriptor typedFeaturesetDescriptor;
+
+  InteractionType interactionType;
+
+  String? filter;
+
+  Object encode() {
+    return <Object?>[
+      typedFeaturesetDescriptor,
+      interactionType,
+      filter,
+    ];
+  }
+
+  static Interaction decode(Object result) {
+    result as List<Object?>;
+    return Interaction(
+      typedFeaturesetDescriptor: result[0]! as TypedFeaturesetDescriptor,
+      interactionType: result[1]! as InteractionType,
+      filter: result[2] as String?,
+    );
+  }
+}
+
+class TypedFeaturesetDescriptor {
+  TypedFeaturesetDescriptor({
+    required this.featuresetDescriptor,
+    required this.featuresetType,
+  });
+
+  FeaturesetDescriptor featuresetDescriptor;
+
+  String featuresetType;
+
+  Object encode() {
+    return <Object?>[
+      featuresetDescriptor,
+      featuresetType,
+    ];
+  }
+
+  static TypedFeaturesetDescriptor decode(Object result) {
+    result as List<Object?>;
+    return TypedFeaturesetDescriptor(
+      featuresetDescriptor: result[0]! as FeaturesetDescriptor,
+      featuresetType: result[1]! as String,
+    );
+  }
+}
+
 /// A featureset descriptor.
 ///
 /// The descriptor instance acts as a universal target for interactions or querying rendered features (see
 /// ``MapboxMap/queryRenderedFeatures(with:featureset:filter:completion:)``).
-@experimental
 class FeaturesetDescriptor {
   FeaturesetDescriptor({
     this.featuresetId,
@@ -1390,7 +1449,6 @@ class FeaturesetDescriptor {
 /// A basic feature of a featureset.
 ///
 /// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
-@experimental
 class FeaturesetFeature {
   FeaturesetFeature({
     this.id,
@@ -1445,7 +1503,6 @@ class FeaturesetFeature {
 }
 
 /// Defines the parameters for querying features from a Featureset with an optional filter and id.
-@experimental
 class FeaturesetQueryTarget {
   FeaturesetQueryTarget({
     required this.featureset,
@@ -2061,7 +2118,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is InteractionType) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
     } else if (value is FillExtrusionBaseAlignment) {
@@ -2232,6 +2289,15 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is StylePropertyValue) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(195);
+      writeValue(buffer, value.encode());
+    } else if (value is CanonicalTileID) {
+      buffer.putUint8(196);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(197);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -2266,7 +2332,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : ViewAnnotationAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
+        return value == null ? null : InteractionType.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : FillExtrusionBaseAlignment.values[value];
@@ -3888,7 +3954,6 @@ class _MapInterface {
   ///
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param targets An array of targets to query with.
-  @experimental
   Future<List<QueriedRenderedFeature>> queryRenderedFeaturesForTargets(
       _RenderedQueryGeometry geometry,
       List<FeaturesetQueryTarget> targets) async {
@@ -3928,7 +3993,6 @@ class _MapInterface {
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
-  @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
       _RenderedQueryGeometry geometry,
       FeaturesetDescriptor featureset,
@@ -3968,7 +4032,6 @@ class _MapInterface {
   ///
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
-  @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesInViewport(
       FeaturesetDescriptor featureset, String? filter) async {
     final String pigeonVar_channelName =
@@ -4039,7 +4102,6 @@ class _MapInterface {
   /// Queries  the source features for a given featureset.
   ///
   /// @param target A featureset query target.
-  @experimental
   Future<List<QueriedSourceFeature>> querySourceFeaturesForTargets(
       FeaturesetQueryTarget target) async {
     final String pigeonVar_channelName =
@@ -4239,9 +4301,8 @@ class _MapInterface {
   /// @param state Map of entries to update with their respective new values
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  @experimental
   Future<void> setFeatureStateForFeaturesetDescriptor(
-      FeaturesetDescriptor featureset,
+      TypedFeaturesetDescriptor featureset,
       FeaturesetFeatureId featureId,
       Map<String, Object?> state) async {
     final String pigeonVar_channelName =
@@ -4276,7 +4337,6 @@ class _MapInterface {
   /// @param state Map of entries to update with their respective new values
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  @experimental
   Future<void> setFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, Map<String, Object?> state) async {
     final String pigeonVar_channelName =
@@ -4348,7 +4408,6 @@ class _MapInterface {
   /// @param featureId Identifier of the feature whose state should be queried.
   ///
   /// @return  A `Cancelable` object that could be used to cancel the pending query.
-  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) async {
     final String pigeonVar_channelName =
@@ -4385,7 +4444,6 @@ class _MapInterface {
   /// @param feature An interactive feature to query the state from.
   ///
   /// @return  A `Cancelable` object that could be used to cancel the pending query.
-  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature) async {
     final String pigeonVar_channelName =
@@ -4463,7 +4521,6 @@ class _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  @experimental
   Future<void> removeFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset,
       FeaturesetFeatureId featureId,
@@ -4498,7 +4555,6 @@ class _MapInterface {
   /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  @experimental
   Future<void> removeFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, String? stateKey) async {
     final String pigeonVar_channelName =
@@ -4532,7 +4588,6 @@ class _MapInterface {
   /// @param featureset A featureset descriptor
   ///
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  @experimental
   Future<void> resetFeatureStatesForFeatureset(
       FeaturesetDescriptor featureset) async {
     final String pigeonVar_channelName =
@@ -4555,6 +4610,35 @@ class _MapInterface {
       );
     } else {
       return;
+    }
+  }
+
+  Future<FeaturesetFeature> addInteraction(Interaction interaction) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.addInteraction$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[interaction]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as FeaturesetFeature?)!;
     }
   }
 
@@ -7380,7 +7464,6 @@ class StyleManager {
   /// Returns the available featuresets in the currently loaded style.
   ///
   /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
-  @experimental
   Future<List<FeaturesetDescriptor>> getFeaturesets() async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
