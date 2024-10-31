@@ -39,6 +39,10 @@ class MapInterfaceController(
     callback(Result.success(Unit))
   }
 
+  override fun styleGlyphURL(): String = mapboxMap.getStyleGlyphURL()
+
+  override fun setStyleGlyphURL(glyphURL: String) = mapboxMap.setStyleGlyphURL(glyphURL)
+
   override fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit) {
     mapboxMap.loadStyleUri(
       styleURI,

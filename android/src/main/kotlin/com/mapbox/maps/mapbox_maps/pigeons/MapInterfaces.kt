@@ -3215,6 +3215,20 @@ interface _MapInterface {
    * Note: This method has no effect on iOS platform.
    */
   fun setSnapshotLegacyMode(enabled: Boolean, callback: (Result<Unit>) -> Unit)
+  /**
+   * The URL that points to the glyphs used by the style for rendering text labels on the map.
+   *
+   * This property allows setting a custom glyph URL at runtime, making it easier to
+   * apply custom fonts to the map without modifying the base style.
+   */
+  fun styleGlyphURL(): String
+  /**
+   * The URL that points to the glyphs used by the style for rendering text labels on the map.
+   *
+   * This property allows setting a custom glyph URL at runtime, making it easier to
+   * apply custom fonts to the map without modifying the base style.
+   */
+  fun setStyleGlyphURL(glyphURL: String)
 
   companion object {
     /** The codec used by _MapInterface. */
@@ -3802,6 +3816,39 @@ interface _MapInterface {
                 reply.reply(wrapResult(null))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.styleGlyphURL$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.styleGlyphURL())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setStyleGlyphURL$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val glyphURLArg = args[0] as String
+            val wrapped: List<Any?> = try {
+              api.setStyleGlyphURL(glyphURLArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)

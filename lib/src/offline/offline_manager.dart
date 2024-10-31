@@ -65,8 +65,8 @@ final class OfflineManager {
       OnStylePackLoadProgressListener? progressListener) async {
     if (progressListener != null) {
       await _api.addStylePackLoadProgressListener(styleURI);
-      final eventChannel =
-          EventChannel("com.mapbox.maps.flutter/${_messageChannel}/${styleURI}");
+      final eventChannel = EventChannel(
+          "com.mapbox.maps.flutter/${_messageChannel}/${styleURI}");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(StylePackLoadProgress.decode(event));
       });
