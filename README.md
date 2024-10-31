@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.8.0-beta.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.8.0-rc.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -48,12 +48,12 @@ The Maps Flutter SDK is compatible with applications:
 
 - Deployed on iOS 12 or higher
 - Built using the Android SDK 21 or higher
-- Built using the Dart SDK 3.0.0 or higher
+- Built using the Flutter SDK 3.22.3/Dart SDK 3.4.4 or higher
 
 ## Installation
 
 ### Configure credentials
-To run the Maps Flutter SDK you will need to configure the Mapbox Access Tokens. 
+To run the Maps Flutter SDK you will need to configure the Mapbox Access Token.
 Read more about access tokens in the platform [Android](https://docs.mapbox.com/android/maps/guides/install/#configure-credentials) or [iOS](https://docs.mapbox.com/ios/maps/guides/install/#step-4-configure-your-public-token) docs.
 
 #### Access token
@@ -62,7 +62,7 @@ You can set the access token for Mapbox Maps Flutter SDK(as well as for every Ma
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
 ```
 
-It's a good practice to retrieve access tokens from some external source.
+It's a good practice to retrieve the access token from some external source.
 
 You can pass access token via the command line arguments when either building : 
 
@@ -98,7 +98,7 @@ To use the Maps Flutter SDK add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^2.4.0-beta.1
+  mapbox_maps_flutter: ^2.4.0-rc.1
 ```
 
 ### Configure permissions
