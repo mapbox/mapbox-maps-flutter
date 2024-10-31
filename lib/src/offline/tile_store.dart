@@ -88,8 +88,8 @@ final class TileStore {
       OnTileRegionLoadProgressListener? progressListener) async {
     if (progressListener != null) {
       await _api.addTileRegionLoadProgressListener(id);
-      final eventChannel =
-          EventChannel("com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}");
+      final eventChannel = EventChannel(
+          "com.mapbox.maps.flutter/${_messageChannel}/tile-region-${id}");
       eventChannel.receiveBroadcastStream().listen((event) {
         progressListener(TileRegionLoadProgress.decode(event));
       });
