@@ -2973,6 +2973,16 @@ protocol _MapInterface {
   ///
   /// Note: This method has no effect on iOS platform.
   func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  func styleGlyphURL() throws -> String
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  func setStyleGlyphURL(glyphURL: String) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -3611,6 +3621,42 @@ class _MapInterfaceSetup {
       }
     } else {
       setSnapshotLegacyModeChannel.setMessageHandler(nil)
+    }
+    /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+    ///
+    /// This property allows setting a custom glyph URL at runtime, making it easier to
+    /// apply custom fonts to the map without modifying the base style.
+    let styleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.styleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      styleGlyphURLChannel.setMessageHandler { _, reply in
+        do {
+          let result = try api.styleGlyphURL()
+          reply(wrapResult(result))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      styleGlyphURLChannel.setMessageHandler(nil)
+    }
+    /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+    ///
+    /// This property allows setting a custom glyph URL at runtime, making it easier to
+    /// apply custom fonts to the map without modifying the base style.
+    let setStyleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setStyleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setStyleGlyphURLChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let glyphURLArg = args[0] as! String
+        do {
+          try api.setStyleGlyphURL(glyphURL: glyphURLArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setStyleGlyphURLChannel.setMessageHandler(nil)
     }
   }
 }

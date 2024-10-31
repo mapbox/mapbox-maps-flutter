@@ -397,6 +397,19 @@ class MapboxMap extends ChangeNotifier {
   /// Returns the `map options`.
   Future<MapOptions> getMapOptions() => _mapInterface.getMapOptions();
 
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  Future<String> styleGlyphURL() => _mapInterface.styleGlyphURL();
+
+  /// The URL that points to the glyphs used by the style for rendering text labels on the map.
+  ///
+  /// This property allows setting a custom glyph URL at runtime, making it easier to
+  /// apply custom fonts to the map without modifying the base style.
+  Future<void> setStyleGlyphURL(String glyphURL) =>
+      _mapInterface.setStyleGlyphURL(glyphURL);
+
   /// Debug options for the widget associated with the map.
   Future<List<MapWidgetDebugOptions>> getDebugOptions() async {
     return _mapInterface.getDebugOptions().then((value) {

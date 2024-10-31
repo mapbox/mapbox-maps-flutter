@@ -10,6 +10,16 @@ import 'empty_map_widget.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  testWidgets('styleGlyphURL', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    final styleGlyphURL = 'test://test/test/{fontstack}/{range}.pbf';
+
+    await mapboxMap.setStyleGlyphURL(styleGlyphURL);
+    expect(await mapboxMap.styleGlyphURL(), styleGlyphURL);
+  });
+
   testWidgets('loadStyleURI', (WidgetTester tester) async {
     final mapFuture = app.main();
     await tester.pumpAndSettle();

@@ -5,6 +5,7 @@ import Flutter
 import Turf
 
 final class MapInterfaceController: _MapInterface {
+
     private static let errorCode = "0"
     private let mapboxMap: MapboxMap
     private let mapView: MapView
@@ -16,6 +17,14 @@ final class MapInterfaceController: _MapInterface {
 
     func setSnapshotLegacyMode(enabled: Bool, completion: @escaping (Result<Void, any Error>) -> Void) {
         completion(.success(()))
+    }
+
+    func styleGlyphURL() throws -> String {
+        return mapboxMap.styleGlyphURL
+    }
+
+    func setStyleGlyphURL(glyphURL: String) throws {
+        mapboxMap.styleGlyphURL = glyphURL
     }
 
     func loadStyleURI(styleURI: String, completion: @escaping (Result<Void, Error>) -> Void) {
