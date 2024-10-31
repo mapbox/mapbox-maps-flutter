@@ -1,5 +1,7 @@
 ### main
 
+* Update Maps SDK to 11.8.0-rc.1
+
 # 2.4.0-beta.1
 
 * Expose current map's camera state on `CameraChanged` event. [#704](https://github.com/mapbox/mapbox-maps-flutter/pull/704)
