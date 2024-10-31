@@ -186,6 +186,11 @@ enum ViewAnnotationAnchor: Int {
   case cENTER = 8
 }
 
+enum InteractionType: Int {
+  case cLICK = 0
+  case lONGCLICK = 1
+}
+
 /// Type information of the variant's content
 enum Type: Int {
   case sCREENBOX = 0
@@ -1214,6 +1219,56 @@ struct FeaturesetFeatureId {
   }
 }
 
+/// Generated class from Pigeon that represents data sent in messages.
+struct Interaction {
+  var typedFeaturesetDescriptor: TypedFeaturesetDescriptor
+  var interactionType: InteractionType
+  var filter: String?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> Interaction? {
+    let typedFeaturesetDescriptor = pigeonVar_list[0] as! TypedFeaturesetDescriptor
+    let interactionType = pigeonVar_list[1] as! InteractionType
+    let filter: String? = nilOrValue(pigeonVar_list[2])
+
+    return Interaction(
+      typedFeaturesetDescriptor: typedFeaturesetDescriptor,
+      interactionType: interactionType,
+      filter: filter
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      typedFeaturesetDescriptor,
+      interactionType,
+      filter,
+    ]
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct TypedFeaturesetDescriptor {
+  var featuresetDescriptor: FeaturesetDescriptor
+  var featuresetType: String
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> TypedFeaturesetDescriptor? {
+    let featuresetDescriptor = pigeonVar_list[0] as! FeaturesetDescriptor
+    let featuresetType = pigeonVar_list[1] as! String
+
+    return TypedFeaturesetDescriptor(
+      featuresetDescriptor: featuresetDescriptor,
+      featuresetType: featuresetType
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featuresetDescriptor,
+      featuresetType,
+    ]
+  }
+}
+
 /// A featureset descriptor.
 ///
 /// The descriptor instance acts as a universal target for interactions or querying rendered features (see 
@@ -1896,174 +1951,184 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Type(rawValue: enumResultAsInt)
+        return InteractionType(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePackErrorType(rawValue: enumResultAsInt)
+        return Type(rawValue: enumResultAsInt)
       }
       return nil
     case 139:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return ResponseErrorReason(rawValue: enumResultAsInt)
+        return StylePackErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 140:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
+        return ResponseErrorReason(rawValue: enumResultAsInt)
       }
       return nil
     case 141:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TileStoreUsageMode(rawValue: enumResultAsInt)
+        return OfflineRegionDownloadState(rawValue: enumResultAsInt)
       }
       return nil
     case 142:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StylePropertyValueKind(rawValue: enumResultAsInt)
+        return TileStoreUsageMode(rawValue: enumResultAsInt)
       }
       return nil
     case 143:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return StyleProjectionName(rawValue: enumResultAsInt)
+        return StylePropertyValueKind(rawValue: enumResultAsInt)
       }
       return nil
     case 144:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return Anchor(rawValue: enumResultAsInt)
+        return StyleProjectionName(rawValue: enumResultAsInt)
       }
       return nil
     case 145:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return HttpMethod(rawValue: enumResultAsInt)
+        return Anchor(rawValue: enumResultAsInt)
       }
       return nil
     case 146:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return HttpRequestErrorType(rawValue: enumResultAsInt)
+        return HttpMethod(rawValue: enumResultAsInt)
       }
       return nil
     case 147:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return DownloadErrorCode(rawValue: enumResultAsInt)
+        return HttpRequestErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 148:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return DownloadState(rawValue: enumResultAsInt)
+        return DownloadErrorCode(rawValue: enumResultAsInt)
       }
       return nil
     case 149:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TileRegionErrorType(rawValue: enumResultAsInt)
+        return DownloadState(rawValue: enumResultAsInt)
       }
       return nil
     case 150:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return _MapEvent(rawValue: enumResultAsInt)
+        return TileRegionErrorType(rawValue: enumResultAsInt)
       }
       return nil
     case 151:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return _MapEvent(rawValue: enumResultAsInt)
+      }
+      return nil
     case 152:
-      return Feature.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 153:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+      return Feature.fromList(self.readValue() as! [Any?])
     case 154:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 155:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 156:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 157:
-      return CameraState.fromList(self.readValue() as! [Any?])
+      return CameraOptions.fromList(self.readValue() as! [Any?])
     case 158:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
+      return CameraState.fromList(self.readValue() as! [Any?])
     case 159:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
+      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
     case 160:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
+      return CameraBounds.fromList(self.readValue() as! [Any?])
     case 161:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
+      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 163:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return MapDebugOptions.fromList(self.readValue() as! [Any?])
     case 164:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 165:
-      return MapOptions.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 166:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return MapOptions.fromList(self.readValue() as! [Any?])
     case 167:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 168:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 169:
-      return Size.fromList(self.readValue() as! [Any?])
+      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
     case 170:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 171:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 172:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 173:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
+      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
     case 174:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return LayerPosition.fromList(self.readValue() as! [Any?])
     case 175:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 176:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 177:
-      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 178:
-      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
     case 179:
-      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
+      return Interaction.fromList(self.readValue() as! [Any?])
     case 180:
-      return FeaturesetQueryTarget.fromList(self.readValue() as! [Any?])
+      return TypedFeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 181:
-      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 182:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
     case 183:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+      return FeaturesetQueryTarget.fromList(self.readValue() as! [Any?])
     case 184:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 185:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 186:
-      return FlatLight.fromList(self.readValue() as! [Any?])
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 187:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 188:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 189:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return FlatLight.fromList(self.readValue() as! [Any?])
     case 190:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
     case 191:
-      return ImageContent.fromList(self.readValue() as! [Any?])
+      return AmbientLight.fromList(self.readValue() as! [Any?])
     case 192:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 193:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return ImageStretches.fromList(self.readValue() as! [Any?])
     case 194:
+      return ImageContent.fromList(self.readValue() as! [Any?])
+    case 195:
+      return TransitionOptions.fromList(self.readValue() as! [Any?])
+    case 196:
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+    case 197:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2097,179 +2162,188 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Type {
+    } else if let value = value as? InteractionType {
       super.writeByte(137)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePackErrorType {
+    } else if let value = value as? Type {
       super.writeByte(138)
       super.writeValue(value.rawValue)
-    } else if let value = value as? ResponseErrorReason {
+    } else if let value = value as? StylePackErrorType {
       super.writeByte(139)
       super.writeValue(value.rawValue)
-    } else if let value = value as? OfflineRegionDownloadState {
+    } else if let value = value as? ResponseErrorReason {
       super.writeByte(140)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileStoreUsageMode {
+    } else if let value = value as? OfflineRegionDownloadState {
       super.writeByte(141)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StylePropertyValueKind {
+    } else if let value = value as? TileStoreUsageMode {
       super.writeByte(142)
       super.writeValue(value.rawValue)
-    } else if let value = value as? StyleProjectionName {
+    } else if let value = value as? StylePropertyValueKind {
       super.writeByte(143)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Anchor {
+    } else if let value = value as? StyleProjectionName {
       super.writeByte(144)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpMethod {
+    } else if let value = value as? Anchor {
       super.writeByte(145)
       super.writeValue(value.rawValue)
-    } else if let value = value as? HttpRequestErrorType {
+    } else if let value = value as? HttpMethod {
       super.writeByte(146)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadErrorCode {
+    } else if let value = value as? HttpRequestErrorType {
       super.writeByte(147)
       super.writeValue(value.rawValue)
-    } else if let value = value as? DownloadState {
+    } else if let value = value as? DownloadErrorCode {
       super.writeByte(148)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TileRegionErrorType {
+    } else if let value = value as? DownloadState {
       super.writeByte(149)
       super.writeValue(value.rawValue)
-    } else if let value = value as? _MapEvent {
+    } else if let value = value as? TileRegionErrorType {
       super.writeByte(150)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? _MapEvent {
       super.writeByte(151)
-      super.writeValue(value.toList())
-    } else if let value = value as? Feature {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(152)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? Feature {
       super.writeByte(153)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(154)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(155)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(156)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
+    } else if let value = value as? CameraOptions {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
+    } else if let value = value as? CameraState {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? CameraBoundsOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
+    } else if let value = value as? CameraBounds {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? MapAnimationOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? MapOptions {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
+    } else if let value = value as? ScreenBox {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? CoordinateBoundsZoom {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? LayerPosition {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeatureId {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? FeaturesetFeatureId {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? Interaction {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetQueryTarget {
+    } else if let value = value as? TypedFeaturesetDescriptor {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? FeaturesetQueryTarget {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? StyleProjection {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? FlatLight {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? AmbientLight {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? MbxImage {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? ImageStretches {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? ImageContent {
       super.writeByte(194)
+      super.writeValue(value.toList())
+    } else if let value = value as? TransitionOptions {
+      super.writeByte(195)
+      super.writeValue(value.toList())
+    } else if let value = value as? CanonicalTileID {
+      super.writeByte(196)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(197)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3160,7 +3234,7 @@ protocol _MapInterface {
   /// @param state Map of entries to update with their respective new values
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
-  func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
+  func setFeatureStateForFeaturesetDescriptor(featureset: TypedFeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void)
   /// Update the state map of an individual feature.
   /// 
   /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
@@ -3234,6 +3308,7 @@ protocol _MapInterface {
   /// 
   /// @return A `Cancelable` object  that could be used to cancel the pending operation.
   func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, Error>) -> Void)
+  func addInteraction(interaction: Interaction, completion: @escaping (Result<FeaturesetFeature, Error>) -> Void)
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   func reduceMemoryUse() throws
   /// Gets elevation for the given coordinate.
@@ -3867,7 +3942,7 @@ class _MapInterfaceSetup {
     if let api = api {
       setFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let featuresetArg = args[0] as! TypedFeaturesetDescriptor
         let featureIdArg = args[1] as! FeaturesetFeatureId
         let stateArg = args[2] as! [String: Any?]
         api.setFeatureStateForFeaturesetDescriptor(featureset: featuresetArg, featureId: featureIdArg, state: stateArg) { result in
@@ -4092,6 +4167,23 @@ class _MapInterfaceSetup {
       }
     } else {
       resetFeatureStatesForFeaturesetChannel.setMessageHandler(nil)
+    }
+    let addInteractionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.addInteraction\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addInteractionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let interactionArg = args[0] as! Interaction
+        api.addInteraction(interaction: interactionArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      addInteractionChannel.setMessageHandler(nil)
     }
     /// Reduces memory use. Useful to call when the application gets paused or sent to background.
     let reduceMemoryUseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

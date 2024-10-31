@@ -21,6 +21,19 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
+
+    var featureset =
+        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
+
+    var typedFeaturesetDescriptor = TypedFeaturesetDescriptor(
+        featuresetDescriptor: featureset, featuresetType: "featureset");
+
+    var interactionType = InteractionType.CLICK;
+
+    var interaction = Interaction(
+        typedFeaturesetDescriptor: typedFeaturesetDescriptor,
+        interactionType: interactionType);
+    mapboxMap.addInteraction(interaction);
   }
 
   _onTap(context) async {
@@ -39,13 +52,18 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
         geometry: renderedQueryGeometry, featureset: featureset);
     var featuresetFeature = queriedFeatures?.first;
 
+    var typedFeaturesetDescriptor = TypedFeaturesetDescriptor(
+        featuresetDescriptor: featureset, featuresetType: "featureset");
+
     if (featuresetFeature != null) {
       // Define the state to set for the feature, in this case highlighting
       // Set that featurestate on that featuresetFeature
       Map<String, Object?> state = {
         "highlight": true,
       };
-      mapboxMap?.setFeatureStateForFeaturesetFeature(featuresetFeature, state);
+      mapboxMap?.setFeatureStateForFeaturesetDescriptor(
+          typedFeaturesetDescriptor, featuresetFeature.id!, state);
+      //mapboxMap?.setFeatureStateForFeaturesetFeature(featuresetFeature, state);
     }
   }
 

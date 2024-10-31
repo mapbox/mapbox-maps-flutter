@@ -505,7 +505,7 @@ class MapboxMap extends ChangeNotifier {
   /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
   @experimental
   Future<void> setFeatureStateForFeaturesetDescriptor(
-          FeaturesetDescriptor featureset,
+          TypedFeaturesetDescriptor featureset,
           FeaturesetFeatureId featureId,
           Map<String, Object?> state) =>
       _mapInterface.setFeatureStateForFeaturesetDescriptor(
@@ -578,6 +578,9 @@ class MapboxMap extends ChangeNotifier {
   Future<void> resetFeatureStatesForFeatureset(
           FeaturesetDescriptor featureset) =>
       _mapInterface.resetFeatureStatesForFeatureset(featureset);
+
+  Future<void> addInteraction(Interaction interaction) =>
+      _mapInterface.addInteraction(interaction);
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
