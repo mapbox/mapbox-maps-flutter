@@ -1,15 +1,8 @@
-### 2.3.0
+### 2.4.0
 
 * Update Maps SDK to 11.8.0
-
-### 2.4.0-rc.1
-
 * Updated the minimum required Flutter SDK to version 3.22.3 and Dart to version 3.4.4. With the fix for Virtual Display hosting mode on Android in Flutter 3.22, we’ve changed the default map view hosting mode to Virtual Display composition. This update should eliminate the brief visibility of the map after it has been dismissed.
 * Introduce experimental property `MapboxMap.styleGlyphURL`. Use this property to apply custom fonts to the map at runtime, without modifying the base style.
-* Update Maps SDK to 11.8.0-rc.1.
-
-# 2.4.0-beta.1
-
 * Expose current map's camera state on `CameraChanged` event. [#704](https://github.com/mapbox/mapbox-maps-flutter/pull/704)
 
 You can now observe the map's camera updates with `onCameraChangeListener`
