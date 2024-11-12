@@ -6,7 +6,7 @@ import 'dart:developer' as developer;
 import 'dart:ffi';
 import 'dart:ui';
 import 'package:ffi/ffi.dart';
-import 'package:bindgen_support/bindgen_support.dart';
+import 'package:mapbox_core_maps_flutter/mapbox_core_maps_flutter.dart' as mapbox;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

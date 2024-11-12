@@ -2,6 +2,12 @@ part of mapbox_maps_flutter;
 
 typedef OnPlatformViewCreatedCallback = void Function(int);
 
+// If I attempt to create a new instance of ::mapbox::maps::Map from the platform pointer directly,
+// avoiding wrapping it in a proxy object, the app crashes with a SIGSEGV error if Dart's (Wrapper)Map gets garbage collected.
+// This has to be addressed, but keeping the map alive should help for now.
+// Beware accessing this from the main isolate, it was created on the platform thread(isolate).
+mapbox.Map? _map;
+
 class _MapboxMapsPlatform {
   late final MethodChannel _channel = MethodChannel(
       'plugins.flutter.io', const StandardMethodCodec(), binaryMessenger);
@@ -19,12 +25,18 @@ late final MethodChannel _nativeMapChannel = MethodChannel(
     if (call.method.startsWith("nativeMapHandle")) {
       final int handle = call.arguments;
       // await runOnPlatformThread(() {
-        Context.init("dart.framework/dart");
+      try {
+        mapbox.Context.init("dart.framework/dart");
         print("Running on platform thread");
-        final WrapperMap nativeMap = WrapperMap(handle);
+        final mapbox.Map nativeMap = mapbox.Map.mapFromPeer(handle);
+        _map = nativeMap;
         print("Map created, attempting to call 'render' method");
-        nativeMap.render();
+
+        nativeMap.setCamera(mapbox.CameraOptions(zoom: 19.45));
         print("Render method called");
+      } catch (e) {
+        print("Error creating map: $e");
+      }
       // });
     }
   }

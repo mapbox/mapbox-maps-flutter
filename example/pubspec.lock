@@ -25,13 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
-  bindgen_support:
-    dependency: transitive
-    description:
-      path: "../../bindgen_support/bindgen_support"
-      relative: true
-    source: path
-    version: "1.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -201,6 +194,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  mapbox_core_maps_flutter:
+    dependency: transitive
+    description:
+      path: "/Users/romanlaitarenko/Developer/mapbox-sdk/projects/gl-native/internal/bindings/generated/dart/mapbox_core_maps_flutter"
+      relative: false
+    source: path
+    version: "0.0.1"
   mapbox_maps_flutter:
     dependency: "direct main"
     description:
@@ -494,5 +494,5 @@ packages:
     source: hosted
     version: "1.0.4"
 sdks:
-  dart: ">=3.5.3 <4.0.0"
+  dart: ">=3.5.4 <4.0.0"
   flutter: ">=3.18.0-18.0.pre.54"

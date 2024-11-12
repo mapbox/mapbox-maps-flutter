@@ -15,8 +15,8 @@ dependencies:
   typed_data: ^1.3.0
   meta: ^1.9.1
   ffi: ^2.1.3
-  bindgen_support:
-    path: ../bindgen_support/bindgen_support
+  mapbox_core_maps_flutter:
+    path: /Users/romanlaitarenko/Developer/mapbox-sdk/projects/gl-native/internal/bindings/generated/dart/mapbox_core_maps_flutter
 
 dev_dependencies:
   integration_test:
