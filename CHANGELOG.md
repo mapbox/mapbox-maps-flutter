@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Configuring Mapbox's secret token is no longer required when installing our SDKs.
+
 ### 2.4.0
 
 * Update Maps SDK to 11.8.0
