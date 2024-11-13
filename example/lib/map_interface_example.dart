@@ -91,7 +91,7 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
       child: Text('setFeatureState'),
       onPressed: () {
         mapboxMap?.setFeatureState(
-            'source', 'custom', 'point', json.encode({'choose': true}));
+            'source', null, 'point', json.encode({'choose': true}));
       },
     );
   }
@@ -100,7 +100,7 @@ class MapInterfaceExampleState extends State<MapInterfaceExample> {
     return TextButton(
       child: Text('getFeatureState'),
       onPressed: () {
-        mapboxMap?.getFeatureState('source', 'custom', 'point').then(
+        mapboxMap?.getFeatureState('source', null, 'point').then(
             (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text("FeatureState: ${value}"),
                   backgroundColor: Theme.of(context).primaryColor,
