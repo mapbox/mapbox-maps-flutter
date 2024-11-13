@@ -7,12 +7,6 @@ struct SuffixBinaryMessenger {
     let suffix: String
 }
 
-extension FlutterBinaryMessenger {
-    func unproxy() -> FlutterBinaryMessenger {
-        return (self as? ProxyBinaryMessenger)?.messenger ?? self
-    }
-}
-
 final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
@@ -93,7 +87,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             cameraManager: mapView.camera,
             mapboxMap: mapboxMap
         )
-        _ViewportMessengerSetup.setUp(binaryMessenger: proxyBinaryMessenger, api: viewportController)
+        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: viewportController, messageChannelSuffix: binaryMessenger.suffix)
 
         super.init()
 
@@ -156,6 +150,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
-        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _ViewportMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }
