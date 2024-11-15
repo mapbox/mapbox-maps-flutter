@@ -182,7 +182,7 @@ class MapWidget extends StatefulWidget {
   State createState() => _MapWidgetState();
 
   @Deprecated(
-      'Subscribe to onMapCreated to receive an instanc of MapboxMap instead')
+      'Subscribe to onMapCreated to receive an instance of MapboxMap instead')
   MapboxMap? getMapboxMap() => null;
 }
 
