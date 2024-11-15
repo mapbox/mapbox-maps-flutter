@@ -1,11 +1,23 @@
-> [!IMPORTANT]
-> Configuring Mapbox's secret token is no longer required when installing our SDKs.
+### main
+
+* Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
+```dart
+MapWidget(
+  viewport: CameraViewportState(
+    center: Point(coordinates: Position(-117.918976, 33.812092)),
+    zoom: 15.0,
+  ),
+);
+```
 
 ### 2.4.1
 
 * Fix annotation click listeners not working.
 
 ### 2.4.0
+
+> [!IMPORTANT]
+> Configuring Mapbox's secret token is no longer required when installing our SDKs.
 
 * Update Maps SDK to 11.8.0
 * Updated the minimum required Flutter SDK to version 3.22.3 and Dart to version 3.4.4. With the fix for Virtual Display hosting mode on Android in Flutter 3.22, we’ve changed the default map view hosting mode to Virtual Display composition. This update should eliminate the brief visibility of the map after it has been dismissed.
