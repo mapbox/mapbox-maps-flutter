@@ -50,7 +50,7 @@ final class StyleDefaultViewportState: ViewportState {
     private let mapboxMap: MapboxMap
 
     init(mapboxMap: MapboxMap) {
-        if (mapboxMap.isStyleLoaded) {
+        if mapboxMap.isStyleLoaded {
             result = Signal(just: StyleLoaded(timeInterval: EventTimeInterval(begin: Date(), end: Date())))
         } else {
             result = mapboxMap.onStyleLoaded
