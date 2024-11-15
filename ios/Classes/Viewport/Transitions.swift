@@ -18,7 +18,7 @@ extension _EasingViewportTransitionOptions {
 }
 
 final class GenericViewportTransition: ViewportTransition {
-    typealias AnimationRunner = (MapboxMaps.CameraOptions, @escaping AnimationCompletion) -> Void
+    typealias AnimationRunner = (MapboxMaps.CameraOptions, @escaping AnimationCompletion) -> MapboxMaps.Cancelable
     private let runAnimation: AnimationRunner
 
     internal init(runAnimation: @escaping AnimationRunner) {
@@ -27,11 +27,17 @@ final class GenericViewportTransition: ViewportTransition {
 
     public func run(to toState: MapboxMaps.ViewportState,
                     completion: @escaping (Bool) -> Void) -> MapboxMaps.Cancelable {
-        return toState.observeDataSource { [runAnimation] cameraOptions in
-            runAnimation(cameraOptions) { animationPosition in
+        var transitionAnimationCancellable: MapboxMaps.Cancelable?
+        let toStateCancellable = toState.observeDataSource { [runAnimation] cameraOptions in
+            transitionAnimationCancellable = runAnimation(cameraOptions) { animationPosition in
                 completion(animationPosition == .end)
             }
             return false
+        }
+
+        return MapboxMaps.AnyCancelable {
+            toStateCancellable.cancel()
+            transitionAnimationCancellable?.cancel()
         }
     }
 }

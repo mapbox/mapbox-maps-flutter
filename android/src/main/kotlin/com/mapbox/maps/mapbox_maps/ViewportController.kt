@@ -9,6 +9,7 @@ import com.mapbox.common.Cancelable
 import com.mapbox.geojson.Polygon
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons._DefaultViewportTransitionOptions
@@ -31,12 +32,14 @@ import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateBearing
 import com.mapbox.maps.plugin.viewport.data.FollowPuckViewportStateOptions
 import com.mapbox.maps.plugin.viewport.data.OverviewViewportStateOptions
 import com.mapbox.maps.plugin.viewport.state.ViewportState
+import com.mapbox.maps.plugin.viewport.state.ViewportStateDataObserver
 import com.mapbox.maps.plugin.viewport.transition.ViewportTransition
 
 class ViewportController(
   private val viewportPlugin: ViewportPlugin,
   private val cameraPlugin: CameraAnimationsPlugin,
-  private val context: Context
+  private val context: Context,
+  private val mapboxMap: MapboxMap
 ) : _ViewportMessenger {
 
   override fun transition(
@@ -44,14 +47,19 @@ class ViewportController(
     transitionStorage: _ViewportTransitionStorage?,
     callback: (Result<Boolean>) -> Unit
   ) {
-    val state = viewportPlugin.viewportStateFromFLTState(stateStorage, context)
-    if (state == null) {
+    try {
+      val state = viewportPlugin.viewportStateFromFLTState(stateStorage, context, mapboxMap)
+      if (state == null) {
+        callback(Result.success(true))
+        return
+      }
+      val transition = viewportPlugin.transitionFromFLTTransition(transitionStorage, cameraPlugin)
+      viewportPlugin.transitionTo(state, transition) { success ->
+        callback(Result.success(success))
+      }
+    } catch (error: Exception) {
       logE("Viewport", "Could not create viewport state ouf of options: $stateStorage")
-      return
-    }
-    val transition = viewportPlugin.transitionFromFLTTransition(transitionStorage, cameraPlugin)
-    viewportPlugin.transitionTo(state, transition) { success ->
-      callback(Result.success(success))
+      callback(Result.success(false))
     }
   }
 }
@@ -118,17 +126,15 @@ fun _DefaultViewportTransitionOptions.toOptions(): DefaultViewportTransitionOpti
     .build()
 }
 
-fun ViewportPlugin.viewportStateFromFLTState(stateStorage: _ViewportStateStorage, context: Context): ViewportState? {
+fun ViewportPlugin.viewportStateFromFLTState(stateStorage: _ViewportStateStorage, context: Context, mapboxMap: MapboxMap): ViewportState? {
   return when (stateStorage.type) {
-    _ViewportStateType.IDLE -> throw Exception("Not implemented")
+    _ViewportStateType.IDLE -> idle().let { null }
     _ViewportStateType.FOLLOW_PUCK ->
-      (stateStorage.options as? _FollowPuckViewportStateOptions)
-        ?.let { makeFollowPuckViewportState(it.toOptions()) }
+      makeFollowPuckViewportState((stateStorage.options as _FollowPuckViewportStateOptions).toOptions())
     _ViewportStateType.OVERVIEW ->
-      (stateStorage.options as? _OverviewViewportStateOptions)
-        ?.let { makeOverviewViewportState(it.toOptions(context)) }
-    _ViewportStateType.STYLE_DEFAULT -> throw Exception("Not implemented")
-    _ViewportStateType.CAMERA -> throw Exception("Not implemented")
+      makeOverviewViewportState((stateStorage.options as _OverviewViewportStateOptions).toOptions(context))
+    _ViewportStateType.STYLE_DEFAULT -> StyleDefaultViewportState(mapboxMap)
+    _ViewportStateType.CAMERA -> CameraViewportState(stateStorage.options as CameraOptions, mapboxMap)
   }
 }
 
@@ -168,4 +174,45 @@ fun _OverviewViewportStateOptions.toOptions(context: Context): OverviewViewportS
     .offset(offset?.toScreenCoordinate(context) ?: ScreenCoordinate(0.0, 0.0))
     .animationDurationMs(animationDurationMs)
     .build()
+}
+
+class CameraViewportState(private val options: CameraOptions, private val mapboxMap: MapboxMap): ViewportState {
+
+  override fun observeDataSource(viewportStateDataObserver: ViewportStateDataObserver): Cancelable {
+    viewportStateDataObserver.onNewData(options)
+    return Cancelable {  }
+  }
+
+  override fun startUpdatingCamera() {
+    mapboxMap.setCamera(options)
+  }
+
+  override fun stopUpdatingCamera() {}
+}
+
+class StyleDefaultViewportState(private val mapboxMap: MapboxMap): ViewportState {
+  private var token: Cancelable? = null
+
+  private fun observeStyleDefaultCamera(handler: (CameraOptions) -> Unit): Cancelable {
+    if (mapboxMap.isStyleLoaded()) {
+      handler(mapboxMap.styleManager.styleDefaultCamera)
+      return Cancelable {  }
+    }
+
+    return mapboxMap.subscribeStyleLoaded {
+      handler(mapboxMap.styleManager.styleDefaultCamera)
+    }
+  }
+
+  override fun observeDataSource(viewportStateDataObserver: ViewportStateDataObserver): Cancelable {
+    return observeStyleDefaultCamera { viewportStateDataObserver.onNewData(it) }
+  }
+
+  override fun startUpdatingCamera() {
+    token = observeStyleDefaultCamera { mapboxMap.setCamera(it) }
+  }
+
+  override fun stopUpdatingCamera() {
+    token?.cancel()
+  }
 }

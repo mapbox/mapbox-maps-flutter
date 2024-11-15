@@ -124,9 +124,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
                 // This is a bit of a hack to size the map view as early as possible,
                 // Flutter is quite slow with it
-                // This should be remedied with passing MapWidget state in the creation params,
-                // instead of current situation when we rely on state updates,
-                // which are quite slow
                 mapView.superview?.frame = CGRect(origin: .zero, size: size)
             }
             result(nil)

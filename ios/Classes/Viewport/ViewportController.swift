@@ -1,5 +1,5 @@
 import Foundation
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import Flutter
 @_implementationOnly import MapboxCommon_Private.MBXLog_Internal
 
@@ -21,29 +21,42 @@ final class ViewportController: _ViewportMessenger {
     // MARK: - ViewportManager
 
     func transition(stateStorage: _ViewportStateStorage, transitionStorage: _ViewportTransitionStorage?, completion: @escaping (Result<Bool, any Error>) -> Void) {
-        let state = viewportManager.viewportStateFromFLTState(stateStorage, mapboxMap: mapboxMap)
-        let transition = viewportManager.transitionFromFLTTransition(transitionStorage, camera: cameraManager)
-        viewportManager.transition(to: state, transition: transition) { success in
-            completion(.success(success))
+        do {
+            guard let state = try viewportManager.viewportStateFromFLTState(stateStorage, mapboxMap: mapboxMap) else {
+                completion(.success(true))
+                return
+            }
+            let transition = viewportManager.transitionFromFLTTransition(transitionStorage, camera: cameraManager)
+            viewportManager.transition(to: state, transition: transition) { success in
+                completion(.success(success))
+            }
+        } catch {
+            viewportManager.idle()
+            Log.error(forMessage: "Viewport", category: error.localizedDescription)
         }
     }
 }
 
 extension ViewportManager {
-    func viewportStateFromFLTState(_ stateStorage: _ViewportStateStorage, mapboxMap: MapboxMap) -> MapboxMaps.ViewportState {
+    func viewportStateFromFLTState(_ stateStorage: _ViewportStateStorage, mapboxMap: MapboxMap) throws -> MapboxMaps.ViewportState? {
         switch (stateStorage.type, stateStorage.options) {
-        case (.idle, nil):
-            fatalError()
+        case (.idle, _):
+            idle()
+            return nil
         case (.overview, let options as _OverviewViewportStateOptions):
             return makeOverviewViewportState(options: options.toOptions())
         case (.followPuck, let options as _FollowPuckViewportStateOptions):
             return makeFollowPuckViewportState(options: options.toOptions())
-        case (.styleDefault, nil):
-            fatalError()
-        case (.camera, nil):
-            fatalError()
+        case (.styleDefault, _):
+            return StyleDefaultViewportState(mapboxMap: mapboxMap)
+        case (.camera, let options as CameraOptions):
+            return makeCameraViewportState(camera: options.toCameraOptions())
         default:
-            fatalError()
+            throw ViewportInternalError(
+                code: "Could not create viewport state ouf of options \(stateStorage)",
+                message: nil,
+                details: nil
+            )
         }
     }
 }
@@ -83,6 +96,7 @@ extension ViewportManager {
                 }
                 animator.addCompletion(completion)
                 animator.startAnimation()
+                return animator
             }
         default:
             return makeImmediateViewportTransition()

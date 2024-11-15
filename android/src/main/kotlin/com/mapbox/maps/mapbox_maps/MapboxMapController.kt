@@ -149,7 +149,7 @@ class MapboxMapController(
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
     compassController = CompassController(mapView)
-    viewportController = ViewportController(mapView.viewport, mapView.camera, context)
+    viewportController = ViewportController(mapView.viewport, mapView.camera, context, mapboxMap)
 
     changeUserAgent(pluginVersion)
 
@@ -253,6 +253,9 @@ class MapboxMapController(
 
           result.success(byteArray)
         }
+      }
+      "mapView#submitViewSizeHint" -> {
+        result.success(null) // no-op on this platform
       }
       else -> {
         result.notImplemented()
