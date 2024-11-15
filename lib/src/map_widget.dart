@@ -191,7 +191,6 @@ class _MapWidgetState extends State<MapWidget> {
       _MapboxMapsPlatform.instance(_suffix);
   final int _suffix = _suffixesRegistry.getSuffix();
   late final _MapEvents _events;
-  ViewportState? currentViewport;
   bool _needsStateUpdate = false;
   MapboxMap? mapboxMap;
   GlobalKey key = GlobalKey();
