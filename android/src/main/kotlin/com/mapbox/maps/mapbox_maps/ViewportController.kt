@@ -176,11 +176,11 @@ fun _OverviewViewportStateOptions.toOptions(context: Context): OverviewViewportS
     .build()
 }
 
-class CameraViewportState(private val options: CameraOptions, private val mapboxMap: MapboxMap): ViewportState {
+class CameraViewportState(private val options: CameraOptions, private val mapboxMap: MapboxMap) : ViewportState {
 
   override fun observeDataSource(viewportStateDataObserver: ViewportStateDataObserver): Cancelable {
     viewportStateDataObserver.onNewData(options)
-    return Cancelable {  }
+    return Cancelable { }
   }
 
   override fun startUpdatingCamera() {
@@ -190,13 +190,13 @@ class CameraViewportState(private val options: CameraOptions, private val mapbox
   override fun stopUpdatingCamera() {}
 }
 
-class StyleDefaultViewportState(private val mapboxMap: MapboxMap): ViewportState {
+class StyleDefaultViewportState(private val mapboxMap: MapboxMap) : ViewportState {
   private var token: Cancelable? = null
 
   private fun observeStyleDefaultCamera(handler: (CameraOptions) -> Unit): Cancelable {
     if (mapboxMap.isStyleLoaded()) {
       handler(mapboxMap.styleManager.styleDefaultCamera)
-      return Cancelable {  }
+      return Cancelable { }
     }
 
     return mapboxMap.subscribeStyleLoaded {
