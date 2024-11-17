@@ -99,6 +99,18 @@ extension PuckPosition on StyleManager {
   }
 }
 
+extension PuckBearing on StyleManager {
+  Future<double?> getPuckBearing() async {
+    Layer? layer;
+    if (Platform.isAndroid) {
+      layer = await getLayer("mapbox-location-indicator-layer");
+    } else {
+      layer = await getLayer("puck");
+    }
+    return (layer as LocationIndicatorLayer).bearing;
+  }
+}
+
 extension PolylineCreation on PolylineAnnotationManager {
   addAnnotation(List<Position> coordinates) {
     return PolylineAnnotationOptions(

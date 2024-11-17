@@ -156,6 +156,22 @@ class _MapboxMapsPlatform {
     }
   }
 
+  Future<dynamic> addNavigationListeners() async {
+    try {
+      return _channel.invokeMethod('navigation#add_listeners');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeNavigationListeners() async {
+    try {
+      return _channel.invokeMethod('navigation#remove_listeners');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<Uint8List> snapshot() async {
     try {
       final List<int> data = await _channel.invokeMethod('map#snapshot');

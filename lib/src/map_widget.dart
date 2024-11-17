@@ -41,35 +41,42 @@ enum AndroidPlatformViewHostingMode {
 /// <strong>Warning:</strong> Please note that you are responsible for getting permission to use the map data,
 /// and for ensuring your use adheres to the relevant terms of use.
 class MapWidget extends StatefulWidget {
-  MapWidget({
-    Key? key,
-    this.mapOptions,
-    this.cameraOptions,
-    // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
-    // As a workaround default is true.
-    this.textureView = true,
-    this.androidHostingMode = AndroidPlatformViewHostingMode.VD,
-    this.styleUri = MapboxStyles.STANDARD,
-    this.gestureRecognizers,
-    this.onMapCreated,
-    this.onStyleLoadedListener,
-    this.onCameraChangeListener,
-    this.onMapIdleListener,
-    this.onMapLoadedListener,
-    this.onMapLoadErrorListener,
-    this.onRenderFrameStartedListener,
-    this.onRenderFrameFinishedListener,
-    this.onSourceAddedListener,
-    this.onSourceDataLoadedListener,
-    this.onSourceRemovedListener,
-    this.onStyleDataLoadedListener,
-    this.onStyleImageMissingListener,
-    this.onStyleImageUnusedListener,
-    this.onResourceRequestListener,
-    this.onTapListener,
-    this.onLongTapListener,
-    this.onScrollListener,
-  }) : super(key: key) {
+  MapWidget(
+      {Key? key,
+      this.mapOptions,
+      this.cameraOptions,
+      // FIXME Flutter 3.x has memory leak on Android using in SurfaceView mode, see https://github.com/flutter/flutter/issues/118384
+      // As a workaround default is true.
+      this.textureView = true,
+      this.androidHostingMode = AndroidPlatformViewHostingMode.HC,
+      this.styleUri = MapboxStyles.STANDARD,
+      this.gestureRecognizers,
+      this.onMapCreated,
+      this.onStyleLoadedListener,
+      this.onCameraChangeListener,
+      this.onMapIdleListener,
+      this.onMapLoadedListener,
+      this.onMapLoadErrorListener,
+      this.onRenderFrameStartedListener,
+      this.onRenderFrameFinishedListener,
+      this.onSourceAddedListener,
+      this.onSourceDataLoadedListener,
+      this.onSourceRemovedListener,
+      this.onStyleDataLoadedListener,
+      this.onStyleImageMissingListener,
+      this.onStyleImageUnusedListener,
+      this.onResourceRequestListener,
+      this.onTapListener,
+      this.onLongTapListener,
+      this.onScrollListener,
+      this.onNewLocationListener,
+      this.onNavigationRouteReadyListener,
+      this.onNavigationRouteFailedListener,
+      this.onNavigationRouteCancelledListener,
+      this.onNavigationRouteRenderedListener,
+      this.onRouteProgressListener,
+      this.onNavigationCameraStateListener})
+      : super(key: key) {
     LogConfiguration._setupDebugLoggingIfNeeded();
   }
 
@@ -161,6 +168,14 @@ class MapWidget extends StatefulWidget {
   final OnMapLongTapListener? onLongTapListener;
   final OnMapScrollListener? onScrollListener;
 
+  final OnNewLocationListener? onNewLocationListener;
+  final OnNavigationRouteListener? onNavigationRouteReadyListener;
+  final OnNavigationRouteListener? onNavigationRouteFailedListener;
+  final OnNavigationRouteListener? onNavigationRouteCancelledListener;
+  final OnNavigationRouteListener? onNavigationRouteRenderedListener;
+  final OnRouteProgressListener? onRouteProgressListener;
+  final OnNavigationCameraStateListener? onNavigationCameraStateListener;
+
   @override
   State createState() {
     return _mapWidgetState;
@@ -243,11 +258,20 @@ class _MapWidgetState extends State<MapWidget> {
 
   Future<void> onPlatformViewCreated(int id) async {
     final MapboxMap controller = MapboxMap._(
-      mapboxMapsPlatform: _mapboxMapsPlatform,
-      onMapTapListener: widget.onTapListener,
-      onMapLongTapListener: widget.onLongTapListener,
-      onMapScrollListener: widget.onScrollListener,
-    );
+        mapboxMapsPlatform: _mapboxMapsPlatform,
+        onMapTapListener: widget.onTapListener,
+        onMapLongTapListener: widget.onLongTapListener,
+        onMapScrollListener: widget.onScrollListener,
+        onNavigationRouteReadyListener: widget.onNavigationRouteReadyListener,
+        onNavigationRouteFailedListener: widget.onNavigationRouteFailedListener,
+        onNavigationRouteCancelledListener:
+            widget.onNavigationRouteCancelledListener,
+        onNavigationRouteRenderedListener:
+            widget.onNavigationRouteRenderedListener,
+        onNewLocationListener: widget.onNewLocationListener,
+        onRouteProgressListener: widget.onRouteProgressListener,
+        onNavigationCameraStateListener:
+            widget.onNavigationCameraStateListener);
     if (widget.onMapCreated != null) {
       widget.onMapCreated!(controller);
     }

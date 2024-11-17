@@ -137,14 +137,22 @@ extension on _MapWidgetDebugOptions {
 
 /// Controller for a single MapboxMap instance running on the host platform.
 class MapboxMap extends ChangeNotifier {
-  MapboxMap._({
-    required _MapboxMapsPlatform mapboxMapsPlatform,
-    this.onMapTapListener,
-    this.onMapLongTapListener,
-    this.onMapScrollListener,
-  }) : _mapboxMapsPlatform = mapboxMapsPlatform {
+  MapboxMap._(
+      {required _MapboxMapsPlatform mapboxMapsPlatform,
+      this.onMapTapListener,
+      this.onMapLongTapListener,
+      this.onMapScrollListener,
+      this.onNewLocationListener,
+      this.onNavigationRouteReadyListener,
+      this.onNavigationRouteFailedListener,
+      this.onNavigationRouteCancelledListener,
+      this.onNavigationRouteRenderedListener,
+      this.onRouteProgressListener,
+      this.onNavigationCameraStateListener})
+      : _mapboxMapsPlatform = mapboxMapsPlatform {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
+    _setupNavigation();
   }
 
   final _MapboxMapsPlatform _mapboxMapsPlatform;
@@ -204,14 +212,31 @@ class MapboxMap extends ChangeNotifier {
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
+  /// The interface to access navigation methods.
+  late NavigationInterface navigation = NavigationInterface(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
+
+  OnNewLocationListener? onNewLocationListener;
+  OnNavigationRouteListener? onNavigationRouteReadyListener;
+  OnNavigationRouteListener? onNavigationRouteFailedListener;
+  OnNavigationRouteListener? onNavigationRouteCancelledListener;
+  OnNavigationRouteListener? onNavigationRouteRenderedListener;
+  OnRouteProgressListener? onRouteProgressListener;
+  OnNavigationCameraStateListener? onNavigationCameraStateListener;
 
   @override
   void dispose() {
     _mapboxMapsPlatform.dispose();
     GestureListener.setUp(null,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+
+    NavigationListener.setUp(null,
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
@@ -614,6 +639,26 @@ class MapboxMap extends ChangeNotifier {
     }
   }
 
+  void _setupNavigation() {
+    if (onNewLocationListener != null ||
+        onNavigationRouteReadyListener != null) {
+      NavigationListener.setUp(
+          _NavigationListener(
+              onNewLocationListener: onNewLocationListener,
+              onNavigationRouteReadyListener: onNavigationRouteReadyListener,
+              onNavigationRouteFailedListener: onNavigationRouteFailedListener,
+              onNavigationRouteCancelledListener:
+                  onNavigationRouteCancelledListener,
+              onNavigationRouteRenderedListener:
+                  onNavigationRouteRenderedListener,
+              onRouteProgressListener: onRouteProgressListener,
+              onNavigationCameraStateListener: onNavigationCameraStateListener),
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+      _mapboxMapsPlatform.addNavigationListeners();
+    }
+  }
+
   void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
     this.onMapTapListener = onMapTapListener;
     _setupGestures();
@@ -627,6 +672,17 @@ class MapboxMap extends ChangeNotifier {
   void setOnMapMoveListener(OnMapScrollListener? onMapScrollListener) {
     this.onMapScrollListener = onMapScrollListener;
     _setupGestures();
+  }
+
+  void setOnNavigationRouteReadyListener(
+      OnNavigationRouteListener? onNavigationRouteReadyListener) {
+    this.onNavigationRouteReadyListener = onNavigationRouteReadyListener;
+    _setupNavigation();
+  }
+
+  void setOnNewLocationListener(OnNewLocationListener? onNewLocationListener) {
+    this.onNewLocationListener = onNewLocationListener;
+    _setupNavigation();
   }
 
   /// Returns a snapshot of the map.
@@ -669,5 +725,59 @@ class _GestureListener extends GestureListener {
   @override
   void onScroll(MapContentGestureContext context) {
     onMapScrollListener?.call(context);
+  }
+}
+
+class _NavigationListener extends NavigationListener {
+  _NavigationListener(
+      {this.onNavigationRouteReadyListener,
+      this.onNavigationRouteFailedListener,
+      this.onNavigationRouteCancelledListener,
+      this.onNavigationRouteRenderedListener,
+      this.onNewLocationListener,
+      this.onRouteProgressListener,
+      this.onNavigationCameraStateListener});
+
+  final OnNavigationRouteListener? onNavigationRouteReadyListener;
+  final OnNavigationRouteListener? onNavigationRouteFailedListener;
+  final OnNavigationRouteListener? onNavigationRouteCancelledListener;
+  final OnNavigationRouteListener? onNavigationRouteRenderedListener;
+  final OnNewLocationListener? onNewLocationListener;
+  final OnRouteProgressListener? onRouteProgressListener;
+  final OnNavigationCameraStateListener? onNavigationCameraStateListener;
+
+  @override
+  void onNavigationRouteReady() {
+    onNavigationRouteReadyListener?.call();
+  }
+
+  @override
+  void onNavigationRouteFailed() {
+    onNavigationRouteFailedListener?.call();
+  }
+
+  @override
+  void onNavigationRouteCancelled() {
+    onNavigationRouteCancelledListener?.call();
+  }
+
+  @override
+  void onNavigationRouteRendered() {
+    onNavigationRouteRenderedListener?.call();
+  }
+
+  @override
+  void onNewLocation(NavigationLocation location) {
+    onNewLocationListener?.call(location);
+  }
+
+  @override
+  void onRouteProgress(RouteProgress routeProgress) {
+    onRouteProgressListener?.call(routeProgress);
+  }
+
+  @override
+  void onNavigationCameraStateChanged(NavigationCameraState state) {
+    onNavigationCameraStateListener?.call(state);
   }
 }

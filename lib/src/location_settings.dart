@@ -26,7 +26,7 @@ class LocationSettings {
           await MapboxMapsOptions._getFlutterAssetPath(
               settings.locationPuck?.locationPuck3D?.modelUri);
     }
-    _api.updateSettings(settings,
+    await _api.updateSettings(settings,
         settings.locationPuck?.locationPuck2D is DefaultLocationPuck2D);
   }
 }
