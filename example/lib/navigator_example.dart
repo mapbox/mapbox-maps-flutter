@@ -90,7 +90,7 @@ class NavigatorExampleState extends State<NavigatorExample>
   }
 
   Future updateCamera(NavigationLocation location) async {
-    mapboxMap.easeTo(
+    await mapboxMap.easeTo(
         CameraOptions(
             center: Point(
                 coordinates: Position(location.longitude!, location.latitude!)),
