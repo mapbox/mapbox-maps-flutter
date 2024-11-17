@@ -1,15 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:turf/turf.dart' as turf;
 
 import 'example.dart';
 
@@ -179,7 +174,7 @@ class NavigatorExampleState extends State<NavigatorExample>
           Padding(
               padding: const EdgeInsets.fromLTRB(72, 8, 8, 8),
               child: FloatingActionButton(
-                elevation: 4,
+                elevation: 5,
                 onPressed: _onOverviewClicked,
                 child: const Icon(Icons.route),
               )),
