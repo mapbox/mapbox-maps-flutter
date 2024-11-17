@@ -98,7 +98,7 @@ class NavigatorExampleState extends State<NavigatorExample>
             pitch: 45,
             padding: MbxEdgeInsets(top: 300.0, left: 0, bottom: 0, right: 0),
             bearing: location.bearing),
-        MapAnimationOptions(duration: 1500));
+        MapAnimationOptions(duration: 100));
   }
 
   Future _start() async {
