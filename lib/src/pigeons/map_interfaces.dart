@@ -2005,6 +2005,27 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is StylePropertyValue) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
+    } else if (value is NavigationLocation) {
+      buffer.putUint8(191);
+      writeValue(buffer, value.encode());
+    } else if (value is RouteProgressState) {
+      buffer.putUint8(192);
+      writeValue(buffer, value.index);
+    } else if (value is RoadObjectLocationType) {
+      buffer.putUint8(193);
+      writeValue(buffer, value.index);
+    } else if (value is RoadObject) {
+      buffer.putUint8(194);
+      writeValue(buffer, value.encode());
+    } else if (value is RoadObjectDistanceInfo) {
+      buffer.putUint8(195);
+      writeValue(buffer, value.encode());
+    } else if (value is UpcomingRoadObject) {
+      buffer.putUint8(196);
+      writeValue(buffer, value.encode());
+    } else if (value is RouteProgress) {
+      buffer.putUint8(197);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -2159,6 +2180,22 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return CanonicalTileID.decode(readValue(buffer)!);
       case 190:
         return StylePropertyValue.decode(readValue(buffer)!);
+      case 191:
+        return NavigationLocation.decode(readValue(buffer)!);
+      case 192:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : RouteProgressState.values[value];
+      case 193:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : RoadObjectLocationType.values[value];
+      case 194:
+        return RoadObject.decode(readValue(buffer)!);
+      case 195:
+        return RoadObjectDistanceInfo.decode(readValue(buffer)!);
+      case 196:
+        return UpcomingRoadObject.decode(readValue(buffer)!);
+      case 197:
+        return RouteProgress.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }

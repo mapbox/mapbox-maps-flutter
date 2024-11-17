@@ -114,3 +114,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 !**/Podfile.lock
 !**/example/pubspec.lock
+android/gradlew
+android/gradle/wrapper/gradle-wrapper.jar

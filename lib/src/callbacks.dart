@@ -72,3 +72,11 @@ typedef void OnTileRegionLoadProgressListener(TileRegionLoadProgress progress);
 // TileRegionEstimate load progress callback.
 typedef void OnTileRegionEstimateProgressListenter(
     TileRegionEstimateProgress progress);
+
+typedef void OnNavigationRouteListener();
+
+typedef void OnNewLocationListener(NavigationLocation location);
+
+typedef void OnRouteProgressListener(RouteProgress routeProgress);
+
+typedef void OnNavigationCameraStateListener(NavigationCameraState state);
