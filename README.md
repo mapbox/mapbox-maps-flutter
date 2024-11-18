@@ -98,7 +98,7 @@ To use the Maps Flutter SDK add the git dependency to the pubspec.yaml:
 
 ```
 dependencies:
-  mapbox_maps_flutter: ^2.4.0
+  mapbox_maps_flutter: ^2.4.1
 ```
 
 ### Configure permissions
