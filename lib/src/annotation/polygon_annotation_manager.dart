@@ -9,15 +9,17 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _PolygonAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _PolygonAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolygonAnnotationClickListener(
       OnPolygonAnnotationClickListener listener) {
     OnPolygonAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger);
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.

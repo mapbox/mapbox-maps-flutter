@@ -9,14 +9,17 @@ class PointAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _PointAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _PointAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPointAnnotationClickListener(
       OnPointAnnotationClickListener listener) {
-    OnPointAnnotationClickListener.setUp(listener, binaryMessenger: _messenger);
+    OnPointAnnotationClickListener.setUp(listener,
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.
