@@ -9,15 +9,17 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _PolylineAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _PolylineAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnPolylineAnnotationClickListener(
       OnPolylineAnnotationClickListener listener) {
     OnPolylineAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger);
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.
