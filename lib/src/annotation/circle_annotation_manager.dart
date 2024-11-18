@@ -9,15 +9,17 @@ class CircleAnnotationManager extends BaseAnnotationManager {
       required String channelSuffix})
       : _annotationMessenger = _CircleAnnotationMessenger(
             binaryMessenger: messenger, messageChannelSuffix: channelSuffix),
+        _channelSuffix = channelSuffix,
         super._();
 
   final _CircleAnnotationMessenger _annotationMessenger;
+  final String _channelSuffix;
 
   /// Add a listener to receive the callback when an annotation is clicked.
   void addOnCircleAnnotationClickListener(
       OnCircleAnnotationClickListener listener) {
     OnCircleAnnotationClickListener.setUp(listener,
-        binaryMessenger: _messenger);
+        binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
   /// Create a new annotation with the option.
