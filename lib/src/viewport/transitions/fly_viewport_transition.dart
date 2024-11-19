@@ -17,7 +17,6 @@ part of mapbox_maps_flutter;
 /// In this example, the fly animation will occur over 5 seconds. If [duration] is not specified,
 /// the transition will use a default duration determined by the system.
 final class FlyViewportTransition extends ViewportTransition {
-
   /// The duration of the fly animation.
   ///
   /// Specifies how long the fly animation should take to complete. If not provided, a default duration

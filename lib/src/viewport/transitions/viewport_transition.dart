@@ -12,7 +12,6 @@ part of mapbox_maps_flutter;
 /// - [EasingViewportTransition], which animates transitions using an easing curve.
 /// - [FlyViewportTransition], which performs a fly-over animation.
 sealed class ViewportTransition {
-
   /// Creates a [ViewportTransition].
   ///
   /// This constructor is typically called by subclasses to initialize the base class.

@@ -5,7 +5,6 @@ part of mapbox_maps_flutter;
 ///
 /// This class serves as a base for different bearing behaviors when the camera follows the user's location indicator (puck).
 sealed class FollowPuckViewportStateBearing {
-
   /// Creates a [FollowPuckViewportStateBearing].
   const FollowPuckViewportStateBearing();
 }
@@ -19,8 +18,8 @@ sealed class FollowPuckViewportStateBearing {
 /// ```dart
 /// final bearingOption = FollowPuckViewportStateBearingConstant(90.0);
 /// ```
-class FollowPuckViewportStateBearingConstant extends FollowPuckViewportStateBearing {
-
+class FollowPuckViewportStateBearingConstant
+    extends FollowPuckViewportStateBearing {
   /// The constant value to set the camera's bearing, in degrees.
   final double bearing;
 
@@ -33,8 +32,8 @@ class FollowPuckViewportStateBearingConstant extends FollowPuckViewportStateBear
 /// Sets the camera's bearing based on the device's current heading.
 ///
 /// The camera rotates to match the direction the device is facing, providing an experience where the map orients itself according to the user's physical orientation.
-class FollowPuckViewportStateBearingHeading extends FollowPuckViewportStateBearing {
-
+class FollowPuckViewportStateBearingHeading
+    extends FollowPuckViewportStateBearing {
   /// Creates a [FollowPuckViewportStateBearingHeading].
   ///
   /// This option enables the camera to update its bearing automatically based on the device's heading information.
@@ -46,8 +45,8 @@ class FollowPuckViewportStateBearingHeading extends FollowPuckViewportStateBeari
 /// The camera rotates to align with the user's movement direction, which is useful in navigation scenarios where the map should reflect the path ahead.
 ///
 /// **Note:** This option is only available on iOS.
-class FollowPuckViewportStateBearingCourse extends FollowPuckViewportStateBearing {
-
+class FollowPuckViewportStateBearingCourse
+    extends FollowPuckViewportStateBearing {
   /// Creates a [FollowPuckViewportStateBearingCourse].
   ///
   /// **Note:** This option is only supported on iOS devices. On other platforms, it may have no effect.
@@ -77,7 +76,6 @@ class FollowPuckViewportStateBearingCourse extends FollowPuckViewportStateBearin
 /// );
 /// ```
 final class FollowPuckViewportState extends ViewportState {
-
   /// The zoom level of the map.
   ///
   /// Determines how close the camera is to the map's surface. Higher values zoom in closer.

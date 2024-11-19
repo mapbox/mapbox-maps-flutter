@@ -96,7 +96,7 @@ sealed class ViewportState {
   /// This constructor is typically called by subclasses to initialize the base class.
   const ViewportState();
 }
- 
+
 extension on ViewportState {
   _ViewportStateStorage _toStorage() {
     return switch (this) {

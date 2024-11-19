@@ -19,7 +19,6 @@ part of mapbox_maps_flutter;
 ///
 /// This creates a default viewport transition with a maximum animation duration of 3.5 seconds.
 final class DefaultViewportTransition extends ViewportTransition {
-
   /// The maximum duration of the animation.
   ///
   /// The animation will not exceed this duration, regardless of the changes in the viewport.

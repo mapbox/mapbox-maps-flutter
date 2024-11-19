@@ -28,7 +28,6 @@ part of mapbox_maps_flutter;
 ///
 /// In these examples, different easing curves and durations are used to animate the viewport transitions.
 final class EasingViewportTransition extends ViewportTransition {
-
   /// The easing curve to use for the animation.
   ///
   /// This defines the rate of change of the animation over time. You can use any [Cubic] curve,

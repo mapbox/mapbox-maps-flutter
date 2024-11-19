@@ -10,8 +10,8 @@ class ViewportExample extends StatefulWidget implements Example {
   @override
   final String title = 'Move camera with viewport';
   @override
-  final String subtitle = 'Move the camera to different cities with viewport animations.';
-
+  final String subtitle =
+      'Move the camera to different cities with viewport animations.';
 
   @override
   State<StatefulWidget> createState() => _ViewportExampleState();
@@ -40,9 +40,9 @@ class _ViewportExampleState extends State<ViewportExample> {
               _flying++;
             },
             transition: FlyViewportTransition(
-                duration:
-                    cities[(_cityIndex + 1) % cities.length].animationDuration,
-                ),
+              duration:
+                  cities[(_cityIndex + 1) % cities.length].animationDuration,
+            ),
             completion: (result) {
               print(
                   'Animaton complete with $result, currentCity ${currentCity.name}');

@@ -10,6 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
+import struct Turf.Point
 
 /// Error class for passing custom error details to Dart side.
 final class ViewportInternalError: Error {
@@ -307,18 +308,22 @@ private class ViewportInternalPigeonCodecReader: FlutterStandardReader {
     case 133:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 134:
-      return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
+      return CameraOptions.fromList(self.readValue() as! [Any?])
     case 135:
-      return _FlyViewportTransitionOptions.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 136:
-      return _EasingViewportTransitionOptions.fromList(self.readValue() as! [Any?])
+      return _DefaultViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 137:
-      return _ViewportTransitionStorage.fromList(self.readValue() as! [Any?])
+      return _FlyViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 138:
-      return _OverviewViewportStateOptions.fromList(self.readValue() as! [Any?])
+      return _EasingViewportTransitionOptions.fromList(self.readValue() as! [Any?])
     case 139:
-      return _FollowPuckViewportStateOptions.fromList(self.readValue() as! [Any?])
+      return _ViewportTransitionStorage.fromList(self.readValue() as! [Any?])
     case 140:
+      return _OverviewViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 141:
+      return _FollowPuckViewportStateOptions.fromList(self.readValue() as! [Any?])
+    case 142:
       return _ViewportStateStorage.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -343,26 +348,32 @@ private class ViewportInternalPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ScreenCoordinate {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? _DefaultViewportTransitionOptions {
+    } else if let value = value as? CameraOptions {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? _FlyViewportTransitionOptions {
+    } else if let value = value as? Point {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? _EasingViewportTransitionOptions {
+    } else if let value = value as? _DefaultViewportTransitionOptions {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? _ViewportTransitionStorage {
+    } else if let value = value as? _FlyViewportTransitionOptions {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? _OverviewViewportStateOptions {
+    } else if let value = value as? _EasingViewportTransitionOptions {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? _FollowPuckViewportStateOptions {
+    } else if let value = value as? _ViewportTransitionStorage {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? _ViewportStateStorage {
+    } else if let value = value as? _OverviewViewportStateOptions {
       super.writeByte(140)
+      super.writeValue(value.toList())
+    } else if let value = value as? _FollowPuckViewportStateOptions {
+      super.writeByte(141)
+      super.writeValue(value.toList())
+    } else if let value = value as? _ViewportStateStorage {
+      super.writeByte(142)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

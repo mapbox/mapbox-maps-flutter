@@ -273,26 +273,32 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
     } else if (value is ScreenCoordinate) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is _DefaultViewportTransitionOptions) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is _FlyViewportTransitionOptions) {
+    } else if (value is Point) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is _EasingViewportTransitionOptions) {
+    } else if (value is _DefaultViewportTransitionOptions) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is _ViewportTransitionStorage) {
+    } else if (value is _FlyViewportTransitionOptions) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is _OverviewViewportStateOptions) {
+    } else if (value is _EasingViewportTransitionOptions) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is _FollowPuckViewportStateOptions) {
+    } else if (value is _ViewportTransitionStorage) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is _ViewportStateStorage) {
+    } else if (value is _OverviewViewportStateOptions) {
       buffer.putUint8(140);
+      writeValue(buffer, value.encode());
+    } else if (value is _FollowPuckViewportStateOptions) {
+      buffer.putUint8(141);
+      writeValue(buffer, value.encode());
+    } else if (value is _ViewportStateStorage) {
+      buffer.putUint8(142);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -318,18 +324,22 @@ class ViewportInternal_PigeonCodec extends StandardMessageCodec {
       case 133:
         return ScreenCoordinate.decode(readValue(buffer)!);
       case 134:
-        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
+        return CameraOptions.decode(readValue(buffer)!);
       case 135:
-        return _FlyViewportTransitionOptions.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 136:
-        return _EasingViewportTransitionOptions.decode(readValue(buffer)!);
+        return _DefaultViewportTransitionOptions.decode(readValue(buffer)!);
       case 137:
-        return _ViewportTransitionStorage.decode(readValue(buffer)!);
+        return _FlyViewportTransitionOptions.decode(readValue(buffer)!);
       case 138:
-        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
+        return _EasingViewportTransitionOptions.decode(readValue(buffer)!);
       case 139:
-        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+        return _ViewportTransitionStorage.decode(readValue(buffer)!);
       case 140:
+        return _OverviewViewportStateOptions.decode(readValue(buffer)!);
+      case 141:
+        return _FollowPuckViewportStateOptions.decode(readValue(buffer)!);
+      case 142:
         return _ViewportStateStorage.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

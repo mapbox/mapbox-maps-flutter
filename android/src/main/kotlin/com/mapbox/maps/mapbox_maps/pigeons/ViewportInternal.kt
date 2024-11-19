@@ -5,6 +5,8 @@
 package com.mapbox.maps.mapbox_maps.pigeons
 
 import android.util.Log
+import com.mapbox.geojson.Point
+import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
@@ -266,35 +268,45 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _DefaultViewportTransitionOptions.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _FlyViewportTransitionOptions.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _EasingViewportTransitionOptions.fromList(it)
+          _DefaultViewportTransitionOptions.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _ViewportTransitionStorage.fromList(it)
+          _FlyViewportTransitionOptions.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _OverviewViewportStateOptions.fromList(it)
+          _EasingViewportTransitionOptions.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _FollowPuckViewportStateOptions.fromList(it)
+          _ViewportTransitionStorage.fromList(it)
         }
       }
       140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _OverviewViewportStateOptions.fromList(it)
+        }
+      }
+      141.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          _FollowPuckViewportStateOptions.fromList(it)
+        }
+      }
+      142.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           _ViewportStateStorage.fromList(it)
         }
@@ -324,32 +336,40 @@ private open class ViewportInternalPigeonCodec : StandardMessageCodec() {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is _DefaultViewportTransitionOptions -> {
+      is CameraOptions -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is _FlyViewportTransitionOptions -> {
+      is Point -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is _EasingViewportTransitionOptions -> {
+      is _DefaultViewportTransitionOptions -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is _ViewportTransitionStorage -> {
+      is _FlyViewportTransitionOptions -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is _OverviewViewportStateOptions -> {
+      is _EasingViewportTransitionOptions -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is _FollowPuckViewportStateOptions -> {
+      is _ViewportTransitionStorage -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is _ViewportStateStorage -> {
+      is _OverviewViewportStateOptions -> {
         stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is _FollowPuckViewportStateOptions -> {
+        stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is _ViewportStateStorage -> {
+        stream.write(142)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

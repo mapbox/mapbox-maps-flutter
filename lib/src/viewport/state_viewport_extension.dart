@@ -4,7 +4,6 @@ ViewportTransition? _viewportTransition;
 Function(bool)? _viewportTransitionCompletion;
 
 extension WidgetViewportAnimation on State {
-
   /// Applies the animation to the map viewport.
   ///
   /// Use this function to apply animation to viewport state change.
