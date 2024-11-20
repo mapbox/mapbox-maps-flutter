@@ -64,11 +64,15 @@ class ViewportController(
   }
 }
 
-fun ViewportPlugin.transitionFromFLTTransition(transitionStorage: _ViewportTransitionStorage?, cameraPlugin: CameraAnimationsPlugin): ViewportTransition {
+fun ViewportPlugin.transitionFromFLTTransition(
+  transitionStorage: _ViewportTransitionStorage?,
+  cameraPlugin: CameraAnimationsPlugin
+): ViewportTransition {
   return when (transitionStorage?.type) {
     _ViewportTransitionType.DEFAULT_TRANSITION ->
       (transitionStorage.options as? _DefaultViewportTransitionOptions)
         ?.let { makeDefaultViewportTransition(it.toOptions()) }
+
     _ViewportTransitionType.FLY ->
       (transitionStorage.options as? _FlyViewportTransitionOptions)
         ?.let {
@@ -80,34 +84,54 @@ fun ViewportPlugin.transitionFromFLTTransition(transitionStorage: _ViewportTrans
             cameraPlugin.flyTo(
               cameraOptions, options.build(),
               object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) { completion.onComplete(true) }
-                override fun onAnimationCancel(animation: Animator) { completion.onComplete(false) }
+                override fun onAnimationEnd(animation: Animator) {
+                  completion.onComplete(true)
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                  completion.onComplete(false)
+                }
               }
             )
           }
         }
+
     _ViewportTransitionType.EASING ->
       (transitionStorage.options as? _EasingViewportTransitionOptions)
         ?.let {
           GenericViewportTransition { cameraOptions, completion ->
             val options = MapAnimationOptions.Builder()
               .duration(it.durationMs)
-              .interpolator(PathInterpolator(it.a.toFloat(), it.b.toFloat(), it.c.toFloat(), it.d.toFloat()))
+              .interpolator(
+                PathInterpolator(
+                  it.a.toFloat(),
+                  it.b.toFloat(),
+                  it.c.toFloat(),
+                  it.d.toFloat()
+                )
+              )
               .build()
             cameraPlugin.easeTo(
               cameraOptions, options,
               object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) { completion.onComplete(true) }
-                override fun onAnimationCancel(animation: Animator) { completion.onComplete(false) }
+                override fun onAnimationEnd(animation: Animator) {
+                  completion.onComplete(true)
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                  completion.onComplete(false)
+                }
               }
             )
           }
         }
+
     null -> null
   } ?: makeImmediateViewportTransition()
 }
 
 typealias AnimationRunner = (CameraOptions, CompletionListener) -> Unit
+
 class GenericViewportTransition(private val runAnimation: AnimationRunner) : ViewportTransition {
 
   override fun run(to: ViewportState, completionListener: CompletionListener): Cancelable {
@@ -126,15 +150,29 @@ fun _DefaultViewportTransitionOptions.toOptions(): DefaultViewportTransitionOpti
     .build()
 }
 
-fun ViewportPlugin.viewportStateFromFLTState(stateStorage: _ViewportStateStorage, context: Context, mapboxMap: MapboxMap): ViewportState? {
+fun ViewportPlugin.viewportStateFromFLTState(
+  stateStorage: _ViewportStateStorage,
+  context: Context,
+  mapboxMap: MapboxMap
+): ViewportState? {
   return when (stateStorage.type) {
     _ViewportStateType.IDLE -> idle().let { null }
     _ViewportStateType.FOLLOW_PUCK ->
       makeFollowPuckViewportState((stateStorage.options as _FollowPuckViewportStateOptions).toOptions())
+
     _ViewportStateType.OVERVIEW ->
-      makeOverviewViewportState((stateStorage.options as _OverviewViewportStateOptions).toOptions(context))
+      makeOverviewViewportState(
+        (stateStorage.options as _OverviewViewportStateOptions).toOptions(
+          context
+        )
+      )
+
     _ViewportStateType.STYLE_DEFAULT -> StyleDefaultViewportState(mapboxMap)
-    _ViewportStateType.CAMERA -> CameraViewportState(stateStorage.options as CameraOptions, mapboxMap)
+    _ViewportStateType.CAMERA -> CameraViewportState(
+      (stateStorage.options as com.mapbox.maps.mapbox_maps.pigeons.CameraOptions).toCameraOptions(
+        context
+      ), mapboxMap
+    )
   }
 }
 
@@ -144,11 +182,15 @@ fun _FollowPuckViewportStateOptions.toOptions(): FollowPuckViewportStateOptions 
     _FollowPuckViewportStateBearing.COURSE -> FollowPuckViewportStateBearing.SyncWithLocationPuck
     _FollowPuckViewportStateBearing.CONSTANT -> {
       if (bearingValue == null) {
-        logE("Viewport", "Invalid FollowPuckViewportStateOptions, bearing mode is CONSTANT but bearingValue is null")
+        logE(
+          "Viewport",
+          "Invalid FollowPuckViewportStateOptions, bearing mode is CONSTANT but bearingValue is null"
+        )
       }
 
       bearingValue?.let { FollowPuckViewportStateBearing.Constant(it) }
     }
+
     null -> null
   }
 
@@ -176,7 +218,8 @@ fun _OverviewViewportStateOptions.toOptions(context: Context): OverviewViewportS
     .build()
 }
 
-class CameraViewportState(private val options: CameraOptions, private val mapboxMap: MapboxMap) : ViewportState {
+class CameraViewportState(private val options: CameraOptions, private val mapboxMap: MapboxMap) :
+  ViewportState {
 
   override fun observeDataSource(viewportStateDataObserver: ViewportStateDataObserver): Cancelable {
     viewportStateDataObserver.onNewData(options)
