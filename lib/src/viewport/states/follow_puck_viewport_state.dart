@@ -64,6 +64,8 @@ class FollowPuckViewportStateBearingCourse
 /// - The [bearing] controls the rotation of the map and can be set to follow the user's heading or a custom value using [FollowPuckViewportStateBearing].
 /// - The [pitch] adjusts the angle of the camera toward the horizon, providing a 3D perspective when set above zero.
 ///
+/// **Note**: Location should be enabled to use this viewport state.
+///
 /// **Note:** It is recommended to use only the [DefaultViewportTransition] animation option when transitioning to the [FollowPuckViewportState], as it smoothly handles the moving user location puck. Other animation options like [EasingViewportTransition] and [FlyViewportTransition] are not supported and may result in undesired behavior.
 ///
 /// ### Example
