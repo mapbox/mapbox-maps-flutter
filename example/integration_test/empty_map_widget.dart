@@ -24,7 +24,7 @@ class Events {
 var events = Events();
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
-Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
+Future<MapboxMap> main({double? width, double? height, CameraOptions? camera, ViewportState? viewport}) {
   final completer = Completer<MapboxMap>();
 
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
@@ -33,13 +33,14 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
   runApp(MaterialApp(
       home: Align(
     alignment: Alignment.topLeft,
-    child: Container(
+    child: SizedBox(
       width: width,
       height: height,
       child: MapWidget(
         key: ValueKey("mapWidget"),
         androidHostingMode: AndroidPlatformViewHostingMode.VD,
         cameraOptions: camera,
+        viewport: viewport,
         onMapCreated: (MapboxMap mapboxMap) {
           completer.complete(mapboxMap);
         },
