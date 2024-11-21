@@ -2,7 +2,7 @@ PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
-  - mapbox_maps_flutter (2.4.0):
+  - mapbox_maps_flutter (2.4.1):
     - Flutter
     - MapboxMaps (~> 11.8.0)
     - Turf (= 3.0.0)
@@ -49,7 +49,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
-  mapbox_maps_flutter: 564903a43401bad6b277ffef34b0ab03329a34c1
+  mapbox_maps_flutter: 84ab1eb6c6c7731e12cc70f6b2d9deb89a78f0fa
   MapboxCommon: 95fe03b74d0d0ca39dc646ca14862deb06875151
   MapboxCoreMaps: f2a82182c5f6c6262220b81547c6df708012932b
   MapboxMaps: dbe1869006c5918d62efc6b475fb884947ea2ecd
