@@ -171,7 +171,8 @@ fun ViewportPlugin.viewportStateFromFLTState(
     _ViewportStateType.CAMERA -> CameraViewportState(
       (stateStorage.options as com.mapbox.maps.mapbox_maps.pigeons.CameraOptions).toCameraOptions(
         context
-      ), mapboxMap
+      ),
+      mapboxMap
     )
   }
 }
