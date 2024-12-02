@@ -1,5 +1,7 @@
 ### main
 
+### 2.5.0-beta.1
+
 * Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
 ```dart
 MapWidget(
@@ -9,6 +11,7 @@ MapWidget(
   ),
 );
 ```
+* Update Turf dependency to `4.0.0-beta.1`
 
 ### 2.4.1
 
