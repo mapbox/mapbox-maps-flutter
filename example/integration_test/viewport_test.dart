@@ -61,7 +61,7 @@ void main() {
     await tester.pumpAndSettle();
     final cameraAfterViewport = await mapboxMap.getCameraState();
 
-    // check that the came is reset to the default viewport
+    // check that the camera is reset to the default viewport
     expect(
         cameraAfterViewport.center.coordinates.lng,
         moreOrLessEquals(
