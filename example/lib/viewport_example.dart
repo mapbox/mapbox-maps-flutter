@@ -45,7 +45,7 @@ class _ViewportExampleState extends State<ViewportExample> {
             ),
             completion: (result) {
               print(
-                  'Animaton complete with $result, currentCity ${currentCity.name}');
+                  'Animation complete with $result, currentCity ${currentCity.name}');
               setState(() => _flying--);
             },
           );
