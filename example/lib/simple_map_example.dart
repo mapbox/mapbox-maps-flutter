@@ -24,6 +24,10 @@ class _SimpleMapState extends State<SimpleMapExample> {
   Widget build(BuildContext context) {
     return MapWidget(
       styleUri: MapboxStyles.STANDARD,
+      viewport: CameraViewportState(
+        center: Point(coordinates: Position(-117.918976, 33.812092)),
+        zoom: 15.0,
+      ),
     );
   }
 }
