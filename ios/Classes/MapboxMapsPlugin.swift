@@ -11,6 +11,7 @@ public class MapboxMapsPlugin: NSObject, FlutterPlugin {
     private static var textureController: TextureController!
 
     public static func register(with registrar: FlutterPluginRegistrar) {
+
         let instance = MapboxMapFactory(withRegistrar: registrar)
         registrar.register(instance, withId: "plugins.flutter.io/mapbox_maps")
 
@@ -64,7 +65,7 @@ final class TextureController {
 
 final class MapTexture: NSObject, FlutterTexture {
     private let textureRegistry: FlutterTextureRegistry
-    private let map: MapboxCoreMaps_Private.Map
+    private var map: MapboxCoreMaps_Private.Map!
     private let device = MTLCreateSystemDefaultDevice()!
     private let size: CGSize
     private var needsRepaint = false
@@ -74,25 +75,36 @@ final class MapTexture: NSObject, FlutterTexture {
     private var texture: MTLTexture?
     private var cvTexture: CVMetalTexture?
     var textureId: Int64!
-
+    var thread: Thread?
+    var needsRepaintUpdateQueue = DispatchQueue(
+        label: "needsRepaintUpdateQueue",
+        qos: .userInitiated
+    )
     init(textureRegistry: FlutterTextureRegistry, size: CGSize) {
         self.size = size
         self.textureRegistry = textureRegistry
+        super.init()
+        setupMap()
+        thread = Thread.init(target: self, selector: #selector(setupRendering), object: nil)
+        thread?.start()
+    }
+
+    private func setupMap() {
         let clientProxy = MapClientProxy()
         self.map = Map(
             client: clientProxy,
             mapOptions: .init(size: size)
         )
-        super.init()
+
         clientProxy.repaintClosure = { [unowned self] in
-            self.needsRepaint = true
+            self.needsRepaintUpdateQueue.sync {
+                self.needsRepaint = true
+            }
         }
         clientProxy.drawableProvider = { [unowned self] in
             return self.texture
         }
 
-        setup()
-        map.createRenderer()
         map.setStyleURIForUri(StyleURI.standard.rawValue)
         let helsinki = CLLocationCoordinate2D(latitude: 60.170119, longitude: 24.938333)
         map.setCameraFor(
@@ -105,20 +117,39 @@ final class MapTexture: NSObject, FlutterTexture {
                 pitch: 0
             )
         )
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.map.render()
-            self.textureRegistry.textureFrameAvailable(self.textureId)
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.map.render()
-            self.textureRegistry.textureFrameAvailable(self.textureId)
-        }
     }
 
-    func setup() {
-        
+    @objc func setupRendering() {
+        setupTextureBuffer()
+        map.createRenderer()
+
+        let link = CADisplayLink(target: self, selector: #selector(update))
+
+        link.add(to: .current, forMode: .default)
+
+        RunLoop.current.run()
+    }
+    private var renderFrameFinishedEventCancellable: MapboxCommon.Cancelable?
+    private var isRendering = false
+
+    @objc private func update(_ displayLink: CADisplayLink) {
+        let needsRepaint = needsRepaintUpdateQueue.sync {
+            return self.needsRepaint
+        }
+
+        guard needsRepaint else { return }
+        print("\(Thread.current) pre render")
+
+        needsRepaintUpdateQueue.sync {
+            self.needsRepaint = false
+        }
+        map.render()
+        print("\(Thread.current) post render")
+        self.textureRegistry.textureFrameAvailable(self.textureId)
+    }
+
+    func setupTextureBuffer() {
+
         guard let ioSurfaceRef = IOSurfaceCreate(
             [
                 kIOSurfaceWidth: size.width,
@@ -167,6 +198,7 @@ final class MapTexture: NSObject, FlutterTexture {
     }
 
     func copyPixelBuffer() -> Unmanaged<CVPixelBuffer>? {
+        print("MapTexture: copyPixelBuffer")
         guard let pixelBuffer = buffer?.takeUnretainedValue() else {
             return nil
         }
@@ -180,10 +212,12 @@ final class MapClientProxy: MapClient, MBMMetalViewProvider {
     var drawableProvider: (() -> (any MTLTexture)?)?
 
     func scheduleRepaint() {
+        print("\(Thread.current) scheduleRepaint")
         repaintClosure()
     }
 
     func getDrawableTexture() -> (any MTLTexture)? {
-        drawableProvider?()
+        print("getDrawableTexture")
+        return drawableProvider?()
     }
 }
