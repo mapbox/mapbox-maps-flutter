@@ -40,6 +40,7 @@ void main() {
       iconTextFit: IconTextFit.NONE,
       iconTextFitPadding: [0.0, 1.0, 2.0, 3.0],
       symbolAvoidEdges: true,
+      symbolElevationReference: SymbolElevationReference.SEA,
       symbolPlacement: SymbolPlacement.POINT,
       symbolSortKey: 1.0,
       symbolSpacing: 1.0,
@@ -78,7 +79,6 @@ void main() {
       iconOpacity: 1.0,
       iconTranslate: [0.0, 1.0],
       iconTranslateAnchor: IconTranslateAnchor.MAP,
-      symbolElevationReference: SymbolElevationReference.SEA,
       symbolZOffset: 1.0,
       textColor: Colors.red.value,
       textEmissiveStrength: 1.0,
@@ -111,6 +111,7 @@ void main() {
     expect(layer.iconTextFit, IconTextFit.NONE);
     expect(layer.iconTextFitPadding, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.symbolAvoidEdges, true);
+    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
     expect(layer.symbolPlacement, SymbolPlacement.POINT);
     expect(layer.symbolSortKey, 1.0);
     expect(layer.symbolSpacing, 1.0);
@@ -149,7 +150,6 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
-    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColor, Colors.red.value);
     expect(layer.textEmissiveStrength, 1.0);
@@ -204,6 +204,7 @@ void main() {
         [0.0, 1.0, 2.0, 3.0]
       ],
       symbolAvoidEdgesExpression: ['==', true, true],
+      symbolElevationReferenceExpression: ['string', 'sea'],
       symbolPlacementExpression: ['string', 'point'],
       symbolSortKeyExpression: ['number', 1.0],
       symbolSpacingExpression: ['number', 1.0],
@@ -257,7 +258,6 @@ void main() {
         [0.0, 1.0]
       ],
       iconTranslateAnchorExpression: ['string', 'map'],
-      symbolElevationReferenceExpression: ['string', 'sea'],
       symbolZOffsetExpression: ['number', 1.0],
       textColorExpression: ['rgba', 255, 0, 0, 1],
       textEmissiveStrengthExpression: ['number', 1.0],
@@ -298,6 +298,7 @@ void main() {
     expect(layer.iconTextFit, IconTextFit.NONE);
     expect(layer.iconTextFitPadding, [0.0, 1.0, 2.0, 3.0]);
     expect(layer.symbolAvoidEdges, true);
+    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
     expect(layer.symbolPlacement, SymbolPlacement.POINT);
     expect(layer.symbolSortKey, 1.0);
     expect(layer.symbolSpacing, 1.0);
@@ -336,7 +337,6 @@ void main() {
     expect(layer.iconOpacity, 1.0);
     expect(layer.iconTranslate, [0.0, 1.0]);
     expect(layer.iconTranslateAnchor, IconTranslateAnchor.MAP);
-    expect(layer.symbolElevationReference, SymbolElevationReference.SEA);
     expect(layer.symbolZOffset, 1.0);
     expect(layer.textColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.textEmissiveStrength, 1.0);

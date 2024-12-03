@@ -294,6 +294,26 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
     }
+
+    func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillZOffset))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillZOffset(managerId: String, fillZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillZOffset = fillZOffset
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
 }
 
 extension PolygonAnnotationOptions {
@@ -314,6 +334,9 @@ extension PolygonAnnotationOptions {
         }
         if let fillPattern {
             annotation.fillPattern = fillPattern
+        }
+        if let fillZOffset {
+            annotation.fillZOffset = fillZOffset
         }
         return annotation
     }
@@ -338,6 +361,9 @@ extension PolygonAnnotation {
         if let fillPattern {
             annotation.fillPattern = fillPattern
         }
+        if let fillZOffset {
+            annotation.fillZOffset = fillZOffset
+        }
         return annotation
     }
 }
@@ -351,7 +377,8 @@ extension MapboxMaps.PolygonAnnotation {
             fillColor: fillColor?.intValue,
             fillOpacity: fillOpacity,
             fillOutlineColor: fillOutlineColor?.intValue,
-            fillPattern: fillPattern
+            fillPattern: fillPattern,
+            fillZOffset: fillZOffset
         )
     }
 }

@@ -23,6 +23,7 @@ class PolygonAnnotation {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillZOffset,
   });
 
   /// The id for annotation
@@ -48,6 +49,10 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  double? fillZOffset;
+
   Object encode() {
     return <Object?>[
       id,
@@ -57,6 +62,7 @@ class PolygonAnnotation {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ];
   }
 
@@ -70,6 +76,7 @@ class PolygonAnnotation {
       fillOpacity: result[4] as double?,
       fillOutlineColor: result[5] as int?,
       fillPattern: result[6] as String?,
+      fillZOffset: result[7] as double?,
     );
   }
 }
@@ -82,6 +89,7 @@ class PolygonAnnotationOptions {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillZOffset,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -104,6 +112,10 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  double? fillZOffset;
+
   Object encode() {
     return <Object?>[
       geometry,
@@ -112,6 +124,7 @@ class PolygonAnnotationOptions {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ];
   }
 
@@ -124,6 +137,7 @@ class PolygonAnnotationOptions {
       fillOpacity: result[3] as double?,
       fillOutlineColor: result[4] as int?,
       fillPattern: result[5] as String?,
+      fillZOffset: result[6] as double?,
     );
   }
 }
@@ -798,6 +812,54 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as FillTranslateAnchor?);
+    }
+  }
+
+  Future<void> setFillZOffset(String managerId, double fillZOffset) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[managerId, fillZOffset]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getFillZOffset(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillZOffset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?);
     }
   }
 }

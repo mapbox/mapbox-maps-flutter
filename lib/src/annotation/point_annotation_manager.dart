@@ -157,6 +157,16 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<bool?> getSymbolAvoidEdges() =>
       _annotationMessenger.getSymbolAvoidEdges(id);
 
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  Future<void> setSymbolElevationReference(
+          SymbolElevationReference symbolElevationReference) =>
+      _annotationMessenger.setSymbolElevationReference(
+          id, symbolElevationReference);
+
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  Future<SymbolElevationReference?> getSymbolElevationReference() =>
+      _annotationMessenger.getSymbolElevationReference(id);
+
   /// Label placement relative to its geometry. Default value: "point".
   Future<void> setSymbolPlacement(SymbolPlacement symbolPlacement) =>
       _annotationMessenger.setSymbolPlacement(id, symbolPlacement);
@@ -433,16 +443,6 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// Controls the frame of reference for `icon-translate`. Default value: "map".
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
       _annotationMessenger.getIconTranslateAnchor(id);
-
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<void> setSymbolElevationReference(
-          SymbolElevationReference symbolElevationReference) =>
-      _annotationMessenger.setSymbolElevationReference(
-          id, symbolElevationReference);
-
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<SymbolElevationReference?> getSymbolElevationReference() =>
-      _annotationMessenger.getSymbolElevationReference(id);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
   Future<void> setSymbolZOffset(double symbolZOffset) =>

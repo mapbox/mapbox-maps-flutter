@@ -96,6 +96,9 @@ struct PolygonAnnotation {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  var fillZOffset: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotation? {
@@ -106,6 +109,7 @@ struct PolygonAnnotation {
     let fillOpacity: Double? = nilOrValue(pigeonVar_list[4])
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[5])
     let fillPattern: String? = nilOrValue(pigeonVar_list[6])
+    let fillZOffset: Double? = nilOrValue(pigeonVar_list[7])
 
     return PolygonAnnotation(
       id: id,
@@ -114,7 +118,8 @@ struct PolygonAnnotation {
       fillColor: fillColor,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern
+      fillPattern: fillPattern,
+      fillZOffset: fillZOffset
     )
   }
   func toList() -> [Any?] {
@@ -126,6 +131,7 @@ struct PolygonAnnotation {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ]
   }
 }
@@ -146,6 +152,9 @@ struct PolygonAnnotationOptions {
   var fillOutlineColor: Int64?
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   var fillPattern: String?
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  var fillZOffset: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationOptions? {
@@ -155,6 +164,7 @@ struct PolygonAnnotationOptions {
     let fillOpacity: Double? = nilOrValue(pigeonVar_list[3])
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[4])
     let fillPattern: String? = nilOrValue(pigeonVar_list[5])
+    let fillZOffset: Double? = nilOrValue(pigeonVar_list[6])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
@@ -162,7 +172,8 @@ struct PolygonAnnotationOptions {
       fillColor: fillColor,
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
-      fillPattern: fillPattern
+      fillPattern: fillPattern,
+      fillZOffset: fillZOffset
     )
   }
   func toList() -> [Any?] {
@@ -173,6 +184,7 @@ struct PolygonAnnotationOptions {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ]
   }
 }
@@ -290,6 +302,8 @@ protocol _PolygonAnnotationMessenger {
   func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillTranslateAnchor(managerId: String, completion: @escaping (Result<FillTranslateAnchor?, Error>) -> Void)
+  func setFillZOffset(managerId: String, fillZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -701,6 +715,41 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       getFillTranslateAnchorChannel.setMessageHandler(nil)
+    }
+    let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillZOffsetArg = args[1] as! Double
+        api.setFillZOffset(managerId: managerIdArg, fillZOffset: fillZOffsetArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillZOffsetChannel.setMessageHandler(nil)
+    }
+    let getFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillZOffsetChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillZOffset(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillZOffsetChannel.setMessageHandler(nil)
     }
   }
 }

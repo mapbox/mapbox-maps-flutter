@@ -1,5 +1,5 @@
 // This file is generated.
-@_spi(Experimental) import MapboxMaps
+import MapboxMaps
 import Foundation
 import Flutter
 

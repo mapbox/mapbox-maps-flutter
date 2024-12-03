@@ -127,6 +127,15 @@ enum IconTextFit: Int {
   case bOTH = 3
 }
 
+/// Selects the base of symbol-elevation.
+/// Default value: "ground".
+enum SymbolElevationReference: Int {
+  /// Elevate symbols relative to the sea level.
+  case sEA = 0
+  /// Elevate symbols relative to the ground's height below them.
+  case gROUND = 1
+}
+
 /// Label placement relative to its geometry.
 /// Default value: "point".
 enum SymbolPlacement: Int {
@@ -255,15 +264,6 @@ enum IconTranslateAnchor: Int {
   case mAP = 0
   /// Icons are translated relative to the viewport.
   case vIEWPORT = 1
-}
-
-/// Selects the base of symbol-elevation.
-/// Default value: "ground".
-enum SymbolElevationReference: Int {
-  /// Elevate symbols relative to the sea level.
-  case sEA = 0
-  /// Elevate symbols relative to the ground's height below them.
-  case gROUND = 1
 }
 
 /// Controls the frame of reference for `text-translate`.
@@ -778,67 +778,67 @@ private class PointAnnotationMessengerPigeonCodecReader: FlutterStandardReader {
     case 133:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return SymbolPlacement(rawValue: enumResultAsInt)
+        return SymbolElevationReference(rawValue: enumResultAsInt)
       }
       return nil
     case 134:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return SymbolZOrder(rawValue: enumResultAsInt)
+        return SymbolPlacement(rawValue: enumResultAsInt)
       }
       return nil
     case 135:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextAnchor(rawValue: enumResultAsInt)
+        return SymbolZOrder(rawValue: enumResultAsInt)
       }
       return nil
     case 136:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextJustify(rawValue: enumResultAsInt)
+        return TextAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextPitchAlignment(rawValue: enumResultAsInt)
+        return TextJustify(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextRotationAlignment(rawValue: enumResultAsInt)
+        return TextPitchAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 139:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextTransform(rawValue: enumResultAsInt)
+        return TextRotationAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 140:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextVariableAnchor(rawValue: enumResultAsInt)
+        return TextTransform(rawValue: enumResultAsInt)
       }
       return nil
     case 141:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return TextWritingMode(rawValue: enumResultAsInt)
+        return TextVariableAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 142:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return IconTranslateAnchor(rawValue: enumResultAsInt)
+        return TextWritingMode(rawValue: enumResultAsInt)
       }
       return nil
     case 143:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return SymbolElevationReference(rawValue: enumResultAsInt)
+        return IconTranslateAnchor(rawValue: enumResultAsInt)
       }
       return nil
     case 144:
@@ -873,37 +873,37 @@ private class PointAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? IconTextFit {
       super.writeByte(132)
       super.writeValue(value.rawValue)
-    } else if let value = value as? SymbolPlacement {
+    } else if let value = value as? SymbolElevationReference {
       super.writeByte(133)
       super.writeValue(value.rawValue)
-    } else if let value = value as? SymbolZOrder {
+    } else if let value = value as? SymbolPlacement {
       super.writeByte(134)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextAnchor {
+    } else if let value = value as? SymbolZOrder {
       super.writeByte(135)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextJustify {
+    } else if let value = value as? TextAnchor {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextPitchAlignment {
+    } else if let value = value as? TextJustify {
       super.writeByte(137)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextRotationAlignment {
+    } else if let value = value as? TextPitchAlignment {
       super.writeByte(138)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextTransform {
+    } else if let value = value as? TextRotationAlignment {
       super.writeByte(139)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextVariableAnchor {
+    } else if let value = value as? TextTransform {
       super.writeByte(140)
       super.writeValue(value.rawValue)
-    } else if let value = value as? TextWritingMode {
+    } else if let value = value as? TextVariableAnchor {
       super.writeByte(141)
       super.writeValue(value.rawValue)
-    } else if let value = value as? IconTranslateAnchor {
+    } else if let value = value as? TextWritingMode {
       super.writeByte(142)
       super.writeValue(value.rawValue)
-    } else if let value = value as? SymbolElevationReference {
+    } else if let value = value as? IconTranslateAnchor {
       super.writeByte(143)
       super.writeValue(value.rawValue)
     } else if let value = value as? TextTranslateAnchor {
@@ -1008,6 +1008,8 @@ protocol _PointAnnotationMessenger {
   func getIconTextFitPadding(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolAvoidEdges(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void)
+  func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
+  func getSymbolElevationReference(managerId: String, completion: @escaping (Result<SymbolElevationReference?, Error>) -> Void)
   func setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolPlacement(managerId: String, completion: @escaping (Result<SymbolPlacement?, Error>) -> Void)
   func setSymbolSortKey(managerId: String, symbolSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1080,8 +1082,6 @@ protocol _PointAnnotationMessenger {
   func getIconTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTranslateAnchor(managerId: String, completion: @escaping (Result<IconTranslateAnchor?, Error>) -> Void)
-  func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
-  func getSymbolElevationReference(managerId: String, completion: @escaping (Result<SymbolElevationReference?, Error>) -> Void)
   func setSymbolZOffset(managerId: String, symbolZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getSymbolZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setTextColor(managerId: String, textColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1723,6 +1723,41 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getSymbolAvoidEdgesChannel.setMessageHandler(nil)
+    }
+    let setSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setSymbolElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let symbolElevationReferenceArg = args[1] as! SymbolElevationReference
+        api.setSymbolElevationReference(managerId: managerIdArg, symbolElevationReference: symbolElevationReferenceArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setSymbolElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let getSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getSymbolElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getSymbolElevationReference(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getSymbolElevationReferenceChannel.setMessageHandler(nil)
     }
     let setSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolPlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -2983,41 +3018,6 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
-    }
-    let setSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setSymbolElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let symbolElevationReferenceArg = args[1] as! SymbolElevationReference
-        api.setSymbolElevationReference(managerId: managerIdArg, symbolElevationReference: symbolElevationReferenceArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setSymbolElevationReferenceChannel.setMessageHandler(nil)
-    }
-    let getSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getSymbolElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getSymbolElevationReference(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getSymbolElevationReferenceChannel.setMessageHandler(nil)
     }
     let setSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

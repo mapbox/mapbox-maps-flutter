@@ -29,6 +29,8 @@ class LocationIndicatorLayer extends Layer {
     List<Object>? this.bearingImageSizeExpression,
     int? this.emphasisCircleColor,
     List<Object>? this.emphasisCircleColorExpression,
+    List<double?>? this.emphasisCircleGlowRange,
+    List<Object>? this.emphasisCircleGlowRangeExpression,
     double? this.emphasisCircleRadius,
     List<Object>? this.emphasisCircleRadiusExpression,
     double? this.imagePitchDisplacement,
@@ -97,11 +99,11 @@ class LocationIndicatorLayer extends Layer {
   /// Default value: "#ffffff".
   List<Object>? accuracyRadiusColorExpression;
 
-  /// The bearing of the location indicator.
+  /// The bearing of the location indicator. Values under 0.01 degree variation are ignored.
   /// Default value: 0.
   double? bearing;
 
-  /// The bearing of the location indicator.
+  /// The bearing of the location indicator. Values under 0.01 degree variation are ignored.
   /// Default value: 0.
   List<Object>? bearingExpression;
 
@@ -121,6 +123,14 @@ class LocationIndicatorLayer extends Layer {
   /// Default value: "#ffffff".
   List<Object>? emphasisCircleColorExpression;
 
+  /// Specifies a glow effect range of the emphasis circle, in pixels. If [0,0] values are provided, it renders the circle as a solid color. The first value specifies the start of the glow effect where it is equal to the circle's color, the second is the end, where it's fully transparent. Between the two values the effect is linearly faded out.
+  /// Default value: [0,0].
+  List<double?>? emphasisCircleGlowRange;
+
+  /// Specifies a glow effect range of the emphasis circle, in pixels. If [0,0] values are provided, it renders the circle as a solid color. The first value specifies the start of the glow effect where it is equal to the circle's color, the second is the end, where it's fully transparent. Between the two values the effect is linearly faded out.
+  /// Default value: [0,0].
+  List<Object>? emphasisCircleGlowRangeExpression;
+
   /// The radius, in pixel, of the circle emphasizing the indicator, drawn between the accuracy radius and the indicator shadow.
   /// Default value: 0.
   double? emphasisCircleRadius;
@@ -137,11 +147,11 @@ class LocationIndicatorLayer extends Layer {
   /// Default value: "0".
   List<Object>? imagePitchDisplacementExpression;
 
-  /// An array of [latitude, longitude, altitude] position of the location indicator.
+  /// An array of [latitude, longitude, altitude] position of the location indicator. Values under 0.000001 variation are ignored.
   /// Default value: [0,0,0].
   List<double?>? location;
 
-  /// An array of [latitude, longitude, altitude] position of the location indicator.
+  /// An array of [latitude, longitude, altitude] position of the location indicator. Values under 0.000001 variation are ignored.
   /// Default value: [0,0,0].
   List<Object>? locationExpression;
 
@@ -252,6 +262,13 @@ class LocationIndicatorLayer extends Layer {
     }
     if (emphasisCircleColor != null) {
       paint["emphasis-circle-color"] = emphasisCircleColor?.toRGBA();
+    }
+
+    if (emphasisCircleGlowRangeExpression != null) {
+      paint["emphasis-circle-glow-range"] = emphasisCircleGlowRangeExpression;
+    }
+    if (emphasisCircleGlowRange != null) {
+      paint["emphasis-circle-glow-range"] = emphasisCircleGlowRange;
     }
 
     if (emphasisCircleRadiusExpression != null) {
@@ -372,6 +389,12 @@ class LocationIndicatorLayer extends Layer {
           (map["paint"]["emphasis-circle-color"] as List?)?.toRGBAInt(),
       emphasisCircleColorExpression:
           _optionalCastList(map["paint"]["emphasis-circle-color"]),
+      emphasisCircleGlowRange:
+          (map["paint"]["emphasis-circle-glow-range"] as List?)
+              ?.map<double?>((e) => e.toDouble())
+              .toList(),
+      emphasisCircleGlowRangeExpression:
+          _optionalCastList(map["paint"]["emphasis-circle-glow-range"]),
       emphasisCircleRadius:
           _optionalCast(map["paint"]["emphasis-circle-radius"]),
       emphasisCircleRadiusExpression:

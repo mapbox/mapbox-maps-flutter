@@ -43,6 +43,8 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconTextFitPaddingExpression,
     bool? this.symbolAvoidEdges,
     List<Object>? this.symbolAvoidEdgesExpression,
+    SymbolElevationReference? this.symbolElevationReference,
+    List<Object>? this.symbolElevationReferenceExpression,
     SymbolPlacement? this.symbolPlacement,
     List<Object>? this.symbolPlacementExpression,
     double? this.symbolSortKey,
@@ -119,8 +121,6 @@ class SymbolLayer extends Layer {
     List<Object>? this.iconTranslateExpression,
     IconTranslateAnchor? this.iconTranslateAnchor,
     List<Object>? this.iconTranslateAnchorExpression,
-    SymbolElevationReference? this.symbolElevationReference,
-    List<Object>? this.symbolElevationReferenceExpression,
     double? this.symbolZOffset,
     List<Object>? this.symbolZOffsetExpression,
     int? this.textColor,
@@ -276,6 +276,16 @@ class SymbolLayer extends Layer {
   /// If true, the symbols will not cross tile edges to avoid mutual collisions. Recommended in layers that don't have enough padding in the vector tile to prevent collisions, or if it is a point symbol layer placed after a line symbol layer. When using a client that supports global collision detection, like Mapbox GL JS version 0.42.0 or greater, enabling this property is not needed to prevent clipped labels at tile boundaries.
   /// Default value: false.
   List<Object>? symbolAvoidEdgesExpression;
+
+  /// Selects the base of symbol-elevation.
+  /// Default value: "ground".
+  @experimental
+  SymbolElevationReference? symbolElevationReference;
+
+  /// Selects the base of symbol-elevation.
+  /// Default value: "ground".
+  @experimental
+  List<Object>? symbolElevationReferenceExpression;
 
   /// Label placement relative to its geometry.
   /// Default value: "point".
@@ -573,16 +583,6 @@ class SymbolLayer extends Layer {
   /// Default value: "map".
   List<Object>? iconTranslateAnchorExpression;
 
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  @experimental
-  SymbolElevationReference? symbolElevationReference;
-
-  /// Selects the base of symbol-elevation.
-  /// Default value: "ground".
-  @experimental
-  List<Object>? symbolElevationReferenceExpression;
-
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
   @experimental
@@ -784,6 +784,14 @@ class SymbolLayer extends Layer {
 
     if (symbolAvoidEdges != null) {
       layout["symbol-avoid-edges"] = symbolAvoidEdges;
+    }
+    if (symbolElevationReferenceExpression != null) {
+      layout["symbol-elevation-reference"] = symbolElevationReferenceExpression;
+    }
+
+    if (symbolElevationReference != null) {
+      layout["symbol-elevation-reference"] =
+          symbolElevationReference?.name.toLowerCase().replaceAll("_", "-");
     }
     if (symbolPlacementExpression != null) {
       layout["symbol-placement"] = symbolPlacementExpression;
@@ -1060,14 +1068,6 @@ class SymbolLayer extends Layer {
           iconTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
-    if (symbolElevationReferenceExpression != null) {
-      paint["symbol-elevation-reference"] = symbolElevationReferenceExpression;
-    }
-    if (symbolElevationReference != null) {
-      paint["symbol-elevation-reference"] =
-          symbolElevationReference?.name.toLowerCase().replaceAll("_", "-");
-    }
-
     if (symbolZOffsetExpression != null) {
       paint["symbol-z-offset"] = symbolZOffsetExpression;
     }
@@ -1250,6 +1250,15 @@ class SymbolLayer extends Layer {
       symbolAvoidEdges: _optionalCast(map["layout"]["symbol-avoid-edges"]),
       symbolAvoidEdgesExpression:
           _optionalCastList(map["layout"]["symbol-avoid-edges"]),
+      symbolElevationReference:
+          map["layout"]["symbol-elevation-reference"] == null
+              ? null
+              : SymbolElevationReference.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["layout"]["symbol-elevation-reference"])),
+      symbolElevationReferenceExpression:
+          _optionalCastList(map["layout"]["symbol-elevation-reference"]),
       symbolPlacement: map["layout"]["symbol-placement"] == null
           ? null
           : SymbolPlacement.values.firstWhere((e) => e.name
@@ -1405,15 +1414,6 @@ class SymbolLayer extends Layer {
               .contains(map["paint"]["icon-translate-anchor"])),
       iconTranslateAnchorExpression:
           _optionalCastList(map["paint"]["icon-translate-anchor"]),
-      symbolElevationReference:
-          map["paint"]["symbol-elevation-reference"] == null
-              ? null
-              : SymbolElevationReference.values.firstWhere((e) => e.name
-                  .toLowerCase()
-                  .replaceAll("_", "-")
-                  .contains(map["paint"]["symbol-elevation-reference"])),
-      symbolElevationReferenceExpression:
-          _optionalCastList(map["paint"]["symbol-elevation-reference"]),
       symbolZOffset: _optionalCast(map["paint"]["symbol-z-offset"]),
       symbolZOffsetExpression:
           _optionalCastList(map["paint"]["symbol-z-offset"]),

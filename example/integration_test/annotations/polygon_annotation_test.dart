@@ -30,6 +30,7 @@ void main() {
       fillOpacity: 1.0,
       fillOutlineColor: Colors.red.value,
       fillPattern: "abc",
+      fillZOffset: 1.0,
     );
     final annotation = await manager.create(polygonAnnotationOptions);
     var polygon = annotation.geometry;
@@ -45,6 +46,7 @@ void main() {
     expect(1.0, annotation.fillOpacity);
     expect(Colors.red.value, annotation.fillOutlineColor);
     expect("abc", annotation.fillPattern);
+    expect(1.0, annotation.fillZOffset);
   });
 
   testWidgets('update and delete PolygonAnnotation',

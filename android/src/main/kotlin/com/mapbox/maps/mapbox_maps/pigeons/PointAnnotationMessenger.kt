@@ -129,6 +129,23 @@ enum class IconTextFit(val raw: Int) {
 }
 
 /**
+ * Selects the base of symbol-elevation.
+ * Default value: "ground".
+ */
+enum class SymbolElevationReference(val raw: Int) {
+  /** Elevate symbols relative to the sea level. */
+  SEA(0),
+  /** Elevate symbols relative to the ground's height below them. */
+  GROUND(1);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Label placement relative to its geometry.
  * Default value: "point".
  */
@@ -329,23 +346,6 @@ enum class IconTranslateAnchor(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): IconTranslateAnchor? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * Selects the base of symbol-elevation.
- * Default value: "ground".
- */
-enum class SymbolElevationReference(val raw: Int) {
-  /** Elevate symbols relative to the sea level. */
-  SEA(0),
-  /** Elevate symbols relative to the ground's height below them. */
-  GROUND(1);
-
-  companion object {
-    fun ofRaw(raw: Int): SymbolElevationReference? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -924,57 +924,57 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolPlacement.ofRaw(it.toInt())
+          SymbolElevationReference.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolZOrder.ofRaw(it.toInt())
+          SymbolPlacement.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextAnchor.ofRaw(it.toInt())
+          SymbolZOrder.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextJustify.ofRaw(it.toInt())
+          TextAnchor.ofRaw(it.toInt())
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextPitchAlignment.ofRaw(it.toInt())
+          TextJustify.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextRotationAlignment.ofRaw(it.toInt())
+          TextPitchAlignment.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextTransform.ofRaw(it.toInt())
+          TextRotationAlignment.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextVariableAnchor.ofRaw(it.toInt())
+          TextTransform.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextWritingMode.ofRaw(it.toInt())
+          TextVariableAnchor.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          IconTranslateAnchor.ofRaw(it.toInt())
+          TextWritingMode.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolElevationReference.ofRaw(it.toInt())
+          IconTranslateAnchor.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
@@ -1018,47 +1018,47 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is SymbolPlacement -> {
+      is SymbolElevationReference -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is SymbolZOrder -> {
+      is SymbolPlacement -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is TextAnchor -> {
+      is SymbolZOrder -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is TextJustify -> {
+      is TextAnchor -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is TextPitchAlignment -> {
+      is TextJustify -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is TextRotationAlignment -> {
+      is TextPitchAlignment -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is TextTransform -> {
+      is TextRotationAlignment -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is TextVariableAnchor -> {
+      is TextTransform -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is TextWritingMode -> {
+      is TextVariableAnchor -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is IconTranslateAnchor -> {
+      is TextWritingMode -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is SymbolElevationReference -> {
+      is IconTranslateAnchor -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
@@ -1145,6 +1145,8 @@ interface _PointAnnotationMessenger {
   fun getIconTextFitPadding(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Boolean, callback: (Result<Unit>) -> Unit)
   fun getSymbolAvoidEdges(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getSymbolElevationReference(managerId: String, callback: (Result<SymbolElevationReference?>) -> Unit)
   fun setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, callback: (Result<Unit>) -> Unit)
   fun getSymbolPlacement(managerId: String, callback: (Result<SymbolPlacement?>) -> Unit)
   fun setSymbolSortKey(managerId: String, symbolSortKey: Double, callback: (Result<Unit>) -> Unit)
@@ -1217,8 +1219,6 @@ interface _PointAnnotationMessenger {
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
-  fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
-  fun getSymbolElevationReference(managerId: String, callback: (Result<SymbolElevationReference?>) -> Unit)
   fun setSymbolZOffset(managerId: String, symbolZOffset: Double, callback: (Result<Unit>) -> Unit)
   fun getSymbolZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextColor(managerId: String, textColor: Long, callback: (Result<Unit>) -> Unit)
@@ -1937,6 +1937,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getSymbolAvoidEdges(managerIdArg) { result: Result<Boolean?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val symbolElevationReferenceArg = args[1] as SymbolElevationReference
+            api.setSymbolElevationReference(managerIdArg, symbolElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getSymbolElevationReference(managerIdArg) { result: Result<SymbolElevationReference?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3377,46 +3417,6 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconTranslateAnchor(managerIdArg) { result: Result<IconTranslateAnchor?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            val symbolElevationReferenceArg = args[1] as SymbolElevationReference
-            api.setSymbolElevationReference(managerIdArg, symbolElevationReferenceArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getSymbolElevationReference(managerIdArg) { result: Result<SymbolElevationReference?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

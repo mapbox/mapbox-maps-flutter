@@ -47,6 +47,14 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
           puck3D.modelScaleMode?.let { this.modelScaleMode = it.toModelScaleMode() }
           puck3D.modelEmissiveStrength?.let { this.modelEmissiveStrength = it.toFloat() }
           puck3D.modelEmissiveStrengthExpression?.let { this.modelEmissiveStrengthExpression = it }
+          puck3D.modelOpacityExpression?.let { this.modelOpacityExpression = it }
+          puck3D.modelRotationExpression?.let { this.modelRotationExpression = it }
+          puck3D.modelColor?.let { this.modelColor = it.toInt() }
+          puck3D.modelColorExpression?.let { this.modelColorExpression = it }
+          puck3D.modelColorMixIntensity?.let { this.modelColorMixIntensity = it.toFloat() }
+          puck3D.modelColorMixIntensityExpression?.let { this.modelColorMixIntensityExpression = it }
+          puck3D.materialOverrides?.let { this.materialOverrides = it }
+          puck3D.nodeOverrides?.let { this.nodeOverrides = it }
         }
       } else {
         (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
@@ -111,6 +119,14 @@ fun LocationComponentSettingsInterface.toFLT(context: Context) = LocationCompone
         modelScaleMode = puck3D.modelScaleMode.toFLTModelScaleMode(),
         modelEmissiveStrength = puck3D.modelEmissiveStrength.toDouble(),
         modelEmissiveStrengthExpression = puck3D.modelEmissiveStrengthExpression,
+        modelOpacityExpression = puck3D.modelOpacityExpression,
+        modelRotationExpression = puck3D.modelRotationExpression,
+        modelColor = puck3D.modelColor.toUInt().toLong(),
+        modelColorExpression = puck3D.modelColorExpression,
+        modelColorMixIntensity = puck3D.modelColorMixIntensity.toDouble(),
+        modelColorMixIntensityExpression = puck3D.modelColorMixIntensityExpression,
+        materialOverrides = puck3D.materialOverrides,
+        nodeOverrides = puck3D.nodeOverrides,
       )
     }
   )
