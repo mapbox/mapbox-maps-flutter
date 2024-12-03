@@ -231,6 +231,7 @@ class _MapWidgetState extends State<MapWidget> {
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         channelSuffix: _suffix.toString());
 
+    _updateEventListeners();
     // Here we mark the state as needing an update to ensure
     // the widget configuration is propagated to the platform side.
     //
