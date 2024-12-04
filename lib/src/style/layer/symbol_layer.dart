@@ -1406,14 +1406,14 @@ class SymbolLayer extends Layer {
       iconTranslateAnchorExpression:
           _optionalCastList(map["paint"]["icon-translate-anchor"]),
       symbolElevationReference:
-          map["paint"]["symbol-elevation-reference"] == null
+          map["layout"]["symbol-elevation-reference"] == null
               ? null
               : SymbolElevationReference.values.firstWhere((e) => e.name
                   .toLowerCase()
                   .replaceAll("_", "-")
-                  .contains(map["paint"]["symbol-elevation-reference"])),
+                  .contains(map["layout"]["symbol-elevation-reference"])),
       symbolElevationReferenceExpression:
-          _optionalCastList(map["paint"]["symbol-elevation-reference"]),
+          _optionalCastList(map["layout"]["symbol-elevation-reference"]),
       symbolZOffset: _optionalCast(map["paint"]["symbol-z-offset"]),
       symbolZOffsetExpression:
           _optionalCastList(map["paint"]["symbol-z-offset"]),
