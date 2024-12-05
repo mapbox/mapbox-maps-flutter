@@ -93,6 +93,10 @@ void main() {
     var symbolAvoidEdges = await manager.getSymbolAvoidEdges();
     expect(true, symbolAvoidEdges);
 
+    await manager.setSymbolElevationReference(SymbolElevationReference.SEA);
+    var symbolElevationReference = await manager.getSymbolElevationReference();
+    expect(SymbolElevationReference.SEA, symbolElevationReference);
+
     await manager.setSymbolPlacement(SymbolPlacement.POINT);
     var symbolPlacement = await manager.getSymbolPlacement();
     expect(SymbolPlacement.POINT, symbolPlacement);
@@ -236,10 +240,6 @@ void main() {
     await manager.setIconTranslateAnchor(IconTranslateAnchor.MAP);
     var iconTranslateAnchor = await manager.getIconTranslateAnchor();
     expect(IconTranslateAnchor.MAP, iconTranslateAnchor);
-
-    await manager.setSymbolElevationReference(SymbolElevationReference.SEA);
-    var symbolElevationReference = await manager.getSymbolElevationReference();
-    expect(SymbolElevationReference.SEA, symbolElevationReference);
 
     await manager.setSymbolZOffset(1.0);
     var symbolZOffset = await manager.getSymbolZOffset();

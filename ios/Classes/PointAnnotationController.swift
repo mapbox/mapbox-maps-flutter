@@ -415,6 +415,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
+    func getSymbolElevationReference(managerId: String, completion: @escaping (Result<SymbolElevationReference?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.symbolElevationReference?.toFLTSymbolElevationReference()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.symbolElevationReference = MapboxMaps.SymbolElevationReference(symbolElevationReference)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getSymbolPlacement(managerId: String, completion: @escaping (Result<SymbolPlacement?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -1128,26 +1148,6 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.iconTranslateAnchor = MapboxMaps.IconTranslateAnchor(iconTranslateAnchor)
-
-            completion(.success(()))
-        } catch {
-            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func getSymbolElevationReference(managerId: String, completion: @escaping (Result<SymbolElevationReference?, Error>) -> Void) {
-        do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.symbolElevationReference?.toFLTSymbolElevationReference()))
-        } catch {
-            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-        }
-    }
-
-    func setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            let manager = try getManager(id: managerId)
-            manager.symbolElevationReference = MapboxMaps.SymbolElevationReference(symbolElevationReference)
 
             completion(.success(()))
         } catch {
