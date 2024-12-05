@@ -19,6 +19,8 @@ class BackgroundLayer extends Layer {
     List<Object>? this.backgroundOpacityExpression,
     String? this.backgroundPattern,
     List<Object>? this.backgroundPatternExpression,
+    BackgroundPitchAlignment? this.backgroundPitchAlignment,
+    List<Object>? this.backgroundPitchAlignmentExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -61,6 +63,14 @@ class BackgroundLayer extends Layer {
   /// Name of image in sprite to use for drawing an image background. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   List<Object>? backgroundPatternExpression;
 
+  /// Orientation of background layer.
+  /// Default value: "map".
+  BackgroundPitchAlignment? backgroundPitchAlignment;
+
+  /// Orientation of background layer.
+  /// Default value: "map".
+  List<Object>? backgroundPitchAlignmentExpression;
+
   @override
   Future<String> _encode() async {
     var layout = {};
@@ -100,6 +110,14 @@ class BackgroundLayer extends Layer {
     }
     if (backgroundPattern != null) {
       paint["background-pattern"] = backgroundPattern;
+    }
+
+    if (backgroundPitchAlignmentExpression != null) {
+      paint["background-pitch-alignment"] = backgroundPitchAlignmentExpression;
+    }
+    if (backgroundPitchAlignment != null) {
+      paint["background-pitch-alignment"] =
+          backgroundPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     var properties = {
@@ -158,6 +176,15 @@ class BackgroundLayer extends Layer {
       backgroundPattern: _optionalCast(map["paint"]["background-pattern"]),
       backgroundPatternExpression:
           _optionalCastList(map["paint"]["background-pattern"]),
+      backgroundPitchAlignment:
+          map["paint"]["background-pitch-alignment"] == null
+              ? null
+              : BackgroundPitchAlignment.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["background-pitch-alignment"])),
+      backgroundPitchAlignmentExpression:
+          _optionalCastList(map["paint"]["background-pitch-alignment"]),
     );
   }
 }

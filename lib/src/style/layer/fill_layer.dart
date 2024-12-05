@@ -31,6 +31,8 @@ class FillLayer extends Layer {
     List<Object>? this.fillTranslateExpression,
     FillTranslateAnchor? this.fillTranslateAnchor,
     List<Object>? this.fillTranslateAnchorExpression,
+    double? this.fillZOffset,
+    List<Object>? this.fillZOffsetExpression,
   }) : super(
             id: id,
             visibility: visibility,
@@ -115,6 +117,16 @@ class FillLayer extends Layer {
   /// Default value: "map".
   List<Object>? fillTranslateAnchorExpression;
 
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
+  double? fillZOffset;
+
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  @experimental
+  List<Object>? fillZOffsetExpression;
+
   @override
   Future<String> _encode() async {
     var layout = {};
@@ -189,6 +201,13 @@ class FillLayer extends Layer {
     if (fillTranslateAnchor != null) {
       paint["fill-translate-anchor"] =
           fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+    }
+
+    if (fillZOffsetExpression != null) {
+      paint["fill-z-offset"] = fillZOffsetExpression;
+    }
+    if (fillZOffset != null) {
+      paint["fill-z-offset"] = fillZOffset;
     }
 
     var properties = {
@@ -272,6 +291,8 @@ class FillLayer extends Layer {
               .contains(map["paint"]["fill-translate-anchor"])),
       fillTranslateAnchorExpression:
           _optionalCastList(map["paint"]["fill-translate-anchor"]),
+      fillZOffset: _optionalCast(map["paint"]["fill-z-offset"]),
+      fillZOffsetExpression: _optionalCastList(map["paint"]["fill-z-offset"]),
     );
   }
 }

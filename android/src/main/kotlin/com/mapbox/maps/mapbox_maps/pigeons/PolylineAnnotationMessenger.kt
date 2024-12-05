@@ -108,7 +108,10 @@ data class PolylineAnnotation(
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
-  /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
+  /**
+   * Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+   * @experimental
+   */
   val lineZOffset: Double? = null,
   /**
    * Blur applied to the line, in pixels.
@@ -203,7 +206,10 @@ data class PolylineAnnotationOptions(
   val lineJoin: LineJoin? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
-  /** Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment. */
+  /**
+   * Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+   * @experimental
+   */
   val lineZOffset: Double? = null,
   /**
    * Blur applied to the line, in pixels.

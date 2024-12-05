@@ -135,6 +135,9 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
     annotation.fillPattern?.let {
       originalAnnotation.fillPattern = it
     }
+    annotation.fillZOffset?.let {
+      originalAnnotation.fillZOffset = it
+    }
     return originalAnnotation
   }
 
@@ -344,6 +347,29 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       callback(Result.success(null))
     }
   }
+
+  override fun setFillZOffset(
+    managerId: String,
+    fillZOffset: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillZOffset = fillZOffset
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillZOffset(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillZOffset
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
 }
 
 fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAnnotation(): PolygonAnnotation {
@@ -357,6 +383,7 @@ fun com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation.toFLTPolygonAn
     // colorInt is 32 bit and may be bigger than MAX_INT, so transfer to UInt firstly and then to Long.
     fillOutlineColor = fillOutlineColorInt?.toUInt()?.toLong(),
     fillPattern = fillPattern,
+    fillZOffset = fillZOffset,
   )
 }
 
@@ -379,6 +406,9 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   }
   this.fillPattern?.let {
     options.withFillPattern(it)
+  }
+  this.fillZOffset?.let {
+    options.withFillZOffset(it)
   }
   return options
 }

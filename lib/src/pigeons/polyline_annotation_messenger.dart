@@ -75,6 +75,7 @@ class PolylineAnnotation {
   double? lineSortKey;
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.
@@ -180,6 +181,7 @@ class PolylineAnnotationOptions {
   double? lineSortKey;
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.

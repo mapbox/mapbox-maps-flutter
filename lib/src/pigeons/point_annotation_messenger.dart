@@ -77,6 +77,16 @@ enum IconTextFit {
   BOTH,
 }
 
+/// Selects the base of symbol-elevation.
+/// Default value: "ground".
+enum SymbolElevationReference {
+  /// Elevate symbols relative to the sea level.
+  SEA,
+
+  /// Elevate symbols relative to the ground's height below them.
+  GROUND,
+}
+
 /// Label placement relative to its geometry.
 /// Default value: "point".
 enum SymbolPlacement {
@@ -236,16 +246,6 @@ enum IconTranslateAnchor {
 
   /// Icons are translated relative to the viewport.
   VIEWPORT,
-}
-
-/// Selects the base of symbol-elevation.
-/// Default value: "ground".
-enum SymbolElevationReference {
-  /// Elevate symbols relative to the sea level.
-  SEA,
-
-  /// Elevate symbols relative to the ground's height below them.
-  GROUND,
 }
 
 /// Controls the frame of reference for `text-translate`.
@@ -418,6 +418,7 @@ class PointAnnotation {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
+  /// @experimental
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
@@ -692,6 +693,7 @@ class PointAnnotationOptions {
 
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
+  /// @experimental
   double? symbolZOffset;
 
   /// The color with which the text will be drawn.
@@ -827,37 +829,37 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is IconTextFit) {
       buffer.putUint8(132);
       writeValue(buffer, value.index);
-    } else if (value is SymbolPlacement) {
+    } else if (value is SymbolElevationReference) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    } else if (value is SymbolZOrder) {
+    } else if (value is SymbolPlacement) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
-    } else if (value is TextAnchor) {
+    } else if (value is SymbolZOrder) {
       buffer.putUint8(135);
       writeValue(buffer, value.index);
-    } else if (value is TextJustify) {
+    } else if (value is TextAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is TextPitchAlignment) {
+    } else if (value is TextJustify) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is TextRotationAlignment) {
+    } else if (value is TextPitchAlignment) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is TextTransform) {
+    } else if (value is TextRotationAlignment) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is TextVariableAnchor) {
+    } else if (value is TextTransform) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is TextWritingMode) {
+    } else if (value is TextVariableAnchor) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is IconTranslateAnchor) {
+    } else if (value is TextWritingMode) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is SymbolElevationReference) {
+    } else if (value is IconTranslateAnchor) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
     } else if (value is TextTranslateAnchor) {
@@ -894,37 +896,37 @@ class PointAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : IconTextFit.values[value];
       case 133:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : SymbolPlacement.values[value];
+        return value == null ? null : SymbolElevationReference.values[value];
       case 134:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : SymbolZOrder.values[value];
+        return value == null ? null : SymbolPlacement.values[value];
       case 135:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextAnchor.values[value];
+        return value == null ? null : SymbolZOrder.values[value];
       case 136:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextJustify.values[value];
+        return value == null ? null : TextAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextPitchAlignment.values[value];
+        return value == null ? null : TextJustify.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextRotationAlignment.values[value];
+        return value == null ? null : TextPitchAlignment.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextTransform.values[value];
+        return value == null ? null : TextRotationAlignment.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextVariableAnchor.values[value];
+        return value == null ? null : TextTransform.values[value];
       case 141:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TextWritingMode.values[value];
+        return value == null ? null : TextVariableAnchor.values[value];
       case 142:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : IconTranslateAnchor.values[value];
+        return value == null ? null : TextWritingMode.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : SymbolElevationReference.values[value];
+        return value == null ? null : IconTranslateAnchor.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : TextTranslateAnchor.values[value];
@@ -1859,6 +1861,56 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as bool?);
+    }
+  }
+
+  Future<void> setSymbolElevationReference(String managerId,
+      SymbolElevationReference symbolElevationReference) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[managerId, symbolElevationReference]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<SymbolElevationReference?> getSymbolElevationReference(
+      String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as SymbolElevationReference?);
     }
   }
 
@@ -3605,56 +3657,6 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as IconTranslateAnchor?);
-    }
-  }
-
-  Future<void> setSymbolElevationReference(String managerId,
-      SymbolElevationReference symbolElevationReference) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[managerId, symbolElevationReference]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<SymbolElevationReference?> getSymbolElevationReference(
-      String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[managerId]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as SymbolElevationReference?);
     }
   }
 

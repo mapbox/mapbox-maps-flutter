@@ -28,6 +28,7 @@ void main() {
       bearing: 1.0,
       bearingImageSize: 1.0,
       emphasisCircleColor: Colors.red.value,
+      emphasisCircleGlowRange: [0.0, 1.0],
       emphasisCircleRadius: 1.0,
       imagePitchDisplacement: 1.0,
       location: [0.0, 1.0, 2.0],
@@ -51,6 +52,7 @@ void main() {
     expect(layer.bearing, 1.0);
     expect(layer.bearingImageSize, 1.0);
     expect(layer.emphasisCircleColor, Colors.red.value);
+    expect(layer.emphasisCircleGlowRange, [0.0, 1.0]);
     expect(layer.emphasisCircleRadius, 1.0);
     expect(layer.imagePitchDisplacement, 1.0);
     expect(layer.location, [0.0, 1.0, 2.0]);
@@ -86,6 +88,10 @@ void main() {
       bearingExpression: ['number', 1.0],
       bearingImageSizeExpression: ['number', 1.0],
       emphasisCircleColorExpression: ['rgba', 255, 0, 0, 1],
+      emphasisCircleGlowRangeExpression: [
+        'literal',
+        [0.0, 1.0]
+      ],
       emphasisCircleRadiusExpression: ['number', 1.0],
       imagePitchDisplacementExpression: ['number', 1.0],
       locationExpression: [
@@ -117,6 +123,7 @@ void main() {
     expect(layer.bearing, 1.0);
     expect(layer.bearingImageSize, 1.0);
     expect(layer.emphasisCircleColorExpression, ['rgba', 255, 0, 0, 1]);
+    expect(layer.emphasisCircleGlowRange, [0.0, 1.0]);
     expect(layer.emphasisCircleRadius, 1.0);
     expect(layer.imagePitchDisplacement, 1.0);
     expect(layer.location, [0.0, 1.0, 2.0]);

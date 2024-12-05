@@ -80,10 +80,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineSortKey() => _annotationMessenger.getLineSortKey(id);
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  @experimental
   Future<void> setLineZOffset(double lineZOffset) =>
       _annotationMessenger.setLineZOffset(id, lineZOffset);
 
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  @experimental
   Future<double?> getLineZOffset() => _annotationMessenger.getLineZOffset(id);
 
   /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0.
@@ -195,17 +197,21 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
       _annotationMessenger.getLineTranslateAnchor(id);
 
   /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property. Default value: "transparent".
+  @experimental
   Future<void> setLineTrimColor(int lineTrimColor) =>
       _annotationMessenger.setLineTrimColor(id, lineTrimColor);
 
   /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property. Default value: "transparent".
+  @experimental
   Future<int?> getLineTrimColor() => _annotationMessenger.getLineTrimColor(id);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
   Future<void> setLineTrimFadeRange(List<double?> lineTrimFadeRange) =>
       _annotationMessenger.setLineTrimFadeRange(id, lineTrimFadeRange);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
   Future<List<double?>?> getLineTrimFadeRange() =>
       _annotationMessenger.getLineTrimFadeRange(id);
 

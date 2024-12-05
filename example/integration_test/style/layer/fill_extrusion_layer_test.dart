@@ -28,6 +28,7 @@ void main() {
       fillExtrusionAmbientOcclusionRadius: 1.0,
       fillExtrusionAmbientOcclusionWallRadius: 1.0,
       fillExtrusionBase: 1.0,
+      fillExtrusionBaseAlignment: FillExtrusionBaseAlignment.TERRAIN,
       fillExtrusionColor: Colors.red.value,
       fillExtrusionCutoffFadeRange: 1.0,
       fillExtrusionEmissiveStrength: 1.0,
@@ -37,6 +38,7 @@ void main() {
       fillExtrusionFloodLightIntensity: 1.0,
       fillExtrusionFloodLightWallRadius: 1.0,
       fillExtrusionHeight: 1.0,
+      fillExtrusionHeightAlignment: FillExtrusionHeightAlignment.TERRAIN,
       fillExtrusionLineWidth: 1.0,
       fillExtrusionOpacity: 1.0,
       fillExtrusionPattern: "abc",
@@ -59,6 +61,8 @@ void main() {
     expect(layer.fillExtrusionAmbientOcclusionRadius, 1.0);
     expect(layer.fillExtrusionAmbientOcclusionWallRadius, 1.0);
     expect(layer.fillExtrusionBase, 1.0);
+    expect(
+        layer.fillExtrusionBaseAlignment, FillExtrusionBaseAlignment.TERRAIN);
     expect(layer.fillExtrusionColor, Colors.red.value);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);
@@ -68,6 +72,8 @@ void main() {
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);
     expect(layer.fillExtrusionFloodLightWallRadius, 1.0);
     expect(layer.fillExtrusionHeight, 1.0);
+    expect(layer.fillExtrusionHeightAlignment,
+        FillExtrusionHeightAlignment.TERRAIN);
     expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPattern, "abc");
@@ -105,6 +111,7 @@ void main() {
       fillExtrusionAmbientOcclusionRadiusExpression: ['number', 1.0],
       fillExtrusionAmbientOcclusionWallRadiusExpression: ['number', 1.0],
       fillExtrusionBaseExpression: ['number', 1.0],
+      fillExtrusionBaseAlignmentExpression: ['string', 'terrain'],
       fillExtrusionColorExpression: ['rgba', 255, 0, 0, 1],
       fillExtrusionCutoffFadeRangeExpression: ['number', 1.0],
       fillExtrusionEmissiveStrengthExpression: ['number', 1.0],
@@ -114,6 +121,7 @@ void main() {
       fillExtrusionFloodLightIntensityExpression: ['number', 1.0],
       fillExtrusionFloodLightWallRadiusExpression: ['number', 1.0],
       fillExtrusionHeightExpression: ['number', 1.0],
+      fillExtrusionHeightAlignmentExpression: ['string', 'terrain'],
       fillExtrusionLineWidthExpression: ['number', 1.0],
       fillExtrusionOpacityExpression: ['number', 1.0],
       fillExtrusionPatternExpression: ['image', "abc"],
@@ -144,6 +152,8 @@ void main() {
     expect(layer.fillExtrusionAmbientOcclusionRadius, 1.0);
     expect(layer.fillExtrusionAmbientOcclusionWallRadius, 1.0);
     expect(layer.fillExtrusionBase, 1.0);
+    expect(
+        layer.fillExtrusionBaseAlignment, FillExtrusionBaseAlignment.TERRAIN);
     expect(layer.fillExtrusionColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.fillExtrusionCutoffFadeRange, 1.0);
     expect(layer.fillExtrusionEmissiveStrength, 1.0);
@@ -154,6 +164,8 @@ void main() {
     expect(layer.fillExtrusionFloodLightIntensity, 1.0);
     expect(layer.fillExtrusionFloodLightWallRadius, 1.0);
     expect(layer.fillExtrusionHeight, 1.0);
+    expect(layer.fillExtrusionHeightAlignment,
+        FillExtrusionHeightAlignment.TERRAIN);
     expect(layer.fillExtrusionLineWidth, 1.0);
     expect(layer.fillExtrusionOpacity, 1.0);
     expect(layer.fillExtrusionPatternExpression, ['image', "abc"]);

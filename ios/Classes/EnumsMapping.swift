@@ -181,6 +181,25 @@ extension MapboxMaps.IconTextFit {
         }
     }
 }
+extension MapboxMaps.SymbolElevationReference {
+
+    init?(_ fltValue: SymbolElevationReference?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .sEA: self = .sea
+        case .gROUND: self = .ground
+        }
+    }
+
+    func toFLTSymbolElevationReference() -> SymbolElevationReference? {
+        switch self {
+        case .sea: return .sEA
+        case .ground: return .gROUND
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.SymbolPlacement {
 
     init?(_ fltValue: SymbolPlacement?) {
@@ -357,25 +376,6 @@ extension MapboxMaps.IconTranslateAnchor {
         switch self {
         case .map: return .mAP
         case .viewport: return .vIEWPORT
-        default: return nil
-        }
-    }
-}
-extension MapboxMaps.SymbolElevationReference {
-
-    init?(_ fltValue: SymbolElevationReference?) {
-        guard let fltValue else { return nil }
-
-        switch fltValue {
-        case .sEA: self = .sea
-        case .gROUND: self = .ground
-        }
-    }
-
-    func toFLTSymbolElevationReference() -> SymbolElevationReference? {
-        switch self {
-        case .sea: return .sEA
-        case .ground: return .gROUND
         default: return nil
         }
     }

@@ -157,6 +157,18 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<bool?> getSymbolAvoidEdges() =>
       _annotationMessenger.getSymbolAvoidEdges(id);
 
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  @experimental
+  Future<void> setSymbolElevationReference(
+          SymbolElevationReference symbolElevationReference) =>
+      _annotationMessenger.setSymbolElevationReference(
+          id, symbolElevationReference);
+
+  /// Selects the base of symbol-elevation. Default value: "ground".
+  @experimental
+  Future<SymbolElevationReference?> getSymbolElevationReference() =>
+      _annotationMessenger.getSymbolElevationReference(id);
+
   /// Label placement relative to its geometry. Default value: "point".
   Future<void> setSymbolPlacement(SymbolPlacement symbolPlacement) =>
       _annotationMessenger.setSymbolPlacement(id, symbolPlacement);
@@ -434,21 +446,13 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconTranslateAnchor?> getIconTranslateAnchor() =>
       _annotationMessenger.getIconTranslateAnchor(id);
 
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<void> setSymbolElevationReference(
-          SymbolElevationReference symbolElevationReference) =>
-      _annotationMessenger.setSymbolElevationReference(
-          id, symbolElevationReference);
-
-  /// Selects the base of symbol-elevation. Default value: "ground".
-  Future<SymbolElevationReference?> getSymbolElevationReference() =>
-      _annotationMessenger.getSymbolElevationReference(id);
-
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  @experimental
   Future<void> setSymbolZOffset(double symbolZOffset) =>
       _annotationMessenger.setSymbolZOffset(id, symbolZOffset);
 
   /// Specifies an uniform elevation from the ground, in meters. Default value: 0. Minimum value: 0.
+  @experimental
   Future<double?> getSymbolZOffset() =>
       _annotationMessenger.getSymbolZOffset(id);
 

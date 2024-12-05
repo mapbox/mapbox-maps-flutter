@@ -24,7 +24,11 @@ class Events {
 var events = Events();
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
-Future<MapboxMap> main({double? width, double? height, CameraOptions? camera, ViewportState? viewport}) {
+Future<MapboxMap> main(
+    {double? width,
+    double? height,
+    CameraOptions? camera,
+    ViewportState? viewport}) {
   final completer = Completer<MapboxMap>();
 
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
