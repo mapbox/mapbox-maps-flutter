@@ -69,6 +69,10 @@ void main() {
     await manager.setFillTranslateAnchor(FillTranslateAnchor.MAP);
     var fillTranslateAnchor = await manager.getFillTranslateAnchor();
     expect(FillTranslateAnchor.MAP, fillTranslateAnchor);
+
+    await manager.setFillZOffset(1.0);
+    var fillZOffset = await manager.getFillZOffset();
+    expect(1.0, fillZOffset);
   });
 }
 // End of generated file.
