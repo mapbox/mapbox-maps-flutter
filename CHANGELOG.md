@@ -1,4 +1,4 @@
-### main
+### 2.5.0-rc.1
 
 Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
   * Update experimental `symbolElevationReference` property on `SymbolLayer`. 
@@ -11,6 +11,7 @@ Updated our generated code to align with iOS and Android platforms. Specifically
   * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.  
   * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`. 
   * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
+* Bump Maps SDK to 11.9.0-rc.1
 
 ### 2.5.0-beta.1
 
