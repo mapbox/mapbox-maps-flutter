@@ -16,7 +16,7 @@ final class _MapEvents {
   OnStyleImageUnusedListener? _onStyleImageUnusedListener;
   OnResourceRequestListener? _onResourceRequestListener;
   late final MethodChannel _channel;
-  List<_MapEvent> _subscribedEventTypes = [];
+  List<_MapEvent> subscribedEventTypes = [];
 
   List<_MapEvent> get eventTypes {
     final listenersMap = {
@@ -54,7 +54,7 @@ final class _MapEvents {
   void updateSubscriptions() {
     final newEventTypes = eventTypes;
 
-    if (listEquals(newEventTypes, _subscribedEventTypes)) {
+    if (listEquals(newEventTypes, subscribedEventTypes)) {
       return;
     }
 
@@ -62,7 +62,7 @@ final class _MapEvents {
     _channel.invokeMethod(
         "subscribeToEvents", newEventTypes.map((e) => e.index).toList());
 
-    _subscribedEventTypes = newEventTypes;
+    subscribedEventTypes = newEventTypes;
   }
 
   void dispose() {

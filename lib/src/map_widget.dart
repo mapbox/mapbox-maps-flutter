@@ -206,6 +206,7 @@ class _MapWidgetState extends State<MapWidget> {
       'mapboxPluginVersion': '2.5.0-rc.1',
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
     };
+    _events.subscribedEventTypes = _events.eventTypes;
 
     return _mapboxMapsPlatform.buildView(widget.androidHostingMode,
         creationParams, onPlatformViewCreated, widget.gestureRecognizers,
