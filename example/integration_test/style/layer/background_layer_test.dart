@@ -23,6 +23,7 @@ void main() {
       backgroundEmissiveStrength: 1.0,
       backgroundOpacity: 1.0,
       backgroundPattern: "abc",
+      backgroundPitchAlignment: BackgroundPitchAlignment.MAP,
     ));
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
@@ -33,6 +34,7 @@ void main() {
     expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPattern, "abc");
+    expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
   });
 
   testWidgets('Add BackgroundLayer with expressions',
@@ -56,6 +58,7 @@ void main() {
       backgroundEmissiveStrengthExpression: ['number', 1.0],
       backgroundOpacityExpression: ['number', 1.0],
       backgroundPatternExpression: ['image', "abc"],
+      backgroundPitchAlignmentExpression: ['string', 'map'],
     ));
     var layer = await mapboxMap.style.getLayer('layer') as BackgroundLayer;
     expect(layer.minZoom, 1);
@@ -71,6 +74,7 @@ void main() {
     expect(layer.backgroundEmissiveStrength, 1.0);
     expect(layer.backgroundOpacity, 1.0);
     expect(layer.backgroundPatternExpression, ['image', "abc"]);
+    expect(layer.backgroundPitchAlignment, BackgroundPitchAlignment.MAP);
   });
 }
 // End of generated file.

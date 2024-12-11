@@ -114,6 +114,7 @@ struct PolylineAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// @experimental
   var lineZOffset: Double?
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0.
@@ -206,6 +207,7 @@ struct PolylineAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   var lineSortKey: Double?
   /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// @experimental
   var lineZOffset: Double?
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0.
