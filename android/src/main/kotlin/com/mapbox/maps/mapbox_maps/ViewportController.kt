@@ -54,8 +54,10 @@ class ViewportController(
         return
       }
       val transition = viewportPlugin.transitionFromFLTTransition(transitionStorage, cameraPlugin)
+      var callbackCopy: ((Result<Boolean>) -> Unit)? = callback
       viewportPlugin.transitionTo(state, transition) { success ->
-        callback(Result.success(success))
+        callbackCopy?.invoke(Result.success(success))
+        callbackCopy = null
       }
     } catch (error: Exception) {
       logE("Viewport", "Could not create viewport state ouf of options: $stateStorage")
