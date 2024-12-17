@@ -2,7 +2,6 @@
 part of mapbox_maps_flutter;
 
 /// Layer that removes 3D content from map.
-@experimental
 class ClipLayer extends Layer {
   ClipLayer({
     required String id,

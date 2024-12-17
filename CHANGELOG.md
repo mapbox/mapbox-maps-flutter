@@ -1,3 +1,7 @@
+# main
+
+* Mark `ClipLayer` as stable.
+
 ### 2.5.0-rc.1
 
 Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
