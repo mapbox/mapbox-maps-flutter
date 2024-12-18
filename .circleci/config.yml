@@ -154,11 +154,9 @@ jobs:
       - flutter/install_sdk_and_pub:
           version: 3.24.3
           app-dir: example
-      - flutter/install_ios_pod:
-          app-dir: example
       - run:
           name: swiftlint
-          working_directory: ios
+          working_directory: ios/MapboxMapsFlutter
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint; swiftlint lint --strict
       - run:
           name: unit test
