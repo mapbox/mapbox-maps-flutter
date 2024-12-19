@@ -281,11 +281,11 @@ class LocationPuck3D {
   /// Default value: "map".
   ModelScaleMode? modelScaleMode;
 
-  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+  /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 5]
   double? modelEmissiveStrength;
 
-  /// Strength of the emission as Expression string, note that when [modelEmissiveStrengthExpression] is specified, it will overwrite the [modelEmissiveStrength] property. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors).
+  /// The emissive strength expression of the model, which will overwrite the default model emissive strength.
   String? modelEmissiveStrengthExpression;
 
   Object encode() {
