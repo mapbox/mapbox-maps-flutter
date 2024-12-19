@@ -2121,182 +2121,194 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is InteractionType) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionBaseAlignment) {
+    } else if (value is Type) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is FillExtrusionHeightAlignment) {
+    } else if (value is FillExtrusionBaseAlignment) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is BackgroundPitchAlignment) {
+    } else if (value is FillExtrusionHeightAlignment) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is BackgroundPitchAlignment) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is Anchor) {
+    } else if (value is StyleProjectionName) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is HttpMethod) {
+    } else if (value is Anchor) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    } else if (value is HttpRequestErrorType) {
+    } else if (value is HttpMethod) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    } else if (value is DownloadErrorCode) {
+    } else if (value is HttpRequestErrorType) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is DownloadState) {
+    } else if (value is DownloadErrorCode) {
       buffer.putUint8(151);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
+    } else if (value is DownloadState) {
       buffer.putUint8(152);
       writeValue(buffer, value.index);
-    } else if (value is _MapEvent) {
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(153);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is _MapEvent) {
       buffer.putUint8(154);
-      writeValue(buffer, value.encode());
-    } else if (value is Feature) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(155);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is Feature) {
       buffer.putUint8(156);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
+    } else if (value is CameraState) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is CameraBoundsOptions) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
+    } else if (value is CameraBounds) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is MapAnimationOptions) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MapOptions) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is CoordinateBoundsZoom) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is Size) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is FeaturesetFeatureId) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is Interaction) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is TypedFeaturesetDescriptor) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FeaturesetQueryTarget) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is FlatLight) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is AmbientLight) {
+      buffer.putUint8(194);
+      writeValue(buffer, value.encode());
+    } else if (value is MbxImage) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is ImageContent) {
       buffer.putUint8(197);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is CanonicalTileID) {
+      buffer.putUint8(199);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(200);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2335,133 +2347,148 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : InteractionType.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : FillExtrusionBaseAlignment.values[value];
+        return value == null ? null : Type.values[value];
       case 139:
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : FillExtrusionBaseAlignment.values[value];
+      case 140:
         final int? value = readValue(buffer) as int?;
         return value == null
             ? null
             : FillExtrusionHeightAlignment.values[value];
-      case 140:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : BackgroundPitchAlignment.values[value];
       case 141:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePackErrorType.values[value];
+        return value == null ? null : BackgroundPitchAlignment.values[value];
       case 142:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ResponseErrorReason.values[value];
+        return value == null ? null : StylePackErrorType.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : OfflineRegionDownloadState.values[value];
+        return value == null ? null : ResponseErrorReason.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileStoreUsageMode.values[value];
+        return value == null ? null : OfflineRegionDownloadState.values[value];
       case 145:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePropertyValueKind.values[value];
+        return value == null ? null : TileStoreUsageMode.values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StyleProjectionName.values[value];
+        return value == null ? null : StylePropertyValueKind.values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Anchor.values[value];
+        return value == null ? null : StyleProjectionName.values[value];
       case 148:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpMethod.values[value];
+        return value == null ? null : Anchor.values[value];
       case 149:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpRequestErrorType.values[value];
+        return value == null ? null : HttpMethod.values[value];
       case 150:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadErrorCode.values[value];
+        return value == null ? null : HttpRequestErrorType.values[value];
       case 151:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadState.values[value];
+        return value == null ? null : DownloadErrorCode.values[value];
       case 152:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileRegionErrorType.values[value];
+        return value == null ? null : DownloadState.values[value];
       case 153:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _MapEvent.values[value];
+        return value == null ? null : TileRegionErrorType.values[value];
       case 154:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : _MapEvent.values[value];
       case 155:
-        return Feature.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 156:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+        return Feature.decode(readValue(buffer)!);
       case 157:
-        return TileCoverOptions.decode(readValue(buffer)!);
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
       case 158:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
+        return TileCoverOptions.decode(readValue(buffer)!);
       case 159:
-        return CameraOptions.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 160:
-        return CameraState.decode(readValue(buffer)!);
+        return CameraOptions.decode(readValue(buffer)!);
       case 161:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
+        return CameraState.decode(readValue(buffer)!);
       case 162:
-        return CameraBounds.decode(readValue(buffer)!);
+        return CameraBoundsOptions.decode(readValue(buffer)!);
       case 163:
-        return MapAnimationOptions.decode(readValue(buffer)!);
+        return CameraBounds.decode(readValue(buffer)!);
       case 164:
-        return CoordinateBounds.decode(readValue(buffer)!);
+        return MapAnimationOptions.decode(readValue(buffer)!);
       case 165:
-        return MapDebugOptions.decode(readValue(buffer)!);
+        return CoordinateBounds.decode(readValue(buffer)!);
       case 166:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return MapDebugOptions.decode(readValue(buffer)!);
       case 167:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 168:
-        return MapOptions.decode(readValue(buffer)!);
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 169:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MapOptions.decode(readValue(buffer)!);
       case 170:
-        return ScreenBox.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 171:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 172:
-        return Size.decode(readValue(buffer)!);
+        return CoordinateBoundsZoom.decode(readValue(buffer)!);
       case 173:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 174:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 175:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 176:
-        return LayerPosition.decode(readValue(buffer)!);
+        return FeatureExtensionValue.decode(readValue(buffer)!);
       case 177:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return LayerPosition.decode(readValue(buffer)!);
       case 178:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 179:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 180:
-        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 181:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return FeaturesetFeatureId.decode(readValue(buffer)!);
       case 182:
-        return MercatorCoordinate.decode(readValue(buffer)!);
+        return Interaction.decode(readValue(buffer)!);
       case 183:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return TypedFeaturesetDescriptor.decode(readValue(buffer)!);
       case 184:
-        return StyleProjection.decode(readValue(buffer)!);
+        return FeaturesetDescriptor.decode(readValue(buffer)!);
       case 185:
-        return FlatLight.decode(readValue(buffer)!);
+        return FeaturesetFeature.decode(readValue(buffer)!);
       case 186:
-        return DirectionalLight.decode(readValue(buffer)!);
+        return FeaturesetQueryTarget.decode(readValue(buffer)!);
       case 187:
-        return AmbientLight.decode(readValue(buffer)!);
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
       case 188:
-        return MbxImage.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 189:
-        return ImageStretches.decode(readValue(buffer)!);
+        return MercatorCoordinate.decode(readValue(buffer)!);
       case 190:
-        return ImageContent.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 191:
-        return TransitionOptions.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 192:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return FlatLight.decode(readValue(buffer)!);
       case 193:
+        return DirectionalLight.decode(readValue(buffer)!);
+      case 194:
+        return AmbientLight.decode(readValue(buffer)!);
+      case 195:
+        return MbxImage.decode(readValue(buffer)!);
+      case 196:
+        return ImageStretches.decode(readValue(buffer)!);
+      case 197:
+        return ImageContent.decode(readValue(buffer)!);
+      case 198:
+        return TransitionOptions.decode(readValue(buffer)!);
+      case 199:
+        return CanonicalTileID.decode(readValue(buffer)!);
+      case 200:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

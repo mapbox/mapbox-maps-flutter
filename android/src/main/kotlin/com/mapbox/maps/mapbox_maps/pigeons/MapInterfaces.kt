@@ -2084,295 +2084,315 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionBaseAlignment.ofRaw(it.toInt())
+          Type.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionHeightAlignment.ofRaw(it.toInt())
+          FillExtrusionBaseAlignment.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          BackgroundPitchAlignment.ofRaw(it.toInt())
+          FillExtrusionHeightAlignment.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePackErrorType.ofRaw(it.toInt())
+          BackgroundPitchAlignment.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResponseErrorReason.ofRaw(it.toInt())
+          StylePackErrorType.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          OfflineRegionDownloadState.ofRaw(it.toInt())
+          ResponseErrorReason.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileStoreUsageMode.ofRaw(it.toInt())
+          OfflineRegionDownloadState.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePropertyValueKind.ofRaw(it.toInt())
+          TileStoreUsageMode.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StyleProjectionName.ofRaw(it.toInt())
+          StylePropertyValueKind.ofRaw(it.toInt())
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Anchor.ofRaw(it.toInt())
+          StyleProjectionName.ofRaw(it.toInt())
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpMethod.ofRaw(it.toInt())
+          Anchor.ofRaw(it.toInt())
         }
       }
       149.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpRequestErrorType.ofRaw(it.toInt())
+          HttpMethod.ofRaw(it.toInt())
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadErrorCode.ofRaw(it.toInt())
+          HttpRequestErrorType.ofRaw(it.toInt())
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadState.ofRaw(it.toInt())
+          DownloadErrorCode.ofRaw(it.toInt())
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileRegionErrorType.ofRaw(it.toInt())
+          DownloadState.ofRaw(it.toInt())
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _MapEvent.ofRaw(it.toInt())
+          TileRegionErrorType.ofRaw(it.toInt())
         }
       }
       154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          _MapEvent.ofRaw(it.toInt())
         }
       }
       155.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureDecoder.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          FeatureDecoder.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
+          CameraState.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          CameraBoundsOptions.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
+          CameraBounds.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          MapAnimationOptions.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          MapDebugOptions.fromList(it)
         }
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          CoordinateBoundsZoom.fromList(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          Size.fromList(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          FeaturesetFeatureId.fromList(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          Interaction.fromList(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          TypedFeaturesetDescriptor.fromList(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          FeaturesetQueryTarget.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          DirectionalLight.fromList(it)
+        }
+      }
+      194.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AmbientLight.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       197.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ImageContent.fromList(it)
+        }
+      }
+      198.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TransitionOptions.fromList(it)
+        }
+      }
+      199.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CanonicalTileID.fromList(it)
+        }
+      }
+      200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2418,240 +2438,256 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionBaseAlignment -> {
+      is Type -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionHeightAlignment -> {
+      is FillExtrusionBaseAlignment -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is BackgroundPitchAlignment -> {
+      is FillExtrusionHeightAlignment -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is BackgroundPitchAlignment -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is StylePackErrorType -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is ResponseErrorReason -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is OfflineRegionDownloadState -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is TileStoreUsageMode -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is StylePropertyValueKind -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is Anchor -> {
+      is StyleProjectionName -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is HttpMethod -> {
+      is Anchor -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
-      is HttpRequestErrorType -> {
+      is HttpMethod -> {
         stream.write(149)
         writeValue(stream, value.raw)
       }
-      is DownloadErrorCode -> {
+      is HttpRequestErrorType -> {
         stream.write(150)
         writeValue(stream, value.raw)
       }
-      is DownloadState -> {
+      is DownloadErrorCode -> {
         stream.write(151)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
+      is DownloadState -> {
         stream.write(152)
         writeValue(stream, value.raw)
       }
-      is _MapEvent -> {
+      is TileRegionErrorType -> {
         stream.write(153)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is _MapEvent -> {
         stream.write(154)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is Feature -> {
+      is Point -> {
         stream.write(155)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is Feature -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is MbxEdgeInsets -> {
+      is TileCoverOptions -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is CameraOptions -> {
+      is MbxEdgeInsets -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is CameraState -> {
+      is CameraOptions -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
+      is CameraState -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is CameraBoundsOptions -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is MapAnimationOptions -> {
+      is CameraBounds -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is MapAnimationOptions -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is MapDebugOptions -> {
+      is CoordinateBounds -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is MapDebugOptions -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is MapOptions -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is ScreenCoordinate -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is CoordinateBoundsZoom -> {
+      is ScreenBox -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is CoordinateBoundsZoom -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is Size -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is RenderedQueryOptions -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is SourceQueryOptions -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is FeatureExtensionValue -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is LayerPosition -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is QueriedRenderedFeature -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is QueriedFeature -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is FeaturesetFeatureId -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is Interaction -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is TypedFeaturesetDescriptor -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is FeaturesetDescriptor -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is FeaturesetFeature -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is FeaturesetQueryTarget -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is _RenderedQueryGeometry -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is ProjectedMeters -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is MercatorCoordinate -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is StyleObjectInfo -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is StyleProjection -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is FlatLight -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is DirectionalLight -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is AmbientLight -> {
+        stream.write(194)
+        writeValue(stream, value.toList())
+      }
+      is MbxImage -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is ImageStretches -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is ImageContent -> {
         stream.write(197)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(198)
+        writeValue(stream, value.toList())
+      }
+      is CanonicalTileID -> {
+        stream.write(199)
+        writeValue(stream, value.toList())
+      }
+      is StylePropertyValue -> {
+        stream.write(200)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
