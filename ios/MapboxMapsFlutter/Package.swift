@@ -12,11 +12,10 @@ let package = Package(
         .library(name: "mapbox-maps-flutter", targets: ["MapboxMapsFlutter"])
     ],
     dependencies: [
-        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.9.0-rc.1"),
+        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.9.0"),
     ],
     targets: [
         .target(
-            // TODO: Update your target name.
             name: "MapboxMapsFlutter",
             dependencies: [
                 .product(name: "MapboxMaps", package: "mapbox-maps-ios"),

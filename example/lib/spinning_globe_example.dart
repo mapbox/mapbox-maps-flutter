@@ -44,7 +44,7 @@ class SpinningGlobeExampleState extends State<SpinningGlobeExample> {
     return Scaffold(
         body: MapWidget(
             onMapCreated: _onMapCreated,
-            onStyleDataLoadedListener: _onStyleLoaded,
+            onStyleLoadedListener: _onStyleLoaded,
             onCameraChangeListener: (data) {
               _spinGlobe(data.cameraState);
             }),
