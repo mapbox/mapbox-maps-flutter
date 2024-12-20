@@ -1,11 +1,11 @@
 # main
 
 * Add support for Swift Package Manager.
+
+### 2.5.0
+
 * Mark `ClipLayer` as stable.
-
-### 2.5.0-rc.1
-
-Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
+* Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
   * Update experimental `symbolElevationReference` property on `SymbolLayer`. 
   * Introduce `backgroundPitchAlignment` property on `BackgroundLayer`.
   * Introduce experimental `fillZOffset` property on `FillLayer`.
@@ -16,20 +16,15 @@ Updated our generated code to align with iOS and Android platforms. Specifically
   * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.  
   * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`. 
   * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
-* Bump Maps SDK to 11.9.0-rc.1
-
-### 2.5.0-beta.1
-
 * Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
-```dart
-MapWidget(
-  viewport: CameraViewportState(
-    center: Point(coordinates: Position(-117.918976, 33.812092)),
-    zoom: 15.0,
-  ),
-);
-```
-* Update Turf dependency to `4.0.0-beta.1`
+  ```dart
+  MapWidget(
+    viewport: CameraViewportState(
+      center: Point(coordinates: Position(-117.918976, 33.812092)),
+      zoom: 15.0,
+    ),
+  );
+  ```
 
 ### 2.4.1
 
