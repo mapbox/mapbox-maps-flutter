@@ -1,5 +1,7 @@
 # main
 
+* Add support for Swift Package Manager.
+
 ### 2.5.0
 
 * Mark `ClipLayer` as stable.
