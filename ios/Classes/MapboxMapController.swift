@@ -113,14 +113,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             } catch {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
-        case "navigation#add_listeners": {
+        case "navigation#add_listeners":
             navigationController!.addListeners(messenger: messenger)
             result(nil)
-        }
-        case "navigation#remove_listeners": {
+        case "navigation#remove_listeners": 
             navigationController!.removeListeners()
             result(nil)
-        }
         default:
             result(FlutterMethodNotImplemented)
         }

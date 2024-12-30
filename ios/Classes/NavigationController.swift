@@ -3,8 +3,7 @@ import CoreLocation
 import MapboxDirections
 import MapboxNavigationCore
 
-@MainActor
-final class NavigationController: ObservableObject, NavigationInterface {
+final class NavigationController: NSObject, NavigationInterface {
     let predictiveCacheManager: PredictiveCacheManager?
 
     @Published private(set) var isInActiveNavigation: Bool = false
