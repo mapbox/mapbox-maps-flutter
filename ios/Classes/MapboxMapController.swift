@@ -13,6 +13,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
+    private let navigationController: NavigationController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
 
@@ -82,6 +83,9 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+        navigationController = NavigationController(withMapView: mapView)
+        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: attributionController, messageChannelSuffix: binaryMessenger.suffix)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -109,6 +113,14 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             } catch {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
+        case "navigation#add_listeners": {
+            navigationController!.addListeners(messenger: messenger)
+            result(nil)
+        }
+        case "navigation#remove_listeners": {
+            navigationController!.removeListeners()
+            result(nil)
+        }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -128,5 +140,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
+        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }
