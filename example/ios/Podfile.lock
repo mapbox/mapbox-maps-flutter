@@ -4,14 +4,14 @@ PODS:
     - Flutter
   - mapbox_maps_flutter (2.4.0):
     - Flutter
-    - MapboxMaps (~> 11.8.0)
+    - MapboxMaps (~> 11.9.0)
     - Turf (= 3.0.0)
-  - MapboxCommon (24.8.0)
-  - MapboxCoreMaps (11.8.0):
-    - MapboxCommon (~> 24.8)
-  - MapboxMaps (11.8.0):
-    - MapboxCommon (= 24.8.0)
-    - MapboxCoreMaps (= 11.8.0)
+  - MapboxCommon (24.9.0)
+  - MapboxCoreMaps (11.9.0):
+    - MapboxCommon (~> 24.9)
+  - MapboxMaps (11.9.0):
+    - MapboxCommon (= 24.9.0)
+    - MapboxCoreMaps (= 11.9.0)
     - Turf (= 3.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -59,4 +59,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e9395e37b54f3250ebce302f8de7800b2ba2b828
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
