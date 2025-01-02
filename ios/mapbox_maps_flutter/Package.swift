@@ -9,14 +9,14 @@ let package = Package(
         .iOS("12.0"),
     ],
     products: [
-        .library(name: "mapbox-maps-flutter", targets: ["MapboxMapsFlutter"])
+        .library(name: "mapbox-maps-flutter", targets: ["mapbox_maps_flutter"])
     ],
     dependencies: [
         .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: "11.9.0"),
     ],
     targets: [
         .target(
-            name: "MapboxMapsFlutter",
+            name: "mapbox_maps_flutter",
             dependencies: [
                 .product(name: "MapboxMaps", package: "mapbox-maps-ios"),
             ],
