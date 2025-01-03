@@ -1,7 +1,7 @@
 import Combine
 import CoreLocation
 import MapboxDirections
-import MapboxNavigationCore
+import MapboxCoreNavigation
 
 final class NavigationController: NSObject, NavigationInterface {
     let predictiveCacheManager: PredictiveCacheManager?
@@ -113,25 +113,35 @@ final class NavigationController: NSObject, NavigationInterface {
 
     func setRoute(waypoints: [Point], completion: @escaping (Result<Void, Error>) -> Void) {
         self.requestRoutes(waypoints)
+        completion(.success())
     }
 
     func stopTripSession(completion: @escaping (Result<Void, Error>) -> Void) {
-        core.tripSession()
+        //core.cameraState
+        cameraState = .overview
+        completion(.success())
     }
 
     func startTripSession(withForegroundService: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-
+        guard let previewRoutes = currentPreviewRoutes else { return }
+        core.tripSession().startActiveGuidance(with: previewRoutes, startLegIndex: 0)
+        cameraState = .following
+        currentPreviewRoutes = nil
+        waypoints = []
+        completion(.success())
     }
 
     func requestNavigationCameraToFollowing(completion: @escaping (Result<Void, Error>) -> Void) {
-
+        cameraState = .following
+        completion(.success())
     }
 
     func requestNavigationCameraToOverview(completion: @escaping (Result<Void, Error>) -> Void) {
-
+        cameraState = .overview
+        completion(.success())
     }
 
-    func lastLocation(completion: @escaping (Result<NavigationLocation?, Error>) -> Void) {
-
+    func lastLocation(completion: @escaping (Result<NavigationLocation?, Error>) -> Void) {        
+        completion(.success(nil))
     }
 }
