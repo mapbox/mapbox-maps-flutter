@@ -80,3 +80,4 @@ part 'src/viewport/transitions/viewport_transition.dart';
 part 'src/viewport/transitions/default_viewport_transition.dart';
 part 'src/viewport/transitions/fly_viewport_transition.dart';
 part 'src/viewport/transitions/easing_viewport_transition.dart';
+part 'src/package_info.dart';

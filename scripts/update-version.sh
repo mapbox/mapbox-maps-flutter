@@ -22,3 +22,6 @@ sed -i '' "s/^version: .*/version: $VERSION/" "$PUBSPEC_FILE"
 
 PODSPEC_FILE="$SCRIPT_DIR/../ios/mapbox_maps_flutter.podspec"
 sed -i '' "s/\(s\.version *= *\)\'[^\']*\'/\1\'$VERSION\'/" "$PODSPEC_FILE"
+
+PACKAGE_INFO_FILE="$SCRIPT_DIR/../lib/src/package_info.dart"
+sed -i '' "s/^const String mapboxPluginVersion = .*/const String mapboxPluginVersion = '$VERSION';/" "$PACKAGE_INFO_FILE"
