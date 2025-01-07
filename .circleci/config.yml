@@ -156,7 +156,7 @@ jobs:
           app-dir: example
       - run:
           name: swiftlint
-          working_directory: ios/MapboxMapsFlutter
+          working_directory: ios/mapbox_maps_flutter
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint; swiftlint lint --strict
       - run:
           name: unit test
