@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Mapbox' => 'mobile@mapbox.com' }
   s.source           = { :path => '.' }
 
-  s.source_files = 'MapboxMapsFlutter/Sources/Classes/**/*'
+  s.source_files = 'mapbox_maps_flutter/Sources/mapbox_maps_flutter/Classes/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '12.0'
 

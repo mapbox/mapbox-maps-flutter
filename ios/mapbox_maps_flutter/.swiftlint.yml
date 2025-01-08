@@ -3,8 +3,8 @@ allow_zero_lintable_files: true
 excluded:
   - Carthage
   - Pods
-  - Sources/Classes/Generated
-  - Sources/Classes/*AnnotationController.swift
+  - Sources/mapbox_maps_flutter/Classes/Generated
+  - Sources/mapbox_maps_flutter/Classes/*AnnotationController.swift
   - .build/
 disabled_rules:
   - comment_spacing
