@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
+platform :ios, '13.0'
 use_frameworks!
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
@@ -45,4 +45,6 @@ post_install do |installer|
   end
 end
 
-pod 'MapboxNavigationCore', :podspec => '../../ios/MapboxNavigationCore.podspec'
+pod 'Turf', :podspec => '../../ios/Turf.podspec'
+pod 'MapboxDirections', :podspec => '../../ios/MapboxDirections.podspec'
+pod 'MapboxNavigationCore', :podspec => '../../ios/MapboxNavigationCore.podspec', :modular_headers => false

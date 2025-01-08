@@ -14,13 +14,20 @@ Pod::Spec.new do |nav|
   nav.license          = 'MIT'
   nav.author           = { 'Mapbox' => 'mobile@mapbox.com' }  
 
-  #nav.dependency 'MapboxMaps', '11.8.0'
-  #nav.dependency 'Turf', '~> 3.0.0'
-  #nav.dependency 'MapboxDirections', '~> 2.14'
-  nav.source_files = 'Sources/MapboxNavigationCore/**/*.swift'
+  nav.source_files = 'Sources/MapboxNavigationCore/**/*.{h,m,swift}'
+  nav.resource_bundle = { 'MapboxCoreNavigationResources' => ['Sources/MapboxCoreNavigation/Resources/*/*', 'Sources/MapboxCoreNavigation/Resources/*'] }
 
-  s.platform = :ios, '12.0'
+  nav.requires_arc = true
+  nav.module_name = "MapboxCoreNavigation"
 
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-  s.swift_version = '5.8'
+  nav.platform = :ios, '13.0'
+
+  nav.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
+  nav.swift_version = '5.8'
+
+  nav.dependency 'Turf', '3.0.0'
+  #nav.dependency 'MapboxDirections', '3.5.0'
+
+  nav.subspec 'MapboxDirections' do |directions|
+  end
 end
