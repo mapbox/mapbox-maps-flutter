@@ -93,14 +93,6 @@ Then to retrieve the token from the environment in the application :
 String ACCESS_TOKEN = String.fromEnvironment("ACCESS_TOKEN");
 ```
 
-### Add the dependency
-To use the Maps Flutter SDK add the git dependency to the pubspec.yaml:
-
-```
-dependencies:
-  mapbox_maps_flutter: ^2.5.0
-```
-
 ### Configure permissions
 You will need to grant location permission in order to use the location component of the Maps Flutter SDK.
 
