@@ -106,6 +106,38 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
             result(nil)
+        case "interactions#add_interaction":
+            let listener = InteractionsListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+            guard let arguments = methodCall.arguments as? [String: Any],
+                  let featuresetDescriptorList = arguments["featuresetDescriptor"] as? [String?],
+                  let featuresetDescriptor = FeaturesetDescriptor.fromList(featuresetDescriptorList),
+                  let interactionTypeRaw = arguments["interactionType"] as? Int,
+                  let interactionType = InteractionType(rawValue: interactionTypeRaw),
+                  let stopPropagation = arguments["stopPropagation"] as? Bool,
+                  let id = arguments["id"] as? Int else {
+                return
+            }
+            let filter = arguments["filter"] as? String
+            let filterExpression = try? filter.flatMap { try $0.toExp() }
+            let radius = arguments["radius"] as? CGFloat
+
+            switch interactionType {
+            case .tAP:
+                mapboxMap.addInteraction(
+                    TapInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
+                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: Int64(id)) { _ in }
+                        return stopPropagation
+                    })
+                )
+            case .lONGTAP:
+                mapboxMap.addInteraction(
+                    LongPressInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
+                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: Int64(id)) { _ in }
+                        return stopPropagation
+                    })
+                )
+            }
+            result(nil)
         case "platform#releaseMethodChannels":
             releaseMethodChannels()
             result(nil)

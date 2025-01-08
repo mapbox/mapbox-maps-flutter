@@ -23,7 +23,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeature
 import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeatureId
-import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetQueryTarget
 import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
@@ -180,32 +179,6 @@ class MapInterfaceController(
     }
   }
 
-  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
-  override fun queryRenderedFeaturesForTargets(
-    geometry: _RenderedQueryGeometry,
-    targets: List<FeaturesetQueryTarget>,
-    callback: (Result<List<QueriedRenderedFeature>>) -> Unit
-  ) {
-    mapboxMap.queryRenderedFeatures(
-      geometry.toRenderedQueryGeometry(context),
-      targets.map { target ->
-        target.toFeaturesetQueryTarget()
-      }
-    ) {
-      if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
-      } else {
-        callback(
-          Result.success(
-            it.value!!.map { feature ->
-              feature.toFLTQueriedRenderedFeature()
-            }.toMutableList()
-          )
-        )
-      }
-    }
-  }
-
   @OptIn(MapboxExperimental::class)
   override fun queryRenderedFeaturesForFeatureset(
     geometry: _RenderedQueryGeometry,
@@ -214,8 +187,8 @@ class MapInterfaceController(
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
     mapboxMap.queryRenderedFeatures(
-      geometry.toRenderedQueryGeometry(context),
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      geometry.toRenderedQueryGeometry(context),
       filter?.let { Expression.fromRaw(filter) }
     ) {
       callback(
@@ -234,8 +207,8 @@ class MapInterfaceController(
   ) {
     val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(mapView.width.toDouble(), mapView.height.toDouble())))
     mapboxMap.queryRenderedFeatures(
-      geometry,
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      geometry,
       filter?.let { Expression.fromRaw(filter) }
     ) {
       callback(
@@ -252,28 +225,6 @@ class MapInterfaceController(
     callback: (Result<List<QueriedSourceFeature?>>) -> Unit
   ) {
     mapboxMap.querySourceFeatures(sourceId, options.toSourceQueryOptions()) {
-      if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
-      } else {
-        callback(
-          Result.success(
-            it.value!!.map { feature -> feature.toFLTQueriedSourceFeature() }.toMutableList()
-          )
-        )
-      }
-    }
-  }
-
-  @OptIn(MapboxExperimental::class)
-  override fun querySourceFeaturesForTargets(
-    target: FeaturesetQueryTarget,
-    callback: (Result<List<QueriedSourceFeature>>) -> Unit
-  ) {
-    mapboxMap.querySourceFeatures(
-      target.featureset.toTypedFeaturesetDescriptor(),
-      target.filter?.let { Expression.fromRaw(target.filter) },
-      target.id
-    ) {
       if (it.isError) {
         callback(Result.failure(Throwable(it.error)))
       } else {

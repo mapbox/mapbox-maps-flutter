@@ -221,13 +221,6 @@ extension FeaturesetFeatureId {
     }
 }
 
-extension FeaturesetQueryTarget {
-    func toMapFeaturesetQueryTarget() -> MapboxMaps.FeaturesetQueryTarget {
-        let filterExpression = try? filter.flatMap { try $0.toExp() }
-        return MapboxMaps.FeaturesetQueryTarget(featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression, id: id.map { UInt64($0) })
-    }
-}
-
 extension FeaturesetDescriptor {
     func toMapFeaturesetDescriptor() -> MapboxMaps.FeaturesetDescriptor<MapboxMaps.FeaturesetFeature> {
         if let featuresetId {
@@ -247,27 +240,6 @@ extension FeaturesetFeature {
             featureset: featureset.toMapFeaturesetDescriptor(),
             geoJsonFeature: feature,
             state: JSONObject.init(turfRawValue: state)!)
-    }
-}
-
-extension Interaction {
-    func toMapInteraction(completion: @escaping (FeaturesetFeature) -> Void) -> MapboxMaps.Interaction {
-        let filterExpression = try? filter.flatMap { try $0.toExp() }
-
-        switch interactionType {
-        case .cLICK:
-            return TapInteraction.init(typedFeaturesetDescriptor.featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression) { _, _ in
-                // TODO: figure out how to pass typed completion with pigeon
-                print("tapped")
-                return true
-            }
-        case .lONGCLICK:
-            return LongPressInteraction.init(typedFeaturesetDescriptor.featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression) { featuresetFeature, _ in
-                
-                completion(featuresetFeature.toFLTFeaturesetFeature())
-                return true
-            }
-        }
     }
 }
 
@@ -491,17 +463,11 @@ extension MapboxMaps.QueriedSourceFeature {
         return QueriedSourceFeature(queriedFeature: queriedFeature.toFLTQueriedFeature())
     }
 }
-extension MapboxMaps.FeaturesetQueryTarget {
-    func toFLTFeaturesetQueryTarget() -> FeaturesetQueryTarget {
-        return FeaturesetQueryTarget(featureset: featureset.toFLTFeaturesetDescriptor(), filter: filter?.description, id: id.map { Int64($0) })
-    }
-}
 extension MapboxMaps.QueriedRenderedFeature {
     func toFLTQueriedRenderedFeature() -> QueriedRenderedFeature {
         return QueriedRenderedFeature(
             queriedFeature: queriedFeature.toFLTQueriedFeature(),
-            layers: layers,
-            queryTargets: queryTargets.map({$0.toFLTFeaturesetQueryTarget()}))
+            layers: layers)
     }
 }
 extension MapboxMaps.QueriedFeature {

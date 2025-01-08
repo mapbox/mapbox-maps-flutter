@@ -198,17 +198,6 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func queryRenderedFeaturesForTargets(geometry: _RenderedQueryGeometry, targets: [FeaturesetQueryTarget], completion: @escaping (Result<[QueriedRenderedFeature], any Error>) -> Void) {
-        self.mapboxMap.queryRenderedFeatures(with: geometry, targets: targets.map({$0.toMapFeaturesetQueryTarget()})) { result in
-            switch result {
-            case .success(let features):
-                completion(.success(features.map({$0.toFLTQueriedRenderedFeature()})))
-            case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
-            }
-        }
-    }
-
     func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
         let filterExpression = try? filter.flatMap { try $0.toExp() }
         self.mapboxMap.queryRenderedFeatures(with: geometry, featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression) { result in
@@ -245,17 +234,6 @@ final class MapInterfaceController: _MapInterface {
             }
         } catch {
             completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
-        }
-    }
-
-    func querySourceFeaturesForTargets(target: FeaturesetQueryTarget, completion: @escaping (Result<[QueriedSourceFeature], any Error>) -> Void) {
-        self.mapboxMap.querySourceFeatures(for: target.toMapFeaturesetQueryTarget()) { result in
-            switch result {
-            case .success(let features):
-                completion(.success(features.map({$0.toFLTQueriedSourceFeature()})))
-            case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
-            }
         }
     }
 
@@ -315,11 +293,11 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func setFeatureStateForFeaturesetDescriptor(featureset: TypedFeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
+    func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
         guard let state = JSONObject.init(turfRawValue: state) else {
             return
         }
-        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.featuresetDescriptor.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
+        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
             if let error {
                 completion(.failure(FlutterError(
                     code: "setFeatureStateError",
@@ -433,12 +411,6 @@ final class MapInterfaceController: _MapInterface {
                 completion(.success(()))
             }
         }
-    }
-
-    func addInteraction(interaction: Interaction, completion: @escaping (Result<FeaturesetFeature, any Error>) -> Void) {
-        mapboxMap.addInteraction(interaction.toMapInteraction(completion: { _ in
-            print("no op")
-        }))
     }
 
     func reduceMemoryUse() throws {

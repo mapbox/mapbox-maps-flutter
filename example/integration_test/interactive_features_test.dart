@@ -83,15 +83,15 @@ void main() {
         geometry: Point(coordinates: Position(0.01, 0.01)).toJson(),
         properties: {},
         state: {});
-    Map<String, Object?> state = {
+    var state = FeatureState(map: {
       "highlight": true,
-    };
+    });
 
     // test set and get featurestate
     await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
     var returnedFeatureState =
         await mapboxMap.getFeatureStateForFeaturesetFeature(feature);
-    expect(returnedFeatureState, state);
+    expect(returnedFeatureState, state.map);
 
     // test remove featurestate
     await mapboxMap.removeFeatureStateForFeaturesetFeature(
@@ -105,7 +105,7 @@ void main() {
     await mapboxMap.setFeatureStateForFeaturesetFeature(feature, state);
     var returnedFeatureState3 =
         await mapboxMap.getFeatureStateForFeaturesetFeature(feature);
-    expect(returnedFeatureState3, state);
+    expect(returnedFeatureState3, state.map);
 
     await mapboxMap.resetFeatureStatesForFeatureset(
         FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
@@ -133,9 +133,9 @@ void main() {
     var featuresetDescriptor =
         FeaturesetDescriptor(featuresetId: "poi", importId: "nested");
     var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
-    Map<String, Object?> state = {
+    var state = FeatureState(map: {
       "highlight": true,
-    };
+    });
 
     await Future.delayed(Duration(seconds: 1));
 
@@ -145,7 +145,7 @@ void main() {
     var returnedFeatureState =
         await mapboxMap.getFeatureStateForFeaturesetDescriptor(
             featuresetDescriptor, featuresetID);
-    expect(returnedFeatureState, state);
+    expect(returnedFeatureState, state.map);
 
     // test remove featurestate
     await mapboxMap.removeFeatureStateForFeaturesetDescriptor(
@@ -176,9 +176,9 @@ void main() {
     var featuresetID = FeaturesetFeatureId(id: "11", namespace: "A");
     var featuresetDescriptor =
         FeaturesetDescriptor(featuresetId: "poi", importId: "nested");
-    Map<String, Object?> state = {
+    var state = FeatureState(map: {
       "hide": true,
-    };
+    });
     var filter = '["==",["get", "type"], "A"]';
     Map<String, Object?> expectedProperties = {
       "name": "nest1",
@@ -196,7 +196,7 @@ void main() {
     expect(queryResult.length, 1);
     expect(poi.id?.id, featuresetID.id);
     expect(poi.id?.namespace, featuresetID.namespace);
-    expect(poi.state, state);
+    expect(poi.state, state.map);
     expect(point.coordinates.lat, closeTo(0.01, 0.05));
     expect(point.coordinates.lng, closeTo(0.01, 0.05));
     expect(poi.properties, expectedProperties);
@@ -221,68 +221,5 @@ void main() {
 
     expect(returnedFeaturesets.length, 1);
     expect(returnedFeaturesets.first.importId, "nested");
-  });
-
-  testWidgets('test_query_featureset_target', (WidgetTester tester) async {
-    // load style and position camera
-    final mapFuture = app.main(
-        width: 200,
-        height: 200,
-        camera:
-            CameraOptions(center: Point(coordinates: Position(0, 0)), zoom: 10),
-        alignment: Alignment(100, 100));
-    await tester.pumpAndSettle();
-    final mapboxMap = await mapFuture;
-    var styleJson = await rootBundle.loadString('assets/featuresetsStyle.json');
-    mapboxMap.style.setStyleJSON(styleJson);
-
-    await app.events.onMapLoaded.future;
-    await Future.delayed(Duration(seconds: 1));
-
-    var featuresetFilter = '["==", ["get", "type"], "B"]';
-    var layerFilter = '["==", ["get", "filter"], true]';
-    var featuresetPOI =
-        FeaturesetDescriptor(featuresetId: "poi", importId: "nested");
-    var featuresetLayer = FeaturesetDescriptor(layerId: "circle-2");
-    var coord = await mapboxMap
-        .pixelForCoordinate(Point(coordinates: Position(0.01, 0.01)));
-    var targets = [
-      FeaturesetQueryTarget(
-          featureset: featuresetPOI, filter: featuresetFilter, id: 1),
-      FeaturesetQueryTarget(
-          featureset: featuresetLayer, filter: layerFilter, id: 2)
-    ];
-    Map<String, Object?> expectedProperties = {
-      "name": "qux",
-      "filter": true,
-      "bar": 2
-    };
-    Map<String, Object?> expectedProperties2 = {
-      "type": "B",
-      "class": "poi",
-      "name": "nest2"
-    };
-
-    var returnedQuery = await mapboxMap.queryRenderedFeaturesForTargets(
-        RenderedQueryGeometry.fromScreenCoordinate(coord), targets);
-    var firstFeature =
-        Feature.fromFeature(returnedQuery[0]!.queriedFeature.feature);
-    var secondFeature =
-        Feature.fromFeature(returnedQuery[1]!.queriedFeature.feature);
-
-    expect(returnedQuery.length, 2);
-    expect(returnedQuery[0]?.queryTargets?.length, 1);
-    expect(returnedQuery[0]?.queryTargets?.last.id, 2);
-    expect(returnedQuery[0]?.queryTargets?.last.featureset.layerId, "circle-2");
-    expect(returnedQuery[0]?.queryTargets?.last.filter, null);
-    expect(firstFeature.id.toString(), "2");
-    expect(firstFeature.properties, expectedProperties);
-    expect(returnedQuery[1]?.queryTargets?.length, 1);
-    expect(returnedQuery[1]?.queryTargets?.last.id, 1);
-    expect(returnedQuery[1]?.queryTargets?.last.featureset.featuresetId, "poi");
-    expect(returnedQuery[1]?.queryTargets?.last.featureset.importId, "nested");
-    expect(returnedQuery[1]?.queryTargets?.last.filter, null);
-    expect(secondFeature.id.toString(), "12");
-    expect(secondFeature.properties, expectedProperties2);
   });
 }

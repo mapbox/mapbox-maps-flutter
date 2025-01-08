@@ -8,7 +8,7 @@ class InteractiveFeaturesExample extends StatefulWidget implements Example {
   @override
   final String title = 'Interactive Features';
   @override
-  final String? subtitle = 'Click to select buildings, long-click to unselect';
+  final String? subtitle = 'Tap a Buildings to highlight it or a POI to hide it';
 
   @override
   State<StatefulWidget> createState() => InteractiveFeaturesState();
@@ -22,69 +22,41 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
 
-    var featureset =
-        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
+    /// Define interactions for 3D Buildings
 
-    var typedFeaturesetDescriptor = TypedFeaturesetDescriptor(
-        featuresetDescriptor: featureset, featuresetType: "featureset");
+    // Define a tap interaction targeting the Buildings featureset in the Standard style
+    var tapInteraction = TapInteraction(Featureset.standardBuildings());
 
-    var interactionType = InteractionType.CLICK;
+    // Define a state to highlight the building when it is interacted with
+    StandardBuildingState featureState = StandardBuildingState(highlight: true);
 
-    var interaction = Interaction(
-        typedFeaturesetDescriptor: typedFeaturesetDescriptor,
-        interactionType: interactionType);
-    mapboxMap.addInteraction(interaction);
-  }
+    // Add the tap interaction to the map, set the action to occur when a building is tapped (highlight it)
+    mapboxMap.addInteraction(tapInteraction, (_, FeaturesetFeature feature) {
+      mapboxMap.setFeatureStateForFeaturesetFeature(feature, featureState);
+      var buildingFeature = StandardBuildingsFeature(
+          feature.geometry, feature.properties, feature.state,
+          id: feature.id);
+      print("Building feature id: ${buildingFeature.id}");
+    });
+    
+    // On long tap, remove the highlight state
+    mapboxMap.addInteraction(LongTapInteraction(Featureset.standardBuildings()), 
+    (_, FeaturesetFeature feature) {
+      mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature);
+    });
 
-  _onTap(context) async {
-    // Define the geometry to query, in this case the point where the user clicked.
-    var clicked = await mapboxMap?.pixelForCoordinate(context.point);
-    var renderedQueryGeometry =
-        RenderedQueryGeometry.fromScreenCoordinate(clicked!);
+    /// Define interactions for Points of Interest 
+    
+    // Define a tap interaction targeting the POI featureset in the Standard style, including a click radius
+    // Do not stop propagation of the click event to lower layers
+    var tapInteractionPOI = TapInteraction(Featureset.standardPoi(),
+        radius: 10, stopPropagation: false);
 
-    // Define the featureset to query. In this case "buildings", which is defined in the
-    // Standard Experimental style.
-    var featureset =
-        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
-
-    // Query the featureset for the geometry
-    var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
-        geometry: renderedQueryGeometry, featureset: featureset);
-    var featuresetFeature = queriedFeatures?.first;
-
-    var typedFeaturesetDescriptor = TypedFeaturesetDescriptor(
-        featuresetDescriptor: featureset, featuresetType: "featureset");
-
-    if (featuresetFeature != null) {
-      // Define the state to set for the feature, in this case highlighting
-      // Set that featurestate on that featuresetFeature
-      Map<String, Object?> state = {
-        "highlight": true,
-      };
-      mapboxMap?.setFeatureStateForFeaturesetDescriptor(
-          typedFeaturesetDescriptor, featuresetFeature.id!, state);
-      //mapboxMap?.setFeatureStateForFeaturesetFeature(featuresetFeature, state);
-    }
-  }
-
-  _onLongTap(context) async {
-    // Define the geometry to query, in this case the point where the user clicked.
-    var clicked = await mapboxMap?.pixelForCoordinate(context.point);
-    var renderedQueryGeometry =
-        RenderedQueryGeometry.fromScreenCoordinate(clicked!);
-
-    // Query the featureset for the geometry
-    var featureset =
-        FeaturesetDescriptor(featuresetId: "buildings", importId: "basemap");
-    var queriedFeatures = await mapboxMap?.queryRenderedFeaturesForFeatureset(
-        geometry: renderedQueryGeometry, featureset: featureset);
-    var featuresetFeatureId = queriedFeatures?.first.id;
-
-    // Remove that feature state
-    if (featuresetFeatureId != null) {
-      mapboxMap?.removeFeatureStateForFeaturesetDescriptor(
-          featureset: featureset, featureId: featuresetFeatureId);
-    }
+    // Define a state to hide the POI when it is interacted with
+    mapboxMap.addInteraction(tapInteractionPOI, (_, FeaturesetFeature feature) {
+      mapboxMap.setFeatureStateForFeaturesetFeature(
+          feature, StandardPoiState(hide: true));
+    });
   }
 
   @override
@@ -97,14 +69,9 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
           bearing: 49.92,
           zoom: 16.35,
           pitch: 40),
-
-      /// DON'T USE Standard Experimental style in production, it will break over time.
-      /// Currently this feature is in preview.
-      styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
+      styleUri: MapboxStyles.STANDARD,
       textureView: true,
       onMapCreated: _onMapCreated,
-      onTapListener: _onTap,
-      onLongTapListener: _onLongTap,
     ));
   }
 }

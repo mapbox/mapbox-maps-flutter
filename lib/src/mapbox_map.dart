@@ -443,15 +443,6 @@ class MapboxMap extends ChangeNotifier {
           _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
           options);
 
-  /// Queries the map for rendered features using featureset descriptors.
-  @experimental
-  Future<List<QueriedRenderedFeature?>> queryRenderedFeaturesForTargets(
-          RenderedQueryGeometry geometry,
-          List<FeaturesetQueryTarget> targets) async =>
-      _mapInterface.queryRenderedFeaturesForTargets(
-          _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
-          targets);
-
   /// Queries the map for rendered features with one typed featureset.
   @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
@@ -473,12 +464,6 @@ class MapboxMap extends ChangeNotifier {
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
       _mapInterface.querySourceFeatures(sourceId, options);
-
-  /// Queries the source features for a given featureset.
-  @experimental
-  Future<List<QueriedSourceFeature?>> querySourceFeaturesForTargets(
-          FeaturesetQueryTarget target) async =>
-      _mapInterface.querySourceFeaturesForTargets(target);
 
   /// Returns all the leaves (original points) of a cluster (given its cluster_id) from a GeoJsonSource, with pagination support: limit is the number of leaves
   /// to return (set to Infinity for all points), and offset is the amount of points to skip (for pagination).
@@ -522,11 +507,11 @@ class MapboxMap extends ChangeNotifier {
   /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
   @experimental
   Future<void> setFeatureStateForFeaturesetDescriptor(
-          TypedFeaturesetDescriptor featureset,
+          FeaturesetDescriptor featureset,
           FeaturesetFeatureId featureId,
-          Map<String, Object?> state) =>
+          FeatureState state) =>
       _mapInterface.setFeatureStateForFeaturesetDescriptor(
-          featureset, featureId, state);
+          featureset, featureId, state.map);
 
   /// Update the state map of an individual feature.
   ///
@@ -534,8 +519,8 @@ class MapboxMap extends ChangeNotifier {
   /// the operation will be no-op and callback will receive an error.
   @experimental
   Future<void> setFeatureStateForFeaturesetFeature(
-          FeaturesetFeature feature, Map<String, Object?> state) =>
-      _mapInterface.setFeatureStateForFeaturesetFeature(feature, state);
+          FeaturesetFeature feature, FeatureState state) =>
+      _mapInterface.setFeatureStateForFeaturesetFeature(feature, state.map);
 
   /// Gets the state map of a feature within a style source.
   ///
@@ -596,8 +581,22 @@ class MapboxMap extends ChangeNotifier {
           FeaturesetDescriptor featureset) =>
       _mapInterface.resetFeatureStatesForFeatureset(featureset);
 
-  Future<void> addInteraction(Interaction interaction) =>
-      _mapInterface.addInteraction(interaction);
+  // References for all interactions added to the map.
+  _InteractionsList interactionsList = _InteractionsList(interactions: {});
+
+  /// Add an interaction
+  @experimental
+  void addInteraction(Interaction interaction, OnInteraction action) {
+    interactionsList.interactions[action.hashCode] = _InteractionListener(
+      onInteractionListener: action,
+      interactionID: action.hashCode,
+    );
+
+    InteractionsListener.setUp(interactionsList,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+    _mapboxMapsPlatform.addInteractionsListeners(interaction, action.hashCode);
+  }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
@@ -767,5 +766,38 @@ class _GestureListener extends GestureListener {
   @override
   void onScroll(MapContentGestureContext context) {
     onMapScrollListener?.call(context);
+  }
+}
+
+// Listen for a single interaction added to the map, identified by its id
+class _InteractionListener extends InteractionsListener {
+  _InteractionListener({
+    required this.interactionID,
+    required this.onInteractionListener,
+  });
+
+  int interactionID;
+
+  final OnInteraction onInteractionListener;
+
+  @override
+  void onInteraction(MapContentGestureContext context,
+      FeaturesetFeature feature, int interactionID) {
+    onInteractionListener.call(context, feature);
+  }
+}
+
+// Listen to all interactions on the map, determine which interaction to call
+class _InteractionsList extends InteractionsListener {
+  _InteractionsList({
+    required this.interactions,
+  });
+
+  Map<int, _InteractionListener> interactions;
+
+  @override
+  void onInteraction(MapContentGestureContext context,
+      FeaturesetFeature feature, int interactionID) {
+    interactions[interactionID]?.onInteraction(context, feature, interactionID);
   }
 }

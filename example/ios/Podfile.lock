@@ -1,6 +1,11 @@
 PODS:
   - Flutter (1.0.0)
   - integration_test (0.0.1):
+<<<<<<< HEAD
+=======
+    - Flutter
+  - mapbox_maps_flutter (2.5.0):
+>>>>>>> 085bf46 (Add map.addInteraction, add Standard featuresets)
     - Flutter
   - mapbox_maps_flutter (2.6.0-beta.1):
     - Flutter

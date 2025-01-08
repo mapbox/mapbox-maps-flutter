@@ -11,13 +11,20 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
+import com.mapbox.common.toValue
+import com.mapbox.maps.ClickInteraction
+import com.mapbox.maps.FeaturesetDescriptor
+import com.mapbox.maps.LongClickInteraction
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.extension.style.expressions.dsl.generated.id
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
+import com.mapbox.maps.mapbox_maps.pigeons.InteractionType
+import com.mapbox.maps.mapbox_maps.pigeons.InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.Projection
 import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
@@ -233,6 +240,54 @@ class MapboxMapController(
       }
       "gesture#remove_listeners" -> {
         gestureController.removeListeners()
+        result.success(null)
+      }
+      "interactions#add_interaction" -> {
+        val listener = InteractionsListener(messenger, channelSuffix)
+        val arguments: HashMap<String, Any> = call.arguments as? HashMap<String, Any> ?: return
+        val featuresetDescriptorList = arguments["featuresetDescriptor"] as? List<Any?> ?: return
+        val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(featuresetDescriptorList)
+        val interactionTypeRaw = arguments["interactionType"] as? Int ?: return
+        val interactionType = InteractionType.ofRaw(interactionTypeRaw)
+        val stopPropagation = arguments["stopPropagation"] as? Boolean ?: return
+        val id = arguments["id"] as? Int ?: return
+        val filter = arguments["filter"] as? String
+        val radius = arguments["radius"] as? Double
+
+        featuresetDescriptor.featuresetId?.let {
+          when (interactionType) {
+            InteractionType.TAP -> mapboxMap?.addInteraction(
+              ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+                return@featureset stopPropagation
+              }
+            )
+            InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+              LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+                return@featureset stopPropagation
+              }
+            )
+            null -> return
+          }
+        } ?: featuresetDescriptor.layerId?.let {
+          when (interactionType) {
+            InteractionType.TAP -> mapboxMap?.addInteraction(
+              ClickInteraction.layer(id = it, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+                return@layer stopPropagation
+              }
+            )
+            InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+              LongClickInteraction.layer(id = it, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+                return@layer stopPropagation
+              }
+            )
+            null -> return
+          }
+        }
+
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {

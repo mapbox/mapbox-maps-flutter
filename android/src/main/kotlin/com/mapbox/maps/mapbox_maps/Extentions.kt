@@ -16,7 +16,6 @@ import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
-import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.extension.style.layers.properties.generated.ProjectionName
 import com.mapbox.maps.extension.style.light.LightPosition
 import com.mapbox.maps.extension.style.light.generated.ambientLight
@@ -290,29 +289,27 @@ fun FeaturesetDescriptor.toTypedFeaturesetDescriptor(): TypedFeaturesetDescripto
   )
 }
 
-fun FeaturesetQueryTarget.toFeaturesetQueryTarget(): com.mapbox.maps.FeaturesetQueryTarget {
-  return com.mapbox.maps.FeaturesetQueryTarget(featureset.toFeatureSetDescriptor(), filter?.let { Expression.fromRaw(filter) }, id)
-}
-
 @OptIn(MapboxExperimental::class)
 fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureState {
   val map = this
   return FeatureState {
     for ((key, value) in map) {
-      when (value) {
-        is String -> {
-          addStringState(key, value)
+      value?.let {
+        when (value) {
+          is String -> {
+            addStringState(key, value)
+          }
+          is Long -> {
+            addLongState(key, value)
+          }
+          is Double -> {
+            addDoubleState(key, value)
+          }
+          is Boolean -> {
+            addBooleanState(key, value)
+          }
+          else -> throw (RuntimeException("Unsupported (key, value): ($key, $value)"))
         }
-        is Long -> {
-          addLongState(key, value)
-        }
-        is Double -> {
-          addDoubleState(key, value)
-        }
-        is Boolean -> {
-          addBooleanState(key, value)
-        }
-        else -> throw (RuntimeException("Unsupported (key, value): ($key, $value)"))
       }
     }
   }
@@ -321,7 +318,7 @@ fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureStat
 @OptIn(MapboxExperimental::class)
 @SuppressLint("RestrictedApi")
 fun FeaturesetFeature.toFeaturesetFeature(): com.mapbox.maps.interactions.FeaturesetFeature<FeatureState> {
-  val jsonObject: JsonObject = JsonParser.parseString(properties.toString()).getAsJsonObject()
+  val jsonObject: JsonObject = JsonParser.parseString(Gson().toJson(properties)).getAsJsonObject()
   featureset.featuresetId?.let {
     return com.mapbox.maps.interactions.FeaturesetFeature(
       id?.toFeaturesetFeatureId(),
@@ -639,6 +636,16 @@ fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFLTFeatureset
     geometry.toMap(),
     properties.toFilteredMap(),
     JSONObject(state.asJsonString()).toFilteredMap()
+  )
+}
+
+@SuppressLint("RestrictedApi")
+@OptIn(MapboxExperimental::class)
+fun com.mapbox.maps.InteractionContext.toFLTMapContentGestureContext(): MapContentGestureContext {
+  return MapContentGestureContext(
+    ScreenCoordinate(screenCoordinate.x, screenCoordinate.y),
+    coordinateInfo.coordinate,
+    GestureState.ENDED
   )
 }
 
