@@ -168,8 +168,12 @@ enum ViewAnnotationAnchor {
   CENTER,
 }
 
+/// The type of interaction, either tap/click or longTap/longClick
 enum InteractionType {
+  /// A short tap or click
   TAP,
+
+  /// A long tap or long click
   LONG_TAP,
 }
 
@@ -1340,6 +1344,7 @@ class FeaturesetFeatureId {
   }
 }
 
+/// Wraps a FeatureState map
 class FeatureState {
   FeatureState({
     required this.map,
@@ -1375,14 +1380,19 @@ class Interaction {
     this.radius,
   });
 
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
   FeaturesetDescriptor featuresetDescriptor;
 
+  /// The type of interaction, either tap or longTap
   InteractionType interactionType;
 
+  /// Whether to stop the propagation of the interaction to the map. Defaults to true.
   bool stopPropagation;
 
+  /// An optional filter of features that should trigger the interaction.
   String? filter;
 
+  /// Radius of a tappable area
   double? radius;
 
   Object encode() {
@@ -1407,7 +1417,9 @@ class Interaction {
   }
 }
 
-///A featureset descriptor.
+/// A featureset descriptor.
+///
+/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
 class FeaturesetDescriptor {
   FeaturesetDescriptor({
     this.featuresetId,
@@ -1415,11 +1427,24 @@ class FeaturesetDescriptor {
     this.layerId,
   });
 
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  ///
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
   String? featuresetId;
 
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
   ///
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
   String? importId;
 
+  /// An optional unique identifier for the layer within the current style.
+  ///
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
   String? layerId;
 
   Object encode() {
@@ -1440,6 +1465,11 @@ class FeaturesetDescriptor {
   }
 }
 
+/// A basic feature of a featureset.
+///
+/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+///
+/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
 class FeaturesetFeature {
   FeaturesetFeature({
     this.id,
@@ -1449,14 +1479,25 @@ class FeaturesetFeature {
     required this.state,
   });
 
+  /// An identifier of the feature.
+  ///
+  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+  /// In this case it's impossible to set a feature state for an individual feature.
   FeaturesetFeatureId? id;
 
+  /// A featureset descriptor denoting the featureset this feature belongs to.
   FeaturesetDescriptor featureset;
 
+  /// A feature geometry.
   Map<String?, Object?> geometry;
 
+  /// Feature JSON properties.
   Map<String, Object?> properties;
 
+  /// A feature state.
+  ///
+  /// This is a **snapshot** of the state that the feature had when it was interacted with.
+  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
   Map<String, Object?> state;
 
   Object encode() {
@@ -4028,7 +4069,7 @@ class _MapInterface {
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
-      _RenderedQueryGeometry geometry,
+      _RenderedQueryGeometry? geometry,
       FeaturesetDescriptor featureset,
       String? filter) async {
     final String pigeonVar_channelName =
@@ -4041,46 +4082,6 @@ class _MapInterface {
     );
     final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
         .send(<Object?>[geometry, featureset, filter]) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)!
-          .cast<FeaturesetFeature>();
-    }
-  }
-
-  /// Queries all rendered features in current viewport, using one typed featureset.
-  ///
-  /// This is same as `MapboxMap/ queryRenderedFeaturesForFeatureset()`` called with geometry matching the current viewport.
-  ///
-  /// - Important: If you need to handle basic gestures on map content,
-  /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
-  ///
-  /// @param featureset A typed featureset to query with.
-  /// @param filter An additional filter for features.
-  Future<List<FeaturesetFeature>> queryRenderedFeaturesInViewport(
-      FeaturesetDescriptor featureset, String? filter) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesInViewport$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[featureset, filter]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

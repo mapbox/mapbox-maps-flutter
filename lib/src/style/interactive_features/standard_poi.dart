@@ -68,14 +68,12 @@ class StandardPoiFeature extends FeaturesetFeature {
 
 // Represents available states for POIs in the Standard style.
 class StandardPoiState extends FeatureState {
-  // When `true`, hides the icon and text. 
+  // When `true`, hides the icon and text.
   bool? hide;
-  
+
   @override
   Map<String, Object?> get map {
-    return {
-      "hide": hide
-    };
+    return {"hide": hide};
   }
 
   StandardPoiState({this.hide})

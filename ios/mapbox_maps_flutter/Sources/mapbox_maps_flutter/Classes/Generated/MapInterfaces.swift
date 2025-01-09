@@ -3236,16 +3236,6 @@ protocol _MapInterface {
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
   func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
-  /// Queries all rendered features in current viewport, using one typed featureset.
-  ///
-  /// This is same as `MapboxMap/ queryRenderedFeaturesForFeatureset()`` called with geometry matching the current viewport.
-  /// 
-  /// - Important: If you need to handle basic gestures on map content, 
-  /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
-  ///
-  /// @param featureset A typed featureset to query with.
-  /// @param filter An additional filter for features.
-  func queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
@@ -3791,33 +3781,6 @@ class _MapInterfaceSetup {
       }
     } else {
       queryRenderedFeaturesForFeaturesetChannel.setMessageHandler(nil)
-    }
-    /// Queries all rendered features in current viewport, using one typed featureset.
-    ///
-    /// This is same as `MapboxMap/ queryRenderedFeaturesForFeatureset()`` called with geometry matching the current viewport.
-    /// 
-    /// - Important: If you need to handle basic gestures on map content, 
-    /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
-    ///
-    /// @param featureset A typed featureset to query with.
-    /// @param filter An additional filter for features.
-    let queryRenderedFeaturesInViewportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesInViewport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      queryRenderedFeaturesInViewportChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let featuresetArg = args[0] as! FeaturesetDescriptor
-        let filterArg: String? = nilOrValue(args[1])
-        api.queryRenderedFeaturesInViewport(featureset: featuresetArg, filter: filterArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      queryRenderedFeaturesInViewportChannel.setMessageHandler(nil)
     }
     /// Queries the map for source features.
     ///

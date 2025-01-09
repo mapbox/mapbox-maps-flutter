@@ -233,8 +233,11 @@ enum class ViewAnnotationAnchor(val raw: Int) {
   }
 }
 
+/** The type of interaction, either tap/click or longTap/longClick */
 enum class InteractionType(val raw: Int) {
+  /** A short tap or click */
   TAP(0),
+  /** A long tap or long click */
   LONG_TAP(1);
 
   companion object {
@@ -1401,7 +1404,11 @@ data class FeaturesetFeatureId(
   }
 }
 
-/** Generated class from Pigeon that represents data sent in messages. */
+/**
+ * Wraps a FeatureState map
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
 data class FeatureState(
   val map: Map<String, Any?>
 ) {
@@ -1428,10 +1435,15 @@ data class FeatureState(
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class Interaction(
+  /** The featureset descriptor that specifies the featureset to be included in the interaction. */
   val featuresetDescriptor: FeaturesetDescriptor,
+  /** The type of interaction, either tap or longTap */
   val interactionType: InteractionType,
+  /** Whether to stop the propagation of the interaction to the map. Defaults to true. */
   val stopPropagation: Boolean,
+  /** An optional filter of features that should trigger the interaction. */
   val filter: String? = null,
+  /** Radius of a tappable area */
   val radius: Double? = null
 ) {
   companion object {
@@ -1458,12 +1470,33 @@ data class Interaction(
 /**
  * A featureset descriptor.
  *
+ * The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+ *
  * Generated class from Pigeon that represents data sent in messages.
  */
 data class FeaturesetDescriptor(
+  /**
+   * An optional unique identifier for the featureset within the style.
+   * This id is used to reference a specific featureset.
+   *
+   * * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+   * * meaning `layerId` will not be considered even if it has a valid value.
+   */
   val featuresetId: String? = null,
-  /** */
+  /**
+   * An optional import id that is required if the featureset is defined within an imported style.
+   * If the featureset belongs to the current style, this field should be set to a null string.
+   *
+   * Note: `importId` is only applicable when used in conjunction with `featuresetId`
+   * and has no effect when used with `layerId`.
+   */
   val importId: String? = null,
+  /**
+   * An optional unique identifier for the layer within the current style.
+   *
+   * Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+   * Additionally, `importId` does not apply when using `layerId`.
+   */
   val layerId: String? = null
 ) {
   companion object {
@@ -1483,12 +1516,35 @@ data class FeaturesetDescriptor(
   }
 }
 
-/** Generated class from Pigeon that represents data sent in messages. */
+/**
+ * A basic feature of a featureset.
+ *
+ * If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+ *
+ * The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
 data class FeaturesetFeature(
+  /**
+   * An identifier of the feature.
+   *
+   * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+   * In this case it's impossible to set a feature state for an individual feature.
+   */
   val id: FeaturesetFeatureId? = null,
+  /** A featureset descriptor denoting the featureset this feature belongs to. */
   val featureset: FeaturesetDescriptor,
+  /** A feature geometry. */
   val geometry: Map<String?, Any?>,
+  /** Feature JSON properties. */
   val properties: Map<String, Any?>,
+  /**
+   * A feature state.
+   *
+   * This is a **snapshot** of the state that the feature had when it was interacted with.
+   * To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
+   */
   val state: Map<String, Any?>
 ) {
   companion object {
@@ -3489,19 +3545,7 @@ interface _MapInterface {
    * @param featureset A typed featureset to query with.
    * @param filter An additional filter for features.
    */
-  fun queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
-  /**
-   * Queries all rendered features in current viewport, using one typed featureset.
-   *
-   * This is same as `MapboxMap/ queryRenderedFeaturesForFeatureset()`` called with geometry matching the current viewport.
-   *
-   * - Important: If you need to handle basic gestures on map content,
-   * please prefer to use Interactions API, see `MapboxMap/addInteraction`.
-   *
-   * @param featureset A typed featureset to query with.
-   * @param filter An additional filter for features.
-   */
-  fun queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
+  fun queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry?, featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
   /**
    * Queries the map for source features.
    *
@@ -4067,31 +4111,10 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val geometryArg = args[0] as _RenderedQueryGeometry
+            val geometryArg = args[0] as _RenderedQueryGeometry?
             val featuresetArg = args[1] as FeaturesetDescriptor
             val filterArg = args[2] as String?
             api.queryRenderedFeaturesForFeatureset(geometryArg, featuresetArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesInViewport$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val featuresetArg = args[0] as FeaturesetDescriptor
-            val filterArg = args[1] as String?
-            api.queryRenderedFeaturesInViewport(featuresetArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

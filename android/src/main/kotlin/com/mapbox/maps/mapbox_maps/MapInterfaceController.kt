@@ -8,9 +8,6 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxDelicateApi
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.RenderedQueryGeometry
-import com.mapbox.maps.ScreenBox
-import com.mapbox.maps.ScreenCoordinate
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
@@ -181,34 +178,15 @@ class MapInterfaceController(
 
   @OptIn(MapboxExperimental::class)
   override fun queryRenderedFeaturesForFeatureset(
-    geometry: _RenderedQueryGeometry,
+    geometry: _RenderedQueryGeometry?,
     featureset: FeaturesetDescriptor,
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
+    val typedFeaturesetDescriptor = featureset.toTypedFeaturesetDescriptor() as? TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>> ?: return
     mapboxMap.queryRenderedFeatures(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      geometry.toRenderedQueryGeometry(context),
-      filter?.let { Expression.fromRaw(filter) }
-    ) {
-      callback(
-        Result.success(
-          it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
-        )
-      )
-    }
-  }
-
-  @OptIn(MapboxExperimental::class)
-  override fun queryRenderedFeaturesInViewport(
-    featureset: FeaturesetDescriptor,
-    filter: String?,
-    callback: (Result<List<FeaturesetFeature>>) -> Unit
-  ) {
-    val geometry = RenderedQueryGeometry(ScreenBox(ScreenCoordinate(0.0, 0.0), ScreenCoordinate(mapView.width.toDouble(), mapView.height.toDouble())))
-    mapboxMap.queryRenderedFeatures(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      geometry,
+      typedFeaturesetDescriptor,
+      geometry?.toRenderedQueryGeometry(context),
       filter?.let { Expression.fromRaw(filter) }
     ) {
       callback(
@@ -320,16 +298,17 @@ class MapInterfaceController(
     ) { callback(Result.success(Unit)) }
   }
 
-  @OptIn(MapboxExperimental::class)
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun setFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    val mapsFeature = feature.toFeaturesetFeature()
+    val id = feature.id?.toFeaturesetFeatureId() ?: return
     mapboxMap.setFeatureState(
-      mapsFeature,
-      state.toFeatureState()
+      feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      id = id,
+      state = state.toFeatureState()
     ) { callback(Result.success(Unit)) }
   }
 
@@ -356,25 +335,30 @@ class MapInterfaceController(
     featureId: FeaturesetFeatureId,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    mapboxMap.getFeatureState(
-      featureset.toTypedFeaturesetDescriptor(),
-      featureId.toFeaturesetFeatureId()
-    ) {
-      callback(
-        Result.success(
-          JSONObject(it.asJsonString()).toFilteredMap()
+    featureset.toTypedFeaturesetDescriptor()?.let { featuresetDescriptor ->
+      mapboxMap.getFeatureState(
+        featuresetDescriptor,
+        featureId.toFeaturesetFeatureId()
+      ) {
+        callback(
+          Result.success(
+            JSONObject(it.asJsonString()).toFilteredMap()
+          )
         )
-      )
+      }
     }
   }
 
-  @OptIn(MapboxExperimental::class)
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun getFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
+    val id = feature.id?.toFeaturesetFeatureId() ?: return
+    val featuresetDescriptor = feature.featureset.toTypedFeaturesetDescriptor() ?: return
     mapboxMap.getFeatureState(
-      feature.toFeaturesetFeature()
+      featuresetDescriptor,
+      id
     ) {
       callback(
         Result.success(
@@ -420,14 +404,16 @@ class MapInterfaceController(
     }
   }
 
-  @OptIn(MapboxExperimental::class)
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
   override fun removeFeatureStateForFeaturesetFeature(
     feature: FeaturesetFeature,
     stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
+    val id = feature.id?.toFeaturesetFeatureId() ?: return
     mapboxMap.removeFeatureState(
-      feature.toFeaturesetFeature(),
+      feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      id,
       stateKey?.let { FeatureStateKey.create(it) }
     ) {
       if (it.isError) {

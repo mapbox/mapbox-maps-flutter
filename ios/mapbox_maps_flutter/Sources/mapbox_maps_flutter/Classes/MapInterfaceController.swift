@@ -210,18 +210,6 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func queryRenderedFeaturesInViewport(featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
-        let filterExpression = try? filter.flatMap { try $0.toExp() }
-        self.mapboxMap.queryRenderedFeatures(featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression) { result in
-            switch result {
-            case .success(let features):
-                completion(.success(features.map({$0.toFLTFeaturesetFeature()})))
-            case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
-            }
-        }
-    }
-
     func querySourceFeatures(sourceId: String, options: SourceQueryOptions, completion: @escaping (Result<[QueriedSourceFeature?], Error>) -> Void) {
         do {
             try self.mapboxMap.querySourceFeatures(for: sourceId, options: options.toSourceQueryOptions()) { result in

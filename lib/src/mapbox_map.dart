@@ -446,19 +446,15 @@ class MapboxMap extends ChangeNotifier {
   /// Queries the map for rendered features with one typed featureset.
   @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
-          {required RenderedQueryGeometry geometry,
+          {RenderedQueryGeometry? geometry,
           required FeaturesetDescriptor featureset,
           String? filter}) async =>
       _mapInterface.queryRenderedFeaturesForFeatureset(
-          _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
+          geometry != null
+            ? _RenderedQueryGeometry(value: geometry.value, type: geometry.type)
+            : null,
           featureset,
           filter);
-
-  /// Queries all rendered features in current viewport, using one typed featureset.
-  @experimental
-  Future<List<FeaturesetFeature>> queryRenderedFeaturesInViewport(
-          {required FeaturesetDescriptor featureset, String? filter}) async =>
-      _mapInterface.queryRenderedFeaturesInViewport(featureset, filter);
 
   /// Queries the map for source features.
   Future<List<QueriedSourceFeature?>> querySourceFeatures(

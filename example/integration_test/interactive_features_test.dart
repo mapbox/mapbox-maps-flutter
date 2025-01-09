@@ -49,8 +49,8 @@ void main() {
     expect(featuresetFilterQuery[0].properties["name"], "nest1");
     expect(featuresetFilterQuery[0].properties["class"], "poi");
 
-    //test queryRenderedFeaturesInViewport
-    var viewportQuery = await mapboxMap.queryRenderedFeaturesInViewport(
+    //test queryRenderedFeatures for full viewport
+    var viewportQuery = await mapboxMap.queryRenderedFeaturesForFeatureset(
         featureset:
             FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
 
@@ -188,7 +188,7 @@ void main() {
 
     await mapboxMap.setFeatureStateForFeaturesetDescriptor(
         featuresetDescriptor, featuresetID, state);
-    var queryResult = await mapboxMap.queryRenderedFeaturesInViewport(
+    var queryResult = await mapboxMap.queryRenderedFeaturesForFeatureset(
         featureset: featuresetDescriptor, filter: filter);
     var poi = queryResult.first;
     var point = Point.decode(poi.geometry);
