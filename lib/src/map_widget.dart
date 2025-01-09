@@ -203,7 +203,7 @@ class _MapWidgetState extends State<MapWidget> {
       'textureView': widget.textureView,
       'styleUri': widget.styleUri,
       'channelSuffix': _mapboxMapsPlatform.channelSuffix,
-      'mapboxPluginVersion': '2.5.0',
+      'mapboxPluginVersion': mapboxPluginVersion,
       'eventTypes': _events.eventTypes.map((e) => e.index).toList(),
     };
     _events.subscribedEventTypes = _events.eventTypes;
