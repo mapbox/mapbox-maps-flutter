@@ -582,7 +582,8 @@ class MapboxMap extends ChangeNotifier {
       _mapInterface.resetFeatureStatesForFeatureset(featureset);
 
   // References for all interactions added to the map.
-  _InteractionsList interactionsList = _InteractionsList(interactions: {});
+  @experimental
+  var interactionsList = _InteractionsList(interactions: {});
 
   /// Add an interaction
   @experimental
