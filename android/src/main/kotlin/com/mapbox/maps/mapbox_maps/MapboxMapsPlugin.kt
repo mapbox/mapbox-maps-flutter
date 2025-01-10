@@ -142,6 +142,7 @@ class MapController(
   private var eglSurface: EGLSurface
   private val renderThread: HandlerThread
   private val handler: Handler
+  private var step = 0
 
   init {
     renderThread = HandlerThread("RenderThread", THREAD_PRIORITY_DISPLAY)
@@ -176,11 +177,12 @@ class MapController(
     map.styleURI = Style.STANDARD
     map.setCamera(
       CameraOptions.Builder()
-        .center(Point.fromLngLat(24.938333, 60.170119))
-        .zoom(3.0)
+        .center(Point.fromLngLat(0.0, 0.0))
+        .zoom(2.0)
         .build()
     )
     map.setStyleProjection(Value.valueOf(hashMapOf("name" to Value.valueOf("globe"))))
+
     return map
   }
 
@@ -227,5 +229,24 @@ class MapController(
     map?.render()
 
     eglCore.swapBuffers(eglSurface)
+
+    map?.setCamera(
+      CameraOptions.Builder()
+        .center(Point.fromLngLat(getCycleValue(step), 0.0))
+        .zoom(1.0)
+        .build()
+    )
+    step = step + 1
   }
 }
+
+fun getCycleValue(step: Int): Double {
+  val totalRange = 361 // total numbers from -180 to 180
+  val normalizedStep = step % totalRange
+  return if (normalizedStep <= 180) {
+    (-180 + normalizedStep).toDouble()
+  } else {
+    (180 - (normalizedStep - 180)).toDouble()
+  }
+}
+
