@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.SurfaceTexture
 import android.opengl.EGLSurface
 import android.opengl.GLES20
 import android.os.Handler
@@ -40,6 +41,7 @@ import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.view.TextureRegistry.SurfaceProducer
+import io.flutter.view.TextureRegistry.SurfaceTextureEntry
 
 /** MapboxMapsPlugin */
 class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
@@ -78,9 +80,9 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
         val width = call.argument<Double>("width")
         val height = call.argument<Double>("height")
         val size = Size(width!!.toFloat(), height!!.toFloat())
-        val producer = flutterPluginBinding.textureRegistry.createSurfaceProducer()
-        mapController = MapController(producer, flutterPluginBinding.applicationContext, size, )
-        result.success(producer.id())
+        val textureEntry = flutterPluginBinding.textureRegistry.createSurfaceTexture()
+        mapController = MapController(textureEntry, flutterPluginBinding.applicationContext, size, )
+        result.success(textureEntry.id())
       }
     }
   }
@@ -131,7 +133,7 @@ class MapboxMapsPlugin : FlutterPlugin, ActivityAware {
 
 @SuppressLint("RestrictedApi")
 class MapController(
-  private val surfaceProducer: SurfaceProducer,
+  private val surfaceTextureEntry: SurfaceTextureEntry,
   private val context: Context,
   private val size: Size
 ) : SurfaceProducer.Callback,
@@ -142,13 +144,14 @@ class MapController(
   private var eglSurface: EGLSurface
   private val renderThread: HandlerThread
   private val handler: Handler
-  private var step = 0
+  private var step = 0.0
+  private val texture: SurfaceTexture
 
   init {
     renderThread = HandlerThread("RenderThread", THREAD_PRIORITY_DISPLAY)
-    surfaceProducer.setSize(size.width.toInt(), size.height.toInt())
-    surfaceProducer.setCallback(this)
-    eglCore = EGLCore(false, 1, mapName = "sfsfs")
+    texture = surfaceTextureEntry.surfaceTexture()
+    texture.setDefaultBufferSize(size.width.toInt(), size.height.toInt())
+    eglCore = EGLCore(true, 1, mapName = "sfsfs")
     eglSurface = eglCore.eglNoSurface
     map = createMap()
     renderThread.start()
@@ -187,14 +190,10 @@ class MapController(
   }
 
   private fun setupOpenGL() {
-    val surface = surfaceProducer.surface
     if (!eglCore.prepareEgl()) {
       throw IllegalStateException("OpenGL ES 3.0 context could not be created")
     }
-    if (!surface.isValid) {
-      throw IllegalStateException("Invalid surface")
-    }
-    eglSurface = eglCore.createWindowSurface(surface)
+    eglSurface = eglCore.createWindowSurface(texture)
     if (eglSurface == eglCore.eglNoSurface) {
       throw IllegalStateException("Surface was null")
     }
@@ -236,11 +235,11 @@ class MapController(
         .zoom(1.0)
         .build()
     )
-    step = step + 1
+    step = step + 0.1
   }
 }
 
-fun getCycleValue(step: Int): Double {
+fun getCycleValue(step: Double): Double {
   val totalRange = 361 // total numbers from -180 to 180
   val normalizedStep = step % totalRange
   return if (normalizedStep <= 180) {

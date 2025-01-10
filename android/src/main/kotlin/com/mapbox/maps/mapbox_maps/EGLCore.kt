@@ -150,7 +150,7 @@ internal class EGLCore(
   /**
    * Creates an EGL surface associated with a Surface.
    */
-  fun createWindowSurface(surface: Surface): EGLSurface {
+  fun createWindowSurface(surface: Any): EGLSurface {
     try {
       // Create a window surface, and attach it to the Surface we received.
       val surfaceAttribs = intArrayOf(EGL14.EGL_NONE)
