@@ -3541,11 +3541,12 @@ interface _MapInterface {
    * - Important: If you need to handle basic gestures on map content,
    * please prefer to use Interactions API, see `MapboxMap/addInteraction`.
    *
-   * @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
    * @param featureset A typed featureset to query with.
+   * @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+   * If omitted, the full viewport is queried.
    * @param filter An additional filter for features.
    */
-  fun queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry?, featureset: FeaturesetDescriptor, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
+  fun queryRenderedFeaturesForFeatureset(featureset: FeaturesetDescriptor, geometry: _RenderedQueryGeometry?, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
   /**
    * Queries the map for source features.
    *
@@ -4111,10 +4112,10 @@ interface _MapInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val geometryArg = args[0] as _RenderedQueryGeometry?
-            val featuresetArg = args[1] as FeaturesetDescriptor
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val geometryArg = args[1] as _RenderedQueryGeometry?
             val filterArg = args[2] as String?
-            api.queryRenderedFeaturesForFeatureset(geometryArg, featuresetArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
+            api.queryRenderedFeaturesForFeatureset(featuresetArg, geometryArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

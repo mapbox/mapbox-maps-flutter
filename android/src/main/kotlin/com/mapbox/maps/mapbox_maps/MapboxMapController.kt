@@ -250,21 +250,21 @@ class MapboxMapController(
         val interactionTypeRaw = arguments["interactionType"] as? Int ?: return
         val interactionType = InteractionType.ofRaw(interactionTypeRaw)
         val stopPropagation = arguments["stopPropagation"] as? Boolean ?: return
-        val id = arguments["id"] as? Int ?: return
-        val filter = arguments["filter"] as? String
+        val id = (arguments["id"] as? Int)?.toLong() ?: return
+        val filter = (arguments["filter"] as? String).toValue()
         val radius = arguments["radius"] as? Double
 
         featuresetDescriptor.featuresetId?.let {
           when (interactionType) {
             InteractionType.TAP -> mapboxMap?.addInteraction(
-              ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
-                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+              ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@featureset stopPropagation
               }
             )
             InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
-              LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
-                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+              LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@featureset stopPropagation
               }
             )
@@ -273,21 +273,20 @@ class MapboxMapController(
         } ?: featuresetDescriptor.layerId?.let {
           when (interactionType) {
             InteractionType.TAP -> mapboxMap?.addInteraction(
-              ClickInteraction.layer(id = it, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
-                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+              ClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@layer stopPropagation
               }
             )
             InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
-              LongClickInteraction.layer(id = it, filter = filter.toValue(), radius = radius) { featuresetFeature, context ->
-                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id.toLong()) { _ -> }
+              LongClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@layer stopPropagation
               }
             )
             null -> return
           }
         }
-
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {

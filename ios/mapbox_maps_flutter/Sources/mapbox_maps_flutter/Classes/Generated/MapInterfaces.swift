@@ -3235,7 +3235,7 @@ protocol _MapInterface {
   /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param featureset A typed featureset to query with.
   /// @param filter An additional filter for features.
-  func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
+  func queryRenderedFeaturesForFeatureset(featureset: FeaturesetDescriptor, geometry: _RenderedQueryGeometry?, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
@@ -3767,10 +3767,10 @@ class _MapInterfaceSetup {
     if let api = api {
       queryRenderedFeaturesForFeaturesetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let geometryArg = args[0] as! _RenderedQueryGeometry
-        let featuresetArg = args[1] as! FeaturesetDescriptor
+        let featuresetArg = args[0] as! FeaturesetDescriptor
+        let geometryArg: _RenderedQueryGeometry? = nilOrValue(args[1])
         let filterArg: String? = nilOrValue(args[2])
-        api.queryRenderedFeaturesForFeatureset(geometry: geometryArg, featureset: featuresetArg, filter: filterArg) { result in
+        api.queryRenderedFeaturesForFeatureset(featureset: featuresetArg, geometry: geometryArg, filter: filterArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

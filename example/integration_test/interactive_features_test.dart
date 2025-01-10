@@ -27,9 +27,9 @@ void main() {
     var coord = await mapboxMap
         .pixelForCoordinate(Point(coordinates: Position(0.01, 0.01)));
     var featuresetQuery = await mapboxMap.queryRenderedFeaturesForFeatureset(
-        geometry: RenderedQueryGeometry.fromScreenCoordinate(coord),
         featureset:
-            FeaturesetDescriptor(featuresetId: "poi", importId: "nested"));
+            FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+        geometry: RenderedQueryGeometry.fromScreenCoordinate(coord));
 
     expect(featuresetQuery.length, 2);
     expect(featuresetQuery.first.properties["name"], "nest2");
@@ -40,9 +40,9 @@ void main() {
     var filter = '["==",["get", "type"], "A"]';
     var featuresetFilterQuery =
         await mapboxMap.queryRenderedFeaturesForFeatureset(
-            geometry: RenderedQueryGeometry.fromScreenCoordinate(coord),
             featureset:
                 FeaturesetDescriptor(featuresetId: "poi", importId: "nested"),
+            geometry: RenderedQueryGeometry.fromScreenCoordinate(coord),
             filter: filter);
 
     expect(featuresetFilterQuery.length, 1);

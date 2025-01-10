@@ -198,15 +198,20 @@ final class MapInterfaceController: _MapInterface {
         }
     }
 
-    func queryRenderedFeaturesForFeatureset(geometry: _RenderedQueryGeometry, featureset: FeaturesetDescriptor, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
+    func queryRenderedFeaturesForFeatureset(featureset: FeaturesetDescriptor, geometry: _RenderedQueryGeometry?, filter: String?, completion: @escaping (Result<[FeaturesetFeature], any Error>) -> Void) {
         let filterExpression = try? filter.flatMap { try $0.toExp() }
-        self.mapboxMap.queryRenderedFeatures(with: geometry, featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression) { result in
+        let fltCompletion: (Result<[MapboxMaps.FeaturesetFeature], Error>) -> Void = { result in
             switch result {
             case .success(let features):
                 completion(.success(features.map({$0.toFLTFeaturesetFeature()})))
             case .failure(let error):
                 completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
             }
+        }
+        if let geometry {
+            self.mapboxMap.queryRenderedFeatures(with: geometry, featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression, completion: fltCompletion)
+        } else {
+            self.mapboxMap.queryRenderedFeatures(featureset: featureset.toMapFeaturesetDescriptor(), filter: filterExpression, completion: fltCompletion)
         }
     }
 

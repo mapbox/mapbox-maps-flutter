@@ -178,8 +178,8 @@ class MapInterfaceController(
 
   @OptIn(MapboxExperimental::class)
   override fun queryRenderedFeaturesForFeatureset(
-    geometry: _RenderedQueryGeometry?,
     featureset: FeaturesetDescriptor,
+    geometry: _RenderedQueryGeometry?,
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
@@ -354,8 +354,8 @@ class MapInterfaceController(
     feature: FeaturesetFeature,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    val id = feature.id?.toFeaturesetFeatureId() ?: return
     val featuresetDescriptor = feature.featureset.toTypedFeaturesetDescriptor() ?: return
+    val id = feature.id?.toFeaturesetFeatureId() ?: return
     mapboxMap.getFeatureState(
       featuresetDescriptor,
       id

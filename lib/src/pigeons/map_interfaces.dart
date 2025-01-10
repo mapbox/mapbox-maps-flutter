@@ -4065,12 +4065,13 @@ class _MapInterface {
   /// - Important: If you need to handle basic gestures on map content,
   /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
   ///
-  /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param featureset A typed featureset to query with.
+  /// @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+  /// If omitted, the full viewport is queried.
   /// @param filter An additional filter for features.
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
-      _RenderedQueryGeometry? geometry,
       FeaturesetDescriptor featureset,
+      _RenderedQueryGeometry? geometry,
       String? filter) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
@@ -4081,7 +4082,7 @@ class _MapInterface {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[geometry, featureset, filter]) as List<Object?>?;
+        .send(<Object?>[featureset, geometry, filter]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
