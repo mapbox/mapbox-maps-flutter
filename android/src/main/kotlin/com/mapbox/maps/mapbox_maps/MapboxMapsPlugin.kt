@@ -10,6 +10,7 @@ import android.os.Process.THREAD_PRIORITY_DISPLAY
 import android.util.Log
 import android.view.Choreographer
 import androidx.lifecycle.Lifecycle
+import com.mapbox.bindgen.Value
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.Map
@@ -179,6 +180,7 @@ class MapController(
         .zoom(3.0)
         .build()
     )
+    map.setStyleProjection(Value.valueOf(hashMapOf("name" to Value.valueOf("globe"))))
     return map
   }
 
