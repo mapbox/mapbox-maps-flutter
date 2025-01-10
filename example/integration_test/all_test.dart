@@ -48,6 +48,7 @@ import 'scale_bar_test.dart' as scale_bar_test;
 import 'offline_test.dart' as offline_test;
 import 'snapshotter/snapshotter_test.dart' as snapshotter_test;
 import 'viewport_test.dart' as viewport_test;
+import 'interactive_features_test.dart' as interactive_features_test;
 
 void main() {
   animation_test.main();
@@ -74,6 +75,7 @@ void main() {
 
   // style tests
   style_test.main();
+  interactive_features_test.main();
 
   // layer tests
   background_layer_test.main();

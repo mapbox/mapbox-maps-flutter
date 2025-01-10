@@ -72,3 +72,7 @@ typedef void OnTileRegionLoadProgressListener(TileRegionLoadProgress progress);
 // TileRegionEstimate load progress callback.
 typedef void OnTileRegionEstimateProgressListenter(
     TileRegionEstimateProgress progress);
+
+// Interaction callback called when a featureset or layer is interacted with.
+typedef void OnInteraction(
+    MapContentGestureContext context, FeaturesetFeature feature);

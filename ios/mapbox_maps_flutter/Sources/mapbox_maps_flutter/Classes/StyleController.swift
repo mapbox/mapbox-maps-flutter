@@ -427,6 +427,12 @@ final class StyleController: StyleManager {
         }
     }
 
+    func getFeaturesets() throws -> [FeaturesetDescriptor] {
+        return styleManager.featuresets.map {
+            $0.toFLTFeaturesetDescriptor()
+        }
+    }
+
     // MARK: Style Lights
 
     func getStyleLights() throws -> [StyleObjectInfo?] {
