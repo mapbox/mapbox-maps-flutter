@@ -31,8 +31,7 @@ extension Standard on FeaturesetDescriptor {
   }
 
   // A Featureset of place labels in the Standard style
-  static FeaturesetDescriptor placeLabels(
-      {String importId = "basemap"}) {
+  static FeaturesetDescriptor placeLabels({String importId = "basemap"}) {
     return FeaturesetDescriptor(
         featuresetId: "place-labels", importId: importId);
   }

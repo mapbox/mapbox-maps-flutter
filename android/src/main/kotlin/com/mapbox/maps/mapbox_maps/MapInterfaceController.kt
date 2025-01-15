@@ -339,7 +339,7 @@ class MapInterfaceController(
     featureId: FeaturesetFeatureId,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    featureset.toTypedFeaturesetDescriptor()?.let { featuresetDescriptor ->
+    featureset.toTypedFeaturesetDescriptor()?.also { featuresetDescriptor ->
       mapboxMap.getFeatureState(
         featuresetDescriptor,
         featureId.toFeaturesetFeatureId()
@@ -350,8 +350,9 @@ class MapInterfaceController(
           )
         )
       }
+    } ?: run {
+      callback(Result.failure(Throwable("Cannot get feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
     }
-    callback(Result.failure(Throwable("Cannot get feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
   }
 
   @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)

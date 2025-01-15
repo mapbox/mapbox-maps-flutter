@@ -52,8 +52,8 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     // Define a tap interaction targeting the POI featureset in the Standard style, including a click radius
     // Do not stop propagation of the click event to lower layers
-    var tapInteractionPOI = TapInteraction(Standard.pois(),
-        radius: 10, stopPropagation: false);
+    var tapInteractionPOI =
+        TapInteraction(Standard.pois(), radius: 10, stopPropagation: false);
 
     // Define a state to hide the POI when it is interacted with
     mapboxMap.addInteraction(tapInteractionPOI, (_, FeaturesetFeature feature) {
