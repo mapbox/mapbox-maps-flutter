@@ -29,7 +29,7 @@ class StandardPlaceLabelsFeature extends FeaturesetFeature {
       {FeaturesetFeatureId? id})
       : super(
             id: id,
-            featureset: Featureset.standardPlaceLabels(),
+            featureset: Standard.placeLabels(),
             geometry: geometry,
             properties: properties,
             state: state);

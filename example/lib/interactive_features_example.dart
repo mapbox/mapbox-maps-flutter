@@ -1,14 +1,17 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
 
 class InteractiveFeaturesExample extends StatefulWidget implements Example {
   @override
-  final Widget leading = const Icon(Icons.map);
+  final Widget leading = const Icon(Icons.touch_app);
   @override
   final String title = 'Interactive Features';
   @override
-  final String? subtitle = 'Tap a Buildings to highlight it or a POI to hide it';
+  final String? subtitle = 'Tap a building to highlight it or a POI to hide it';
+
+  const InteractiveFeaturesExample({super.key});
 
   @override
   State<StatefulWidget> createState() => InteractiveFeaturesState();
@@ -25,7 +28,7 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     /// Define interactions for 3D Buildings
 
     // Define a tap interaction targeting the Buildings featureset in the Standard style
-    var tapInteraction = TapInteraction(Featureset.standardBuildings());
+    var tapInteraction = TapInteraction(Standard.buildings());
 
     // Define a state to highlight the building when it is interacted with
     StandardBuildingState featureState = StandardBuildingState(highlight: true);
@@ -36,20 +39,20 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
       var buildingFeature = StandardBuildingsFeature(
           feature.geometry, feature.properties, feature.state,
           id: feature.id);
-      print("Building feature id: ${buildingFeature.id}");
+      log("Building feature id: ${buildingFeature.id?.id}");
     });
-    
+
     // On long tap, remove the highlight state
-    mapboxMap.addInteraction(LongTapInteraction(Featureset.standardBuildings()), 
-    (_, FeaturesetFeature feature) {
+    mapboxMap.addInteraction(LongTapInteraction(Standard.buildings()),
+        (_, FeaturesetFeature feature) {
       mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature);
     });
 
-    /// Define interactions for Points of Interest 
-    
+    /// Define interactions for Points of Interest
+
     // Define a tap interaction targeting the POI featureset in the Standard style, including a click radius
     // Do not stop propagation of the click event to lower layers
-    var tapInteractionPOI = TapInteraction(Featureset.standardPoi(),
+    var tapInteractionPOI = TapInteraction(Standard.pois(),
         radius: 10, stopPropagation: false);
 
     // Define a state to hide the POI when it is interacted with

@@ -60,7 +60,7 @@ class StandardPoiFeature extends FeaturesetFeature {
       {FeaturesetFeatureId? id})
       : super(
             id: id,
-            featureset: Featureset.standardPoi(),
+            featureset: Standard.pois(),
             geometry: geometry,
             properties: properties,
             state: state);

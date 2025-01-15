@@ -22,7 +22,7 @@ class StandardBuildingsFeature extends FeaturesetFeature {
       {FeaturesetFeatureId? id})
       : super(
             id: id,
-            featureset: Featureset.standardBuildings(),
+            featureset: Standard.buildings(),
             geometry: geometry,
             properties: properties,
             state: state);
