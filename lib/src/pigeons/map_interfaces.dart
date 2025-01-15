@@ -1204,7 +1204,6 @@ class QueriedRenderedFeature {
   QueriedRenderedFeature({
     required this.queriedFeature,
     required this.layers,
-    this.queryTargets,
   });
 
   /// Feature returned by the query.
@@ -1215,16 +1214,10 @@ class QueriedRenderedFeature {
   /// If the feature is only rendered in one layer, a single Id will be provided.
   List<String?> layers;
 
-  /// An array of feature query targets that correspond to this queried feature.
-  ///
-  /// - Note: Returned query targets will omit the original `filter` data.
-  List<FeaturesetQueryTarget>? queryTargets;
-
   Object encode() {
     return <Object?>[
       queriedFeature,
       layers,
-      queryTargets,
     ];
   }
 
@@ -1233,8 +1226,6 @@ class QueriedRenderedFeature {
     return QueriedRenderedFeature(
       queriedFeature: result[0]! as QueriedFeature,
       layers: (result[1] as List<Object?>?)!.cast<String?>(),
-      queryTargets:
-          (result[2] as List<Object?>?)?.cast<FeaturesetQueryTarget>(),
     );
   }
 }
@@ -1519,41 +1510,6 @@ class FeaturesetFeature {
       properties:
           (result[3] as Map<Object?, Object?>?)!.cast<String, Object?>(),
       state: (result[4] as Map<Object?, Object?>?)!.cast<String, Object?>(),
-    );
-  }
-}
-
-/// Defines the parameters for querying features from a Featureset with an optional filter and id.
-class FeaturesetQueryTarget {
-  FeaturesetQueryTarget({
-    required this.featureset,
-    this.filter,
-    this.id,
-  });
-
-  /// A `FeaturesetDescriptor` that specifies the featureset to be included in the query.
-  FeaturesetDescriptor featureset;
-
-  /// An optional filter expression used to refine the query results based on conditions related to the specified featureset.
-  String? filter;
-
-  /// An optional unique identifier associated with the target.
-  int? id;
-
-  Object encode() {
-    return <Object?>[
-      featureset,
-      filter,
-      id,
-    ];
-  }
-
-  static FeaturesetQueryTarget decode(Object result) {
-    result as List<Object?>;
-    return FeaturesetQueryTarget(
-      featureset: result[0]! as FeaturesetDescriptor,
-      filter: result[1] as String?,
-      id: result[2] as int?,
     );
   }
 }
@@ -2289,53 +2245,50 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is FeaturesetFeature) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetQueryTarget) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is FlatLight) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is MbxImage) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is ImageContent) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
-      buffer.putUint8(201);
-      writeValue(buffer, value.encode());
     } else if (value is StylePropertyValue) {
-      buffer.putUint8(202);
+      buffer.putUint8(201);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2491,36 +2444,34 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 186:
         return FeaturesetFeature.decode(readValue(buffer)!);
       case 187:
-        return FeaturesetQueryTarget.decode(readValue(buffer)!);
-      case 188:
         return MapContentGestureContext.decode(readValue(buffer)!);
-      case 189:
+      case 188:
         return _RenderedQueryGeometry.decode(readValue(buffer)!);
-      case 190:
+      case 189:
         return ProjectedMeters.decode(readValue(buffer)!);
-      case 191:
+      case 190:
         return MercatorCoordinate.decode(readValue(buffer)!);
-      case 192:
+      case 191:
         return StyleObjectInfo.decode(readValue(buffer)!);
-      case 193:
+      case 192:
         return StyleProjection.decode(readValue(buffer)!);
-      case 194:
+      case 193:
         return FlatLight.decode(readValue(buffer)!);
-      case 195:
+      case 194:
         return DirectionalLight.decode(readValue(buffer)!);
-      case 196:
+      case 195:
         return AmbientLight.decode(readValue(buffer)!);
-      case 197:
+      case 196:
         return MbxImage.decode(readValue(buffer)!);
-      case 198:
+      case 197:
         return ImageStretches.decode(readValue(buffer)!);
-      case 199:
+      case 198:
         return ImageContent.decode(readValue(buffer)!);
-      case 200:
+      case 199:
         return TransitionOptions.decode(readValue(buffer)!);
-      case 201:
+      case 200:
         return CanonicalTileID.decode(readValue(buffer)!);
-      case 202:
+      case 201:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

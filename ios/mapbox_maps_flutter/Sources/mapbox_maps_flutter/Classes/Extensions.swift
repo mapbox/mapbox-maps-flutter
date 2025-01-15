@@ -644,7 +644,8 @@ extension MapboxMaps.Geometry {
             return multiLineString.toMap()
         case .multiPolygon(let multiPolygon):
             return multiPolygon.toMap()
-        case .geometryCollection:
+        // includes GeometryCollection as it is not supported
+        default:
             return [:]
         }
     }

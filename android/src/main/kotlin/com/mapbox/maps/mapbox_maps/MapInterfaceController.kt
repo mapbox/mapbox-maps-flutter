@@ -183,17 +183,18 @@ class MapInterfaceController(
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
-    val typedFeaturesetDescriptor = featureset.toTypedFeaturesetDescriptor() as? TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>> ?: return
-    mapboxMap.queryRenderedFeatures(
-      typedFeaturesetDescriptor,
-      geometry?.toRenderedQueryGeometry(context),
-      filter?.let { Expression.fromRaw(filter) }
-    ) {
-      callback(
-        Result.success(
-          it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
+    (featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>).let { typedFeaturesetDescriptor ->
+      mapboxMap.queryRenderedFeatures(
+        typedFeaturesetDescriptor,
+        geometry?.toRenderedQueryGeometry(context),
+        filter?.let { Expression.fromRaw(filter) }
+      ) {
+        callback(
+          Result.success(
+            it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
+          )
         )
-      )
+      }
     }
   }
 
@@ -304,12 +305,15 @@ class MapInterfaceController(
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    val id = feature.id?.toFeaturesetFeatureId() ?: return
-    mapboxMap.setFeatureState(
-      feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      id = id,
-      state = state.toFeatureState()
-    ) { callback(Result.success(Unit)) }
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.setFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        id = feature.id.toFeaturesetFeatureId(),
+        state = state.toFeatureState()
+      ) { callback(Result.success(Unit)) }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature for the requested feature: ${feature.id}")))
+    }
   }
 
   override fun getFeatureState(
@@ -347,6 +351,7 @@ class MapInterfaceController(
         )
       }
     }
+    callback(Result.failure(Throwable("Cannot get feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
   }
 
   @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
@@ -354,17 +359,19 @@ class MapInterfaceController(
     feature: FeaturesetFeature,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    val featuresetDescriptor = feature.featureset.toTypedFeaturesetDescriptor() ?: return
-    val id = feature.id?.toFeaturesetFeatureId() ?: return
-    mapboxMap.getFeatureState(
-      featuresetDescriptor,
-      id
-    ) {
-      callback(
-        Result.success(
-          JSONObject(it.asJsonString()).toFilteredMap()
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.getFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        feature.id.toFeaturesetFeatureId()
+      ) {
+        callback(
+          Result.success(
+            JSONObject(it.asJsonString()).toFilteredMap()
+          )
         )
-      )
+      }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
     }
   }
 
@@ -377,7 +384,7 @@ class MapInterfaceController(
   ) {
     mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey) {
       if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
+        callback(Result.failure(Throwable("Cannot remove feature state for the requested feature: $featureId")))
       } else {
         callback(Result.success(Unit))
       }
@@ -397,7 +404,7 @@ class MapInterfaceController(
       stateKey?.let { FeatureStateKey.create(it) }
     ) {
       if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
+        callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
       } else {
         callback(Result.success(Unit))
       }
@@ -410,17 +417,20 @@ class MapInterfaceController(
     stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
-    val id = feature.id?.toFeaturesetFeatureId() ?: return
-    mapboxMap.removeFeatureState(
-      feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      id,
-      stateKey?.let { FeatureStateKey.create(it) }
-    ) {
-      if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
-      } else {
-        callback(Result.success(Unit))
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.removeFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        feature.id.toFeaturesetFeatureId(),
+        stateKey?.let { FeatureStateKey.create(it) }
+      ) {
+        if (it.isError) {
+          callback(Result.failure(Throwable("Cannot remove feature state for the requested feature: ${feature.id}")))
+        } else {
+          callback(Result.success(Unit))
+        }
       }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
     }
   }
 
@@ -433,7 +443,7 @@ class MapInterfaceController(
       featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>
     ) {
       if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
+        callback(Result.failure(Throwable("Cannot reset feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}.")))
       } else {
         callback(Result.success(Unit))
       }

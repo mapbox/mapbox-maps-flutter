@@ -1281,27 +1281,19 @@ data class QueriedRenderedFeature(
    * If the feature has been rendered in multiple layers, multiple Ids will be provided.
    * If the feature is only rendered in one layer, a single Id will be provided.
    */
-  val layers: List<String?>,
-  /**
-   * An array of feature query targets that correspond to this queried feature.
-   *
-   * - Note: Returned query targets will omit the original `filter` data.
-   */
-  val queryTargets: List<FeaturesetQueryTarget>? = null
+  val layers: List<String?>
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): QueriedRenderedFeature {
       val queriedFeature = pigeonVar_list[0] as QueriedFeature
       val layers = pigeonVar_list[1] as List<String?>
-      val queryTargets = pigeonVar_list[2] as List<FeaturesetQueryTarget>?
-      return QueriedRenderedFeature(queriedFeature, layers, queryTargets)
+      return QueriedRenderedFeature(queriedFeature, layers)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       queriedFeature,
       layers,
-      queryTargets,
     )
   }
 }
@@ -1564,36 +1556,6 @@ data class FeaturesetFeature(
       geometry,
       properties,
       state,
-    )
-  }
-}
-
-/**
- * Defines the parameters for querying features from a Featureset with an optional filter and id.
- *
- * Generated class from Pigeon that represents data sent in messages.
- */
-data class FeaturesetQueryTarget(
-  /** A `FeaturesetDescriptor` that specifies the featureset to be included in the query. */
-  val featureset: FeaturesetDescriptor,
-  /** An optional filter expression used to refine the query results based on conditions related to the specified featureset. */
-  val filter: String? = null,
-  /** An optional unique identifier associated with the target. */
-  val id: Long? = null
-) {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): FeaturesetQueryTarget {
-      val featureset = pigeonVar_list[0] as FeaturesetDescriptor
-      val filter = pigeonVar_list[1] as String?
-      val id = pigeonVar_list[2] as Long?
-      return FeaturesetQueryTarget(featureset, filter, id)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      featureset,
-      filter,
-      id,
     )
   }
 }
@@ -2357,80 +2319,75 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetQueryTarget.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
-        }
-      }
-      201.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           CanonicalTileID.fromList(it)
         }
       }
-      202.toByte() -> {
+      201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2672,68 +2629,64 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is FeaturesetQueryTarget -> {
+      is MapContentGestureContext -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is _RenderedQueryGeometry -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is ProjectedMeters -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is MercatorCoordinate -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is StyleObjectInfo -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is StyleProjection -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is FlatLight -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is DirectionalLight -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is AmbientLight -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is MbxImage -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is ImageStretches -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is ImageContent -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is TransitionOptions -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is CanonicalTileID -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
-        stream.write(201)
-        writeValue(stream, value.toList())
-      }
       is StylePropertyValue -> {
-        stream.write(202)
+        stream.write(201)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

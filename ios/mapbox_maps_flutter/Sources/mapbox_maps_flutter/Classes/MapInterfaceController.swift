@@ -205,7 +205,11 @@ final class MapInterfaceController: _MapInterface {
             case .success(let features):
                 completion(.success(features.map({$0.toFLTFeaturesetFeature()})))
             case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+                completion(.failure(FlutterError(
+                    code: MapInterfaceController.errorCode,
+                    message: "\(error)",
+                    details: "Error querying rendered features for featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}."
+                )))
             }
         }
         if let geometry {
@@ -288,14 +292,19 @@ final class MapInterfaceController: _MapInterface {
 
     func setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: [String: Any?], completion: @escaping (Result<Void, any Error>) -> Void) {
         guard let state = JSONObject.init(turfRawValue: state) else {
+            completion(.failure(FlutterError(
+                code: "setFeatureStateError",
+                message: "Error converting feature state.",
+                details: nil
+            )))
             return
         }
-        self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
+        _ = self.mapboxMap.setFeatureState<FeaturesetFeature>(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), state: state) { error in
             if let error {
                 completion(.failure(FlutterError(
                     code: "setFeatureStateError",
                     message: error.localizedDescription,
-                    details: nil
+                    details: "Error setting feature state for featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))} and featureId: \(String(describing: featureId))."
                 )))
             } else {
                 completion(.success(()))
@@ -305,14 +314,19 @@ final class MapInterfaceController: _MapInterface {
 
     func setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: [String: Any?], completion: @escaping (Result<Void, Error>) -> Void) {
         guard let state = JSONObject.init(turfRawValue: state) else {
+            completion(.failure(FlutterError(
+                code: "setFeatureStateError",
+                message: "Error converting feature state.",
+                details: nil
+            )))
             return
         }
-        self.mapboxMap.setFeatureState<FeaturesetFeature>(feature.toMapFeaturesetFeature(), state: state) { error in
+        _ = self.mapboxMap.setFeatureState<FeaturesetFeature>(feature.toMapFeaturesetFeature(), state: state) { error in
             if let error {
                 completion(.failure(FlutterError(
                     code: "setFeatureStateError",
                     message: error.localizedDescription,
-                    details: nil
+                    details: "Error setting feature state for feature: \(String(describing: feature.id))."
                 )))
             } else {
                 completion(.success(()))
@@ -337,7 +351,11 @@ final class MapInterfaceController: _MapInterface {
             case .success(let state):
                 completion(.success(state.mapValues { $0?.rawValue }))
             case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+                completion(.failure(FlutterError(
+                    code: "getFeatureStateError",
+                    message: "\(error)",
+                    details: "Error getting feature state for featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}."
+                )))
             }
         }
     }
@@ -348,7 +366,11 @@ final class MapInterfaceController: _MapInterface {
             case .success(let state):
                 completion(.success(state.mapValues { $0?.rawValue }))
             case .failure(let error):
-                completion(.failure(FlutterError(code: MapInterfaceController.errorCode, message: "\(error)", details: nil)))
+                completion(.failure(FlutterError(
+                    code: "getFeatureStateError",
+                    message: "\(error)",
+                    details: "Error getting feature state for feature: \(String(describing: feature.id))."
+                )))
             }
         }
     }
@@ -366,11 +388,11 @@ final class MapInterfaceController: _MapInterface {
 
     func removeFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.removeFeatureState(featureset: featureset.toMapFeaturesetDescriptor(), featureId: featureId.toMapFeaturesetFeatureId(), stateKey: stateKey) { error in
-            if let error {
+            if error != nil {
                 completion(.failure(FlutterError(
                     code: "removeFeatureStateError",
-                    message: error.localizedDescription,
-                    details: nil
+                    message: "Cannot remove feature state.",
+                    details: "The requested featureset: \(featureset) is not valid."
                 )))
             } else {
                 completion(.success(()))
@@ -380,11 +402,11 @@ final class MapInterfaceController: _MapInterface {
 
     func removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.removeFeatureState(feature.toMapFeaturesetFeature(), stateKey: stateKey) { error in
-            if let error {
+            if error != nil {
                 completion(.failure(FlutterError(
                     code: "removeFeatureStateError",
-                    message: error.localizedDescription,
-                    details: nil
+                    message: "Cannot remove feature state.",
+                    details: "The requested feature: \(String(describing: feature.id)) is not valid"
                 )))
             } else {
                 completion(.success(()))
@@ -394,11 +416,11 @@ final class MapInterfaceController: _MapInterface {
 
     func resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, completion: @escaping (Result<Void, any Error>) -> Void) {
         self.mapboxMap.resetFeatureStates(featureset: featureset.toMapFeaturesetDescriptor()) { error in
-            if let error {
+            if error != nil {
                 completion(.failure(FlutterError(
                     code: "resetFeatureStateError",
-                    message: error.localizedDescription,
-                    details: nil
+                    message: "Cannot remove feature state.",
+                    details: "The requested featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))} is not valid."
                 )))
             } else {
                 completion(.success(()))

@@ -1123,28 +1123,21 @@ struct QueriedRenderedFeature {
   /// If the feature has been rendered in multiple layers, multiple Ids will be provided.
   /// If the feature is only rendered in one layer, a single Id will be provided.
   var layers: [String?]
-  /// An array of feature query targets that correspond to this queried feature.
-  ///
-  /// - Note: Returned query targets will omit the original `filter` data.
-  var queryTargets: [FeaturesetQueryTarget]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
     let queriedFeature = pigeonVar_list[0] as! QueriedFeature
     let layers = pigeonVar_list[1] as! [String?]
-    let queryTargets: [FeaturesetQueryTarget]? = nilOrValue(pigeonVar_list[2])
 
     return QueriedRenderedFeature(
       queriedFeature: queriedFeature,
-      layers: layers,
-      queryTargets: queryTargets
+      layers: layers
     )
   }
   func toList() -> [Any?] {
     return [
       queriedFeature,
       layers,
-      queryTargets,
     ]
   }
 }
@@ -1368,38 +1361,6 @@ struct FeaturesetFeature {
       geometry,
       properties,
       state,
-    ]
-  }
-}
-
-/// Defines the parameters for querying features from a Featureset with an optional filter and id.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct FeaturesetQueryTarget {
-  /// A `FeaturesetDescriptor` that specifies the featureset to be included in the query.
-  var featureset: FeaturesetDescriptor
-  /// An optional filter expression used to refine the query results based on conditions related to the specified featureset.
-  var filter: String?
-  /// An optional unique identifier associated with the target.
-  var id: Int64?
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetQueryTarget? {
-    let featureset = pigeonVar_list[0] as! FeaturesetDescriptor
-    let filter: String? = nilOrValue(pigeonVar_list[1])
-    let id: Int64? = nilOrValue(pigeonVar_list[2])
-
-    return FeaturesetQueryTarget(
-      featureset: featureset,
-      filter: filter,
-      id: id
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      featureset,
-      filter,
-      id,
     ]
   }
 }
@@ -2132,36 +2093,34 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 186:
       return FeaturesetFeature.fromList(self.readValue() as! [Any?])
     case 187:
-      return FeaturesetQueryTarget.fromList(self.readValue() as! [Any?])
-    case 188:
       return MapContentGestureContext.fromList(self.readValue() as! [Any?])
-    case 189:
+    case 188:
       return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
-    case 190:
+    case 189:
       return ProjectedMeters.fromList(self.readValue() as! [Any?])
-    case 191:
+    case 190:
       return MercatorCoordinate.fromList(self.readValue() as! [Any?])
-    case 192:
+    case 191:
       return StyleObjectInfo.fromList(self.readValue() as! [Any?])
-    case 193:
+    case 192:
       return StyleProjection.fromList(self.readValue() as! [Any?])
-    case 194:
+    case 193:
       return FlatLight.fromList(self.readValue() as! [Any?])
-    case 195:
+    case 194:
       return DirectionalLight.fromList(self.readValue() as! [Any?])
-    case 196:
+    case 195:
       return AmbientLight.fromList(self.readValue() as! [Any?])
-    case 197:
+    case 196:
       return MbxImage.fromList(self.readValue() as! [Any?])
-    case 198:
+    case 197:
       return ImageStretches.fromList(self.readValue() as! [Any?])
-    case 199:
+    case 198:
       return ImageContent.fromList(self.readValue() as! [Any?])
-    case 200:
+    case 199:
       return TransitionOptions.fromList(self.readValue() as! [Any?])
-    case 201:
+    case 200:
       return CanonicalTileID.fromList(self.readValue() as! [Any?])
-    case 202:
+    case 201:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2345,53 +2304,50 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? FeaturesetFeature {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetQueryTarget {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? StyleProjection {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? FlatLight {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? AmbientLight {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? MbxImage {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? ImageStretches {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? ImageContent {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
-      super.writeByte(201)
-      super.writeValue(value.toList())
     } else if let value = value as? StylePropertyValue {
-      super.writeByte(202)
+      super.writeByte(201)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
