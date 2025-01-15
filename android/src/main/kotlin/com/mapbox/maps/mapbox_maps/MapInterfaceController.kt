@@ -5,12 +5,21 @@ import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxDelicateApi
+import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
+import com.mapbox.maps.extension.style.expressions.generated.Expression
+import com.mapbox.maps.interactions.FeatureState
+import com.mapbox.maps.interactions.FeatureStateKey
+import com.mapbox.maps.interactions.TypedFeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
 import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeature
+import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetFeatureId
 import com.mapbox.maps.mapbox_maps.pigeons.MapDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons.MapOptions
 import com.mapbox.maps.mapbox_maps.pigeons.NorthOrientation
@@ -27,6 +36,7 @@ import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapWidgetDebugOptions
 import com.mapbox.maps.mapbox_maps.pigeons._RenderedQueryGeometry
 import com.mapbox.maps.plugin.delegates.listeners.OnMapLoadErrorListener
+import org.json.JSONObject
 
 class MapInterfaceController(
   private val mapboxMap: MapboxMap,
@@ -166,6 +176,28 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class)
+  override fun queryRenderedFeaturesForFeatureset(
+    featureset: FeaturesetDescriptor,
+    geometry: _RenderedQueryGeometry?,
+    filter: String?,
+    callback: (Result<List<FeaturesetFeature>>) -> Unit
+  ) {
+    (featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>).let { typedFeaturesetDescriptor ->
+      mapboxMap.queryRenderedFeatures(
+        typedFeaturesetDescriptor,
+        geometry?.toRenderedQueryGeometry(context),
+        filter?.let { Expression.fromRaw(filter) }
+      ) {
+        callback(
+          Result.success(
+            it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
+          )
+        )
+      }
+    }
+  }
+
   override fun querySourceFeatures(
     sourceId: String,
     options: SourceQueryOptions,
@@ -253,6 +285,37 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun setFeatureStateForFeaturesetDescriptor(
+    featureset: FeaturesetDescriptor,
+    featureId: FeaturesetFeatureId,
+    state: Map<String, Any?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    mapboxMap.setFeatureState(
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      featureId.toFeaturesetFeatureId(),
+      state.toFeatureState()
+    ) { callback(Result.success(Unit)) }
+  }
+
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun setFeatureStateForFeaturesetFeature(
+    feature: FeaturesetFeature,
+    state: Map<String, Any?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.setFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        id = feature.id.toFeaturesetFeatureId(),
+        state = state.toFeatureState()
+      ) { callback(Result.success(Unit)) }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature for the requested feature: ${feature.id}")))
+    }
+  }
+
   override fun getFeatureState(
     sourceId: String,
     sourceLayerId: String?,
@@ -270,6 +333,49 @@ class MapInterfaceController(
     }
   }
 
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun getFeatureStateForFeaturesetDescriptor(
+    featureset: FeaturesetDescriptor,
+    featureId: FeaturesetFeatureId,
+    callback: (Result<Map<String, Any?>>) -> Unit
+  ) {
+    featureset.toTypedFeaturesetDescriptor()?.also { featuresetDescriptor ->
+      mapboxMap.getFeatureState(
+        featuresetDescriptor,
+        featureId.toFeaturesetFeatureId()
+      ) {
+        callback(
+          Result.success(
+            JSONObject(it.asJsonString()).toFilteredMap()
+          )
+        )
+      }
+    } ?: run {
+      callback(Result.failure(Throwable("Cannot get feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+    }
+  }
+
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun getFeatureStateForFeaturesetFeature(
+    feature: FeaturesetFeature,
+    callback: (Result<Map<String, Any?>>) -> Unit
+  ) {
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.getFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        feature.id.toFeaturesetFeatureId()
+      ) {
+        callback(
+          Result.success(
+            JSONObject(it.asJsonString()).toFilteredMap()
+          )
+        )
+      }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
+    }
+  }
+
   override fun removeFeatureState(
     sourceId: String,
     sourceLayerId: String?,
@@ -279,7 +385,66 @@ class MapInterfaceController(
   ) {
     mapboxMap.removeFeatureState(sourceId, sourceLayerId, featureId, stateKey) {
       if (it.isError) {
-        callback(Result.failure(Throwable(it.error)))
+        callback(Result.failure(Throwable("Cannot remove feature state for the requested feature: $featureId")))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
+  }
+
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun removeFeatureStateForFeaturesetDescriptor(
+    featureset: FeaturesetDescriptor,
+    featureId: FeaturesetFeatureId,
+    stateKey: String?,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    mapboxMap.removeFeatureState(
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+      featureId.toFeaturesetFeatureId(),
+      stateKey?.let { FeatureStateKey.create(it) }
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+      } else {
+        callback(Result.success(Unit))
+      }
+    }
+  }
+
+  @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
+  override fun removeFeatureStateForFeaturesetFeature(
+    feature: FeaturesetFeature,
+    stateKey: String?,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    if (feature.id?.toFeaturesetFeatureId() != null) {
+      mapboxMap.removeFeatureState(
+        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
+        feature.id.toFeaturesetFeatureId(),
+        stateKey?.let { FeatureStateKey.create(it) }
+      ) {
+        if (it.isError) {
+          callback(Result.failure(Throwable("Cannot remove feature state for the requested feature: ${feature.id}")))
+        } else {
+          callback(Result.success(Unit))
+        }
+      }
+    } else {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
+    }
+  }
+
+  @OptIn(MapboxExperimental::class)
+  override fun resetFeatureStatesForFeatureset(
+    featureset: FeaturesetDescriptor,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    mapboxMap.resetFeatureStates(
+      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>
+    ) {
+      if (it.isError) {
+        callback(Result.failure(Throwable("Cannot reset feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}.")))
       } else {
         callback(Result.success(Unit))
       }
