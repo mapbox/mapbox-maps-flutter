@@ -3335,7 +3335,7 @@ class _CameraManager {
   }
 }
 
-abstract class InteractionsListener {
+abstract class _InteractionsListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       MapInterfaces_PigeonCodec();
 
@@ -3343,7 +3343,7 @@ abstract class InteractionsListener {
       FeaturesetFeature feature, int interactionID);
 
   static void setUp(
-    InteractionsListener? api, {
+    _InteractionsListener? api, {
     BinaryMessenger? binaryMessenger,
     String messageChannelSuffix = '',
   }) {
@@ -3353,7 +3353,7 @@ abstract class InteractionsListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -3361,19 +3361,19 @@ abstract class InteractionsListener {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final MapContentGestureContext? arg_context =
               (args[0] as MapContentGestureContext?);
           assert(arg_context != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
           final FeaturesetFeature? arg_feature =
               (args[1] as FeaturesetFeature?);
           assert(arg_feature != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction was null, expected non-null FeaturesetFeature.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null FeaturesetFeature.');
           final int? arg_interactionID = (args[2] as int?);
           assert(arg_interactionID != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null int.');
           try {
             api.onInteraction(arg_context!, arg_feature!, arg_interactionID!);
             return wrapResponse(empty: true);

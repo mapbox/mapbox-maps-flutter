@@ -3364,16 +3364,16 @@ interface _CameraManager {
   }
 }
 /** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
-class InteractionsListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
+class _InteractionsListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
   companion object {
-    /** The codec used by InteractionsListener. */
+    /** The codec used by _InteractionsListener. */
     val codec: MessageCodec<Any?> by lazy {
       MapInterfacesPigeonCodec()
     }
   }
   fun onInteraction(contextArg: MapContentGestureContext, featureArg: FeaturesetFeature, interactionIDArg: Long, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(contextArg, featureArg, interactionIDArg)) {
       if (it is List<*>) {
