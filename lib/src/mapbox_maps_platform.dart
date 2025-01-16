@@ -161,6 +161,23 @@ class _MapboxMapsPlatform {
     }
   }
 
+  Future<dynamic> addInteractionsListeners(
+      Interaction interaction, int interactionID) async {
+    try {
+      return _channel
+          .invokeMethod('interactions#add_interaction', <String, dynamic>{
+        'featuresetDescriptor': interaction.featuresetDescriptor.encode(),
+        'interactionType': interaction.interactionType.index,
+        'filter': interaction.filter,
+        'radius': interaction.radius,
+        'stopPropagation': interaction.stopPropagation,
+        'id': interactionID,
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
   Future<dynamic> removeGestureListeners() async {
     try {
       return _channel.invokeMethod('gesture#remove_listeners');

@@ -28,7 +28,8 @@ Future<MapboxMap> main(
     {double? width,
     double? height,
     CameraOptions? camera,
-    ViewportState? viewport}) {
+    ViewportState? viewport,
+    Alignment alignment = Alignment.topLeft}) {
   final completer = Completer<MapboxMap>();
 
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
