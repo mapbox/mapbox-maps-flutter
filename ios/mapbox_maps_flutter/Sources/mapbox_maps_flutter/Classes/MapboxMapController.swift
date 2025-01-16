@@ -107,7 +107,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             gesturesController!.removeListeners()
             result(nil)
         case "interactions#add_interaction":
-            let listener = InteractionsListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+            let listener = _InteractionsListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
             guard let arguments = methodCall.arguments as? [String: Any],
                   let featuresetDescriptorList = arguments["featuresetDescriptor"] as? [String?],
                   let featuresetDescriptor = FeaturesetDescriptor.fromList(featuresetDescriptorList),

@@ -190,8 +190,11 @@ enum ViewAnnotationAnchor: Int {
   case cENTER = 8
 }
 
+/// The type of interaction, either tap/click or longTap/longClick
 enum InteractionType: Int {
+  /// A short tap or click
   case tAP = 0
+  /// A long tap or long click
   case lONGTAP = 1
 }
 
@@ -1240,6 +1243,8 @@ struct FeaturesetFeatureId {
   }
 }
 
+/// Wraps a FeatureState map
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct FeatureState {
   var map: [String: Any?]
@@ -1267,10 +1272,15 @@ struct FeatureState {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct Interaction {
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
   var featuresetDescriptor: FeaturesetDescriptor
+  /// The type of interaction, either tap or longTap
   var interactionType: InteractionType
+  /// Whether to stop the propagation of the interaction to the map. Defaults to true.
   var stopPropagation: Bool
+  /// An optional filter of features that should trigger the interaction.
   var filter: String?
+  /// Radius of a tappable area
   var radius: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1302,11 +1312,26 @@ struct Interaction {
 
 /// A featureset descriptor.
 ///
+/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct FeaturesetDescriptor {
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  /// 
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
   var featuresetId: String?
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
   ///
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
   var importId: String?
+  /// An optional unique identifier for the layer within the current style.
+  /// 
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
   var layerId: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -1330,12 +1355,29 @@ struct FeaturesetDescriptor {
   }
 }
 
+/// A basic feature of a featureset.
+///
+/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+///
+/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct FeaturesetFeature {
+  /// An identifier of the feature.
+  ///
+  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+  /// In this case it's impossible to set a feature state for an individual feature.
   var id: FeaturesetFeatureId?
+  /// A featureset descriptor denoting the featureset this feature belongs to.
   var featureset: FeaturesetDescriptor
+  /// A feature geometry.
   var geometry: [String?: Any?]
+  /// Feature JSON properties.
   var properties: [String: Any?]
+  /// A feature state.
+  ///
+  /// This is a **snapshot** of the state that the feature had when it was interacted with.
+  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
   var state: [String: Any?]
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
@@ -3075,10 +3117,10 @@ class _CameraManagerSetup {
   }
 }
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
-protocol InteractionsListenerProtocol {
+protocol _InteractionsListenerProtocol {
   func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void)
 }
-class InteractionsListener: InteractionsListenerProtocol {
+class _InteractionsListener: _InteractionsListenerProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
   private let messageChannelSuffix: String
   init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
@@ -3089,7 +3131,7 @@ class InteractionsListener: InteractionsListenerProtocol {
     return MapInterfacesPigeonCodec.shared
   }
   func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.InteractionsListener.onInteraction\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg, featureArg, interactionIDArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -3188,8 +3230,9 @@ protocol _MapInterface {
   /// - Important: If you need to handle basic gestures on map content, 
   /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
   ///
-  /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
   /// @param featureset A typed featureset to query with.
+  /// @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+  /// If omitted, the full viewport is queried.
   /// @param filter An additional filter for features.
   func queryRenderedFeaturesForFeatureset(featureset: FeaturesetDescriptor, geometry: _RenderedQueryGeometry?, filter: String?, completion: @escaping (Result<[FeaturesetFeature], Error>) -> Void)
   /// Queries the map for source features.
@@ -3716,8 +3759,9 @@ class _MapInterfaceSetup {
     /// - Important: If you need to handle basic gestures on map content, 
     /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
     ///
-    /// @param geometry A screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
     /// @param featureset A typed featureset to query with.
+    /// @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+    /// If omitted, the full viewport is queried.
     /// @param filter An additional filter for features.
     let queryRenderedFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

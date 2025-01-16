@@ -24,13 +24,13 @@ import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.InteractionType
-import com.mapbox.maps.mapbox_maps.pigeons.InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.Projection
 import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
@@ -243,7 +243,7 @@ class MapboxMapController(
         result.success(null)
       }
       "interactions#add_interaction" -> {
-        val listener = InteractionsListener(messenger, channelSuffix)
+        val listener = _InteractionsListener(messenger, channelSuffix)
         val arguments: HashMap<String, Any> = call.arguments as? HashMap<String, Any> ?: return
         val featuresetDescriptorList = arguments["featuresetDescriptor"] as? List<Any?> ?: return
         val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(featuresetDescriptorList)

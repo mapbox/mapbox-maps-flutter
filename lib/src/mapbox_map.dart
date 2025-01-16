@@ -578,22 +578,23 @@ class MapboxMap extends ChangeNotifier {
           FeaturesetDescriptor featureset) =>
       _mapInterface.resetFeatureStatesForFeatureset(featureset);
 
-  // References for all interactions added to the map.
+  /// References for all interactions added to the map.
   @experimental
-  var interactionsList = _InteractionsList(interactions: {});
+  final _InteractionsList _interactionsList =
+      _InteractionsList(interactions: {});
 
   /// Add an interaction
   @experimental
   void addInteraction(Interaction interaction, OnInteraction action) {
-    interactionsList.interactions[action.hashCode] = _InteractionListener(
+    var id = _interactionsList.interactions.length;
+    _interactionsList.interactions[id] = _InteractionListener(
       onInteractionListener: action,
-      interactionID: action.hashCode,
+      interactionID: id,
     );
-
-    InteractionsListener.setUp(interactionsList,
+    _InteractionsListener.setUp(_interactionsList,
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-    _mapboxMapsPlatform.addInteractionsListeners(interaction, action.hashCode);
+    _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
   }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
@@ -767,8 +768,8 @@ class _GestureListener extends GestureListener {
   }
 }
 
-// Listen for a single interaction added to the map, identified by its id
-class _InteractionListener extends InteractionsListener {
+/// Listen for a single interaction added to the map, identified by its id
+class _InteractionListener extends _InteractionsListener {
   _InteractionListener({
     required this.interactionID,
     required this.onInteractionListener,
@@ -785,8 +786,8 @@ class _InteractionListener extends InteractionsListener {
   }
 }
 
-// Listen to all interactions on the map, determine which interaction to call
-class _InteractionsList extends InteractionsListener {
+/// Listen to all interactions on the map, determine which interaction to call
+class _InteractionsList extends _InteractionsListener {
   _InteractionsList({
     required this.interactions,
   });
