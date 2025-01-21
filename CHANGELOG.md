@@ -1,6 +1,12 @@
 # main
 
+### 2.6.0-beta.1
+
+> [!IMPORTANT]
+> The iOS minimum deployment target is now iOS 14.0.
+
 * Add support for Swift Package Manager.
+* Update Maps SDK to 11.10.0-beta.1
 
 ### 2.5.0
 
