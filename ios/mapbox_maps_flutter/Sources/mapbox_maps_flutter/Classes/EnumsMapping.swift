@@ -1,5 +1,5 @@
 // This file is generated
-import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 
 extension MapboxMaps.FillTranslateAnchor {
 
