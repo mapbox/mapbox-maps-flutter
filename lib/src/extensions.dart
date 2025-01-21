@@ -39,10 +39,6 @@ extension _MbxEdgeInsetsCodable on MbxEdgeInsets {
       right: edgeInsets.right,
     );
   }
-
-  EdgeInsets toEdgeInsets() {
-    return EdgeInsets.fromLTRB(left, top, right, bottom);
-  }
 }
 
 extension ScreenBoxToJson on ScreenBox {
