@@ -204,9 +204,9 @@ To create 5 point annotations using custom icon:
     var options = <PointAnnotationOptions>[];
     for (var i = 0; i < 5; i++) {
       options.add(PointAnnotationOptions(
-          geometry: createRandomPoint().toJson(), image: list));
+          geometry: Point.fromJson(createRandomPoint().toJson()), image: list));
     }
-    pointAnnotationManager?.createMulti(options);
+    pointAnnotationManager.createMulti(options);
   });
 ```
 You can find more examples of the AnnotationManagers usage in the sample app : [point annotations](example/lib/point_annotations.dart), [circle annotations](example/lib/circle_annotations.dart), [polygon annotations](example/lib/polygon_annotations.dart), [polyline annotations](example/lib/polyline_annotations.dart). 
