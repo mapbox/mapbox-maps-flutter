@@ -37,7 +37,7 @@ Contributions welcome!
 | Fill Annotations | :white_check_mark: | :white_check_mark: |
 | Snapshotter | :white_check_mark: | :white_check_mark: |
 | Offline | :white_check_mark: | :white_check_mark: |
-| Viewport | :x:                | :x: |
+| Viewport | :white_check_mark: | :white_check_mark: |
 | Style DSL   | :x:                | :x: |
 | Expression DSL   | :x:                | :x: |
 | View Annotations   | :x:                | :x: |
