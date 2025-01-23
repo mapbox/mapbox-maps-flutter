@@ -3,25 +3,19 @@ part of mapbox_maps_flutter;
 // A single tap interaction.
 class TapInteraction extends Interaction {
   TapInteraction(FeaturesetDescriptor featuresetDescriptor,
-      {String? filter, double? radius, bool stopPropagation = true})
+      {super.filter, super.radius, super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
-            interactionType: InteractionType.TAP,
-            filter: filter,
-            radius: radius,
-            stopPropagation: stopPropagation);
+            interactionType: InteractionType.TAP);
 }
 
 // A long tap interaction
 class LongTapInteraction extends Interaction {
   LongTapInteraction(FeaturesetDescriptor featuresetDescriptor,
-      {String? filter, double? radius, bool stopPropagation = true})
+      {super.filter, super.radius, super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
-            interactionType: InteractionType.LONG_TAP,
-            filter: filter,
-            radius: radius,
-            stopPropagation: stopPropagation);
+            interactionType: InteractionType.LONG_TAP);
 }
 
 extension Standard on FeaturesetDescriptor {

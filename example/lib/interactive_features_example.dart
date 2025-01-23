@@ -34,12 +34,10 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     StandardBuildingState featureState = StandardBuildingState(highlight: true);
 
     // Add the tap interaction to the map, set the action to occur when a building is tapped (highlight it)
-    mapboxMap.addInteraction(tapInteraction, (_, FeaturesetFeature feature) {
+    mapboxMap.addInteraction<StandardBuildingsFeature>(tapInteraction,
+        (_, feature) {
       mapboxMap.setFeatureStateForFeaturesetFeature(feature, featureState);
-      var buildingFeature = StandardBuildingsFeature(
-          feature.geometry, feature.properties, feature.state,
-          id: feature.id);
-      log("Building feature id: ${buildingFeature.id?.id}");
+      log("Building group: ${feature.group}");
     });
 
     // On long tap, remove the highlight state
@@ -56,9 +54,11 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
         TapInteraction(Standard.pois(), radius: 10, stopPropagation: false);
 
     // Define a state to hide the POI when it is interacted with
-    mapboxMap.addInteraction(tapInteractionPOI, (_, FeaturesetFeature feature) {
+    mapboxMap.addInteraction(tapInteractionPOI,
+        (_, StandardPoiFeature feature) {
       mapboxMap.setFeatureStateForFeaturesetFeature(
           feature, StandardPoiState(hide: true));
+      log("POI feature name: ${feature.name}");
     });
   }
 
@@ -72,7 +72,7 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
           bearing: 49.92,
           zoom: 16.35,
           pitch: 40),
-      styleUri: MapboxStyles.STANDARD,
+      styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
       textureView: true,
       onMapCreated: _onMapCreated,
     ));

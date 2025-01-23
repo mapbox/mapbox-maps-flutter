@@ -25,14 +25,20 @@ class StandardPlaceLabelsFeature extends FeaturesetFeature {
   }
 
   StandardPlaceLabelsFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state,
-      {FeaturesetFeatureId? id})
+      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
       : super(
-            id: id,
             featureset: Standard.placeLabels(),
             geometry: geometry,
             properties: properties,
             state: state);
+
+  StandardPlaceLabelsFeature.fromFeaturesetFeature(FeaturesetFeature feature)
+      : super(
+            id: feature.id,
+            featureset: feature.featureset,
+            geometry: feature.geometry,
+            properties: feature.properties,
+            state: feature.state);
 }
 
 // Represents available states for Place Labels in the Standard style.

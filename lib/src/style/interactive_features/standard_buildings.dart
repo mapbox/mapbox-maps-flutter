@@ -18,14 +18,21 @@ class StandardBuildingsFeature extends FeaturesetFeature {
   }
 
   StandardBuildingsFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state,
-      {FeaturesetFeatureId? id})
+      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
       : super(
-            id: id,
             featureset: Standard.buildings(),
             geometry: geometry,
             properties: properties,
             state: state);
+
+  @override
+  StandardBuildingsFeature.fromFeaturesetFeature(FeaturesetFeature feature)
+      : super(
+            id: feature.id,
+            featureset: feature.featureset,
+            geometry: feature.geometry,
+            properties: feature.properties,
+            state: feature.state);
 }
 
 // Represents available states for Buildings in the Standard style.

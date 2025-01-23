@@ -56,14 +56,20 @@ class StandardPoiFeature extends FeaturesetFeature {
   }
 
   StandardPoiFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state,
-      {FeaturesetFeatureId? id})
+      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
       : super(
-            id: id,
             featureset: Standard.pois(),
             geometry: geometry,
             properties: properties,
             state: state);
+
+  StandardPoiFeature.fromFeaturesetFeature(FeaturesetFeature feature)
+      : super(
+            id: feature.id,
+            featureset: feature.featureset,
+            geometry: feature.geometry,
+            properties: feature.properties,
+            state: feature.state);
 }
 
 // Represents available states for POIs in the Standard style.

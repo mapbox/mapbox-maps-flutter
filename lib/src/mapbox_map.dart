@@ -585,9 +585,10 @@ class MapboxMap extends ChangeNotifier {
 
   /// Add an interaction
   @experimental
-  void addInteraction(Interaction interaction, OnInteraction action) {
+  void addInteraction<T extends FeaturesetFeature>(
+      Interaction interaction, OnInteraction<T> action) {
     var id = _interactionsList.interactions.length;
-    _interactionsList.interactions[id] = _InteractionListener(
+    _interactionsList.interactions[id] = _InteractionListener<T>(
       onInteractionListener: action,
       interactionID: id,
     );
@@ -769,7 +770,8 @@ class _GestureListener extends GestureListener {
 }
 
 /// Listen for a single interaction added to the map, identified by its id
-class _InteractionListener extends _InteractionsListener {
+class _InteractionListener<T extends FeaturesetFeature>
+    extends _InteractionsListener {
   _InteractionListener({
     required this.interactionID,
     required this.onInteractionListener,
@@ -777,17 +779,33 @@ class _InteractionListener extends _InteractionsListener {
 
   int interactionID;
 
-  final OnInteraction onInteractionListener;
+  final OnInteraction<T> onInteractionListener;
 
   @override
   void onInteraction(MapContentGestureContext context,
       FeaturesetFeature feature, int interactionID) {
-    onInteractionListener.call(context, feature);
+    var featuresetID = feature.featureset.featuresetId;
+    T typedFeature;
+
+    if (featuresetID == "buildings") {
+      typedFeature =
+          StandardBuildingsFeature.fromFeaturesetFeature(feature) as T;
+    } else if (featuresetID == "poi") {
+      typedFeature = StandardPoiFeature.fromFeaturesetFeature(feature) as T;
+    } else if (featuresetID == "place-labels") {
+      typedFeature =
+          StandardPlaceLabelsFeature.fromFeaturesetFeature(feature) as T;
+    } else {
+      typedFeature = feature as T;
+    }
+
+    onInteractionListener.call(context, typedFeature);
   }
 }
 
 /// Listen to all interactions on the map, determine which interaction to call
-class _InteractionsList extends _InteractionsListener {
+class _InteractionsList<T extends FeaturesetFeature>
+    extends _InteractionsListener {
   _InteractionsList({
     required this.interactions,
   });
