@@ -234,14 +234,14 @@ enum class ViewAnnotationAnchor(val raw: Int) {
 }
 
 /** The type of interaction, either tap/click or longTap/longClick */
-enum class InteractionType(val raw: Int) {
+enum class _InteractionType(val raw: Int) {
   /** A short tap or click */
   TAP(0),
   /** A long tap or long click */
   LONG_TAP(1);
 
   companion object {
-    fun ofRaw(raw: Int): InteractionType? {
+    fun ofRaw(raw: Int): _InteractionType? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -1426,11 +1426,11 @@ data class FeatureState(
  *
  * Generated class from Pigeon that represents data sent in messages.
  */
-data class Interaction(
+data class _Interaction(
   /** The featureset descriptor that specifies the featureset to be included in the interaction. */
   val featuresetDescriptor: FeaturesetDescriptor,
   /** The type of interaction, either tap or longTap */
-  val interactionType: InteractionType,
+  val interactionType: _InteractionType,
   /** Whether to stop the propagation of the interaction to the map. Defaults to true. */
   val stopPropagation: Boolean,
   /** An optional filter of features that should trigger the interaction. */
@@ -1439,13 +1439,13 @@ data class Interaction(
   val radius: Double? = null
 ) {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): Interaction {
+    fun fromList(pigeonVar_list: List<Any?>): _Interaction {
       val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor
-      val interactionType = pigeonVar_list[1] as InteractionType
+      val interactionType = pigeonVar_list[1] as _InteractionType
       val stopPropagation = pigeonVar_list[2] as Boolean
       val filter = pigeonVar_list[3] as String?
       val radius = pigeonVar_list[4] as Double?
-      return Interaction(featuresetDescriptor, interactionType, stopPropagation, filter, radius)
+      return _Interaction(featuresetDescriptor, interactionType, stopPropagation, filter, radius)
     }
   }
   fun toList(): List<Any?> {
@@ -2069,7 +2069,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          InteractionType.ofRaw(it.toInt())
+          _InteractionType.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
@@ -2304,7 +2304,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Interaction.fromList(it)
+          _Interaction.fromList(it)
         }
       }
       185.toByte() -> {
@@ -2429,7 +2429,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is InteractionType -> {
+      is _InteractionType -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
@@ -2617,7 +2617,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is Interaction -> {
+      is _Interaction -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }

@@ -586,10 +586,10 @@ class MapboxMap extends ChangeNotifier {
   /// Add an interaction
   @experimental
   void addInteraction<T extends FeaturesetFeature>(
-      Interaction interaction, OnInteraction<T> action) {
+      TypedInteraction<T> interaction) {
     var id = _interactionsList.interactions.length;
     _interactionsList.interactions[id] = _InteractionListener<T>(
-      onInteractionListener: action,
+      onInteractionListener: interaction.action,
       interactionID: id,
     );
     _InteractionsListener.setUp(_interactionsList,
@@ -791,7 +791,7 @@ class _InteractionListener<T extends FeaturesetFeature>
       typedFeature =
           StandardBuildingsFeature.fromFeaturesetFeature(feature) as T;
     } else if (featuresetID == "poi") {
-      typedFeature = StandardPoiFeature.fromFeaturesetFeature(feature) as T;
+      typedFeature = StandardPOIsFeature.fromFeaturesetFeature(feature) as T;
     } else if (featuresetID == "place-labels") {
       typedFeature =
           StandardPlaceLabelsFeature.fromFeaturesetFeature(feature) as T;

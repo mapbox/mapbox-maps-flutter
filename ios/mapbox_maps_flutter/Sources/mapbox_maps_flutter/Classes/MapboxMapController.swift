@@ -112,7 +112,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
                   let featuresetDescriptorList = arguments["featuresetDescriptor"] as? [String?],
                   let featuresetDescriptor = FeaturesetDescriptor.fromList(featuresetDescriptorList),
                   let interactionTypeRaw = arguments["interactionType"] as? Int,
-                  let interactionType = InteractionType(rawValue: interactionTypeRaw),
+                  let interactionType = _InteractionType(rawValue: interactionTypeRaw),
                   let stopPropagation = arguments["stopPropagation"] as? Bool,
                   let id = arguments["id"] as? Int else {
                 return

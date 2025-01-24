@@ -27,39 +27,39 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     /// Define interactions for 3D Buildings
 
-    // Define a tap interaction targeting the Buildings featureset in the Standard style
-    var tapInteraction = TapInteraction(Standard.buildings());
-
     // Define a state to highlight the building when it is interacted with
     StandardBuildingState featureState = StandardBuildingState(highlight: true);
 
-    // Add the tap interaction to the map, set the action to occur when a building is tapped (highlight it)
-    mapboxMap.addInteraction<StandardBuildingsFeature>(tapInteraction,
+    // Define a tap interaction targeting the Buildings featureset in the Standard style
+    // Set the action to occur when a building is tapped (highlight it)
+    var tapInteraction = TapInteraction<StandardBuildingsFeature>(StandardBuildings(),
         (_, feature) {
       mapboxMap.setFeatureStateForFeaturesetFeature(feature, featureState);
       log("Building group: ${feature.group}");
     });
 
+    // Add the tap interaction to the map
+    mapboxMap.addInteraction(tapInteraction);
+
     // On long tap, remove the highlight state
-    mapboxMap.addInteraction(LongTapInteraction(Standard.buildings()),
-        (_, FeaturesetFeature feature) {
+    mapboxMap.addInteraction(
+        LongTapInteraction<StandardBuildingsFeature>(StandardBuildings(), (_, feature) {
       mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature);
-    });
+    }));
 
     /// Define interactions for Points of Interest
 
     // Define a tap interaction targeting the POI featureset in the Standard style, including a click radius
     // Do not stop propagation of the click event to lower layers
     var tapInteractionPOI =
-        TapInteraction(Standard.pois(), radius: 10, stopPropagation: false);
+        TapInteraction(StandardPOIs(), (_, StandardPOIsFeature feature) {
+      mapboxMap.setFeatureStateForFeaturesetFeature(
+          feature, StandardPOIsState(hide: true));
+      log("POI feature name: ${feature.name}");
+    }, radius: 10, stopPropagation: false);
 
     // Define a state to hide the POI when it is interacted with
-    mapboxMap.addInteraction(tapInteractionPOI,
-        (_, StandardPoiFeature feature) {
-      mapboxMap.setFeatureStateForFeaturesetFeature(
-          feature, StandardPoiState(hide: true));
-      log("POI feature name: ${feature.name}");
-    });
+    mapboxMap.addInteraction(tapInteractionPOI);
   }
 
   @override

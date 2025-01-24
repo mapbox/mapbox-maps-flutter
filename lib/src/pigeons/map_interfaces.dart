@@ -169,7 +169,7 @@ enum ViewAnnotationAnchor {
 }
 
 /// The type of interaction, either tap/click or longTap/longClick
-enum InteractionType {
+enum _InteractionType {
   /// A short tap or click
   TAP,
 
@@ -1362,8 +1362,8 @@ class FeatureState {
 /// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
 ///
 /// See also: ``MapboxMap/addInteraction``.
-class Interaction {
-  Interaction({
+class _Interaction {
+  _Interaction({
     required this.featuresetDescriptor,
     required this.interactionType,
     required this.stopPropagation,
@@ -1375,7 +1375,7 @@ class Interaction {
   FeaturesetDescriptor featuresetDescriptor;
 
   /// The type of interaction, either tap or longTap
-  InteractionType interactionType;
+  _InteractionType interactionType;
 
   /// Whether to stop the propagation of the interaction to the map. Defaults to true.
   bool stopPropagation;
@@ -1396,11 +1396,11 @@ class Interaction {
     ];
   }
 
-  static Interaction decode(Object result) {
+  static _Interaction decode(Object result) {
     result as List<Object?>;
-    return Interaction(
+    return _Interaction(
       featuresetDescriptor: result[0]! as FeaturesetDescriptor,
-      interactionType: result[1]! as InteractionType,
+      interactionType: result[1]! as _InteractionType,
       stopPropagation: result[2]! as bool,
       filter: result[3] as String?,
       radius: result[4] as double?,
@@ -2095,7 +2095,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is InteractionType) {
+    } else if (value is _InteractionType) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
     } else if (value is GestureState) {
@@ -2236,7 +2236,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is FeatureState) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is Interaction) {
+    } else if (value is _Interaction) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
     } else if (value is FeaturesetDescriptor) {
@@ -2324,7 +2324,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : ViewAnnotationAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : InteractionType.values[value];
+        return value == null ? null : _InteractionType.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
         return value == null ? null : GestureState.values[value];
@@ -2438,7 +2438,7 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 183:
         return FeatureState.decode(readValue(buffer)!);
       case 184:
-        return Interaction.decode(readValue(buffer)!);
+        return _Interaction.decode(readValue(buffer)!);
       case 185:
         return FeaturesetDescriptor.decode(readValue(buffer)!);
       case 186:

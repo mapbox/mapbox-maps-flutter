@@ -191,7 +191,7 @@ enum ViewAnnotationAnchor: Int {
 }
 
 /// The type of interaction, either tap/click or longTap/longClick
-enum InteractionType: Int {
+enum _InteractionType: Int {
   /// A short tap or click
   case tAP = 0
   /// A long tap or long click
@@ -1271,11 +1271,11 @@ struct FeatureState {
 /// See also: ``MapboxMap/addInteraction``.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
-struct Interaction {
+struct _Interaction {
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
   var featuresetDescriptor: FeaturesetDescriptor
   /// The type of interaction, either tap or longTap
-  var interactionType: InteractionType
+  var interactionType: _InteractionType
   /// Whether to stop the propagation of the interaction to the map. Defaults to true.
   var stopPropagation: Bool
   /// An optional filter of features that should trigger the interaction.
@@ -1284,14 +1284,14 @@ struct Interaction {
   var radius: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> Interaction? {
+  static func fromList(_ pigeonVar_list: [Any?]) -> _Interaction? {
     let featuresetDescriptor = pigeonVar_list[0] as! FeaturesetDescriptor
-    let interactionType = pigeonVar_list[1] as! InteractionType
+    let interactionType = pigeonVar_list[1] as! _InteractionType
     let stopPropagation = pigeonVar_list[2] as! Bool
     let filter: String? = nilOrValue(pigeonVar_list[3])
     let radius: Double? = nilOrValue(pigeonVar_list[4])
 
-    return Interaction(
+    return _Interaction(
       featuresetDescriptor: featuresetDescriptor,
       interactionType: interactionType,
       stopPropagation: stopPropagation,
@@ -1961,7 +1961,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 137:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return InteractionType(rawValue: enumResultAsInt)
+        return _InteractionType(rawValue: enumResultAsInt)
       }
       return nil
     case 138:
@@ -2129,7 +2129,7 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 183:
       return FeatureState.fromList(self.readValue() as! [Any?])
     case 184:
-      return Interaction.fromList(self.readValue() as! [Any?])
+      return _Interaction.fromList(self.readValue() as! [Any?])
     case 185:
       return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 186:
@@ -2196,7 +2196,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? ViewAnnotationAnchor {
       super.writeByte(136)
       super.writeValue(value.rawValue)
-    } else if let value = value as? InteractionType {
+    } else if let value = value as? _InteractionType {
       super.writeByte(137)
       super.writeValue(value.rawValue)
     } else if let value = value as? GestureState {
@@ -2337,7 +2337,7 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? FeatureState {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? Interaction {
+    } else if let value = value as? _Interaction {
       super.writeByte(184)
       super.writeValue(value.toList())
     } else if let value = value as? FeaturesetDescriptor {

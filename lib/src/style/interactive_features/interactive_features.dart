@@ -1,37 +1,39 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter.dart';
 
-// A single tap interaction.
-class TapInteraction extends Interaction {
-  TapInteraction(FeaturesetDescriptor featuresetDescriptor,
+/// A single tap interaction.
+final class TapInteraction<T extends FeaturesetFeature>
+    extends TypedInteraction<T> {
+  TapInteraction(
+      FeaturesetDescriptor featuresetDescriptor, OnInteraction<T> action,
       {super.filter, super.radius, super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
-            interactionType: InteractionType.TAP);
+            interactionType: "TAP",
+            action: action);
 }
 
-// A long tap interaction
-class LongTapInteraction extends Interaction {
-  LongTapInteraction(FeaturesetDescriptor featuresetDescriptor,
+/// A long tap interaction
+final class LongTapInteraction<T extends FeaturesetFeature>
+    extends TypedInteraction<T> {
+  LongTapInteraction(
+      FeaturesetDescriptor featuresetDescriptor, OnInteraction<T> action,
       {super.filter, super.radius, super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
-            interactionType: InteractionType.LONG_TAP);
+            interactionType: "LONG_TAP",
+            action: action);
 }
 
-extension Standard on FeaturesetDescriptor {
-  // A Featureset of buildings in the Standard style
-  static FeaturesetDescriptor buildings({String importId = "basemap"}) {
-    return FeaturesetDescriptor(featuresetId: "buildings", importId: importId);
-  }
+/// A typed interaction with an action
+final class TypedInteraction<T extends FeaturesetFeature> extends _Interaction {
+  TypedInteraction(
+      {required super.featuresetDescriptor,
+      super.filter,
+      super.radius,
+      super.stopPropagation = true,
+      required this.action,
+      required interactionType})
+      : super(interactionType: _InteractionType.values.byName(interactionType));
 
-  // A Featureset of place labels in the Standard style
-  static FeaturesetDescriptor placeLabels({String importId = "basemap"}) {
-    return FeaturesetDescriptor(
-        featuresetId: "place-labels", importId: importId);
-  }
-
-  // A Featureset of POIs in the Standard style
-  static FeaturesetDescriptor pois({String importId = "basemap"}) {
-    return FeaturesetDescriptor(featuresetId: "poi", importId: importId);
-  }
+  OnInteraction<T> action;
 }

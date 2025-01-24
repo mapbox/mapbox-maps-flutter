@@ -162,7 +162,7 @@ class _MapboxMapsPlatform {
   }
 
   Future<dynamic> addInteractionsListeners(
-      Interaction interaction, int interactionID) async {
+      _Interaction interaction, int interactionID) async {
     try {
       return _channel
           .invokeMethod('interactions#add_interaction', <String, dynamic>{

@@ -23,13 +23,13 @@ import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
-import com.mapbox.maps.mapbox_maps.pigeons.InteractionType
 import com.mapbox.maps.mapbox_maps.pigeons.LogoSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.Projection
 import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionType
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
@@ -248,7 +248,7 @@ class MapboxMapController(
         val featuresetDescriptorList = arguments["featuresetDescriptor"] as? List<Any?> ?: return
         val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(featuresetDescriptorList)
         val interactionTypeRaw = arguments["interactionType"] as? Int ?: return
-        val interactionType = InteractionType.ofRaw(interactionTypeRaw)
+        val interactionType = _InteractionType.ofRaw(interactionTypeRaw)
         val stopPropagation = arguments["stopPropagation"] as? Boolean ?: return
         val id = (arguments["id"] as? Int)?.toLong() ?: return
         val filter = (arguments["filter"] as? String).toValue()
@@ -256,13 +256,13 @@ class MapboxMapController(
 
         featuresetDescriptor.featuresetId?.let {
           when (interactionType) {
-            InteractionType.TAP -> mapboxMap?.addInteraction(
+            _InteractionType.TAP -> mapboxMap?.addInteraction(
               ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
                 listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@featureset stopPropagation
               }
             )
-            InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+            _InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
               LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
                 listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@featureset stopPropagation
@@ -272,13 +272,13 @@ class MapboxMapController(
           }
         } ?: featuresetDescriptor.layerId?.let {
           when (interactionType) {
-            InteractionType.TAP -> mapboxMap?.addInteraction(
+            _InteractionType.TAP -> mapboxMap?.addInteraction(
               ClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
                 listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@layer stopPropagation
               }
             )
-            InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+            _InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
               LongClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
                 listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
                 return@layer stopPropagation
