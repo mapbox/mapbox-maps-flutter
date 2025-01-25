@@ -44,7 +44,11 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     // On long tap, remove the highlight state
     mapboxMap.addInteraction(
         LongTapInteraction<StandardBuildingsFeature>(StandardBuildings(), (_, feature) {
-      mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature);
+      mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature).then(
+          (value) => log("Feature state removed for: ${feature.id}.")
+      ).catchError(
+          (error) => log("Error removing feature state for ${feature.id}, error: $error")
+      );
     }));
 
     /// Define interactions for Points of Interest

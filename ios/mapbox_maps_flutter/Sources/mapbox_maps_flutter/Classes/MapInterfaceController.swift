@@ -304,7 +304,7 @@ final class MapInterfaceController: _MapInterface {
                 completion(.failure(FlutterError(
                     code: "setFeatureStateError",
                     message: error.localizedDescription,
-                    details: "Error setting feature state for featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))} and featureId: \(String(describing: featureId))."
+                    details: "Error setting feature state for feature \(String(describing: featureId)) from featureset {featuresetId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}."
                 )))
             } else {
                 completion(.success(()))
@@ -354,7 +354,7 @@ final class MapInterfaceController: _MapInterface {
                 completion(.failure(FlutterError(
                     code: "getFeatureStateError",
                     message: "\(error)",
-                    details: "Error getting feature state for featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}."
+                    details: "Error getting feature state for feature \(String(describing: featureId)) from featureset {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}."
                 )))
             }
         }
@@ -391,8 +391,8 @@ final class MapInterfaceController: _MapInterface {
             if error != nil {
                 completion(.failure(FlutterError(
                     code: "removeFeatureStateError",
-                    message: "Cannot remove feature state.",
-                    details: "The requested featureset: \(featureset) is not valid."
+                    message: "Cannot remove feature state",
+                    details: "Feature state was not found for the requested feature: \(String(describing: featureId))."
                 )))
             } else {
                 completion(.success(()))
@@ -405,8 +405,8 @@ final class MapInterfaceController: _MapInterface {
             if error != nil {
                 completion(.failure(FlutterError(
                     code: "removeFeatureStateError",
-                    message: "Cannot remove feature state.",
-                    details: "The requested feature: \(String(describing: feature.id)) is not valid"
+                    message: "Cannot remove feature state",
+                    details: "Feature state was not found for the requested feature: \(String(describing: feature.id))"
                 )))
             } else {
                 completion(.success(()))
@@ -419,8 +419,8 @@ final class MapInterfaceController: _MapInterface {
             if error != nil {
                 completion(.failure(FlutterError(
                     code: "resetFeatureStateError",
-                    message: "Cannot remove feature state.",
-                    details: "The requested featureset: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))} is not valid."
+                    message: "Cannot reset feature states",
+                    details: "The requested featureset is not valid or was not found: {featureId: \(String(describing: featureset.featuresetId)), importId: \(String(describing: featureset.importId)), layerId: \(String(describing: featureset.layerId))}"
                 )))
             } else {
                 completion(.success(()))

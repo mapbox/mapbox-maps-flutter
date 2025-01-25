@@ -183,18 +183,18 @@ class MapInterfaceController(
     filter: String?,
     callback: (Result<List<FeaturesetFeature>>) -> Unit
   ) {
-    (featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<*, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>).let { typedFeaturesetDescriptor ->
+    featureset.toTypedFeaturesetDescriptor()?.let { typedFeaturesetDescriptor ->
       mapboxMap.queryRenderedFeatures(
         typedFeaturesetDescriptor,
         geometry?.toRenderedQueryGeometry(context),
         filter?.let { Expression.fromRaw(filter) }
       ) {
-        callback(
-          Result.success(
-            it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()
-          )
-        )
+        callback(Result.success(it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()))
       }
+    } ?: {
+      callback(Result.failure(
+        Throwable("Error querying rendered features for featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}")
+      ))
     }
   }
 
@@ -292,11 +292,15 @@ class MapInterfaceController(
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.setFeatureState(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      featureId.toFeaturesetFeatureId(),
-      state.toFeatureState()
-    ) { callback(Result.success(Unit)) }
+    featureset.toTypedFeaturesetDescriptor()?.let { typedFeaturesetDescriptor ->
+      mapboxMap.setFeatureState(
+        typedFeaturesetDescriptor,
+        featureId.toFeaturesetFeatureId(),
+        state.toFeatureState()
+      ) { callback(Result.success(Unit)) }
+    } ?: {
+      callback(Result.failure(Throwable("Error setting feature state for feature $featureId from featureset {featuresetId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}.")))
+    }
   }
 
   @OptIn(MapboxExperimental::class, MapboxDelicateApi::class)
@@ -305,14 +309,15 @@ class MapInterfaceController(
     state: Map<String, Any?>,
     callback: (Result<Unit>) -> Unit
   ) {
-    if (feature.id?.toFeaturesetFeatureId() != null) {
-      mapboxMap.setFeatureState(
-        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-        id = feature.id.toFeaturesetFeatureId(),
-        state = state.toFeatureState()
-      ) { callback(Result.success(Unit)) }
-    } else {
-      callback(Result.failure(Throwable("Invalid feature for the requested feature: ${feature.id}")))
+    feature.id?.let {
+      setFeatureStateForFeaturesetDescriptor(
+        feature.featureset,
+        it,
+        state,
+        callback
+      )
+    } ?: {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: $feature")))
     }
   }
 
@@ -344,14 +349,10 @@ class MapInterfaceController(
         featuresetDescriptor,
         featureId.toFeaturesetFeatureId()
       ) {
-        callback(
-          Result.success(
-            JSONObject(it.asJsonString()).toFilteredMap()
-          )
-        )
+        callback(Result.success(JSONObject(it.asJsonString()).toFilteredMap()))
       }
-    } ?: run {
-      callback(Result.failure(Throwable("Cannot get feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+    } ?: {
+      callback(Result.failure(Throwable("Error getting feature state for feature $featureId from featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}.")))
     }
   }
 
@@ -360,19 +361,14 @@ class MapInterfaceController(
     feature: FeaturesetFeature,
     callback: (Result<Map<String, Any?>>) -> Unit
   ) {
-    if (feature.id?.toFeaturesetFeatureId() != null) {
-      mapboxMap.getFeatureState(
-        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-        feature.id.toFeaturesetFeatureId()
-      ) {
-        callback(
-          Result.success(
-            JSONObject(it.asJsonString()).toFilteredMap()
-          )
-        )
-      }
-    } else {
-      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
+    feature.id?.let {
+      getFeatureStateForFeaturesetDescriptor(
+        feature.featureset,
+        it,
+        callback
+      )
+    } ?: {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: $feature")))
     }
   }
 
@@ -399,15 +395,17 @@ class MapInterfaceController(
     stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.removeFeatureState(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-      featureId.toFeaturesetFeatureId(),
-      stateKey?.let { FeatureStateKey.create(it) }
-    ) {
-      if (it.isError) {
-        callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
-      } else {
-        callback(Result.success(Unit))
+    featureset.toTypedFeaturesetDescriptor()?.let { typedFeaturesetDescriptor ->
+      mapboxMap.removeFeatureState(
+        typedFeaturesetDescriptor,
+        featureId.toFeaturesetFeatureId(),
+        stateKey?.let { FeatureStateKey.create(it) }
+      ) {
+        if (it.isError) {
+          callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+        } else {
+          callback(Result.success(Unit))
+        }
       }
     }
   }
@@ -418,20 +416,15 @@ class MapInterfaceController(
     stateKey: String?,
     callback: (Result<Unit>) -> Unit
   ) {
-    if (feature.id?.toFeaturesetFeatureId() != null) {
-      mapboxMap.removeFeatureState(
-        feature.featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>,
-        feature.id.toFeaturesetFeatureId(),
-        stateKey?.let { FeatureStateKey.create(it) }
-      ) {
-        if (it.isError) {
-          callback(Result.failure(Throwable("Cannot remove feature state for the requested feature: ${feature.id}")))
-        } else {
-          callback(Result.success(Unit))
-        }
-      }
-    } else {
-      callback(Result.failure(Throwable("Invalid feature id for the requested feature: ${feature.id}")))
+    feature.id?.let {
+      removeFeatureStateForFeaturesetDescriptor(
+        feature.featureset,
+        it,
+        stateKey,
+        callback
+      )
+    } ?: {
+      callback(Result.failure(Throwable("Invalid feature id for the requested feature: $feature")))
     }
   }
 
@@ -440,14 +433,18 @@ class MapInterfaceController(
     featureset: FeaturesetDescriptor,
     callback: (Result<Unit>) -> Unit
   ) {
-    mapboxMap.resetFeatureStates(
-      featureset.toTypedFeaturesetDescriptor() as TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>
-    ) {
-      if (it.isError) {
-        callback(Result.failure(Throwable("Cannot reset feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}.")))
-      } else {
-        callback(Result.success(Unit))
+    featureset.toTypedFeaturesetDescriptor()?.let { typedFeaturesetDescriptor ->
+      mapboxMap.resetFeatureStates(
+        typedFeaturesetDescriptor
+      ) {
+        if (it.isError) {
+          callback(Result.failure(Throwable("Error resetting feature states for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}.")))
+        } else {
+          callback(Result.success(Unit))
+        }
       }
+    } ?: {
+      callback(Result.failure(Throwable("Failed to convert requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}.")))
     }
   }
 

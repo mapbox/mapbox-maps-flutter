@@ -4,13 +4,12 @@
 * Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue. 
 
 ```dart
-var tapInteraction = TapInteraction(Featureset.standardBuildings())
-mapboxMap.addInteraction(tapInteraction, 
-  (_, FeaturesetFeature feature) {
-    mapboxMap.setFeatureStateForFeaturesetFeature(feature, 
-    StandardBuildingState(highlight: true));
-  }
-);
+var tapInteraction = TapInteraction<StandardBuildingsFeature>(StandardBuildings(),
+    (_, feature) {
+  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingState(highlight: true));
+  log("Building group: ${feature.group}");
+});
+mapboxMap.addInteraction(tapInteraction);
 ```
 
 Specific changes: 

@@ -272,7 +272,7 @@ fun FeaturesetFeatureId.toFeaturesetFeatureId(): com.mapbox.maps.FeaturesetFeatu
 }
 
 @OptIn(MapboxExperimental::class)
-fun FeaturesetDescriptor.toTypedFeaturesetDescriptor(): TypedFeaturesetDescriptor<*, *>? {
+fun FeaturesetDescriptor.toTypedFeaturesetDescriptor(): TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>? {
   featuresetId?.let {
     return TypedFeaturesetDescriptor.Featureset(
       featuresetId, importId
