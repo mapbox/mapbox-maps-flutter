@@ -35,7 +35,7 @@ private func wrapResult(_ result: Any?) -> [Any?] {
 }
 
 private func wrapError(_ error: Any) -> [Any?] {
-  if let pigeonError = error as? PigeonError {
+  if let pigeonError = error as? NavigationMessagerError {
     return [
       pigeonError.code,
       pigeonError.message,
@@ -57,7 +57,7 @@ private func wrapError(_ error: Any) -> [Any?] {
 }
 
 private func createConnectionError(withChannelName channelName: String) -> NavigationMessagerError {
-  return PigeonError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
+  return NavigationMessagerError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
 }
 
 private func isNullish(_ value: Any?) -> Bool {
@@ -421,13 +421,13 @@ class NavigationMessagerPigeonCodec: FlutterStandardMessageCodec, @unchecked Sen
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol NavigationListenerProtocol {
-  func onNavigationRouteReady(completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onNavigationRouteFailed(completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onNavigationRouteCancelled(completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onNavigationRouteRendered(completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onNewLocation(location locationArg: NavigationLocation, completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, PigeonError>) -> Void)
-  func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, PigeonError>) -> Void)
+  func onNavigationRouteReady(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onNavigationRouteFailed(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onNavigationRouteCancelled(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onNavigationRouteRendered(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onNewLocation(location locationArg: NavigationLocation, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+  func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
 }
 class NavigationListener: NavigationListenerProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
@@ -439,7 +439,7 @@ class NavigationListener: NavigationListenerProtocol {
   var codec: NavigationMessagerPigeonCodec {
     return NavigationMessagerPigeonCodec.shared
   }
-  func onNavigationRouteReady(completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNavigationRouteReady(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNavigationRouteReady\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
@@ -451,13 +451,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onNavigationRouteFailed(completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNavigationRouteFailed(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNavigationRouteFailed\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
@@ -469,13 +469,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onNavigationRouteCancelled(completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNavigationRouteCancelled(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNavigationRouteCancelled\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
@@ -487,13 +487,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onNavigationRouteRendered(completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNavigationRouteRendered(completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNavigationRouteRendered\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
@@ -505,13 +505,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onNewLocation(location locationArg: NavigationLocation, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNewLocation(location locationArg: NavigationLocation, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNewLocation\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([locationArg] as [Any?]) { response in
@@ -523,13 +523,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onRouteProgress\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([routeProgressArg] as [Any?]) { response in
@@ -541,13 +541,13 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
     }
   }
-  func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.NavigationListener.onNavigationCameraStateChanged\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([stateArg] as [Any?]) { response in
@@ -559,7 +559,7 @@ class NavigationListener: NavigationListenerProtocol {
         let code: String = listResponse[0] as! String
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
-        completion(.failure(PigeonError(code: code, message: message, details: details)))
+        completion(.failure(NavigationMessagerError(code: code, message: message, details: details)))
       } else {
         completion(.success(Void()))
       }
@@ -568,7 +568,7 @@ class NavigationListener: NavigationListenerProtocol {
 }
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationInterface {
-  func setRoute(waypoints: [Point], completion: @escaping (Result<Void, Error>) -> Void)
+    func setRoute(waypoints: [Point], completion: @escaping (Result<Void, Error>) -> Void)
   func stopTripSession(completion: @escaping (Result<Void, Error>) -> Void)
   func startTripSession(withForegroundService: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func requestNavigationCameraToFollowing(completion: @escaping (Result<Void, Error>) -> Void)

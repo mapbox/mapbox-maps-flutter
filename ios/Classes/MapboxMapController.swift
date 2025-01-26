@@ -7,6 +7,7 @@ struct SuffixBinaryMessenger {
     let suffix: String
 }
 
+@MainActor
 final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
@@ -84,7 +85,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
         navigationController = NavigationController(withMapView: mapView)
-        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: attributionController, messageChannelSuffix: binaryMessenger.suffix)
+        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: navigationController, messageChannelSuffix: binaryMessenger.suffix)
 
         super.init()
 
@@ -114,7 +115,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
         case "navigation#add_listeners":
-            navigationController!.addListeners(messenger: messenger)
+            navigationController!.addListeners(messenger: binaryMessenger)
             result(nil)
         case "navigation#remove_listeners": 
             navigationController!.removeListeners()
