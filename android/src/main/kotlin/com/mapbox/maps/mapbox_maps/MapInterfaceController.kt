@@ -11,9 +11,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
-import com.mapbox.maps.interactions.FeatureState
 import com.mapbox.maps.interactions.FeatureStateKey
-import com.mapbox.maps.interactions.TypedFeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.CanonicalTileID
 import com.mapbox.maps.mapbox_maps.pigeons.ConstrainMode
 import com.mapbox.maps.mapbox_maps.pigeons.FeatureExtensionValue
@@ -192,9 +190,11 @@ class MapInterfaceController(
         callback(Result.success(it.map { feature -> feature.toFLTFeaturesetFeature() }.toMutableList()))
       }
     } ?: {
-      callback(Result.failure(
-        Throwable("Error querying rendered features for featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}")
-      ))
+      callback(
+        Result.failure(
+          Throwable("Error querying rendered features for featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}")
+        )
+      )
     }
   }
 
