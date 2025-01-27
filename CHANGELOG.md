@@ -1,5 +1,7 @@
 # main
 
+* Align tap propagation behavior on Android and iOS.
+
 ### 2.6.0-beta.1
 
 > [!IMPORTANT]
