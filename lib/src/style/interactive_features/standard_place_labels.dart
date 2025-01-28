@@ -2,7 +2,8 @@ part of '../../../mapbox_maps_flutter.dart';
 
 /// A feature that labels places including countries, states, cities,
 /// towns, and neighborhoods in the Standard style.
-class StandardPlaceLabelsFeature extends FeaturesetFeature {
+extension StandardPlaceLabelsFeature
+    on TypedFeaturesetFeature<StandardPlaceLabels> {
   /// A feature state.
   ///
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
@@ -23,22 +24,6 @@ class StandardPlaceLabelsFeature extends FeaturesetFeature {
   String? get category {
     return properties["class"] as String?;
   }
-
-  StandardPlaceLabelsFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
-      : super(
-            featureset: StandardPlaceLabels(),
-            geometry: geometry,
-            properties: properties,
-            state: state);
-
-  StandardPlaceLabelsFeature.fromFeaturesetFeature(FeaturesetFeature feature)
-      : super(
-            id: feature.id,
-            featureset: feature.featureset,
-            geometry: feature.geometry,
-            properties: feature.properties,
-            state: feature.state);
 }
 
 /// A Featureset of place labels in the Standard style

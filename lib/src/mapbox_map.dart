@@ -580,19 +580,19 @@ class MapboxMap extends ChangeNotifier {
 
   /// References for all interactions added to the map.
   @experimental
-  final _InteractionsList _interactionsList =
-      _InteractionsList(interactions: {});
+  final _InteractionsMap _interactionsMap =
+      _InteractionsMap(interactions: {});
 
   /// Add an interaction
   @experimental
-  void addInteraction<T extends FeaturesetFeature>(
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
       TypedInteraction<T> interaction) {
-    var id = _interactionsList.interactions.length;
-    _interactionsList.interactions[id] = _InteractionListener<T>(
+    var id = _interactionsMap.interactions.length;
+    _interactionsMap.interactions[id] = _InteractionListener<T>(
       onInteractionListener: interaction.action,
       interactionID: id,
     );
-    _InteractionsListener.setUp(_interactionsList,
+    _InteractionsListener.setUp(_interactionsMap,
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
     _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
@@ -789,12 +789,16 @@ class _InteractionListener<T extends FeaturesetFeature>
 
     if (featuresetID == "buildings") {
       typedFeature =
-          StandardBuildingsFeature.fromFeaturesetFeature(feature) as T;
+          TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
+              feature) as T;
     } else if (featuresetID == "poi") {
-      typedFeature = StandardPOIsFeature.fromFeaturesetFeature(feature) as T;
+      typedFeature =
+          TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
+              as T;
     } else if (featuresetID == "place-labels") {
       typedFeature =
-          StandardPlaceLabelsFeature.fromFeaturesetFeature(feature) as T;
+          TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
+              feature) as T;
     } else {
       typedFeature = feature as T;
     }
@@ -804,9 +808,9 @@ class _InteractionListener<T extends FeaturesetFeature>
 }
 
 /// Listen to all interactions on the map, determine which interaction to call
-class _InteractionsList<T extends FeaturesetFeature>
+class _InteractionsMap<T extends FeaturesetFeature>
     extends _InteractionsListener {
-  _InteractionsList({
+  _InteractionsMap({
     required this.interactions,
   });
 

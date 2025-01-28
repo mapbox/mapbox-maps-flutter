@@ -1,7 +1,8 @@
 part of '../../../mapbox_maps_flutter.dart';
 
 /// A Feature that represents a building in the Standard style.
-class StandardBuildingsFeature extends FeaturesetFeature {
+extension StandardBuildingsFeature
+    on TypedFeaturesetFeature<StandardBuildings> {
   /// A feature state.
   ///
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
@@ -16,23 +17,6 @@ class StandardBuildingsFeature extends FeaturesetFeature {
   String? get group {
     return properties["group"] as String?;
   }
-
-  StandardBuildingsFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
-      : super(
-            featureset: StandardBuildings(),
-            geometry: geometry,
-            properties: properties,
-            state: state);
-
-  @override
-  StandardBuildingsFeature.fromFeaturesetFeature(FeaturesetFeature feature)
-      : super(
-            id: feature.id,
-            featureset: feature.featureset,
-            geometry: feature.geometry,
-            properties: feature.properties,
-            state: feature.state);
 }
 
 /// A Featureset of buildings in the Standard style

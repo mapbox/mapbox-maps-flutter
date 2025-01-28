@@ -1,7 +1,7 @@
 part of '../../../mapbox_maps_flutter.dart';
 
 /// A feature that is a point of interest in the Standard style.
-class StandardPOIsFeature extends FeaturesetFeature {
+extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
   /// A feature state.
   ///
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
@@ -54,22 +54,6 @@ class StandardPOIsFeature extends FeaturesetFeature {
   Point? get coordinate {
     return this.geometry["coordinates"] as Point?;
   }
-
-  StandardPOIsFeature(Map<String?, Object?> geometry,
-      Map<String, Object?> properties, Map<String, Object?> state, {super.id})
-      : super(
-            featureset: StandardPOIs(),
-            geometry: geometry,
-            properties: properties,
-            state: state);
-
-  StandardPOIsFeature.fromFeaturesetFeature(FeaturesetFeature feature)
-      : super(
-            id: feature.id,
-            featureset: feature.featureset,
-            geometry: feature.geometry,
-            properties: feature.properties,
-            state: feature.state);
 }
 
 /// A Featureset of POIs in the Standard style
