@@ -1,6 +1,7 @@
 # main
 
 * Align tap propagation behavior on Android and iOS.
+* Fix Android throwing NPE when converting a map with null values to a `Value`.
 
 ### 2.6.0-beta.1
 
