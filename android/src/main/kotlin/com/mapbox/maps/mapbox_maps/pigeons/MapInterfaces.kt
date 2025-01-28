@@ -1418,7 +1418,7 @@ data class FeatureState(
 }
 
 /**
- * An interaction that can be added to the map.
+ * Internal: An interaction that can be added to the map.
  *
  * To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
  *
@@ -1453,6 +1453,48 @@ data class _Interaction(
       featuresetDescriptor,
       interactionType,
       stopPropagation,
+      filter,
+      radius,
+    )
+  }
+}
+
+/**
+ * Internal class to handle pigeon conversions for interactions.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class _InteractionPigeon(
+  /** The featureset descriptor that specifies the featureset to be included in the interaction. */
+  val featuresetDescriptor: List<Any?>,
+  /** Whether to stop the propagation of the interaction to the map */
+  val stopPropagation: Boolean,
+  /** The type of interaction, either tap or longTap as a String */
+  val interactionType: String,
+  /** An identifier for the interaction */
+  val identifier: String,
+  /** An optional filter of features that should trigger the interaction. */
+  val filter: String? = null,
+  /** Radius of a tappable area */
+  val radius: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _InteractionPigeon {
+      val featuresetDescriptor = pigeonVar_list[0] as List<Any?>
+      val stopPropagation = pigeonVar_list[1] as Boolean
+      val interactionType = pigeonVar_list[2] as String
+      val identifier = pigeonVar_list[3] as String
+      val filter = pigeonVar_list[4] as String?
+      val radius = pigeonVar_list[5] as Double?
+      return _InteractionPigeon(featuresetDescriptor, stopPropagation, interactionType, identifier, filter, radius)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetDescriptor,
+      stopPropagation,
+      interactionType,
+      identifier,
       filter,
       radius,
     )
@@ -2309,85 +2351,90 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetDescriptor.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeature.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       201.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CanonicalTileID.fromList(it)
+        }
+      }
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2621,72 +2668,76 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is FeaturesetDescriptor -> {
+      is _InteractionPigeon -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeature -> {
+      is FeaturesetDescriptor -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is FeaturesetFeature -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is MapContentGestureContext -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is _RenderedQueryGeometry -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is ProjectedMeters -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is MercatorCoordinate -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is StyleObjectInfo -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is StyleProjection -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is FlatLight -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is DirectionalLight -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is AmbientLight -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is MbxImage -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is ImageStretches -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is ImageContent -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is TransitionOptions -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is CanonicalTileID -> {
         stream.write(201)
+        writeValue(stream, value.toList())
+      }
+      is StylePropertyValue -> {
+        stream.write(202)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

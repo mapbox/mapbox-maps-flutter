@@ -109,30 +109,29 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         case "interactions#add_interaction":
             let listener = _InteractionsListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
             guard let arguments = methodCall.arguments as? [String: Any],
-                  let featuresetDescriptorList = arguments["featuresetDescriptor"] as? [String?],
-                  let featuresetDescriptor = FeaturesetDescriptor.fromList(featuresetDescriptorList),
-                  let interactionTypeRaw = arguments["interactionType"] as? Int,
-                  let interactionType = _InteractionType(rawValue: interactionTypeRaw),
-                  let stopPropagation = arguments["stopPropagation"] as? Bool,
-                  let id = arguments["id"] as? Int else {
+                  let interactionsList = arguments["interaction"] as? [Any?],
+                  let interaction = _InteractionPigeon.fromList(interactionsList),
+                  let featuresetDescriptor = FeaturesetDescriptor.fromList(interaction.featuresetDescriptor),
+                  let interactionType = _InteractionType.fromString(interaction.interactionType),
+                  let id = Int64(interaction.identifier) else {
                 return
             }
-            let filter = arguments["filter"] as? String
-            let filterExpression = try? filter.flatMap { try $0.toExp() }
-            let radius = arguments["radius"] as? CGFloat
+            let stopPropagation = interaction.stopPropagation
+            let filterExpression = try? interaction.filter.flatMap { try $0.toExp() }
+            let radius: CGFloat? = interaction.radius.flatMap { CGFloat($0) }
 
             switch interactionType {
             case .tAP:
                 mapboxMap.addInteraction(
                     TapInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
-                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: Int64(id)) { _ in }
+                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: id) { _ in }
                         return stopPropagation
                     })
                 )
             case .lONGTAP:
                 mapboxMap.addInteraction(
                     LongPressInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
-                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: Int64(id)) { _ in }
+                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: id) { _ in }
                         return stopPropagation
                     })
                 )

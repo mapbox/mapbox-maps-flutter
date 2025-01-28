@@ -1072,6 +1072,19 @@ extension UIGestureRecognizer.State {
     }
 }
 
+extension _InteractionType {
+    static func fromString(_ string: String) -> _InteractionType? {
+        switch string {
+        case "TAP":
+            return .tAP
+        case "LONG_TAP":
+            return .lONGTAP
+        default:
+            return nil
+        }
+    }
+}
+
 // MARK: Offline
 
 extension MapboxCoreMaps.StylePackLoadOptions {

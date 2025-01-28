@@ -32,8 +32,8 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     // Define a tap interaction targeting the Buildings featureset in the Standard style
     // Set the action to occur when a building is tapped (highlight it)
-    var tapInteraction = TapInteraction<StandardBuildingsFeature>(StandardBuildings(),
-        (_, feature) {
+    var tapInteraction = TapInteraction<StandardBuildingsFeature>(
+        StandardBuildings(), (_, feature) {
       mapboxMap.setFeatureStateForFeaturesetFeature(feature, featureState);
       log("Building group: ${feature.group}");
     });
@@ -42,13 +42,13 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     mapboxMap.addInteraction(tapInteraction);
 
     // On long tap, remove the highlight state
-    mapboxMap.addInteraction(
-        LongTapInteraction<StandardBuildingsFeature>(StandardBuildings(), (_, feature) {
-      mapboxMap.removeFeatureStateForFeaturesetFeature(feature: feature).then(
-          (value) => log("Feature state removed for: ${feature.id}.")
-      ).catchError(
-          (error) => log("Error removing feature state for ${feature.id}, error: $error")
-      );
+    mapboxMap.addInteraction(LongTapInteraction<StandardBuildingsFeature>(
+        StandardBuildings(), (_, feature) {
+      mapboxMap
+          .removeFeatureStateForFeaturesetFeature(feature: feature)
+          .then((value) => log("Feature state removed for: ${feature.id}."))
+          .catchError((error) => log(
+              "Error removing feature state for ${feature.id}, error: $error"));
     }));
 
     /// Define interactions for Points of Interest

@@ -107,7 +107,7 @@ class _MapboxMapsPlatform {
       case AndroidPlatformViewHostingMode.HC:
         return PlatformViewsService.initExpensiveAndroidView;
       case AndroidPlatformViewHostingMode.VD:
-        throw "Unexpected hostring mode(VD) when selecting an android view controller";
+        throw "Unexpected hosting mode(VD) when selecting an android view controller";
     }
   }
 
@@ -163,15 +163,18 @@ class _MapboxMapsPlatform {
 
   Future<dynamic> addInteractionsListeners(
       _Interaction interaction, int interactionID) async {
+    var interactionPigeon = _InteractionPigeon(
+        featuresetDescriptor:
+            interaction.featuresetDescriptor.encode() as List<Object?>,
+        stopPropagation: interaction.stopPropagation,
+        interactionType: interaction.interactionType.name,
+        identifier: interactionID.toString(),
+        radius: interaction.radius,
+        filter: interaction.filter);
     try {
       return _channel
           .invokeMethod('interactions#add_interaction', <String, dynamic>{
-        'featuresetDescriptor': interaction.featuresetDescriptor.encode(),
-        'interactionType': interaction.interactionType.index,
-        'filter': interaction.filter,
-        'radius': interaction.radius,
-        'stopPropagation': interaction.stopPropagation,
-        'id': interactionID,
+        'interaction': interactionPigeon.encode(),
       });
     } on PlatformException catch (e) {
       return new Future.error(e);

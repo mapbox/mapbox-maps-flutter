@@ -13,12 +13,10 @@ import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
 import com.mapbox.common.toValue
 import com.mapbox.maps.ClickInteraction
-import com.mapbox.maps.FeaturesetDescriptor
 import com.mapbox.maps.LongClickInteraction
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.extension.style.expressions.dsl.generated.id
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
@@ -29,6 +27,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionPigeon
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionType
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
@@ -245,14 +244,14 @@ class MapboxMapController(
       "interactions#add_interaction" -> {
         val listener = _InteractionsListener(messenger, channelSuffix)
         val arguments: HashMap<String, Any> = call.arguments as? HashMap<String, Any> ?: return
-        val featuresetDescriptorList = arguments["featuresetDescriptor"] as? List<Any?> ?: return
-        val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(featuresetDescriptorList)
-        val interactionTypeRaw = arguments["interactionType"] as? Int ?: return
-        val interactionType = _InteractionType.ofRaw(interactionTypeRaw)
-        val stopPropagation = arguments["stopPropagation"] as? Boolean ?: return
-        val id = (arguments["id"] as? Int)?.toLong() ?: return
-        val filter = (arguments["filter"] as? String).toValue()
-        val radius = arguments["radius"] as? Double
+        val interactionList = arguments["interaction"] as? List<Any?> ?: return
+        val interaction = _InteractionPigeon.fromList(interactionList)
+        val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(interaction.featuresetDescriptor)
+        val interactionType = _InteractionType.valueOf(interaction.interactionType)
+        val stopPropagation = interaction.stopPropagation
+        val id = interaction.identifier.toLong()
+        val filter = interaction.filter.toValue()
+        val radius = interaction.radius
 
         featuresetDescriptor.featuresetId?.let {
           when (interactionType) {

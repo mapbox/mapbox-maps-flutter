@@ -1264,7 +1264,7 @@ struct FeatureState {
   }
 }
 
-/// An interaction that can be added to the map.
+/// Internal: An interaction that can be added to the map.
 ///
 /// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
 ///
@@ -1304,6 +1304,53 @@ struct _Interaction {
       featuresetDescriptor,
       interactionType,
       stopPropagation,
+      filter,
+      radius,
+    ]
+  }
+}
+
+/// Internal class to handle pigeon conversions for interactions.
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct _InteractionPigeon {
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
+  var featuresetDescriptor: [Any?]
+  /// Whether to stop the propagation of the interaction to the map
+  var stopPropagation: Bool
+  /// The type of interaction, either tap or longTap as a String
+  var interactionType: String
+  /// An identifier for the interaction
+  var identifier: String
+  /// An optional filter of features that should trigger the interaction.
+  var filter: String?
+  /// Radius of a tappable area
+  var radius: Double?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> _InteractionPigeon? {
+    let featuresetDescriptor = pigeonVar_list[0] as! [Any?]
+    let stopPropagation = pigeonVar_list[1] as! Bool
+    let interactionType = pigeonVar_list[2] as! String
+    let identifier = pigeonVar_list[3] as! String
+    let filter: String? = nilOrValue(pigeonVar_list[4])
+    let radius: Double? = nilOrValue(pigeonVar_list[5])
+
+    return _InteractionPigeon(
+      featuresetDescriptor: featuresetDescriptor,
+      stopPropagation: stopPropagation,
+      interactionType: interactionType,
+      identifier: identifier,
+      filter: filter,
+      radius: radius
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      featuresetDescriptor,
+      stopPropagation,
+      interactionType,
+      identifier,
       filter,
       radius,
     ]
@@ -2131,38 +2178,40 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 184:
       return _Interaction.fromList(self.readValue() as! [Any?])
     case 185:
-      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
+      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
     case 186:
-      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
+      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 187:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
     case 188:
-      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
     case 189:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 190:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 191:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 192:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 193:
-      return FlatLight.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 194:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
+      return FlatLight.fromList(self.readValue() as! [Any?])
     case 195:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
     case 196:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return AmbientLight.fromList(self.readValue() as! [Any?])
     case 197:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 198:
-      return ImageContent.fromList(self.readValue() as! [Any?])
+      return ImageStretches.fromList(self.readValue() as! [Any?])
     case 199:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
+      return ImageContent.fromList(self.readValue() as! [Any?])
     case 200:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return TransitionOptions.fromList(self.readValue() as! [Any?])
     case 201:
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+    case 202:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2340,56 +2389,59 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? _Interaction {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? StyleProjection {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? FlatLight {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? AmbientLight {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? MbxImage {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? ImageStretches {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? ImageContent {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(201)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(202)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)

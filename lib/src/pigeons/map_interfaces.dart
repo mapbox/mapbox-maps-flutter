@@ -1357,7 +1357,7 @@ class FeatureState {
   }
 }
 
-/// An interaction that can be added to the map.
+/// Internal: An interaction that can be added to the map.
 ///
 /// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
 ///
@@ -1404,6 +1404,59 @@ class _Interaction {
       stopPropagation: result[2]! as bool,
       filter: result[3] as String?,
       radius: result[4] as double?,
+    );
+  }
+}
+
+/// Internal class to handle pigeon conversions for interactions.
+class _InteractionPigeon {
+  _InteractionPigeon({
+    required this.featuresetDescriptor,
+    required this.stopPropagation,
+    required this.interactionType,
+    required this.identifier,
+    this.filter,
+    this.radius,
+  });
+
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
+  List<Object?> featuresetDescriptor;
+
+  /// Whether to stop the propagation of the interaction to the map
+  bool stopPropagation;
+
+  /// The type of interaction, either tap or longTap as a String
+  String interactionType;
+
+  /// An identifier for the interaction
+  String identifier;
+
+  /// An optional filter of features that should trigger the interaction.
+  String? filter;
+
+  /// Radius of a tappable area
+  double? radius;
+
+  Object encode() {
+    return <Object?>[
+      featuresetDescriptor,
+      stopPropagation,
+      interactionType,
+      identifier,
+      filter,
+      radius,
+    ];
+  }
+
+  static _InteractionPigeon decode(Object result) {
+    result as List<Object?>;
+    return _InteractionPigeon(
+      featuresetDescriptor: (result[0] as List<Object?>?)!.cast<Object?>(),
+      stopPropagation: result[1]! as bool,
+      interactionType: result[2]! as String,
+      identifier: result[3]! as String,
+      filter: result[4] as String?,
+      radius: result[5] as double?,
     );
   }
 }
@@ -2239,56 +2292,59 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is _Interaction) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetDescriptor) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeature) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FlatLight) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is MbxImage) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is ImageContent) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(201);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(202);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2440,38 +2496,40 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 184:
         return _Interaction.decode(readValue(buffer)!);
       case 185:
-        return FeaturesetDescriptor.decode(readValue(buffer)!);
+        return _InteractionPigeon.decode(readValue(buffer)!);
       case 186:
-        return FeaturesetFeature.decode(readValue(buffer)!);
+        return FeaturesetDescriptor.decode(readValue(buffer)!);
       case 187:
-        return MapContentGestureContext.decode(readValue(buffer)!);
+        return FeaturesetFeature.decode(readValue(buffer)!);
       case 188:
-        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+        return MapContentGestureContext.decode(readValue(buffer)!);
       case 189:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
       case 190:
-        return MercatorCoordinate.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 191:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return MercatorCoordinate.decode(readValue(buffer)!);
       case 192:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 193:
-        return FlatLight.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 194:
-        return DirectionalLight.decode(readValue(buffer)!);
+        return FlatLight.decode(readValue(buffer)!);
       case 195:
-        return AmbientLight.decode(readValue(buffer)!);
+        return DirectionalLight.decode(readValue(buffer)!);
       case 196:
-        return MbxImage.decode(readValue(buffer)!);
+        return AmbientLight.decode(readValue(buffer)!);
       case 197:
-        return ImageStretches.decode(readValue(buffer)!);
+        return MbxImage.decode(readValue(buffer)!);
       case 198:
-        return ImageContent.decode(readValue(buffer)!);
+        return ImageStretches.decode(readValue(buffer)!);
       case 199:
-        return TransitionOptions.decode(readValue(buffer)!);
+        return ImageContent.decode(readValue(buffer)!);
       case 200:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return TransitionOptions.decode(readValue(buffer)!);
       case 201:
+        return CanonicalTileID.decode(readValue(buffer)!);
+      case 202:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
