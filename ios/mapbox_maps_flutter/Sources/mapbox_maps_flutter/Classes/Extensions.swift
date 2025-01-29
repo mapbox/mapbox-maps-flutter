@@ -154,6 +154,95 @@ extension RenderedQueryOptions {
         return MapboxCoreMaps.RenderedQueryOptions(layerIds: layerIds?.compactMap { $0 }, filter: filterExp)
     }
 }
+
+extension String {
+    func toExp() throws -> Exp {
+        guard let data = self.data(using: .utf8) else {
+            throw DecodingError.valueNotFound(String.self, DecodingError.Context(codingPath: [], debugDescription: "Could not decode string to Exp"))
+        }
+        return try JSONDecoder().decode(Expression.self, from: data)
+    }
+}
+
+extension _RenderedQueryGeometry: RenderedQueryGeometryConvertible {
+    var geometry: MapboxMaps.RenderedQueryGeometry {
+        switch type {
+        case .sCREENBOX:
+            guard let cgRect = convertValueToCGRect(value) else { fallthrough }
+            return RenderedQueryGeometry(boundingBox: cgRect)
+        case .sCREENCOORDINATE:
+            guard let cgPoint = convertValueToCGPoint(value) else { fallthrough }
+            return RenderedQueryGeometry(point: cgPoint)
+        case .lIST:
+            guard let cgPoints = convertValueToCGPoints(value) else { fallthrough }
+            return RenderedQueryGeometry(shape: cgPoints)
+        default:
+            return RenderedQueryGeometry(shape: [])
+        }
+    }
+}
+
+func convertValueToCGRect(_ value: String) -> CGRect? {
+    let screenBoxArray = convertStringToDictionary(properties: value)
+    guard let minCoord = screenBoxArray["min"] as? [String: Double] else { return nil }
+    guard let maxCoord = screenBoxArray["max"] as? [String: Double] else { return nil }
+    guard let minX = minCoord["x"], let minY = minCoord["y"],
+          let maxX = maxCoord["x"], let maxY = maxCoord["y"] else {
+        return nil
+    }
+    let screenBox = ScreenBox(min: ScreenCoordinate(x: minX, y: minY),
+                              max: ScreenCoordinate(x: maxX, y: maxY))
+    return screenBox.toCGRect()
+}
+
+func convertValueToCGPoint(_ value: String) -> CGPoint? {
+    guard let pointDict = convertStringToDictionary(properties: value) as? [String: Double],
+          let x = pointDict["x"], let y = pointDict["y"] else {
+        return nil
+    }
+    return CGPoint(x: x, y: y)
+}
+
+func convertValueToCGPoints(_ value: String) -> [CGPoint]? {
+    guard let data = value.data(using: .utf8),
+          let rawPoints = try? JSONDecoder().decode([[String: Double]].self, from: data) else {
+        return nil
+    }
+    let cgPoints = rawPoints.compactMap {
+        guard let x = $0["x"], let y = $0["y"] else { return Optional<CGPoint>.none }
+        return CGPoint(x: x, y: y)
+    }
+    return cgPoints
+}
+
+extension FeaturesetFeatureId {
+    func toMapFeaturesetFeatureId() -> MapboxMaps.FeaturesetFeatureId {
+        return MapboxMaps.FeaturesetFeatureId(id: id, namespace: namespace)
+    }
+}
+
+extension FeaturesetDescriptor {
+    func toMapFeaturesetDescriptor() -> MapboxMaps.FeaturesetDescriptor<MapboxMaps.FeaturesetFeature> {
+        if let featuresetId {
+            return MapboxMaps.FeaturesetDescriptor.featureset(featuresetId, importId: importId)
+        } else {
+            return MapboxMaps.FeaturesetDescriptor.layer(layerId ?? "layer")
+        }
+    }
+}
+
+extension FeaturesetFeature {
+    func toMapFeaturesetFeature() -> MapboxMaps.FeaturesetFeature {
+        var feature = Feature(geometry: convertDictionaryToGeometry(dict: geometry))
+        feature.properties = JSONObject.init(turfRawValue: properties)
+        return MapboxMaps.FeaturesetFeature(
+            id: id?.toMapFeaturesetFeatureId(),
+            featureset: featureset.toMapFeaturesetDescriptor(),
+            geoJsonFeature: feature,
+            state: JSONObject.init(turfRawValue: state)!)
+    }
+}
+
 extension MercatorCoordinate {
     func toMercatorCoordinate() -> MapboxMaps.MercatorCoordinate {
         return MapboxMaps.MercatorCoordinate(x: x, y: y)
@@ -376,7 +465,9 @@ extension MapboxMaps.QueriedSourceFeature {
 }
 extension MapboxMaps.QueriedRenderedFeature {
     func toFLTQueriedRenderedFeature() -> QueriedRenderedFeature {
-        return QueriedRenderedFeature(queriedFeature: queriedFeature.toFLTQueriedFeature(), layers: layers)
+        return QueriedRenderedFeature(
+            queriedFeature: queriedFeature.toFLTQueriedFeature(),
+            layers: layers)
     }
 }
 extension MapboxMaps.QueriedFeature {
@@ -423,6 +514,34 @@ extension MapboxMaps.MapOptions {
         )
     }
 }
+extension MapboxMaps.FeaturesetFeatureId {
+    func toFLTFeaturesetFeatureId() -> FeaturesetFeatureId {
+        return FeaturesetFeatureId(
+            id: self.id,
+            namespace: self.namespace)
+    }
+}
+
+extension MapboxMaps.FeaturesetDescriptor {
+    func toFLTFeaturesetDescriptor() -> FeaturesetDescriptor {
+        return FeaturesetDescriptor(
+            featuresetId: featuresetId,
+            importId: importId,
+            layerId: layerId)
+    }
+}
+
+extension MapboxMaps.FeaturesetFeature {
+    func toFLTFeaturesetFeature() -> FeaturesetFeature {
+        return FeaturesetFeature(
+            id: id?.toFLTFeaturesetFeatureId(),
+            featureset: featureset.toFLTFeaturesetDescriptor(),
+            geometry: geometry.toMap(),
+            properties: properties.turfRawValue,
+            state: state.turfRawValue)
+    }
+}
+
 extension MapboxMaps.CameraBounds {
     func toFLTCameraBounds() -> CameraBounds {
         return CameraBounds(
@@ -439,8 +558,7 @@ extension CGPoint {
     }
 }
 
-extension MapboxMaps.MapContentGestureContext {
-
+extension MapboxMaps.InteractionContext {
     func toFLTMapContentGestureContext() -> MapContentGestureContext {
         MapContentGestureContext(
             touchPosition: point.toFLTScreenCoordinate(),
@@ -512,7 +630,6 @@ extension MapboxMaps.StylePropertyValue {
 }
 
 extension MapboxMaps.Geometry {
-
     func toMap() -> [String: Any] {
         switch self {
         case .point(let point):
@@ -521,7 +638,14 @@ extension MapboxMaps.Geometry {
             return line.toMap()
         case .polygon(let polygon):
             return polygon.toMap()
-        case .multiPoint, .multiLineString, .multiPolygon, .geometryCollection:
+        case .multiPoint(let multiPoint):
+            return multiPoint.toMap()
+        case .multiLineString(let multiLineString):
+            return multiLineString.toMap()
+        case .multiPolygon(let multiPolygon):
+            return multiPolygon.toMap()
+        // includes GeometryCollection as it is not supported
+        default:
             return [:]
         }
     }
@@ -529,19 +653,62 @@ extension MapboxMaps.Geometry {
 
 extension Point {
     func toMap() -> [String: Any] {
-        return [COORDINATES: [coordinates.longitude, coordinates.latitude]]
+        return [
+            "type": "Point",
+            COORDINATES: [coordinates.longitude, coordinates.latitude]
+        ]
     }
 }
+
 extension LineString {
     func toMap() -> [String: Any] {
-        return [COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})]
+        return [
+            "type": "LineString",
+            COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})
+        ]
     }
 }
+
 extension Polygon {
     func toMap() -> [String: Any] {
-        return [COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})]
+        return [
+            "type": "Polygon",
+            COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})
+        ]
     }
 }
+
+extension MultiPoint {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiPoint",
+            COORDINATES: coordinates.map({[$0.longitude, $0.latitude]})
+        ]
+    }
+}
+
+extension MultiLineString {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiLineString",
+            COORDINATES: coordinates.map({$0.map {[$0.longitude, $0.latitude]}})
+        ]
+    }
+}
+
+extension MultiPolygon {
+    func toMap() -> [String: Any] {
+        return [
+            "type": "MultiPolygon",
+            COORDINATES: coordinates.map({ polygon in
+                polygon.map({ ring in
+                    ring.map({[$0.longitude, $0.latitude]})
+                })
+            })
+        ]
+    }
+}
+
 extension CLLocationCoordinate2D {
     func toDict() -> [String: Any] {
         return [COORDINATES: [self.longitude, self.latitude]]
@@ -901,6 +1068,19 @@ extension UIGestureRecognizer.State {
             return .ended
         @unknown default:
             return .ended
+        }
+    }
+}
+
+extension _InteractionType {
+    static func fromString(_ string: String) -> _InteractionType? {
+        switch string {
+        case "TAP":
+            return .tAP
+        case "LONG_TAP":
+            return .lONGTAP
+        default:
+            return nil
         }
     }
 }
