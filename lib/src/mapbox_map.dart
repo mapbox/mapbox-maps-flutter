@@ -580,14 +580,16 @@ class MapboxMap extends ChangeNotifier {
 
   /// References for all interactions added to the map.
   @experimental
-  final _InteractionsMap _interactionsMap =
-      _InteractionsMap(interactions: {});
+  final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
 
-  /// Add an interaction
+  /// Add an interaction to the map
+  /// An identifier can be provided, which you can use to remove
+  /// the interaction with `.removeInteraction(interactionID)`
   @experimental
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
-      TypedInteraction<T> interaction) {
-    var id = _interactionsMap.interactions.length;
+      TypedInteraction<T> interaction,
+      {String? interactionID}) {
+    var id = interactionID ?? DateTime.now().microsecondsSinceEpoch.toString();
     _interactionsMap.interactions[id] = _InteractionListener<T>(
       onInteractionListener: interaction.action,
       interactionID: id,
@@ -596,6 +598,15 @@ class MapboxMap extends ChangeNotifier {
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
     _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
+  }
+
+  /// Remove an interaction from the map with the given interactionID
+  /// that was passed with `.addInteraction(interaction, interactionID)`
+  @experimental
+  void removeInteraction(String interactionID) {
+    _interactionsMap.interactions.remove(interactionID);
+    _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
+    print(_interactionsMap.interactions.length);
   }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
@@ -777,13 +788,13 @@ class _InteractionListener<T extends FeaturesetFeature>
     required this.onInteractionListener,
   });
 
-  int interactionID;
+  String interactionID;
 
   final OnInteraction<T> onInteractionListener;
 
   @override
   void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID) {
+      FeaturesetFeature feature, String interactionID) {
     var featuresetID = feature.featureset.featuresetId;
     T typedFeature;
 
@@ -814,11 +825,11 @@ class _InteractionsMap<T extends FeaturesetFeature>
     required this.interactions,
   });
 
-  Map<int, _InteractionListener> interactions;
+  Map<String, _InteractionListener> interactions;
 
   @override
   void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID) {
+      FeaturesetFeature feature, String interactionID) {
     interactions[interactionID]?.onInteraction(context, feature, interactionID);
   }
 }
