@@ -61,7 +61,12 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
     }, radius: 10, stopPropagation: false);
 
     // Define a state to hide the POI when it is interacted with
-    mapboxMap.addInteraction(tapInteractionPOI);
+    mapboxMap.addInteraction(tapInteractionPOI, interactionID: "tap_interaction_poi");
+
+    // Remove the POI tap interaction after 10 seconds
+    Future.delayed(Duration(seconds: 10), () {
+      mapboxMap.removeInteraction("tap_interaction_poi");
+    });
   }
 
   @override
@@ -74,6 +79,8 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
           bearing: 49.92,
           zoom: 16.35,
           pitch: 40),
+
+      /// NOT FOR PRODUCTION USE. An experimental version of the Mapbox Standard style.
       styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
       textureView: true,
       onMapCreated: _onMapCreated,

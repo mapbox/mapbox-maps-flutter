@@ -402,11 +402,13 @@ class MapInterfaceController(
         stateKey?.let { FeatureStateKey.create(it) }
       ) {
         if (it.isError) {
-          callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+          callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}} and featureID: $featureId.")))
         } else {
           callback(Result.success(Unit))
         }
       }
+    } ?: {
+      callback(Result.failure(Throwable("Failed to convert requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}.")))
     }
   }
 

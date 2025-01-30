@@ -3170,7 +3170,7 @@ class _CameraManagerSetup {
 }
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol _InteractionsListenerProtocol {
-  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void)
+  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: String, completion: @escaping (Result<Void, MapInterfacesError>) -> Void)
 }
 class _InteractionsListener: _InteractionsListenerProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
@@ -3182,7 +3182,7 @@ class _InteractionsListener: _InteractionsListenerProtocol {
   var codec: MapInterfacesPigeonCodec {
     return MapInterfacesPigeonCodec.shared
   }
-  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
+  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: String, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg, featureArg, interactionIDArg] as [Any?]) { response in
