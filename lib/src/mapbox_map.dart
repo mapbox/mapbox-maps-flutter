@@ -606,7 +606,6 @@ class MapboxMap extends ChangeNotifier {
   void removeInteraction(String interactionID) {
     _interactionsMap.interactions.remove(interactionID);
     _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
-    print(_interactionsMap.interactions.length);
   }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
