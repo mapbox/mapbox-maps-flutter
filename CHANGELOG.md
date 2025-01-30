@@ -20,7 +20,8 @@ mapboxMap.addInteraction(tapInteraction);
 ```
 
 Specific changes: 
-  * Introduce the experimental `MapboxMap.addInteractions` method, which allows you to add interactions to the map. 
+  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map. 
+  * Introduce the experimental `MapboxMap.removeInteraction` method, which allows you to remove interactions from the map using an identifier `mapboxMap.removeInteraction("tap_interaction_poi")`
   * Introduce `TapInteraction` and `LongTapInteraction`, which allow you to add tap and longTap interactions to the map.
   * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
   * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`

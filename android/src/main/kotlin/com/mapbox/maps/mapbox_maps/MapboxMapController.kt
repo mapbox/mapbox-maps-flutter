@@ -11,9 +11,6 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
-import com.mapbox.common.toValue
-import com.mapbox.maps.ClickInteraction
-import com.mapbox.maps.LongClickInteraction
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
@@ -27,9 +24,6 @@ import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
-import com.mapbox.maps.mapbox_maps.pigeons._InteractionPigeon
-import com.mapbox.maps.mapbox_maps.pigeons._InteractionType
-import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
