@@ -28,11 +28,12 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
 
     var cancelable = featuresetDescriptor.featuresetId?.let {
       when (interactionType) {
-        _InteractionType.TAP ->
-          mapboxMap?.addInteraction(ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
+        _InteractionType.TAP -> mapboxMap?.addInteraction(
+          ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
             listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
             return@featureset stopPropagation
-          })
+            }
+          )
 
         _InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
           LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
