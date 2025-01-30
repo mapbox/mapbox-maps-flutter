@@ -3422,7 +3422,7 @@ class _InteractionsListener(private val binaryMessenger: BinaryMessenger, privat
       MapInterfacesPigeonCodec()
     }
   }
-  fun onInteraction(contextArg: MapContentGestureContext, featureArg: FeaturesetFeature, interactionIDArg: Long, callback: (Result<Unit>) -> Unit) {
+  fun onInteraction(contextArg: MapContentGestureContext, featureArg: FeaturesetFeature, interactionIDArg: String, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)

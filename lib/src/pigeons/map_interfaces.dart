@@ -3398,7 +3398,7 @@ abstract class _InteractionsListener {
       MapInterfaces_PigeonCodec();
 
   void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID);
+      FeaturesetFeature feature, String interactionID);
 
   static void setUp(
     _InteractionsListener? api, {
@@ -3429,9 +3429,9 @@ abstract class _InteractionsListener {
               (args[1] as FeaturesetFeature?);
           assert(arg_feature != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null FeaturesetFeature.');
-          final int? arg_interactionID = (args[2] as int?);
+          final String? arg_interactionID = (args[2] as String?);
           assert(arg_interactionID != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.');
           try {
             api.onInteraction(arg_context!, arg_feature!, arg_interactionID!);
             return wrapResponse(empty: true);

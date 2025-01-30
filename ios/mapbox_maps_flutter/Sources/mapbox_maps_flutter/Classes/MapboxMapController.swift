@@ -13,6 +13,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
+    private let interactionsController: InteractionsController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
 
@@ -67,6 +68,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         gesturesController = GesturesController(withMapView: mapView)
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)
 
+        interactionsController = InteractionsController(withMapView: mapView)
+
         let logoController = LogoController(withMapView: mapView)
         LogoSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: logoController, messageChannelSuffix: binaryMessenger.suffix)
 
@@ -107,35 +110,10 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             gesturesController!.removeListeners()
             result(nil)
         case "interactions#add_interaction":
-            let listener = _InteractionsListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
-            guard let arguments = methodCall.arguments as? [String: Any],
-                  let interactionsList = arguments["interaction"] as? [Any?],
-                  let interaction = _InteractionPigeon.fromList(interactionsList),
-                  let featuresetDescriptor = FeaturesetDescriptor.fromList(interaction.featuresetDescriptor),
-                  let interactionType = _InteractionType.fromString(interaction.interactionType),
-                  let id = Int64(interaction.identifier) else {
-                return
-            }
-            let stopPropagation = interaction.stopPropagation
-            let filterExpression = try? interaction.filter.flatMap { try $0.toExp() }
-            let radius: CGFloat? = interaction.radius.flatMap { CGFloat($0) }
-
-            switch interactionType {
-            case .tAP:
-                mapboxMap.addInteraction(
-                    TapInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
-                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: id) { _ in }
-                        return stopPropagation
-                    })
-                )
-            case .lONGTAP:
-                mapboxMap.addInteraction(
-                    LongPressInteraction(featuresetDescriptor.toMapFeaturesetDescriptor(), filter: filterExpression, radius: radius, action: { featuresetFeature, context in
-                        listener.onInteraction(context: context.toFLTMapContentGestureContext(), feature: featuresetFeature.toFLTFeaturesetFeature(), interactionID: id) { _ in }
-                        return stopPropagation
-                    })
-                )
-            }
+            interactionsController!.addInteraction(messenger: binaryMessenger, methodCall: methodCall)
+            result(nil)
+        case "interactions#remove_interaction":
+            interactionsController!.removeInteraction(methodCall: methodCall)
             result(nil)
         case "platform#releaseMethodChannels":
             releaseMethodChannels()
