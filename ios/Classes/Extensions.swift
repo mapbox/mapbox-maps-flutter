@@ -11,6 +11,8 @@ extension FlutterError: @retroactive Error { }
 extension FlutterError: Error { }
 #endif
 
+import MapboxNavigationCore
+
 // FLT to Mapbox
 
 extension [_MapWidgetDebugOptions] {
@@ -1094,3 +1096,49 @@ func executeOnMainThread<T>(_ execute: @escaping (T) -> Void) -> (T) -> Void {
         }
     }
 }
+
+extension CoreLocation.CLLocation {
+    func toFLTNavigationLocation() -> NavigationLocation {
+               
+        let timestamp = Int64(self.timestamp.timeIntervalSince1970)
+
+        return NavigationLocation(
+            latitude: self.coordinate.latitude,
+            longitude: self.coordinate.longitude,
+            timestamp: timestamp,
+            monotonicTimestamp: timestamp,
+            altitude: self.altitude,
+            horizontalAccuracy: self.horizontalAccuracy,
+            verticalAccuracy: self.verticalAccuracy,
+            speed: self.speed,
+            speedAccuracy: self.speedAccuracy,
+            bearing: nil,
+            bearingAccuracy: nil,
+            floor: nil,
+            source: nil
+        )
+    }
+}
+
+extension MapboxNavigationCore.RouteProgress {
+    func toFLTRouteProgress() -> RouteProgress {
+               
+        return RouteProgress(
+          bannerInstructionsJson: nil,
+          voiceInstructionsJson: nil,
+          currentState: .uNCERTAIN,
+          inTunnel: false,
+          distanceRemaining: self.distanceRemaining,
+          distanceTraveled: self.distanceTraveled,
+          durationRemaining: self.durationRemaining,
+          fractionTraveled: self.fractionTraveled,
+          remainingWaypoints: Int64(self.remainingWaypoints.count),
+          upcomingRoadObjects: nil,
+          stale: nil,
+          routeAlternativeId: nil,
+          currentRouteGeometryIndex: nil,
+          inParkingAisle: nil
+        )
+    }
+}
+

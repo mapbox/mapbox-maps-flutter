@@ -9,9 +9,9 @@ final class NavigationController: NSObject, NavigationInterface {
     let predictiveCacheManager: PredictiveCacheManager?
 
     @Published private(set) var isInActiveNavigation: Bool = false
-    @Published private(set) var currentPreviewRoutes: NavigationRoutes?
-    @Published private(set) var activeNavigationRoutes: NavigationRoutes?
-    @Published private(set) var routeProgress: RouteProgress?
+    @Published private(set) var currentPreviewRoutes: MapboxNavigationCore.NavigationRoutes?
+    @Published private(set) var activeNavigationRoutes: MapboxNavigationCore.NavigationRoutes?
+    @Published private(set) var routeProgress: MapboxNavigationCore.RouteProgress?
     @Published private(set) var currentLocation: CLLocation?
     @Published var cameraState: NavigationCameraState = .iDLE
     @Published var profileIdentifier: ProfileIdentifier = .automobileAvoidingTraffic
@@ -35,7 +35,10 @@ final class NavigationController: NSObject, NavigationInterface {
         self.navigationProvider = MapboxNavigationProvider(coreConfig: config)
         self.core = self.navigationProvider.mapboxNavigation
         self.predictiveCacheManager = self.navigationProvider.predictiveCacheManager
-        self.observeNavigation()
+        //self.observeNavigation()
+        
+//        func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+//        func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
     }
 
     private func observeNavigation() {
@@ -46,17 +49,21 @@ final class NavigationController: NSObject, NavigationInterface {
             }
             .removeDuplicates()
             .assign(to: &$isInActiveNavigation)
-
-        core.navigation().routeProgress
-            .map { $0?.routeProgress }
-            .assign(to: &$routeProgress)
+        
+        core.navigation().routeProgress.sink { state in
+            self.routeProgress=state?.routeProgress
+            if (self.routeProgress != nil) {
+                self.onNavigationListener?.onRouteProgress(routeProgress: self.routeProgress!.toFLTRouteProgress()) { _ in }
+            }
+        }
 
         core.tripSession().navigationRoutes
             .assign(to: &$activeNavigationRoutes)
-
-        core.navigation().locationMatching
-            .map { $0.enhancedLocation }
-            .assign(to: &$currentLocation)
+        
+        core.navigation().locationMatching.sink { state in
+            self.currentLocation = state.enhancedLocation
+            self.onNavigationListener?.onNewLocation(location: state.enhancedLocation.toFLTNavigationLocation()) { _ in }
+        }
     }
 
     func startFreeDrive() {
@@ -94,6 +101,7 @@ final class NavigationController: NSObject, NavigationInterface {
             )
             let previewRoutes = try await provider.calculateRoutes(options: mapMatchingOptions).value
             currentPreviewRoutes = previewRoutes
+            self.onNavigationListener?.onNavigationRouteReady() { _ in }
         } else {
             let routeOptions = NavigationRouteOptions(
                 waypoints: waypoints,
@@ -101,6 +109,7 @@ final class NavigationController: NSObject, NavigationInterface {
             )
             let previewRoutes = try await provider.calculateRoutes(options: routeOptions).value
             currentPreviewRoutes = previewRoutes
+            self.onNavigationListener?.onNavigationRouteReady() { _ in }
         }
         cameraState = .iDLE
     }
@@ -118,7 +127,7 @@ final class NavigationController: NSObject, NavigationInterface {
         Task {
             do {
                 try await self.requestRoutes(points: waypoints)
-                completion(.success(<#T##Void#>))
+                completion(.success(Void()))
             }
             catch {
                 completion(.failure(error))
@@ -127,9 +136,10 @@ final class NavigationController: NSObject, NavigationInterface {
     }
 
     func stopTripSession(completion: @escaping (Result<Void, Error>) -> Void) {
-        //core.cameraState
+        
         cameraState = .oVERVIEW
-        completion(.success(<#T##Void#>))
+        self.onNavigationListener?.onNavigationCameraStateChanged(state: cameraState) {_ in }
+        completion(.success(Void()))
     }
 
     func startTripSession(withForegroundService: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -138,17 +148,20 @@ final class NavigationController: NSObject, NavigationInterface {
         cameraState = .fOLLOWING
         currentPreviewRoutes = nil
         waypoints = []
-        completion(.success(<#T##Void#>))
+        self.onNavigationListener?.onNavigationCameraStateChanged(state: cameraState) {_ in }
+        completion(.success(Void()))
     }
 
     func requestNavigationCameraToFollowing(completion: @escaping (Result<Void, Error>) -> Void) {
         cameraState = .fOLLOWING
-        completion(.success(<#T##Void#>))
+        self.onNavigationListener?.onNavigationCameraStateChanged(state: cameraState) {_ in }
+        completion(.success(Void()))
     }
 
     func requestNavigationCameraToOverview(completion: @escaping (Result<Void, Error>) -> Void) {
         cameraState = .oVERVIEW
-        completion(.success(<#T##Void#>))
+        self.onNavigationListener?.onNavigationCameraStateChanged(state: cameraState) {_ in }
+        completion(.success(Void()))
     }
 
     func lastLocation(completion: @escaping (Result<NavigationLocation?, Error>) -> Void) {        

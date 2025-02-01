@@ -3,6 +3,7 @@ import MapboxMaps
 import MapboxCommon
 import MapboxCommon_Private
 
+@MainActor
 final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
 
