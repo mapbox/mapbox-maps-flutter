@@ -42,7 +42,7 @@ class AnnotationController(private val mapView: MapView) :
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnCircleAnnotationClickListener { annotation ->
               onCircleAnnotationClickListener?.onCircleAnnotationClick(annotation.toFLTCircleAnnotation()) {}
-              true
+              false
             }
           )
         }
@@ -52,7 +52,7 @@ class AnnotationController(private val mapView: MapView) :
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener { annotation ->
               onPointAnnotationClickListener?.onPointAnnotationClick(annotation.toFLTPointAnnotation()) {}
-              true
+              false
             }
           )
         }
@@ -62,7 +62,7 @@ class AnnotationController(private val mapView: MapView) :
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListener { annotation ->
               onPolygonAnnotationClickListener?.onPolygonAnnotationClick(annotation.toFLTPolygonAnnotation()) {}
-              true
+              false
             }
           )
         }
@@ -72,7 +72,7 @@ class AnnotationController(private val mapView: MapView) :
           this.addClickListener(
             com.mapbox.maps.plugin.annotation.generated.OnPolylineAnnotationClickListener { annotation ->
               onPolylineAnnotationClickListener?.onPolylineAnnotationClick(annotation.toFLTPolylineAnnotation()) {}
-              true
+              false
             }
           )
         }

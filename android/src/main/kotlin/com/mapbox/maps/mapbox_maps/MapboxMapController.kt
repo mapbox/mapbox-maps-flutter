@@ -11,6 +11,9 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import com.mapbox.bindgen.Value
 import com.mapbox.common.SettingsServiceFactory
 import com.mapbox.common.SettingsServiceStorageType
+import com.mapbox.common.toValue
+import com.mapbox.maps.ClickInteraction
+import com.mapbox.maps.LongClickInteraction
 import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
@@ -24,6 +27,9 @@ import com.mapbox.maps.mapbox_maps.pigeons.ScaleBarSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
 import com.mapbox.maps.mapbox_maps.pigeons._AnimationManager
 import com.mapbox.maps.mapbox_maps.pigeons._CameraManager
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionPigeon
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionType
+import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import com.mapbox.maps.mapbox_maps.pigeons._LocationComponentSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons._MapInterface
 import com.mapbox.maps.mapbox_maps.pigeons._ViewportMessenger
@@ -233,6 +239,53 @@ class MapboxMapController(
       }
       "gesture#remove_listeners" -> {
         gestureController.removeListeners()
+        result.success(null)
+      }
+      "interactions#add_interaction" -> {
+        val listener = _InteractionsListener(messenger, channelSuffix)
+        val arguments: HashMap<String, Any> = call.arguments as? HashMap<String, Any> ?: return
+        val interactionList = arguments["interaction"] as? List<Any?> ?: return
+        val interaction = _InteractionPigeon.fromList(interactionList)
+        val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(interaction.featuresetDescriptor)
+        val interactionType = _InteractionType.valueOf(interaction.interactionType)
+        val stopPropagation = interaction.stopPropagation
+        val id = interaction.identifier.toLong()
+        val filter = interaction.filter.toValue()
+        val radius = interaction.radius
+
+        featuresetDescriptor.featuresetId?.let {
+          when (interactionType) {
+            _InteractionType.TAP -> mapboxMap?.addInteraction(
+              ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
+                return@featureset stopPropagation
+              }
+            )
+            _InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+              LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
+                return@featureset stopPropagation
+              }
+            )
+            null -> return
+          }
+        } ?: featuresetDescriptor.layerId?.let {
+          when (interactionType) {
+            _InteractionType.TAP -> mapboxMap?.addInteraction(
+              ClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
+                return@layer stopPropagation
+              }
+            )
+            _InteractionType.LONG_TAP -> mapboxMap?.addInteraction(
+              LongClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
+                listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
+                return@layer stopPropagation
+              }
+            )
+            null -> return
+          }
+        }
         result.success(null)
       }
       "platform#releaseMethodChannels" -> {
