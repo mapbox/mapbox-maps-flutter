@@ -18,6 +18,7 @@ Specific changes:
   * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
   * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
 * For more guidance with using these new features see `interactive_features_example.dart`.
+* Update Maps SDK to 11.10.0-rc.1
 
 ### 2.6.0-beta.1
 
