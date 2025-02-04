@@ -30,7 +30,7 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
     val filter = interaction.filter.toValue()
     val radius = interaction.radius
 
-    /// If there is a featuresetDescriptor add the interaction to that feature, including filter and radius if present
+    // If there is a featuresetDescriptor add the interaction to that feature, including filter and radius if present
     val cancelable = if (featuresetDescriptor != null) {
       featuresetDescriptor.featuresetId?.let {
         when (interactionType) {
@@ -99,7 +99,7 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
           )
         }
       }
-    /// Otherwise add interactions to the whole map view
+      // Otherwise add interactions to the whole map view
     } else {
       when (interactionType) {
         _InteractionType.TAP -> mapboxMap.addInteraction(
