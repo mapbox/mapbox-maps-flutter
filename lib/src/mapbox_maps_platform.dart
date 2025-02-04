@@ -165,7 +165,7 @@ class _MapboxMapsPlatform {
       _Interaction interaction, String interactionID) async {
     var interactionPigeon = _InteractionPigeon(
         featuresetDescriptor:
-            interaction.featuresetDescriptor.encode() as List<Object?>,
+            interaction.featuresetDescriptor?.encode() as List<Object?>?,
         stopPropagation: interaction.stopPropagation,
         interactionType: interaction.interactionType.name,
         identifier: interactionID,

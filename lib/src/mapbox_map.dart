@@ -792,28 +792,31 @@ class _InteractionListener<T extends FeaturesetFeature>
   final OnInteraction<T> onInteractionListener;
 
   @override
-  void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, String interactionID) {
-    var featuresetID = feature.featureset.featuresetId;
-    T typedFeature;
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    var featuresetID = feature?.featureset.featuresetId;
+    T? typedFeature;
 
-    if (featuresetID == "buildings") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
-              feature) as T;
-    } else if (featuresetID == "poi") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
-              as T;
-    } else if (featuresetID == "place-labels") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
-              feature) as T;
+    if (feature != null) {
+      if (featuresetID == "buildings") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
+                feature) as T;
+      } else if (featuresetID == "poi") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
+                as T;
+      } else if (featuresetID == "place-labels") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
+                feature) as T;
+      } else {
+        typedFeature = feature as T;
+      }
+      onInteractionListener.call(typedFeature, context);
     } else {
-      typedFeature = feature as T;
+      onInteractionListener.call(null, context);
     }
-
-    onInteractionListener.call(context, typedFeature);
   }
 }
 
@@ -827,8 +830,8 @@ class _InteractionsMap<T extends FeaturesetFeature>
   Map<String, _InteractionListener> interactions;
 
   @override
-  void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, String interactionID) {
-    interactions[interactionID]?.onInteraction(context, feature, interactionID);
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    interactions[interactionID]?.onInteraction(feature, context, interactionID);
   }
 }

@@ -1428,7 +1428,7 @@ data class FeatureState(
  */
 data class _Interaction(
   /** The featureset descriptor that specifies the featureset to be included in the interaction. */
-  val featuresetDescriptor: FeaturesetDescriptor,
+  val featuresetDescriptor: FeaturesetDescriptor? = null,
   /** The type of interaction, either tap or longTap */
   val interactionType: _InteractionType,
   /** Whether to stop the propagation of the interaction to the map. Defaults to true. */
@@ -1440,7 +1440,7 @@ data class _Interaction(
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): _Interaction {
-      val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor
+      val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor?
       val interactionType = pigeonVar_list[1] as _InteractionType
       val stopPropagation = pigeonVar_list[2] as Boolean
       val filter = pigeonVar_list[3] as String?
@@ -1466,7 +1466,7 @@ data class _Interaction(
  */
 data class _InteractionPigeon(
   /** The featureset descriptor that specifies the featureset to be included in the interaction. */
-  val featuresetDescriptor: List<Any?>,
+  val featuresetDescriptor: List<Any?>? = null,
   /** Whether to stop the propagation of the interaction to the map */
   val stopPropagation: Boolean,
   /** The type of interaction, either tap or longTap as a String */
@@ -1480,7 +1480,7 @@ data class _InteractionPigeon(
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): _InteractionPigeon {
-      val featuresetDescriptor = pigeonVar_list[0] as List<Any?>
+      val featuresetDescriptor = pigeonVar_list[0] as List<Any?>?
       val stopPropagation = pigeonVar_list[1] as Boolean
       val interactionType = pigeonVar_list[2] as String
       val identifier = pigeonVar_list[3] as String
@@ -3422,11 +3422,11 @@ class _InteractionsListener(private val binaryMessenger: BinaryMessenger, privat
       MapInterfacesPigeonCodec()
     }
   }
-  fun onInteraction(contextArg: MapContentGestureContext, featureArg: FeaturesetFeature, interactionIDArg: String, callback: (Result<Unit>) -> Unit) {
+  fun onInteraction(featureArg: FeaturesetFeature?, contextArg: MapContentGestureContext, interactionIDArg: String, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(contextArg, featureArg, interactionIDArg)) {
+    channel.send(listOf(featureArg, contextArg, interactionIDArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))

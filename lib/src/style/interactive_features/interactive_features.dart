@@ -1,34 +1,60 @@
 part of '../../../mapbox_maps_flutter.dart';
 
-/// A single tap interaction on a Featureset with a typed `FeaturesetDescriptor`.
+/// A single tap interaction on a Featureset with a typed `FeaturesetDescriptor` or on the map.
 final class TapInteraction<T extends FeaturesetDescriptor>
     extends TypedInteraction<TypedFeaturesetFeature<T>> {
-  TapInteraction(
-      T featuresetDescriptor, OnInteraction<TypedFeaturesetFeature<T>> action,
+  TapInteraction(T featuresetDescriptor,
+      OnInteractionFeatureContext<TypedFeaturesetFeature<T>> action2,
       {super.filter, super.radius, super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
             interactionType: "TAP",
-            action: action);
+            action: (feature, context) {
+              if (feature != null) {
+                action2(feature, context);
+              }
+            });
+
+  TapInteraction.onMap(OnInteractionContext actionContext,
+      {super.stopPropagation = true})
+      : super(
+            featuresetDescriptor: null,
+            interactionType: "TAP",
+            action: (feature, context) => actionContext(context));
 }
 
-/// A long tap interaction on a Featureset with a typed `FeaturesetDescriptor`.
+/// A long tap interaction on a Featureset with a typed `FeaturesetDescriptor` or on the map.
 final class LongTapInteraction<T extends FeaturesetDescriptor>
     extends TypedInteraction<TypedFeaturesetFeature<T>> {
   LongTapInteraction(
-      T featuresetDescriptor, OnInteraction<TypedFeaturesetFeature<T>> action,
-      {super.filter, super.radius, super.stopPropagation = true})
+      T featuresetDescriptor,
+      OnInteractionFeatureContext<TypedFeaturesetFeature<T>>
+          actionFeatureContext,
+      {super.filter,
+      super.radius,
+      super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
             interactionType: "LONG_TAP",
-            action: action);
+            action: (feature, context) {
+              if (feature != null) {
+                actionFeatureContext(feature, context);
+              }
+            });
+
+  LongTapInteraction.onMap(OnInteractionContext actionContext,
+      {super.stopPropagation = true})
+      : super(
+            featuresetDescriptor: null,
+            interactionType: "LONG_TAP",
+            action: (feature, context) => actionContext(context));
 }
 
 /// An `_Interaction` with an action that has a typed `FeaturesetFeature` as input.
 final class TypedInteraction<T extends TypedFeaturesetFeature>
     extends _Interaction {
   TypedInteraction(
-      {required super.featuresetDescriptor,
+      {super.featuresetDescriptor,
       super.filter,
       super.radius,
       super.stopPropagation = true,

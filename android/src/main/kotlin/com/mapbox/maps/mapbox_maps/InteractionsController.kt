@@ -21,41 +21,98 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
     val arguments: HashMap<String, Any> = call.arguments as? HashMap<String, Any> ?: return
     val interactionList = arguments["interaction"] as? List<Any?> ?: return
     val interaction = _InteractionPigeon.fromList(interactionList)
-    val featuresetDescriptor = com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(interaction.featuresetDescriptor)
+    val featuresetDescriptor = interaction.featuresetDescriptor?.let {
+      com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor.fromList(it)
+    }
     val interactionType = _InteractionType.valueOf(interaction.interactionType)
     val stopPropagation = interaction.stopPropagation
     val id = interaction.identifier
     val filter = interaction.filter.toValue()
     val radius = interaction.radius
 
-    val cancelable = featuresetDescriptor.featuresetId?.let {
+    /// If there is a featuresetDescriptor add the interaction to that feature, including filter and radius if present
+    val cancelable = if (featuresetDescriptor != null) {
+      featuresetDescriptor.featuresetId?.let {
+        when (interactionType) {
+          _InteractionType.TAP -> mapboxMap.addInteraction(
+            ClickInteraction.featureset(
+              id = it,
+              importId = featuresetDescriptor.importId,
+              filter = filter,
+              radius = radius
+            ) { featuresetFeature, context ->
+              listener.onInteraction(
+                featuresetFeature.toFLTFeaturesetFeature(),
+                context.toFLTMapContentGestureContext(),
+                id
+              ) { _ -> }
+              return@featureset stopPropagation
+            }
+          )
+
+          _InteractionType.LONG_TAP -> mapboxMap.addInteraction(
+            LongClickInteraction.featureset(
+              id = it,
+              importId = featuresetDescriptor.importId,
+              filter = filter,
+              radius = radius
+            ) { featuresetFeature, context ->
+              listener.onInteraction(
+                featuresetFeature.toFLTFeaturesetFeature(),
+                context.toFLTMapContentGestureContext(),
+                id
+              ) { _ -> }
+              return@featureset stopPropagation
+            }
+          )
+        }
+      } ?: featuresetDescriptor.layerId?.let {
+        when (interactionType) {
+          _InteractionType.TAP -> mapboxMap.addInteraction(
+            ClickInteraction.layer(
+              id = it,
+              filter = filter,
+              radius = radius
+            ) { featuresetFeature, context ->
+              listener.onInteraction(
+                featuresetFeature.toFLTFeaturesetFeature(),
+                context.toFLTMapContentGestureContext(),
+                id
+              ) { _ -> }
+              return@layer stopPropagation
+            }
+          )
+
+          _InteractionType.LONG_TAP -> mapboxMap.addInteraction(
+            LongClickInteraction.layer(
+              id = it,
+              filter = filter,
+              radius = radius
+            ) { featuresetFeature, context ->
+              listener.onInteraction(
+                featuresetFeature.toFLTFeaturesetFeature(),
+                context.toFLTMapContentGestureContext(),
+                id
+              ) { _ -> }
+              return@layer stopPropagation
+            }
+          )
+        }
+      }
+    /// Otherwise add interactions to the whole map view
+    } else {
       when (interactionType) {
         _InteractionType.TAP -> mapboxMap.addInteraction(
-          ClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
-            listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
-            return@featureset stopPropagation
+          ClickInteraction { context ->
+            listener.onInteraction(null, context.toFLTMapContentGestureContext(), id) { _ -> }
+            return@ClickInteraction stopPropagation
           }
         )
 
         _InteractionType.LONG_TAP -> mapboxMap.addInteraction(
-          LongClickInteraction.featureset(id = it, importId = featuresetDescriptor.importId, filter = filter, radius = radius) { featuresetFeature, context ->
-            listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
-            return@featureset stopPropagation
-          }
-        )
-      }
-    } ?: featuresetDescriptor.layerId?.let {
-      when (interactionType) {
-        _InteractionType.TAP -> mapboxMap.addInteraction(
-          ClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
-            listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
-            return@layer stopPropagation
-          }
-        )
-        _InteractionType.LONG_TAP -> mapboxMap.addInteraction(
-          LongClickInteraction.layer(id = it, filter = filter, radius = radius) { featuresetFeature, context ->
-            listener.onInteraction(context.toFLTMapContentGestureContext(), featuresetFeature.toFLTFeaturesetFeature(), id) { _ -> }
-            return@layer stopPropagation
+          LongClickInteraction { context ->
+            listener.onInteraction(null, context.toFLTMapContentGestureContext(), id) { _ -> }
+            return@LongClickInteraction stopPropagation
           }
         )
       }
