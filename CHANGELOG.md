@@ -1,3 +1,7 @@
+### 2.5.2
+
+* Bump Maps SDK to 11.9.2
+
 ### 2.6.0-rc.1
 
 > [!IMPORTANT]
@@ -30,6 +34,10 @@ Specific changes:
 
 * Add support for Swift Package Manager.
 * Update Maps SDK to 11.10.0-beta.1
+
+### 2.5.1
+
+* Bump Maps SDK to 11.9.1
 
 ### 2.5.0
 
