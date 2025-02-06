@@ -1,4 +1,8 @@
-## 2.5.1
+### 2.5.2
+
+* Bump Maps SDK to 11.9.2
+
+### 2.5.1
 
 * Bump Maps SDK to 11.9.1
 
