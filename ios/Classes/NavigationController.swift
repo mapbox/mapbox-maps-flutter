@@ -25,20 +25,18 @@ final class NavigationController: NSObject, NavigationInterface {
     private let mapView: MapView
     private let navigationProvider: MapboxNavigationProvider
 
-    init(withMapView mapView: MapView) {
+    init(withMapView mapView: MapView, navigationProvider: MapboxNavigationProvider) {
+        
         self.mapView = mapView
-
-        let config = CoreConfig(
-            credentials: .init(), // You can pass a custom token if you need to,
-            locationSource: .live
-        )
-        self.navigationProvider = MapboxNavigationProvider(coreConfig: config)
+        
+        self.navigationProvider = navigationProvider
+        
         self.core = self.navigationProvider.mapboxNavigation
         self.predictiveCacheManager = self.navigationProvider.predictiveCacheManager
-        //self.observeNavigation()
         
-//        func onRouteProgress(routeProgress routeProgressArg: RouteProgress, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
-//        func onNavigationCameraStateChanged(state stateArg: NavigationCameraState, completion: @escaping (Result<Void, NavigationMessagerError>) -> Void)
+        super.init()
+        
+        observeNavigation()
     }
 
     private func observeNavigation() {
@@ -63,6 +61,14 @@ final class NavigationController: NSObject, NavigationInterface {
         core.navigation().locationMatching.sink { state in
             self.currentLocation = state.enhancedLocation
             self.onNavigationListener?.onNewLocation(location: state.enhancedLocation.toFLTNavigationLocation()) { _ in }
+        }
+        
+        if (core.navigation().currentLocationMatching != nil) {
+            self.currentLocation = self.core.navigation().currentLocationMatching?.enhancedLocation
+            if(self.currentLocation != nil)
+            {
+                self.onNavigationListener?.onNewLocation(location: self.currentLocation!.toFLTNavigationLocation()) { _ in }
+            }
         }
     }
 
@@ -91,7 +97,9 @@ final class NavigationController: NSObject, NavigationInterface {
 
     func requestRoutes(points: [Point]) async throws {
 
-        waypoints.append(Waypoint(coordinate: self.currentLocation!.coordinate, name: "Current location"))
+        if(self.currentLocation != nil) {
+            waypoints.append(Waypoint(coordinate: self.currentLocation!.coordinate, name: "Current location"))
+        }
 
         let provider = core.routingProvider()
         if shouldRequestMapMatching {
@@ -164,7 +172,30 @@ final class NavigationController: NSObject, NavigationInterface {
         completion(.success(Void()))
     }
 
-    func lastLocation(completion: @escaping (Result<NavigationLocation?, Error>) -> Void) {        
+    func lastLocation(completion: @escaping (Result<NavigationLocation?, Error>) -> Void) {
+        if(self.currentLocation != nil)
+        {
+            completion(.success(self.currentLocation!.toFLTNavigationLocation()))
+        }
+        else if (self.mapView.location.latestLocation != nil) {
+            let timestamp = Int64(self.mapView.location.latestLocation!.timestamp.timeIntervalSince1970)
+            
+            completion(.success(NavigationLocation(
+                latitude: self.mapView.location.latestLocation!.coordinate.latitude,
+                longitude: self.mapView.location.latestLocation!.coordinate.longitude,
+                timestamp: timestamp,
+                monotonicTimestamp: timestamp,
+                altitude: self.mapView.location.latestLocation!.altitude,
+                horizontalAccuracy: self.mapView.location.latestLocation!.horizontalAccuracy,
+                verticalAccuracy: self.mapView.location.latestLocation!.verticalAccuracy,
+                speed: self.mapView.location.latestLocation!.speed,
+                speedAccuracy: self.mapView.location.latestLocation!.speedAccuracy,
+                bearing: nil,
+                bearingAccuracy: nil,
+                floor: nil,
+                source: nil
+            )))
+        }
         completion(.success(nil))
     }
 }

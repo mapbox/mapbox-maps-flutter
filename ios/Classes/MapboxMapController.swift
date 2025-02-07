@@ -1,6 +1,7 @@
 import Flutter
 @_spi(Experimental) import MapboxMaps
 import UIKit
+import MapboxNavigationCore
 
 struct SuffixBinaryMessenger {
     let messenger: FlutterBinaryMessenger
@@ -17,6 +18,10 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let navigationController: NavigationController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
+    private static let navigationProvider: MapboxNavigationProvider = MapboxNavigationProvider(coreConfig: CoreConfig(
+        credentials: .init(), // You can pass a custom token if you need to,
+        locationSource: .live
+    ))
 
     func view() -> UIView {
         return mapView
@@ -47,6 +52,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             eventTypes: eventTypes,
             channelSuffix: String(channelSuffix)
         )
+
+        //mapView.location.override(locationProvider: self.navigationProvider, headingProvider: nil)
 
         let styleController = StyleController(styleManager: mapboxMap)
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: styleController, messageChannelSuffix: binaryMessenger.suffix)
@@ -84,7 +91,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
-        navigationController = NavigationController(withMapView: mapView)
+        navigationController = NavigationController(withMapView: mapView, navigationProvider: MapboxMapController.navigationProvider )
         NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: navigationController, messageChannelSuffix: binaryMessenger.suffix)
 
         super.init()
