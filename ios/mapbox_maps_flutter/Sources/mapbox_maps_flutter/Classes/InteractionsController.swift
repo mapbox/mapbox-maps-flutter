@@ -22,8 +22,8 @@ final class InteractionsController {
         let stopPropagation = interaction.stopPropagation
 
         /// If there is a featuresetDescriptor add the interaction to that feature, including filter and radius if present
-        if let featursetDescriptorList = interaction.featuresetDescriptor,
-            let featuresetDescriptor = FeaturesetDescriptor.fromList(featursetDescriptorList) {
+        if let featuresetDescriptorList = interaction.featuresetDescriptor,
+            let featuresetDescriptor = FeaturesetDescriptor.fromList(featuresetDescriptorList) {
             let filterExpression = try? interaction.filter.flatMap { try $0.toExp() }
             let radius: CGFloat? = interaction.radius.flatMap { CGFloat($0) }
             switch interactionType {

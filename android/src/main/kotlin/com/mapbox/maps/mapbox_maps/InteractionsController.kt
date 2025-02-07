@@ -1,18 +1,19 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.content.Context
 import com.mapbox.common.Cancelable
-import com.mapbox.common.toValue
 import com.mapbox.maps.ClickInteraction
 import com.mapbox.maps.LongClickInteraction
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.extension.style.expressions.generated.Expression
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionPigeon
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionType
 import com.mapbox.maps.mapbox_maps.pigeons._InteractionsListener
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 
-class InteractionsController(private val mapboxMap: MapboxMap) {
+class InteractionsController(private val mapboxMap: MapboxMap, private var context: Context) {
   private var cancelables = HashMap<String, Cancelable?>()
 
   @OptIn(MapboxExperimental::class)
@@ -27,7 +28,7 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
     val interactionType = _InteractionType.valueOf(interaction.interactionType)
     val stopPropagation = interaction.stopPropagation
     val id = interaction.identifier
-    val filter = interaction.filter.toValue()
+    val filter = interaction.filter?.let { Expression.fromRaw(it) }
     val radius = interaction.radius
 
     // If there is a featuresetDescriptor add the interaction to that feature, including filter and radius if present
@@ -40,10 +41,10 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
               importId = featuresetDescriptor.importId,
               filter = filter,
               radius = radius
-            ) { featuresetFeature, context ->
+            ) { featuresetFeature, interactionContext ->
               listener.onInteraction(
                 featuresetFeature.toFLTFeaturesetFeature(),
-                context.toFLTMapContentGestureContext(),
+                interactionContext.toFLTMapContentGestureContext(context),
                 id
               ) { _ -> }
               return@featureset stopPropagation
@@ -56,10 +57,10 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
               importId = featuresetDescriptor.importId,
               filter = filter,
               radius = radius
-            ) { featuresetFeature, context ->
+            ) { featuresetFeature, interactionContext ->
               listener.onInteraction(
                 featuresetFeature.toFLTFeaturesetFeature(),
-                context.toFLTMapContentGestureContext(),
+                interactionContext.toFLTMapContentGestureContext(context),
                 id
               ) { _ -> }
               return@featureset stopPropagation
@@ -73,10 +74,10 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
               id = it,
               filter = filter,
               radius = radius
-            ) { featuresetFeature, context ->
+            ) { featuresetFeature, interactionContext ->
               listener.onInteraction(
                 featuresetFeature.toFLTFeaturesetFeature(),
-                context.toFLTMapContentGestureContext(),
+                interactionContext.toFLTMapContentGestureContext(context),
                 id
               ) { _ -> }
               return@layer stopPropagation
@@ -88,10 +89,10 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
               id = it,
               filter = filter,
               radius = radius
-            ) { featuresetFeature, context ->
+            ) { featuresetFeature, interactionContext ->
               listener.onInteraction(
                 featuresetFeature.toFLTFeaturesetFeature(),
-                context.toFLTMapContentGestureContext(),
+                interactionContext.toFLTMapContentGestureContext(context),
                 id
               ) { _ -> }
               return@layer stopPropagation
@@ -103,15 +104,15 @@ class InteractionsController(private val mapboxMap: MapboxMap) {
     } else {
       when (interactionType) {
         _InteractionType.TAP -> mapboxMap.addInteraction(
-          ClickInteraction { context ->
-            listener.onInteraction(null, context.toFLTMapContentGestureContext(), id) { _ -> }
+          ClickInteraction { interactionContext ->
+            listener.onInteraction(null, interactionContext.toFLTMapContentGestureContext(context), id) { _ -> }
             return@ClickInteraction stopPropagation
           }
         )
 
         _InteractionType.LONG_TAP -> mapboxMap.addInteraction(
-          LongClickInteraction { context ->
-            listener.onInteraction(null, context.toFLTMapContentGestureContext(), id) { _ -> }
+          LongClickInteraction { interactionContext ->
+            listener.onInteraction(null, interactionContext.toFLTMapContentGestureContext(context), id) { _ -> }
             return@LongClickInteraction stopPropagation
           }
         )

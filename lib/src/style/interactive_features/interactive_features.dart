@@ -3,15 +3,19 @@ part of '../../../mapbox_maps_flutter.dart';
 /// A single tap interaction on a Featureset with a typed `FeaturesetDescriptor` or on the map.
 final class TapInteraction<T extends FeaturesetDescriptor>
     extends TypedInteraction<TypedFeaturesetFeature<T>> {
-  TapInteraction(T featuresetDescriptor,
-      OnInteractionFeatureContext<TypedFeaturesetFeature<T>> action2,
-      {super.filter, super.radius, super.stopPropagation = true})
+  TapInteraction(
+      T featuresetDescriptor,
+      OnInteractionFeatureContext<TypedFeaturesetFeature<T>>
+          actionFeatureContext,
+      {super.filter,
+      super.radius,
+      super.stopPropagation = true})
       : super(
             featuresetDescriptor: featuresetDescriptor,
             interactionType: "TAP",
             action: (feature, context) {
               if (feature != null) {
-                action2(feature, context);
+                actionFeatureContext(feature, context);
               }
             });
 

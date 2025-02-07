@@ -367,6 +367,10 @@ class MapboxMap extends ChangeNotifier {
   /// Returns `true` if a gesture is currently in progress.
   Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
 
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _mapInterface.dispatch(gesture, screenCoordinate);
+
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
@@ -811,7 +815,8 @@ class _InteractionListener<T extends FeaturesetFeature>
             TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
                 feature) as T;
       } else {
-        typedFeature = feature as T;
+        typedFeature =
+            TypedFeaturesetFeature.fromFeaturesetFeature(feature) as T;
       }
       onInteractionListener.call(typedFeature, context);
     } else {

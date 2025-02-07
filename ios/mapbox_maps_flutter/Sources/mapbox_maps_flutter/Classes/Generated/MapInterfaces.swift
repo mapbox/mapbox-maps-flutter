@@ -3226,6 +3226,9 @@ protocol _MapInterface {
   ///
   /// @return `true` if a gesture is currently in progress, `false` otherwise.
   func isGestureInProgress() throws -> Bool
+  /// For internal use only.
+  /// Dispatch a map gesture event for testing purposes.
+  func dispatch(gesture: String, screenCoordinate: ScreenCoordinate) throws
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
@@ -3578,6 +3581,24 @@ class _MapInterfaceSetup {
       }
     } else {
       isGestureInProgressChannel.setMessageHandler(nil)
+    }
+    /// For internal use only.
+    /// Dispatch a map gesture event for testing purposes.
+    let dispatchChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      dispatchChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let gestureArg = args[0] as! String
+        let screenCoordinateArg = args[1] as! ScreenCoordinate
+        do {
+          try api.dispatch(gesture: gestureArg, screenCoordinate: screenCoordinateArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      dispatchChannel.setMessageHandler(nil)
     }
     /// Tells the map rendering engine that the animation is currently performed by the
     /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.

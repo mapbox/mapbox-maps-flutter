@@ -3473,6 +3473,11 @@ interface _MapInterface {
    */
   fun isGestureInProgress(): Boolean
   /**
+   * For internal use only.
+   * Dispatch a map gesture event for testing purposes.
+   */
+  fun dispatch(gesture: String, screenCoordinate: ScreenCoordinate)
+  /**
    * Tells the map rendering engine that the animation is currently performed by the
    * user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
    * In particular, it brings more stability to symbol placement and rendering.
@@ -3879,6 +3884,25 @@ interface _MapInterface {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.isGestureInProgress())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val gestureArg = args[0] as String
+            val screenCoordinateArg = args[1] as ScreenCoordinate
+            val wrapped: List<Any?> = try {
+              api.dispatch(gestureArg, screenCoordinateArg)
+              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }

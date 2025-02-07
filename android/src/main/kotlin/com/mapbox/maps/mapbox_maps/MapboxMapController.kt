@@ -146,7 +146,7 @@ class MapboxMapController(
     annotationController = AnnotationController(mapView)
     locationComponentController = LocationComponentController(mapView, context)
     gestureController = GestureController(mapView, context)
-    interactionsController = InteractionsController(mapboxMap)
+    interactionsController = InteractionsController(mapboxMap, context)
     logoController = LogoController(mapView)
     attributionController = AttributionController(mapView)
     scaleBarController = ScaleBarController(mapView)
