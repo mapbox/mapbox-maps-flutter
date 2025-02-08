@@ -16,9 +16,9 @@ final class NavigationController: NSObject, NavigationInterface {
     let predictiveCacheManager: PredictiveCacheManager?
 
     @Published private(set) var isInActiveNavigation: Bool = false
-    @Published private(set) var currentPreviewRoutes: MapboxNavigationCore.NavigationRoutes?
-    @Published private(set) var activeNavigationRoutes: MapboxNavigationCore.NavigationRoutes?
-    @Published private(set) var currentRouteProgress: MapboxNavigationCore.RouteProgress?
+    //@Published private(set) var currentPreviewRoutes: MapboxNavigationCore.NavigationRoutes?
+    @Published private(set) var routes: MapboxNavigationCore.NavigationRoutes?
+    @Published private(set) var routeProgress: MapboxNavigationCore.RouteProgress?
     @Published private(set) var currentLocation: CLLocation?
     @Published var cameraState: MapboxNavigationCore.NavigationCameraState = .idle
     @Published var profileIdentifier: ProfileIdentifier = .automobileAvoidingTraffic
@@ -29,10 +29,15 @@ final class NavigationController: NSObject, NavigationInterface {
 
     private var cancelables: Set<AnyCancelable> = []
     private var onNavigationListener: NavigationListener?    
-    private let mapView: MapView
-    private let navigationProvider: MapboxNavigationProvider
-    private var navigationCamera: NavigationCamera
-    private let mapStyleManager: NavigationMapStyleManager
+    let mapView: MapView
+    let navigationProvider: MapboxNavigationProvider
+    var navigationCamera: MapboxNavigationCore.NavigationCamera
+    let mapStyleManager: NavigationMapStyleManager
+    
+    // Vanishing route line properties
+        var routePoints: RoutePoints?
+        var routeLineGranularDistances: RouteLineGranularDistances?
+        var routeRemainingDistancesIndex: Int?
     
     private var lifetimeSubscriptions: Set<AnyCancellable> = []
 
@@ -74,7 +79,7 @@ final class NavigationController: NSObject, NavigationInterface {
         }
 
         core.tripSession().navigationRoutes
-            .assign(to: &$activeNavigationRoutes)
+            .assign(to: &$routes)
         
         core.navigation().locationMatching.sink { state in
             self.currentLocation = state.enhancedLocation
@@ -102,8 +107,8 @@ final class NavigationController: NSObject, NavigationInterface {
     private var customRouteLineLayerPosition: MapboxMaps.LayerPosition? = nil {
             didSet {
                 mapStyleManager.customRouteLineLayerPosition = customRouteLineLayerPosition
-                guard let activeNavigationRoutes else { return }
-                show(activeNavigationRoutes, routeAnnotationKinds: routeAnnotationKinds)
+                guard let routes else { return }
+                show(routes, routeAnnotationKinds: routeAnnotationKinds)
             }
         }
     
@@ -116,15 +121,11 @@ final class NavigationController: NSObject, NavigationInterface {
             didSet { updateCameraPadding() }
         }
 
-        @_spi(MapboxInternal) public var showsViewportDebugView: Bool = false {
-            didSet { updateDebugViewportVisibility() }
-        }
-
         /// Controls whether to show annotations on intersections, e.g. traffic signals, railroad crossings, yield and stop
         /// signs. Defaults to `true`.
         public var showsIntersectionAnnotations: Bool = true {
             didSet {
-                updateIntersectionAnnotations(routeProgress: currentRouteProgress)
+                updateIntersectionAnnotations(routeProgress: routeProgress)
             }
         }
 
@@ -132,7 +133,7 @@ final class NavigationController: NSObject, NavigationInterface {
         /// Defaults to `true`.
         public var showsAlternatives: Bool = true {
             didSet {
-                updateAlternatives(routeProgress: currentRouteProgress)
+                updateAlternatives(routeProgress: routeProgress)
             }
         }
 
@@ -145,7 +146,7 @@ final class NavigationController: NSObject, NavigationInterface {
                 } else {
                     routeAnnotationKinds.removeAll()
                 }
-                updateAlternatives(routeProgress: currentRouteProgress)
+                updateAlternatives(routeProgress: routeProgress)
             }
         }
 
@@ -185,10 +186,93 @@ final class NavigationController: NSObject, NavigationInterface {
             }
         }
     
+    // MARK: RouteLine Customization
+
+        /// Configures the route line color for the main route.
+        /// If set, overrides the `.unknown` and `.low` traffic colors.
+        @objc public dynamic var routeColor: UIColor {
+            get {
+                congestionConfiguration.colors.mainRouteColors.unknown
+            }
+            set {
+                congestionConfiguration.colors.mainRouteColors.unknown = newValue
+                congestionConfiguration.colors.mainRouteColors.low = newValue
+            }
+        }
+
+        /// Configures the route line color for alternative routes.
+        /// If set, overrides the `.unknown` and `.low` traffic colors.
+        @objc public dynamic var routeAlternateColor: UIColor {
+            get {
+                congestionConfiguration.colors.alternativeRouteColors.unknown
+            }
+            set {
+                congestionConfiguration.colors.alternativeRouteColors.unknown = newValue
+                congestionConfiguration.colors.alternativeRouteColors.low = newValue
+            }
+        }
+
+        /// Configures the casing route line color for the main route.
+        @objc public dynamic var routeCasingColor: UIColor = .defaultRouteCasing
+        /// Configures the casing route line color for alternative routes.
+        @objc public dynamic var routeAlternateCasingColor: UIColor = .defaultAlternateLineCasing
+        /// Configures the color for restricted areas on the route line.
+        @objc public dynamic var routeRestrictedAreaColor: UIColor = .defaultRouteRestrictedAreaColor
+        /// Configures the color for the traversed part of the main route. The traversed part is rendered only if the color
+        /// is not `nil`.
+        /// Defaults to `nil`.
+        @objc public dynamic var traversedRouteColor: UIColor? = nil
+        /// Configures the color of the maneuver arrow.
+        @objc public dynamic var maneuverArrowColor: UIColor = .defaultManeuverArrow
+        /// Configures the stroke color of the maneuver arrow.
+        @objc public dynamic var maneuverArrowStrokeColor: UIColor = .defaultManeuverArrowStroke
+
+        // MARK: Route Annotations Customization
+
+        /// Configures the color of the route annotation for the main route.
+        @objc public dynamic var routeAnnotationSelectedColor: UIColor =
+            .defaultSelectedRouteAnnotationColor
+        /// Configures the color of the route annotation for alternative routes.
+        @objc public dynamic var routeAnnotationColor: UIColor = .defaultRouteAnnotationColor
+        /// Configures the text color of the route annotation for the main route.
+        @objc public dynamic var routeAnnotationSelectedTextColor: UIColor = .defaultSelectedRouteAnnotationTextColor
+        /// Configures the text color of the route annotation for alternative routes.
+        @objc public dynamic var routeAnnotationTextColor: UIColor = .defaultRouteAnnotationTextColor
+        /// Configures the text color of the route annotation for alternative routes when relative duration is greater then
+        /// the main route.
+        @objc public dynamic var routeAnnotationMoreTimeTextColor: UIColor = .defaultRouteAnnotationMoreTimeTextColor
+        /// Configures the text color of the route annotation for alternative routes when relative duration is lesser then
+        /// the main route.
+        @objc public dynamic var routeAnnotationLessTimeTextColor: UIColor = .defaultRouteAnnotationLessTimeTextColor
+        /// Configures the text font of the route annotations.
+        @objc public dynamic var routeAnnotationTextFont: UIFont = .defaultRouteAnnotationTextFont
+        /// Configures the waypoint color.
+        @objc public dynamic var waypointColor: UIColor = .defaultWaypointColor
+        /// Configures the waypoint stroke color.
+        @objc public dynamic var waypointStrokeColor: UIColor = .defaultWaypointStrokeColor
+    
     public func update(navigationCameraState: MapboxNavigationCore.NavigationCameraState) {
         guard cameraState != navigationCamera.currentCameraState else { return }
             navigationCamera.update(cameraState: navigationCameraState)
         }
+    
+    /// Represents a set of ``RoadAlertType`` values that should be hidden from the map display.
+       /// By default, this is an empty set, which indicates that all road alerts will be displayed.
+       ///
+       /// - Note: If specific `RoadAlertType` values are added to this set, those alerts will be
+       ///   excluded from the map rendering.
+       public var excludedRouteAlertTypes: RoadAlertType = [] {
+           didSet {
+               guard let navigationRoutes = routes else {
+                   return
+               }
+
+               mapStyleManager.updateRouteAlertsAnnotations(
+                   navigationRoutes: navigationRoutes,
+                   excludedRouteAlertTypes: excludedRouteAlertTypes
+               )
+           }
+       }
     
     /// Visualizes the given routes and it's alternatives, removing any existing from the map.
     ///
@@ -205,7 +289,7 @@ final class NavigationController: NSObject, NavigationInterface {
         routeAnnotationKinds: Set<RouteAnnotationKind>
     ) {
         removeRoutes()
-        activeNavigationRoutes = navigationRoutes
+        routes = navigationRoutes
         self.routeAnnotationKinds = routeAnnotationKinds
         let mainRoute = navigationRoutes.mainRoute.route
         if routeLineTracksTraversal {
@@ -231,13 +315,13 @@ final class NavigationController: NSObject, NavigationInterface {
     
     /// Removes routes and all visible annotations from the map.
         public func removeRoutes() {
-            activeNavigationRoutes = nil
+            routes = nil
             routeLineGranularDistances = nil
             routeRemainingDistancesIndex = nil
             mapStyleManager.removeAllFeatures()
         }
 
-        func updateArrow(routeProgress: RouteProgress) {
+    func updateArrow(routeProgress: MapboxNavigationCore.RouteProgress) {
             if routeProgress.currentLegProgress.followOnStep != nil {
                 mapStyleManager.updateArrows(
                     route: routeProgress.route,
@@ -255,34 +339,11 @@ final class NavigationController: NSObject, NavigationInterface {
             mapStyleManager.removeArrows()
         }
 
-        // MARK: - Debug Viewport
-
-        private func updateDebugViewportVisibility() {
-            if showsViewportDebugView {
-                let viewportDebugView = with(UIView(frame: .zero)) {
-                    $0.layer.borderWidth = 1
-                    $0.layer.borderColor = UIColor.blue.cgColor
-                    $0.backgroundColor = .clear
-                }
-                addSubview(viewportDebugView)
-                self.viewportDebugView = viewportDebugView
-                viewportDebugView.isUserInteractionEnabled = false
-                updateViewportDebugView()
-            } else {
-                viewportDebugView?.removeFromSuperview()
-                viewportDebugView = nil
-            }
-        }
-    
-    private func updateViewportDebugView() {
-            viewportDebugView?.frame = bounds.inset(by: navigationCamera.viewportPadding)
-        }
-
         // MARK: - Camera
 
         private func updateCameraPadding() {
             let padding = viewportPadding
-            let safeAreaInsets = safeAreaInsets
+            let safeAreaInsets = mapView.safeAreaInsets
 
             navigationCamera.viewportPadding = .init(
                 top: safeAreaInsets.top + padding.top,
@@ -290,7 +351,6 @@ final class NavigationController: NSObject, NavigationInterface {
                 bottom: safeAreaInsets.bottom + padding.bottom,
                 right: safeAreaInsets.right + padding.right
             )
-            updateViewportDebugView()
         }
     
     private func fitCamera(
@@ -327,6 +387,30 @@ final class NavigationController: NSObject, NavigationInterface {
             }
         }
 
+    private var customRouteLineFeatureProvider: RouteLineFeatureProvider {
+            .init { [weak self] identifier, sourceIdentifier in
+                guard let self else { return nil }
+                return delegate?.navigationMapView(
+                    self,
+                    routeLineLayerWithIdentifier: identifier,
+                    sourceIdentifier: sourceIdentifier
+                )
+            } customRouteCasingLineLayer: { [weak self] identifier, sourceIdentifier in
+                guard let self else { return nil }
+                return delegate?.navigationMapView(
+                    self,
+                    routeCasingLineLayerWithIdentifier: identifier,
+                    sourceIdentifier: sourceIdentifier
+                )
+            } customRouteRestrictedAreasLineLayer: { [weak self] identifier, sourceIdentifier in
+                guard let self else { return nil }
+                return delegate?.navigationMapView(
+                    self,
+                    routeRestrictedAreasLineLayerWithIdentifier: identifier,
+                    sourceIdentifier: sourceIdentifier
+                )
+            }
+        }
     
     private var waypointsFeatureProvider: WaypointFeatureProvider {
            .init { [weak self] waypoints, legIndex in
@@ -350,14 +434,14 @@ final class NavigationController: NSObject, NavigationInterface {
        }
     
     private func updateWaypointsVisiblity() {
-            guard let mainRoute = routes?.mainRoute.route else {
+        guard let mainRoute = routes?.mainRoute.route else {
                 mapStyleManager.removeWaypoints()
                 return
             }
 
             mapStyleManager.updateWaypoints(
                 route: mainRoute,
-                legIndex: currentRouteProgress?.legIndex ?? 0,
+                legIndex: routeProgress?.legIndex ?? 0,
                 config: mapStyleConfig,
                 featureProvider: waypointsFeatureProvider
             )

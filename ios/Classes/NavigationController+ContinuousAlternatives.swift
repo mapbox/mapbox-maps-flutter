@@ -3,6 +3,7 @@ import Foundation
 import MapboxDirections
 import Turf
 import UIKit
+import MapboxNavigationCore
 
 extension NavigationController {
     /// Returns a list of the ``AlternativeRoute``s, that are close to a certain point and are within threshold distance

@@ -3,6 +3,7 @@ import CoreLocation
 import MapboxDirections
 import MapboxMaps
 import UIKit
+import MapboxNavigationCore
 
 extension NavigationController {
     struct RoutePoints {
@@ -43,7 +44,7 @@ extension NavigationController {
         return RoutePoints(nestedList: nestedList, flatList: flatList)
     }
 
-    func updateRouteLine(routeProgress: RouteProgress) {
+    func updateRouteLine(routeProgress: MapboxNavigationCore.RouteProgress) {
         updateIntersectionAnnotations(routeProgress: routeProgress)
         if let routes {
             mapStyleManager.updateRouteAlertsAnnotations(
@@ -65,12 +66,12 @@ extension NavigationController {
         updateArrow(routeProgress: routeProgress)
     }
 
-    func updateAlternatives(routeProgress: RouteProgress?) {
+    func updateAlternatives(routeProgress: MapboxNavigationCore.RouteProgress?) {
         guard let routes = routeProgress?.navigationRoutes ?? routes else { return }
         show(routes, routeAnnotationKinds: routeAnnotationKinds)
     }
 
-    func updateIntersectionAnnotations(routeProgress: RouteProgress?) {
+    func updateIntersectionAnnotations(routeProgress: MapboxNavigationCore.RouteProgress?) {
         if let routeProgress, showsIntersectionAnnotations {
             mapStyleManager.updateIntersectionAnnotations(routeProgress: routeProgress)
         } else {

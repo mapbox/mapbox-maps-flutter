@@ -46,7 +46,7 @@ final class NavigationMapStyleManager {
     private var layerIds: [String]
 
     var customizedLayerProvider: CustomizedLayerProvider = .init { $0 }
-    var customRouteLineLayerPosition: LayerPosition?
+    var customRouteLineLayerPosition: MapboxMaps.LayerPosition?
 
     private let routeFeaturesStore: MapFeaturesStore
     private let waypointFeaturesStore: MapFeaturesStore
@@ -56,7 +56,7 @@ final class NavigationMapStyleManager {
     private let routeAnnotationsFeaturesStore: MapFeaturesStore
     private let routeAlertsFeaturesStore: MapFeaturesStore
 
-    init(mapView: MapView, customRouteLineLayerPosition: LayerPosition?) {
+    init(mapView: MapView, customRouteLineLayerPosition: MapboxMaps.LayerPosition?) {
         self.mapView = mapView
         self.layersOrder = Self.makeMapLayersOrder(
             with: mapView,
@@ -160,7 +160,7 @@ final class NavigationMapStyleManager {
         )
     }
 
-    func updateIntersectionAnnotations(routeProgress: RouteProgress) {
+    func updateIntersectionAnnotations(routeProgress: MapboxNavigationCore.RouteProgress) {
         intersectionAnnotationsFeaturesStore.update(
             using: routeProgress.intersectionAnnotationsMapFeatures(
                 ids: .currentRoute,
@@ -171,7 +171,7 @@ final class NavigationMapStyleManager {
     }
 
     func updateRouteAnnotations(
-        navigationRoutes: NavigationRoutes,
+        navigationRoutes: MapboxNavigationCore.NavigationRoutes,
         annotationKinds: Set<RouteAnnotationKind>,
         config: MapStyleConfig
     ) {
@@ -185,7 +185,7 @@ final class NavigationMapStyleManager {
     }
 
     func updateRouteAlertsAnnotations(
-        navigationRoutes: NavigationRoutes,
+        navigationRoutes: MapboxNavigationCore.NavigationRoutes,
         excludedRouteAlertTypes: RoadAlertType,
         distanceTraveled: CLLocationDistance = 0.0
     ) {
@@ -302,7 +302,7 @@ final class NavigationMapStyleManager {
 
     private static func makeMapLayersOrder(
         with mapView: MapView,
-        customRouteLineLayerPosition: LayerPosition?
+        customRouteLineLayerPosition: MapboxMaps.LayerPosition?
     ) -> MapLayersOrder {
         let alternative_0_ids = FeatureIds.RouteLine.alternative(idx: 0)
         let alternative_1_ids = FeatureIds.RouteLine.alternative(idx: 1)
@@ -375,7 +375,7 @@ final class NavigationMapStyleManager {
     private static func legacyLayerPosition(
         for layerIdentifier: String,
         mapView: MapView,
-        customRouteLineLayerPosition: LayerPosition?
+        customRouteLineLayerPosition: MapboxMaps.LayerPosition?
     ) -> MapboxMaps.LayerPosition? {
         let mainLineIds = FeatureIds.RouteLine.main
         if layerIdentifier.hasPrefix(mainLineIds.main),
