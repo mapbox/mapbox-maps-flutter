@@ -1,5 +1,6 @@
 // This file is generated
 import MapboxMaps
+import MapboxNavigationCore
 
 extension MapboxMaps.FillTranslateAnchor {
 
@@ -472,6 +473,28 @@ extension MapboxMaps.Anchor {
         case .map: return .mAP
         case .viewport: return .vIEWPORT
         default: return nil
+        }
+    }
+}
+extension MapboxNavigationCore.NavigationCameraState {
+
+    init?(_ fltValue: NavigationCameraState?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .iDLE: self = .idle
+        case .fOLLOWING: self = .following
+        case .oVERVIEW: self = .overview
+        case .tRANSITIONTOFOLLOWING: self = .following
+        case .tRANSITIONTOOVERVIEW: self = .overview
+        }
+    }
+
+    func toFLTNavigationCameraState() -> NavigationCameraState? {
+        switch self {
+        case .idle: return .iDLE
+        case .following: return .fOLLOWING
+        case .overview: return .oVERVIEW
         }
     }
 }
