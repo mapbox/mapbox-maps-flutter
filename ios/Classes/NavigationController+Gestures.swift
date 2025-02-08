@@ -4,6 +4,7 @@ import MapboxDirections
 import MapboxMaps
 import Turf
 import UIKit
+import MapboxNavigationCore
 
 extension NavigationController {
     func setupGestureRecognizers() {
@@ -12,7 +13,7 @@ extension NavigationController {
             target: self,
             action: #selector(handleLongPress(_:))
         )
-        addGestureRecognizer(longPressGestureRecognizer)
+        //addGestureRecognizer(longPressGestureRecognizer)
 
         // Gesture recognizer, which is used to detect taps on route line, waypoint or POI
         mapViewTapGestureRecognizer = UITapGestureRecognizer(
@@ -29,10 +30,10 @@ extension NavigationController {
     @objc
     private func handleLongPress(_ gesture: UIGestureRecognizer) {
         guard gesture.state == .began else { return }
-        let gestureLocation = gesture.location(in: self)
+        let gestureLocation = gesture.location(in: self.mapView)
         Task { @MainActor in
             let point = await mapPoint(at: gestureLocation)
-            delegate?.navigationMapView(self, userDidLongTap: point)
+            //delegate?.navigationMapView(self, userDidLongTap: point)
         }
     }
 
@@ -81,20 +82,20 @@ extension NavigationController {
             if let allRoutes = routes?.allRoutes() {
                 let waypointTest = legSeparatingWaypoints(on: allRoutes, closeTo: tapPoint)
                 if let selected = waypointTest?.first {
-                    delegate?.navigationMapView(self, didSelect: selected)
+                    //delegate?.navigationMapView(self, didSelect: selected)
                     return
                 }
             }
 
             if let alternativeRoute = continuousAlternativeRoutes(closeTo: tapPoint)?.first {
-                delegate?.navigationMapView(self, didSelect: alternativeRoute)
+                //delegate?.navigationMapView(self, didSelect: alternativeRoute)
                 return
             }
 
             let point = await mapPoint(at: tapPoint)
 
             if point.name != nil {
-                delegate?.navigationMapView(self, userDidTap: point)
+                //delegate?.navigationMapView(self, userDidTap: point)
             }
         }
     }
@@ -127,20 +128,22 @@ extension NavigationController {
     }
 
     private func mapPoint(at point: CGPoint) async -> MapPoint {
-        let options = RenderedQueryOptions(layerIds: mapStyleManager.poiLayerIds, filter: nil)
+        let options = MapboxMaps.RenderedQueryOptions(layerIds: mapStyleManager.poiLayerIds, filter: nil)
         let rectSize = poiClickableAreaSize
         let rect = CGRect(x: point.x - rectSize / 2, y: point.y - rectSize / 2, width: rectSize, height: rectSize)
 
-        let features = try? await mapView.mapboxMap.queryRenderedFeatures(with: rect, options: options)
-        if let feature = features?.first?.queriedFeature.feature,
-           case .string(let poiName) = feature[property: .poiName, languageCode: nil],
-           case .point(let point) = feature.geometry
-        {
-            return MapPoint(name: poiName, coordinate: point.coordinates)
-        } else {
-            let coordinate = mapView.mapboxMap.coordinate(for: point)
-            return MapPoint(name: nil, coordinate: coordinate)
-        }
+//        let features = try? await mapView.mapboxMap.queryRenderedFeatures(with: rect, options: options)
+//        if let feature = features?.first?.queriedFeature.feature,
+//           case .string(let poiName) = feature[property: .poiName, languageCode: nil],
+//           case .point(let point) = feature.geometry
+//        {
+//            return MapPoint(name: poiName, coordinate: point.coordinates)
+//        } else {
+//            let coordinate = mapView.mapboxMap.coordinate(for: point)
+//            return MapPoint(name: nil, coordinate: coordinate)
+//        }
+        let coordinate = mapView.mapboxMap.coordinate(for: point)
+        return MapPoint(name: nil, coordinate: coordinate)
     }
 }
 
@@ -154,7 +157,7 @@ extension NavigationController: GestureManagerDelegate {
         guard gestureType != .singleTap else { return }
 
         MainActor.assumingIsolated {
-            delegate?.navigationMapViewUserDidStartInteraction(self)
+            //delegate?.navigationMapViewUserDidStartInteraction(self)
         }
     }
 
@@ -166,7 +169,7 @@ extension NavigationController: GestureManagerDelegate {
         guard gestureType != .singleTap else { return }
 
         MainActor.assumingIsolated {
-            delegate?.navigationMapViewUserDidEndInteraction(self)
+            //delegate?.navigationMapViewUserDidEndInteraction(self)
         }
     }
 

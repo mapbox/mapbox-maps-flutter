@@ -34,12 +34,19 @@ final class NavigationController: NSObject, NavigationInterface {
     var navigationCamera: MapboxNavigationCore.NavigationCamera
     let mapStyleManager: NavigationMapStyleManager
     
+    /// The object that acts as the navigation delegate of the map view.
+       public weak var delegate: NavigationMapViewDelegate?
+    
     // Vanishing route line properties
         var routePoints: RoutePoints?
         var routeLineGranularDistances: RouteLineGranularDistances?
         var routeRemainingDistancesIndex: Int?
     
     private var lifetimeSubscriptions: Set<AnyCancellable> = []
+    
+    /// The gesture recognizer, that is used to detect taps on waypoints and routes that are currently
+        /// present on the map. Enabled by default.
+        public internal(set) var mapViewTapGestureRecognizer: UITapGestureRecognizer!
 
     init(withMapView mapView: MapView, navigationProvider: MapboxNavigationProvider) {
         
@@ -368,7 +375,7 @@ final class NavigationController: NSObject, NavigationInterface {
                 let routes = [routes.mainRoute.route] + routes.alternativeRoutes.map(\.route)
                 coordinates = MultiLineString(routes.compactMap(\.shape?.coordinates)).coordinates.flatMap { $0 }
             }
-            let initialCameraOptions = CameraOptions(
+            let initialCameraOptions = MapboxMaps.CameraOptions(
                 padding: navigationCamera.viewportPadding,
                 bearing: 0,
                 pitch: 0
@@ -510,14 +517,14 @@ final class NavigationController: NSObject, NavigationInterface {
 
     func cancelPreview() {
         waypoints = []
-        currentPreviewRoutes = nil
+        routes = nil
         update(navigationCameraState: .following)
     }
 
     func startActiveNavigation() {
-        guard let previewRoutes = currentPreviewRoutes else { return }
+        guard let previewRoutes = routes else { return }
         core.tripSession().startActiveGuidance(with: previewRoutes, startLegIndex: 0)
-        currentPreviewRoutes = nil
+        routes = nil
         waypoints = []
         update(navigationCameraState: .following)
     }
@@ -539,7 +546,7 @@ final class NavigationController: NSObject, NavigationInterface {
                 profileIdentifier: profileIdentifier
             )
             let previewRoutes = try await provider.calculateRoutes(options: mapMatchingOptions).value
-            currentPreviewRoutes = previewRoutes
+            routes = previewRoutes
             self.onNavigationListener?.onNavigationRouteReady() { _ in }
         } else {
             let routeOptions = NavigationRouteOptions(
@@ -547,7 +554,7 @@ final class NavigationController: NSObject, NavigationInterface {
                 profileIdentifier: profileIdentifier
             )
             let previewRoutes = try await provider.calculateRoutes(options: routeOptions).value
-            currentPreviewRoutes = previewRoutes
+            routes = previewRoutes
             self.onNavigationListener?.onNavigationRouteReady() { _ in }
         }
         update(navigationCameraState: .idle)
@@ -581,10 +588,10 @@ final class NavigationController: NSObject, NavigationInterface {
     }
 
     func startTripSession(withForegroundService: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let previewRoutes = currentPreviewRoutes else { return }
+        guard let previewRoutes = routes else { return }
         core.tripSession().startActiveGuidance(with: previewRoutes, startLegIndex: 0)
         update(navigationCameraState: .following)
-        currentPreviewRoutes = nil
+        routes = nil
         waypoints = []
         completion(.success(Void()))
     }
