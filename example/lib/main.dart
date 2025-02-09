@@ -64,7 +64,7 @@ class MapsDemo extends StatelessWidget {
   //
   // Alternatively you can replace `String.fromEnvironment("ACCESS_TOKEN")`
   // in the following line with your access token directly.
-  static const String ACCESS_TOKEN = "pk.eyJ1IjoicmlkZWhpa2UiLCJhIjoiY2xwc2wwNGZrMDN3eTJqcGwxdjViaGRzdiJ9.jFtcT-N-qh-Zj7i0vrWxAA";
+  static const String ACCESS_TOKEN =  String.fromEnvironment("ACCESS_TOKEN");
 
   void _pushPage(BuildContext context, Example page) async {
     Navigator.of(context).push(MaterialPageRoute<void>(

@@ -22,7 +22,7 @@ class Events {
 }
 
 var events = Events();
-const ACCESS_TOKEN = "pk.eyJ1IjoicmlkZWhpa2UiLCJhIjoiY2xwc2wwNGZrMDN3eTJqcGwxdjViaGRzdiJ9.jFtcT-N-qh-Zj7i0vrWxAA";
+const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
 Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
   final completer = Completer<MapboxMap>();

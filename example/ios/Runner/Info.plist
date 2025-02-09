@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MBXAccessToken</key>
-	<string>pk.eyJ1IjoicmlkZWhpa2UiLCJhIjoiY2xwc2wwNGZrMDN3eTJqcGwxdjViaGRzdiJ9.jFtcT-N-qh-Zj7i0vrWxAA</string>
+	<string>YOUR_ACCESS_TOKEN</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Always and when in use!</string>
 	<key>NSLocationAlwaysUsageDescription</key>
