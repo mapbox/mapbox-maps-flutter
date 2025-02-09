@@ -18,10 +18,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let navigationController: NavigationController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
-    private static let navigationProvider: MapboxNavigationProvider = MapboxNavigationProvider(coreConfig: CoreConfig(
-        credentials: .init(), // You can pass a custom token if you need to,
-        locationSource: .live
-    ))
+    private static var navigationProvider: MapboxNavigationProvider?
 
     private var navigationMapView: NavigationMapView!
 
@@ -40,8 +37,18 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
+        
+        if(MapboxMapController.navigationProvider == nil)
+        {
+            MapboxMapController.navigationProvider = MapboxNavigationProvider(coreConfig: CoreConfig(
+                credentials: .init(navigation: ApiConfiguration(accessToken: MapboxOptions.accessToken),
+                                   map: ApiConfiguration(accessToken: MapboxOptions.accessToken)), // You can pass a custom token if you need to,
+                locationSource: .live,
+                disableBackgroundTrackingLocation: false
+           ))
+        }
 
-        let mapboxNavigation = MapboxMapController.navigationProvider.mapboxNavigation
+        let mapboxNavigation = MapboxMapController.navigationProvider!.mapboxNavigation
         let navigationMapView = NavigationMapView(
             location: mapboxNavigation.navigation()
                 .locationMatching.map(\.enhancedLocation)
@@ -49,14 +56,14 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             routeProgress: mapboxNavigation.navigation()
                 .routeProgress.map(\.?.routeProgress)
                 .eraseToAnyPublisher(),
-            predictiveCacheManager: MapboxMapController.navigationProvider.predictiveCacheManager,
+            predictiveCacheManager: MapboxMapController.navigationProvider!.predictiveCacheManager,
             frame: frame,
             mapInitOptions: mapInitOptions
         )
         
+        navigationMapView.viewportPadding = UIEdgeInsets(top: 20, left: 20, bottom: 80, right: 20)
         navigationMapView.puckType = .puck2D(.navigationDefault)
-        //navigationMapView.delegate = self
-        navigationMapView.translatesAutoresizingMaskIntoConstraints = false
+        navigationMapView.translatesAutoresizingMaskIntoConstraints = true
 
         self.navigationMapView = navigationMapView
 
@@ -73,8 +80,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             eventTypes: eventTypes,
             channelSuffix: String(channelSuffix)
         )
-
-        //mapView.location.override(locationProvider: self.navigationProvider, headingProvider: nil)
 
         let styleController = StyleController(styleManager: mapboxMap)
         StyleManagerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: styleController, messageChannelSuffix: binaryMessenger.suffix)

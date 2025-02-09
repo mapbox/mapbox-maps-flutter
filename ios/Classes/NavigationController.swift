@@ -27,9 +27,17 @@ final class NavigationController: NSObject, NavigationInterface {
     init(withMapView: NavigationMapView, navigationProvider: MapboxNavigation) {
         self.navigationMapView = withMapView
         self.core = navigationProvider
+        
+        super.init()
+        observeMap()
+    }
+    
+    func observeMap(){
+        self.navigationMapView.navigationCamera.cameraStates.sink { state in
+            self.onNavigationListener?.onNavigationCameraStateChanged(state: state.toFLTNavigationCameraState()!) { _ in }
+        }
     }
 
-    
     func startFreeDrive() {
         core.tripSession().startFreeDrive()
     }
@@ -42,11 +50,7 @@ final class NavigationController: NSObject, NavigationInterface {
 
     func startActiveNavigation() {
         guard let previewRoutes = routes else { return }
-        //self.navigationMapView.route
         core.tripSession().startActiveGuidance(with: previewRoutes, startLegIndex: 0)
-        //routes = nil
-        //waypoints = []
-        
     }
 
     func stopActiveNavigation() {
@@ -55,8 +59,7 @@ final class NavigationController: NSObject, NavigationInterface {
     }
 
     func requestRoutes(points: [Point]) async throws {
-        guard !isInActiveNavigation, let currentLocation else { return }
-        
+       
         self.waypoints = points.map { Waypoint(coordinate: LocationCoordinate2D(latitude: $0.coordinates.latitude, longitude: $0.coordinates.longitude)) }
         
         let provider = core.routingProvider()
@@ -116,12 +119,12 @@ final class NavigationController: NSObject, NavigationInterface {
     }
 
     func requestNavigationCameraToFollowing(completion: @escaping (Result<Void, Error>) -> Void) {
-        //update(navigationCameraState: .following)
+        navigationMapView.update(navigationCameraState: .following)
         completion(.success(Void()))
     }
 
     func requestNavigationCameraToOverview(completion: @escaping (Result<Void, Error>) -> Void) {
-        //update(navigationCameraState: .overview)
+        navigationMapView.update(navigationCameraState: .overview)
         completion(.success(Void()))
     }
 
@@ -131,7 +134,8 @@ final class NavigationController: NSObject, NavigationInterface {
         {
             completion(.success(self.currentLocation!.toFLTNavigationLocation()))
         }
-        else if (mapView.location.latestLocation != nil) {
+        else if(mapView.location.latestLocation != nil)
+        {
             let timestamp = Int64(mapView.location.latestLocation!.timestamp.timeIntervalSince1970)
             
             completion(.success(NavigationLocation(
@@ -150,6 +154,14 @@ final class NavigationController: NSObject, NavigationInterface {
                 source: nil
             )))
         }
-        completion(.success(nil))
+        else {
+            var locationManager = NavigationLocationManager()
+            if(locationManager.location != nil){
+                completion(.success(locationManager.location!.toFLTNavigationLocation()))
+            }
+            else{
+                completion(.success(nil))
+            }
+        }
     }
 }
