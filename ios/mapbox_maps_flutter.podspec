@@ -29,5 +29,5 @@ Pod::Spec.new do |s|
   s.dependency 'MapboxMaps', '11.8.0'
   s.dependency 'Turf', '3.0.0'
 
-  s.dependency 'MapboxNavigationCoreUnofficial', '3.5.0'
+  s.dependency 'MapboxNavigationCoreUnofficial', '3.5.1'
 end

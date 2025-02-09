@@ -23,8 +23,10 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         locationSource: .live
     ))
 
+    private var navigationMapView: NavigationMapView!
+
     func view() -> UIView {
-        return mapView
+        return navigationMapView
     }
 
     init(
@@ -39,7 +41,26 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
 
-        mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+        let mapboxNavigation = MapboxMapController.navigationProvider.mapboxNavigation
+        let navigationMapView = NavigationMapView(
+            location: mapboxNavigation.navigation()
+                .locationMatching.map(\.enhancedLocation)
+                .eraseToAnyPublisher(),
+            routeProgress: mapboxNavigation.navigation()
+                .routeProgress.map(\.?.routeProgress)
+                .eraseToAnyPublisher(),
+            predictiveCacheManager: MapboxMapController.navigationProvider.predictiveCacheManager,
+            frame: frame,
+            mapInitOptions: mapInitOptions
+        )
+        
+        navigationMapView.puckType = .puck2D(.navigationDefault)
+        //navigationMapView.delegate = self
+        navigationMapView.translatesAutoresizingMaskIntoConstraints = false
+
+        self.navigationMapView = navigationMapView
+
+        mapView = self.navigationMapView.mapView
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(
@@ -91,7 +112,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
-        navigationController = NavigationController(withMapView: mapView, navigationProvider: MapboxMapController.navigationProvider )
+        navigationController = NavigationController(withMapView: navigationMapView, navigationProvider: mapboxNavigation)
         NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: navigationController, messageChannelSuffix: binaryMessenger.suffix)
 
         super.init()
