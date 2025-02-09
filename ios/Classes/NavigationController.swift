@@ -36,6 +36,13 @@ final class NavigationController: NSObject, NavigationInterface {
         self.navigationMapView.navigationCamera.cameraStates.sink { state in
             self.onNavigationListener?.onNavigationCameraStateChanged(state: state.toFLTNavigationCameraState()!) { _ in }
         }
+        core.navigation().locationMatching.sink { locationMatching in
+            self.onNavigationListener?.onNewLocation(location: locationMatching.enhancedLocation.toFLTNavigationLocation()) { _ in }
+        }
+        core.navigation().routeProgress.sink { routeProgress in
+            if(routeProgress == nil){ return }
+            self.onNavigationListener?.onRouteProgress(routeProgress: routeProgress!.routeProgress.toFLTRouteProgress()) { _ in }
+        }
     }
 
     func startFreeDrive() {
