@@ -116,3 +116,5 @@ app.*.symbols
 !**/example/pubspec.lock
 android/gradlew
 android/gradle/wrapper/gradle-wrapper.jar
+example/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+example/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved

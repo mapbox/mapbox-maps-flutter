@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import MapboxMaps
 
+@MainActor
 public class MapboxMapsPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = MapboxMapFactory(withRegistrar: registrar)

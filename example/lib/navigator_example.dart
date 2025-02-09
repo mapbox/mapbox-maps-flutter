@@ -43,8 +43,10 @@ class NavigatorExampleState extends State<NavigatorExample>
   _onStyleLoadedCallback(StyleLoadedEventData data) async {
     print("Style loaded");
     styleLoaded = true;
-    await mapboxMap.navigation.startTripSession(true);
+    //await mapboxMap.navigation.startTripSession(true);
+    print("Trip navigation started");
     await _start();
+    print("Trip started");
   }
 
   _onNavigationRouteReadyListener() async {
@@ -103,21 +105,18 @@ class NavigatorExampleState extends State<NavigatorExample>
 
   Future _start() async {
     await Permission.location.request();
+    print("Permissions requested");
 
-    final ByteData bytes = await rootBundle.load('assets/puck_icon.png');
-    final Uint8List list = bytes.buffer.asUint8List();
-    await mapboxMap.location.updateSettings(LocationComponentSettings(
-        enabled: true,
-        puckBearingEnabled: true,
-        locationPuck: LocationPuck(
-            locationPuck2D: DefaultLocationPuck2D(
-                topImage: list,
-                bearingImage: Uint8List.fromList([]),
-                shadowImage: Uint8List.fromList([])))));
+    //final ByteData bytes = await rootBundle.load('assets/puck_icon.png');
+    //final Uint8List list = bytes.buffer.asUint8List();
+    // await mapboxMap.location.updateSettings(LocationComponentSettings(
+    //     enabled: true,
+    //     puckBearingEnabled: true));
+
 
     print("Puck enabled");
-    var myCoordinate = await mapboxMap.style.getPuckPosition();
-    if (myCoordinate == null) {
+    //var myCoordinate = await mapboxMap.style.getPuckPosition();
+    //if (myCoordinate == null) {
       print("Puck location was not defined");
       var lastLocation = await mapboxMap.navigation.lastLocation();
       if (lastLocation == null) {
@@ -125,11 +124,12 @@ class NavigatorExampleState extends State<NavigatorExample>
         return;
       }
 
-      myCoordinate = Position(lastLocation.longitude!, lastLocation.latitude!);
-    }
+      var myCoordinate = Position(lastLocation.longitude!, lastLocation.latitude!);
+    //}
 
     await mapboxMap
         .setCamera(CameraOptions(center: Point(coordinates: myCoordinate)));
+    print("Camera centered to the current user location");
 
     final destinationCoordinate = createRandomPositionAround(myCoordinate);
 
@@ -137,6 +137,8 @@ class NavigatorExampleState extends State<NavigatorExample>
       Point(coordinates: myCoordinate),
       Point(coordinates: destinationCoordinate)
     ]);
+
+    await mapboxMap.navigation.startTripSession(true);
   }
 
   @override
@@ -161,13 +163,14 @@ class NavigatorExampleState extends State<NavigatorExample>
           Center(
             child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 80,
+                height: MediaQuery.of(context).size.height - 180,
                 child: mapWidget),
           ),
           Padding(
               padding: const EdgeInsets.all(8),
               child: FloatingActionButton(
                 elevation: 4,
+                heroTag: "following",
                 onPressed: _onFollowingClicked,
                 child: const Icon(Icons.mode_standby),
               )),
@@ -175,6 +178,7 @@ class NavigatorExampleState extends State<NavigatorExample>
               padding: const EdgeInsets.fromLTRB(72, 8, 8, 8),
               child: FloatingActionButton(
                 elevation: 5,
+                heroTag: "overview",
                 onPressed: _onOverviewClicked,
                 child: const Icon(Icons.route),
               )),

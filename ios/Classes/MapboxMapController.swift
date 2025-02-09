@@ -1,23 +1,29 @@
 import Flutter
 @_spi(Experimental) import MapboxMaps
 import UIKit
+import MapboxNavigationCore
 
 struct SuffixBinaryMessenger {
     let messenger: FlutterBinaryMessenger
     let suffix: String
 }
 
+@MainActor
 final class MapboxMapController: NSObject, FlutterPlatformView {
     private let mapView: MapView
     private let mapboxMap: MapboxMap
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
+    private let navigationController: NavigationController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
+    private static var navigationProvider: MapboxNavigationProvider?
+
+    private var navigationMapView: NavigationMapView!
 
     func view() -> UIView {
-        return mapView
+        return navigationMapView
     }
 
     init(
@@ -31,8 +37,37 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
             .set(key: "com.mapbox.common.telemetry.internal.custom_user_agent_fragment", value: "FlutterPlugin/\(pluginVersion)")
+        
+        if(MapboxMapController.navigationProvider == nil)
+        {
+            MapboxMapController.navigationProvider = MapboxNavigationProvider(coreConfig: CoreConfig(
+                credentials: .init(navigation: ApiConfiguration(accessToken: MapboxOptions.accessToken),
+                                   map: ApiConfiguration(accessToken: MapboxOptions.accessToken)), // You can pass a custom token if you need to,
+                locationSource: .live,
+                disableBackgroundTrackingLocation: false
+           ))
+        }
 
-        mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
+        let mapboxNavigation = MapboxMapController.navigationProvider!.mapboxNavigation
+        let navigationMapView = NavigationMapView(
+            location: mapboxNavigation.navigation()
+                .locationMatching.map(\.enhancedLocation)
+                .eraseToAnyPublisher(),
+            routeProgress: mapboxNavigation.navigation()
+                .routeProgress.map(\.?.routeProgress)
+                .eraseToAnyPublisher(),
+            predictiveCacheManager: MapboxMapController.navigationProvider!.predictiveCacheManager,
+            frame: frame,
+            mapInitOptions: mapInitOptions
+        )
+        
+        navigationMapView.viewportPadding = UIEdgeInsets(top: 20, left: 20, bottom: 80, right: 20)
+        navigationMapView.puckType = .puck2D(.navigationDefault)
+        navigationMapView.translatesAutoresizingMaskIntoConstraints = true
+
+        self.navigationMapView = navigationMapView
+
+        mapView = self.navigationMapView.mapView
         mapboxMap = mapView.mapboxMap
 
         channel = FlutterMethodChannel(
@@ -82,6 +117,9 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         annotationController = AnnotationController(withMapView: mapView)
         annotationController!.setup(binaryMessenger: binaryMessenger)
 
+        navigationController = NavigationController(withMapView: navigationMapView, navigationProvider: mapboxNavigation)
+        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: navigationController, messageChannelSuffix: binaryMessenger.suffix)
+
         super.init()
 
         channel.setMethodCallHandler { [weak self] in self?.onMethodCall(methodCall: $0, result: $1) }
@@ -109,6 +147,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             } catch {
                 result(FlutterError(code: "2342345", message: error.localizedDescription, details: nil))
             }
+        case "navigation#add_listeners":
+            navigationController!.addListeners(messenger: binaryMessenger)
+            result(nil)
+        case "navigation#remove_listeners": 
+            navigationController!.removeListeners()
+            result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -128,5 +172,6 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         CompassSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         ScaleBarSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         annotationController?.tearDown(messenger: binaryMessenger)
+        NavigationInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
     }
 }
