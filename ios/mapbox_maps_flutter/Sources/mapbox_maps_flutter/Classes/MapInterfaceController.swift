@@ -113,7 +113,8 @@ final class MapInterfaceController: _MapInterface {
         default:
             throw FlutterError(code: "FailedConvertingGesture", message: "Invalid gesture type: \(gesture)", details: nil)
         }
-        self.mapboxMap.dispatch(event: MapboxCoreMaps_Private.PlatformEventInfo(type: eventType, screenCoordinate: MapboxCoreMaps_Private.ScreenCoordinate(x: CGFloat(screenCoordinate.x), y: CGFloat(screenCoordinate.y))))
+        // NO OP on iOS
+        // self.mapboxMap.dispatch(event: MapboxCoreMaps_Private.PlatformEventInfo(type: eventType, screenCoordinate: MapboxCoreMaps_Private.ScreenCoordinate(x: CGFloat(screenCoordinate.x), y: CGFloat(screenCoordinate.y))))
     }
 
     func setUserAnimationInProgress(inProgress: Bool) throws {
