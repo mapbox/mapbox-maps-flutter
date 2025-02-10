@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) @testable import MapboxMaps
+@_spi(Experimental) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
 import Turf
