@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Internal) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
 import Turf
@@ -98,23 +98,7 @@ final class MapInterfaceController: _MapInterface {
     }
 
     func dispatch(gesture: String, screenCoordinate: ScreenCoordinate) throws {
-        var eventType = PlatformEventType.click
-        switch gesture {
-        case "click":
-            eventType = .click
-        case "longClick":
-            eventType = .longClick
-        case "drag":
-            eventType = .drag
-        case "dragBeing":
-            eventType = .dragBegin
-        case "dragEnd":
-            eventType = .dragEnd
-        default:
-            throw FlutterError(code: "FailedConvertingGesture", message: "Invalid gesture type: \(gesture)", details: nil)
-        }
-        // NO OP on iOS
-        // self.mapboxMap.dispatch(event: MapboxCoreMaps_Private.PlatformEventInfo(type: eventType, screenCoordinate: MapboxCoreMaps_Private.ScreenCoordinate(x: CGFloat(screenCoordinate.x), y: CGFloat(screenCoordinate.y))))
+        self.mapboxMap.dispatch(gesture: gesture, screenCoordinateX: screenCoordinate.x, screenCoordinateY: screenCoordinate.y)
     }
 
     func setUserAnimationInProgress(inProgress: Bool) throws {
