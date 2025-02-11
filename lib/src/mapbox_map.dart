@@ -593,7 +593,7 @@ class MapboxMap extends ChangeNotifier {
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
       TypedInteraction<T> interaction,
       {String? interactionID}) {
-    var id = interactionID ?? DateTime.now().microsecondsSinceEpoch.toString();
+    final id = interactionID ?? UniqueKey().toString();
     _interactionsMap.interactions[id] = _InteractionListener<T>(
       onInteractionListener: interaction.action,
       interactionID: id,
@@ -798,7 +798,7 @@ class _InteractionListener<T extends FeaturesetFeature>
   @override
   void onInteraction(FeaturesetFeature? feature,
       MapContentGestureContext context, String interactionID) {
-    var featuresetID = feature?.featureset.featuresetId;
+    final featuresetID = feature?.featureset.featuresetId;
     T? typedFeature;
 
     if (feature != null) {
