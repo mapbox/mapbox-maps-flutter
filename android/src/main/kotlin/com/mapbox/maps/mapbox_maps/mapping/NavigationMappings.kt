@@ -31,6 +31,14 @@ fun Location.toFLT(): NavigationLocation {
   )
 }
 
+fun android.location.Location.toFLT(): NavigationLocation {
+  return NavigationLocation(
+    longitude = this.longitude,
+    altitude = this.altitude,
+    latitude = this.latitude
+  )
+}
+
 fun RoadObject.toFLT(): NavigationRoadObject {
   return NavigationRoadObject(
     id = this.id,

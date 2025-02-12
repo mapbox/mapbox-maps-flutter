@@ -7,6 +7,8 @@ import android.content.res.Resources
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.mapbox.maps.MapView
 import com.mapbox.geojson.Point
 import com.mapbox.common.location.Location
@@ -334,11 +336,21 @@ class NavigationController(
 
   override fun lastLocation(callback: (Result<NavigationLocation?>) -> Unit) {
     val point = this.navigationLocationProvider.lastLocation
-    if (point == null) {
-      callback.invoke(Result.success<NavigationLocation?>(null))
+    if (point != null) {
+      callback.invoke(Result.success<NavigationLocation?>(point.toFLT()))
       return
     }
 
-    callback.invoke(Result.success<NavigationLocation?>(point.toFLT()))
+    val locationProviderClient = LocationServices.getFusedLocationProviderClient(this.context)
+    val locationTask = locationProviderClient.getLastLocation()
+    locationTask.addOnSuccessListener { location ->
+      if (location != null) {
+        callback.invoke(Result.success<NavigationLocation?>(location.toFLT()))
+      } else {
+        callback.invoke(Result.success<NavigationLocation?>(null))
+      }
+    }.addOnFailureListener { exception ->
+      callback.invoke(Result.success<NavigationLocation?>(null))
+    }
   }
 }
