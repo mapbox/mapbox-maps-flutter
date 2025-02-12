@@ -32,7 +32,7 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     // Define a tap interaction targeting the Buildings featureset in the Standard style
     // Set the action to occur when a building is tapped (highlight it)
-    var tapInteraction = TapInteraction(StandardBuildings(), (_, feature) {
+    var tapInteraction = TapInteraction(StandardBuildings(), (feature, _) {
       mapboxMap.setFeatureStateForFeaturesetFeature(feature, featureState);
       log("Building group: ${feature.group}");
     });
@@ -42,26 +42,40 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
 
     // On long tap, remove the highlight state
     mapboxMap
-        .addInteraction(LongTapInteraction(StandardBuildings(), (_, feature) {
+        .addInteraction(LongTapInteraction(StandardBuildings(), (feature, _) {
       mapboxMap
           .removeFeatureStateForFeaturesetFeature(feature: feature)
           .then((value) => log("Feature state removed for: ${feature.id?.id}."))
           .catchError((error) => log(
               "Error removing feature state for ${feature.id?.id}, error: $error"));
-    }));
+    }, stopPropagation: false));
 
     /// Define interactions for Points of Interest
 
     // Define a tap interaction targeting the POI featureset in the Standard style, including a click radius
     // Do not stop propagation of the click event to lower layers
-    var tapInteractionPOI = TapInteraction(StandardPOIs(), (_, feature) {
+    var tapInteractionPOI = TapInteraction(StandardPOIs(), (feature, _) {
+      // Hide the POI when it is interacted with
       mapboxMap.setFeatureStateForFeaturesetFeature(
           feature, StandardPOIsState(hide: true));
       log("POI feature name: ${feature.name}");
     }, radius: 10, stopPropagation: false);
+    mapboxMap.addInteraction(tapInteractionPOI,
+        interactionID: "tap_interaction_poi");
 
-    // Define a state to hide the POI when it is interacted with
-    mapboxMap.addInteraction(tapInteractionPOI);
+    // Remove the POI tap interaction after 10 seconds
+    Future.delayed(Duration(seconds: 10), () {
+      mapboxMap.removeInteraction("tap_interaction_poi");
+    });
+
+    /// Define interactions for the whole map
+
+    // When the map is long-tapped print the screen coordinates of the tap
+    var longTapInteraction = LongTapInteraction.onMap((context) {
+      log("Long tap at: ${context.touchPosition.x}, ${context.touchPosition.y}");
+    }, stopPropagation: false);
+
+    mapboxMap.addInteraction(longTapInteraction);
   }
 
   @override
@@ -74,6 +88,8 @@ class InteractiveFeaturesState extends State<InteractiveFeaturesExample> {
           bearing: 49.92,
           zoom: 16.35,
           pitch: 40),
+
+      /// NOT FOR PRODUCTION USE. An experimental version of the Mapbox Standard style.
       styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
       textureView: true,
       onMapCreated: _onMapCreated,

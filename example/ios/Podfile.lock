@@ -49,13 +49,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
-  mapbox_maps_flutter: 2b6837c5f1eb194f37ccbc0b68c6e9874087d456
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+  mapbox_maps_flutter: fe8cf4ea31108a6a0e5386525dbebfaf85b59221
   MapboxCommon: cf475edb27c65faf9d7c102663dc65bdfe4d013a
   MapboxCoreMaps: eb9f293622f66fc003771770802b17225aa483e9
   MapboxMaps: 294406c6d821016c67f38b0ecca37ed9e5abfb78
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   Turf: c9eb11a65d96af58cac523460fd40fec5061b081
 
 PODFILE CHECKSUM: b3192822a93c0d8045ea3b93674ed183e8ddffc6

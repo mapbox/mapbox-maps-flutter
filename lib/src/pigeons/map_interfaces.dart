@@ -1364,7 +1364,7 @@ class FeatureState {
 /// See also: ``MapboxMap/addInteraction``.
 class _Interaction {
   _Interaction({
-    required this.featuresetDescriptor,
+    this.featuresetDescriptor,
     required this.interactionType,
     required this.stopPropagation,
     this.filter,
@@ -1372,7 +1372,7 @@ class _Interaction {
   });
 
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  FeaturesetDescriptor featuresetDescriptor;
+  FeaturesetDescriptor? featuresetDescriptor;
 
   /// The type of interaction, either tap or longTap
   _InteractionType interactionType;
@@ -1399,7 +1399,7 @@ class _Interaction {
   static _Interaction decode(Object result) {
     result as List<Object?>;
     return _Interaction(
-      featuresetDescriptor: result[0]! as FeaturesetDescriptor,
+      featuresetDescriptor: result[0] as FeaturesetDescriptor?,
       interactionType: result[1]! as _InteractionType,
       stopPropagation: result[2]! as bool,
       filter: result[3] as String?,
@@ -1411,7 +1411,7 @@ class _Interaction {
 /// Internal class to handle pigeon conversions for interactions.
 class _InteractionPigeon {
   _InteractionPigeon({
-    required this.featuresetDescriptor,
+    this.featuresetDescriptor,
     required this.stopPropagation,
     required this.interactionType,
     required this.identifier,
@@ -1420,7 +1420,7 @@ class _InteractionPigeon {
   });
 
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  List<Object?> featuresetDescriptor;
+  List<Object?>? featuresetDescriptor;
 
   /// Whether to stop the propagation of the interaction to the map
   bool stopPropagation;
@@ -1451,7 +1451,7 @@ class _InteractionPigeon {
   static _InteractionPigeon decode(Object result) {
     result as List<Object?>;
     return _InteractionPigeon(
-      featuresetDescriptor: (result[0] as List<Object?>?)!.cast<Object?>(),
+      featuresetDescriptor: (result[0] as List<Object?>?)?.cast<Object?>(),
       stopPropagation: result[1]! as bool,
       interactionType: result[2]! as String,
       identifier: result[3]! as String,
@@ -3397,8 +3397,8 @@ abstract class _InteractionsListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
       MapInterfaces_PigeonCodec();
 
-  void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID);
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID);
 
   static void setUp(
     _InteractionsListener? api, {
@@ -3421,19 +3421,17 @@ abstract class _InteractionsListener {
           assert(message != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.');
           final List<Object?> args = (message as List<Object?>?)!;
+          final FeaturesetFeature? arg_feature =
+              (args[0] as FeaturesetFeature?);
           final MapContentGestureContext? arg_context =
-              (args[0] as MapContentGestureContext?);
+              (args[1] as MapContentGestureContext?);
           assert(arg_context != null,
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
-          final FeaturesetFeature? arg_feature =
-              (args[1] as FeaturesetFeature?);
-          assert(arg_feature != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null FeaturesetFeature.');
-          final int? arg_interactionID = (args[2] as int?);
+          final String? arg_interactionID = (args[2] as String?);
           assert(arg_interactionID != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null int.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.');
           try {
-            api.onInteraction(arg_context!, arg_feature!, arg_interactionID!);
+            api.onInteraction(arg_feature, arg_context!, arg_interactionID!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
@@ -3679,6 +3677,33 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  /// For internal use only.
+  /// Dispatch a map gesture event for testing purposes.
+  Future<void> dispatch(
+      String gesture, ScreenCoordinate screenCoordinate) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[gesture, screenCoordinate]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 

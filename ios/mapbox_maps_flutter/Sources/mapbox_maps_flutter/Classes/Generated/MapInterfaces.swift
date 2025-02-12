@@ -1273,7 +1273,7 @@ struct FeatureState {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _Interaction {
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  var featuresetDescriptor: FeaturesetDescriptor
+  var featuresetDescriptor: FeaturesetDescriptor?
   /// The type of interaction, either tap or longTap
   var interactionType: _InteractionType
   /// Whether to stop the propagation of the interaction to the map. Defaults to true.
@@ -1285,7 +1285,7 @@ struct _Interaction {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _Interaction? {
-    let featuresetDescriptor = pigeonVar_list[0] as! FeaturesetDescriptor
+    let featuresetDescriptor: FeaturesetDescriptor? = nilOrValue(pigeonVar_list[0])
     let interactionType = pigeonVar_list[1] as! _InteractionType
     let stopPropagation = pigeonVar_list[2] as! Bool
     let filter: String? = nilOrValue(pigeonVar_list[3])
@@ -1315,7 +1315,7 @@ struct _Interaction {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _InteractionPigeon {
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  var featuresetDescriptor: [Any?]
+  var featuresetDescriptor: [Any?]?
   /// Whether to stop the propagation of the interaction to the map
   var stopPropagation: Bool
   /// The type of interaction, either tap or longTap as a String
@@ -1329,7 +1329,7 @@ struct _InteractionPigeon {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _InteractionPigeon? {
-    let featuresetDescriptor = pigeonVar_list[0] as! [Any?]
+    let featuresetDescriptor: [Any?]? = nilOrValue(pigeonVar_list[0])
     let stopPropagation = pigeonVar_list[1] as! Bool
     let interactionType = pigeonVar_list[2] as! String
     let identifier = pigeonVar_list[3] as! String
@@ -3170,7 +3170,7 @@ class _CameraManagerSetup {
 }
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol _InteractionsListenerProtocol {
-  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void)
+  func onInteraction(feature featureArg: FeaturesetFeature?, context contextArg: MapContentGestureContext, interactionID interactionIDArg: String, completion: @escaping (Result<Void, MapInterfacesError>) -> Void)
 }
 class _InteractionsListener: _InteractionsListenerProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
@@ -3182,10 +3182,10 @@ class _InteractionsListener: _InteractionsListenerProtocol {
   var codec: MapInterfacesPigeonCodec {
     return MapInterfacesPigeonCodec.shared
   }
-  func onInteraction(context contextArg: MapContentGestureContext, feature featureArg: FeaturesetFeature, interactionID interactionIDArg: Int64, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
+  func onInteraction(feature featureArg: FeaturesetFeature?, context contextArg: MapContentGestureContext, interactionID interactionIDArg: String, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([contextArg, featureArg, interactionIDArg] as [Any?]) { response in
+    channel.sendMessage([featureArg, contextArg, interactionIDArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -3226,6 +3226,9 @@ protocol _MapInterface {
   ///
   /// @return `true` if a gesture is currently in progress, `false` otherwise.
   func isGestureInProgress() throws -> Bool
+  /// For internal use only.
+  /// Dispatch a map gesture event for testing purposes.
+  func dispatch(gesture: String, screenCoordinate: ScreenCoordinate) throws
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
@@ -3578,6 +3581,24 @@ class _MapInterfaceSetup {
       }
     } else {
       isGestureInProgressChannel.setMessageHandler(nil)
+    }
+    /// For internal use only.
+    /// Dispatch a map gesture event for testing purposes.
+    let dispatchChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      dispatchChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let gestureArg = args[0] as! String
+        let screenCoordinateArg = args[1] as! ScreenCoordinate
+        do {
+          try api.dispatch(gesture: gestureArg, screenCoordinate: screenCoordinateArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      dispatchChannel.setMessageHandler(nil)
     }
     /// Tells the map rendering engine that the animation is currently performed by the
     /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.

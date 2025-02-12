@@ -1,5 +1,5 @@
 import Foundation
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Internal) import MapboxMaps
 import MapboxCoreMaps_Private
 import Flutter
 import Turf
@@ -95,6 +95,11 @@ final class MapInterfaceController: _MapInterface {
 
     func isGestureInProgress() throws -> Bool {
         return mapboxMap.isGestureInProgress
+    }
+
+    func dispatch(gesture: String, screenCoordinate: ScreenCoordinate) throws {
+        /// No op until this is exposed for iOS in v11.10.0 stable
+        /// self.mapboxMap.dispatch(gesture: gesture, screenCoordinateX: screenCoordinate.x, screenCoordinateY: screenCoordinate.y)
     }
 
     func setUserAnimationInProgress(inProgress: Bool) throws {
