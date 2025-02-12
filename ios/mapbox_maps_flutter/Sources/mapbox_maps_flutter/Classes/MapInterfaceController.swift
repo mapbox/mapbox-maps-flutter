@@ -98,7 +98,8 @@ final class MapInterfaceController: _MapInterface {
     }
 
     func dispatch(gesture: String, screenCoordinate: ScreenCoordinate) throws {
-        self.mapboxMap.dispatch(gesture: gesture, screenCoordinateX: screenCoordinate.x, screenCoordinateY: screenCoordinate.y)
+        /// No op until this is exposed for iOS in v11.10.0 stable
+        /// self.mapboxMap.dispatch(gesture: gesture, screenCoordinateX: screenCoordinate.x, screenCoordinateY: screenCoordinate.y)
     }
 
     func setUserAnimationInProgress(inProgress: Bool) throws {
