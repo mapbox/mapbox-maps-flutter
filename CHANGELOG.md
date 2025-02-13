@@ -1,3 +1,7 @@
+### main 
+
+* [Android] Fix bug in `.setStyleImportConfigProperties()` where map values were not being set correctly.
+
 ### 2.5.2
 
 * Bump Maps SDK to 11.9.2

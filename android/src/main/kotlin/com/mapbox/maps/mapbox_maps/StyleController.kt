@@ -114,7 +114,7 @@ class StyleController(private val context: Context, private val styleManager: Ma
   override fun setStyleImportConfigProperties(importId: String, configs: Map<String, Any>) {
     styleManager.setStyleImportConfigProperties(
       importId,
-      configs.mapValues { it.toValue() } as HashMap<String, Value>
+      configs.mapValues { it.value.toValue() } as HashMap<String, Value>
     )
   }
 
