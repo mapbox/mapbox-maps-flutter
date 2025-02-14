@@ -1,6 +1,7 @@
 ### main 
 
 * [Android] Fix bug in `.setStyleImportConfigProperties()` where map values were not being set correctly.
+* [Android] Fix throwing NPE when converting a map with null values to a `Value`.
 
 ### 2.5.2
 
