@@ -13,6 +13,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
     private let channel: FlutterMethodChannel
     private let annotationController: AnnotationController?
     private let gesturesController: GesturesController?
+    private let interactionsController: InteractionsController?
     private let eventHandler: MapboxEventHandler
     private let binaryMessenger: SuffixBinaryMessenger
 
@@ -67,6 +68,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         gesturesController = GesturesController(withMapView: mapView)
         GesturesSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: gesturesController, messageChannelSuffix: binaryMessenger.suffix)
 
+        interactionsController = InteractionsController(withMapView: mapView)
+
         let logoController = LogoController(withMapView: mapView)
         LogoSettingsInterfaceSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: logoController, messageChannelSuffix: binaryMessenger.suffix)
 
@@ -105,6 +108,12 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
             result(nil)
         case "gesture#remove_listeners":
             gesturesController!.removeListeners()
+            result(nil)
+        case "interactions#add_interaction":
+            interactionsController!.addInteraction(messenger: binaryMessenger, methodCall: methodCall)
+            result(nil)
+        case "interactions#remove_interaction":
+            interactionsController!.removeInteraction(methodCall: methodCall)
             result(nil)
         case "platform#releaseMethodChannels":
             releaseMethodChannels()

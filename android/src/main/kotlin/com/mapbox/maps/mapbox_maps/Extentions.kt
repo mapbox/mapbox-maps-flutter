@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import com.google.gson.Gson
@@ -9,6 +10,7 @@ import com.mapbox.bindgen.Value
 import com.mapbox.common.TileRegionError
 import com.mapbox.geojson.*
 import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.StylePackError
 import com.mapbox.maps.applyDefaultParams
 import com.mapbox.maps.debugoptions.MapViewDebugOptions
@@ -19,6 +21,8 @@ import com.mapbox.maps.extension.style.light.generated.directionalLight
 import com.mapbox.maps.extension.style.light.generated.flatLight
 import com.mapbox.maps.extension.style.projection.generated.Projection
 import com.mapbox.maps.extension.style.types.StyleTransition
+import com.mapbox.maps.interactions.FeatureState
+import com.mapbox.maps.interactions.TypedFeaturesetDescriptor
 import com.mapbox.maps.logE
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import org.json.JSONArray
@@ -263,6 +267,50 @@ fun RenderedQueryOptions.toRenderedQueryOptions(): com.mapbox.maps.RenderedQuery
   return com.mapbox.maps.RenderedQueryOptions(layerIds, filter?.toValue())
 }
 
+fun FeaturesetFeatureId.toFeaturesetFeatureId(): com.mapbox.maps.FeaturesetFeatureId {
+  return com.mapbox.maps.FeaturesetFeatureId(id, namespace)
+}
+
+@OptIn(MapboxExperimental::class)
+fun FeaturesetDescriptor.toTypedFeaturesetDescriptor(): TypedFeaturesetDescriptor<FeatureState, com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>>? {
+  featuresetId?.let {
+    return TypedFeaturesetDescriptor.Featureset(
+      featuresetId, importId
+    )
+  } ?: layerId?.let {
+    return TypedFeaturesetDescriptor.Layer(
+      layerId
+    )
+  }
+  return null
+}
+
+@OptIn(MapboxExperimental::class)
+fun Map<String, Any?>.toFeatureState(): com.mapbox.maps.interactions.FeatureState {
+  val map = this
+  return FeatureState {
+    for ((key, value) in map) {
+      value?.let {
+        when (value) {
+          is String -> {
+            addStringState(key, value)
+          }
+          is Long -> {
+            addLongState(key, value)
+          }
+          is Double -> {
+            addDoubleState(key, value)
+          }
+          is Boolean -> {
+            addBooleanState(key, value)
+          }
+          else -> throw (RuntimeException("Unsupported (key, value): ($key, $value)"))
+        }
+      }
+    }
+  }
+}
+
 fun MapDebugOptions.toMapDebugOptions(): com.mapbox.maps.MapDebugOptions {
   return com.mapbox.maps.MapDebugOptions.values()[data.ordinal]
 }
@@ -378,6 +426,44 @@ fun CameraBoundsOptions.toCameraBoundsOptions(): com.mapbox.maps.CameraBoundsOpt
     .minPitch(minPitch)
     .minZoom(minZoom)
     .build()
+
+fun Geometry.toMap(): Map<String?, Any?> {
+  return when (this) {
+    is Point -> mapOf(
+      "type" to "Point",
+      "coordinates" to listOf(this.latitude(), this.longitude())
+    )
+    is LineString -> mapOf(
+      "type" to "LineString",
+      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+    )
+    is Polygon -> mapOf(
+      "type" to "Polygon",
+      "coordinates" to this.coordinates().map { ring ->
+        ring.map { listOf(it.latitude(), it.longitude()) }
+      }
+    )
+    is MultiPoint -> mapOf(
+      "type" to "MultiPoint",
+      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+    )
+    is MultiLineString -> mapOf(
+      "type" to "MultiLineString",
+      "coordinates" to this.coordinates().map { line ->
+        line.map { listOf(it.latitude(), it.longitude()) }
+      }
+    )
+    is MultiPolygon -> mapOf(
+      "type" to "MultiPolygon",
+      "coordinates" to this.coordinates().map { polygon ->
+        polygon.map { ring ->
+          ring.map { listOf(it.latitude(), it.longitude()) }
+        }
+      }
+    )
+    else -> throw IllegalArgumentException("Unsupported geometry type")
+  }
+}
 
 fun Map<String?, Any?>.toGeometry(): Geometry {
   when {
@@ -504,6 +590,35 @@ fun com.mapbox.maps.QueriedRenderedFeature.toFLTQueriedRenderedFeature(): Querie
   return QueriedRenderedFeature(queriedFeature.toFLTQueriedFeature(), layers)
 }
 
+fun com.mapbox.maps.FeaturesetFeatureId.toFLTFeaturesetFeatureId(): FeaturesetFeatureId {
+  return FeaturesetFeatureId(featureId, featureNamespace)
+}
+
+fun com.mapbox.maps.FeaturesetDescriptor.toFLTFeaturesetDescriptor(): FeaturesetDescriptor {
+  return FeaturesetDescriptor(featuresetId, importId, layerId)
+}
+
+@SuppressLint("RestrictedApi")
+@OptIn(MapboxExperimental::class)
+fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFLTFeaturesetFeature(): FeaturesetFeature {
+  return FeaturesetFeature(
+    id?.toFLTFeaturesetFeatureId(),
+    descriptor.toFeaturesetDescriptor().toFLTFeaturesetDescriptor(),
+    geometry.toMap(),
+    properties.toFilteredMap(),
+    JSONObject(state.asJsonString()).toFilteredMap()
+  )
+}
+
+@SuppressLint("RestrictedApi")
+fun com.mapbox.maps.InteractionContext.toFLTMapContentGestureContext(context: Context): MapContentGestureContext {
+  return MapContentGestureContext(
+    screenCoordinate.toFLTScreenCoordinate(context),
+    coordinateInfo.coordinate,
+    GestureState.ENDED
+  )
+}
+
 fun com.mapbox.maps.QueriedSourceFeature.toFLTQueriedSourceFeature(): QueriedSourceFeature {
   return QueriedSourceFeature(queriedFeature.toFLTQueriedFeature())
 }
@@ -592,6 +707,13 @@ fun JSONObject.toMap(): Map<String?, Any?> = keys().asSequence().associateWith {
     JSONObject.NULL -> null
     else -> value
   }
+}
+
+@OptIn(MapboxExperimental::class)
+fun JSONObject.toFilteredMap(): Map<String, Any?> {
+  return this.toMap()
+    .filterKeys { it != null } // Filter out null keys
+    .mapKeys { it.key!! }
 }
 
 fun Number.toLogicalPixels(context: Context): Double {

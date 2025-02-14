@@ -35,6 +35,10 @@ private fun wrapError(exception: Throwable): List<Any?> {
   }
 }
 
+private fun createConnectionError(channelName: String): FlutterError {
+  return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
+}
+
 /**
  * Error class for passing custom error details to Flutter via a thrown PlatformException.
  * @property code The error code.
@@ -224,6 +228,20 @@ enum class ViewAnnotationAnchor(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): ViewAnnotationAnchor? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/** The type of interaction, either tap/click or longTap/longClick */
+enum class _InteractionType(val raw: Int) {
+  /** A short tap or click */
+  TAP(0),
+  /** A long tap or long click */
+  LONG_TAP(1);
+
+  companion object {
+    fun ofRaw(raw: Int): _InteractionType? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -1345,6 +1363,246 @@ data class QueriedFeature(
 }
 
 /**
+ * Identifies a feature in a featureset.
+ *
+ * Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
+ *
+ * In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
+ * The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
+ *
+ * - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
+ * If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetFeatureId(
+  /** A feature id coming from the feature itself.exp */
+  val id: String,
+  /** A namespace of the feature */
+  val namespace: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeatureId {
+      val id = pigeonVar_list[0] as String
+      val namespace = pigeonVar_list[1] as String?
+      return FeaturesetFeatureId(id, namespace)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      namespace,
+    )
+  }
+}
+
+/**
+ * Wraps a FeatureState map
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeatureState(
+  val map: Map<String, Any?>
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeatureState {
+      val map = pigeonVar_list[0] as Map<String, Any?>
+      return FeatureState(map)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      map,
+    )
+  }
+}
+
+/**
+ * Internal: An interaction that can be added to the map.
+ *
+ * To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
+ *
+ * See also: ``MapboxMap/addInteraction``.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class _Interaction(
+  /** The featureset descriptor that specifies the featureset to be included in the interaction. */
+  val featuresetDescriptor: FeaturesetDescriptor? = null,
+  /** The type of interaction, either tap or longTap */
+  val interactionType: _InteractionType,
+  /** Whether to stop the propagation of the interaction to the map. Defaults to true. */
+  val stopPropagation: Boolean,
+  /** An optional filter of features that should trigger the interaction. */
+  val filter: String? = null,
+  /** Radius of a tappable area */
+  val radius: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _Interaction {
+      val featuresetDescriptor = pigeonVar_list[0] as FeaturesetDescriptor?
+      val interactionType = pigeonVar_list[1] as _InteractionType
+      val stopPropagation = pigeonVar_list[2] as Boolean
+      val filter = pigeonVar_list[3] as String?
+      val radius = pigeonVar_list[4] as Double?
+      return _Interaction(featuresetDescriptor, interactionType, stopPropagation, filter, radius)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetDescriptor,
+      interactionType,
+      stopPropagation,
+      filter,
+      radius,
+    )
+  }
+}
+
+/**
+ * Internal class to handle pigeon conversions for interactions.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class _InteractionPigeon(
+  /** The featureset descriptor that specifies the featureset to be included in the interaction. */
+  val featuresetDescriptor: List<Any?>? = null,
+  /** Whether to stop the propagation of the interaction to the map */
+  val stopPropagation: Boolean,
+  /** The type of interaction, either tap or longTap as a String */
+  val interactionType: String,
+  /** An identifier for the interaction */
+  val identifier: String,
+  /** An optional filter of features that should trigger the interaction. */
+  val filter: String? = null,
+  /** Radius of a tappable area */
+  val radius: Double? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): _InteractionPigeon {
+      val featuresetDescriptor = pigeonVar_list[0] as List<Any?>?
+      val stopPropagation = pigeonVar_list[1] as Boolean
+      val interactionType = pigeonVar_list[2] as String
+      val identifier = pigeonVar_list[3] as String
+      val filter = pigeonVar_list[4] as String?
+      val radius = pigeonVar_list[5] as Double?
+      return _InteractionPigeon(featuresetDescriptor, stopPropagation, interactionType, identifier, filter, radius)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetDescriptor,
+      stopPropagation,
+      interactionType,
+      identifier,
+      filter,
+      radius,
+    )
+  }
+}
+
+/**
+ * A featureset descriptor.
+ *
+ * The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetDescriptor(
+  /**
+   * An optional unique identifier for the featureset within the style.
+   * This id is used to reference a specific featureset.
+   *
+   * * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+   * * meaning `layerId` will not be considered even if it has a valid value.
+   */
+  val featuresetId: String? = null,
+  /**
+   * An optional import id that is required if the featureset is defined within an imported style.
+   * If the featureset belongs to the current style, this field should be set to a null string.
+   *
+   * Note: `importId` is only applicable when used in conjunction with `featuresetId`
+   * and has no effect when used with `layerId`.
+   */
+  val importId: String? = null,
+  /**
+   * An optional unique identifier for the layer within the current style.
+   *
+   * Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+   * Additionally, `importId` does not apply when using `layerId`.
+   */
+  val layerId: String? = null
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetDescriptor {
+      val featuresetId = pigeonVar_list[0] as String?
+      val importId = pigeonVar_list[1] as String?
+      val layerId = pigeonVar_list[2] as String?
+      return FeaturesetDescriptor(featuresetId, importId, layerId)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      featuresetId,
+      importId,
+      layerId,
+    )
+  }
+}
+
+/**
+ * A basic feature of a featureset.
+ *
+ * If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+ *
+ * The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
+data class FeaturesetFeature(
+  /**
+   * An identifier of the feature.
+   *
+   * The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+   * In this case it's impossible to set a feature state for an individual feature.
+   */
+  val id: FeaturesetFeatureId? = null,
+  /** A featureset descriptor denoting the featureset this feature belongs to. */
+  val featureset: FeaturesetDescriptor,
+  /** A feature geometry. */
+  val geometry: Map<String?, Any?>,
+  /** Feature JSON properties. */
+  val properties: Map<String, Any?>,
+  /**
+   * A feature state.
+   *
+   * This is a **snapshot** of the state that the feature had when it was interacted with.
+   * To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
+   */
+  val state: Map<String, Any?>
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): FeaturesetFeature {
+      val id = pigeonVar_list[0] as FeaturesetFeatureId?
+      val featureset = pigeonVar_list[1] as FeaturesetDescriptor
+      val geometry = pigeonVar_list[2] as Map<String?, Any?>
+      val properties = pigeonVar_list[3] as Map<String, Any?>
+      val state = pigeonVar_list[4] as Map<String, Any?>
+      return FeaturesetFeature(id, featureset, geometry, properties, state)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      id,
+      featureset,
+      geometry,
+      properties,
+      state,
+    )
+  }
+}
+
+/**
  * Geometry for querying rendered features.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -1853,285 +2111,330 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Type.ofRaw(it.toInt())
+          _InteractionType.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionBaseAlignment.ofRaw(it.toInt())
+          GestureState.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillExtrusionHeightAlignment.ofRaw(it.toInt())
+          Type.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          BackgroundPitchAlignment.ofRaw(it.toInt())
+          FillExtrusionBaseAlignment.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePackErrorType.ofRaw(it.toInt())
+          FillExtrusionHeightAlignment.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResponseErrorReason.ofRaw(it.toInt())
+          BackgroundPitchAlignment.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          OfflineRegionDownloadState.ofRaw(it.toInt())
+          StylePackErrorType.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileStoreUsageMode.ofRaw(it.toInt())
+          ResponseErrorReason.ofRaw(it.toInt())
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StylePropertyValueKind.ofRaw(it.toInt())
+          OfflineRegionDownloadState.ofRaw(it.toInt())
         }
       }
       146.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          StyleProjectionName.ofRaw(it.toInt())
+          TileStoreUsageMode.ofRaw(it.toInt())
         }
       }
       147.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          Anchor.ofRaw(it.toInt())
+          StylePropertyValueKind.ofRaw(it.toInt())
         }
       }
       148.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpMethod.ofRaw(it.toInt())
+          StyleProjectionName.ofRaw(it.toInt())
         }
       }
       149.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          HttpRequestErrorType.ofRaw(it.toInt())
+          Anchor.ofRaw(it.toInt())
         }
       }
       150.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadErrorCode.ofRaw(it.toInt())
+          HttpMethod.ofRaw(it.toInt())
         }
       }
       151.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DownloadState.ofRaw(it.toInt())
+          HttpRequestErrorType.ofRaw(it.toInt())
         }
       }
       152.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TileRegionErrorType.ofRaw(it.toInt())
+          DownloadErrorCode.ofRaw(it.toInt())
         }
       }
       153.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          _MapEvent.ofRaw(it.toInt())
+          DownloadState.ofRaw(it.toInt())
         }
       }
       154.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          TileRegionErrorType.ofRaw(it.toInt())
         }
       }
       155.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          _MapEvent.ofRaw(it.toInt())
         }
       }
       156.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       157.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          FeatureDecoder.fromList(it)
         }
       }
       158.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          CameraState.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
+          CameraBoundsOptions.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          CameraBounds.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
+          MapAnimationOptions.fromList(it)
         }
       }
       166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          MapDebugOptions.fromList(it)
         }
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          CoordinateBoundsZoom.fromList(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          Size.fromList(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          FeaturesetFeatureId.fromList(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          FeatureState.fromList(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          _Interaction.fromList(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CanonicalTileID.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       193.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          StyleProjection.fromList(it)
+        }
+      }
+      194.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          FlatLight.fromList(it)
+        }
+      }
+      195.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          DirectionalLight.fromList(it)
+        }
+      }
+      196.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AmbientLight.fromList(it)
+        }
+      }
+      197.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MbxImage.fromList(it)
+        }
+      }
+      198.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ImageStretches.fromList(it)
+        }
+      }
+      199.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ImageContent.fromList(it)
+        }
+      }
+      200.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          TransitionOptions.fromList(it)
+        }
+      }
+      201.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CanonicalTileID.fromList(it)
+        }
+      }
+      202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2173,232 +2476,268 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is Type -> {
+      is _InteractionType -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionBaseAlignment -> {
+      is GestureState -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is FillExtrusionHeightAlignment -> {
+      is Type -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is BackgroundPitchAlignment -> {
+      is FillExtrusionBaseAlignment -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is StylePackErrorType -> {
+      is FillExtrusionHeightAlignment -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is ResponseErrorReason -> {
+      is BackgroundPitchAlignment -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is OfflineRegionDownloadState -> {
+      is StylePackErrorType -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
-      is TileStoreUsageMode -> {
+      is ResponseErrorReason -> {
         stream.write(144)
         writeValue(stream, value.raw)
       }
-      is StylePropertyValueKind -> {
+      is OfflineRegionDownloadState -> {
         stream.write(145)
         writeValue(stream, value.raw)
       }
-      is StyleProjectionName -> {
+      is TileStoreUsageMode -> {
         stream.write(146)
         writeValue(stream, value.raw)
       }
-      is Anchor -> {
+      is StylePropertyValueKind -> {
         stream.write(147)
         writeValue(stream, value.raw)
       }
-      is HttpMethod -> {
+      is StyleProjectionName -> {
         stream.write(148)
         writeValue(stream, value.raw)
       }
-      is HttpRequestErrorType -> {
+      is Anchor -> {
         stream.write(149)
         writeValue(stream, value.raw)
       }
-      is DownloadErrorCode -> {
+      is HttpMethod -> {
         stream.write(150)
         writeValue(stream, value.raw)
       }
-      is DownloadState -> {
+      is HttpRequestErrorType -> {
         stream.write(151)
         writeValue(stream, value.raw)
       }
-      is TileRegionErrorType -> {
+      is DownloadErrorCode -> {
         stream.write(152)
         writeValue(stream, value.raw)
       }
-      is _MapEvent -> {
+      is DownloadState -> {
         stream.write(153)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is TileRegionErrorType -> {
         stream.write(154)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is Feature -> {
+      is _MapEvent -> {
         stream.write(155)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is GlyphsRasterizationOptions -> {
+      is Point -> {
         stream.write(156)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is Feature -> {
         stream.write(157)
         writeValue(stream, value.toList())
       }
-      is MbxEdgeInsets -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is CameraOptions -> {
+      is TileCoverOptions -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is CameraState -> {
+      is MbxEdgeInsets -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
+      is CameraOptions -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is CameraState -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is MapAnimationOptions -> {
+      is CameraBoundsOptions -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is CameraBounds -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is MapDebugOptions -> {
+      is MapAnimationOptions -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is CoordinateBounds -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is MapDebugOptions -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is MapOptions -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is CoordinateBoundsZoom -> {
+      is ScreenCoordinate -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is ScreenBox -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is CoordinateBoundsZoom -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is Size -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is RenderedQueryOptions -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is SourceQueryOptions -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is FeatureExtensionValue -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is LayerPosition -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is QueriedRenderedFeature -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is QueriedSourceFeature -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is QueriedFeature -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is FeaturesetFeatureId -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is FeatureState -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is _Interaction -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is _InteractionPigeon -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is FeaturesetDescriptor -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is FeaturesetFeature -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is MapContentGestureContext -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is _RenderedQueryGeometry -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is ProjectedMeters -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is MercatorCoordinate -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
+      is StyleObjectInfo -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is StylePropertyValue -> {
+      is StyleProjection -> {
         stream.write(193)
+        writeValue(stream, value.toList())
+      }
+      is FlatLight -> {
+        stream.write(194)
+        writeValue(stream, value.toList())
+      }
+      is DirectionalLight -> {
+        stream.write(195)
+        writeValue(stream, value.toList())
+      }
+      is AmbientLight -> {
+        stream.write(196)
+        writeValue(stream, value.toList())
+      }
+      is MbxImage -> {
+        stream.write(197)
+        writeValue(stream, value.toList())
+      }
+      is ImageStretches -> {
+        stream.write(198)
+        writeValue(stream, value.toList())
+      }
+      is ImageContent -> {
+        stream.write(199)
+        writeValue(stream, value.toList())
+      }
+      is TransitionOptions -> {
+        stream.write(200)
+        writeValue(stream, value.toList())
+      }
+      is CanonicalTileID -> {
+        stream.write(201)
+        writeValue(stream, value.toList())
+      }
+      is StylePropertyValue -> {
+        stream.write(202)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3075,6 +3414,31 @@ interface _CameraManager {
     }
   }
 }
+/** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
+class _InteractionsListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
+  companion object {
+    /** The codec used by _InteractionsListener. */
+    val codec: MessageCodec<Any?> by lazy {
+      MapInterfacesPigeonCodec()
+    }
+  }
+  fun onInteraction(featureArg: FeaturesetFeature?, contextArg: MapContentGestureContext, interactionIDArg: String, callback: (Result<Unit>) -> Unit) {
+    val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$separatedMessageChannelSuffix"
+    val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
+    channel.send(listOf(featureArg, contextArg, interactionIDArg)) {
+      if (it is List<*>) {
+        if (it.size > 1) {
+          callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else {
+          callback(Result.success(Unit))
+        }
+      } else {
+        callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+}
 /**
  * Map class provides map rendering functionality.
  *
@@ -3108,6 +3472,11 @@ interface _MapInterface {
    * @return `true` if a gesture is currently in progress, `false` otherwise.
    */
   fun isGestureInProgress(): Boolean
+  /**
+   * For internal use only.
+   * Dispatch a map gesture event for testing purposes.
+   */
+  fun dispatch(gesture: String, screenCoordinate: ScreenCoordinate)
   /**
    * Tells the map rendering engine that the animation is currently performed by the
    * user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
@@ -3174,6 +3543,20 @@ interface _MapInterface {
    */
   fun queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
+   * Queries the map for rendered features with one typed featureset.
+   *
+   * The results array will contain features of the type specified by this featureset.
+   *
+   * - Important: If you need to handle basic gestures on map content,
+   * please prefer to use Interactions API, see `MapboxMap/addInteraction`.
+   *
+   * @param featureset A typed featureset to query with.
+   * @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+   * If omitted, the full viewport is queried.
+   * @param filter An additional filter for features.
+   */
+  fun queryRenderedFeaturesForFeatureset(featureset: FeaturesetDescriptor, geometry: _RenderedQueryGeometry?, filter: String?, callback: (Result<List<FeaturesetFeature>>) -> Unit)
+  /**
    * Queries the map for source features.
    *
    * @param sourceId The style source identifier used to query for source features.
@@ -3236,6 +3619,26 @@ interface _MapInterface {
    */
   fun setFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, state: String, callback: (Result<Unit>) -> Unit)
   /**
+   * Update the state map of a feature within a featureset.
+   * Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+   * will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+   *
+   * @param featureset The featureset to look the feature in.
+   * @param featureId Identifier of the feature whose state should be updated.
+   * @param state Map of entries to update with their respective new values
+   */
+  fun setFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  /**
+   * Update the state map of an individual feature.
+   *
+   * The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+   * the operation will be no-op and callback will receive an error.
+   *
+   * @param feature The feature to update.
+   * @param state Map of entries to update with their respective new values
+   */
+  fun setFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, state: Map<String, Any?>, callback: (Result<Unit>) -> Unit)
+  /**
    * Gets the state map of a feature within a style source.
    *
    * Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -3244,9 +3647,27 @@ interface _MapInterface {
    * @param sourceId The style source identifier.
    * @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
    * @param featureId The feature identifier of the feature whose state should be queried.
-   * @param completion The `query feature state completion` called when the query completes.
+   *
+   * @return A String representing the Feature's state map.
    */
   fun getFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, callback: (Result<String>) -> Unit)
+  /**
+   * Get the state map of a feature within a style source.
+   *
+   * @param featureset A featureset the feature belongs to.
+   * @param featureId Identifier of the feature whose state should be queried.
+   *
+   * @return The Feature's state map or an empty map if the feature could not be found.
+   */
+  fun getFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, callback: (Result<Map<String, Any?>>) -> Unit)
+  /**
+   * Get the state map of a feature within a style source.
+   *
+   * @param feature An interactive feature to query the state of.
+   *
+   * @return The Feature's state map or an empty map if the feature could not be found.
+   */
+  fun getFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, callback: (Result<Map<String, Any?>>) -> Unit)
   /**
    * Removes entries from a feature state object.
    *
@@ -3254,7 +3675,7 @@ interface _MapInterface {
    * `stateKey`.
    *
    * Note that updates to feature state are asynchronous, so changes made by this method might not be
-   * immediately visible using `getStateFeature`.
+   * immediately visible using `getFeatureState`.
    *
    * @param sourceId The style source identifier.
    * @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
@@ -3262,6 +3683,32 @@ interface _MapInterface {
    * @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
    */
   fun removeFeatureState(sourceId: String, sourceLayerId: String?, featureId: String, stateKey: String?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Removes entries from a feature state object of a feature in the specified featureset.
+   * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+   *
+   * @param featureset A featureset the feature belongs to.
+   * @param featureId Identifier of the feature whose state should be removed.
+   * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+   */
+  fun removeFeatureStateForFeaturesetDescriptor(featureset: FeaturesetDescriptor, featureId: FeaturesetFeatureId, stateKey: String?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Removes entries from a specified Feature.
+   * Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+   *
+   * @param feature An interactive feature to update.
+   * @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+   */
+  fun removeFeatureStateForFeaturesetFeature(feature: FeaturesetFeature, stateKey: String?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Reset all the feature states within a featureset.
+   *
+   * Note that updates to feature state are asynchronous, so changes made by this method might not be
+   * immediately visible using ``MapboxMap/getFeatureState()``.
+   *
+   * @param featureset A featureset descriptor
+   */
+  fun resetFeatureStatesForFeatureset(featureset: FeaturesetDescriptor, callback: (Result<Unit>) -> Unit)
   /** Reduces memory use. Useful to call when the application gets paused or sent to background. */
   fun reduceMemoryUse()
   /**
@@ -3437,6 +3884,25 @@ interface _MapInterface {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.isGestureInProgress())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val gestureArg = args[0] as String
+            val screenCoordinateArg = args[1] as ScreenCoordinate
+            val wrapped: List<Any?> = try {
+              api.dispatch(gestureArg, screenCoordinateArg)
+              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }
@@ -3670,6 +4136,28 @@ interface _MapInterface {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val geometryArg = args[1] as _RenderedQueryGeometry?
+            val filterArg = args[2] as String?
+            api.queryRenderedFeaturesForFeatureset(featuresetArg, geometryArg, filterArg) { result: Result<List<FeaturesetFeature>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3778,6 +4266,47 @@ interface _MapInterface {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            val stateArg = args[2] as Map<String, Any?>
+            api.setFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg, stateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            val stateArg = args[1] as Map<String, Any?>
+            api.setFeatureStateForFeaturesetFeature(featureArg, stateArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3786,6 +4315,47 @@ interface _MapInterface {
             val sourceLayerIdArg = args[1] as String?
             val featureIdArg = args[2] as String
             api.getFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg) { result: Result<String> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            api.getFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg) { result: Result<Map<String, Any?>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            api.getFeatureStateForFeaturesetFeature(featureArg) { result: Result<Map<String, Any?>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3809,6 +4379,66 @@ interface _MapInterface {
             val featureIdArg = args[2] as String
             val stateKeyArg = args[3] as String?
             api.removeFeatureState(sourceIdArg, sourceLayerIdArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            val featureIdArg = args[1] as FeaturesetFeatureId
+            val stateKeyArg = args[2] as String?
+            api.removeFeatureStateForFeaturesetDescriptor(featuresetArg, featureIdArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featureArg = args[0] as FeaturesetFeature
+            val stateKeyArg = args[1] as String?
+            api.removeFeatureStateForFeaturesetFeature(featureArg, stateKeyArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val featuresetArg = args[0] as FeaturesetDescriptor
+            api.resetFeatureStatesForFeatureset(featuresetArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -5025,6 +5655,12 @@ interface StyleManager {
    * @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
    */
   fun localizeLabels(locale: String, layerIds: List<String>?, callback: (Result<Unit>) -> Unit)
+  /**
+   * Returns the available featuresets in the currently loaded style.
+   *
+   * - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+   */
+  fun getFeaturesets(): List<FeaturesetDescriptor>
 
   companion object {
     /** The codec used by StyleManager. */
@@ -6131,6 +6767,21 @@ interface StyleManager {
                 reply.reply(wrapResult(null))
               }
             }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              listOf(api.getFeaturesets())
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
           }
         } else {
           channel.setMessageHandler(null)
