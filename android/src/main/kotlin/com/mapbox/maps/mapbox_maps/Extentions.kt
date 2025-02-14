@@ -928,6 +928,7 @@ fun Any.toValue(): Value {
   } else if (this is HashMap<*, *>) {
     val valueMap = this
       .mapKeys { it.key as? String }
+      .filterValues { it != null }
       .mapValues { it.value.toValue() }
     Value.valueOf(kotlin.collections.HashMap(valueMap))
   } else {
