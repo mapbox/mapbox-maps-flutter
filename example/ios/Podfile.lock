@@ -1,62 +1,21 @@
 PODS:
   - Flutter (1.0.0)
-  - integration_test (0.0.1):
-    - Flutter
-  - mapbox_maps_flutter (2.6.0-rc.1):
-    - Flutter
-    - MapboxMaps (~> 11.10.0-rc.1)
-    - Turf (= 4.0.0)
-  - MapboxCommon (24.10.0-rc.1):
-    - Turf (= 4.0.0)
-  - MapboxCoreMaps (11.10.0-rc.1):
-    - MapboxCommon (~> 24.10.0-rc)
-  - MapboxMaps (11.10.0-rc.1):
-    - MapboxCommon (= 24.10.0-rc.1)
-    - MapboxCoreMaps (= 11.10.0-rc.1)
-    - Turf (= 4.0.0)
-  - path_provider_foundation (0.0.1):
-    - Flutter
-    - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
-  - Turf (4.0.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - integration_test (from `.symlinks/plugins/integration_test/ios`)
-  - mapbox_maps_flutter (from `.symlinks/plugins/mapbox_maps_flutter/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-
-SPEC REPOS:
-  trunk:
-    - MapboxCommon
-    - MapboxCoreMaps
-    - MapboxMaps
-    - Turf
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  integration_test:
-    :path: ".symlinks/plugins/integration_test/ios"
-  mapbox_maps_flutter:
-    :path: ".symlinks/plugins/mapbox_maps_flutter/ios"
-  path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
-  mapbox_maps_flutter: 2b6837c5f1eb194f37ccbc0b68c6e9874087d456
-  MapboxCommon: cf475edb27c65faf9d7c102663dc65bdfe4d013a
-  MapboxCoreMaps: eb9f293622f66fc003771770802b17225aa483e9
-  MapboxMaps: 294406c6d821016c67f38b0ecca37ed9e5abfb78
-  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
-  permission_handler_apple: 3787117e48f80715ff04a3830ca039283d6a4f29
-  Turf: c9eb11a65d96af58cac523460fd40fec5061b081
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
 
 PODFILE CHECKSUM: b3192822a93c0d8045ea3b93674ed183e8ddffc6
 
