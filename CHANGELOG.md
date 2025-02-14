@@ -1,3 +1,7 @@
+### main
+
+* Fix Android throwing NPE when converting a map with null values to a `Value`.
+
 ### 2.5.2
 
 * Bump Maps SDK to 11.9.2
