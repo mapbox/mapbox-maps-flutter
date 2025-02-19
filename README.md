@@ -186,7 +186,7 @@ To use the 3D puck with model downloaded from Uri instead of the default 2D puck
                   "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Embedded/Duck.gltf",))));
 ```
 
-You can find more examples of customization in the sample [app](example/lib/location.dart).
+You can find more examples of customization in the sample [app](example/lib/location_example.dart).
 
 ## Markers and annotations
 Additional information is available in our [Flutter](https://docs.mapbox.com/flutter/maps/guides/markers-and-annotations/), [Android](https://docs.mapbox.com/android/maps/guides/annotations/), and [iOS](https://docs.mapbox.com/ios/maps/guides/annotations/) documentation.
