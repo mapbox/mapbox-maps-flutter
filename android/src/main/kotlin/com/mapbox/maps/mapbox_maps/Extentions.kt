@@ -611,9 +611,9 @@ fun com.mapbox.maps.interactions.FeaturesetFeature<FeatureState>.toFLTFeatureset
 }
 
 @SuppressLint("RestrictedApi")
-fun com.mapbox.maps.InteractionContext.toFLTMapContentGestureContext(): MapContentGestureContext {
+fun com.mapbox.maps.InteractionContext.toFLTMapContentGestureContext(context: Context): MapContentGestureContext {
   return MapContentGestureContext(
-    ScreenCoordinate(screenCoordinate.x, screenCoordinate.y),
+    screenCoordinate.toFLTScreenCoordinate(context),
     coordinateInfo.coordinate,
     GestureState.ENDED
   )
@@ -928,6 +928,7 @@ fun Any.toValue(): Value {
   } else if (this is HashMap<*, *>) {
     val valueMap = this
       .mapKeys { it.key as? String }
+      .filterValues { it != null }
       .mapValues { it.value.toValue() }
     Value.valueOf(kotlin.collections.HashMap(valueMap))
   } else {

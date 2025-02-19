@@ -1,5 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
@@ -8,6 +9,8 @@ import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxDelicateApi
 import com.mapbox.maps.MapboxExperimental
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.PlatformEventInfo
+import com.mapbox.maps.PlatformEventType
 import com.mapbox.maps.TileCacheBudget
 import com.mapbox.maps.extension.observable.eventdata.MapLoadingErrorEventData
 import com.mapbox.maps.extension.style.expressions.generated.Expression
@@ -402,11 +405,13 @@ class MapInterfaceController(
         stateKey?.let { FeatureStateKey.create(it) }
       ) {
         if (it.isError) {
-          callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId} and featureID: $featureId.")))
+          callback(Result.failure(Throwable("Cannot remove feature state for the requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}} and featureID: $featureId.")))
         } else {
           callback(Result.success(Unit))
         }
       }
+    } ?: {
+      callback(Result.failure(Throwable("Failed to convert requested featureset: {featureId: ${featureset.featuresetId}, importId: ${featureset.importId}, layerId: ${featureset.layerId}}.")))
     }
   }
 
@@ -471,5 +476,24 @@ class MapInterfaceController(
 
   override fun setGestureInProgress(inProgress: Boolean) {
     mapboxMap.setGestureInProgress(inProgress)
+  }
+
+  @OptIn(MapboxExperimental::class)
+  @SuppressLint("RestrictedApi")
+  override fun dispatch(gesture: String, screenCoordinate: com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate) {
+    val eventType: PlatformEventType = when (gesture) {
+      "click" -> PlatformEventType.CLICK
+      "longClick" -> PlatformEventType.LONG_CLICK
+      "drag" -> PlatformEventType.DRAG
+      "dragBegin" -> PlatformEventType.DRAG_BEGIN
+      "dragEnd" -> PlatformEventType.DRAG_END
+      else -> throw IllegalArgumentException("Invalid gesture type: $gesture")
+    }
+    mapboxMap.dispatch(
+      platformEventInfo = PlatformEventInfo(
+        eventType,
+        screenCoordinate.toScreenCoordinate(context)
+      )
+    )
   }
 }

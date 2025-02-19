@@ -1,5 +1,9 @@
-# main
+### 2.6.0
 
+> [!IMPORTANT]
+> The iOS minimum deployment target is now iOS 14.0.
+
+* Update Maps SDK to 11.10.0
 * Align tap propagation behavior on Android and iOS.
 * Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue. 
 
@@ -11,21 +15,23 @@ var tapInteraction = TapInteraction(StandardBuildings(),
 });
 mapboxMap.addInteraction(tapInteraction);
 ```
-
 Specific changes: 
-  * Introduce the experimental `MapboxMap.addInteractions` method, which allows you to add interactions to the map. 
+  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map. 
+  * Introduce the experimental `MapboxMap.removeInteraction` method, which allows you to remove interactions from the map using an identifier `mapboxMap.removeInteraction("tap_interaction_poi")`
+  * Introduce the ability to add `TapInteraction` and `LongTapInteraction` targeting the map itself. 
   * Introduce `TapInteraction` and `LongTapInteraction`, which allow you to add tap and longTap interactions to the map.
   * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
   * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
 * For more guidance with using these new features see `interactive_features_example.dart`.
-
-### 2.6.0-beta.1
-
-> [!IMPORTANT]
-> The iOS minimum deployment target is now iOS 14.0.
-
 * Add support for Swift Package Manager.
-* Update Maps SDK to 11.10.0-beta.1
+
+### 2.5.2
+
+* Bump Maps SDK to 11.9.2
+
+### 2.5.1
+
+* Bump Maps SDK to 11.9.1
 
 ### 2.5.0
 

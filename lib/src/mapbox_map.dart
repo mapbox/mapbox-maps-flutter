@@ -369,6 +369,10 @@ class MapboxMap extends ChangeNotifier {
   /// Returns `true` if a gesture is currently in progress.
   Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
 
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _mapInterface.dispatch(gesture, screenCoordinate);
+
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
@@ -584,11 +588,14 @@ class MapboxMap extends ChangeNotifier {
   @experimental
   final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
 
-  /// Add an interaction
+  /// Add an interaction to the map
+  /// An identifier can be provided, which you can use to remove
+  /// the interaction with `.removeInteraction(interactionID)`
   @experimental
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
-      TypedInteraction<T> interaction) {
-    var id = _interactionsMap.interactions.length;
+      TypedInteraction<T> interaction,
+      {String? interactionID}) {
+    final id = interactionID ?? UniqueKey().toString();
     _interactionsMap.interactions[id] = _InteractionListener<T>(
       onInteractionListener: interaction.action,
       interactionID: id,
@@ -597,6 +604,14 @@ class MapboxMap extends ChangeNotifier {
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
     _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
+  }
+
+  /// Remove an interaction from the map with the given interactionID
+  /// that was passed with `.addInteraction(interaction, interactionID)`
+  @experimental
+  void removeInteraction(String interactionID) {
+    _interactionsMap.interactions.remove(interactionID);
+    _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
   }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
@@ -800,33 +815,37 @@ class _InteractionListener<T extends FeaturesetFeature>
     required this.onInteractionListener,
   });
 
-  int interactionID;
+  String interactionID;
 
   final OnInteraction<T> onInteractionListener;
 
   @override
-  void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID) {
-    var featuresetID = feature.featureset.featuresetId;
-    T typedFeature;
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    final featuresetID = feature?.featureset.featuresetId;
+    T? typedFeature;
 
-    if (featuresetID == "buildings") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
-              feature) as T;
-    } else if (featuresetID == "poi") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
-              as T;
-    } else if (featuresetID == "place-labels") {
-      typedFeature =
-          TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
-              feature) as T;
+    if (feature != null) {
+      if (featuresetID == "buildings") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
+                feature) as T;
+      } else if (featuresetID == "poi") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
+                as T;
+      } else if (featuresetID == "place-labels") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
+                feature) as T;
+      } else {
+        typedFeature =
+            TypedFeaturesetFeature.fromFeaturesetFeature(feature) as T;
+      }
+      onInteractionListener.call(typedFeature, context);
     } else {
-      typedFeature = feature as T;
+      onInteractionListener.call(null, context);
     }
-
-    onInteractionListener.call(context, typedFeature);
   }
 }
 
@@ -837,11 +856,11 @@ class _InteractionsMap<T extends FeaturesetFeature>
     required this.interactions,
   });
 
-  Map<int, _InteractionListener> interactions;
+  Map<String, _InteractionListener> interactions;
 
   @override
-  void onInteraction(MapContentGestureContext context,
-      FeaturesetFeature feature, int interactionID) {
-    interactions[interactionID]?.onInteraction(context, feature, interactionID);
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    interactions[interactionID]?.onInteraction(feature, context, interactionID);
   }
 }
