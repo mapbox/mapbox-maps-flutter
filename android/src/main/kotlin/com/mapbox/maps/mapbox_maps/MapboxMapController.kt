@@ -18,6 +18,7 @@ import com.mapbox.maps.MapInitOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.mapbox_maps.annotation.AnnotationController
+import com.mapbox.maps.mapbox_maps.http.CustomHttpServiceInterceptor
 import com.mapbox.maps.mapbox_maps.pigeons.AttributionSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.CompassSettingsInterface
 import com.mapbox.maps.mapbox_maps.pigeons.GesturesSettingsInterface
@@ -309,6 +310,19 @@ class MapboxMapController(
       }
       "mapView#submitViewSizeHint" -> {
         result.success(null) // no-op on this platform
+      }
+      "map#setCustomHeaders" -> {
+        try {
+          val headers = call.argument<Map<String, String>>("headers")
+          headers?.let {
+            CustomHttpServiceInterceptor.getInstance().setCustomHeaders(headers)
+            result.success(null)
+          } ?: run {
+            result.error("INVALID_ARGUMENTS", "Headers cannot be null", null)
+          }
+        } catch (e: Exception) {
+          result.error("HEADER_ERROR", e.message, null)
+        }
       }
       else -> {
         result.notImplemented()

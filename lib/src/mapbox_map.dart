@@ -207,7 +207,9 @@ class MapboxMap extends ChangeNotifier {
       AttributionSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-
+  late final MapboxHttpService httpService = MapboxHttpService(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      channelSuffix: _mapboxMapsPlatform.channelSuffix);
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
@@ -580,8 +582,7 @@ class MapboxMap extends ChangeNotifier {
 
   /// References for all interactions added to the map.
   @experimental
-  final _InteractionsMap _interactionsMap =
-      _InteractionsMap(interactions: {});
+  final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
 
   /// Add an interaction
   @experimental
@@ -740,6 +741,28 @@ class MapboxMap extends ChangeNotifier {
   @experimental
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);
+
+  /// Set custom headers for all Mapbox HTTP requests
+  ///
+  /// [headers] is a map of header names to header values
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails
+  ///
+  /// Example:
+  /// ```dart
+  /// MapboxMap.setCustomHeaders({
+  ///   "Authorization": "Bearer sk.eyJ1IjoiYWxleG9yZ2V0IiwiYSI6ImNtZ291Z291MjB1ZjIyc251Zm91Zm91ZjEifQ.1234567890",
+  /// });
+  /// ```
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails
+  Future<void> setCustomHeaders(Map<String, String> headers) =>
+      MapboxHttpService(
+              binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+              channelSuffix: _mapboxMapsPlatform.channelSuffix)
+          .setCustomHeaders(headers);
 }
 
 class _GestureListener extends GestureListener {
