@@ -10,7 +10,7 @@
 ```dart
 var tapInteraction = TapInteraction(StandardBuildings(),
     (_, feature) {
-  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingState(highlight: true));
+  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingsState(highlight: true));
   log("Building group: ${feature.group}");
 });
 mapboxMap.addInteraction(tapInteraction);
