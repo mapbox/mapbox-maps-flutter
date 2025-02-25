@@ -1,3 +1,7 @@
+### main 
+
+* Experimental `StandardBuildingState` has been removed. Use `StandardBuildingsState` instead.
+
 ### 2.6.0
 
 > [!IMPORTANT]

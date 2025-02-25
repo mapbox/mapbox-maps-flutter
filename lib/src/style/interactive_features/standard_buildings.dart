@@ -10,7 +10,8 @@ part of '../../../mapbox_maps_flutter.dart';
 ///     // Handle the tapped feature here
 /// }));
 /// ```
-extension StandardBuildingsFeature on TypedFeaturesetFeature<StandardBuildings> {
+extension StandardBuildingsFeature
+    on TypedFeaturesetFeature<StandardBuildings> {
   /// A feature state.
   ///
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
@@ -30,7 +31,7 @@ extension StandardBuildingsFeature on TypedFeaturesetFeature<StandardBuildings> 
 /// A featureset of StandardBuildings features.
 class StandardBuildings extends FeaturesetDescriptor {
   StandardBuildings({String importId = "basemap"})
-    : super(featuresetId: "buildings", importId: importId);
+      : super(featuresetId: "buildings", importId: importId);
 }
 
 /// Represents available states for StandardBuildings features in the Standard style.
@@ -50,8 +51,8 @@ class StandardBuildingsState extends FeatureState {
   }
 
   StandardBuildingsState({this.highlight, this.select})
-    : super(map: {
-      "highlight": highlight,
-      "select": select,
-    });
+      : super(map: {
+          "highlight": highlight,
+          "select": select,
+        });
 }

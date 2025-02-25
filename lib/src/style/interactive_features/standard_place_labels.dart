@@ -10,7 +10,8 @@ part of '../../../mapbox_maps_flutter.dart';
 ///     // Handle the tapped feature here
 /// }));
 /// ```
-extension StandardPlaceLabelsFeature on TypedFeaturesetFeature<StandardPlaceLabels> {
+extension StandardPlaceLabelsFeature
+    on TypedFeaturesetFeature<StandardPlaceLabels> {
   /// A feature state.
   ///
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
@@ -36,7 +37,7 @@ extension StandardPlaceLabelsFeature on TypedFeaturesetFeature<StandardPlaceLabe
 /// A featureset of StandardPlaceLabels features.
 class StandardPlaceLabels extends FeaturesetDescriptor {
   StandardPlaceLabels({String importId = "basemap"})
-    : super(featuresetId: "place-labels", importId: importId);
+      : super(featuresetId: "place-labels", importId: importId);
 }
 
 /// Represents available states for StandardPlaceLabels features in the Standard style.
@@ -60,9 +61,9 @@ class StandardPlaceLabelsState extends FeatureState {
   }
 
   StandardPlaceLabelsState({this.hide, this.highlight, this.select})
-    : super(map: {
-      "hide": hide,
-      "highlight": highlight,
-      "select": select,
-    });
+      : super(map: {
+          "hide": hide,
+          "highlight": highlight,
+          "select": select,
+        });
 }

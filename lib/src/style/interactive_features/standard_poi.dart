@@ -16,8 +16,7 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
   /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
   StandardPOIsState get stateSnapshot {
-    return StandardPOIsState()
-      ..hide = state["hide"] as bool?;
+    return StandardPOIsState()..hide = state["hide"] as bool?;
   }
 
   /// Name of the point of interest.
@@ -69,7 +68,7 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
 /// A featureset of StandardPOIs features.
 class StandardPOIs extends FeaturesetDescriptor {
   StandardPOIs({String importId = "basemap"})
-    : super(featuresetId: "poi", importId: importId);
+      : super(featuresetId: "poi", importId: importId);
 }
 
 /// Represents available states for StandardPOIs features in the Standard style.
@@ -85,7 +84,7 @@ class StandardPOIsState extends FeatureState {
   }
 
   StandardPOIsState({this.hide})
-    : super(map: {
-      "hide": hide,
-    });
+      : super(map: {
+          "hide": hide,
+        });
 }
