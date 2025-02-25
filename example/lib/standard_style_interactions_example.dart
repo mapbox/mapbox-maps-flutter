@@ -37,6 +37,7 @@ class StandardStyleInteractionsState
       mapboxMap.setFeatureStateForFeaturesetFeature(
           feature, StandardPOIsState(hide: true));
       log("POI feature name: ${feature.name}");
+
       /// Not stopping propagation means that the tap event will be propagated to other interactions.
     }, radius: 10, stopPropagation: false);
     mapboxMap.addInteraction(tapInteractionPOI,
@@ -46,7 +47,7 @@ class StandardStyleInteractionsState
     var tapInteractionBuildings =
         TapInteraction(StandardBuildings(), (feature, _) {
       mapboxMap.setFeatureStateForFeaturesetFeature(
-          feature, StandardBuildingState(highlight: true));
+          feature, StandardBuildingsState(highlight: true));
       log("Building group: ${feature.group}");
     });
     mapboxMap.addInteraction(tapInteractionBuildings);
