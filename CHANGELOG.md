@@ -1,5 +1,16 @@
-### 2.6.0
+### 2.6.1
 
+* Update Maps SDK to 11.10.1 (iOS) and 11.10.2 (Android), introducing several bug fixes: 
+  * Fix LUT not being applied to in-place updated images.
+  * Fix in-place updates for SDF images.
+  * Fix background layer not being updated if raster image was updated in-place or if color theme changed.
+  * Vector icons supported in location indicator layer.
+    * Important: `top-image`, `bearing-image`, and `shadow-image` properties on LocationIndicatorLayer are now paint properties instead of layout properties.
+  * Fix mipmaps for images updated in place.
+  * Ensure background color is correctly set.
+  * Fixing missing vector images after style change
+
+### 2.6.0
 
 > [!IMPORTANT]
 > The iOS minimum deployment target is now iOS 14.0.
