@@ -1,3 +1,7 @@
+### main 
+
+* Experimental `StandardBuildingState` has been removed. Use `StandardBuildingsState` instead.
+
 ### 2.6.0
 
 > [!IMPORTANT]
@@ -10,7 +14,7 @@
 ```dart
 var tapInteraction = TapInteraction(StandardBuildings(),
     (_, feature) {
-  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingState(highlight: true));
+  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingsState(highlight: true));
   log("Building group: ${feature.group}");
 });
 mapboxMap.addInteraction(tapInteraction);

@@ -1,6 +1,15 @@
+// This file is generated.
 part of '../../../mapbox_maps_flutter.dart';
 
-/// A feature that is a point of interest in the Standard style.
+/// A point of interest.
+///
+/// Use the ``StandardPOIs()`` descriptor to handle interactions on Poi features:
+///
+/// ```dart
+/// mapboxMap.addInteraction(TapInteraction(StandardPOIs(), (feature, context) {
+///     // Handle the tapped feature here
+/// }));
+/// ```
 extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
   /// A feature state.
   ///
@@ -50,26 +59,28 @@ extension StandardPOIsFeature on TypedFeaturesetFeature<StandardPOIs> {
     return properties["airport_ref"] as String?;
   }
 
-  /// POI coordinate.
+  /// The coordinate of the Point of Interest.
   Point? get coordinate {
     return this.geometry["coordinates"] as Point?;
   }
 }
 
-/// A Featureset of POIs in the Standard style
+/// A featureset of StandardPOIs features.
 class StandardPOIs extends FeaturesetDescriptor {
   StandardPOIs({String importId = "basemap"})
       : super(featuresetId: "poi", importId: importId);
 }
 
-/// Represents available states for POIs in the Standard style.
+/// Represents available states for StandardPOIs features in the Standard style.
 class StandardPOIsState extends FeatureState {
-  /// When `true`, hides the icon and text.
+  /// When `true`, hides the icon and text. Use this state when displaying a custom annotation on top.
   bool? hide;
 
   @override
   Map<String, Object?> get map {
-    return {"hide": hide};
+    return {
+      "hide": hide,
+    };
   }
 
   StandardPOIsState({this.hide})

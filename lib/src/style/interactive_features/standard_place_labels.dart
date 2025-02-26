@@ -1,7 +1,15 @@
+// This file is generated.
 part of '../../../mapbox_maps_flutter.dart';
 
-/// A feature that labels places including countries, states, cities,
-/// towns, and neighborhoods in the Standard style.
+/// Points for labeling places including countries, states, cities, towns, and neighborhoods.
+///
+/// Use the ``StandardPlaceLabels()`` descriptor to handle interactions on Place Labels features:
+///
+/// ```dart
+/// mapboxMap.addInteraction(TapInteraction(StandardPlaceLabels(), (feature, context) {
+///     // Handle the tapped feature here
+/// }));
+/// ```
 extension StandardPlaceLabelsFeature
     on TypedFeaturesetFeature<StandardPlaceLabels> {
   /// A feature state.
@@ -26,13 +34,13 @@ extension StandardPlaceLabelsFeature
   }
 }
 
-/// A Featureset of place labels in the Standard style
+/// A featureset of StandardPlaceLabels features.
 class StandardPlaceLabels extends FeaturesetDescriptor {
   StandardPlaceLabels({String importId = "basemap"})
       : super(featuresetId: "place-labels", importId: importId);
 }
 
-/// Represents available states for Place Labels in the Standard style.
+/// Represents available states for StandardPlaceLabels features in the Standard style.
 class StandardPlaceLabelsState extends FeatureState {
   /// When `true`, hides the label. Use this state when displaying a custom annotation on top.
   bool? hide;
