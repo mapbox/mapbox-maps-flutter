@@ -715,7 +715,7 @@ class MapboxMap extends ChangeNotifier {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
         onMapScrollListener != null ||
-        OnMapZoomListener != null) {
+        onMapZoomListener != null) {
       GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,

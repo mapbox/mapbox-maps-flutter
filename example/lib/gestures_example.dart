@@ -133,7 +133,7 @@ class GesturesExampleState extends State<GesturesExample> {
       onMapCreated: _onMapCreated,
       onTapListener: _onTap,
       onLongTapListener: _onLongTap,
-      //    onScrollListener: _onMove,
+      onScrollListener: _onMove,
       onZoomListener: _onZoom,
     );
 
