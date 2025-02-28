@@ -1,7 +1,6 @@
 package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
-import android.view.ScaleGestureDetector
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Point

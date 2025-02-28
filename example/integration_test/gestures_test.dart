@@ -65,4 +65,42 @@ void main() {
       expect(updatedSettings.zoomAnimationAmount, settings.zoomAnimationAmount);
     }
   });
+
+  testWidgets('RecognizeTapEvent', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+
+    var point = await mapboxMap
+        .pixelForCoordinate(Point(coordinates: Position(0.01, 0.01)));
+    mapboxMap.dispatch("click", point);
+
+    await app.events.onMapTapListener.future;
+    var tapContext = app.events.mapInteractions[0];
+
+    expect(tapContext.gestureState, GestureState.ended);
+    expect(tapContext.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(tapContext.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(tapContext.point.coordinates.lat, closeTo(0.01, 1e-4));
+    expect(tapContext.point.coordinates.lng, closeTo(0.01, 1e-4));
+  });
+
+  testWidgets('RecognizeLongTapEvent', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+
+    var point = await mapboxMap
+        .pixelForCoordinate(Point(coordinates: Position(-0.01, -0.01)));
+    mapboxMap.dispatch("longClick", point);
+
+    await app.events.onMapLongTapListener.future;
+    var tapContext = app.events.mapInteractions[0];
+
+    expect(tapContext.gestureState, GestureState.ended);
+    expect(tapContext.touchPosition.x, closeTo(point.x, 1e-4));
+    expect(tapContext.touchPosition.y, closeTo(point.y, 1e-4));
+    expect(tapContext.point.coordinates.lat, closeTo(-0.01, 1e-4));
+    expect(tapContext.point.coordinates.lng, closeTo(-0.01, 1e-4));
+  });
 }
