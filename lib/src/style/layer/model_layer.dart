@@ -26,6 +26,8 @@ class ModelLayer extends Layer {
     List<Object>? this.modelColorMixIntensityExpression,
     double? this.modelCutoffFadeRange,
     List<Object>? this.modelCutoffFadeRangeExpression,
+    ModelElevationReference? this.modelElevationReference,
+    List<Object>? this.modelElevationReferenceExpression,
     double? this.modelEmissiveStrength,
     List<Object>? this.modelEmissiveStrengthExpression,
     List<double?>? this.modelHeightBasedEmissiveStrengthMultiplier,
@@ -124,6 +126,16 @@ class ModelLayer extends Layer {
   @experimental
   List<Object>? modelCutoffFadeRangeExpression;
 
+  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+  /// Default value: "ground".
+  @experimental
+  ModelElevationReference? modelElevationReference;
+
+  /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+  /// Default value: "ground".
+  @experimental
+  List<Object>? modelElevationReferenceExpression;
+
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are not supported when using GeoJSON or vector tile as the model layer source.
   /// Default value: 0. Value range: [0, 5]
   @experimental
@@ -165,12 +177,12 @@ class ModelLayer extends Layer {
   List<Object>? modelReceiveShadowsExpression;
 
   /// The rotation of the model in euler angles [lon, lat, z].
-  /// Default value: [0,0,0].
+  /// Default value: [0,0,0]. The unit of modelRotation is in degrees.
   @experimental
   List<double?>? modelRotation;
 
   /// The rotation of the model in euler angles [lon, lat, z].
-  /// Default value: [0,0,0].
+  /// Default value: [0,0,0]. The unit of modelRotation is in degrees.
   @experimental
   List<Object>? modelRotationExpression;
 
@@ -279,6 +291,14 @@ class ModelLayer extends Layer {
     }
     if (modelCutoffFadeRange != null) {
       paint["model-cutoff-fade-range"] = modelCutoffFadeRange;
+    }
+
+    if (modelElevationReferenceExpression != null) {
+      paint["model-elevation-reference"] = modelElevationReferenceExpression;
+    }
+    if (modelElevationReference != null) {
+      paint["model-elevation-reference"] =
+          modelElevationReference?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (modelEmissiveStrengthExpression != null) {
@@ -422,6 +442,14 @@ class ModelLayer extends Layer {
           _optionalCast(map["paint"]["model-cutoff-fade-range"]),
       modelCutoffFadeRangeExpression:
           _optionalCastList(map["paint"]["model-cutoff-fade-range"]),
+      modelElevationReference: map["paint"]["model-elevation-reference"] == null
+          ? null
+          : ModelElevationReference.values.firstWhere((e) => e.name
+              .toLowerCase()
+              .replaceAll("_", "-")
+              .contains(map["paint"]["model-elevation-reference"])),
+      modelElevationReferenceExpression:
+          _optionalCastList(map["paint"]["model-elevation-reference"]),
       modelEmissiveStrength:
           _optionalCast(map["paint"]["model-emissive-strength"]),
       modelEmissiveStrengthExpression:

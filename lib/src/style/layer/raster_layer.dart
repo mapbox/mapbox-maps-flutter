@@ -122,27 +122,27 @@ class RasterLayer extends Layer {
   List<Object>? rasterElevationExpression;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of rasterEmissiveStrength is in intensity.
   double? rasterEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of rasterEmissiveStrength is in intensity.
   List<Object>? rasterEmissiveStrengthExpression;
 
   /// Fade duration when a new tile is added.
-  /// Default value: 300. Minimum value: 0.
+  /// Default value: 300. Minimum value: 0. The unit of rasterFadeDuration is in milliseconds.
   double? rasterFadeDuration;
 
   /// Fade duration when a new tile is added.
-  /// Default value: 300. Minimum value: 0.
+  /// Default value: 300. Minimum value: 0. The unit of rasterFadeDuration is in milliseconds.
   List<Object>? rasterFadeDurationExpression;
 
   /// Rotates hues around the color wheel.
-  /// Default value: 0.
+  /// Default value: 0. The unit of rasterHueRotate is in degrees.
   double? rasterHueRotate;
 
   /// Rotates hues around the color wheel.
-  /// Default value: 0.
+  /// Default value: 0. The unit of rasterHueRotate is in degrees.
   List<Object>? rasterHueRotateExpression;
 
   /// The opacity at which the image will be drawn.

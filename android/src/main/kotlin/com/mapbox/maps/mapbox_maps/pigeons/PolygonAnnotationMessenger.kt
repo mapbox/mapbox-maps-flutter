@@ -39,6 +39,25 @@ private fun createConnectionError(channelName: String): FlutterError {
 }
 
 /**
+ * Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
+ * Default value: "none".
+ */
+enum class FillElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks. */
+  HD_ROAD_BASE(1),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(2);
+
+  companion object {
+    fun ofRaw(raw: Int): FillElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Controls the frame of reference for `fill-translate`.
  * Default value: "map".
  */
@@ -167,20 +186,25 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillTranslateAnchor.ofRaw(it.toInt())
+          FillElevationReference.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          FillTranslateAnchor.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonAnnotation.fromList(it)
+          PolygonDecoder.fromList(it)
         }
       }
       132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotation.fromList(it)
+        }
+      }
+      133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolygonAnnotationOptions.fromList(it)
         }
@@ -190,20 +214,24 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is FillTranslateAnchor -> {
+      is FillElevationReference -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is Polygon -> {
+      is FillTranslateAnchor -> {
         stream.write(130)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is PolygonAnnotation -> {
+      is Polygon -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is PolygonAnnotationOptions -> {
+      is PolygonAnnotation -> {
         stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotationOptions -> {
+        stream.write(133)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -243,6 +271,8 @@ interface _PolygonAnnotationMessenger {
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getFillElevationReference(managerId: String, callback: (Result<FillElevationReference?>) -> Unit)
   fun setFillSortKey(managerId: String, fillSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getFillSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setFillAntialias(managerId: String, fillAntialias: Boolean, callback: (Result<Unit>) -> Unit)
@@ -367,6 +397,46 @@ interface _PolygonAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillElevationReferenceArg = args[1] as FillElevationReference
+            api.setFillElevationReference(managerIdArg, fillElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillElevationReference(managerIdArg) { result: Result<FillElevationReference?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

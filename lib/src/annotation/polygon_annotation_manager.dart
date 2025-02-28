@@ -42,6 +42,18 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<void> setFillElevationReference(
+          FillElevationReference fillElevationReference) =>
+      _annotationMessenger.setFillElevationReference(
+          id, fillElevationReference);
+
+  /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<FillElevationReference?> getFillElevationReference() =>
+      _annotationMessenger.getFillElevationReference(id);
+
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   Future<void> setFillSortKey(double fillSortKey) =>
       _annotationMessenger.setFillSortKey(id, fillSortKey);
@@ -63,11 +75,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used. Default value: "#000000".
   Future<int?> getFillColor() => _annotationMessenger.getFillColor(id);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of fillEmissiveStrength is in intensity.
   Future<void> setFillEmissiveStrength(double fillEmissiveStrength) =>
       _annotationMessenger.setFillEmissiveStrength(id, fillEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of fillEmissiveStrength is in intensity.
   Future<double?> getFillEmissiveStrength() =>
       _annotationMessenger.getFillEmissiveStrength(id);
 
@@ -93,11 +105,11 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   Future<String?> getFillPattern() => _annotationMessenger.getFillPattern(id);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of fillTranslate is in pixels.
   Future<void> setFillTranslate(List<double?> fillTranslate) =>
       _annotationMessenger.setFillTranslate(id, fillTranslate);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of fillTranslate is in pixels.
   Future<List<double?>?> getFillTranslate() =>
       _annotationMessenger.getFillTranslate(id);
 

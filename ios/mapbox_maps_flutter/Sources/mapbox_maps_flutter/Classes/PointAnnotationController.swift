@@ -355,6 +355,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         }
     }
 
+    func getIconSizeScaleRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.iconSizeScaleRange))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setIconSizeScaleRange(managerId: String, iconSizeScaleRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.iconSizeScaleRange = iconSizeScaleRange.compactMap { $0 }
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getIconTextFit(managerId: String, completion: @escaping (Result<IconTextFit?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -908,6 +928,26 @@ final class PointAnnotationController: _PointAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.textSize = textSize
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getTextSizeScaleRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.textSizeScaleRange))
+        } catch {
+            completion(.failure(FlutterError(code: PointAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setTextSizeScaleRange(managerId: String, textSizeScaleRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.textSizeScaleRange = textSizeScaleRange.compactMap { $0 }
 
             completion(.success(()))
         } catch {

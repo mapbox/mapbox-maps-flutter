@@ -37,22 +37,18 @@ class ClipLayer extends Layer {
 
   /// Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
   /// Default value: [].
-  @experimental
   List<String?>? clipLayerScope;
 
   /// Removes content from layers with the specified scope. By default all layers are affected. For example specifying `basemap` will only remove content from the Mapbox Standard style layers which have the same scope
   /// Default value: [].
-  @experimental
   List<Object>? clipLayerScopeExpression;
 
   /// Layer types that will also be removed if fallen below this clip layer.
   /// Default value: [].
-  @experimental
   List<String?>? clipLayerTypes;
 
   /// Layer types that will also be removed if fallen below this clip layer.
   /// Default value: [].
-  @experimental
   List<Object>? clipLayerTypesExpression;
 
   @override

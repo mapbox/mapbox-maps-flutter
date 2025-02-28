@@ -39,6 +39,14 @@ void main() {
     var lineCap = await manager.getLineCap();
     expect(LineCap.BUTT, lineCap);
 
+    await manager.setLineCrossSlope(1.0);
+    var lineCrossSlope = await manager.getLineCrossSlope();
+    expect(1.0, lineCrossSlope);
+
+    await manager.setLineElevationReference(LineElevationReference.NONE);
+    var lineElevationReference = await manager.getLineElevationReference();
+    expect(LineElevationReference.NONE, lineElevationReference);
+
     await manager.setLineJoin(LineJoin.BEVEL);
     var lineJoin = await manager.getLineJoin();
     expect(LineJoin.BEVEL, lineJoin);
@@ -54,6 +62,10 @@ void main() {
     await manager.setLineSortKey(1.0);
     var lineSortKey = await manager.getLineSortKey();
     expect(1.0, lineSortKey);
+
+    await manager.setLineWidthUnit(LineWidthUnit.PIXELS);
+    var lineWidthUnit = await manager.getLineWidthUnit();
+    expect(LineWidthUnit.PIXELS, lineWidthUnit);
 
     await manager.setLineZOffset(1.0);
     var lineZOffset = await manager.getLineZOffset();

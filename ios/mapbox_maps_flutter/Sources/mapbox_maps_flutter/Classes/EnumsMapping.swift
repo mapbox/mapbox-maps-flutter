@@ -1,6 +1,27 @@
 // This file is generated
 @_spi(Experimental) import MapboxMaps
 
+extension MapboxMaps.FillElevationReference {
+
+    init?(_ fltValue: FillElevationReference?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .nONE: self = .none
+        case .hDROADBASE: self = .hdRoadBase
+        case .hDROADMARKUP: self = .hdRoadMarkup
+        }
+    }
+
+    func toFLTFillElevationReference() -> FillElevationReference? {
+        switch self {
+        case .none: return .nONE
+        case .hdRoadBase: return .hDROADBASE
+        case .hdRoadMarkup: return .hDROADMARKUP
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.FillTranslateAnchor {
 
     init?(_ fltValue: FillTranslateAnchor?) {
@@ -41,6 +62,29 @@ extension MapboxMaps.LineCap {
         }
     }
 }
+extension MapboxMaps.LineElevationReference {
+
+    init?(_ fltValue: LineElevationReference?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .nONE: self = .none
+        case .sEA: self = .sea
+        case .gROUND: self = .ground
+        case .hDROADMARKUP: self = .hdRoadMarkup
+        }
+    }
+
+    func toFLTLineElevationReference() -> LineElevationReference? {
+        switch self {
+        case .none: return .nONE
+        case .sea: return .sEA
+        case .ground: return .gROUND
+        case .hdRoadMarkup: return .hDROADMARKUP
+        default: return nil
+        }
+    }
+}
 extension MapboxMaps.LineJoin {
 
     init?(_ fltValue: LineJoin?) {
@@ -60,6 +104,25 @@ extension MapboxMaps.LineJoin {
         case .round: return .rOUND
         case .miter: return .mITER
         case .none: return .nONE
+        default: return nil
+        }
+    }
+}
+extension MapboxMaps.LineWidthUnit {
+
+    init?(_ fltValue: LineWidthUnit?) {
+        guard let fltValue else { return nil }
+
+        switch fltValue {
+        case .pIXELS: self = .pixels
+        case .mETERS: self = .meters
+        }
+    }
+
+    func toFLTLineWidthUnit() -> LineWidthUnit? {
+        switch self {
+        case .pixels: return .pIXELS
+        case .meters: return .mETERS
         default: return nil
         }
     }
@@ -189,6 +252,7 @@ extension MapboxMaps.SymbolElevationReference {
         switch fltValue {
         case .sEA: self = .sea
         case .gROUND: self = .ground
+        case .hDROADMARKUP: self = .hdRoadMarkup
         }
     }
 
@@ -196,6 +260,7 @@ extension MapboxMaps.SymbolElevationReference {
         switch self {
         case .sea: return .sEA
         case .ground: return .gROUND
+        case .hdRoadMarkup: return .hDROADMARKUP
         default: return nil
         }
     }

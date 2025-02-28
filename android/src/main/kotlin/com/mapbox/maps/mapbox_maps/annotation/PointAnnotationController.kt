@@ -536,6 +536,29 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
     }
   }
 
+  override fun setIconSizeScaleRange(
+    managerId: String,
+    iconSizeScaleRange: List<Double?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.iconSizeScaleRange = iconSizeScaleRange.mapNotNull { it }
+    callback(Result.success(Unit))
+  }
+
+  override fun getIconSizeScaleRange(
+    managerId: String,
+    callback: (Result<List<Double?>?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.iconSizeScaleRange
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setIconTextFit(
     managerId: String,
     iconTextFit: IconTextFit,
@@ -1173,6 +1196,29 @@ class PointAnnotationController(private val delegate: ControllerDelegate) : _Poi
   ) {
     val manager = delegate.getManager(managerId) as PointAnnotationManager
     val value = manager.textSize
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setTextSizeScaleRange(
+    managerId: String,
+    textSizeScaleRange: List<Double?>,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    manager.textSizeScaleRange = textSizeScaleRange.mapNotNull { it }
+    callback(Result.success(Unit))
+  }
+
+  override fun getTextSizeScaleRange(
+    managerId: String,
+    callback: (Result<List<Double?>?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PointAnnotationManager
+    val value = manager.textSizeScaleRange
     if (value != null) {
       callback(Result.success(value))
     } else {

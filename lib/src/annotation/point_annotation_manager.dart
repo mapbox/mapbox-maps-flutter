@@ -95,11 +95,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// If true, text will display without their corresponding icons when the icon collides with other symbols and the text does not. Default value: false.
   Future<bool?> getIconOptional() => _annotationMessenger.getIconOptional(id);
 
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0.
+  /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of iconPadding is in pixels.
   Future<void> setIconPadding(double iconPadding) =>
       _annotationMessenger.setIconPadding(id, iconPadding);
 
-  /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0.
+  /// Size of the additional area around the icon bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of iconPadding is in pixels.
   Future<double?> getIconPadding() => _annotationMessenger.getIconPadding(id);
 
   /// Orientation of icon when map is pitched. Default value: "auto".
@@ -110,11 +110,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconPitchAlignment?> getIconPitchAlignment() =>
       _annotationMessenger.getIconPitchAlignment(id);
 
-  /// Rotates the icon clockwise. Default value: 0.
+  /// Rotates the icon clockwise. Default value: 0. The unit of iconRotate is in degrees.
   Future<void> setIconRotate(double iconRotate) =>
       _annotationMessenger.setIconRotate(id, iconRotate);
 
-  /// Rotates the icon clockwise. Default value: 0.
+  /// Rotates the icon clockwise. Default value: 0. The unit of iconRotate is in degrees.
   Future<double?> getIconRotate() => _annotationMessenger.getIconRotate(id);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of icons. Default value: "auto".
@@ -126,12 +126,22 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconRotationAlignment?> getIconRotationAlignment() =>
       _annotationMessenger.getIconRotationAlignment(id);
 
-  /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0.
+  /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
   Future<void> setIconSize(double iconSize) =>
       _annotationMessenger.setIconSize(id, iconSize);
 
-  /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0.
+  /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image. Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
   Future<double?> getIconSize() => _annotationMessenger.getIconSize(id);
+
+  /// Defines the minimum and maximum scaling factors for icon related properties like `icon-size`, `icon-halo-width`, `icon-halo-blur` Default value: [0.8,2]. Value range: [0.1, 10]
+  @experimental
+  Future<void> setIconSizeScaleRange(List<double?> iconSizeScaleRange) =>
+      _annotationMessenger.setIconSizeScaleRange(id, iconSizeScaleRange);
+
+  /// Defines the minimum and maximum scaling factors for icon related properties like `icon-size`, `icon-halo-width`, `icon-halo-blur` Default value: [0.8,2]. Value range: [0.1, 10]
+  @experimental
+  Future<List<double?>?> getIconSizeScaleRange() =>
+      _annotationMessenger.getIconSizeScaleRange(id);
 
   /// Scales the icon to fit around the associated text. Default value: "none".
   Future<void> setIconTextFit(IconTextFit iconTextFit) =>
@@ -141,11 +151,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<IconTextFit?> getIconTextFit() =>
       _annotationMessenger.getIconTextFit(id);
 
-  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0].
+  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
   Future<void> setIconTextFitPadding(List<double?> iconTextFitPadding) =>
       _annotationMessenger.setIconTextFitPadding(id, iconTextFitPadding);
 
-  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0].
+  /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left. Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
   Future<List<double?>?> getIconTextFitPadding() =>
       _annotationMessenger.getIconTextFitPadding(id);
 
@@ -185,11 +195,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getSymbolSortKey() =>
       _annotationMessenger.getSymbolSortKey(id);
 
-  /// Distance between two symbol anchors. Default value: 250. Minimum value: 1.
+  /// Distance between two symbol anchors. Default value: 250. Minimum value: 1. The unit of symbolSpacing is in pixels.
   Future<void> setSymbolSpacing(double symbolSpacing) =>
       _annotationMessenger.setSymbolSpacing(id, symbolSpacing);
 
-  /// Distance between two symbol anchors. Default value: 250. Minimum value: 1.
+  /// Distance between two symbol anchors. Default value: 250. Minimum value: 1. The unit of symbolSpacing is in pixels.
   Future<double?> getSymbolSpacing() =>
       _annotationMessenger.getSymbolSpacing(id);
 
@@ -262,41 +272,41 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<bool?> getTextKeepUpright() =>
       _annotationMessenger.getTextKeepUpright(id);
 
-  /// Text tracking amount. Default value: 0.
+  /// Text tracking amount. Default value: 0. The unit of textLetterSpacing is in ems.
   Future<void> setTextLetterSpacing(double textLetterSpacing) =>
       _annotationMessenger.setTextLetterSpacing(id, textLetterSpacing);
 
-  /// Text tracking amount. Default value: 0.
+  /// Text tracking amount. Default value: 0. The unit of textLetterSpacing is in ems.
   Future<double?> getTextLetterSpacing() =>
       _annotationMessenger.getTextLetterSpacing(id);
 
-  /// Text leading value for multi-line text. Default value: 1.2.
+  /// Text leading value for multi-line text. Default value: 1.2. The unit of textLineHeight is in ems.
   Future<void> setTextLineHeight(double textLineHeight) =>
       _annotationMessenger.setTextLineHeight(id, textLineHeight);
 
-  /// Text leading value for multi-line text. Default value: 1.2.
+  /// Text leading value for multi-line text. Default value: 1.2. The unit of textLineHeight is in ems.
   Future<double?> getTextLineHeight() =>
       _annotationMessenger.getTextLineHeight(id);
 
-  /// Maximum angle change between adjacent characters. Default value: 45.
+  /// Maximum angle change between adjacent characters. Default value: 45. The unit of textMaxAngle is in degrees.
   Future<void> setTextMaxAngle(double textMaxAngle) =>
       _annotationMessenger.setTextMaxAngle(id, textMaxAngle);
 
-  /// Maximum angle change between adjacent characters. Default value: 45.
+  /// Maximum angle change between adjacent characters. Default value: 45. The unit of textMaxAngle is in degrees.
   Future<double?> getTextMaxAngle() => _annotationMessenger.getTextMaxAngle(id);
 
-  /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0.
+  /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
   Future<void> setTextMaxWidth(double textMaxWidth) =>
       _annotationMessenger.setTextMaxWidth(id, textMaxWidth);
 
-  /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0.
+  /// The maximum line width for text wrapping. Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
   Future<double?> getTextMaxWidth() => _annotationMessenger.getTextMaxWidth(id);
 
-  /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0].
+  /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0]. The unit of textOffset is in ems.
   Future<void> setTextOffset(List<double?> textOffset) =>
       _annotationMessenger.setTextOffset(id, textOffset);
 
-  /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0].
+  /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position. Default value: [0,0]. The unit of textOffset is in ems.
   Future<List<double?>?> getTextOffset() =>
       _annotationMessenger.getTextOffset(id);
 
@@ -307,11 +317,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// If true, icons will display without their corresponding text when the text collides with other symbols and the icon does not. Default value: false.
   Future<bool?> getTextOptional() => _annotationMessenger.getTextOptional(id);
 
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0.
+  /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of textPadding is in pixels.
   Future<void> setTextPadding(double textPadding) =>
       _annotationMessenger.setTextPadding(id, textPadding);
 
-  /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0.
+  /// Size of the additional area around the text bounding box used for detecting symbol collisions. Default value: 2. Minimum value: 0. The unit of textPadding is in pixels.
   Future<double?> getTextPadding() => _annotationMessenger.getTextPadding(id);
 
   /// Orientation of text when map is pitched. Default value: "auto".
@@ -322,19 +332,19 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<TextPitchAlignment?> getTextPitchAlignment() =>
       _annotationMessenger.getTextPitchAlignment(id);
 
-  /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0.
+  /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0. The unit of textRadialOffset is in ems.
   Future<void> setTextRadialOffset(double textRadialOffset) =>
       _annotationMessenger.setTextRadialOffset(id, textRadialOffset);
 
-  /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0.
+  /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present. Default value: 0. The unit of textRadialOffset is in ems.
   Future<double?> getTextRadialOffset() =>
       _annotationMessenger.getTextRadialOffset(id);
 
-  /// Rotates the text clockwise. Default value: 0.
+  /// Rotates the text clockwise. Default value: 0. The unit of textRotate is in degrees.
   Future<void> setTextRotate(double textRotate) =>
       _annotationMessenger.setTextRotate(id, textRotate);
 
-  /// Rotates the text clockwise. Default value: 0.
+  /// Rotates the text clockwise. Default value: 0. The unit of textRotate is in degrees.
   Future<double?> getTextRotate() => _annotationMessenger.getTextRotate(id);
 
   /// In combination with `symbol-placement`, determines the rotation behavior of the individual glyphs forming the text. Default value: "auto".
@@ -346,12 +356,22 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<TextRotationAlignment?> getTextRotationAlignment() =>
       _annotationMessenger.getTextRotationAlignment(id);
 
-  /// Font size. Default value: 16. Minimum value: 0.
+  /// Font size. Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
   Future<void> setTextSize(double textSize) =>
       _annotationMessenger.setTextSize(id, textSize);
 
-  /// Font size. Default value: 16. Minimum value: 0.
+  /// Font size. Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
   Future<double?> getTextSize() => _annotationMessenger.getTextSize(id);
+
+  /// Defines the minimum and maximum scaling factors for text related properties like `text-size`, `text-max-width`, `text-halo-width`, `font-size` Default value: [0.8,2]. Value range: [0.1, 10]
+  @experimental
+  Future<void> setTextSizeScaleRange(List<double?> textSizeScaleRange) =>
+      _annotationMessenger.setTextSizeScaleRange(id, textSizeScaleRange);
+
+  /// Defines the minimum and maximum scaling factors for text related properties like `text-size`, `text-max-width`, `text-halo-width`, `font-size` Default value: [0.8,2]. Value range: [0.1, 10]
+  @experimental
+  Future<List<double?>?> getTextSizeScaleRange() =>
+      _annotationMessenger.getTextSizeScaleRange(id);
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property. Default value: "none".
   Future<void> setTextTransform(TextTransform textTransform) =>
@@ -376,19 +396,19 @@ class PointAnnotationManager extends BaseAnnotationManager {
   Future<double?> getIconColorSaturation() =>
       _annotationMessenger.getIconColorSaturation(id);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
   Future<void> setIconEmissiveStrength(double iconEmissiveStrength) =>
       _annotationMessenger.setIconEmissiveStrength(id, iconEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
   Future<double?> getIconEmissiveStrength() =>
       _annotationMessenger.getIconEmissiveStrength(id);
 
-  /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0.
+  /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
   Future<void> setIconHaloBlur(double iconHaloBlur) =>
       _annotationMessenger.setIconHaloBlur(id, iconHaloBlur);
 
-  /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0.
+  /// Fade out the halo towards the outside. Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
   Future<double?> getIconHaloBlur() => _annotationMessenger.getIconHaloBlur(id);
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "rgba(0, 0, 0, 0)".
@@ -398,11 +418,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/). Default value: "rgba(0, 0, 0, 0)".
   Future<int?> getIconHaloColor() => _annotationMessenger.getIconHaloColor(id);
 
-  /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0.
+  /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   Future<void> setIconHaloWidth(double iconHaloWidth) =>
       _annotationMessenger.setIconHaloWidth(id, iconHaloWidth);
 
-  /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0.
+  /// Distance of halo to the icon outline. Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   Future<double?> getIconHaloWidth() =>
       _annotationMessenger.getIconHaloWidth(id);
 
@@ -429,11 +449,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The opacity at which the icon will be drawn. Default value: 1. Value range: [0, 1]
   Future<double?> getIconOpacity() => _annotationMessenger.getIconOpacity(id);
 
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
+  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of iconTranslate is in pixels.
   Future<void> setIconTranslate(List<double?> iconTranslate) =>
       _annotationMessenger.setIconTranslate(id, iconTranslate);
 
-  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
+  /// Distance that the icon's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of iconTranslate is in pixels.
   Future<List<double?>?> getIconTranslate() =>
       _annotationMessenger.getIconTranslate(id);
 
@@ -463,19 +483,19 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The color with which the text will be drawn. Default value: "#000000".
   Future<int?> getTextColor() => _annotationMessenger.getTextColor(id);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
   Future<void> setTextEmissiveStrength(double textEmissiveStrength) =>
       _annotationMessenger.setTextEmissiveStrength(id, textEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
   Future<double?> getTextEmissiveStrength() =>
       _annotationMessenger.getTextEmissiveStrength(id);
 
-  /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0.
+  /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
   Future<void> setTextHaloBlur(double textHaloBlur) =>
       _annotationMessenger.setTextHaloBlur(id, textHaloBlur);
 
-  /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0.
+  /// The halo's fadeout distance towards the outside. Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
   Future<double?> getTextHaloBlur() => _annotationMessenger.getTextHaloBlur(id);
 
   /// The color of the text's halo, which helps it stand out from backgrounds. Default value: "rgba(0, 0, 0, 0)".
@@ -485,11 +505,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The color of the text's halo, which helps it stand out from backgrounds. Default value: "rgba(0, 0, 0, 0)".
   Future<int?> getTextHaloColor() => _annotationMessenger.getTextHaloColor(id);
 
-  /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0.
+  /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
   Future<void> setTextHaloWidth(double textHaloWidth) =>
       _annotationMessenger.setTextHaloWidth(id, textHaloWidth);
 
-  /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0.
+  /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size. Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
   Future<double?> getTextHaloWidth() =>
       _annotationMessenger.getTextHaloWidth(id);
 
@@ -508,11 +528,11 @@ class PointAnnotationManager extends BaseAnnotationManager {
   /// The opacity at which the text will be drawn. Default value: 1. Value range: [0, 1]
   Future<double?> getTextOpacity() => _annotationMessenger.getTextOpacity(id);
 
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
+  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of textTranslate is in pixels.
   Future<void> setTextTranslate(List<double?> textTranslate) =>
       _annotationMessenger.setTextTranslate(id, textTranslate);
 
-  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0].
+  /// Distance that the text's anchor is moved from its original placement. Positive values indicate right and down, while negative values indicate left and up. Default value: [0,0]. The unit of textTranslate is in pixels.
   Future<List<double?>?> getTextTranslate() =>
       _annotationMessenger.getTextTranslate(id);
 

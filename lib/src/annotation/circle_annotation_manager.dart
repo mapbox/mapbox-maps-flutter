@@ -64,12 +64,12 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// The fill color of the circle. Default value: "#000000".
   Future<int?> getCircleColor() => _annotationMessenger.getCircleColor(id);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of circleEmissiveStrength is in intensity.
   Future<void> setCircleEmissiveStrength(double circleEmissiveStrength) =>
       _annotationMessenger.setCircleEmissiveStrength(
           id, circleEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of circleEmissiveStrength is in intensity.
   Future<double?> getCircleEmissiveStrength() =>
       _annotationMessenger.getCircleEmissiveStrength(id);
 
@@ -98,11 +98,11 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   Future<CirclePitchScale?> getCirclePitchScale() =>
       _annotationMessenger.getCirclePitchScale(id);
 
-  /// Circle radius. Default value: 5. Minimum value: 0.
+  /// Circle radius. Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   Future<void> setCircleRadius(double circleRadius) =>
       _annotationMessenger.setCircleRadius(id, circleRadius);
 
-  /// Circle radius. Default value: 5. Minimum value: 0.
+  /// Circle radius. Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   Future<double?> getCircleRadius() => _annotationMessenger.getCircleRadius(id);
 
   /// The stroke color of the circle. Default value: "#000000".
@@ -121,19 +121,19 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   Future<double?> getCircleStrokeOpacity() =>
       _annotationMessenger.getCircleStrokeOpacity(id);
 
-  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0.
+  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   Future<void> setCircleStrokeWidth(double circleStrokeWidth) =>
       _annotationMessenger.setCircleStrokeWidth(id, circleStrokeWidth);
 
-  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0.
+  /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`. Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   Future<double?> getCircleStrokeWidth() =>
       _annotationMessenger.getCircleStrokeWidth(id);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of circleTranslate is in pixels.
   Future<void> setCircleTranslate(List<double?> circleTranslate) =>
       _annotationMessenger.setCircleTranslate(id, circleTranslate);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of circleTranslate is in pixels.
   Future<List<double?>?> getCircleTranslate() =>
       _annotationMessenger.getCircleTranslate(id);
 
