@@ -61,12 +61,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
@@ -78,11 +78,37 @@ if (file("$rootDir/gradle/ktlint.gradle").exists() && file("$rootDir/gradle/lint
 }
 
 dependencies {
-    implementation "com.mapbox.maps:android:11.8.0"
-    implementation "com.mapbox.navigationcore:navigation:3.5.0-beta.1"
-    implementation "com.mapbox.navigationcore:ui-components:3.3.0"
-
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
-    implementation "com.google.android.gms:play-services-location:20.0.0"
+    implementation "com.google.android.gms:play-services-location:21.0.1"
+
+    implementation "com.mapbox.common:common-ndk27:24.8.0"
+    implementation "com.mapbox.maps:android-core-ndk27:11.8.0"
+    implementation "com.mapbox.maps:android-ndk27:11.8.0"
+    implementation ("com.mapbox.navigationcore:navigation:3.5.0") {
+        exclude group: "com.mapbox.common", module: "common"
+        exclude group: "com.mapbox.maps", module: "android"
+        exclude group: "com.mapbox.maps", module: "base"
+        exclude group: "com.mapbox.maps", module: "android-core"
+    }
+    implementation ("com.mapbox.navigationcore:ui-components:3.5.0") {
+        exclude group: "com.mapbox.common", module: "common"
+        exclude group: "com.mapbox.maps", module: "android"
+        exclude group: "com.mapbox.maps", module: "base"
+        exclude group: "com.mapbox.maps", module: "android-core"
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.mapbox.maps:android-ndk27:11.8.0"
+            force "com.mapbox.maps:base-ndk27:11.8.0"
+            force "com.mapbox.common:common-ndk27:24.8.0"
+            force "com.mapbox.maps:android-core-ndk27:11.8.0"
+            force "com.mapbox.plugin:maps-locationcomponent-ndk27:11.8.0"
+            force "com.mapbox.plugin:maps-lifecycle-ndk27:11.8.0"
+            force "com.mapbox.plugin:maps-gestures-ndk27:11.8.0"
+            force "com.mapbox.plugin:maps-viewport-ndk27:11.8.0"
+            force "com.mapbox.module:maps-telemetry-ndk27:11.8.0"
+        }
+    }
 }

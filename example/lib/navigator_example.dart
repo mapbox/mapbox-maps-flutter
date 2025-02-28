@@ -113,18 +113,18 @@ class NavigatorExampleState extends State<NavigatorExample>
     //     enabled: true,
     //     puckBearingEnabled: true));
 
-
     print("Puck enabled");
     //var myCoordinate = await mapboxMap.style.getPuckPosition();
     //if (myCoordinate == null) {
-      print("Puck location was not defined");
-      var lastLocation = await mapboxMap.navigation.lastLocation();
-      if (lastLocation == null) {
-        print("Current location is not defined");
-        return;
-      }
+    print("Puck location was not defined");
+    var lastLocation = await mapboxMap.navigation.lastLocation();
+    if (lastLocation == null) {
+      print("Current location is not defined");
+      return;
+    }
 
-      var myCoordinate = Position(lastLocation.longitude!, lastLocation.latitude!);
+    var myCoordinate =
+        Position(lastLocation.longitude!, lastLocation.latitude!);
     //}
 
     await mapboxMap

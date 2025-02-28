@@ -4,6 +4,7 @@ import kotlinx.coroutines.launch
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.coroutineScope
@@ -39,10 +40,14 @@ import com.mapbox.navigation.ui.maps.route.line.api.MapboxRouteLineView
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineApiOptions
 import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineViewOptions
 import com.mapbox.api.directions.v5.models.RouteOptions
+import com.mapbox.navigation.base.ExperimentalPreviewMapboxNavigationAPI
 import com.mapbox.navigation.ui.maps.NavigationStyles
 import com.mapbox.navigation.ui.maps.camera.state.NavigationCameraState
+import com.mapbox.navigation.ui.maps.route.line.api.RoutesRenderedCallback
+import com.mapbox.navigation.ui.maps.route.line.api.RoutesRenderedResult
 import io.flutter.plugin.common.BinaryMessenger
 
+@OptIn(ExperimentalPreviewMapboxNavigationAPI::class)
 class NavigationController(
   private val context: Context,
   private val mapView: MapView,
@@ -118,7 +123,7 @@ class NavigationController(
   private val routeProgressObserver = RouteProgressObserver { routeProgress ->
     // update the camera position to account for the progressed fragment of the route
     viewportDataSource.onRouteProgressChanged(routeProgress)
-    viewportDataSource.evaluate()
+    //viewportDataSource.evaluate()
 
     this.fltNavigationListener?.onRouteProgress(routeProgress.toFLT()) {}
   }
@@ -140,7 +145,11 @@ class NavigationController(
     navigationCamera.requestNavigationCameraToIdle()
     // set a route to receive route progress updates and provide a route reference
     // to the viewport data source (via RoutesObserver)
-    mapboxNavigation?.setNavigationRoutes(routes)
+    mapboxNavigation?.setNavigationRoutes(routes) { data ->
+      if (data.isError) {
+        println(data.error)
+      }
+    }
     // enable the camera back
     navigationCamera.requestNavigationCameraToOverview()
   }
@@ -208,7 +217,7 @@ class NavigationController(
 
         // update camera position to account for new location
         viewportDataSource.onLocationChanged(enhancedLocation)
-        viewportDataSource.evaluate()
+        //viewportDataSource.evaluate()
 
         fltNavigationListener?.onNewLocation(enhancedLocation.toFLT()) {}
 
@@ -234,7 +243,15 @@ class NavigationController(
             if (mapView.mapboxMap.style != null) {
               routeLineView.renderRouteDrawData(
                 mapView.mapboxMap.style!!,
-                this
+                this,
+                mapView.mapboxMap,
+                object : RoutesRenderedCallback {
+                  override fun onRoutesRendered(
+                    result: RoutesRenderedResult
+                  ) {
+                    println(result)
+                  }
+                }
               )
             }
           }
@@ -349,7 +366,7 @@ class NavigationController(
       } else {
         callback.invoke(Result.success<NavigationLocation?>(null))
       }
-    }.addOnFailureListener { exception ->
+    }.addOnFailureListener { _ ->
       callback.invoke(Result.success<NavigationLocation?>(null))
     }
   }
