@@ -40,6 +40,12 @@ class GesturesExampleState extends State<GesturesExample> {
         " state: ${context.gestureState}");
   }
 
+  _onZoom(MapContentGestureContext context) {
+    print("OnZoom coordinate: {${context.point.coordinates.lng}, ${context.point.coordinates.lat}}" +
+        " point: {x: ${context.touchPosition.x}, y: ${context.touchPosition.y}}" +
+        " state: ${context.gestureState}");
+  }
+
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
   }
@@ -127,7 +133,8 @@ class GesturesExampleState extends State<GesturesExample> {
       onMapCreated: _onMapCreated,
       onTapListener: _onTap,
       onLongTapListener: _onLongTap,
-      onScrollListener: _onMove,
+      //    onScrollListener: _onMove,
+      onZoomListener: _onZoom,
     );
 
     final List<Widget> listViewChildren = <Widget>[];

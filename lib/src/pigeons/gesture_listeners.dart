@@ -103,6 +103,8 @@ abstract class GestureListener {
 
   void onScroll(MapContentGestureContext context);
 
+  void onZoom(MapContentGestureContext context);
+
   static void setUp(
     GestureListener? api, {
     BinaryMessenger? binaryMessenger,
@@ -190,6 +192,36 @@ abstract class GestureListener {
               'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll was null, expected non-null MapContentGestureContext.');
           try {
             api.onScroll(arg_context!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom$messageChannelSuffix',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final MapContentGestureContext? arg_context =
+              (args[0] as MapContentGestureContext?);
+          assert(arg_context != null,
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom was null, expected non-null MapContentGestureContext.');
+          try {
+            api.onZoom(arg_context!);
             return wrapResponse(empty: true);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
