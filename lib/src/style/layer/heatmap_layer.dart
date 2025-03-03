@@ -66,11 +66,11 @@ class HeatmapLayer extends Layer {
   List<Object>? heatmapOpacityExpression;
 
   /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
-  /// Default value: 30. Minimum value: 1.
+  /// Default value: 30. Minimum value: 1. The unit of heatmapRadius is in pixels.
   double? heatmapRadius;
 
   /// Radius of influence of one heatmap point in pixels. Increasing the value makes the heatmap smoother, but less detailed. `queryRenderedFeatures` on heatmap layers will return points within this radius.
-  /// Default value: 30. Minimum value: 1.
+  /// Default value: 30. Minimum value: 1. The unit of heatmapRadius is in pixels.
   List<Object>? heatmapRadiusExpression;
 
   /// A measure of how much an individual point contributes to the heatmap. A value of 10 would be equivalent to having 10 points of weight 1 in the same spot. Especially useful when combined with clustering.

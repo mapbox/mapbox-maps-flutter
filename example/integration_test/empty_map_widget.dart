@@ -10,6 +10,9 @@ class Events {
   var onStyleDataLoaded = Completer();
   var onSourceDataLoaded = Completer();
   var onCameraChanged = Completer();
+  var onMapTapListener = Completer();
+  var onMapLongTapListener = Completer();
+  List<MapContentGestureContext> mapInteractions = [];
   var sourceDataIDs = [""];
 
   void resetOnMapLoaded() => onMapLoaded = Completer();
@@ -19,12 +22,20 @@ class Events {
       {sourceDataIDs.clear(), onSourceDataLoaded = Completer()};
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
+  void resetOnMapTapListener() => onMapTapListener = Completer();
+  void resetOnMapLongTapListener() => onMapLongTapListener = Completer();
+  void resetMapInteractions() => mapInteractions.clear();
 }
 
 var events = Events();
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 
-Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
+Future<MapboxMap> main(
+    {double? width,
+    double? height,
+    CameraOptions? camera,
+    ViewportState? viewport,
+    Alignment alignment = Alignment.topLeft}) {
   final completer = Completer<MapboxMap>();
 
   MapboxOptions.setAccessToken(ACCESS_TOKEN);
@@ -33,13 +44,14 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
   runApp(MaterialApp(
       home: Align(
     alignment: Alignment.topLeft,
-    child: Container(
+    child: SizedBox(
       width: width,
       height: height,
       child: MapWidget(
         key: ValueKey("mapWidget"),
         androidHostingMode: AndroidPlatformViewHostingMode.VD,
         cameraOptions: camera,
+        viewport: viewport,
         onMapCreated: (MapboxMap mapboxMap) {
           completer.complete(mapboxMap);
         },
@@ -75,6 +87,18 @@ Future<MapboxMap> main({double? width, double? height, CameraOptions? camera}) {
         onMapIdleListener: (MapIdleEventData data) {
           if (!events.onMapIdle.isCompleted) {
             events.onMapIdle.complete();
+          }
+        },
+        onTapListener: (MapContentGestureContext context) {
+          events.mapInteractions.add(context);
+          if (!events.onMapTapListener.isCompleted) {
+            events.onMapTapListener.complete();
+          }
+        },
+        onLongTapListener: (MapContentGestureContext context) {
+          events.mapInteractions.add(context);
+          if (!events.onMapLongTapListener.isCompleted) {
+            events.onMapLongTapListener.complete();
           }
         },
       ),

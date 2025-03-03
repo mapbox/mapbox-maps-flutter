@@ -129,6 +129,25 @@ enum class IconTextFit(val raw: Int) {
 }
 
 /**
+ * Selects the base of symbol-elevation.
+ * Default value: "ground".
+ */
+enum class SymbolElevationReference(val raw: Int) {
+  /** Elevate symbols relative to the sea level. */
+  SEA(0),
+  /** Elevate symbols relative to the ground's height below them. */
+  GROUND(1),
+  /** Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed. */
+  HD_ROAD_MARKUP(2);
+
+  companion object {
+    fun ofRaw(raw: Int): SymbolElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Label placement relative to its geometry.
  * Default value: "point".
  */
@@ -154,7 +173,7 @@ enum class SymbolPlacement(val raw: Int) {
 enum class SymbolZOrder(val raw: Int) {
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   AUTO(0),
-  /** Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
+  /** Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`. */
   VIEWPORT_Y(1),
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
   SOURCE(2);
@@ -335,23 +354,6 @@ enum class IconTranslateAnchor(val raw: Int) {
 }
 
 /**
- * Selects the base of symbol-elevation.
- * Default value: "ground".
- */
-enum class SymbolElevationReference(val raw: Int) {
-  /** Elevate symbols relative to the sea level. */
-  SEA(0),
-  /** Elevate symbols relative to the ground's height below them. */
-  GROUND(1);
-
-  companion object {
-    fun ofRaw(raw: Int): SymbolElevationReference? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
  * Controls the frame of reference for `text-translate`.
  * Default value: "map".
  */
@@ -393,12 +395,12 @@ data class PointAnnotation(
   val iconOffset: List<Double?>? = null,
   /**
    * Rotates the icon clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of iconRotate is in degrees.
    */
   val iconRotate: Double? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
    */
   val iconSize: Double? = null,
   /**
@@ -408,7 +410,7 @@ data class PointAnnotation(
   val iconTextFit: IconTextFit? = null,
   /**
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-   * Default value: [0,0,0,0].
+   * Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
    */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
@@ -430,37 +432,37 @@ data class PointAnnotation(
   val textJustify: TextJustify? = null,
   /**
    * Text tracking amount.
-   * Default value: 0.
+   * Default value: 0. The unit of textLetterSpacing is in ems.
    */
   val textLetterSpacing: Double? = null,
   /**
    * Text leading value for multi-line text.
-   * Default value: 1.2.
+   * Default value: 1.2. The unit of textLineHeight is in ems.
    */
   val textLineHeight: Double? = null,
   /**
    * The maximum line width for text wrapping.
-   * Default value: 10. Minimum value: 0.
+   * Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
    */
   val textMaxWidth: Double? = null,
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-   * Default value: [0,0].
+   * Default value: [0,0]. The unit of textOffset is in ems.
    */
   val textOffset: List<Double?>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-   * Default value: 0.
+   * Default value: 0. The unit of textRadialOffset is in ems.
    */
   val textRadialOffset: Double? = null,
   /**
    * Rotates the text clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of textRotate is in degrees.
    */
   val textRotate: Double? = null,
   /**
    * Font size.
-   * Default value: 16. Minimum value: 0.
+   * Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
    */
   val textSize: Double? = null,
   /**
@@ -475,12 +477,12 @@ data class PointAnnotation(
   val iconColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
    */
   val iconEmissiveStrength: Double? = null,
   /**
    * Fade out the halo towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
    */
   val iconHaloBlur: Double? = null,
   /**
@@ -490,7 +492,7 @@ data class PointAnnotation(
   val iconHaloColor: Long? = null,
   /**
    * Distance of halo to the icon outline.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
    */
   val iconHaloWidth: Double? = null,
   /**
@@ -511,6 +513,7 @@ data class PointAnnotation(
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
+   * @experimental
    */
   val symbolZOffset: Double? = null,
   /**
@@ -520,12 +523,12 @@ data class PointAnnotation(
   val textColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
    */
   val textEmissiveStrength: Double? = null,
   /**
    * The halo's fadeout distance towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
    */
   val textHaloBlur: Double? = null,
   /**
@@ -535,7 +538,7 @@ data class PointAnnotation(
   val textHaloColor: Long? = null,
   /**
    * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
    */
   val textHaloWidth: Double? = null,
   /**
@@ -659,12 +662,12 @@ data class PointAnnotationOptions(
   val iconOffset: List<Double?>? = null,
   /**
    * Rotates the icon clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of iconRotate is in degrees.
    */
   val iconRotate: Double? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
    */
   val iconSize: Double? = null,
   /**
@@ -674,7 +677,7 @@ data class PointAnnotationOptions(
   val iconTextFit: IconTextFit? = null,
   /**
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-   * Default value: [0,0,0,0].
+   * Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
    */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
@@ -696,37 +699,37 @@ data class PointAnnotationOptions(
   val textJustify: TextJustify? = null,
   /**
    * Text tracking amount.
-   * Default value: 0.
+   * Default value: 0. The unit of textLetterSpacing is in ems.
    */
   val textLetterSpacing: Double? = null,
   /**
    * Text leading value for multi-line text.
-   * Default value: 1.2.
+   * Default value: 1.2. The unit of textLineHeight is in ems.
    */
   val textLineHeight: Double? = null,
   /**
    * The maximum line width for text wrapping.
-   * Default value: 10. Minimum value: 0.
+   * Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
    */
   val textMaxWidth: Double? = null,
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-   * Default value: [0,0].
+   * Default value: [0,0]. The unit of textOffset is in ems.
    */
   val textOffset: List<Double?>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-   * Default value: 0.
+   * Default value: 0. The unit of textRadialOffset is in ems.
    */
   val textRadialOffset: Double? = null,
   /**
    * Rotates the text clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of textRotate is in degrees.
    */
   val textRotate: Double? = null,
   /**
    * Font size.
-   * Default value: 16. Minimum value: 0.
+   * Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
    */
   val textSize: Double? = null,
   /**
@@ -741,12 +744,12 @@ data class PointAnnotationOptions(
   val iconColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
    */
   val iconEmissiveStrength: Double? = null,
   /**
    * Fade out the halo towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
    */
   val iconHaloBlur: Double? = null,
   /**
@@ -756,7 +759,7 @@ data class PointAnnotationOptions(
   val iconHaloColor: Long? = null,
   /**
    * Distance of halo to the icon outline.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
    */
   val iconHaloWidth: Double? = null,
   /**
@@ -777,6 +780,7 @@ data class PointAnnotationOptions(
   /**
    * Specifies an uniform elevation from the ground, in meters.
    * Default value: 0. Minimum value: 0.
+   * @experimental
    */
   val symbolZOffset: Double? = null,
   /**
@@ -786,12 +790,12 @@ data class PointAnnotationOptions(
   val textColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
    */
   val textEmissiveStrength: Double? = null,
   /**
    * The halo's fadeout distance towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
    */
   val textHaloBlur: Double? = null,
   /**
@@ -801,7 +805,7 @@ data class PointAnnotationOptions(
   val textHaloColor: Long? = null,
   /**
    * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
    */
   val textHaloWidth: Double? = null,
   /**
@@ -924,57 +928,57 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolPlacement.ofRaw(it.toInt())
+          SymbolElevationReference.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolZOrder.ofRaw(it.toInt())
+          SymbolPlacement.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextAnchor.ofRaw(it.toInt())
+          SymbolZOrder.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextJustify.ofRaw(it.toInt())
+          TextAnchor.ofRaw(it.toInt())
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextPitchAlignment.ofRaw(it.toInt())
+          TextJustify.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextRotationAlignment.ofRaw(it.toInt())
+          TextPitchAlignment.ofRaw(it.toInt())
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextTransform.ofRaw(it.toInt())
+          TextRotationAlignment.ofRaw(it.toInt())
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextVariableAnchor.ofRaw(it.toInt())
+          TextTransform.ofRaw(it.toInt())
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          TextWritingMode.ofRaw(it.toInt())
+          TextVariableAnchor.ofRaw(it.toInt())
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          IconTranslateAnchor.ofRaw(it.toInt())
+          TextWritingMode.ofRaw(it.toInt())
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          SymbolElevationReference.ofRaw(it.toInt())
+          IconTranslateAnchor.ofRaw(it.toInt())
         }
       }
       144.toByte() -> {
@@ -1018,47 +1022,47 @@ private open class PointAnnotationMessengerPigeonCodec : StandardMessageCodec() 
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is SymbolPlacement -> {
+      is SymbolElevationReference -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is SymbolZOrder -> {
+      is SymbolPlacement -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is TextAnchor -> {
+      is SymbolZOrder -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is TextJustify -> {
+      is TextAnchor -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is TextPitchAlignment -> {
+      is TextJustify -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is TextRotationAlignment -> {
+      is TextPitchAlignment -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is TextTransform -> {
+      is TextRotationAlignment -> {
         stream.write(139)
         writeValue(stream, value.raw)
       }
-      is TextVariableAnchor -> {
+      is TextTransform -> {
         stream.write(140)
         writeValue(stream, value.raw)
       }
-      is TextWritingMode -> {
+      is TextVariableAnchor -> {
         stream.write(141)
         writeValue(stream, value.raw)
       }
-      is IconTranslateAnchor -> {
+      is TextWritingMode -> {
         stream.write(142)
         writeValue(stream, value.raw)
       }
-      is SymbolElevationReference -> {
+      is IconTranslateAnchor -> {
         stream.write(143)
         writeValue(stream, value.raw)
       }
@@ -1139,12 +1143,16 @@ interface _PointAnnotationMessenger {
   fun getIconRotationAlignment(managerId: String, callback: (Result<IconRotationAlignment?>) -> Unit)
   fun setIconSize(managerId: String, iconSize: Double, callback: (Result<Unit>) -> Unit)
   fun getIconSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconSizeScaleRange(managerId: String, iconSizeScaleRange: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getIconSizeScaleRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTextFit(managerId: String, iconTextFit: IconTextFit, callback: (Result<Unit>) -> Unit)
   fun getIconTextFit(managerId: String, callback: (Result<IconTextFit?>) -> Unit)
   fun setIconTextFitPadding(managerId: String, iconTextFitPadding: List<Double?>, callback: (Result<Unit>) -> Unit)
   fun getIconTextFitPadding(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setSymbolAvoidEdges(managerId: String, symbolAvoidEdges: Boolean, callback: (Result<Unit>) -> Unit)
   fun getSymbolAvoidEdges(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getSymbolElevationReference(managerId: String, callback: (Result<SymbolElevationReference?>) -> Unit)
   fun setSymbolPlacement(managerId: String, symbolPlacement: SymbolPlacement, callback: (Result<Unit>) -> Unit)
   fun getSymbolPlacement(managerId: String, callback: (Result<SymbolPlacement?>) -> Unit)
   fun setSymbolSortKey(managerId: String, symbolSortKey: Double, callback: (Result<Unit>) -> Unit)
@@ -1193,6 +1201,8 @@ interface _PointAnnotationMessenger {
   fun getTextRotationAlignment(managerId: String, callback: (Result<TextRotationAlignment?>) -> Unit)
   fun setTextSize(managerId: String, textSize: Double, callback: (Result<Unit>) -> Unit)
   fun getTextSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextSizeScaleRange(managerId: String, textSizeScaleRange: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getTextSizeScaleRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setTextTransform(managerId: String, textTransform: TextTransform, callback: (Result<Unit>) -> Unit)
   fun getTextTransform(managerId: String, callback: (Result<TextTransform?>) -> Unit)
   fun setIconColor(managerId: String, iconColor: Long, callback: (Result<Unit>) -> Unit)
@@ -1217,8 +1227,6 @@ interface _PointAnnotationMessenger {
   fun getIconTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTranslateAnchor(managerId: String, iconTranslateAnchor: IconTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getIconTranslateAnchor(managerId: String, callback: (Result<IconTranslateAnchor?>) -> Unit)
-  fun setSymbolElevationReference(managerId: String, symbolElevationReference: SymbolElevationReference, callback: (Result<Unit>) -> Unit)
-  fun getSymbolElevationReference(managerId: String, callback: (Result<SymbolElevationReference?>) -> Unit)
   fun setSymbolZOffset(managerId: String, symbolZOffset: Double, callback: (Result<Unit>) -> Unit)
   fun getSymbolZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setTextColor(managerId: String, textColor: Long, callback: (Result<Unit>) -> Unit)
@@ -1831,6 +1839,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconSizeScaleRangeArg = args[1] as List<Double?>
+            api.setIconSizeScaleRange(managerIdArg, iconSizeScaleRangeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconSizeScaleRange(managerIdArg) { result: Result<List<Double?>?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -1937,6 +1985,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getSymbolAvoidEdges(managerIdArg) { result: Result<Boolean?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val symbolElevationReferenceArg = args[1] as SymbolElevationReference
+            api.setSymbolElevationReference(managerIdArg, symbolElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getSymbolElevationReference(managerIdArg) { result: Result<SymbolElevationReference?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -2911,6 +2999,46 @@ interface _PointAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textSizeScaleRangeArg = args[1] as List<Double?>
+            api.setTextSizeScaleRange(managerIdArg, textSizeScaleRangeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextSizeScaleRange(managerIdArg) { result: Result<List<Double?>?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -3377,46 +3505,6 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconTranslateAnchor(managerIdArg) { result: Result<IconTranslateAnchor?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            val symbolElevationReferenceArg = args[1] as SymbolElevationReference
-            api.setSymbolElevationReference(managerIdArg, symbolElevationReferenceArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getSymbolElevationReference(managerIdArg) { result: Result<SymbolElevationReference?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

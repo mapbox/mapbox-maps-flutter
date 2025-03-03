@@ -1,11 +1,82 @@
+### main 
+
+### 2.7.0-beta.1
+
+* Experimental `StandardBuildingState` has been removed. Use `StandardBuildingsState` instead.
+* `top-image`, `bearing-image`, and `shadow-image` properties on `LocationIndicatorLayer` are now paint properties instead of layout properties.
+* Introduce `onZoomListener` to `MapWidget` to allowing listening to zoom events resulting from user gestures: pinching, double-tapping, or quick zooming. The event returns `MapContentGestureContext`, which includes `touchPosition` (the location of the gesture on the screen), `point` (the geographical coordinates of the gesture), and `gestureState` (the state of the gesture). See `gestures_example.dart` for implementation guidance.
+* Expose `SymbolLayer.iconSizeScaleRange`, `SymbolLayer.iconSizeScaleRangeExpression`, `SymbolLayer.textSizeScaleRange`, `SymbolLayer.textSizeScaleRangeExpression`, `LineLayer.lineCrossSlope`, `LineLayer.lineElevationReference`, `LineLayer.lineWidthUnit`, `FillLayer.fillElevationReference`.
+* Expose `PointAnnotationManager.setIconSizeScaleRange()`, `PointAnnotationManager.getIconSizeScaleRange()`, `PointAnnotationManager.setTextSizeScaleRange()`, `PointAnnotationManager.getTextSizeScaleRange()` , `PolygonAnnotationManager.setFillElevationReference()`, `PolygonAnnotationManager.getFillElevationReference()`, `PolylineAnnotationManager.setLineCrossSlope()`, `PolylineAnnotationManager.getLineCrossSlope()`, `PolylineAnnotationManager.setLineElevationReference()`, `PolylineAnnotationManager.getLineElevationReference()`, `PolylineAnnotationManager.setLineWidthUnit()`, `PolylineAnnotationManager.getLineWidthUnit()` as experimental.
+* Mark `ClipLayer.clipLayerScope` and `ClipLayer.clipLayerTypes` as stable
+* Mark `BackgroundLayer.backgroundPitchAlignment` as experimental 
+
+### 2.6.0
+
 > [!IMPORTANT]
-> Configuring Mapbox's secret token is no longer required when installing our SDKs.
+> The iOS minimum deployment target is now iOS 14.0.
+
+* Update Maps SDK to 11.10.0
+* Align tap propagation behavior on Android and iOS.
+* Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue. 
+
+```dart
+var tapInteraction = TapInteraction(StandardBuildings(),
+    (_, feature) {
+  mapboxMap.setFeatureStateForFeaturesetFeature(feature, StandardBuildingsState(highlight: true));
+  log("Building group: ${feature.group}");
+});
+mapboxMap.addInteraction(tapInteraction);
+```
+Specific changes: 
+  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map. 
+  * Introduce the experimental `MapboxMap.removeInteraction` method, which allows you to remove interactions from the map using an identifier `mapboxMap.removeInteraction("tap_interaction_poi")`
+  * Introduce the ability to add `TapInteraction` and `LongTapInteraction` targeting the map itself. 
+  * Introduce `TapInteraction` and `LongTapInteraction`, which allow you to add tap and longTap interactions to the map.
+  * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
+  * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
+* For more guidance with using these new features see `interactive_features_example.dart`.
+* Add support for Swift Package Manager.
+
+### 2.5.2
+
+* Bump Maps SDK to 11.9.2
+
+### 2.5.1
+
+* Bump Maps SDK to 11.9.1
+
+### 2.5.0
+
+* Mark `ClipLayer` as stable.
+* Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
+  * Update experimental `symbolElevationReference` property on `SymbolLayer`. 
+  * Introduce `backgroundPitchAlignment` property on `BackgroundLayer`.
+  * Introduce experimental `fillZOffset` property on `FillLayer`.
+  * Introduce experimental `fillExtrusionBaseAlignment` and `fillExtrusionHeightAlignment` properties on `FillExtrusionLayer`.
+  * Mark get and set `ZOffset` methods on `PolygonAnnotationManager`, `PolylineAnnotationManager`, and `PointAnnotationManager` as experimental.
+  * Mark get and set `symbolElevationReference` methods on `PointAnnotationManager` as experimental.
+  * Mark get and set line trim methods on `PolylineAnnotationManager` as experimental.
+  * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.  
+  * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`. 
+  * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
+* Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
+  ```dart
+  MapWidget(
+    viewport: CameraViewportState(
+      center: Point(coordinates: Position(-117.918976, 33.812092)),
+      zoom: 15.0,
+    ),
+  );
+  ```
 
 ### 2.4.1
 
 * Fix annotation click listeners not working.
 
 ### 2.4.0
+
+> [!IMPORTANT]
+> Configuring Mapbox's secret token is no longer required when installing our SDKs.
 
 * Update Maps SDK to 11.8.0
 * Updated the minimum required Flutter SDK to version 3.22.3 and Dart to version 3.4.4. With the fix for Virtual Display hosting mode on Android in Flutter 3.22, we’ve changed the default map view hosting mode to Virtual Display composition. This update should eliminate the brief visibility of the map after it has been dismissed.

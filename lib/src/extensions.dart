@@ -14,20 +14,29 @@ extension Conversion on CameraState {
   static CameraState fromJson(Map<String, dynamic> json) {
     return CameraState(
         center: Point.fromJson(json['center']),
-        padding: MbxEdgeInsetsCodable.fromJson(json['padding']),
+        padding: _MbxEdgeInsetsCodable.fromJson(json['padding']),
         zoom: json['zoom'].toDouble(),
         bearing: json['bearing'].toDouble(),
         pitch: json['pitch'].toDouble());
   }
 }
 
-extension MbxEdgeInsetsCodable on MbxEdgeInsets {
+extension _MbxEdgeInsetsCodable on MbxEdgeInsets {
   static MbxEdgeInsets fromJson(Map<String, dynamic> json) {
     return MbxEdgeInsets(
       top: json["top"].toDouble(),
       left: json["left"].toDouble(),
       bottom: json["bottom"].toDouble(),
       right: json["right"].toDouble(),
+    );
+  }
+
+  static MbxEdgeInsets fromEdgeInsets(EdgeInsets edgeInsets) {
+    return MbxEdgeInsets(
+      top: edgeInsets.top,
+      left: edgeInsets.left,
+      bottom: edgeInsets.bottom,
+      right: edgeInsets.right,
     );
   }
 }

@@ -113,7 +113,7 @@ class RasterSource extends Source {
   double? _tileSize;
 
   /// The minimum visual size to display tiles for this layer. Only configurable for raster layers.
-  /// Default value: 512.
+  /// Default value: 512. The unit of tileSize is in pixels.
   Future<double?> get tileSize async {
     return _style?.getStyleSourceProperty(id, "tileSize").then((value) {
       if (value.value != null) {

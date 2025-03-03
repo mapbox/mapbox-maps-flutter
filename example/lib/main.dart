@@ -10,13 +10,18 @@ import 'package:mapbox_maps_example/ornaments_example.dart';
 import 'package:mapbox_maps_example/geojson_line_example.dart';
 import 'package:mapbox_maps_example/image_source_example.dart';
 import 'package:mapbox_maps_example/map_interface_example.dart';
+import 'package:mapbox_maps_example/standard_style_import_example.dart';
+import 'package:mapbox_maps_example/standard_style_interactions_example.dart';
 import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
+import 'package:mapbox_maps_example/simple_map_example.dart';
 import 'package:mapbox_maps_example/snapshotter_example.dart';
 import 'package:mapbox_maps_example/traffic_layer_example.dart';
+import 'package:mapbox_maps_example/spinning_globe_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
 import 'package:mapbox_maps_example/vector_tile_source_example.dart';
+import 'package:mapbox_maps_example/viewport_example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 import 'full_map_example.dart';
@@ -29,11 +34,16 @@ import 'gestures_example.dart';
 import 'debug_options_example.dart';
 
 final List<Example> _allPages = <Example>[
+  SimpleMapExample(),
+  ViewportExample(),
   SnapshotterExample(),
   TrafficRouteLineExample(),
   OfflineMapExample(),
   ModelLayerExample(),
   DebugOptionsExample(),
+  SpinningGlobeExample(),
+  StandardStyleImportExample(),
+  StandardStyleInteractionsExample(),
   FullMapExample(),
   StyleExample(),
   CameraExample(),

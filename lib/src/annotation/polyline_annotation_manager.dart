@@ -49,6 +49,28 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// The display of line endings. Default value: "butt".
   Future<LineCap?> getLineCap() => _annotationMessenger.getLineCap(id);
 
+  /// Defines the slope of an elevated line. A value of 0 creates a horizontal line. A value of 1 creates a vertical line. Other values are currently not supported. If undefined, the line follows the terrain slope. This is an experimental property with some known issues:  - Vertical lines don't support line caps  - `line-join: round` is not supported with this property
+  @experimental
+  Future<void> setLineCrossSlope(double lineCrossSlope) =>
+      _annotationMessenger.setLineCrossSlope(id, lineCrossSlope);
+
+  /// Defines the slope of an elevated line. A value of 0 creates a horizontal line. A value of 1 creates a vertical line. Other values are currently not supported. If undefined, the line follows the terrain slope. This is an experimental property with some known issues:  - Vertical lines don't support line caps  - `line-join: round` is not supported with this property
+  @experimental
+  Future<double?> getLineCrossSlope() =>
+      _annotationMessenger.getLineCrossSlope(id);
+
+  /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<void> setLineElevationReference(
+          LineElevationReference lineElevationReference) =>
+      _annotationMessenger.setLineElevationReference(
+          id, lineElevationReference);
+
+  /// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<LineElevationReference?> getLineElevationReference() =>
+      _annotationMessenger.getLineElevationReference(id);
+
   /// The display of lines when joining. Default value: "miter".
   Future<void> setLineJoin(LineJoin lineJoin) =>
       _annotationMessenger.setLineJoin(id, lineJoin);
@@ -79,18 +101,30 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   Future<double?> getLineSortKey() => _annotationMessenger.getLineSortKey(id);
 
-  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release. Default value: "pixels".
+  @experimental
+  Future<void> setLineWidthUnit(LineWidthUnit lineWidthUnit) =>
+      _annotationMessenger.setLineWidthUnit(id, lineWidthUnit);
+
+  /// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release. Default value: "pixels".
+  @experimental
+  Future<LineWidthUnit?> getLineWidthUnit() =>
+      _annotationMessenger.getLineWidthUnit(id);
+
+  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:  - Not supported for globe projection at the moment  - Elevated line discontinuity is possible on tile borders with terrain enabled  - Rendering artifacts can happen near line joins and line caps depending on the line styling  - Rendering artifacts relating to `line-opacity` and `line-blur`  - Elevated line visibility is determined by layer order  - Z-fighting issues can happen with intersecting elevated lines  - Elevated lines don't cast shadows Default value: 0.
+  @experimental
   Future<void> setLineZOffset(double lineZOffset) =>
       _annotationMessenger.setLineZOffset(id, lineZOffset);
 
-  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
+  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:  - Not supported for globe projection at the moment  - Elevated line discontinuity is possible on tile borders with terrain enabled  - Rendering artifacts can happen near line joins and line caps depending on the line styling  - Rendering artifacts relating to `line-opacity` and `line-blur`  - Elevated line visibility is determined by layer order  - Z-fighting issues can happen with intersecting elevated lines  - Elevated lines don't cast shadows Default value: 0.
+  @experimental
   Future<double?> getLineZOffset() => _annotationMessenger.getLineZOffset(id);
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0.
+  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   Future<void> setLineBlur(double lineBlur) =>
       _annotationMessenger.setLineBlur(id, lineBlur);
 
-  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0.
+  /// Blur applied to the line, in pixels. Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
   Future<double?> getLineBlur() => _annotationMessenger.getLineBlur(id);
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color. Default value: "rgba(0, 0, 0, 0)".
@@ -116,11 +150,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// The color with which the line will be drawn. Default value: "#000000".
   Future<int?> getLineColor() => _annotationMessenger.getLineColor(id);
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0. The unit of lineDasharray is in line widths.
   Future<void> setLineDasharray(List<double?> lineDasharray) =>
       _annotationMessenger.setLineDasharray(id, lineDasharray);
 
-  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0.
+  /// Specifies the lengths of the alternating dashes and gaps that form the dash pattern. The lengths are later scaled by the line width. To convert a dash length to pixels, multiply the length by the current line width. Note that GeoJSON sources with `lineMetrics: true` specified won't render dashed lines to the expected scale. Also note that zoom-dependent expressions will be evaluated only at integer zoom levels. Minimum value: 0. The unit of lineDasharray is in line widths.
   Future<List<double?>?> getLineDasharray() =>
       _annotationMessenger.getLineDasharray(id);
 
@@ -133,19 +167,19 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineDepthOcclusionFactor() =>
       _annotationMessenger.getLineDepthOcclusionFactor(id);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of lineEmissiveStrength is in intensity.
   Future<void> setLineEmissiveStrength(double lineEmissiveStrength) =>
       _annotationMessenger.setLineEmissiveStrength(id, lineEmissiveStrength);
 
-  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0.
+  /// Controls the intensity of light emitted on the source features. Default value: 0. Minimum value: 0. The unit of lineEmissiveStrength is in intensity.
   Future<double?> getLineEmissiveStrength() =>
       _annotationMessenger.getLineEmissiveStrength(id);
 
-  /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. Default value: 0. Minimum value: 0.
+  /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
   Future<void> setLineGapWidth(double lineGapWidth) =>
       _annotationMessenger.setLineGapWidth(id, lineGapWidth);
 
-  /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. Default value: 0. Minimum value: 0.
+  /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap. Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
   Future<double?> getLineGapWidth() => _annotationMessenger.getLineGapWidth(id);
 
   /// Opacity multiplier (multiplies line-opacity value) of the line part that is occluded by 3D objects. Value 0 hides occluded part, value 1 means the same opacity as non-occluded part. The property is not supported when `line-opacity` has data-driven styling. Default value: 0. Value range: [0, 1]
@@ -156,11 +190,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<double?> getLineOcclusionOpacity() =>
       _annotationMessenger.getLineOcclusionOpacity(id);
 
-  /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. Default value: 0.
+  /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. Default value: 0. The unit of lineOffset is in pixels.
   Future<void> setLineOffset(double lineOffset) =>
       _annotationMessenger.setLineOffset(id, lineOffset);
 
-  /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. Default value: 0.
+  /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset. Default value: 0. The unit of lineOffset is in pixels.
   Future<double?> getLineOffset() => _annotationMessenger.getLineOffset(id);
 
   /// The opacity at which the line will be drawn. Default value: 1. Value range: [0, 1]
@@ -177,11 +211,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   Future<String?> getLinePattern() => _annotationMessenger.getLinePattern(id);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of lineTranslate is in pixels.
   Future<void> setLineTranslate(List<double?> lineTranslate) =>
       _annotationMessenger.setLineTranslate(id, lineTranslate);
 
-  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0].
+  /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively. Default value: [0,0]. The unit of lineTranslate is in pixels.
   Future<List<double?>?> getLineTranslate() =>
       _annotationMessenger.getLineTranslate(id);
 
@@ -195,17 +229,21 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
       _annotationMessenger.getLineTranslateAnchor(id);
 
   /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property. Default value: "transparent".
+  @experimental
   Future<void> setLineTrimColor(int lineTrimColor) =>
       _annotationMessenger.setLineTrimColor(id, lineTrimColor);
 
   /// The color to be used for rendering the trimmed line section that is defined by the `line-trim-offset` property. Default value: "transparent".
+  @experimental
   Future<int?> getLineTrimColor() => _annotationMessenger.getLineTrimColor(id);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
   Future<void> setLineTrimFadeRange(List<double?> lineTrimFadeRange) =>
       _annotationMessenger.setLineTrimFadeRange(id, lineTrimFadeRange);
 
   /// The fade range for the trim-start and trim-end points is defined by the `line-trim-offset` property. The first element of the array represents the fade range from the trim-start point toward the end of the line, while the second element defines the fade range from the trim-end point toward the beginning of the line. The fade result is achieved by interpolating between `line-trim-color` and the color specified by the `line-color` or the `line-gradient` property. Default value: [0,0]. Minimum value: [0,0]. Maximum value: [1,1].
+  @experimental
   Future<List<double?>?> getLineTrimFadeRange() =>
       _annotationMessenger.getLineTrimFadeRange(id);
 
@@ -217,11 +255,11 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   Future<List<double?>?> getLineTrimOffset() =>
       _annotationMessenger.getLineTrimOffset(id);
 
-  /// Stroke thickness. Default value: 1. Minimum value: 0.
+  /// Stroke thickness. Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   Future<void> setLineWidth(double lineWidth) =>
       _annotationMessenger.setLineWidth(id, lineWidth);
 
-  /// Stroke thickness. Default value: 1. Minimum value: 0.
+  /// Stroke thickness. Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   Future<double?> getLineWidth() => _annotationMessenger.getLineWidth(id);
 }
 // End of generated file.

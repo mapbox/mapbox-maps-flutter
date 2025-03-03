@@ -27,6 +27,8 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionAmbientOcclusionWallRadiusExpression,
     double? this.fillExtrusionBase,
     List<Object>? this.fillExtrusionBaseExpression,
+    FillExtrusionBaseAlignment? this.fillExtrusionBaseAlignment,
+    List<Object>? this.fillExtrusionBaseAlignmentExpression,
     int? this.fillExtrusionColor,
     List<Object>? this.fillExtrusionColorExpression,
     double? this.fillExtrusionCutoffFadeRange,
@@ -45,6 +47,8 @@ class FillExtrusionLayer extends Layer {
     List<Object>? this.fillExtrusionFloodLightWallRadiusExpression,
     double? this.fillExtrusionHeight,
     List<Object>? this.fillExtrusionHeightExpression,
+    FillExtrusionHeightAlignment? this.fillExtrusionHeightAlignment,
+    List<Object>? this.fillExtrusionHeightAlignmentExpression,
     double? this.fillExtrusionLineWidth,
     List<Object>? this.fillExtrusionLineWidthExpression,
     double? this.fillExtrusionOpacity,
@@ -136,12 +140,22 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionAmbientOcclusionWallRadiusExpression;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionBase is in meters.
   double? fillExtrusionBase;
 
   /// The height with which to extrude the base of this layer. Must be less than or equal to `fill-extrusion-height`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionBase is in meters.
   List<Object>? fillExtrusionBaseExpression;
+
+  /// Controls the behavior of fill extrusion base over terrain
+  /// Default value: "terrain".
+  @experimental
+  FillExtrusionBaseAlignment? fillExtrusionBaseAlignment;
+
+  /// Controls the behavior of fill extrusion base over terrain
+  /// Default value: "terrain".
+  @experimental
+  List<Object>? fillExtrusionBaseAlignmentExpression;
 
   /// The base color of the extruded fill. The extrusion's surfaces will be shaded differently based on this color in combination with the root `light` settings. If this color is specified as `rgba` with an alpha component, the alpha component will be ignored; use `fill-extrusion-opacity` to set layer opacity.
   /// Default value: "#000000".
@@ -160,11 +174,11 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionCutoffFadeRangeExpression;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionEmissiveStrength is in intensity.
   double? fillExtrusionEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionEmissiveStrength is in intensity.
   List<Object>? fillExtrusionEmissiveStrengthExpression;
 
   /// The color of the flood light effect on the walls of the extruded buildings.
@@ -188,12 +202,12 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionFloodLightGroundAttenuationExpression;
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
-  /// Default value: 0.
+  /// Default value: 0. The unit of fillExtrusionFloodLightGroundRadius is in meters.
   @experimental
   double? fillExtrusionFloodLightGroundRadius;
 
   /// The extent of the flood light effect on the ground beneath the extruded buildings in meters. Note: this experimental property is evaluated once per tile, during tile initialization. Changing the property value could trigger tile reload. The `feature-state` styling is deprecated and will get removed soon.
-  /// Default value: 0.
+  /// Default value: 0. The unit of fillExtrusionFloodLightGroundRadius is in meters.
   @experimental
   List<Object>? fillExtrusionFloodLightGroundRadiusExpression;
 
@@ -208,30 +222,40 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionFloodLightIntensityExpression;
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionFloodLightWallRadius is in meters.
   @experimental
   double? fillExtrusionFloodLightWallRadius;
 
   /// The extent of the flood light effect on the walls of the extruded buildings in meters.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionFloodLightWallRadius is in meters.
   @experimental
   List<Object>? fillExtrusionFloodLightWallRadiusExpression;
 
   /// The height with which to extrude this layer.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionHeight is in meters.
   double? fillExtrusionHeight;
 
   /// The height with which to extrude this layer.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionHeight is in meters.
   List<Object>? fillExtrusionHeightExpression;
 
+  /// Controls the behavior of fill extrusion height over terrain
+  /// Default value: "flat".
+  @experimental
+  FillExtrusionHeightAlignment? fillExtrusionHeightAlignment;
+
+  /// Controls the behavior of fill extrusion height over terrain
+  /// Default value: "flat".
+  @experimental
+  List<Object>? fillExtrusionHeightAlignmentExpression;
+
   /// If a non-zero value is provided, it sets the fill-extrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fill-extrusion properties might not be supported with non-zero line width.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionLineWidth is in meters.
   @experimental
   double? fillExtrusionLineWidth;
 
   /// If a non-zero value is provided, it sets the fill-extrusion layer into wall rendering mode. The value is used to render the feature with the given width over the outlines of the geometry. Note: This property is experimental and some other fill-extrusion properties might not be supported with non-zero line width.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of fillExtrusionLineWidth is in meters.
   @experimental
   List<Object>? fillExtrusionLineWidthExpression;
 
@@ -260,11 +284,11 @@ class FillExtrusionLayer extends Layer {
   List<Object>? fillExtrusionRoundedRoofExpression;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
-  /// Default value: [0,0].
+  /// Default value: [0,0]. The unit of fillExtrusionTranslate is in pixels.
   List<double?>? fillExtrusionTranslate;
 
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up (on the flat plane), respectively.
-  /// Default value: [0,0].
+  /// Default value: [0,0]. The unit of fillExtrusionTranslate is in pixels.
   List<Object>? fillExtrusionTranslateExpression;
 
   /// Controls the frame of reference for `fill-extrusion-translate`.
@@ -364,6 +388,15 @@ class FillExtrusionLayer extends Layer {
       paint["fill-extrusion-base"] = fillExtrusionBase;
     }
 
+    if (fillExtrusionBaseAlignmentExpression != null) {
+      paint["fill-extrusion-base-alignment"] =
+          fillExtrusionBaseAlignmentExpression;
+    }
+    if (fillExtrusionBaseAlignment != null) {
+      paint["fill-extrusion-base-alignment"] =
+          fillExtrusionBaseAlignment?.name.toLowerCase().replaceAll("_", "-");
+    }
+
     if (fillExtrusionColorExpression != null) {
       paint["fill-extrusion-color"] = fillExtrusionColorExpression;
     }
@@ -437,6 +470,15 @@ class FillExtrusionLayer extends Layer {
     }
     if (fillExtrusionHeight != null) {
       paint["fill-extrusion-height"] = fillExtrusionHeight;
+    }
+
+    if (fillExtrusionHeightAlignmentExpression != null) {
+      paint["fill-extrusion-height-alignment"] =
+          fillExtrusionHeightAlignmentExpression;
+    }
+    if (fillExtrusionHeightAlignment != null) {
+      paint["fill-extrusion-height-alignment"] =
+          fillExtrusionHeightAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (fillExtrusionLineWidthExpression != null) {
@@ -576,6 +618,15 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionBase: _optionalCast(map["paint"]["fill-extrusion-base"]),
       fillExtrusionBaseExpression:
           _optionalCastList(map["paint"]["fill-extrusion-base"]),
+      fillExtrusionBaseAlignment:
+          map["paint"]["fill-extrusion-base-alignment"] == null
+              ? null
+              : FillExtrusionBaseAlignment.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["fill-extrusion-base-alignment"])),
+      fillExtrusionBaseAlignmentExpression:
+          _optionalCastList(map["paint"]["fill-extrusion-base-alignment"]),
       fillExtrusionColor:
           (map["paint"]["fill-extrusion-color"] as List?)?.toRGBAInt(),
       fillExtrusionColorExpression:
@@ -612,6 +663,15 @@ class FillExtrusionLayer extends Layer {
       fillExtrusionHeight: _optionalCast(map["paint"]["fill-extrusion-height"]),
       fillExtrusionHeightExpression:
           _optionalCastList(map["paint"]["fill-extrusion-height"]),
+      fillExtrusionHeightAlignment:
+          map["paint"]["fill-extrusion-height-alignment"] == null
+              ? null
+              : FillExtrusionHeightAlignment.values.firstWhere((e) => e.name
+                  .toLowerCase()
+                  .replaceAll("_", "-")
+                  .contains(map["paint"]["fill-extrusion-height-alignment"])),
+      fillExtrusionHeightAlignmentExpression:
+          _optionalCastList(map["paint"]["fill-extrusion-height-alignment"]),
       fillExtrusionLineWidth:
           _optionalCast(map["paint"]["fill-extrusion-line-width"]),
       fillExtrusionLineWidthExpression:

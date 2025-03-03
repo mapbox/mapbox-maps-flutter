@@ -168,11 +168,56 @@ enum ViewAnnotationAnchor {
   CENTER,
 }
 
+/// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+enum ModelElevationReference {
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
+  SEA,
+
+  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
+  GROUND,
+}
+
+/// The type of interaction, either tap/click or longTap/longClick
+enum _InteractionType {
+  /// A short tap or click
+  TAP,
+
+  /// A long tap or long click
+  LONG_TAP,
+}
+
 /// Type information of the variant's content
 enum Type {
   SCREEN_BOX,
   SCREEN_COORDINATE,
   LIST,
+}
+
+/// Controls the behavior of fill extrusion base over terrain
+enum FillExtrusionBaseAlignment {
+  /// The fill extrusion base follows terrain slope.
+  TERRAIN,
+
+  /// The fill extrusion base is flat over terrain.
+  FLAT,
+}
+
+/// Controls the behavior of fill extrusion height over terrain
+enum FillExtrusionHeightAlignment {
+  /// The fill extrusion base follows terrain slope.
+  TERRAIN,
+
+  /// The fill extrusion base is flat over terrain.
+  FLAT,
+}
+
+/// Orientation of background layer.
+enum BackgroundPitchAlignment {
+  /// The background is aligned to the plane of the map.
+  MAP,
+
+  /// The background is aligned to the plane of the viewport, covering the whole screen.
+  VIEWPORT,
 }
 
 /// Describes the reason for a style package download request failure.
@@ -1262,6 +1307,275 @@ class QueriedFeature {
   }
 }
 
+/// Identifies a feature in a featureset.
+///
+/// Knowing the feature identifier allows to set the feature states to a particular feature, see ``MapboxMap/setFeatureState(featureset:featureId:state:callback:)``.
+///
+/// In a featureset a feature can come from different underlying sources. In that case their IDs are not guaranteed to be unique in the featureset.
+/// The ``FeaturesetFeatureId/namespace`` is used to disambiguate from which source the feature is coming.
+///
+/// - Warning: There is no guarantee of identifier persistency. This depends on the underlying source of the features and may vary from style to style.
+/// If you want to store the identifiers persistently, please make sure that the style or source provides this guarantee.
+class FeaturesetFeatureId {
+  FeaturesetFeatureId({
+    required this.id,
+    this.namespace,
+  });
+
+  /// A feature id coming from the feature itself.exp
+  String id;
+
+  /// A namespace of the feature
+  String? namespace;
+
+  Object encode() {
+    return <Object?>[
+      id,
+      namespace,
+    ];
+  }
+
+  static FeaturesetFeatureId decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetFeatureId(
+      id: result[0]! as String,
+      namespace: result[1] as String?,
+    );
+  }
+}
+
+/// Wraps a FeatureState map
+class FeatureState {
+  FeatureState({
+    required this.map,
+  });
+
+  Map<String, Object?> map;
+
+  Object encode() {
+    return <Object?>[
+      map,
+    ];
+  }
+
+  static FeatureState decode(Object result) {
+    result as List<Object?>;
+    return FeatureState(
+      map: (result[0] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+    );
+  }
+}
+
+/// Internal: An interaction that can be added to the map.
+///
+/// To create an interaction use ``TapInteraction`` and ``LongClickInteraction`` implementations.
+///
+/// See also: ``MapboxMap/addInteraction``.
+class _Interaction {
+  _Interaction({
+    this.featuresetDescriptor,
+    required this.interactionType,
+    required this.stopPropagation,
+    this.filter,
+    this.radius,
+  });
+
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
+  FeaturesetDescriptor? featuresetDescriptor;
+
+  /// The type of interaction, either tap or longTap
+  _InteractionType interactionType;
+
+  /// Whether to stop the propagation of the interaction to the map. Defaults to true.
+  bool stopPropagation;
+
+  /// An optional filter of features that should trigger the interaction.
+  String? filter;
+
+  /// Radius of a tappable area
+  double? radius;
+
+  Object encode() {
+    return <Object?>[
+      featuresetDescriptor,
+      interactionType,
+      stopPropagation,
+      filter,
+      radius,
+    ];
+  }
+
+  static _Interaction decode(Object result) {
+    result as List<Object?>;
+    return _Interaction(
+      featuresetDescriptor: result[0] as FeaturesetDescriptor?,
+      interactionType: result[1]! as _InteractionType,
+      stopPropagation: result[2]! as bool,
+      filter: result[3] as String?,
+      radius: result[4] as double?,
+    );
+  }
+}
+
+/// Internal class to handle pigeon conversions for interactions.
+class _InteractionPigeon {
+  _InteractionPigeon({
+    this.featuresetDescriptor,
+    required this.stopPropagation,
+    required this.interactionType,
+    required this.identifier,
+    this.filter,
+    this.radius,
+  });
+
+  /// The featureset descriptor that specifies the featureset to be included in the interaction.
+  List<Object?>? featuresetDescriptor;
+
+  /// Whether to stop the propagation of the interaction to the map
+  bool stopPropagation;
+
+  /// The type of interaction, either tap or longTap as a String
+  String interactionType;
+
+  /// An identifier for the interaction
+  String identifier;
+
+  /// An optional filter of features that should trigger the interaction.
+  String? filter;
+
+  /// Radius of a tappable area
+  double? radius;
+
+  Object encode() {
+    return <Object?>[
+      featuresetDescriptor,
+      stopPropagation,
+      interactionType,
+      identifier,
+      filter,
+      radius,
+    ];
+  }
+
+  static _InteractionPigeon decode(Object result) {
+    result as List<Object?>;
+    return _InteractionPigeon(
+      featuresetDescriptor: (result[0] as List<Object?>?)?.cast<Object?>(),
+      stopPropagation: result[1]! as bool,
+      interactionType: result[2]! as String,
+      identifier: result[3]! as String,
+      filter: result[4] as String?,
+      radius: result[5] as double?,
+    );
+  }
+}
+
+/// A featureset descriptor.
+///
+/// The descriptor instance acts as a universal target for interactions or querying rendered features (see  'TapInteraction', 'LongTapInteraction')
+class FeaturesetDescriptor {
+  FeaturesetDescriptor({
+    this.featuresetId,
+    this.importId,
+    this.layerId,
+  });
+
+  /// An optional unique identifier for the featureset within the style.
+  /// This id is used to reference a specific featureset.
+  ///
+  /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
+  /// * meaning `layerId` will not be considered even if it has a valid value.
+  String? featuresetId;
+
+  /// An optional import id that is required if the featureset is defined within an imported style.
+  /// If the featureset belongs to the current style, this field should be set to a null string.
+  ///
+  /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
+  /// and has no effect when used with `layerId`.
+  String? importId;
+
+  /// An optional unique identifier for the layer within the current style.
+  ///
+  /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
+  /// Additionally, `importId` does not apply when using `layerId`.
+  String? layerId;
+
+  Object encode() {
+    return <Object?>[
+      featuresetId,
+      importId,
+      layerId,
+    ];
+  }
+
+  static FeaturesetDescriptor decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetDescriptor(
+      featuresetId: result[0] as String?,
+      importId: result[1] as String?,
+      layerId: result[2] as String?,
+    );
+  }
+}
+
+/// A basic feature of a featureset.
+///
+/// If you use Standard Style, you can use typed alternatives like `StandardPoiFeature`, `StandardPlaceLabelsFeature`, `StandardBuildingsFeature`.
+///
+/// The featureset feature is different to the `Turf.Feature`. The latter represents any GeoJSON feature, while the former is a high level representation of features.
+class FeaturesetFeature {
+  FeaturesetFeature({
+    this.id,
+    required this.featureset,
+    required this.geometry,
+    required this.properties,
+    required this.state,
+  });
+
+  /// An identifier of the feature.
+  ///
+  /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
+  /// In this case it's impossible to set a feature state for an individual feature.
+  FeaturesetFeatureId? id;
+
+  /// A featureset descriptor denoting the featureset this feature belongs to.
+  FeaturesetDescriptor featureset;
+
+  /// A feature geometry.
+  Map<String?, Object?> geometry;
+
+  /// Feature JSON properties.
+  Map<String, Object?> properties;
+
+  /// A feature state.
+  ///
+  /// This is a **snapshot** of the state that the feature had when it was interacted with.
+  /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
+  Map<String, Object?> state;
+
+  Object encode() {
+    return <Object?>[
+      id,
+      featureset,
+      geometry,
+      properties,
+      state,
+    ];
+  }
+
+  static FeaturesetFeature decode(Object result) {
+    result as List<Object?>;
+    return FeaturesetFeature(
+      id: result[0] as FeaturesetFeatureId?,
+      featureset: result[1]! as FeaturesetDescriptor,
+      geometry: (result[2] as Map<Object?, Object?>?)!.cast<String?, Object?>(),
+      properties:
+          (result[3] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+      state: (result[4] as Map<Object?, Object?>?)!.cast<String, Object?>(),
+    );
+  }
+}
+
 /// Geometry for querying rendered features.
 class _RenderedQueryGeometry {
   _RenderedQueryGeometry({
@@ -1843,167 +2157,206 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is ViewAnnotationAnchor) {
       buffer.putUint8(136);
       writeValue(buffer, value.index);
-    } else if (value is Type) {
+    } else if (value is ModelElevationReference) {
       buffer.putUint8(137);
       writeValue(buffer, value.index);
-    } else if (value is StylePackErrorType) {
+    } else if (value is _InteractionType) {
       buffer.putUint8(138);
       writeValue(buffer, value.index);
-    } else if (value is ResponseErrorReason) {
+    } else if (value is GestureState) {
       buffer.putUint8(139);
       writeValue(buffer, value.index);
-    } else if (value is OfflineRegionDownloadState) {
+    } else if (value is Type) {
       buffer.putUint8(140);
       writeValue(buffer, value.index);
-    } else if (value is TileStoreUsageMode) {
+    } else if (value is FillExtrusionBaseAlignment) {
       buffer.putUint8(141);
       writeValue(buffer, value.index);
-    } else if (value is StylePropertyValueKind) {
+    } else if (value is FillExtrusionHeightAlignment) {
       buffer.putUint8(142);
       writeValue(buffer, value.index);
-    } else if (value is StyleProjectionName) {
+    } else if (value is BackgroundPitchAlignment) {
       buffer.putUint8(143);
       writeValue(buffer, value.index);
-    } else if (value is Anchor) {
+    } else if (value is StylePackErrorType) {
       buffer.putUint8(144);
       writeValue(buffer, value.index);
-    } else if (value is HttpMethod) {
+    } else if (value is ResponseErrorReason) {
       buffer.putUint8(145);
       writeValue(buffer, value.index);
-    } else if (value is HttpRequestErrorType) {
+    } else if (value is OfflineRegionDownloadState) {
       buffer.putUint8(146);
       writeValue(buffer, value.index);
-    } else if (value is DownloadErrorCode) {
+    } else if (value is TileStoreUsageMode) {
       buffer.putUint8(147);
       writeValue(buffer, value.index);
-    } else if (value is DownloadState) {
+    } else if (value is StylePropertyValueKind) {
       buffer.putUint8(148);
       writeValue(buffer, value.index);
-    } else if (value is TileRegionErrorType) {
+    } else if (value is StyleProjectionName) {
       buffer.putUint8(149);
       writeValue(buffer, value.index);
-    } else if (value is _MapEvent) {
+    } else if (value is Anchor) {
       buffer.putUint8(150);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is HttpMethod) {
       buffer.putUint8(151);
-      writeValue(buffer, value.encode());
-    } else if (value is Feature) {
+      writeValue(buffer, value.index);
+    } else if (value is HttpRequestErrorType) {
       buffer.putUint8(152);
-      writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+      writeValue(buffer, value.index);
+    } else if (value is DownloadErrorCode) {
       buffer.putUint8(153);
-      writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+      writeValue(buffer, value.index);
+    } else if (value is DownloadState) {
       buffer.putUint8(154);
-      writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+      writeValue(buffer, value.index);
+    } else if (value is TileRegionErrorType) {
       buffer.putUint8(155);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+      writeValue(buffer, value.index);
+    } else if (value is _MapEvent) {
       buffer.putUint8(156);
-      writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
+    } else if (value is Feature) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is CameraState) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is CameraBoundsOptions) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is CameraBounds) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MapAnimationOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenBox) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBoundsZoom) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is Size) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is RenderedQueryOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is SourceQueryOptions) {
+    } else if (value is MapOptions) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureExtensionValue) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(172);
       writeValue(buffer, value.encode());
-    } else if (value is LayerPosition) {
+    } else if (value is ScreenBox) {
       buffer.putUint8(173);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is CoordinateBoundsZoom) {
       buffer.putUint8(174);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is Size) {
       buffer.putUint8(175);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is RenderedQueryOptions) {
       buffer.putUint8(176);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is SourceQueryOptions) {
       buffer.putUint8(177);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is FeatureExtensionValue) {
       buffer.putUint8(178);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is LayerPosition) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FeaturesetFeatureId) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is FeatureState) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is _Interaction) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(190);
+      writeValue(buffer, value.encode());
+    } else if (value is ProjectedMeters) {
+      buffer.putUint8(191);
+      writeValue(buffer, value.encode());
+    } else if (value is MercatorCoordinate) {
+      buffer.putUint8(192);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleObjectInfo) {
+      buffer.putUint8(193);
+      writeValue(buffer, value.encode());
+    } else if (value is StyleProjection) {
+      buffer.putUint8(194);
+      writeValue(buffer, value.encode());
+    } else if (value is FlatLight) {
+      buffer.putUint8(195);
+      writeValue(buffer, value.encode());
+    } else if (value is DirectionalLight) {
+      buffer.putUint8(196);
+      writeValue(buffer, value.encode());
+    } else if (value is AmbientLight) {
+      buffer.putUint8(197);
+      writeValue(buffer, value.encode());
+    } else if (value is MbxImage) {
+      buffer.putUint8(198);
+      writeValue(buffer, value.encode());
+    } else if (value is ImageStretches) {
+      buffer.putUint8(199);
+      writeValue(buffer, value.encode());
+    } else if (value is ImageContent) {
+      buffer.putUint8(200);
+      writeValue(buffer, value.encode());
+    } else if (value is TransitionOptions) {
+      buffer.putUint8(201);
+      writeValue(buffer, value.encode());
+    } else if (value is CanonicalTileID) {
+      buffer.putUint8(202);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(203);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -2039,125 +2392,159 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : ViewAnnotationAnchor.values[value];
       case 137:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Type.values[value];
+        return value == null ? null : ModelElevationReference.values[value];
       case 138:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePackErrorType.values[value];
+        return value == null ? null : _InteractionType.values[value];
       case 139:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : ResponseErrorReason.values[value];
+        return value == null ? null : GestureState.values[value];
       case 140:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : OfflineRegionDownloadState.values[value];
+        return value == null ? null : Type.values[value];
       case 141:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileStoreUsageMode.values[value];
+        return value == null ? null : FillExtrusionBaseAlignment.values[value];
       case 142:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StylePropertyValueKind.values[value];
+        return value == null
+            ? null
+            : FillExtrusionHeightAlignment.values[value];
       case 143:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : StyleProjectionName.values[value];
+        return value == null ? null : BackgroundPitchAlignment.values[value];
       case 144:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : Anchor.values[value];
+        return value == null ? null : StylePackErrorType.values[value];
       case 145:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpMethod.values[value];
+        return value == null ? null : ResponseErrorReason.values[value];
       case 146:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : HttpRequestErrorType.values[value];
+        return value == null ? null : OfflineRegionDownloadState.values[value];
       case 147:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadErrorCode.values[value];
+        return value == null ? null : TileStoreUsageMode.values[value];
       case 148:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DownloadState.values[value];
+        return value == null ? null : StylePropertyValueKind.values[value];
       case 149:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : TileRegionErrorType.values[value];
+        return value == null ? null : StyleProjectionName.values[value];
       case 150:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : _MapEvent.values[value];
+        return value == null ? null : Anchor.values[value];
       case 151:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : HttpMethod.values[value];
       case 152:
-        return Feature.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : HttpRequestErrorType.values[value];
       case 153:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : DownloadErrorCode.values[value];
       case 154:
-        return TileCoverOptions.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : DownloadState.values[value];
       case 155:
-        return MbxEdgeInsets.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : TileRegionErrorType.values[value];
       case 156:
-        return CameraOptions.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : _MapEvent.values[value];
       case 157:
-        return CameraState.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 158:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
+        return Feature.decode(readValue(buffer)!);
       case 159:
-        return CameraBounds.decode(readValue(buffer)!);
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
       case 160:
-        return MapAnimationOptions.decode(readValue(buffer)!);
+        return TileCoverOptions.decode(readValue(buffer)!);
       case 161:
-        return CoordinateBounds.decode(readValue(buffer)!);
+        return MbxEdgeInsets.decode(readValue(buffer)!);
       case 162:
-        return MapDebugOptions.decode(readValue(buffer)!);
+        return CameraOptions.decode(readValue(buffer)!);
       case 163:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+        return CameraState.decode(readValue(buffer)!);
       case 164:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+        return CameraBoundsOptions.decode(readValue(buffer)!);
       case 165:
-        return MapOptions.decode(readValue(buffer)!);
+        return CameraBounds.decode(readValue(buffer)!);
       case 166:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return MapAnimationOptions.decode(readValue(buffer)!);
       case 167:
-        return ScreenBox.decode(readValue(buffer)!);
+        return CoordinateBounds.decode(readValue(buffer)!);
       case 168:
-        return CoordinateBoundsZoom.decode(readValue(buffer)!);
+        return MapDebugOptions.decode(readValue(buffer)!);
       case 169:
-        return Size.decode(readValue(buffer)!);
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
       case 170:
-        return RenderedQueryOptions.decode(readValue(buffer)!);
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
       case 171:
-        return SourceQueryOptions.decode(readValue(buffer)!);
+        return MapOptions.decode(readValue(buffer)!);
       case 172:
-        return FeatureExtensionValue.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 173:
-        return LayerPosition.decode(readValue(buffer)!);
+        return ScreenBox.decode(readValue(buffer)!);
       case 174:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return CoordinateBoundsZoom.decode(readValue(buffer)!);
       case 175:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return Size.decode(readValue(buffer)!);
       case 176:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return RenderedQueryOptions.decode(readValue(buffer)!);
       case 177:
-        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+        return SourceQueryOptions.decode(readValue(buffer)!);
       case 178:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return FeatureExtensionValue.decode(readValue(buffer)!);
       case 179:
-        return MercatorCoordinate.decode(readValue(buffer)!);
+        return LayerPosition.decode(readValue(buffer)!);
       case 180:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 181:
-        return StyleProjection.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 182:
-        return FlatLight.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 183:
-        return DirectionalLight.decode(readValue(buffer)!);
+        return FeaturesetFeatureId.decode(readValue(buffer)!);
       case 184:
-        return AmbientLight.decode(readValue(buffer)!);
+        return FeatureState.decode(readValue(buffer)!);
       case 185:
-        return MbxImage.decode(readValue(buffer)!);
+        return _Interaction.decode(readValue(buffer)!);
       case 186:
-        return ImageStretches.decode(readValue(buffer)!);
+        return _InteractionPigeon.decode(readValue(buffer)!);
       case 187:
-        return ImageContent.decode(readValue(buffer)!);
+        return FeaturesetDescriptor.decode(readValue(buffer)!);
       case 188:
-        return TransitionOptions.decode(readValue(buffer)!);
+        return FeaturesetFeature.decode(readValue(buffer)!);
       case 189:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return MapContentGestureContext.decode(readValue(buffer)!);
       case 190:
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+      case 191:
+        return ProjectedMeters.decode(readValue(buffer)!);
+      case 192:
+        return MercatorCoordinate.decode(readValue(buffer)!);
+      case 193:
+        return StyleObjectInfo.decode(readValue(buffer)!);
+      case 194:
+        return StyleProjection.decode(readValue(buffer)!);
+      case 195:
+        return FlatLight.decode(readValue(buffer)!);
+      case 196:
+        return DirectionalLight.decode(readValue(buffer)!);
+      case 197:
+        return AmbientLight.decode(readValue(buffer)!);
+      case 198:
+        return MbxImage.decode(readValue(buffer)!);
+      case 199:
+        return ImageStretches.decode(readValue(buffer)!);
+      case 200:
+        return ImageContent.decode(readValue(buffer)!);
+      case 201:
+        return TransitionOptions.decode(readValue(buffer)!);
+      case 202:
+        return CanonicalTileID.decode(readValue(buffer)!);
+      case 203:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -3021,6 +3408,58 @@ class _CameraManager {
   }
 }
 
+abstract class _InteractionsListener {
+  static const MessageCodec<Object?> pigeonChannelCodec =
+      MapInterfaces_PigeonCodec();
+
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID);
+
+  static void setUp(
+    _InteractionsListener? api, {
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) {
+    messageChannelSuffix =
+        messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    {
+      final BasicMessageChannel<
+          Object?> pigeonVar_channel = BasicMessageChannel<
+              Object?>(
+          'dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$messageChannelSuffix',
+          pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final FeaturesetFeature? arg_feature =
+              (args[0] as FeaturesetFeature?);
+          final MapContentGestureContext? arg_context =
+              (args[1] as MapContentGestureContext?);
+          assert(arg_context != null,
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
+          final String? arg_interactionID = (args[2] as String?);
+          assert(arg_interactionID != null,
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.');
+          try {
+            api.onInteraction(arg_feature, arg_context!, arg_interactionID!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          } catch (e) {
+            return wrapResponse(
+                error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+  }
+}
+
 /// Map class provides map rendering functionality.
 ///
 class _MapInterface {
@@ -3253,6 +3692,33 @@ class _MapInterface {
       );
     } else {
       return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  /// For internal use only.
+  /// Dispatch a map gesture event for testing purposes.
+  Future<void> dispatch(
+      String gesture, ScreenCoordinate screenCoordinate) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[gesture, screenCoordinate]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 
@@ -3641,6 +4107,50 @@ class _MapInterface {
     }
   }
 
+  /// Queries the map for rendered features with one typed featureset.
+  ///
+  /// The results array will contain features of the type specified by this featureset.
+  ///
+  /// - Important: If you need to handle basic gestures on map content,
+  /// please prefer to use Interactions API, see `MapboxMap/addInteraction`.
+  ///
+  /// @param featureset A typed featureset to query with.
+  /// @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
+  /// If omitted, the full viewport is queried.
+  /// @param filter An additional filter for features.
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
+      FeaturesetDescriptor featureset,
+      _RenderedQueryGeometry? geometry,
+      String? filter) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[featureset, geometry, filter]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<FeaturesetFeature>();
+    }
+  }
+
   /// Queries the map for source features.
   ///
   /// @param sourceId The style source identifier used to query for source features.
@@ -3836,6 +4346,72 @@ class _MapInterface {
     }
   }
 
+  /// Update the state map of a feature within a featureset.
+  /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+  /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  ///
+  /// @param featureset The featureset to look the feature in.
+  /// @param featureId Identifier of the feature whose state should be updated.
+  /// @param state Map of entries to update with their respective new values
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+      FeaturesetDescriptor featureset,
+      FeaturesetFeatureId featureId,
+      Map<String, Object?> state) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[featureset, featureId, state]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Update the state map of an individual feature.
+  ///
+  /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+  /// the operation will be no-op and callback will receive an error.
+  ///
+  /// @param feature The feature to update.
+  /// @param state Map of entries to update with their respective new values
+  Future<void> setFeatureStateForFeaturesetFeature(
+      FeaturesetFeature feature, Map<String, Object?> state) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[feature, state]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
   /// Gets the state map of a feature within a style source.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -3844,7 +4420,8 @@ class _MapInterface {
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
   /// @param featureId The feature identifier of the feature whose state should be queried.
-  /// @param completion The `query feature state completion` called when the query completes.
+  ///
+  /// @return A String representing the Feature's state map.
   Future<String> getFeatureState(
       String sourceId, String? sourceLayerId, String featureId) async {
     final String pigeonVar_channelName =
@@ -3875,13 +4452,86 @@ class _MapInterface {
     }
   }
 
+  /// Get the state map of a feature within a style source.
+  ///
+  /// @param featureset A featureset the feature belongs to.
+  /// @param featureId Identifier of the feature whose state should be queried.
+  ///
+  /// @return  The Feature's state map or an empty map if the feature could not be found.
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+      FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[featureset, featureId]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as Map<Object?, Object?>?)!
+          .cast<String, Object?>();
+    }
+  }
+
+  /// Get the state map of a feature within a style source.
+  ///
+  /// @param feature An interactive feature to query the state of.
+  ///
+  /// @return  The Feature's state map or an empty map if the feature could not be found.
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+      FeaturesetFeature feature) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[feature]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as Map<Object?, Object?>?)!
+          .cast<String, Object?>();
+    }
+  }
+
   /// Removes entries from a feature state object.
   ///
   /// Remove a specified property or all property from a feature's state object, depending on the value of
   /// `stateKey`.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
-  /// immediately visible using `getStateFeature`.
+  /// immediately visible using `getFeatureState`.
   ///
   /// @param sourceId The style source identifier.
   /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
@@ -3900,6 +4550,100 @@ class _MapInterface {
     final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
             .send(<Object?>[sourceId, sourceLayerId, featureId, stateKey])
         as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Removes entries from a feature state object of a feature in the specified featureset.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  ///
+  /// @param featureset A featureset the feature belongs to.
+  /// @param featureId Identifier of the feature whose state should be removed.
+  /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+  Future<void> removeFeatureStateForFeaturesetDescriptor(
+      FeaturesetDescriptor featureset,
+      FeaturesetFeatureId featureId,
+      String? stateKey) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[featureset, featureId, stateKey]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Removes entries from a specified Feature.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  ///
+  /// @param feature An interactive feature to update.
+  /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
+  Future<void> removeFeatureStateForFeaturesetFeature(
+      FeaturesetFeature feature, String? stateKey) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[feature, stateKey]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Reset all the feature states within a featureset.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using ``MapboxMap/getFeatureState()``.
+  ///
+  /// @param featureset A featureset descriptor
+  Future<void> resetFeatureStatesForFeatureset(
+      FeaturesetDescriptor featureset) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[featureset]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -6729,6 +7473,39 @@ class StyleManager {
       );
     } else {
       return;
+    }
+  }
+
+  /// Returns the available featuresets in the currently loaded style.
+  ///
+  /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
+  Future<List<FeaturesetDescriptor>> getFeaturesets() async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(null) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!
+          .cast<FeaturesetDescriptor>();
     }
   }
 }

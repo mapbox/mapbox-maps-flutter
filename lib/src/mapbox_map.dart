@@ -142,6 +142,7 @@ class MapboxMap extends ChangeNotifier {
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
+    this.onMapZoomListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
@@ -150,23 +151,26 @@ class MapboxMap extends ChangeNotifier {
   final _MapboxMapsPlatform _mapboxMapsPlatform;
 
   /// The currently loaded Style]object.
-  late StyleManager style = StyleManager(
+  late final StyleManager style = StyleManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the location puck.
-  late LocationSettings location = LocationSettings._(
+  late final LocationSettings location = LocationSettings._(
       _LocationComponentSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString()));
 
-  late _CameraManager _cameraManager = _CameraManager(
+  late final _CameraManager _cameraManager = _CameraManager(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late _MapInterface _mapInterface = _MapInterface(
+  late final _MapInterface _mapInterface = _MapInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-  late _AnimationManager _animationManager = _AnimationManager(
+  late final _AnimationManager _animationManager = _AnimationManager(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late final _ViewportMessenger _viewportMessenger = _ViewportMessenger(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
@@ -175,38 +179,40 @@ class MapboxMap extends ChangeNotifier {
 
   // Keep Projection visible for users as iOS doesn't include it in MapboxMaps.
   /// The map projection of the style.
-  late Projection projection = Projection(
+  late final Projection projection = Projection(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the gesture settings.
-  late GesturesSettingsInterface gestures = GesturesSettingsInterface(
+  late final GesturesSettingsInterface gestures = GesturesSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to set the logo settings.
-  late LogoSettingsInterface logo = LogoSettingsInterface(
+  late final LogoSettingsInterface logo = LogoSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late CompassSettingsInterface compass = CompassSettingsInterface(
+  late final CompassSettingsInterface compass = CompassSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the compass settings.
-  late ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
+  late final ScaleBarSettingsInterface scaleBar = ScaleBarSettingsInterface(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to access the attribution settings.
-  late AttributionSettingsInterface attribution = AttributionSettingsInterface(
-      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
-      messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late final AttributionSettingsInterface attribution =
+      AttributionSettingsInterface(
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
+  OnMapZoomListener? onMapZoomListener;
 
   @override
   void dispose() {
@@ -363,6 +369,10 @@ class MapboxMap extends ChangeNotifier {
   /// Returns `true` if a gesture is currently in progress.
   Future<bool> isGestureInProgress() => _mapInterface.isGestureInProgress();
 
+  @visibleForTesting
+  Future<void> dispatch(String gesture, ScreenCoordinate screenCoordinate) =>
+      _mapInterface.dispatch(gesture, screenCoordinate);
+
   /// Tells the map rendering engine that the animation is currently performed by the
   /// user (e.g. with a `setCamera` calls series). It adjusts the engine for the animation use case.
   /// In particular, it brings more stability to symbol placement and rendering.
@@ -439,6 +449,20 @@ class MapboxMap extends ChangeNotifier {
           _RenderedQueryGeometry(value: geometry.value, type: geometry.type),
           options);
 
+  /// Queries the map for rendered features with one typed featureset.
+  @experimental
+  Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
+      {required FeaturesetDescriptor featureset,
+      RenderedQueryGeometry? geometry,
+      String? filter}) async {
+    return _mapInterface.queryRenderedFeaturesForFeatureset(
+        featureset,
+        (geometry != null)
+            ? _RenderedQueryGeometry(value: geometry.value, type: geometry.type)
+            : null,
+        filter);
+  }
+
   /// Queries the map for source features.
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
           String sourceId, SourceQueryOptions options) =>
@@ -481,6 +505,26 @@ class MapboxMap extends ChangeNotifier {
           String featureId, String state) =>
       _mapInterface.setFeatureState(sourceId, sourceLayerId, featureId, state);
 
+  /// Update the state map of a feature within a featureset.
+  /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
+  /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
+  @experimental
+  Future<void> setFeatureStateForFeaturesetDescriptor(
+          FeaturesetDescriptor featureset,
+          FeaturesetFeatureId featureId,
+          FeatureState state) =>
+      _mapInterface.setFeatureStateForFeaturesetDescriptor(
+          featureset, featureId, state.map);
+
+  /// Update the state map of an individual feature.
+  ///
+  /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
+  /// the operation will be no-op and callback will receive an error.
+  @experimental
+  Future<void> setFeatureStateForFeaturesetFeature(
+          FeaturesetFeature feature, FeatureState state) =>
+      _mapInterface.setFeatureStateForFeaturesetFeature(feature, state.map);
+
   /// Gets the state map of a feature within a style source.
   ///
   /// Note that updates to feature state are asynchronous, so changes made by other methods might not be
@@ -488,6 +532,19 @@ class MapboxMap extends ChangeNotifier {
   Future<String> getFeatureState(
           String sourceId, String? sourceLayerId, String featureId) =>
       _mapInterface.getFeatureState(sourceId, sourceLayerId, featureId);
+
+  /// Get the state map of a feature within a style source.
+  @experimental
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
+          FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) =>
+      _mapInterface.getFeatureStateForFeaturesetDescriptor(
+          featureset, featureId);
+
+  /// Get the state map of a feature within a style source.
+  @experimental
+  Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
+          FeaturesetFeature feature) =>
+      _mapInterface.getFeatureStateForFeaturesetFeature(feature);
 
   /// Removes entries from a feature state object.
   ///
@@ -500,6 +557,62 @@ class MapboxMap extends ChangeNotifier {
           String featureId, String? stateKey) =>
       _mapInterface.removeFeatureState(
           sourceId, sourceLayerId, featureId, stateKey);
+
+  /// Removes entries from a feature state object of a feature in the specified featureset.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @experimental
+  Future<void> removeFeatureStateForFeaturesetDescriptor(
+          {required FeaturesetDescriptor featureset,
+          required FeaturesetFeatureId featureId,
+          String? stateKey}) =>
+      _mapInterface.removeFeatureStateForFeaturesetDescriptor(
+          featureset, featureId, stateKey);
+
+  /// Removes entries from a specified Feature.
+  /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
+  @experimental
+  Future<void> removeFeatureStateForFeaturesetFeature(
+          {required FeaturesetFeature feature, String? stateKey}) =>
+      _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
+
+  /// Reset all the feature states within a featureset.
+  ///
+  /// Note that updates to feature state are asynchronous, so changes made by this method might not be
+  /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
+  @experimental
+  Future<void> resetFeatureStatesForFeatureset(
+          FeaturesetDescriptor featureset) =>
+      _mapInterface.resetFeatureStatesForFeatureset(featureset);
+
+  /// References for all interactions added to the map.
+  @experimental
+  final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
+
+  /// Add an interaction to the map
+  /// An identifier can be provided, which you can use to remove
+  /// the interaction with `.removeInteraction(interactionID)`
+  @experimental
+  void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
+      TypedInteraction<T> interaction,
+      {String? interactionID}) {
+    final id = interactionID ?? UniqueKey().toString();
+    _interactionsMap.interactions[id] = _InteractionListener<T>(
+      onInteractionListener: interaction.action,
+      interactionID: id,
+    );
+    _InteractionsListener.setUp(_interactionsMap,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+    _mapboxMapsPlatform.addInteractionsListeners(interaction, id);
+  }
+
+  /// Remove an interaction from the map with the given interactionID
+  /// that was passed with `.addInteraction(interaction, interactionID)`
+  @experimental
+  void removeInteraction(String interactionID) {
+    _interactionsMap.interactions.remove(interactionID);
+    _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
+  }
 
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() => _mapInterface.reduceMemoryUse();
@@ -601,12 +714,14 @@ class MapboxMap extends ChangeNotifier {
   void _setupGestures() {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
-        onMapScrollListener != null) {
+        onMapScrollListener != null ||
+        onMapZoomListener != null) {
       GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,
             onMapLongTapListener: onMapLongTapListener,
             onMapScrollListener: onMapScrollListener,
+            onMapZoomListener: onMapZoomListener,
           ),
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
@@ -626,6 +741,11 @@ class MapboxMap extends ChangeNotifier {
 
   void setOnMapMoveListener(OnMapScrollListener? onMapScrollListener) {
     this.onMapScrollListener = onMapScrollListener;
+    _setupGestures();
+  }
+
+  void setOnMapZoomListener(OnMapZoomListener? onMapZoomListener) {
+    this.onMapZoomListener = onMapZoomListener;
     _setupGestures();
   }
 
@@ -650,11 +770,13 @@ class _GestureListener extends GestureListener {
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
+    this.onMapZoomListener,
   });
 
   final OnMapTapListener? onMapTapListener;
   final OnMapLongTapListener? onMapLongTapListener;
   final OnMapScrollListener? onMapScrollListener;
+  final OnMapZoomListener? onMapZoomListener;
 
   @override
   void onTap(MapContentGestureContext context) {
@@ -669,5 +791,68 @@ class _GestureListener extends GestureListener {
   @override
   void onScroll(MapContentGestureContext context) {
     onMapScrollListener?.call(context);
+  }
+
+  @override
+  void onZoom(MapContentGestureContext context) {
+    onMapZoomListener?.call(context);
+  }
+}
+
+/// Listen for a single interaction added to the map, identified by its id
+class _InteractionListener<T extends FeaturesetFeature>
+    extends _InteractionsListener {
+  _InteractionListener({
+    required this.interactionID,
+    required this.onInteractionListener,
+  });
+
+  String interactionID;
+
+  final OnInteraction<T> onInteractionListener;
+
+  @override
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    final featuresetID = feature?.featureset.featuresetId;
+    T? typedFeature;
+
+    if (feature != null) {
+      if (featuresetID == "buildings") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardBuildings>.fromFeaturesetFeature(
+                feature) as T;
+      } else if (featuresetID == "poi") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPOIs>.fromFeaturesetFeature(feature)
+                as T;
+      } else if (featuresetID == "place-labels") {
+        typedFeature =
+            TypedFeaturesetFeature<StandardPlaceLabels>.fromFeaturesetFeature(
+                feature) as T;
+      } else {
+        typedFeature =
+            TypedFeaturesetFeature.fromFeaturesetFeature(feature) as T;
+      }
+      onInteractionListener.call(typedFeature, context);
+    } else {
+      onInteractionListener.call(null, context);
+    }
+  }
+}
+
+/// Listen to all interactions on the map, determine which interaction to call
+class _InteractionsMap<T extends FeaturesetFeature>
+    extends _InteractionsListener {
+  _InteractionsMap({
+    required this.interactions,
+  });
+
+  Map<String, _InteractionListener> interactions;
+
+  @override
+  void onInteraction(FeaturesetFeature? feature,
+      MapContentGestureContext context, String interactionID) {
+    interactions[interactionID]?.onInteraction(feature, context, interactionID);
   }
 }

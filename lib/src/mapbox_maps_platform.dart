@@ -29,19 +29,21 @@ class _MapboxMapsPlatform {
       AndroidPlatformViewHostingMode androidHostingMode,
       Map<String, dynamic> creationParams,
       OnPlatformViewCreatedCallback onPlatformViewCreated,
-      Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers) {
+      Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
+      {Key? key}) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       switch (androidHostingMode) {
         case AndroidPlatformViewHostingMode.TLHC_VD:
         case AndroidPlatformViewHostingMode.TLHC_HC:
         case AndroidPlatformViewHostingMode.HC:
           return PlatformViewLink(
+            key: key,
             viewType: "plugins.flutter.io/mapbox_maps",
             surfaceFactory: (context, controller) {
               return AndroidViewSurface(
                   controller: controller as AndroidViewController,
                   hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-                  gestureRecognizers: gestureRecognizers ?? Set());
+                  gestureRecognizers: gestureRecognizers ?? {});
             },
             onCreatePlatformView: (params) {
               final AndroidViewController controller =
@@ -66,6 +68,7 @@ class _MapboxMapsPlatform {
           );
         case AndroidPlatformViewHostingMode.VD:
           return AndroidView(
+            key: key,
             viewType: 'plugins.flutter.io/mapbox_maps',
             onPlatformViewCreated: onPlatformViewCreated,
             gestureRecognizers: gestureRecognizers,
@@ -75,6 +78,7 @@ class _MapboxMapsPlatform {
       }
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       return UiKitView(
+        key: key,
         viewType: 'plugins.flutter.io/mapbox_maps',
         onPlatformViewCreated: onPlatformViewCreated,
         gestureRecognizers: gestureRecognizers,
@@ -103,8 +107,17 @@ class _MapboxMapsPlatform {
       case AndroidPlatformViewHostingMode.HC:
         return PlatformViewsService.initExpensiveAndroidView;
       case AndroidPlatformViewHostingMode.VD:
-        throw "Unexpected hostring mode(VD) when selecting an android view controller";
+        throw "Unexpected hosting mode(VD) when selecting an android view controller";
     }
+  }
+
+  Future<void> submitViewSizeHint(
+      {required double width, required double height}) {
+    return _channel
+        .invokeMethod('mapView#submitViewSizeHint', <String, dynamic>{
+      'width': width,
+      'height': height,
+    });
   }
 
   void dispose() async {
@@ -143,6 +156,35 @@ class _MapboxMapsPlatform {
   Future<dynamic> addGestureListeners() async {
     try {
       return _channel.invokeMethod('gesture#add_listeners');
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> addInteractionsListeners(
+      _Interaction interaction, String interactionID) async {
+    var interactionPigeon = _InteractionPigeon(
+        featuresetDescriptor:
+            interaction.featuresetDescriptor?.encode() as List<Object?>?,
+        stopPropagation: interaction.stopPropagation,
+        interactionType: interaction.interactionType.name,
+        identifier: interactionID,
+        radius: interaction.radius,
+        filter: interaction.filter);
+    try {
+      return _channel
+          .invokeMethod('interactions#add_interaction', <String, dynamic>{
+        'interaction': interactionPigeon.encode(),
+      });
+    } on PlatformException catch (e) {
+      return new Future.error(e);
+    }
+  }
+
+  Future<dynamic> removeInteractionsListeners(String interactionID) async {
+    try {
+      return _channel.invokeMethod('interactions#remove_interaction',
+          <String, dynamic>{'identifier': interactionID});
     } on PlatformException catch (e) {
       return new Future.error(e);
     }

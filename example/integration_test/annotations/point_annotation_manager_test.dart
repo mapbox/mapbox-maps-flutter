@@ -81,6 +81,10 @@ void main() {
     var iconSize = await manager.getIconSize();
     expect(1.0, iconSize);
 
+    await manager.setIconSizeScaleRange([0.0, 1.0]);
+    var iconSizeScaleRange = await manager.getIconSizeScaleRange();
+    expect([0.0, 1.0], iconSizeScaleRange);
+
     await manager.setIconTextFit(IconTextFit.NONE);
     var iconTextFit = await manager.getIconTextFit();
     expect(IconTextFit.NONE, iconTextFit);
@@ -92,6 +96,10 @@ void main() {
     await manager.setSymbolAvoidEdges(true);
     var symbolAvoidEdges = await manager.getSymbolAvoidEdges();
     expect(true, symbolAvoidEdges);
+
+    await manager.setSymbolElevationReference(SymbolElevationReference.SEA);
+    var symbolElevationReference = await manager.getSymbolElevationReference();
+    expect(SymbolElevationReference.SEA, symbolElevationReference);
 
     await manager.setSymbolPlacement(SymbolPlacement.POINT);
     var symbolPlacement = await manager.getSymbolPlacement();
@@ -189,6 +197,10 @@ void main() {
     var textSize = await manager.getTextSize();
     expect(1.0, textSize);
 
+    await manager.setTextSizeScaleRange([0.0, 1.0]);
+    var textSizeScaleRange = await manager.getTextSizeScaleRange();
+    expect([0.0, 1.0], textSizeScaleRange);
+
     await manager.setTextTransform(TextTransform.NONE);
     var textTransform = await manager.getTextTransform();
     expect(TextTransform.NONE, textTransform);
@@ -236,10 +248,6 @@ void main() {
     await manager.setIconTranslateAnchor(IconTranslateAnchor.MAP);
     var iconTranslateAnchor = await manager.getIconTranslateAnchor();
     expect(IconTranslateAnchor.MAP, iconTranslateAnchor);
-
-    await manager.setSymbolElevationReference(SymbolElevationReference.SEA);
-    var symbolElevationReference = await manager.getSymbolElevationReference();
-    expect(SymbolElevationReference.SEA, symbolElevationReference);
 
     await manager.setSymbolZOffset(1.0);
     var symbolZOffset = await manager.getSymbolZOffset();

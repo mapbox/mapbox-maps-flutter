@@ -29,7 +29,7 @@ class MapboxMapFactory(
     val cameraOptions = params["cameraOptions"] as com.mapbox.maps.mapbox_maps.pigeons.CameraOptions?
     val channelSuffix = params["channelSuffix"] as Long
     val textureView = params["textureView"] as? Boolean ?: false
-    val styleUri = params["styleUri"] as? String ?: Style.MAPBOX_STREETS
+    val styleUri = params["styleUri"] as? String ?: Style.STANDARD
     val pluginVersion = params["mapboxPluginVersion"] as String
     val eventTypes = params["eventTypes"] as List<Long>
 

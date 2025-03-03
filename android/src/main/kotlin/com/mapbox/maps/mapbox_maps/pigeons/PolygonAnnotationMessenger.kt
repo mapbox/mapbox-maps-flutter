@@ -39,6 +39,25 @@ private fun createConnectionError(channelName: String): FlutterError {
 }
 
 /**
+ * Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
+ * Default value: "none".
+ */
+enum class FillElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks. */
+  HD_ROAD_BASE(1),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(2);
+
+  companion object {
+    fun ofRaw(raw: Int): FillElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Controls the frame of reference for `fill-translate`.
  * Default value: "map".
  */
@@ -76,7 +95,13 @@ data class PolygonAnnotation(
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
-  val fillPattern: String? = null
+  val fillPattern: String? = null,
+  /**
+   * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+   * Default value: 0. Minimum value: 0.
+   * @experimental
+   */
+  val fillZOffset: Double? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotation {
@@ -87,7 +112,8 @@ data class PolygonAnnotation(
       val fillOpacity = pigeonVar_list[4] as Double?
       val fillOutlineColor = pigeonVar_list[5] as Long?
       val fillPattern = pigeonVar_list[6] as String?
-      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern)
+      val fillZOffset = pigeonVar_list[7] as Double?
+      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset)
     }
   }
   fun toList(): List<Any?> {
@@ -99,6 +125,7 @@ data class PolygonAnnotation(
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     )
   }
 }
@@ -122,7 +149,13 @@ data class PolygonAnnotationOptions(
   /** The outline color of the fill. Matches the value of `fill-color` if unspecified. */
   val fillOutlineColor: Long? = null,
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
-  val fillPattern: String? = null
+  val fillPattern: String? = null,
+  /**
+   * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+   * Default value: 0. Minimum value: 0.
+   * @experimental
+   */
+  val fillZOffset: Double? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotationOptions {
@@ -132,7 +165,8 @@ data class PolygonAnnotationOptions(
       val fillOpacity = pigeonVar_list[3] as Double?
       val fillOutlineColor = pigeonVar_list[4] as Long?
       val fillPattern = pigeonVar_list[5] as String?
-      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern)
+      val fillZOffset = pigeonVar_list[6] as Double?
+      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset)
     }
   }
   fun toList(): List<Any?> {
@@ -143,6 +177,7 @@ data class PolygonAnnotationOptions(
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     )
   }
 }
@@ -151,20 +186,25 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          FillTranslateAnchor.ofRaw(it.toInt())
+          FillElevationReference.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          FillTranslateAnchor.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PolygonAnnotation.fromList(it)
+          PolygonDecoder.fromList(it)
         }
       }
       132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotation.fromList(it)
+        }
+      }
+      133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolygonAnnotationOptions.fromList(it)
         }
@@ -174,20 +214,24 @@ private open class PolygonAnnotationMessengerPigeonCodec : StandardMessageCodec(
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is FillTranslateAnchor -> {
+      is FillElevationReference -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is Polygon -> {
+      is FillTranslateAnchor -> {
         stream.write(130)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is PolygonAnnotation -> {
+      is Polygon -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is PolygonAnnotationOptions -> {
+      is PolygonAnnotation -> {
         stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotationOptions -> {
+        stream.write(133)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -227,6 +271,8 @@ interface _PolygonAnnotationMessenger {
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getFillElevationReference(managerId: String, callback: (Result<FillElevationReference?>) -> Unit)
   fun setFillSortKey(managerId: String, fillSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getFillSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setFillAntialias(managerId: String, fillAntialias: Boolean, callback: (Result<Unit>) -> Unit)
@@ -245,6 +291,8 @@ interface _PolygonAnnotationMessenger {
   fun getFillTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getFillTranslateAnchor(managerId: String, callback: (Result<FillTranslateAnchor?>) -> Unit)
+  fun setFillZOffset(managerId: String, fillZOffset: Double, callback: (Result<Unit>) -> Unit)
+  fun getFillZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
 
   companion object {
     /** The codec used by _PolygonAnnotationMessenger. */
@@ -349,6 +397,46 @@ interface _PolygonAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillElevationReferenceArg = args[1] as FillElevationReference
+            api.setFillElevationReference(managerIdArg, fillElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillElevationReference(managerIdArg) { result: Result<FillElevationReference?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }
@@ -703,6 +791,46 @@ interface _PolygonAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getFillTranslateAnchor(managerIdArg) { result: Result<FillTranslateAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillZOffsetArg = args[1] as Double
+            api.setFillZOffset(managerIdArg, fillZOffsetArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillZOffset$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillZOffset(managerIdArg) { result: Result<Double?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

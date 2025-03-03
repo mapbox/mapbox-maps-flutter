@@ -4,6 +4,19 @@
 
 part of mapbox_maps_flutter;
 
+/// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum FillElevationReference {
+  /// Elevated rendering is disabled.
+  NONE,
+
+  /// Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks.
+  HD_ROAD_BASE,
+
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
+  HD_ROAD_MARKUP,
+}
+
 /// Controls the frame of reference for `fill-translate`.
 /// Default value: "map".
 enum FillTranslateAnchor {
@@ -23,6 +36,7 @@ class PolygonAnnotation {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillZOffset,
   });
 
   /// The id for annotation
@@ -48,6 +62,11 @@ class PolygonAnnotation {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  /// @experimental
+  double? fillZOffset;
+
   Object encode() {
     return <Object?>[
       id,
@@ -57,6 +76,7 @@ class PolygonAnnotation {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ];
   }
 
@@ -70,6 +90,7 @@ class PolygonAnnotation {
       fillOpacity: result[4] as double?,
       fillOutlineColor: result[5] as int?,
       fillPattern: result[6] as String?,
+      fillZOffset: result[7] as double?,
     );
   }
 }
@@ -82,6 +103,7 @@ class PolygonAnnotationOptions {
     this.fillOpacity,
     this.fillOutlineColor,
     this.fillPattern,
+    this.fillZOffset,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -104,6 +126,11 @@ class PolygonAnnotationOptions {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   String? fillPattern;
 
+  /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
+  /// Default value: 0. Minimum value: 0.
+  /// @experimental
+  double? fillZOffset;
+
   Object encode() {
     return <Object?>[
       geometry,
@@ -112,6 +139,7 @@ class PolygonAnnotationOptions {
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillZOffset,
     ];
   }
 
@@ -124,6 +152,7 @@ class PolygonAnnotationOptions {
       fillOpacity: result[3] as double?,
       fillOutlineColor: result[4] as int?,
       fillPattern: result[5] as String?,
+      fillZOffset: result[6] as double?,
     );
   }
 }
@@ -135,17 +164,20 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is FillTranslateAnchor) {
+    } else if (value is FillElevationReference) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is Polygon) {
+    } else if (value is FillTranslateAnchor) {
       buffer.putUint8(130);
-      writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotation) {
+      writeValue(buffer, value.index);
+    } else if (value is Polygon) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotationOptions) {
+    } else if (value is PolygonAnnotation) {
       buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotationOptions) {
+      buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -157,12 +189,15 @@ class PolygonAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : FillTranslateAnchor.values[value];
+        return value == null ? null : FillElevationReference.values[value];
       case 130:
-        return Polygon.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : FillTranslateAnchor.values[value];
       case 131:
-        return PolygonAnnotation.decode(readValue(buffer)!);
+        return Polygon.decode(readValue(buffer)!);
       case 132:
+        return PolygonAnnotation.decode(readValue(buffer)!);
+      case 133:
         return PolygonAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -362,6 +397,56 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return;
+    }
+  }
+
+  Future<void> setFillElevationReference(
+      String managerId, FillElevationReference fillElevationReference) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[managerId, fillElevationReference]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<FillElevationReference?> getFillElevationReference(
+      String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as FillElevationReference?);
     }
   }
 
@@ -798,6 +883,54 @@ class _PolygonAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as FillTranslateAnchor?);
+    }
+  }
+
+  Future<void> setFillZOffset(String managerId, double fillZOffset) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
+        .send(<Object?>[managerId, fillZOffset]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double?> getFillZOffset(String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillZOffset$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[managerId]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?);
     }
   }
 }
