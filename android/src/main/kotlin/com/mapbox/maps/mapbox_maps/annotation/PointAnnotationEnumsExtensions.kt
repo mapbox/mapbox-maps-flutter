@@ -47,6 +47,7 @@ fun SymbolElevationReference.toSymbolElevationReference(): com.mapbox.maps.exten
   return when (this) {
     SymbolElevationReference.SEA -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.SEA
     SymbolElevationReference.GROUND -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.GROUND
+    SymbolElevationReference.HD_ROAD_MARKUP -> com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.HD_ROAD_MARKUP
     else -> throw(RuntimeException("Unsupported SymbolElevationReference: $this"))
   }
 }
@@ -173,6 +174,7 @@ fun com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationR
   return when (this) {
     com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.SEA -> SymbolElevationReference.SEA
     com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.GROUND -> SymbolElevationReference.GROUND
+    com.mapbox.maps.extension.style.layers.properties.generated.SymbolElevationReference.HD_ROAD_MARKUP -> SymbolElevationReference.HD_ROAD_MARKUP
     else -> throw(RuntimeException("Unsupported SymbolElevationReference: $this"))
   }
 }

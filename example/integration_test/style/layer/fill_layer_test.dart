@@ -32,6 +32,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      fillElevationReference: FillElevationReference.NONE,
       fillSortKey: 1.0,
       fillAntialias: true,
       fillColor: Colors.red.value,
@@ -49,6 +50,7 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.fillElevationReference, FillElevationReference.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillColor, Colors.red.value);
@@ -89,6 +91,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      fillElevationReferenceExpression: ['string', 'none'],
       fillSortKeyExpression: ['number', 1.0],
       fillAntialiasExpression: ['==', true, true],
       fillColorExpression: ['rgba', 255, 0, 0, 1],
@@ -114,6 +117,7 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.fillElevationReference, FillElevationReference.NONE);
     expect(layer.fillSortKey, 1.0);
     expect(layer.fillAntialias, true);
     expect(layer.fillColorExpression, ['rgba', 255, 0, 0, 1]);

@@ -54,11 +54,11 @@ class HillshadeLayer extends Layer {
   List<Object>? hillshadeAccentColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of hillshadeEmissiveStrength is in intensity.
   double? hillshadeEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of hillshadeEmissiveStrength is in intensity.
   List<Object>? hillshadeEmissiveStrengthExpression;
 
   /// Intensity of the hillshade

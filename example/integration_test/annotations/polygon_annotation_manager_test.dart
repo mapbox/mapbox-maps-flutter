@@ -34,6 +34,10 @@ void main() {
     final manager =
         await mapboxMap.annotations.createPolygonAnnotationManager();
 
+    await manager.setFillElevationReference(FillElevationReference.NONE);
+    var fillElevationReference = await manager.getFillElevationReference();
+    expect(FillElevationReference.NONE, fillElevationReference);
+
     await manager.setFillSortKey(1.0);
     var fillSortKey = await manager.getFillSortKey();
     expect(1.0, fillSortKey);

@@ -135,6 +135,46 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         }
     }
 
+    func getLineCrossSlope(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineCrossSlope))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineCrossSlope(managerId: String, lineCrossSlope: Double, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineCrossSlope = lineCrossSlope
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineElevationReference?.toFLTLineElevationReference()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineElevationReference = MapboxMaps.LineElevationReference(lineElevationReference)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getLineJoin(managerId: String, completion: @escaping (Result<LineJoin?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
@@ -208,6 +248,26 @@ final class PolylineAnnotationController: _PolylineAnnotationMessenger {
         do {
             let manager = try getManager(id: managerId)
             manager.lineSortKey = lineSortKey
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func getLineWidthUnit(managerId: String, completion: @escaping (Result<LineWidthUnit?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.lineWidthUnit?.toFLTLineWidthUnit()))
+        } catch {
+            completion(.failure(FlutterError(code: PolylineAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setLineWidthUnit(managerId: String, lineWidthUnit: LineWidthUnit, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.lineWidthUnit = MapboxMaps.LineWidthUnit(lineWidthUnit)
 
             completion(.success(()))
         } catch {

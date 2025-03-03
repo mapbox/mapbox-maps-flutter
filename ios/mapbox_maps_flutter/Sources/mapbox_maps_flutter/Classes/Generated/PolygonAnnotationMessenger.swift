@@ -69,6 +69,17 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum FillElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks.
+  case hDROADBASE = 1
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
+  case hDROADMARKUP = 2
+}
+
 /// Controls the frame of reference for `fill-translate`.
 /// Default value: "map".
 enum FillTranslateAnchor: Int {
@@ -197,14 +208,20 @@ private class PolygonAnnotationMessengerPigeonCodecReader: FlutterStandardReader
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return FillTranslateAnchor(rawValue: enumResultAsInt)
+        return FillElevationReference(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
-      return Polygon.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return FillTranslateAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 131:
-      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+      return Polygon.fromList(self.readValue() as! [Any?])
     case 132:
+      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+    case 133:
       return PolygonAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -214,17 +231,20 @@ private class PolygonAnnotationMessengerPigeonCodecReader: FlutterStandardReader
 
 private class PolygonAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? FillTranslateAnchor {
+    if let value = value as? FillElevationReference {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Polygon {
+    } else if let value = value as? FillTranslateAnchor {
       super.writeByte(130)
-      super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Polygon {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotationOptions {
+    } else if let value = value as? PolygonAnnotation {
       super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotationOptions {
+      super.writeByte(133)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -286,6 +306,8 @@ protocol _PolygonAnnotationMessenger {
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
+  func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void)
   func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setFillAntialias(managerId: String, fillAntialias: Bool, completion: @escaping (Result<Void, Error>) -> Void)
@@ -402,6 +424,41 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setFillElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let fillElevationReferenceArg = args[1] as! FillElevationReference
+        api.setFillElevationReference(managerId: managerIdArg, fillElevationReference: fillElevationReferenceArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setFillElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let getFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getFillElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getFillElevationReference(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getFillElevationReferenceChannel.setMessageHandler(nil)
     }
     let setFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

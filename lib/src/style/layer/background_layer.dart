@@ -42,11 +42,11 @@ class BackgroundLayer extends Layer {
   List<Object>? backgroundColorExpression;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of backgroundEmissiveStrength is in intensity.
   double? backgroundEmissiveStrength;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of backgroundEmissiveStrength is in intensity.
   List<Object>? backgroundEmissiveStrengthExpression;
 
   /// The opacity at which the background will be drawn.
@@ -65,10 +65,12 @@ class BackgroundLayer extends Layer {
 
   /// Orientation of background layer.
   /// Default value: "map".
+  @experimental
   BackgroundPitchAlignment? backgroundPitchAlignment;
 
   /// Orientation of background layer.
   /// Default value: "map".
+  @experimental
   List<Object>? backgroundPitchAlignmentExpression;
 
   @override

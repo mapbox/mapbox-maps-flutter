@@ -3,7 +3,9 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
+import toFLTFillElevationReference
 import toFLTFillTranslateAnchor
+import toFillElevationReference
 import toFillTranslateAnchor
 
 class PolygonAnnotationController(private val delegate: ControllerDelegate) : _PolygonAnnotationMessenger {
@@ -139,6 +141,29 @@ class PolygonAnnotationController(private val delegate: ControllerDelegate) : _P
       originalAnnotation.fillZOffset = it
     }
     return originalAnnotation
+  }
+
+  override fun setFillElevationReference(
+    managerId: String,
+    fillElevationReference: FillElevationReference,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    manager.fillElevationReference = fillElevationReference.toFillElevationReference()
+    callback(Result.success(Unit))
+  }
+
+  override fun getFillElevationReference(
+    managerId: String,
+    callback: (Result<FillElevationReference?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolygonAnnotationManager
+    val value = manager.fillElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTFillElevationReference()))
+    } else {
+      callback(Result.success(null))
+    }
   }
 
   override fun setFillSortKey(

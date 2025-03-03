@@ -5,11 +5,15 @@ import com.mapbox.maps.extension.style.utils.ColorUtils
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import toFLTLineCap
+import toFLTLineElevationReference
 import toFLTLineJoin
 import toFLTLineTranslateAnchor
+import toFLTLineWidthUnit
 import toLineCap
+import toLineElevationReference
 import toLineJoin
 import toLineTranslateAnchor
+import toLineWidthUnit
 
 class PolylineAnnotationController(private val delegate: ControllerDelegate) : _PolylineAnnotationMessenger {
   private val annotationMap = mutableMapOf<String, com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation>()
@@ -187,6 +191,52 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     }
   }
 
+  override fun setLineCrossSlope(
+    managerId: String,
+    lineCrossSlope: Double,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineCrossSlope = lineCrossSlope
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineCrossSlope(
+    managerId: String,
+    callback: (Result<Double?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineCrossSlope
+    if (value != null) {
+      callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineElevationReference(
+    managerId: String,
+    lineElevationReference: LineElevationReference,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineElevationReference = lineElevationReference.toLineElevationReference()
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineElevationReference(
+    managerId: String,
+    callback: (Result<LineElevationReference?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTLineElevationReference()))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
   override fun setLineJoin(
     managerId: String,
     lineJoin: LineJoin,
@@ -274,6 +324,29 @@ class PolylineAnnotationController(private val delegate: ControllerDelegate) : _
     val value = manager.lineSortKey
     if (value != null) {
       callback(Result.success(value))
+    } else {
+      callback(Result.success(null))
+    }
+  }
+
+  override fun setLineWidthUnit(
+    managerId: String,
+    lineWidthUnit: LineWidthUnit,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    manager.lineWidthUnit = lineWidthUnit.toLineWidthUnit()
+    callback(Result.success(Unit))
+  }
+
+  override fun getLineWidthUnit(
+    managerId: String,
+    callback: (Result<LineWidthUnit?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as PolylineAnnotationManager
+    val value = manager.lineWidthUnit
+    if (value != null) {
+      callback(Result.success(value.toFLTLineWidthUnit()))
     } else {
       callback(Result.success(null))
     }

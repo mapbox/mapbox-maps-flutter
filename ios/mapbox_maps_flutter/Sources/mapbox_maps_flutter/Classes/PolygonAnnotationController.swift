@@ -115,6 +115,26 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     // MARK: Properties
 
+    func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            completion(.success(manager.fillElevationReference?.toFLTFillElevationReference()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let manager = try getManager(id: managerId)
+            manager.fillElevationReference = MapboxMaps.FillElevationReference(fillElevationReference)
+
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             let manager = try getManager(id: managerId)
