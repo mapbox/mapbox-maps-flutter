@@ -16,6 +16,7 @@ import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
 import 'package:mapbox_maps_example/simple_map_example.dart';
 import 'package:mapbox_maps_example/snapshotter_example.dart';
+import 'package:mapbox_maps_example/traffic_layer_example.dart';
 import 'package:mapbox_maps_example/spinning_globe_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
@@ -62,6 +63,7 @@ final List<Example> _allPages = <Example>[
   GesturesExample(),
   OrnamentsExample(),
   AnimatedRouteExample(),
+  TrafficLayerExample(),
 ];
 
 class MapsDemo extends StatelessWidget {
