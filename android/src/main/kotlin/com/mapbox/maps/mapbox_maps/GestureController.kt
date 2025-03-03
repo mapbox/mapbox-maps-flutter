@@ -2,6 +2,7 @@ package com.mapbox.maps.mapbox_maps
 
 import android.content.Context
 import com.mapbox.android.gestures.MoveGestureDetector
+import com.mapbox.android.gestures.StandardScaleGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.mapbox_maps.mapping.applyFromFLT
@@ -15,6 +16,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.ScreenCoordinate
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.OnMoveListener
+import com.mapbox.maps.plugin.gestures.OnScaleListener
 import com.mapbox.maps.plugin.gestures.gestures
 import io.flutter.plugin.common.BinaryMessenger
 
@@ -31,6 +33,7 @@ class GestureController(private val mapView: MapView, private val context: Conte
   private var onClickListener: OnMapClickListener? = null
   private var onLongClickListener: OnMapLongClickListener? = null
   private var onMoveListener: OnMoveListener? = null
+  private var onScaleListener: OnScaleListener? = null
 
   fun addListeners(messenger: BinaryMessenger, channelSuffix: String) {
     fltGestureListener = GestureListener(messenger, channelSuffix)
@@ -42,6 +45,13 @@ class GestureController(private val mapView: MapView, private val context: Conte
       val point = mapView.mapboxMap.coordinateForPixel(pixel)
       val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, state)
       fltGestureListener.onScroll(context) { }
+    }
+
+    fun reportScale(detector: StandardScaleGestureDetector, state: GestureState) {
+      val pixel = com.mapbox.maps.ScreenCoordinate(detector.currentEvent.x.toDouble(), detector.currentEvent.y.toDouble())
+      val point = mapView.mapboxMap.coordinateForPixel(pixel)
+      val context = MapContentGestureContext(pixel.toFLTScreenCoordinate(context), point, state)
+      fltGestureListener.onZoom(context) { }
     }
 
     onClickListener = OnMapClickListener { point ->
@@ -73,12 +83,27 @@ class GestureController(private val mapView: MapView, private val context: Conte
         reportMove(detector, GestureState.ENDED)
       }
     }.also { mapView.gestures.addOnMoveListener(it) }
+
+    onScaleListener = object : OnScaleListener {
+      override fun onScale(detector: StandardScaleGestureDetector) {
+        reportScale(detector, GestureState.CHANGED)
+      }
+
+      override fun onScaleBegin(detector: StandardScaleGestureDetector) {
+        reportScale(detector, GestureState.STARTED)
+      }
+
+      override fun onScaleEnd(detector: StandardScaleGestureDetector) {
+        reportScale(detector, GestureState.ENDED)
+      }
+    }.also { mapView.gestures.addOnScaleListener(it) }
   }
 
   fun removeListeners() {
     onClickListener?.let { mapView.gestures.removeOnMapClickListener(it) }
     onLongClickListener?.let { mapView.gestures.removeOnMapLongClickListener(it) }
     onMoveListener?.let { mapView.gestures.removeOnMoveListener(it) }
+    onScaleListener?.let { mapView.gestures.removeOnScaleListener(it) }
   }
 }
 

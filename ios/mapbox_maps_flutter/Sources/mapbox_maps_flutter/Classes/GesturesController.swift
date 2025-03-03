@@ -28,6 +28,70 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
         onGestureListener?.onScroll(context: context, completion: { _ in })
     }
 
+    @objc private func onMapQuickZoom(_ sender: UIGestureRecognizer) {
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
+            return
+        }
+
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(
+            touchPosition: touchPoint.toFLTScreenCoordinate(),
+            point: point,
+            gestureState: sender.state.toFLTGestureState()
+        )
+
+        onGestureListener?.onZoom(context: context, completion: { _ in })
+    }
+
+    @objc private func onMapPinch(_ sender: UIPinchGestureRecognizer) {
+        guard sender.state == .began || sender.state == .changed || sender.state == .ended else {
+            return
+        }
+
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(
+            touchPosition: touchPoint.toFLTScreenCoordinate(),
+            point: point,
+            gestureState: sender.state.toFLTGestureState()
+        )
+
+        onGestureListener?.onZoom(context: context, completion: { _ in })
+    }
+
+    @objc private func onMapDoubleTapZoomIn(_ sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else {
+            return
+        }
+
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(
+            touchPosition: touchPoint.toFLTScreenCoordinate(),
+            point: point,
+            gestureState: sender.state.toFLTGestureState()
+        )
+
+        onGestureListener?.onZoom(context: context, completion: { _ in })
+    }
+
+    @objc private func onMapDoubleTouchZoomOut(_ sender: UITapGestureRecognizer) {
+        guard sender.state == .ended else {
+            return
+        }
+
+        let touchPoint = sender.location(in: mapView)
+        let point = Point(mapView.mapboxMap.coordinate(for: touchPoint))
+        let context = MapContentGestureContext(
+            touchPosition: touchPoint.toFLTScreenCoordinate(),
+            point: point,
+            gestureState: sender.state.toFLTGestureState()
+        )
+
+        onGestureListener?.onZoom(context: context, completion: { _ in })
+    }
+
     func updateSettings(settings: GesturesSettings) throws {
         if let panEnabled = settings.scrollEnabled {
             mapView.gestures.options.panEnabled = panEnabled
@@ -109,6 +173,10 @@ final class GesturesController: NSObject, GesturesSettingsInterface, UIGestureRe
     func addListeners(messenger: SuffixBinaryMessenger) {
         removeListeners()
         mapView.gestures.panGestureRecognizer.addTarget(self, action: #selector(onMapPan))
+        mapView.gestures.quickZoomGestureRecognizer.addTarget(self, action: #selector(onMapQuickZoom))
+        mapView.gestures.pinchGestureRecognizer.addTarget(self, action: #selector(onMapPinch))
+        mapView.gestures.doubleTapToZoomInGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTapZoomIn))
+        mapView.gestures.doubleTouchToZoomOutGestureRecognizer.addTarget(self, action: #selector(onMapDoubleTouchZoomOut))
 
         onGestureListener = GestureListener(binaryMessenger: messenger.messenger, messageChannelSuffix: messenger.suffix)
 

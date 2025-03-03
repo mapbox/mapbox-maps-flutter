@@ -63,6 +63,9 @@ typedef void OnMapLongTapListener(MapContentGestureContext context);
 /// Gesture listener called on map scroll.
 typedef void OnMapScrollListener(MapContentGestureContext context);
 
+/// Gesture listener called on map zoom.
+typedef void OnMapZoomListener(MapContentGestureContext context);
+
 /// StylePack load progress callback.
 typedef void OnStylePackLoadProgressListener(StylePackLoadProgress progress);
 

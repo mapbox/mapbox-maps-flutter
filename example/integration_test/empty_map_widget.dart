@@ -10,6 +10,9 @@ class Events {
   var onStyleDataLoaded = Completer();
   var onSourceDataLoaded = Completer();
   var onCameraChanged = Completer();
+  var onMapTapListener = Completer();
+  var onMapLongTapListener = Completer();
+  List<MapContentGestureContext> mapInteractions = [];
   var sourceDataIDs = [""];
 
   void resetOnMapLoaded() => onMapLoaded = Completer();
@@ -19,6 +22,9 @@ class Events {
       {sourceDataIDs.clear(), onSourceDataLoaded = Completer()};
   void resetOnCameraChanged() => onCameraChanged = Completer();
   void resetOnMapIdle() => onMapIdle = Completer();
+  void resetOnMapTapListener() => onMapTapListener = Completer();
+  void resetOnMapLongTapListener() => onMapLongTapListener = Completer();
+  void resetMapInteractions() => mapInteractions.clear();
 }
 
 var events = Events();
@@ -81,6 +87,18 @@ Future<MapboxMap> main(
         onMapIdleListener: (MapIdleEventData data) {
           if (!events.onMapIdle.isCompleted) {
             events.onMapIdle.complete();
+          }
+        },
+        onTapListener: (MapContentGestureContext context) {
+          events.mapInteractions.add(context);
+          if (!events.onMapTapListener.isCompleted) {
+            events.onMapTapListener.complete();
+          }
+        },
+        onLongTapListener: (MapContentGestureContext context) {
+          events.mapInteractions.add(context);
+          if (!events.onMapLongTapListener.isCompleted) {
+            events.onMapLongTapListener.complete();
           }
         },
       ),

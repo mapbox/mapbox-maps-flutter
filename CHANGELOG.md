@@ -6,6 +6,7 @@
 * Mark `ClipLayer.clipLayerScope` and `ClipLayer.clipLayerTypes` as stable
 * Mark `BackgroundLayer.backgroundPitchAlignment` as experimental 
 * `top-image`, `bearing-image`, and `shadow-image` properties on `LocationIndicatorLayer` are now paint properties instead of layout properties.
+* Introduce `onZoomListener` to `MapWidget` to allowing listening to zoom events resulting from user gestures: pinching, double-tapping, or quick zooming. The event returns `MapContentGestureContext`, which includes `touchPosition` (the location of the gesture on the screen), `point` (the geographical coordinates of the gesture), and `gestureState` (the state of the gesture). See `gestures_example.dart` for implementation guidance.
 
 ### 2.6.0
 

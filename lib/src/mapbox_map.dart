@@ -142,6 +142,7 @@ class MapboxMap extends ChangeNotifier {
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
+    this.onMapZoomListener,
   }) : _mapboxMapsPlatform = mapboxMapsPlatform {
     annotations = AnnotationManager._(mapboxMapsPlatform: _mapboxMapsPlatform);
     _setupGestures();
@@ -211,6 +212,7 @@ class MapboxMap extends ChangeNotifier {
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
+  OnMapZoomListener? onMapZoomListener;
 
   @override
   void dispose() {
@@ -712,12 +714,14 @@ class MapboxMap extends ChangeNotifier {
   void _setupGestures() {
     if (onMapTapListener != null ||
         onMapLongTapListener != null ||
-        onMapScrollListener != null) {
+        onMapScrollListener != null ||
+        onMapZoomListener != null) {
       GestureListener.setUp(
           _GestureListener(
             onMapTapListener: onMapTapListener,
             onMapLongTapListener: onMapLongTapListener,
             onMapScrollListener: onMapScrollListener,
+            onMapZoomListener: onMapZoomListener,
           ),
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
@@ -737,6 +741,11 @@ class MapboxMap extends ChangeNotifier {
 
   void setOnMapMoveListener(OnMapScrollListener? onMapScrollListener) {
     this.onMapScrollListener = onMapScrollListener;
+    _setupGestures();
+  }
+
+  void setOnMapZoomListener(OnMapZoomListener? onMapZoomListener) {
+    this.onMapZoomListener = onMapZoomListener;
     _setupGestures();
   }
 
@@ -761,11 +770,13 @@ class _GestureListener extends GestureListener {
     this.onMapTapListener,
     this.onMapLongTapListener,
     this.onMapScrollListener,
+    this.onMapZoomListener,
   });
 
   final OnMapTapListener? onMapTapListener;
   final OnMapLongTapListener? onMapLongTapListener;
   final OnMapScrollListener? onMapScrollListener;
+  final OnMapZoomListener? onMapZoomListener;
 
   @override
   void onTap(MapContentGestureContext context) {
@@ -780,6 +791,11 @@ class _GestureListener extends GestureListener {
   @override
   void onScroll(MapContentGestureContext context) {
     onMapScrollListener?.call(context);
+  }
+
+  @override
+  void onZoom(MapContentGestureContext context) {
+    onMapZoomListener?.call(context);
   }
 }
 
