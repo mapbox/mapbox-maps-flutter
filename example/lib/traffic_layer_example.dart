@@ -22,7 +22,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
   final _sfAirport =
       Point(coordinates: Position(-122.39470445734368, 37.7080221537549));
   MapboxMap? mapboxMap;
-  bool? _trafficLayerVisible = false;
+  bool? _trafficLayerVisible = true;
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
@@ -44,12 +44,12 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
 
   Future<void> addTrafficLayer() async {
     // Add the vector source
-    await mapboxMap!.style.addSource(VectorSource(
+    await mapboxMap?.style.addSource(VectorSource(
       id: 'traffic-source',
       url: 'mapbox://mapbox.mapbox-traffic-v1',
     ));
     // Add the traffic layer
-    await mapboxMap!.style.addLayer(
+    await mapboxMap?.style.addLayer(
       LineLayer(
         id: 'traffic-layer',
         sourceId: 'traffic-source',
@@ -62,7 +62,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
       ),
     );
 
-    await mapboxMap!.style.setStyleLayerProperty(
+    await mapboxMap?.style.setStyleLayerProperty(
         "traffic-layer",
         "line-width",
         '''
@@ -74,7 +74,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
             .trim()
             .replaceAll("\n", ""));
 
-    await mapboxMap!.style.setStyleLayerProperty(
+    await mapboxMap?.style.setStyleLayerProperty(
         "traffic-layer",
         "line-offset",
         '''
@@ -86,7 +86,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
             .trim()
             .replaceAll("\n", ""));
 
-    await mapboxMap!.style.setStyleLayerProperty(
+    await mapboxMap?.style.setStyleLayerProperty(
         "traffic-layer",
         "line-color",
         '''
@@ -129,7 +129,7 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
           ],
           "#981b25",
           "#000000"
-        ],
+        ]
         '''
             .trim()
             .replaceAll("\n", ""));
