@@ -215,6 +215,7 @@ data class UpcomingRoadObject (
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class RouteProgress (
+  val navigationRouteJson: String? = null,
   val bannerInstructionsJson: String? = null,
   val voiceInstructionsJson: String? = null,
   val currentState: RouteProgressState? = null,
@@ -233,25 +234,27 @@ data class RouteProgress (
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): RouteProgress {
-      val bannerInstructionsJson = pigeonVar_list[0] as String?
-      val voiceInstructionsJson = pigeonVar_list[1] as String?
-      val currentState = pigeonVar_list[2] as RouteProgressState?
-      val inTunnel = pigeonVar_list[3] as Boolean?
-      val distanceRemaining = pigeonVar_list[4] as Double?
-      val distanceTraveled = pigeonVar_list[5] as Double?
-      val durationRemaining = pigeonVar_list[6] as Double?
-      val fractionTraveled = pigeonVar_list[7] as Double?
-      val remainingWaypoints = pigeonVar_list[8] as Long?
-      val upcomingRoadObjects = pigeonVar_list[9] as List<UpcomingRoadObject>?
-      val stale = pigeonVar_list[10] as Boolean?
-      val routeAlternativeId = pigeonVar_list[11] as String?
-      val currentRouteGeometryIndex = pigeonVar_list[12] as Long?
-      val inParkingAisle = pigeonVar_list[13] as Boolean?
-      return RouteProgress(bannerInstructionsJson, voiceInstructionsJson, currentState, inTunnel, distanceRemaining, distanceTraveled, durationRemaining, fractionTraveled, remainingWaypoints, upcomingRoadObjects, stale, routeAlternativeId, currentRouteGeometryIndex, inParkingAisle)
+      val navigationRouteJson = pigeonVar_list[0] as String?
+      val bannerInstructionsJson = pigeonVar_list[1] as String?
+      val voiceInstructionsJson = pigeonVar_list[2] as String?
+      val currentState = pigeonVar_list[3] as RouteProgressState?
+      val inTunnel = pigeonVar_list[4] as Boolean?
+      val distanceRemaining = pigeonVar_list[5] as Double?
+      val distanceTraveled = pigeonVar_list[6] as Double?
+      val durationRemaining = pigeonVar_list[7] as Double?
+      val fractionTraveled = pigeonVar_list[8] as Double?
+      val remainingWaypoints = pigeonVar_list[9] as Long?
+      val upcomingRoadObjects = pigeonVar_list[10] as List<UpcomingRoadObject>?
+      val stale = pigeonVar_list[11] as Boolean?
+      val routeAlternativeId = pigeonVar_list[12] as String?
+      val currentRouteGeometryIndex = pigeonVar_list[13] as Long?
+      val inParkingAisle = pigeonVar_list[14] as Boolean?
+      return RouteProgress(navigationRouteJson, bannerInstructionsJson, voiceInstructionsJson, currentState, inTunnel, distanceRemaining, distanceTraveled, durationRemaining, fractionTraveled, remainingWaypoints, upcomingRoadObjects, stale, routeAlternativeId, currentRouteGeometryIndex, inParkingAisle)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
+      navigationRouteJson,
       bannerInstructionsJson,
       voiceInstructionsJson,
       currentState,

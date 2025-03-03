@@ -1124,6 +1124,7 @@ extension MapboxNavigationCore.RouteProgress {
     func toFLTRouteProgress() -> RouteProgress {
                
         return RouteProgress(
+          navigationRouteJson: nil,
           bannerInstructionsJson: nil,
           voiceInstructionsJson: nil,
           currentState: .uNCERTAIN,

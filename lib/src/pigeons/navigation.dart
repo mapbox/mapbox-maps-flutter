@@ -125,6 +125,7 @@ class UpcomingRoadObject {
 
 class RouteProgress {
   RouteProgress({
+    this.navigationRouteJson,
     this.bannerInstructionsJson,
     this.voiceInstructionsJson,
     this.currentState,
@@ -140,6 +141,8 @@ class RouteProgress {
     this.currentRouteGeometryIndex,
     this.inParkingAisle,
   });
+
+  String? navigationRouteJson;
 
   String? bannerInstructionsJson;
 
@@ -171,6 +174,7 @@ class RouteProgress {
 
   Object encode() {
     return <Object?>[
+      navigationRouteJson,
       bannerInstructionsJson,
       voiceInstructionsJson,
       currentState,
@@ -191,21 +195,22 @@ class RouteProgress {
   static RouteProgress decode(Object result) {
     result as List<Object?>;
     return RouteProgress(
-      bannerInstructionsJson: result[0] as String?,
-      voiceInstructionsJson: result[1] as String?,
-      currentState: result[2] as RouteProgressState?,
-      inTunnel: result[3] as bool?,
-      distanceRemaining: result[4] as double?,
-      distanceTraveled: result[5] as double?,
-      durationRemaining: result[6] as double?,
-      fractionTraveled: result[7] as double?,
-      remainingWaypoints: result[8] as int?,
+      navigationRouteJson: result[0] as String?,
+      bannerInstructionsJson: result[1] as String?,
+      voiceInstructionsJson: result[2] as String?,
+      currentState: result[3] as RouteProgressState?,
+      inTunnel: result[4] as bool?,
+      distanceRemaining: result[5] as double?,
+      distanceTraveled: result[6] as double?,
+      durationRemaining: result[7] as double?,
+      fractionTraveled: result[8] as double?,
+      remainingWaypoints: result[9] as int?,
       upcomingRoadObjects:
-          (result[9] as List<Object?>?)?.cast<UpcomingRoadObject>(),
-      stale: result[10] as bool?,
-      routeAlternativeId: result[11] as String?,
-      currentRouteGeometryIndex: result[12] as int?,
-      inParkingAisle: result[13] as bool?,
+          (result[10] as List<Object?>?)?.cast<UpcomingRoadObject>(),
+      stale: result[11] as bool?,
+      routeAlternativeId: result[12] as String?,
+      currentRouteGeometryIndex: result[13] as int?,
+      inParkingAisle: result[14] as bool?,
     );
   }
 }

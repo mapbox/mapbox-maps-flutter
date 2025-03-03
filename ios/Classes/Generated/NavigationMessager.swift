@@ -254,6 +254,7 @@ struct UpcomingRoadObject {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct RouteProgress {
+  var navigationRouteJson: String? = nil
   var bannerInstructionsJson: String? = nil
   var voiceInstructionsJson: String? = nil
   var currentState: RouteProgressState? = nil
@@ -273,22 +274,24 @@ struct RouteProgress {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> RouteProgress? {
-    let bannerInstructionsJson: String? = nilOrValue(pigeonVar_list[0])
-    let voiceInstructionsJson: String? = nilOrValue(pigeonVar_list[1])
-    let currentState: RouteProgressState? = nilOrValue(pigeonVar_list[2])
-    let inTunnel: Bool? = nilOrValue(pigeonVar_list[3])
-    let distanceRemaining: Double? = nilOrValue(pigeonVar_list[4])
-    let distanceTraveled: Double? = nilOrValue(pigeonVar_list[5])
-    let durationRemaining: Double? = nilOrValue(pigeonVar_list[6])
-    let fractionTraveled: Double? = nilOrValue(pigeonVar_list[7])
-    let remainingWaypoints: Int64? = nilOrValue(pigeonVar_list[8])
-    let upcomingRoadObjects: [UpcomingRoadObject]? = nilOrValue(pigeonVar_list[9])
-    let stale: Bool? = nilOrValue(pigeonVar_list[10])
-    let routeAlternativeId: String? = nilOrValue(pigeonVar_list[11])
-    let currentRouteGeometryIndex: Int64? = nilOrValue(pigeonVar_list[12])
-    let inParkingAisle: Bool? = nilOrValue(pigeonVar_list[13])
+    let navigationRouteJson: String? = nilOrValue(pigeonVar_list[0])
+    let bannerInstructionsJson: String? = nilOrValue(pigeonVar_list[1])
+    let voiceInstructionsJson: String? = nilOrValue(pigeonVar_list[2])
+    let currentState: RouteProgressState? = nilOrValue(pigeonVar_list[3])
+    let inTunnel: Bool? = nilOrValue(pigeonVar_list[4])
+    let distanceRemaining: Double? = nilOrValue(pigeonVar_list[5])
+    let distanceTraveled: Double? = nilOrValue(pigeonVar_list[6])
+    let durationRemaining: Double? = nilOrValue(pigeonVar_list[7])
+    let fractionTraveled: Double? = nilOrValue(pigeonVar_list[8])
+    let remainingWaypoints: Int64? = nilOrValue(pigeonVar_list[9])
+    let upcomingRoadObjects: [UpcomingRoadObject]? = nilOrValue(pigeonVar_list[10])
+    let stale: Bool? = nilOrValue(pigeonVar_list[11])
+    let routeAlternativeId: String? = nilOrValue(pigeonVar_list[12])
+    let currentRouteGeometryIndex: Int64? = nilOrValue(pigeonVar_list[13])
+    let inParkingAisle: Bool? = nilOrValue(pigeonVar_list[14])
 
     return RouteProgress(
+      navigationRouteJson: navigationRouteJson,
       bannerInstructionsJson: bannerInstructionsJson,
       voiceInstructionsJson: voiceInstructionsJson,
       currentState: currentState,
@@ -307,6 +310,7 @@ struct RouteProgress {
   }
   func toList() -> [Any?] {
     return [
+      navigationRouteJson,
       bannerInstructionsJson,
       voiceInstructionsJson,
       currentState,
