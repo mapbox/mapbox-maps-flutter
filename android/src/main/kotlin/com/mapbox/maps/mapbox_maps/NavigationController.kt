@@ -42,7 +42,6 @@ import com.mapbox.navigation.ui.maps.route.line.model.MapboxRouteLineViewOptions
 import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.navigation.base.ExperimentalPreviewMapboxNavigationAPI
 import com.mapbox.navigation.ui.maps.NavigationStyles
-import com.mapbox.navigation.ui.maps.camera.state.NavigationCameraState
 import com.mapbox.navigation.ui.maps.route.line.api.RoutesRenderedCallback
 import com.mapbox.navigation.ui.maps.route.line.api.RoutesRenderedResult
 import io.flutter.plugin.common.BinaryMessenger
@@ -217,7 +216,7 @@ class NavigationController(
 
         // update camera position to account for new location
         viewportDataSource.onLocationChanged(enhancedLocation)
-        //viewportDataSource.evaluate()
+        viewportDataSource.evaluate()
 
         fltNavigationListener?.onNewLocation(enhancedLocation.toFLT()) {}
 
