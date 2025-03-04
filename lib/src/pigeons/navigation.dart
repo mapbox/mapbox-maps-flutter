@@ -296,6 +296,65 @@ class NavigationLocation {
   }
 }
 
+class Waypoint {
+  Waypoint({this.point, this.name});
+
+  Point? point;
+
+  String? name;
+
+  Object encode() {
+    return <Object?>[
+      point,
+      name,
+    ];
+  }
+
+  static Waypoint decode(Object result) {
+    result as List<Object?>;
+    return Waypoint(
+      point: result[0] as Point?,
+      name: result[1] as String?,
+    );
+  }
+}
+
+class RouteOptions {
+  RouteOptions(
+      {this.waypoints,
+      this.steps,
+      this.alternatives,
+      this.coordinates,
+      this.voiceInstructions});
+
+  List<Waypoint>? waypoints;
+  bool? steps;
+  bool? alternatives;
+  List<Point>? coordinates;
+  bool? voiceInstructions;
+
+  Object encode() {
+    return <Object?>[
+      waypoints,
+      steps,
+      alternatives,
+      coordinates,
+      voiceInstructions
+    ];
+  }
+
+  static RouteOptions decode(Object result) {
+    result as List<Object?>;
+    return RouteOptions(
+      waypoints: result[0] as List<Waypoint>?,
+      steps: result[1] as bool?,
+      alternatives: result[2] as bool?,
+      coordinates: result[3] as List<Point>?,
+      voiceInstructions: result[4] as bool?,
+    );
+  }
+}
+
 class Navigation_PigeonCodec extends StandardMessageCodec {
   const Navigation_PigeonCodec();
   @override
@@ -333,6 +392,12 @@ class Navigation_PigeonCodec extends StandardMessageCodec {
     } else if (value is NavigationCameraState) {
       buffer.putUint8(198);
       writeValue(buffer, value.index);
+    } else if (value is Waypoint) {
+      buffer.putUint8(199);
+      writeValue(buffer, value.encode());
+    } else if (value is RouteOptions) {
+      buffer.putUint8(200);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -595,7 +660,7 @@ class NavigationInterface {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<void> setRoute(List<Point> waypoints) async {
+  Future<void> setRoute(RouteOptions options) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter.NavigationInterface.setRoute$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
@@ -605,7 +670,7 @@ class NavigationInterface {
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[waypoints]) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[options]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

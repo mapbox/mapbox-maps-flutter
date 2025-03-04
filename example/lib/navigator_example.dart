@@ -133,10 +133,10 @@ class NavigatorExampleState extends State<NavigatorExample>
 
     final destinationCoordinate = createRandomPositionAround(myCoordinate);
 
-    await mapboxMap.navigation.setRoute([
-      Point(coordinates: myCoordinate),
-      Point(coordinates: destinationCoordinate)
-    ]);
+    await mapboxMap.navigation.setRoute(RouteOptions(waypoints: [
+      Waypoint(point: Point(coordinates: myCoordinate)),
+      Waypoint(point: Point(coordinates: destinationCoordinate))
+    ]));
 
     await mapboxMap.navigation.startTripSession(true);
   }
