@@ -656,8 +656,8 @@ class NavigationInterfaceSetup {
     if let api = api {
       setRouteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let waypointsArg = args[0] as! [Point]
-        api.setRoute(waypoints: waypointsArg) { result in
+        let routeOptionsArg = args[0] as! RouteOptions
+        api.setRoute(options: routeOptionsArg) { result in
           switch result {
           case .success:
             reply(wrapResult(nil))
