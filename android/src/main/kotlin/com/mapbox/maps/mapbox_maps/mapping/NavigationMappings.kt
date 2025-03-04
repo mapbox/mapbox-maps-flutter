@@ -1,12 +1,7 @@
 package com.mapbox.maps.mapbox_maps.mapping
 
-import com.google.gson.GsonBuilder
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory
 import com.mapbox.common.location.Location
-import com.mapbox.geojson.Point
-import com.mapbox.geojson.PointAsCoordinatesTypeAdapter
 import com.mapbox.maps.mapbox_maps.pigeons.NavigationLocation
-import com.mapbox.navigation.base.route.NavigationRoute.SerialisationState
 import com.mapbox.maps.mapbox_maps.pigeons.RouteProgress as NavigationRouteProgress
 import com.mapbox.maps.mapbox_maps.pigeons.RouteProgressState as NavigationRouteProgressState
 import com.mapbox.maps.mapbox_maps.pigeons.UpcomingRoadObject as NavigationUpcomingRoadObject

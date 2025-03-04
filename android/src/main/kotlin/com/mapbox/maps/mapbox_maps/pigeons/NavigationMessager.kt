@@ -272,6 +272,52 @@ data class RouteProgress (
     )
   }
 }
+data class Waypoint (
+  val point: Point,
+  val name: String?
+) {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): Waypoint {
+      val point = pigeonVar_list[0] as Point
+      val name = pigeonVar_list[1] as String?
+      return Waypoint(point, name)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      point,
+      name,
+    )
+  }
+}
+data class RouteOptions (
+  val waypoints: List<Waypoint>? = null,
+  val steps: Boolean? = null,
+  val alternatives: Boolean? = null,
+  var coordinates: List<Point>? = null,
+  var voiceInstructions: Boolean? = null
+)
+{
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): RouteOptions {
+      val waypoints = pigeonVar_list[0] as List<Waypoint>?
+      val steps = pigeonVar_list[1] as Boolean?
+      val alternatives = pigeonVar_list[2] as Boolean?
+      val coordinates = pigeonVar_list[3] as List<Point>?
+      val voiceInstructions = pigeonVar_list[4] as Boolean?
+      return RouteOptions(waypoints, steps, alternatives, coordinates, voiceInstructions)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      waypoints,
+      steps,
+      alternatives,
+      coordinates,
+      voiceInstructions
+    )
+  }
+}
 private open class NavigationMessagerPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -325,6 +371,16 @@ private open class NavigationMessagerPigeonCodec : StandardMessageCodec() {
           NavigationCameraState.ofRaw(it.toInt())
         }
       }
+      199.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          Waypoint.fromList(it)
+        }
+      }
+      200.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          RouteOptions.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -370,6 +426,14 @@ private open class NavigationMessagerPigeonCodec : StandardMessageCodec() {
         stream.write(198)
         writeValue(stream, value.raw)
       }
+      is Waypoint -> {
+        stream.write(199)
+        writeValue(stream, value.toList())
+      }
+      is RouteOptions -> {
+        stream.write(200)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
@@ -398,7 +462,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onNavigationRouteFailed(callback: (Result<Unit>) -> Unit)
@@ -415,7 +479,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onNavigationRouteCancelled(callback: (Result<Unit>) -> Unit)
@@ -432,7 +496,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onNavigationRouteRendered(callback: (Result<Unit>) -> Unit)
@@ -449,7 +513,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onNewLocation(locationArg: NavigationLocation, callback: (Result<Unit>) -> Unit)
@@ -466,7 +530,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onRouteProgress(routeProgressArg: RouteProgress, callback: (Result<Unit>) -> Unit)
@@ -483,7 +547,7 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
   fun onNavigationCameraStateChanged(stateArg: NavigationCameraState, callback: (Result<Unit>) -> Unit)
@@ -500,13 +564,13 @@ class NavigationListener(private val binaryMessenger: BinaryMessenger, private v
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
-      } 
+      }
     }
   }
 }
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface NavigationInterface {
-  fun setRoute(waypoints: List<Point>, callback: (Result<Unit>) -> Unit)
+  fun setRoute(options: RouteOptions, callback: (Result<Unit>) -> Unit)
   fun stopTripSession(callback: (Result<Unit>) -> Unit)
   fun startTripSession(withForegroundService: Boolean, callback: (Result<Unit>) -> Unit)
   fun requestNavigationCameraToFollowing(callback: (Result<Unit>) -> Unit)
@@ -527,8 +591,8 @@ interface NavigationInterface {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val waypointsArg = args[0] as List<Point>
-            api.setRoute(waypointsArg) { result: Result<Unit> ->
+            val routeOptionsArg = args[0] as RouteOptions
+            api.setRoute(routeOptionsArg) { result: Result<Unit> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

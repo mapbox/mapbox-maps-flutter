@@ -200,7 +200,6 @@ class NavigationController(
     routeLineView = MapboxRouteLineView(mapboxRouteLineOptions)
 
     locationObserver = object : LocationObserver {
-      var firstLocationUpdateReceived = false
 
       override fun onNewRawLocation(rawLocation: Location) {
         // not handled
@@ -219,17 +218,6 @@ class NavigationController(
         viewportDataSource.evaluate()
 
         fltNavigationListener?.onNewLocation(enhancedLocation.toFLT()) {}
-
-        // if this is the first location update the activity has received,
-        // it's best to immediately move the camera to the current user location
-        if (!firstLocationUpdateReceived) {
-          firstLocationUpdateReceived = true
-          navigationCamera.requestNavigationCameraToOverview(
-            stateTransitionOptions = NavigationCameraTransitionOptions.Builder()
-              .maxDuration(0) // instant transition
-              .build()
-          )
-        }
       }
     }
 
@@ -291,13 +279,29 @@ class NavigationController(
   }
 
   @SuppressLint("MissingPermission")
-  override fun setRoute(waypoints: List<Point>, callback: (Result<Unit>) -> Unit) {
+  override fun setRoute(options: com.mapbox.maps.mapbox_maps.pigeons.RouteOptions, callback: (Result<Unit>) -> Unit) {
+    val routeBuilder = RouteOptions.builder()
+      .applyDefaultNavigationOptions()
+
+    if(options.alternatives != null) {
+      routeBuilder.alternatives(options.alternatives)
+    }
+    if(options.steps != null) {
+      routeBuilder.alternatives(options.steps)
+    }
+    if(options.coordinates != null) {
+      routeBuilder.coordinatesList(options.coordinates!!)
+    }
+    if(options.waypoints != null) {
+      routeBuilder.coordinatesList(options.waypoints.map { it.point })
+      routeBuilder.waypointNamesList(options.waypoints.map { it.name })
+    }
+    if(options.voiceInstructions != null) {
+      routeBuilder.voiceInstructions(options.voiceInstructions)
+    }
+
     mapboxNavigation?.requestRoutes(
-      RouteOptions.builder()
-        .applyDefaultNavigationOptions()
-        .alternatives(false)
-        .coordinatesList(waypoints)
-        .build(),
+      routeBuilder.build(),
 
       object : NavigationRouterCallback {
         override fun onRoutesReady(
