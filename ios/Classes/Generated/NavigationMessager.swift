@@ -329,6 +329,62 @@ struct RouteProgress {
   }
 }
 
+struct Waypoint {
+  var point: Point? = nil
+  var name: String? = nil
+    // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> Waypoint? {
+    let point: Point? = nilOrValue(pigeonVar_list[0])
+    let name: String? = nilOrValue(pigeonVar_list[1])
+    
+    return Waypoint(
+      point: point,
+      name: name
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      point,
+      name
+    ]
+  }
+}
+
+struct RouteOptions {
+    var waypoints: [Waypoint]? = nil
+    var steps: Bool? = nil
+    var alternatives: Bool? = nil
+    var coordinates: [Point]? = nil
+    var voiceInstructions: Bool? = nil
+    
+    // swift-format-ignore: AlwaysUseLowerCamelCase
+    static func fromList(_ pigeonVar_list: [Any?]) -> RouteOptions? {
+    let waypoints: [Waypoint]? = nilOrValue(pigeonVar_list[0])
+    let steps: Bool? = nilOrValue(pigeonVar_list[1])
+    let alternatives: Bool? = nilOrValue(pigeonVar_list[2])
+        let coordinates: [Point]? = nilOrValue(pigeonVar_list[3])
+    let voiceInstructions: Bool? = nilOrValue(pigeonVar_list[4])
+    
+    return RouteOptions(
+        waypoints: waypoints,
+        steps: steps,
+        alternatives:alternatives,
+        coordinates:coordinates,
+        voiceInstructions:voiceInstructions
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+        waypoints,
+        steps,
+        alternatives,
+        coordinates,
+        voiceInstructions
+    ]
+  }
+}
+
+
 private class NavigationMessagerPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -364,6 +420,10 @@ private class NavigationMessagerPigeonCodecReader: FlutterStandardReader {
           return NavigationCameraState(rawValue: enumResultAsInt)
         }
         return nil
+      case 199:
+        return Waypoint.fromList(self.readValue() as! [Any?])
+      case 200:
+        return RouteOptions.fromList(self.readValue() as! [Any?])
       default:
         return super.readValue(ofType: type)
     }
@@ -402,6 +462,12 @@ private class NavigationMessagerPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? NavigationCameraState {
       super.writeByte(198)
       super.writeValue(value.rawValue)
+    } else if let value = value as? Waypoint {
+      super.writeByte(199)
+      super.writeValue(value.toList())
+    } else if let value = value as? RouteOptions {
+      super.writeByte(200)
+      super.writeValue(value.toList())
     } else {
       super.writeValue(value)
     }
@@ -572,7 +638,7 @@ class NavigationListener: NavigationListenerProtocol {
 }
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol NavigationInterface {
-    func setRoute(waypoints: [Point], completion: @escaping (Result<Void, Error>) -> Void)
+  func setRoute(options: RouteOptions, completion: @escaping (Result<Void, Error>) -> Void)
   func stopTripSession(completion: @escaping (Result<Void, Error>) -> Void)
   func startTripSession(withForegroundService: Bool, completion: @escaping (Result<Void, Error>) -> Void)
   func requestNavigationCameraToFollowing(completion: @escaping (Result<Void, Error>) -> Void)

@@ -16,7 +16,7 @@ final class NavigationController: NSObject, NavigationInterface {
     @Published var profileIdentifier: ProfileIdentifier = .automobileAvoidingTraffic
     @Published var shouldRequestMapMatching = false
 
-    private var waypoints: [Waypoint] = []
+    private var waypoints: [MapboxNavigationCore.Waypoint] = []
     private let core: MapboxNavigation
 
     private var cancelables: Set<AnyCancelable> = []
@@ -65,9 +65,12 @@ final class NavigationController: NSObject, NavigationInterface {
         self.navigationMapView.navigationCamera.stop()
     }
 
-    func requestRoutes(points: [Point]) async throws {
+    func requestRoutes(points: [Waypoint]) async throws {
        
-        self.waypoints = points.map { Waypoint(coordinate: LocationCoordinate2D(latitude: $0.coordinates.latitude, longitude: $0.coordinates.longitude)) }
+        self.waypoints = points.map {
+            MapboxNavigationCore.Waypoint(
+                coordinate: LocationCoordinate2D(latitude: $0.point!.coordinates.latitude, longitude: $0.point!.coordinates.longitude))
+        }
         
         let provider = core.routingProvider()
         if shouldRequestMapMatching {
@@ -99,10 +102,10 @@ final class NavigationController: NSObject, NavigationInterface {
         cancelables = []
     }
 
-    func setRoute(waypoints: [Point], completion: @escaping (Result<Void, Error>) -> Void) {
+    func setRoute(options: RouteOptions, completion: @escaping (Result<Void, Error>) -> Void) {
         Task {
             do {
-                try await self.requestRoutes(points: waypoints)
+                try await self.requestRoutes(points: options.waypoints!)
                 completion(.success(Void()))
             }
             catch {
