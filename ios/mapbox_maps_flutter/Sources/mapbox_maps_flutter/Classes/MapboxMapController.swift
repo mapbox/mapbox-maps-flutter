@@ -136,6 +136,22 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
                 mapView.superview?.frame = CGRect(origin: .zero, size: size)
             }
             result(nil)
+        case "map#setCustomHeaders":
+            guard let arguments = methodCall.arguments as? [String: Any],
+              let headers = arguments["headers"] as? [String: String]
+        else {
+            result(FlutterError(
+                code: "setCustomHeaders",
+                message: "could not decode arguments",
+                details: nil
+            ))
+            return
+        }
+        let customInterceptor = CustomHttpServiceInterceptor()
+        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
+            customInterceptor.customHeaders = headers
+        result(nil)
+        
         default:
             result(FlutterMethodNotImplemented)
         }
