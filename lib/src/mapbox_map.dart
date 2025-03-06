@@ -767,7 +767,7 @@ class MapboxMap extends ChangeNotifier {
   /// Example:
   /// ```dart
   /// MapboxMap.setCustomHeaders({
-  ///   "Authorization": "Bearer sk.eyJ1IjoiYWxleG9yZ2V0IiwiYSI6ImNtZ291Z291MjB1ZjIyc251Zm91Zm91ZjEifQ.1234567890",
+  ///   "Authorization": "Bearer your_secret_token",
   /// });
   /// ```
   ///
