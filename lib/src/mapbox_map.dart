@@ -208,7 +208,9 @@ class MapboxMap extends ChangeNotifier {
       AttributionSettingsInterface(
           binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-
+  late final MapboxHttpService httpService = MapboxHttpService(
+      binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+      channelSuffix: _mapboxMapsPlatform.channelSuffix);
   OnMapTapListener? onMapTapListener;
   OnMapLongTapListener? onMapLongTapListener;
   OnMapScrollListener? onMapScrollListener;
@@ -763,6 +765,28 @@ class MapboxMap extends ChangeNotifier {
   @experimental
   Future<void> setSnapshotLegacyMode(bool enable) =>
       _mapInterface.setSnapshotLegacyMode(enable);
+
+  /// Set custom headers for all Mapbox HTTP requests
+  ///
+  /// [headers] is a map of header names to header values
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails
+  ///
+  /// Example:
+  /// ```dart
+  /// MapboxMap.setCustomHeaders({
+  ///   "Authorization": "Bearer your_secret_token",
+  /// });
+  /// ```
+  ///
+  /// Throws a [PlatformException] if the native implementation is not available
+  /// or if the operation fails
+  Future<void> setCustomHeaders(Map<String, String> headers) =>
+      MapboxHttpService(
+              binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+              channelSuffix: _mapboxMapsPlatform.channelSuffix)
+          .setCustomHeaders(headers);
 }
 
 class _GestureListener extends GestureListener {
