@@ -59,80 +59,38 @@ class TrafficLayerExampleState extends State<TrafficLayerExample> {
             : Visibility.NONE,
         lineCap: LineCap.ROUND,
         lineJoin: LineJoin.ROUND,
+        lineWidthExpression: [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          14.0,
+          ['*', 2.0, 1.3],
+          20.0,
+          ['*', 10, 1.2]
+        ], 
+        lineColorExpression: [
+          'case',
+          ['==', 'low', ['get', 'congestion']],
+          '#39c66d',
+          ['==', 'moderate', ['get', 'congestion']],
+          '#ff8c1a',
+          ['==', 'heavy', ['get', 'congestion']],
+          '#ff0015',
+          ['==', 'severe', ['get', 'congestion']],
+          '#981b25',
+          '#000000'
+        ],
+        lineOffsetExpression: [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          14.0,
+          ['*', 2, 1.0],
+          20.0,
+          ['*', 18, 1.0]
+        ],
       ),
     );
-
-    await mapboxMap?.style.setStyleLayerProperty(
-        "traffic-layer",
-        "line-width",
-        '''
-        ["interpolate", ["linear"], ["zoom"],
-        14.0, ["*", 2.0, 1.3],
-        20.0, ["*", 10, 1.2]
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
-
-    await mapboxMap?.style.setStyleLayerProperty(
-        "traffic-layer",
-        "line-offset",
-        '''
-        ["interpolate", ["linear"], ["zoom"],
-        14.0, ["*", 2, 1.0],
-        20.0, ["*", 18, 1.0]
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
-
-    await mapboxMap?.style.setStyleLayerProperty(
-        "traffic-layer",
-        "line-color",
-        '''
-        [
-          "case",
-          [
-            "==",
-            "low",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#39c66d",
-          [
-            "==",
-            "moderate",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#ff8c1a",
-          [
-            "==",
-            "heavy",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#ff0015",
-          [
-            "==",
-            "severe",
-            [
-              "get",
-              "congestion"
-            ]
-          ],
-          "#981b25",
-          "#000000"
-        ]
-        '''
-            .trim()
-            .replaceAll("\n", ""));
   }
 
   Future<void> toggleTrafficLayer() async {
