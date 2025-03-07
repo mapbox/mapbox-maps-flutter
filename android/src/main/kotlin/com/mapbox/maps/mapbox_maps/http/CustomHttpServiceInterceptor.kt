@@ -18,7 +18,6 @@ class CustomHttpServiceInterceptor : HttpServiceInterceptorInterface {
     currentHeaders.putAll(customHeaders)
     val modifiedRequest = request.toBuilder()
       .headers(currentHeaders)
-      .networkRestriction(NetworkRestriction.NONE)
       .build()
     val requestOrResponse = HttpRequestOrResponse(modifiedRequest)
     continuation.run(requestOrResponse)
