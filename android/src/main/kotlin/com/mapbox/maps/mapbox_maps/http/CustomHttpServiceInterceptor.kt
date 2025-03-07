@@ -1,13 +1,12 @@
 package com.mapbox.maps.mapbox_maps.http
 
-import com.mapbox.common.HttpServiceFactory
-import com.mapbox.common.HttpServiceInterceptorInterface
 import com.mapbox.common.HttpRequest
 import com.mapbox.common.HttpRequestOrResponse
 import com.mapbox.common.HttpResponse
+import com.mapbox.common.HttpServiceFactory
+import com.mapbox.common.HttpServiceInterceptorInterface
 import com.mapbox.common.HttpServiceInterceptorRequestContinuation
 import com.mapbox.common.HttpServiceInterceptorResponseContinuation
-import com.mapbox.common.NetworkRestriction
 
 class CustomHttpServiceInterceptor : HttpServiceInterceptorInterface {
   private var customHeaders: MutableMap<String, String> = mutableMapOf()

@@ -151,7 +151,7 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         HttpServiceFactory.setHttpServiceInterceptorForInterceptor(customInterceptor)
             customInterceptor.customHeaders = headers
         result(nil)
-        
+
         default:
             result(FlutterMethodNotImplemented)
         }

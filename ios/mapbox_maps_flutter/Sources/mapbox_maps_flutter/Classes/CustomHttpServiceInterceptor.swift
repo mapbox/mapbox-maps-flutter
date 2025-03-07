@@ -1,8 +1,7 @@
-
 import MapboxMaps
 
 final class CustomHttpServiceInterceptor: HttpServiceInterceptorInterface {
-   
+
    var customHeaders: [String: String] = [:]
 
    func onRequest(for request: HttpRequest, continuation: @escaping HttpServiceInterceptorRequestContinuation) {
