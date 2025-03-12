@@ -1,4 +1,12 @@
+> [!IMPORTANT]
+> The iOS minimum deployment target is now iOS 14.0.
+
 ### main 
+
+### 2.7.0-rc.1
+
+* Update Maps SDK to 11.11.0-rc.1
+* Introduces a `setCustomHttpHeader` method to allow the plugin to modify HTTP headers dynamically.
 
 ### 2.7.0-beta.1
 
@@ -11,9 +19,6 @@
 * Mark `BackgroundLayer.backgroundPitchAlignment` as experimental 
 
 ### 2.6.0
-
-> [!IMPORTANT]
-> The iOS minimum deployment target is now iOS 14.0.
 
 * Update Maps SDK to 11.10.0
 * Align tap propagation behavior on Android and iOS.
