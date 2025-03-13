@@ -4,6 +4,7 @@ import 'package:mapbox_maps_example/animation_example.dart';
 import 'package:mapbox_maps_example/camera_example.dart';
 import 'package:mapbox_maps_example/circle_annotations_example.dart';
 import 'package:mapbox_maps_example/cluster_example.dart';
+import 'package:mapbox_maps_example/custom_header_example.dart';
 import 'package:mapbox_maps_example/offline_map_example.dart';
 import 'package:mapbox_maps_example/model_layer_example.dart';
 import 'package:mapbox_maps_example/ornaments_example.dart';
@@ -16,6 +17,7 @@ import 'package:mapbox_maps_example/polygon_annotations_example.dart';
 import 'package:mapbox_maps_example/polyline_annotations_example.dart';
 import 'package:mapbox_maps_example/simple_map_example.dart';
 import 'package:mapbox_maps_example/snapshotter_example.dart';
+import 'package:mapbox_maps_example/traffic_layer_example.dart';
 import 'package:mapbox_maps_example/spinning_globe_example.dart';
 import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
@@ -62,6 +64,8 @@ final List<Example> _allPages = <Example>[
   GesturesExample(),
   OrnamentsExample(),
   AnimatedRouteExample(),
+  CustomHeaderExample(),
+  TrafficLayerExample(),
 ];
 
 class MapsDemo extends StatelessWidget {
