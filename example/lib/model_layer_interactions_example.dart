@@ -23,67 +23,71 @@ class _ModelLayerInteractionsExampleState
     extends State<ModelLayerInteractionsExample> {
   MapboxMap? mapboxMap;
 
-  var model1Position = Position(24.9453, 60.1716);
-  var model2Position = Position(24.9453, 60.1720);
+  var buggyModelPosition = Position(24.9453, 60.1716);
+  var carModelPosition = Position(24.9453, 60.1720);
+
+  _onStyleLoaded(StyleLoadedEventData data) async {
+    addModelLayer();
+  }
 
   addModelLayer() async {
-    //Use Feature Colection to add multiple features on the same layer
-    var value1 = FeatureCollection(features: [
-      Feature(
-          id: 1, //Feature IDs should be Integers for the Model to be recognised by the Mapbox Interactions API
-          geometry: Point(
-            coordinates: model1Position,
-          ),
-          properties: {"name": "BUGGY", 'type': 'FeatureCollection'}),
-    ]);
-
-    var value2 = Feature(
-        id: 2, //Feature IDs should be Integers for the Model to be recognised by the Mapbox Interactions API
-        geometry: Point(coordinates: model2Position),
-        properties: {"name": "CAR", 'type': 'Feature'});
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");
     }
 
-    final buggyModelId = "model-test-id";
+    // 1.) Add the two 3D models to the style
+    final buggyModelId = "buggy-model-id";
     final buggyModelUri =
         "https://github.com/KhronosGroup/glTF-Sample-Models/raw/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
     await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
 
-    final carModelId = "model-car-id";
-    final carModelUri = "asset://flutter_assets/assets/sportcar.glb";
+    final carModelId = "car-model-id";
+    final carModelUri = "asset://assets/sportcar.glb";
     await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
 
-    await mapboxMap?.style
-        .addSource(GeoJsonSource(id: "sourceId1", data: json.encode(value1)));
-    await mapboxMap?.style
-        .addSource(GeoJsonSource(id: "sourceId2", data: json.encode(value2)));
+    // 2.) Create features with an ID and a Point geometry to represent the location of the models
+    var buggyFeature = Feature(
+        id: 1, //Feature IDs should be Integers for the Model to be recognised by the Mapbox Interactions API
+        geometry: Point(
+          coordinates: buggyModelPosition,
+        ),
+        properties: {"name": "BUGGY", "type": "gltf"});
+    var carFeature = Feature(
+        id: 2, //Feature IDs should be Integers for the Model to be recognised by the Mapbox Interactions API
+        geometry: Point(
+          coordinates: carModelPosition,
+        ),
+        properties: {"name": "CAR", "type": "glb"});
 
-    var modelLayer = ModelLayer(id: "modelLayer-buggy", sourceId: "sourceId1");
-    modelLayer.modelId = buggyModelId;
-    modelLayer.modelScale = [0.15, 0.15, 0.15];
-    modelLayer.modelRotation = [0, 0, 90];
-    modelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer);
+    await mapboxMap?.style.addSource(
+        GeoJsonSource(id: "buggySource", data: json.encode(buggyFeature)));
+    await mapboxMap?.style.addSource(
+        GeoJsonSource(id: "carSource", data: json.encode(carFeature)));
 
-    var modelLayer1 = ModelLayer(id: "modelLayer-car", sourceId: "sourceId2");
-    modelLayer1.modelId = carModelId;
-    modelLayer1.modelScale = [7, 7, 7];
-    modelLayer1.modelRotation = [0, 0, 90];
-    modelLayer1.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer1);
-  }
+    // 3.) Add the two model layers to the map, specifying the model id and geojson source id
+    var buggyModelLayer =
+        ModelLayer(id: "modelLayer-buggy", sourceId: "buggySource");
+    buggyModelLayer.modelId = buggyModelId;
+    buggyModelLayer.modelScale = [0.15, 0.15, 0.15];
+    buggyModelLayer.modelRotation = [0, 0, 90];
+    buggyModelLayer.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(buggyModelLayer);
 
-  _onStyleLoaded(StyleLoadedEventData data) async {
-    addModelLayer();
+    var carModelLayer = ModelLayer(id: "modelLayer-car", sourceId: "carSource");
+    carModelLayer.modelId =
+        "asset://assets/sportcar.glb"; // Local assets need to be referenced directly
+    carModelLayer.modelScale = [4, 4, 4];
+    carModelLayer.modelRotation = [0, 0, 90];
+    carModelLayer.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(carModelLayer);
   }
 
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
 
-    //Tap Interaction for FeatureCollection Layer
-    var tapInteractionFeatureCollection = TapInteraction(
+    // Tap Interaction for Buggy Layer
+    var tapInteractionBuggy = TapInteraction(
         FeaturesetDescriptor(layerId: "modelLayer-buggy"), (features, point) {
       showDialog(
         context: context,
@@ -98,11 +102,11 @@ class _ModelLayerInteractionsExampleState
         },
       );
     }, radius: 100);
-    mapboxMap.addInteraction(tapInteractionFeatureCollection,
+    mapboxMap.addInteraction(tapInteractionBuggy,
         interactionID: "tap_interaction_buggy");
 
-    //Tap Interaction for Feature Layer
-    var tapInteractionFeature = TapInteraction(
+    // Tap Interaction for Car Layer
+    var tapInteractionCar = TapInteraction(
         FeaturesetDescriptor(layerId: "modelLayer-car"), (features, point) {
       showDialog(
         context: context,
@@ -117,11 +121,11 @@ class _ModelLayerInteractionsExampleState
         },
       );
     }, radius: 100);
-    mapboxMap.addInteraction(tapInteractionFeature,
+    mapboxMap.addInteraction(tapInteractionCar,
         interactionID: "tap_interaction_car");
 
-    //LongTap Interaction for Feature Layer
-    var longTapInteractionFeature = LongTapInteraction(
+    // LongTap Interaction for Car Layer
+    var longTapInteractionCar = LongTapInteraction(
         FeaturesetDescriptor(layerId: "modelLayer-car"), (features, point) {
       showDialog(
         context: context,
@@ -136,11 +140,11 @@ class _ModelLayerInteractionsExampleState
         },
       );
     }, radius: 100);
-    mapboxMap.addInteraction(longTapInteractionFeature,
+    mapboxMap.addInteraction(longTapInteractionCar,
         interactionID: "long_tap_interaction_car");
 
-    //Tap Interaction for FeatureCollection Layer
-    var longTapInteractionFeatureCollection = LongTapInteraction(
+    // Tap Interaction for Buggy Layer
+    var longTapInteractionBuggy = LongTapInteraction(
         FeaturesetDescriptor(layerId: "modelLayer-buggy"), (features, point) {
       showDialog(
         context: context,
@@ -155,7 +159,7 @@ class _ModelLayerInteractionsExampleState
         },
       );
     }, radius: 100);
-    mapboxMap.addInteraction(longTapInteractionFeatureCollection,
+    mapboxMap.addInteraction(longTapInteractionBuggy,
         interactionID: "long_tap_interaction_buggy");
   }
 
@@ -174,7 +178,7 @@ class _ModelLayerInteractionsExampleState
         ],
       ),
       child: Text(
-        'Try clicking on a model!',
+        'Tap or Long Tap on a model!',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
@@ -199,7 +203,7 @@ class _ModelLayerInteractionsExampleState
         onMapCreated: _onMapCreated,
       ),
       Positioned(
-        bottom: 10,
+        bottom: 100,
         left: 10,
         right: 10,
         child: _buildDebugPanel(),

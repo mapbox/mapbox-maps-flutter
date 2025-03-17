@@ -19,17 +19,18 @@ class ModelLayerExample extends StatefulWidget implements Example {
 class _ModelLayerExampleState extends State<ModelLayerExample> {
   MapboxMap? mapboxMap;
 
-  var position = Position(24.9458, 60.17180);
-  var modelPosition = Position(24.94457012371287, 60.171958417023674);
+  var centerPosition = Position(24.94329401009505, 60.170820928168155);
+  var buggyModelPosition = Position(24.94457012371287, 60.171958417023674);
+  var carModelPosition = Position(24.942935425371218, 60.170573924952095);
 
   @override
   Widget build(BuildContext context) {
     return MapWidget(
         cameraOptions: CameraOptions(
-            center: Point(coordinates: position),
-            zoom: 18.5,
-            bearing: 98.82,
-            pitch: 85),
+            center: Point(coordinates: centerPosition),
+            zoom: 17,
+            bearing: 15,
+            pitch: 55),
         key: const ValueKey<String>('mapWidget'),
         onMapCreated: _onMapCreated,
         onStyleLoadedListener: _onStyleLoaded);
@@ -44,12 +45,12 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
   }
 
   addModelLayer() async {
-    var value = Point(coordinates: modelPosition);
     if (mapboxMap == null) {
       throw Exception("MapboxMap is not ready yet");
     }
 
-    final buggyModelId = "model-test-id";
+    // 1.) Add the two 3D models to the style
+    final buggyModelId = "model-buggy-id";
     final buggyModelUri =
         "https://github.com/KhronosGroup/glTF-Sample-Models/raw/d7a3cc8e51d7c573771ae77a57f16b0662a905c6/2.0/Buggy/glTF/Buggy.gltf";
     await mapboxMap?.style.addStyleModel(buggyModelId, buggyModelUri);
@@ -58,21 +59,29 @@ class _ModelLayerExampleState extends State<ModelLayerExample> {
     final carModelUri = "asset://assets/sportcar.glb";
     await mapboxMap?.style.addStyleModel(carModelId, carModelUri);
 
-    await mapboxMap?.style
-        .addSource(GeoJsonSource(id: "sourceId", data: json.encode(value)));
+    // 2.) Add the two geojson sources to provide coordinates for the models
+    var buggyModelLocation = Point(coordinates: buggyModelPosition);
+    var carModelLocation = Point(coordinates: carModelPosition);
+    await mapboxMap?.style.addSource(GeoJsonSource(
+        id: "buggySourceId", data: json.encode(buggyModelLocation)));
+    await mapboxMap?.style.addSource(
+        GeoJsonSource(id: "carSourceId", data: json.encode(carModelLocation)));
 
-    var modelLayer = ModelLayer(id: "modelLayer-buggy", sourceId: "sourceId");
-    modelLayer.modelId = buggyModelId;
-    modelLayer.modelScale = [0.15, 0.15, 0.15];
-    modelLayer.modelRotation = [0, 0, 90];
-    modelLayer.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer);
+    // 3.) Add the two model layers to the map, specifying the model id and geojson source id
+    var buggyModelLayer =
+        ModelLayer(id: "modelLayer-buggy", sourceId: "buggySourceId");
+    buggyModelLayer.modelId = buggyModelId;
+    buggyModelLayer.modelScale = [0.25, 0.25, 0.25];
+    buggyModelLayer.modelRotation = [0, 0, 90];
+    buggyModelLayer.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(buggyModelLayer);
 
-    var modelLayer1 = ModelLayer(id: "modelLayer-car", sourceId: "sourceId");
-    modelLayer1.modelId = carModelId;
-    modelLayer1.modelScale = [0.15, 0.15, 0.15];
-    modelLayer1.modelRotation = [0, 0, 90];
-    modelLayer1.modelType = ModelType.COMMON_3D;
-    mapboxMap?.style.addLayer(modelLayer1);
+    var carModelLayer = ModelLayer(id: "model-car-id", sourceId: "carSourceId");
+    carModelLayer.modelId =
+        "asset://assets/sportcar.glb"; // Local assets need to be referenced directly
+    carModelLayer.modelScale = [4, 4, 4];
+    carModelLayer.modelRotation = [0, 0, 90];
+    carModelLayer.modelType = ModelType.COMMON_3D;
+    mapboxMap?.style.addLayer(carModelLayer);
   }
 }
