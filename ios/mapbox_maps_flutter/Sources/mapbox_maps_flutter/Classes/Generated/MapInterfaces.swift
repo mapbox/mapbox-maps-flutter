@@ -2138,94 +2138,96 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 158:
       return Feature.fromList(self.readValue() as! [Any?])
     case 159:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+      return PerformanceStatisticsOptions.fromList(self.readValue() as! [Any?])
     case 160:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
     case 161:
-      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
     case 162:
-      return CameraOptions.fromList(self.readValue() as! [Any?])
+      return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
     case 163:
-      return CameraState.fromList(self.readValue() as! [Any?])
+      return CameraOptions.fromList(self.readValue() as! [Any?])
     case 164:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
+      return CameraState.fromList(self.readValue() as! [Any?])
     case 165:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
+      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
     case 166:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
+      return CameraBounds.fromList(self.readValue() as! [Any?])
     case 167:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
+      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
     case 168:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
     case 169:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+      return MapDebugOptions.fromList(self.readValue() as! [Any?])
     case 170:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
     case 171:
-      return MapOptions.fromList(self.readValue() as! [Any?])
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
     case 172:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return MapOptions.fromList(self.readValue() as! [Any?])
     case 173:
-      return ScreenBox.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 174:
-      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
+      return ScreenBox.fromList(self.readValue() as! [Any?])
     case 175:
-      return Size.fromList(self.readValue() as! [Any?])
+      return CoordinateBoundsZoom.fromList(self.readValue() as! [Any?])
     case 176:
-      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
+      return Size.fromList(self.readValue() as! [Any?])
     case 177:
-      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
+      return RenderedQueryOptions.fromList(self.readValue() as! [Any?])
     case 178:
-      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
+      return SourceQueryOptions.fromList(self.readValue() as! [Any?])
     case 179:
-      return LayerPosition.fromList(self.readValue() as! [Any?])
+      return FeatureExtensionValue.fromList(self.readValue() as! [Any?])
     case 180:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return LayerPosition.fromList(self.readValue() as! [Any?])
     case 181:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 182:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 183:
-      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 184:
-      return FeatureState.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
     case 185:
-      return _Interaction.fromList(self.readValue() as! [Any?])
+      return FeatureState.fromList(self.readValue() as! [Any?])
     case 186:
-      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
+      return _Interaction.fromList(self.readValue() as! [Any?])
     case 187:
-      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
+      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
     case 188:
-      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
+      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 189:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
     case 190:
-      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
     case 191:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 192:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 193:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 194:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 195:
-      return FlatLight.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 196:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
+      return FlatLight.fromList(self.readValue() as! [Any?])
     case 197:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
     case 198:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return AmbientLight.fromList(self.readValue() as! [Any?])
     case 199:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 200:
-      return ImageContent.fromList(self.readValue() as! [Any?])
+      return ImageStretches.fromList(self.readValue() as! [Any?])
     case 201:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
+      return ImageContent.fromList(self.readValue() as! [Any?])
     case 202:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return TransitionOptions.fromList(self.readValue() as! [Any?])
     case 203:
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+    case 204:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2325,140 +2327,143 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? Feature {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? PerformanceStatisticsOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
+    } else if let value = value as? CameraOptions {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
+    } else if let value = value as? CameraState {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? CameraBoundsOptions {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
+    } else if let value = value as? CameraBounds {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? MapAnimationOptions {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(171)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? MapOptions {
       super.writeByte(172)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenBox {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(173)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBoundsZoom {
+    } else if let value = value as? ScreenBox {
       super.writeByte(174)
       super.writeValue(value.toList())
-    } else if let value = value as? Size {
+    } else if let value = value as? CoordinateBoundsZoom {
       super.writeByte(175)
       super.writeValue(value.toList())
-    } else if let value = value as? RenderedQueryOptions {
+    } else if let value = value as? Size {
       super.writeByte(176)
       super.writeValue(value.toList())
-    } else if let value = value as? SourceQueryOptions {
+    } else if let value = value as? RenderedQueryOptions {
       super.writeByte(177)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureExtensionValue {
+    } else if let value = value as? SourceQueryOptions {
       super.writeByte(178)
       super.writeValue(value.toList())
-    } else if let value = value as? LayerPosition {
+    } else if let value = value as? FeatureExtensionValue {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? LayerPosition {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeatureId {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureState {
+    } else if let value = value as? FeaturesetFeatureId {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? _Interaction {
+    } else if let value = value as? FeatureState {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? _InteractionPigeon {
+    } else if let value = value as? _Interaction {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? StyleProjection {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? FlatLight {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? AmbientLight {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? MbxImage {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? ImageStretches {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? ImageContent {
       super.writeByte(201)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(202)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(203)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(204)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -3223,6 +3228,8 @@ class _InteractionsListener: _InteractionsListenerProtocol {
 ///
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol _MapInterface {
+  func startPerformanceStatisticsCollection(options: PerformanceStatisticsOptions) throws
+  func stopPerformanceStatisticsCollection() throws
   func loadStyleURI(styleURI: String, completion: @escaping (Result<Void, Error>) -> Void)
   func loadStyleJson(styleJson: String, completion: @escaping (Result<Void, Error>) -> Void)
   func clearData(completion: @escaping (Result<Void, Error>) -> Void)
@@ -3468,6 +3475,34 @@ class _MapInterfaceSetup {
   /// Sets up an instance of `_MapInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _MapInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let startPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.startPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      startPerformanceStatisticsCollectionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! PerformanceStatisticsOptions
+        do {
+          try api.startPerformanceStatisticsCollection(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      startPerformanceStatisticsCollectionChannel.setMessageHandler(nil)
+    }
+    let stopPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.stopPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      stopPerformanceStatisticsCollectionChannel.setMessageHandler { _, reply in
+        do {
+          try api.stopPerformanceStatisticsCollection()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      stopPerformanceStatisticsCollectionChannel.setMessageHandler(nil)
+    }
     let loadStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       loadStyleURIChannel.setMessageHandler { message, reply in
