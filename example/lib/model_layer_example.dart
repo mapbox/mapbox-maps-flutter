@@ -19,9 +19,9 @@ class ModelLayerExample extends StatefulWidget implements Example {
 class _ModelLayerExampleState extends State<ModelLayerExample> {
   MapboxMap? mapboxMap;
 
-  var centerPosition = Position(24.94329401009505, 60.170820928168155);
-  var buggyModelPosition = Position(24.94457012371287, 60.171958417023674);
-  var carModelPosition = Position(24.942935425371218, 60.170573924952095);
+  final centerPosition = Position(24.94329401009505, 60.170820928168155);
+  final buggyModelPosition = Position(24.94457012371287, 60.171958417023674);
+  final carModelPosition = Position(24.942935425371218, 60.170573924952095);
 
   @override
   Widget build(BuildContext context) {

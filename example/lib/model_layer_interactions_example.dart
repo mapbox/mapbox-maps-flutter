@@ -23,8 +23,9 @@ class _ModelLayerInteractionsExampleState
     extends State<ModelLayerInteractionsExample> {
   MapboxMap? mapboxMap;
 
-  var buggyModelPosition = Position(24.9453, 60.1716);
-  var carModelPosition = Position(24.9453, 60.1720);
+  final centerPosition = Position(24.9453, 60.1718);
+  final buggyModelPosition = Position(24.9453, 60.1716);
+  final carModelPosition = Position(24.9453, 60.1720);
 
   _onStyleLoaded(StyleLoadedEventData data) async {
     addModelLayer();
@@ -105,7 +106,7 @@ class _ModelLayerInteractionsExampleState
     mapboxMap.addInteraction(tapInteractionBuggy,
         interactionID: "tap_interaction_buggy");
 
-    // Tap Interaction for Car Layer
+    // LongTap Interaction for Car Layer
     var tapInteractionCar = TapInteraction(
         FeaturesetDescriptor(layerId: "modelLayer-car"), (features, point) {
       showDialog(
@@ -195,7 +196,7 @@ class _ModelLayerInteractionsExampleState
       MapWidget(
         key: ValueKey("mapWidget"),
         cameraOptions: CameraOptions(
-            center: Point(coordinates: Position(24.9453, 60.1718)),
+            center: Point(coordinates:centerPosition),
             bearing: 49.92,
             zoom: 17.5,
             pitch: 60),
