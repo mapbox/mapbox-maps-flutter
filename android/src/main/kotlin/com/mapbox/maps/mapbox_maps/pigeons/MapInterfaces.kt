@@ -2235,230 +2235,225 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       159.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          PerformanceStatisticsOptions.fromList(it)
+          GlyphsRasterizationOptions.fromList(it)
         }
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GlyphsRasterizationOptions.fromList(it)
+          TileCoverOptions.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCoverOptions.fromList(it)
+          MbxEdgeInsets.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          CameraOptions.fromList(it)
         }
       }
       163.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          CameraState.fromList(it)
         }
       }
       164.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          CameraBoundsOptions.fromList(it)
         }
       }
       165.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBoundsOptions.fromList(it)
+          CameraBounds.fromList(it)
         }
       }
       166.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraBounds.fromList(it)
+          MapAnimationOptions.fromList(it)
         }
       }
       167.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapAnimationOptions.fromList(it)
+          CoordinateBounds.fromList(it)
         }
       }
       168.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBounds.fromList(it)
+          MapDebugOptions.fromList(it)
         }
       }
       169.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapDebugOptions.fromList(it)
+          TileCacheBudgetInMegabytes.fromList(it)
         }
       }
       170.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInMegabytes.fromList(it)
+          TileCacheBudgetInTiles.fromList(it)
         }
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TileCacheBudgetInTiles.fromList(it)
+          MapOptions.fromList(it)
         }
       }
       172.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapOptions.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       173.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          ScreenBox.fromList(it)
         }
       }
       174.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenBox.fromList(it)
+          CoordinateBoundsZoom.fromList(it)
         }
       }
       175.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CoordinateBoundsZoom.fromList(it)
+          Size.fromList(it)
         }
       }
       176.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Size.fromList(it)
+          RenderedQueryOptions.fromList(it)
         }
       }
       177.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          RenderedQueryOptions.fromList(it)
+          SourceQueryOptions.fromList(it)
         }
       }
       178.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SourceQueryOptions.fromList(it)
+          FeatureExtensionValue.fromList(it)
         }
       }
       179.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureExtensionValue.fromList(it)
+          LayerPosition.fromList(it)
         }
       }
       180.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LayerPosition.fromList(it)
+          QueriedRenderedFeature.fromList(it)
         }
       }
       181.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedRenderedFeature.fromList(it)
+          QueriedSourceFeature.fromList(it)
         }
       }
       182.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedSourceFeature.fromList(it)
+          QueriedFeature.fromList(it)
         }
       }
       183.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          QueriedFeature.fromList(it)
+          FeaturesetFeatureId.fromList(it)
         }
       }
       184.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeatureId.fromList(it)
+          FeatureState.fromList(it)
         }
       }
       185.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeatureState.fromList(it)
+          _Interaction.fromList(it)
         }
       }
       186.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _Interaction.fromList(it)
+          _InteractionPigeon.fromList(it)
         }
       }
       187.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _InteractionPigeon.fromList(it)
+          FeaturesetDescriptor.fromList(it)
         }
       }
       188.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetDescriptor.fromList(it)
+          FeaturesetFeature.fromList(it)
         }
       }
       189.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FeaturesetFeature.fromList(it)
+          MapContentGestureContext.fromList(it)
         }
       }
       190.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MapContentGestureContext.fromList(it)
+          _RenderedQueryGeometry.fromList(it)
         }
       }
       191.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          _RenderedQueryGeometry.fromList(it)
+          ProjectedMeters.fromList(it)
         }
       }
       192.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ProjectedMeters.fromList(it)
+          MercatorCoordinate.fromList(it)
         }
       }
       193.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MercatorCoordinate.fromList(it)
+          StyleObjectInfo.fromList(it)
         }
       }
       194.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleObjectInfo.fromList(it)
+          StyleProjection.fromList(it)
         }
       }
       195.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          StyleProjection.fromList(it)
+          FlatLight.fromList(it)
         }
       }
       196.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          FlatLight.fromList(it)
+          DirectionalLight.fromList(it)
         }
       }
       197.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DirectionalLight.fromList(it)
+          AmbientLight.fromList(it)
         }
       }
       198.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AmbientLight.fromList(it)
+          MbxImage.fromList(it)
         }
       }
       199.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxImage.fromList(it)
+          ImageStretches.fromList(it)
         }
       }
       200.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageStretches.fromList(it)
+          ImageContent.fromList(it)
         }
       }
       201.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ImageContent.fromList(it)
+          TransitionOptions.fromList(it)
         }
       }
       202.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          TransitionOptions.fromList(it)
-        }
-      }
-      203.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           CanonicalTileID.fromList(it)
         }
       }
-      204.toByte() -> {
+      203.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           StylePropertyValue.fromList(it)
         }
@@ -2588,188 +2583,184 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
         stream.write(158)
         writeValue(stream, value.toList())
       }
-      is PerformanceStatisticsOptions -> {
+      is GlyphsRasterizationOptions -> {
         stream.write(159)
         writeValue(stream, value.toList())
       }
-      is GlyphsRasterizationOptions -> {
+      is TileCoverOptions -> {
         stream.write(160)
         writeValue(stream, value.toList())
       }
-      is TileCoverOptions -> {
+      is MbxEdgeInsets -> {
         stream.write(161)
         writeValue(stream, value.toList())
       }
-      is MbxEdgeInsets -> {
+      is CameraOptions -> {
         stream.write(162)
         writeValue(stream, value.toList())
       }
-      is CameraOptions -> {
+      is CameraState -> {
         stream.write(163)
         writeValue(stream, value.toList())
       }
-      is CameraState -> {
+      is CameraBoundsOptions -> {
         stream.write(164)
         writeValue(stream, value.toList())
       }
-      is CameraBoundsOptions -> {
+      is CameraBounds -> {
         stream.write(165)
         writeValue(stream, value.toList())
       }
-      is CameraBounds -> {
+      is MapAnimationOptions -> {
         stream.write(166)
         writeValue(stream, value.toList())
       }
-      is MapAnimationOptions -> {
+      is CoordinateBounds -> {
         stream.write(167)
         writeValue(stream, value.toList())
       }
-      is CoordinateBounds -> {
+      is MapDebugOptions -> {
         stream.write(168)
         writeValue(stream, value.toList())
       }
-      is MapDebugOptions -> {
+      is TileCacheBudgetInMegabytes -> {
         stream.write(169)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInMegabytes -> {
+      is TileCacheBudgetInTiles -> {
         stream.write(170)
         writeValue(stream, value.toList())
       }
-      is TileCacheBudgetInTiles -> {
+      is MapOptions -> {
         stream.write(171)
         writeValue(stream, value.toList())
       }
-      is MapOptions -> {
+      is ScreenCoordinate -> {
         stream.write(172)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is ScreenBox -> {
         stream.write(173)
         writeValue(stream, value.toList())
       }
-      is ScreenBox -> {
+      is CoordinateBoundsZoom -> {
         stream.write(174)
         writeValue(stream, value.toList())
       }
-      is CoordinateBoundsZoom -> {
+      is Size -> {
         stream.write(175)
         writeValue(stream, value.toList())
       }
-      is Size -> {
+      is RenderedQueryOptions -> {
         stream.write(176)
         writeValue(stream, value.toList())
       }
-      is RenderedQueryOptions -> {
+      is SourceQueryOptions -> {
         stream.write(177)
         writeValue(stream, value.toList())
       }
-      is SourceQueryOptions -> {
+      is FeatureExtensionValue -> {
         stream.write(178)
         writeValue(stream, value.toList())
       }
-      is FeatureExtensionValue -> {
+      is LayerPosition -> {
         stream.write(179)
         writeValue(stream, value.toList())
       }
-      is LayerPosition -> {
+      is QueriedRenderedFeature -> {
         stream.write(180)
         writeValue(stream, value.toList())
       }
-      is QueriedRenderedFeature -> {
+      is QueriedSourceFeature -> {
         stream.write(181)
         writeValue(stream, value.toList())
       }
-      is QueriedSourceFeature -> {
+      is QueriedFeature -> {
         stream.write(182)
         writeValue(stream, value.toList())
       }
-      is QueriedFeature -> {
+      is FeaturesetFeatureId -> {
         stream.write(183)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeatureId -> {
+      is FeatureState -> {
         stream.write(184)
         writeValue(stream, value.toList())
       }
-      is FeatureState -> {
+      is _Interaction -> {
         stream.write(185)
         writeValue(stream, value.toList())
       }
-      is _Interaction -> {
+      is _InteractionPigeon -> {
         stream.write(186)
         writeValue(stream, value.toList())
       }
-      is _InteractionPigeon -> {
+      is FeaturesetDescriptor -> {
         stream.write(187)
         writeValue(stream, value.toList())
       }
-      is FeaturesetDescriptor -> {
+      is FeaturesetFeature -> {
         stream.write(188)
         writeValue(stream, value.toList())
       }
-      is FeaturesetFeature -> {
+      is MapContentGestureContext -> {
         stream.write(189)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is _RenderedQueryGeometry -> {
         stream.write(190)
         writeValue(stream, value.toList())
       }
-      is _RenderedQueryGeometry -> {
+      is ProjectedMeters -> {
         stream.write(191)
         writeValue(stream, value.toList())
       }
-      is ProjectedMeters -> {
+      is MercatorCoordinate -> {
         stream.write(192)
         writeValue(stream, value.toList())
       }
-      is MercatorCoordinate -> {
+      is StyleObjectInfo -> {
         stream.write(193)
         writeValue(stream, value.toList())
       }
-      is StyleObjectInfo -> {
+      is StyleProjection -> {
         stream.write(194)
         writeValue(stream, value.toList())
       }
-      is StyleProjection -> {
+      is FlatLight -> {
         stream.write(195)
         writeValue(stream, value.toList())
       }
-      is FlatLight -> {
+      is DirectionalLight -> {
         stream.write(196)
         writeValue(stream, value.toList())
       }
-      is DirectionalLight -> {
+      is AmbientLight -> {
         stream.write(197)
         writeValue(stream, value.toList())
       }
-      is AmbientLight -> {
+      is MbxImage -> {
         stream.write(198)
         writeValue(stream, value.toList())
       }
-      is MbxImage -> {
+      is ImageStretches -> {
         stream.write(199)
         writeValue(stream, value.toList())
       }
-      is ImageStretches -> {
+      is ImageContent -> {
         stream.write(200)
         writeValue(stream, value.toList())
       }
-      is ImageContent -> {
+      is TransitionOptions -> {
         stream.write(201)
         writeValue(stream, value.toList())
       }
-      is TransitionOptions -> {
+      is CanonicalTileID -> {
         stream.write(202)
         writeValue(stream, value.toList())
       }
-      is CanonicalTileID -> {
-        stream.write(203)
-        writeValue(stream, value.toList())
-      }
       is StylePropertyValue -> {
-        stream.write(204)
+        stream.write(203)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -3478,8 +3469,6 @@ class _InteractionsListener(private val binaryMessenger: BinaryMessenger, privat
  * Generated interface from Pigeon that represents a handler of messages from Flutter.
  */
 interface _MapInterface {
-  fun startPerformanceStatisticsCollection(options: PerformanceStatisticsOptions)
-  fun stopPerformanceStatisticsCollection()
   fun loadStyleURI(styleURI: String, callback: (Result<Unit>) -> Unit)
   fun loadStyleJson(styleJson: String, callback: (Result<Unit>) -> Unit)
   fun clearData(callback: (Result<Unit>) -> Unit)
@@ -3789,40 +3778,6 @@ interface _MapInterface {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: _MapInterface?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.startPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val optionsArg = args[0] as PerformanceStatisticsOptions
-            val wrapped: List<Any?> = try {
-              api.startPerformanceStatisticsCollection(optionsArg)
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.stopPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              api.stopPerformanceStatisticsCollection()
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI$separatedMessageChannelSuffix", codec)
         if (api != null) {

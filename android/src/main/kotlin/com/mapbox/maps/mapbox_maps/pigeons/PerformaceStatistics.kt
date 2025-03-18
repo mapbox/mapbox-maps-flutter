@@ -4,12 +4,33 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
+import android.util.Log
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
+
+private fun wrapResult(result: Any?): List<Any?> {
+  return listOf(result)
+}
+
+private fun wrapError(exception: Throwable): List<Any?> {
+  return if (exception is FlutterError) {
+    listOf(
+      exception.code,
+      exception.message,
+      exception.details
+    )
+  } else {
+    listOf(
+      exception.javaClass.simpleName,
+      exception.toString(),
+      "Cause: " + exception.cause + ", Stacktrace: " + Log.getStackTraceString(exception)
+    )
+  }
+}
 
 private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
@@ -321,6 +342,57 @@ class PerformanceStatisticsListener(private val binaryMessenger: BinaryMessenger
         }
       } else {
         callback(Result.failure(createConnectionError(channelName)))
+      }
+    }
+  }
+}
+/** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+interface _PerformanceStatisticsApi {
+  fun startPerformanceStatisticsCollection(options: PerformanceStatisticsOptions)
+  fun stopPerformanceStatisticsCollection()
+
+  companion object {
+    /** The codec used by _PerformanceStatisticsApi. */
+    val codec: MessageCodec<Any?> by lazy {
+      PerformaceStatisticsPigeonCodec()
+    }
+    /** Sets up an instance of `_PerformanceStatisticsApi` to handle messages through the `binaryMessenger`. */
+    @JvmOverloads
+    fun setUp(binaryMessenger: BinaryMessenger, api: _PerformanceStatisticsApi?, messageChannelSuffix: String = "") {
+      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val optionsArg = args[0] as PerformanceStatisticsOptions
+            val wrapped: List<Any?> = try {
+              api.startPerformanceStatisticsCollection(optionsArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            val wrapped: List<Any?> = try {
+              api.stopPerformanceStatisticsCollection()
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
       }
     }
   }

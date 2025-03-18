@@ -29,6 +29,32 @@ final class PerformaceStatisticsError: Error {
       }
 }
 
+private func wrapResult(_ result: Any?) -> [Any?] {
+  return [result]
+}
+
+private func wrapError(_ error: Any) -> [Any?] {
+  if let pigeonError = error as? PerformaceStatisticsError {
+    return [
+      pigeonError.code,
+      pigeonError.message,
+      pigeonError.details,
+    ]
+  }
+  if let flutterError = error as? FlutterError {
+    return [
+      flutterError.code,
+      flutterError.message,
+      flutterError.details,
+    ]
+  }
+  return [
+    "\(error)",
+    "\(type(of: error))",
+    "Stacktrace: \(Thread.callStackSymbols)",
+  ]
+}
+
 private func createConnectionError(withChannelName channelName: String) -> PerformaceStatisticsError {
   return PerformaceStatisticsError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
 }
@@ -352,6 +378,48 @@ class PerformanceStatisticsListener: PerformanceStatisticsListenerProtocol {
       } else {
         completion(.success(Void()))
       }
+    }
+  }
+}
+/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
+protocol _PerformanceStatisticsApi {
+  func startPerformanceStatisticsCollection(options: PerformanceStatisticsOptions) throws
+  func stopPerformanceStatisticsCollection() throws
+}
+
+/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
+class _PerformanceStatisticsApiSetup {
+  static var codec: FlutterStandardMessageCodec { PerformaceStatisticsPigeonCodec.shared }
+  /// Sets up an instance of `_PerformanceStatisticsApi` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PerformanceStatisticsApi?, messageChannelSuffix: String = "") {
+    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+    let startPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      startPerformanceStatisticsCollectionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let optionsArg = args[0] as! PerformanceStatisticsOptions
+        do {
+          try api.startPerformanceStatisticsCollection(options: optionsArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      startPerformanceStatisticsCollectionChannel.setMessageHandler(nil)
+    }
+    let stopPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      stopPerformanceStatisticsCollectionChannel.setMessageHandler { _, reply in
+        do {
+          try api.stopPerformanceStatisticsCollection()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      stopPerformanceStatisticsCollectionChannel.setMessageHandler(nil)
     }
   }
 }

@@ -34,6 +34,7 @@ part 'src/pigeons/settings.dart';
 part 'src/pigeons/gesture_listeners.dart';
 part 'src/snapshotter/snapshotter_messenger.dart';
 part 'src/pigeons/log_backend.dart';
+part 'src/pigeons/performace_statistics.dart';
 part 'src/style/layer/background_layer.dart';
 part 'src/style/layer/circle_layer.dart';
 part 'src/style/layer/fill_extrusion_layer.dart';
