@@ -1,3 +1,9 @@
+### 2.6.2
+
+* Update Maps SDK to 11.10.2 (iOS) and 11.10.3 (Android):
+  * Fix a bug that may cause style packs to be either inaccessible or incorrect when updating an older tile store database created with Maps SDK 11.9 or earlier versions. **In systems that have already used Maps SDK 11.10.0 through 11.10.1, a re-download of style packs may be necessary**.
+  * Fix a map start time regression by speed up tile loading.
+
 ### 2.6.1
 
 * Update Maps SDK to 11.10.1 (iOS) and 11.10.2 (Android), introducing several bug fixes: 
