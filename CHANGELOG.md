@@ -1,6 +1,6 @@
-### main 
+### main
 
-### 2.7.0-rc.1
+### 2.6.1
 
 * Update Maps SDK to 11.11.0-rc.1
 * Introduces a `setCustomHttpHeader` method to allow the plugin to modify HTTP headers dynamically.
