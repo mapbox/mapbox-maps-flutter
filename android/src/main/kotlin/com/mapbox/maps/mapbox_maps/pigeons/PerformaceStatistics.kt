@@ -36,18 +36,6 @@ private fun createConnectionError(channelName: String): FlutterError {
   return FlutterError("channel-error", "Unable to establish connection on channel: '$channelName'.", "")
 }
 
-/**
- * Error class for passing custom error details to Flutter via a thrown PlatformException.
- * @property code The error code.
- * @property message The error message.
- * @property details The error details. Must be a datatype supported by the api codec.
- */
-class FlutterError(
-  val code: String,
-  override val message: String? = null,
-  val details: Any? = null
-) : Throwable()
-
 /** Samplers which can be optionally enabled to collect performance statistics. */
 enum class PerformanceSamplerOptions(val raw: Int) {
   /** Enables the collection of `cumulativeValues`, which are GPU resource statistics. */
@@ -122,26 +110,26 @@ data class DurationStatistics(
 /** Generated class from Pigeon that represents data sent in messages. */
 data class CumulativeRenderingStatistics(
   /** The number of draw calls at the end of the collection window. */
-  val drawCalls: Long,
+  val drawCalls: Long? = null,
   /** The amount of texture memory in use at the end of the collection window. */
-  val textureBytes: Long,
+  val textureBytes: Long? = null,
   /** The amount of vertex memory (array and index buffer memory) in use at the end of the collection window. */
-  val vertexBytes: Long,
+  val vertexBytes: Long? = null,
   /** The number of graphics pipeline programs created. */
-  val graphicsPrograms: Long,
+  val graphicsPrograms: Long? = null,
   /** The total amount of time spent on all graphics pipeline program creation, in milliseconds. */
-  val graphicsProgramsCreationTimeMillis: Double,
+  val graphicsProgramsCreationTimeMillis: Double? = null,
   /** The number of FBO switches. */
-  val fboSwitchCount: Long
+  val fboSwitchCount: Long? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CumulativeRenderingStatistics {
-      val drawCalls = pigeonVar_list[0] as Long
-      val textureBytes = pigeonVar_list[1] as Long
-      val vertexBytes = pigeonVar_list[2] as Long
-      val graphicsPrograms = pigeonVar_list[3] as Long
-      val graphicsProgramsCreationTimeMillis = pigeonVar_list[4] as Double
-      val fboSwitchCount = pigeonVar_list[5] as Long
+      val drawCalls = pigeonVar_list[0] as Long?
+      val textureBytes = pigeonVar_list[1] as Long?
+      val vertexBytes = pigeonVar_list[2] as Long?
+      val graphicsPrograms = pigeonVar_list[3] as Long?
+      val graphicsProgramsCreationTimeMillis = pigeonVar_list[4] as Double?
+      val fboSwitchCount = pigeonVar_list[5] as Long?
       return CumulativeRenderingStatistics(drawCalls, textureBytes, vertexBytes, graphicsPrograms, graphicsProgramsCreationTimeMillis, fboSwitchCount)
     }
   }
@@ -223,16 +211,16 @@ data class PerformanceStatistics(
   /** The CPU timeline duration statistics of the map render call. */
   val mapRenderDurationStatistics: DurationStatistics,
   /** Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option. */
-  val cumulativeStatistics: CumulativeRenderingStatistics,
+  val cumulativeStatistics: CumulativeRenderingStatistics? = null,
   /** Aggregated, per-frame, timings. Enable using the  `PerFrameRenderingStats` performance sampler option. */
-  val perFrameStatistics: PerFrameRenderingStatistics
+  val perFrameStatistics: PerFrameRenderingStatistics? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PerformanceStatistics {
       val collectionDurationMillis = pigeonVar_list[0] as Double
       val mapRenderDurationStatistics = pigeonVar_list[1] as DurationStatistics
-      val cumulativeStatistics = pigeonVar_list[2] as CumulativeRenderingStatistics
-      val perFrameStatistics = pigeonVar_list[3] as PerFrameRenderingStatistics
+      val cumulativeStatistics = pigeonVar_list[2] as CumulativeRenderingStatistics?
+      val perFrameStatistics = pigeonVar_list[3] as PerFrameRenderingStatistics?
       return PerformanceStatistics(collectionDurationMillis, mapRenderDurationStatistics, cumulativeStatistics, perFrameStatistics)
     }
   }

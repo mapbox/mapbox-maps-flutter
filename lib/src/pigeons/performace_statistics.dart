@@ -80,31 +80,31 @@ class DurationStatistics {
 
 class CumulativeRenderingStatistics {
   CumulativeRenderingStatistics({
-    required this.drawCalls,
-    required this.textureBytes,
-    required this.vertexBytes,
-    required this.graphicsPrograms,
-    required this.graphicsProgramsCreationTimeMillis,
-    required this.fboSwitchCount,
+    this.drawCalls,
+    this.textureBytes,
+    this.vertexBytes,
+    this.graphicsPrograms,
+    this.graphicsProgramsCreationTimeMillis,
+    this.fboSwitchCount,
   });
 
   /// The number of draw calls at the end of the collection window.
-  int drawCalls;
+  int? drawCalls;
 
   /// The amount of texture memory in use at the end of the collection window.
-  int textureBytes;
+  int? textureBytes;
 
   /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
-  int vertexBytes;
+  int? vertexBytes;
 
   /// The number of graphics pipeline programs created.
-  int graphicsPrograms;
+  int? graphicsPrograms;
 
   /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
-  double graphicsProgramsCreationTimeMillis;
+  double? graphicsProgramsCreationTimeMillis;
 
   /// The number of FBO switches.
-  int fboSwitchCount;
+  int? fboSwitchCount;
 
   Object encode() {
     return <Object?>[
@@ -120,12 +120,12 @@ class CumulativeRenderingStatistics {
   static CumulativeRenderingStatistics decode(Object result) {
     result as List<Object?>;
     return CumulativeRenderingStatistics(
-      drawCalls: result[0]! as int,
-      textureBytes: result[1]! as int,
-      vertexBytes: result[2]! as int,
-      graphicsPrograms: result[3]! as int,
-      graphicsProgramsCreationTimeMillis: result[4]! as double,
-      fboSwitchCount: result[5]! as int,
+      drawCalls: result[0] as int?,
+      textureBytes: result[1] as int?,
+      vertexBytes: result[2] as int?,
+      graphicsPrograms: result[3] as int?,
+      graphicsProgramsCreationTimeMillis: result[4] as double?,
+      fboSwitchCount: result[5] as int?,
     );
   }
 }
@@ -205,8 +205,8 @@ class PerformanceStatistics {
   PerformanceStatistics({
     required this.collectionDurationMillis,
     required this.mapRenderDurationStatistics,
-    required this.cumulativeStatistics,
-    required this.perFrameStatistics,
+    this.cumulativeStatistics,
+    this.perFrameStatistics,
   });
 
   /// The actual amount of time elapsed during statistics collection. Note that this duration is always a little bit larger
@@ -217,10 +217,10 @@ class PerformanceStatistics {
   DurationStatistics mapRenderDurationStatistics;
 
   /// Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option.
-  CumulativeRenderingStatistics cumulativeStatistics;
+  CumulativeRenderingStatistics? cumulativeStatistics;
 
   /// Aggregated, per-frame, timings. Enable using the  `PerFrameRenderingStats` performance sampler option.
-  PerFrameRenderingStatistics perFrameStatistics;
+  PerFrameRenderingStatistics? perFrameStatistics;
 
   Object encode() {
     return <Object?>[
@@ -236,8 +236,8 @@ class PerformanceStatistics {
     return PerformanceStatistics(
       collectionDurationMillis: result[0]! as double,
       mapRenderDurationStatistics: result[1]! as DurationStatistics,
-      cumulativeStatistics: result[2]! as CumulativeRenderingStatistics,
-      perFrameStatistics: result[3]! as PerFrameRenderingStatistics,
+      cumulativeStatistics: result[2] as CumulativeRenderingStatistics?,
+      perFrameStatistics: result[3] as PerFrameRenderingStatistics?,
     );
   }
 }

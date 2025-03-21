@@ -173,6 +173,10 @@ class MapboxMap extends ChangeNotifier {
   late final _ViewportMessenger _viewportMessenger = _ViewportMessenger(
       binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
       messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+  late final _PerformanceStatisticsApi _performanceStatistics =
+      _PerformanceStatisticsApi(
+          binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+          messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
 
   /// The interface to create and set annotations.
   late final AnnotationManager annotations;
@@ -222,7 +226,9 @@ class MapboxMap extends ChangeNotifier {
     GestureListener.setUp(null,
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-
+    PerformanceStatisticsListener.setUp(null,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
     super.dispose();
   }
 
@@ -729,6 +735,66 @@ class MapboxMap extends ChangeNotifier {
           messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
       _mapboxMapsPlatform.addGestureListeners();
     }
+  }
+
+  /// Collects CPU and GPU resource usage, as well as timings of layers and rendering groups, over a user-configurable sampling duration.
+  /// Use the collected information to identify layers or rendering groups that may be performing poorly.
+  ///
+  /// Use ``PerformanceStatisticsOptions`` to configure the following collection behaviours:
+  ///     - Which types of sampling to perform, whether cumulative, per-frame, or both.
+  ///     - Duration of sampling in milliseconds. A value of 0 forces the collection of performance statistics every frame.
+  ///
+  /// The statistics collection can be canceled using the ``AnyCancelable`` object returned by this function, note that if the token goes out of the scope it's deinitialized and thus canceled. Canceling collection will prevent the
+  /// callback from being called. Collection can be restarted by calling ``MapboxMap/collectPerformanceStatistics(_:callback:)`` again to obtain a new ``AnyCancelable`` object.
+  ///
+  /// The callback function will be called every time the configured sampling duration ``PerformanceStatisticsOptions/samplingDurationMillis`` has elapsed.
+  ///
+  /// - Parameters:
+  ///   - options The statistics collection options to collect.
+  ///   - callback The callback to be invoked when performance statistics are available.
+  /// - Returns:  The ``AnyCancelable`` object that can be used to cancel performance statistics collection.
+  /// Enable real-time collection of map rendering performance statistics, for development purposes. Use after `render()` has
+  /// been called for the first time.
+  ///
+  /// Collects CPU, GPU resource usage and timings of layers and rendering groups over a user-configurable sampling duration.
+  /// Use the collected information to find which layers or rendering groups might be performing poorly. Use
+  /// [PerformanceStatisticsOptions] to configure the following statistics collection behaviors:
+  /// <ul>
+  ///     <li>Specify the types of sampling: cumulative, per-frame, or both.</li>
+  ///     <li>Define the minimum amount of time over which to perform sampling.</li>
+  /// </ul>
+  ///
+  /// Utilize [PerformanceStatisticsListener] to observe the collected performance statistics. The callback function is invoked
+  /// after the configured sampling duration has elapsed. The collection process is continuous; without user-input,
+  /// it restarts after each callback invocation. Note: Specifying a negative sampling duration
+  /// or omitting the callback function will result in no operation, which will be logged for visibility.
+  ///
+  /// In order to stop the collection process, call [stopPerformanceStatisticsCollection].
+  /// After calling [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
+  /// restarted.
+  @experimental
+  void startPerformanceStatisticsCollection(
+      PerformanceStatisticsOptions options,
+      PerformanceStatisticsListener listener) {
+    PerformanceStatisticsListener.setUp(listener,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+
+    _performanceStatistics.startPerformanceStatisticsCollection(options);
+  }
+
+  /// Disable performance statistics collection.
+  ///
+  /// Calling [stopPerformanceStatisticsCollection] when no collection is enabled is a no-op. After calling
+  /// [startPerformanceStatisticsCollection], [stopPerformanceStatisticsCollection] must be called before collection can be
+  /// restarted.
+  @experimental
+  void stopPerformanceStatisticsCollection() {
+    PerformanceStatisticsListener.setUp(null,
+        binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
+        messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
+
+    _performanceStatistics.stopPerformanceStatisticsCollection();
   }
 
   void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
