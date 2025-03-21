@@ -31,6 +31,19 @@ import java.io.ByteArrayOutputStream
 
 // FLT to Android
 
+fun PerformanceStatisticsOptions.toPerformanceStatisticsOptions(): com.mapbox.maps.PerformanceStatisticsOptions {
+  return com.mapbox.maps.PerformanceStatisticsOptions.Builder()
+    .samplerOptions(samplerOptions.map { it.toPerformanceSamplerOptions() })
+    .samplingDurationMillis(samplingDurationMillis).build()
+}
+
+fun PerformanceSamplerOptions.toPerformanceSamplerOptions(): com.mapbox.maps.PerformanceSamplerOptions {
+  return when (this) {
+    PerformanceSamplerOptions.CUMULATIVE -> com.mapbox.maps.PerformanceSamplerOptions.CUMULATIVE_RENDERING_STATS
+    PerformanceSamplerOptions.PER_FRAME -> com.mapbox.maps.PerformanceSamplerOptions.PER_FRAME_RENDERING_STATS
+  }
+}
+
 fun _MapWidgetDebugOptions.toMapViewDebugOptions(): MapViewDebugOptions {
   return when (this) {
     _MapWidgetDebugOptions.TILE_BORDERS -> MapViewDebugOptions.TILE_BORDERS
@@ -504,6 +517,43 @@ fun Number.toDevicePixels(context: Context): Float {
 }
 
 // Android to FLT
+
+fun com.mapbox.maps.PerformanceStatistics.toPerformanceStatistics(): PerformanceStatistics {
+  return PerformanceStatistics(
+    collectionDurationMillis = collectionDurationMillis,
+    mapRenderDurationStatistics = mapRenderDurationStatistics.toDurationStatistics(),
+    cumulativeStatistics = cumulativeStatistics?.toCumulativeRenderingStatistics(),
+    perFrameStatistics = perFrameStatistics?.toPerFrameRenderingStatistics()
+  )
+}
+
+fun com.mapbox.maps.DurationStatistics.toDurationStatistics(): DurationStatistics {
+  return DurationStatistics(maxMillis = maxMillis, medianMillis = medianMillis)
+}
+
+fun com.mapbox.maps.CumulativeRenderingStatistics.toCumulativeRenderingStatistics(): CumulativeRenderingStatistics {
+  return CumulativeRenderingStatistics(
+    drawCalls = drawCalls,
+    textureBytes = textureBytes,
+    vertexBytes = vertexBytes,
+    graphicsPrograms = graphicsPrograms,
+    graphicsProgramsCreationTimeMillis = graphicsProgramsCreationTimeMillis,
+    fboSwitchCount = fboSwitchCount
+  )
+}
+
+fun com.mapbox.maps.PerFrameRenderingStatistics.toPerFrameRenderingStatistics(): PerFrameRenderingStatistics {
+  return PerFrameRenderingStatistics(
+    topRenderGroups = topRenderGroups.map { it.toGroupPerformanceStatistics() },
+    topRenderLayers = topRenderLayers.map { it.toGroupPerformanceStatistics() },
+    shadowMapDurationStatistics = shadowMapDurationStatistics.toDurationStatistics(),
+    uploadDurationStatistics = uploadDurationStatistics.toDurationStatistics()
+  )
+}
+
+fun com.mapbox.maps.GroupPerformanceStatistics.toGroupPerformanceStatistics(): GroupPerformanceStatistics {
+  return GroupPerformanceStatistics(durationMillis = durationMillis, name = name)
+}
 
 fun MapViewDebugOptions.toFLTDebugOptions(): _MapWidgetDebugOptions? {
   return when (this) {
