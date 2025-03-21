@@ -1,5 +1,7 @@
 ### main 
 
+* Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
+
 ### 2.7.0-rc.1
 
 * Update Maps SDK to 11.11.0-rc.1
