@@ -138,26 +138,26 @@ struct DurationStatistics {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CumulativeRenderingStatistics {
   /// The number of draw calls at the end of the collection window.
-  var drawCalls: Int64
+  var drawCalls: Int64?
   /// The amount of texture memory in use at the end of the collection window.
-  var textureBytes: Int64
+  var textureBytes: Int64?
   /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
-  var vertexBytes: Int64
+  var vertexBytes: Int64?
   /// The number of graphics pipeline programs created.
-  var graphicsPrograms: Int64
+  var graphicsPrograms: Int64?
   /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
-  var graphicsProgramsCreationTimeMillis: Double
+  var graphicsProgramsCreationTimeMillis: Double?
   /// The number of FBO switches.
-  var fboSwitchCount: Int64
+  var fboSwitchCount: Int64?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CumulativeRenderingStatistics? {
-    let drawCalls = pigeonVar_list[0] as! Int64
-    let textureBytes = pigeonVar_list[1] as! Int64
-    let vertexBytes = pigeonVar_list[2] as! Int64
-    let graphicsPrograms = pigeonVar_list[3] as! Int64
-    let graphicsProgramsCreationTimeMillis = pigeonVar_list[4] as! Double
-    let fboSwitchCount = pigeonVar_list[5] as! Int64
+    let drawCalls: Int64? = nilOrValue(pigeonVar_list[0])
+    let textureBytes: Int64? = nilOrValue(pigeonVar_list[1])
+    let vertexBytes: Int64? = nilOrValue(pigeonVar_list[2])
+    let graphicsPrograms: Int64? = nilOrValue(pigeonVar_list[3])
+    let graphicsProgramsCreationTimeMillis: Double? = nilOrValue(pigeonVar_list[4])
+    let fboSwitchCount: Int64? = nilOrValue(pigeonVar_list[5])
 
     return CumulativeRenderingStatistics(
       drawCalls: drawCalls,
@@ -250,16 +250,16 @@ struct PerformanceStatistics {
   /// The CPU timeline duration statistics of the map render call.
   var mapRenderDurationStatistics: DurationStatistics
   /// Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option.
-  var cumulativeStatistics: CumulativeRenderingStatistics
+  var cumulativeStatistics: CumulativeRenderingStatistics?
   /// Aggregated, per-frame, timings. Enable using the  `PerFrameRenderingStats` performance sampler option.
-  var perFrameStatistics: PerFrameRenderingStatistics
+  var perFrameStatistics: PerFrameRenderingStatistics?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PerformanceStatistics? {
     let collectionDurationMillis = pigeonVar_list[0] as! Double
     let mapRenderDurationStatistics = pigeonVar_list[1] as! DurationStatistics
-    let cumulativeStatistics = pigeonVar_list[2] as! CumulativeRenderingStatistics
-    let perFrameStatistics = pigeonVar_list[3] as! PerFrameRenderingStatistics
+    let cumulativeStatistics: CumulativeRenderingStatistics? = nilOrValue(pigeonVar_list[2])
+    let perFrameStatistics: PerFrameRenderingStatistics? = nilOrValue(pigeonVar_list[3])
 
     return PerformanceStatistics(
       collectionDurationMillis: collectionDurationMillis,
