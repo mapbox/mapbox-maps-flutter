@@ -194,7 +194,7 @@ class MapboxMapController(
     super.onFlutterViewDetached()
     lifecycleHelper?.dispose()
     lifecycleHelper = null
-    mapView!!.setViewTreeLifecycleOwner(null)
+    mapView?.setViewTreeLifecycleOwner(null)
   }
 
   override fun dispose() {
@@ -203,6 +203,7 @@ class MapboxMapController(
     }
     lifecycleHelper?.dispose()
     lifecycleHelper = null
+    mapView?.setViewTreeLifecycleOwner(null)
     mapView = null
     mapboxMap = null
     methodChannel.setMethodCallHandler(null)
