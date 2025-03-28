@@ -1,6 +1,6 @@
 # Mapbox Maps SDK Flutter SDK
 
-The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.11.0-rc.1). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
+The Mapbox Maps SDK Flutter SDK is an officially developed solution from Mapbox that enables use of our latest Maps SDK product (v11.11.0). The SDK allows developers to embed highly-customized maps using a Flutter widget on Android and iOS.
 
 Web and desktop are not supported. 
 
@@ -137,7 +137,7 @@ The `MapboxMap` controller instance is provided with `MapWidget.onMapCreated` ca
 `MapboxMap` exposes an entry point to the most of the APIs Maps Flutter SDK provides. It allows to control the map, camera, styles, observe map events, 
 query rendered features, etc.
 
-It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.10.0-rc.1/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.10.0-rc.1/documentation/mapboxmaps/mapboxmap) counterparts.
+It's organized similarly to the [Android](https://docs.mapbox.com/android/maps/api/11.11.0/mapbox-maps-android/com.mapbox.maps/-mapbox-map/) and [iOS](https://docs.mapbox.com/ios/maps/api/11.11.0/documentation/mapboxmaps/mapboxmap) counterparts.
 
 To interact with the map after it's created store the MapboxMap object somewhere : 
 ```
