@@ -16,7 +16,7 @@ extension FlutterError: Error { }
 extension PerformanceStatisticsOptions {
     func toPerformanceStatisticsOptions() -> MapboxMaps.PerformanceStatisticsOptions {
         let samplerOptions = samplerOptions
-            .map(\.samplerOption)
+            .map { $0.toSamplerOptions() }
             .reduce(into: MapboxMaps.PerformanceStatisticsOptions.SamplerOptions(), { partialResult, option in
                 partialResult.insert(option)
             })
@@ -26,7 +26,7 @@ extension PerformanceStatisticsOptions {
 }
 
 extension PerformanceSamplerOptions {
-    var samplerOption: MapboxMaps.PerformanceStatisticsOptions.SamplerOptions {
+    func toSamplerOptions() -> MapboxMaps.PerformanceStatisticsOptions.SamplerOptions {
         switch self {
         case .cUMULATIVE:
             return .cumulative
@@ -408,8 +408,8 @@ extension MapboxMaps.CumulativeRenderingStatistics {
 extension MapboxMaps.PerFrameRenderingStatistics {
     func toFLTPerFrameRenderingStatistics() -> PerFrameRenderingStatistics {
         return .init(
-            topRenderGroups: topRenderGroups.map(\.fLTGroupPerformanceStatistics),
-            topRenderLayers: topRenderLayers.map(\.fLTGroupPerformanceStatistics),
+            topRenderGroups: topRenderGroups.map { $0.toFLTGroupPerformanceStatistics() },
+            topRenderLayers: topRenderLayers.map { $0.toFLTGroupPerformanceStatistics() },
             shadowMapDurationStatistics: shadowMapDurationStatistics.toFLTDurationStatistics(),
             uploadDurationStatistics: uploadDurationStatistics.toFLTDurationStatistics()
         )
@@ -417,7 +417,7 @@ extension MapboxMaps.PerFrameRenderingStatistics {
 }
 
 extension MapboxMaps.GroupPerformanceStatistics {
-    var fLTGroupPerformanceStatistics: GroupPerformanceStatistics {
+    func toFLTGroupPerformanceStatistics() -> GroupPerformanceStatistics {
         return .init(durationMillis: durationMillis, name: name)
     }
 }

@@ -790,11 +790,11 @@ class MapboxMap extends ChangeNotifier {
   /// restarted.
   @experimental
   void stopPerformanceStatisticsCollection() {
+    _performanceStatistics.stopPerformanceStatisticsCollection();
+
     PerformanceStatisticsListener.setUp(null,
         binaryMessenger: _mapboxMapsPlatform.binaryMessenger,
         messageChannelSuffix: _mapboxMapsPlatform.channelSuffix.toString());
-
-    _performanceStatistics.stopPerformanceStatisticsCollection();
   }
 
   void setOnMapTapListener(OnMapTapListener? onMapTapListener) {
