@@ -1,3 +1,6 @@
+### main
+
+* Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
 
 ### 2.7.0
 

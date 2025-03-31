@@ -13,6 +13,29 @@ extension FlutterError: Error { }
 
 // FLT to Mapbox
 
+extension PerformanceStatisticsOptions {
+    func toPerformanceStatisticsOptions() -> MapboxMaps.PerformanceStatisticsOptions {
+        let samplerOptions = samplerOptions
+            .map { $0.toSamplerOptions() }
+            .reduce(into: MapboxMaps.PerformanceStatisticsOptions.SamplerOptions(), { partialResult, option in
+                partialResult.insert(option)
+            })
+
+        return .init(samplerOptions, samplingDurationMillis: samplingDurationMillis)
+    }
+}
+
+extension PerformanceSamplerOptions {
+    func toSamplerOptions() -> MapboxMaps.PerformanceStatisticsOptions.SamplerOptions {
+        switch self {
+        case .cUMULATIVE:
+            return .cumulative
+        case .pERFRAME:
+            return .perFrame
+        }
+    }
+}
+
 extension [_MapWidgetDebugOptions] {
     func toDebugOptions() -> MapViewDebugOptions {
         return reduce(into: []) { partialResult, option in
@@ -351,6 +374,53 @@ extension MbxEdgeInsets {
 }
 
 // Mapbox to FLT
+
+extension MapboxMaps.PerformanceStatistics {
+    func toFLTPerformanceStatistics() -> PerformanceStatistics {
+        return .init(
+            collectionDurationMillis: collectionDurationMillis,
+            mapRenderDurationStatistics: mapRenderDurationStatistics.toFLTDurationStatistics(),
+            cumulativeStatistics: cumulativeStatistics?.toFLTCumulativeRenderingStatistics(),
+            perFrameStatistics: perFrameStatistics?.toFLTPerFrameRenderingStatistics()
+        )
+    }
+}
+
+extension MapboxMaps.DurationStatistics {
+    func toFLTDurationStatistics() -> DurationStatistics {
+        return .init(maxMillis: maxMillis, medianMillis: medianMillis)
+    }
+}
+
+extension MapboxMaps.CumulativeRenderingStatistics {
+    func toFLTCumulativeRenderingStatistics() -> CumulativeRenderingStatistics {
+        return .init(
+            drawCalls: drawCalls.map(Int64.init),
+            textureBytes: textureBytes.map(Int64.init),
+            vertexBytes: vertexBytes.map(Int64.init),
+            graphicsPrograms: __graphicsPrograms?.int64Value,
+            graphicsProgramsCreationTimeMillis: __graphicsProgramsCreationTimeMillis?.doubleValue,
+            fboSwitchCount: __fboSwitchCount?.int64Value
+        )
+    }
+}
+
+extension MapboxMaps.PerFrameRenderingStatistics {
+    func toFLTPerFrameRenderingStatistics() -> PerFrameRenderingStatistics {
+        return .init(
+            topRenderGroups: topRenderGroups.map { $0.toFLTGroupPerformanceStatistics() },
+            topRenderLayers: topRenderLayers.map { $0.toFLTGroupPerformanceStatistics() },
+            shadowMapDurationStatistics: shadowMapDurationStatistics.toFLTDurationStatistics(),
+            uploadDurationStatistics: uploadDurationStatistics.toFLTDurationStatistics()
+        )
+    }
+}
+
+extension MapboxMaps.GroupPerformanceStatistics {
+    func toFLTGroupPerformanceStatistics() -> GroupPerformanceStatistics {
+        return .init(durationMillis: durationMillis, name: name)
+    }
+}
 
 extension UIEdgeInsets {
     func toMbxEdgeInsets() -> MbxEdgeInsets {
