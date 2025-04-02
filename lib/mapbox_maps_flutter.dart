@@ -11,6 +11,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' as turf;
+import 'package:mapbox_maps_platform_interface/mapbox_maps_platform_interface.dart' as platform_interface;
 
 export 'package:turf/helpers.dart';
 
@@ -87,3 +88,4 @@ part 'src/viewport/transitions/fly_viewport_transition.dart';
 part 'src/viewport/transitions/easing_viewport_transition.dart';
 part 'src/package_info.dart';
 part 'src/http/http_service.dart';
+part 'platform_implementation.dart';
