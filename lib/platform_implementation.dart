@@ -6,11 +6,14 @@ final class MapboxMapAdapter extends platform_interface.MapInterface {
 
   MapboxMapAdapter(this.mapboxMap);
 
+  late final _events = StreamController<platform_interface.MapEvent>();
+
   @override
   Future<void> setCamera(platform_interface.CameraOptions cameraOptions) {
     final Point? center;
     if (cameraOptions.center != null) {
-      center = Point(coordinates: turf.Position.named(
+      center = Point(
+        coordinates: turf.Position.named(
           lat: cameraOptions.center!.coordinates.lat,
           lng: cameraOptions.center!.coordinates.lng,
         ),
@@ -25,11 +28,14 @@ final class MapboxMapAdapter extends platform_interface.MapInterface {
       pitch: cameraOptions.pitch,
     ));
   }
+
+  @override
+  Stream<platform_interface.MapEvent> get events => _events.stream;
 }
 
-final class MapboxOptionsAdapter extends platform_interface.MapboxOptionsInterface {
-
-  MapboxOptionsAdapter(): super.internal();
+final class MapboxOptionsAdapter
+    extends platform_interface.MapboxOptionsInterface {
+  MapboxOptionsAdapter() : super.internal();
 
   @override
   Future<String> getAccessToken() {
@@ -43,29 +49,30 @@ final class MapboxOptionsAdapter extends platform_interface.MapboxOptionsInterfa
 }
 
 final class MobileMapWidget extends platform_interface.PlatformMapWidget {
-
   @override
-  platform_interface.MapInterface? map;
+  platform_interface.MapInterface? get map => _map;
 
   MobileMapWidget() : super.internal();
 
+  late final MapboxMapAdapter _map;
+
   @override
   Widget build(BuildContext context) {
-    return MapWidget(
-      onMapCreated: (controller) {
-        map = MapboxMapAdapter(controller);
-        onMapCreated?.call(map!);
-      },
-      onMapLoadErrorListener: (error) {
-        print('Map load error: $error');
-      },
-    );
+    return MapWidget(onMapCreated: (controller) {
+      _map = MapboxMapAdapter(controller);
+      onMapCreated?.call(map!);
+    }, onMapLoadErrorListener: (error) {
+      print('Map load error: $error');
+    }, onMapLoadedListener: (data) {
+      _map._events.add(platform_interface.MapLoaded());
+    });
   }
 }
 
 final class DartMobileMapPlugin {
   static void registerWith() {
     platform_interface.PlatformMapWidget.factory = () => MobileMapWidget();
-    platform_interface.MapboxOptionsInterface.factory = () => MapboxOptionsAdapter();
+    platform_interface.MapboxOptionsInterface.factory =
+        () => MapboxOptionsAdapter();
   }
 }
