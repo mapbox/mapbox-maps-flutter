@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart' show Geolocator;
 
 import 'example.dart';
 
@@ -54,7 +54,7 @@ class AnimatedRouteExampleState extends State<AnimatedRouteExample>
   }
 
   _getPermission() async {
-    await Permission.locationWhenInUse.request();
+    await Geolocator.requestPermission();
   }
 
   _onStyleLoadedCallback(StyleLoadedEventData data) {
