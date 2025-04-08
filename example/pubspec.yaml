@@ -21,7 +21,7 @@ dependencies:
     path: ../
 
   cupertino_icons: ^1.0.2
-  permission_handler: ^11.4.0
+  geolocator: ^13.0.4
   font_awesome_flutter: ^10.1.0
   http: ^1.3.0
   path_provider: ^2.1.3

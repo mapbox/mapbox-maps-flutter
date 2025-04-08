@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart' show Geolocator;
 
 import 'example.dart';
 
@@ -226,7 +226,7 @@ class LocationExampleState extends State<LocationExample> {
     return TextButton(
       child: Text('get location permission'),
       onPressed: () async {
-        var status = await Permission.locationWhenInUse.request();
+        var status = await Geolocator.requestPermission();
         print("Location granted : $status");
       },
     );
