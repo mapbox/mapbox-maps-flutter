@@ -64,6 +64,7 @@ struct MapContentGestureContext {
   /// The state of the gesture.
   var gestureState: GestureState
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapContentGestureContext? {
     let touchPosition = pigeonVar_list[0] as! ScreenCoordinate

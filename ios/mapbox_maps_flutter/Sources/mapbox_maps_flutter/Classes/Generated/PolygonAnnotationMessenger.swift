@@ -69,17 +69,6 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
-/// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum FillElevationReference: Int {
-  /// Elevated rendering is disabled.
-  case nONE = 0
-  /// Elevate geometry relative to HD roads. Use this mode to describe base polygons of the road networks.
-  case hDROADBASE = 1
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features such as 'hatched areas' that should exist only on top of road polygons.
-  case hDROADMARKUP = 2
-}
-
 /// Controls the frame of reference for `fill-translate`.
 /// Default value: "map".
 enum FillTranslateAnchor: Int {
@@ -96,21 +85,24 @@ struct PolygonAnnotation {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotation? {
@@ -122,6 +114,7 @@ struct PolygonAnnotation {
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[5])
     let fillPattern: String? = nilOrValue(pigeonVar_list[6])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[7])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[8])
 
     return PolygonAnnotation(
       id: id,
@@ -131,7 +124,8 @@ struct PolygonAnnotation {
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -144,6 +138,7 @@ struct PolygonAnnotation {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ]
   }
 }
@@ -153,21 +148,24 @@ struct PolygonAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationOptions? {
@@ -178,6 +176,7 @@ struct PolygonAnnotationOptions {
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[4])
     let fillPattern: String? = nilOrValue(pigeonVar_list[5])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[6])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[7])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
@@ -186,7 +185,8 @@ struct PolygonAnnotationOptions {
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -198,6 +198,7 @@ struct PolygonAnnotationOptions {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ]
   }
 }
@@ -208,20 +209,14 @@ private class PolygonAnnotationMessengerPigeonCodecReader: FlutterStandardReader
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return FillElevationReference(rawValue: enumResultAsInt)
-      }
-      return nil
-    case 130:
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
-      if let enumResultAsInt = enumResultAsInt {
         return FillTranslateAnchor(rawValue: enumResultAsInt)
       }
       return nil
-    case 131:
+    case 130:
       return Polygon.fromList(self.readValue() as! [Any?])
-    case 132:
+    case 131:
       return PolygonAnnotation.fromList(self.readValue() as! [Any?])
-    case 133:
+    case 132:
       return PolygonAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -231,20 +226,17 @@ private class PolygonAnnotationMessengerPigeonCodecReader: FlutterStandardReader
 
 private class PolygonAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? FillElevationReference {
+    if let value = value as? FillTranslateAnchor {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? FillTranslateAnchor {
-      super.writeByte(130)
-      super.writeValue(value.rawValue)
     } else if let value = value as? Polygon {
-      super.writeByte(131)
+      super.writeByte(130)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonAnnotation {
-      super.writeByte(132)
+      super.writeByte(131)
       super.writeValue(value.toList())
     } else if let value = value as? PolygonAnnotationOptions {
-      super.writeByte(133)
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -306,8 +298,6 @@ protocol _PolygonAnnotationMessenger {
   func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
-  func setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
-  func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void)
   func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setFillAntialias(managerId: String, fillAntialias: Bool, completion: @escaping (Result<Void, Error>) -> Void)
@@ -424,41 +414,6 @@ class _PolygonAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
-    }
-    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setFillElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let fillElevationReferenceArg = args[1] as! FillElevationReference
-        api.setFillElevationReference(managerId: managerIdArg, fillElevationReference: fillElevationReferenceArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setFillElevationReferenceChannel.setMessageHandler(nil)
-    }
-    let getFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getFillElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getFillElevationReference(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getFillElevationReferenceChannel.setMessageHandler(nil)
     }
     let setFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

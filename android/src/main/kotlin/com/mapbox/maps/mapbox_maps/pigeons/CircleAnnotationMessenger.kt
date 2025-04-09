@@ -114,7 +114,7 @@ data class CircleAnnotation(
   val circleOpacity: Double? = null,
   /**
    * Circle radius.
-   * Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
+   * Default value: 5. Minimum value: 0.
    */
   val circleRadius: Double? = null,
   /**
@@ -129,9 +129,11 @@ data class CircleAnnotation(
   val circleStrokeOpacity: Double? = null,
   /**
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-   * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleAnnotation {
@@ -145,7 +147,8 @@ data class CircleAnnotation(
       val circleStrokeColor = pigeonVar_list[7] as Long?
       val circleStrokeOpacity = pigeonVar_list[8] as Double?
       val circleStrokeWidth = pigeonVar_list[9] as Double?
-      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val isDraggable = pigeonVar_list[10] as Boolean?
+      return CircleAnnotation(id, geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -160,6 +163,7 @@ data class CircleAnnotation(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -178,7 +182,8 @@ data class CircleAnnotation(
       circleRadius == other.circleRadius &&
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
-      circleStrokeWidth == other.circleStrokeWidth
+      circleStrokeWidth == other.circleStrokeWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -207,7 +212,7 @@ data class CircleAnnotationOptions(
   val circleOpacity: Double? = null,
   /**
    * Circle radius.
-   * Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
+   * Default value: 5. Minimum value: 0.
    */
   val circleRadius: Double? = null,
   /**
@@ -222,9 +227,11 @@ data class CircleAnnotationOptions(
   val circleStrokeOpacity: Double? = null,
   /**
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-   * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
-  val circleStrokeWidth: Double? = null
+  val circleStrokeWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): CircleAnnotationOptions {
@@ -237,7 +244,8 @@ data class CircleAnnotationOptions(
       val circleStrokeColor = pigeonVar_list[6] as Long?
       val circleStrokeOpacity = pigeonVar_list[7] as Double?
       val circleStrokeWidth = pigeonVar_list[8] as Double?
-      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth)
+      val isDraggable = pigeonVar_list[9] as Boolean?
+      return CircleAnnotationOptions(geometry, circleSortKey, circleBlur, circleColor, circleOpacity, circleRadius, circleStrokeColor, circleStrokeOpacity, circleStrokeWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -251,6 +259,7 @@ data class CircleAnnotationOptions(
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -268,7 +277,8 @@ data class CircleAnnotationOptions(
       circleRadius == other.circleRadius &&
       circleStrokeColor == other.circleStrokeColor &&
       circleStrokeOpacity == other.circleStrokeOpacity &&
-      circleStrokeWidth == other.circleStrokeWidth
+      circleStrokeWidth == other.circleStrokeWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()

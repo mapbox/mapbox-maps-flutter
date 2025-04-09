@@ -34,7 +34,7 @@ enum CircleTranslateAnchor {
   VIEWPORT,
 }
 
-class CircleAnnotation {
+class CircleAnnotation extends BaseAnnotation {
   CircleAnnotation({
     required this.id,
     required this.geometry,
@@ -46,6 +46,7 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -70,7 +71,7 @@ class CircleAnnotation {
   double? circleOpacity;
 
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
+  /// Default value: 5. Minimum value: 0.
   double? circleRadius;
 
   /// The stroke color of the circle.
@@ -82,8 +83,11 @@ class CircleAnnotation {
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -97,6 +101,7 @@ class CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -117,6 +122,7 @@ class CircleAnnotation {
       circleStrokeColor: result[7] as int?,
       circleStrokeOpacity: result[8] as double?,
       circleStrokeWidth: result[9] as double?,
+      isDraggable: result[10] as bool?,
     );
   }
 
@@ -138,7 +144,8 @@ class CircleAnnotation {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -157,6 +164,7 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -178,7 +186,7 @@ class CircleAnnotationOptions {
   double? circleOpacity;
 
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
+  /// Default value: 5. Minimum value: 0.
   double? circleRadius;
 
   /// The stroke color of the circle.
@@ -190,8 +198,11 @@ class CircleAnnotationOptions {
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? circleStrokeWidth;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -204,6 +215,7 @@ class CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -223,6 +235,7 @@ class CircleAnnotationOptions {
       circleStrokeColor: result[6] as int?,
       circleStrokeOpacity: result[7] as double?,
       circleStrokeWidth: result[8] as double?,
+      isDraggable: result[9] as bool?,
     );
   }
 
@@ -243,7 +256,8 @@ class CircleAnnotationOptions {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override

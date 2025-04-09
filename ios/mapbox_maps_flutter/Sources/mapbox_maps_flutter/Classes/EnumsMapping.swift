@@ -521,22 +521,3 @@ extension MapboxMaps.CircleTranslateAnchor {
         }
     }
 }
-extension MapboxMaps.Anchor {
-
-    init?(_ fltValue: Anchor?) {
-        guard let fltValue else { return nil }
-
-        switch fltValue {
-        case .mAP: self = .map
-        case .vIEWPORT: self = .viewport
-        }
-    }
-
-    func toFLTAnchor() -> Anchor? {
-        switch self {
-        case .map: return .mAP
-        case .viewport: return .vIEWPORT
-        default: return nil
-        }
-    }
-}

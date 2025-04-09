@@ -80,19 +80,6 @@ enum LineCap: Int {
   case sQUARE = 2
 }
 
-/// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum LineElevationReference: Int {
-  /// Elevated rendering is disabled.
-  case nONE = 0
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
-  case sEA = 1
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
-  case gROUND = 2
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
-  case hDROADMARKUP = 3
-}
-
 /// The display of lines when joining.
 /// Default value: "miter".
 enum LineJoin: Int {
@@ -104,15 +91,6 @@ enum LineJoin: Int {
   case mITER = 2
   /// Line segments are not joined together, each one creates a separate line. Useful in combination with line-pattern. Line-cap property is not respected. Can't be used with data-driven styling.
   case nONE = 3
-}
-
-/// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
-/// Default value: "pixels".
-enum LineWidthUnit: Int {
-  /// Width is rendered in pixels.
-  case pIXELS = 0
-  /// Width is rendered in meters.
-  case mETERS = 1
 }
 
 /// Controls the frame of reference for `line-translate`.
@@ -132,46 +110,41 @@ struct PolylineAnnotation {
   var geometry: LineString
   /// The display of lines when joining.
   /// Default value: "miter".
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
-  /// Default value: 0.
+  var lineSortKey: Double? = nil
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
   /// @experimental
-  var lineZOffset: Double?
+  var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
-  /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
-  var lineBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
   /// Default value: 0. Minimum value: 0.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
-  var lineGapWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  /// Default value: 0. The unit of lineOffset is in pixels.
-  var lineOffset: Double?
+  /// Default value: 0.
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
-  /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
-  var lineWidth: Double?
+  /// Default value: 1. Minimum value: 0.
+  var lineWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotation? {
@@ -189,6 +162,7 @@ struct PolylineAnnotation {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[11])
     let linePattern: String? = nilOrValue(pigeonVar_list[12])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[13])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[14])
 
     return PolylineAnnotation(
       id: id,
@@ -204,7 +178,8 @@ struct PolylineAnnotation {
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
-      lineWidth: lineWidth
+      lineWidth: lineWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -223,6 +198,7 @@ struct PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ]
   }
 }
@@ -233,46 +209,41 @@ struct PolylineAnnotationOptions {
   var geometry: LineString
   /// The display of lines when joining.
   /// Default value: "miter".
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
-  /// Default value: 0.
+  var lineSortKey: Double? = nil
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
   /// @experimental
-  var lineZOffset: Double?
+  var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
-  /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
-  var lineBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
   /// Default value: 0. Minimum value: 0.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
-  var lineGapWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  /// Default value: 0. The unit of lineOffset is in pixels.
-  var lineOffset: Double?
+  /// Default value: 0.
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
-  /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
-  var lineWidth: Double?
+  /// Default value: 1. Minimum value: 0.
+  var lineWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotationOptions? {
@@ -289,6 +260,7 @@ struct PolylineAnnotationOptions {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[10])
     let linePattern: String? = nilOrValue(pigeonVar_list[11])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[12])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[13])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
@@ -303,7 +275,8 @@ struct PolylineAnnotationOptions {
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
-      lineWidth: lineWidth
+      lineWidth: lineWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -321,6 +294,7 @@ struct PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ]
   }
 }
@@ -337,32 +311,20 @@ private class PolylineAnnotationMessengerPigeonCodecReader: FlutterStandardReade
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return LineElevationReference(rawValue: enumResultAsInt)
+        return LineJoin(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return LineJoin(rawValue: enumResultAsInt)
-      }
-      return nil
-    case 132:
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
-      if let enumResultAsInt = enumResultAsInt {
-        return LineWidthUnit(rawValue: enumResultAsInt)
-      }
-      return nil
-    case 133:
-      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
-      if let enumResultAsInt = enumResultAsInt {
         return LineTranslateAnchor(rawValue: enumResultAsInt)
       }
       return nil
-    case 134:
+    case 132:
       return LineString.fromList(self.readValue() as! [Any?])
-    case 135:
+    case 133:
       return PolylineAnnotation.fromList(self.readValue() as! [Any?])
-    case 136:
+    case 134:
       return PolylineAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -375,26 +337,20 @@ private class PolylineAnnotationMessengerPigeonCodecWriter: FlutterStandardWrite
     if let value = value as? LineCap {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? LineElevationReference {
+    } else if let value = value as? LineJoin {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? LineJoin {
+    } else if let value = value as? LineTranslateAnchor {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? LineWidthUnit {
-      super.writeByte(132)
-      super.writeValue(value.rawValue)
-    } else if let value = value as? LineTranslateAnchor {
-      super.writeByte(133)
-      super.writeValue(value.rawValue)
     } else if let value = value as? LineString {
-      super.writeByte(134)
+      super.writeByte(132)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineAnnotation {
-      super.writeByte(135)
+      super.writeByte(133)
       super.writeValue(value.toList())
     } else if let value = value as? PolylineAnnotationOptions {
-      super.writeByte(136)
+      super.writeByte(134)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -458,10 +414,6 @@ protocol _PolylineAnnotationMessenger {
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
   func setLineCap(managerId: String, lineCap: LineCap, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineCap(managerId: String, completion: @escaping (Result<LineCap?, Error>) -> Void)
-  func setLineCrossSlope(managerId: String, lineCrossSlope: Double, completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineCrossSlope(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineElevationReference(managerId: String, completion: @escaping (Result<LineElevationReference?, Error>) -> Void)
   func setLineJoin(managerId: String, lineJoin: LineJoin, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineJoin(managerId: String, completion: @escaping (Result<LineJoin?, Error>) -> Void)
   func setLineMiterLimit(managerId: String, lineMiterLimit: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -470,8 +422,6 @@ protocol _PolylineAnnotationMessenger {
   func getLineRoundLimit(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineSortKey(managerId: String, lineSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setLineWidthUnit(managerId: String, lineWidthUnit: LineWidthUnit, completion: @escaping (Result<Void, Error>) -> Void)
-  func getLineWidthUnit(managerId: String, completion: @escaping (Result<LineWidthUnit?, Error>) -> Void)
   func setLineZOffset(managerId: String, lineZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getLineZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setLineBlur(managerId: String, lineBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -642,76 +592,6 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineCapChannel.setMessageHandler(nil)
     }
-    let setLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setLineCrossSlopeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let lineCrossSlopeArg = args[1] as! Double
-        api.setLineCrossSlope(managerId: managerIdArg, lineCrossSlope: lineCrossSlopeArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setLineCrossSlopeChannel.setMessageHandler(nil)
-    }
-    let getLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getLineCrossSlopeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getLineCrossSlope(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getLineCrossSlopeChannel.setMessageHandler(nil)
-    }
-    let setLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setLineElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let lineElevationReferenceArg = args[1] as! LineElevationReference
-        api.setLineElevationReference(managerId: managerIdArg, lineElevationReference: lineElevationReferenceArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setLineElevationReferenceChannel.setMessageHandler(nil)
-    }
-    let getLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getLineElevationReferenceChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getLineElevationReference(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getLineElevationReferenceChannel.setMessageHandler(nil)
-    }
     let setLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineJoinChannel.setMessageHandler { message, reply in
@@ -851,41 +731,6 @@ class _PolylineAnnotationMessengerSetup {
       }
     } else {
       getLineSortKeyChannel.setMessageHandler(nil)
-    }
-    let setLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setLineWidthUnitChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let lineWidthUnitArg = args[1] as! LineWidthUnit
-        api.setLineWidthUnit(managerId: managerIdArg, lineWidthUnit: lineWidthUnitArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setLineWidthUnitChannel.setMessageHandler(nil)
-    }
-    let getLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getLineWidthUnitChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getLineWidthUnit(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getLineWidthUnitChannel.setMessageHandler(nil)
     }
     let setLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

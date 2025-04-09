@@ -58,27 +58,6 @@ enum class LineCap(val raw: Int) {
 }
 
 /**
- * Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
- * Default value: "none".
- */
-enum class LineElevationReference(val raw: Int) {
-  /** Elevated rendering is disabled. */
-  NONE(0),
-  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
-  SEA(1),
-  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
-  GROUND(2),
-  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
-  HD_ROAD_MARKUP(3);
-
-  companion object {
-    fun ofRaw(raw: Int): LineElevationReference? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
  * The display of lines when joining.
  * Default value: "miter".
  */
@@ -94,23 +73,6 @@ enum class LineJoin(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): LineJoin? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
- * Default value: "pixels".
- */
-enum class LineWidthUnit(val raw: Int) {
-  /** Width is rendered in pixels. */
-  PIXELS(0),
-  /** Width is rendered in meters. */
-  METERS(1);
-
-  companion object {
-    fun ofRaw(raw: Int): LineWidthUnit? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -147,21 +109,13 @@ data class PolylineAnnotation(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   *  - Not supported for globe projection at the moment
-   *  - Elevated line discontinuity is possible on tile borders with terrain enabled
-   *  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-   *  - Rendering artifacts relating to `line-opacity` and `line-blur`
-   *  - Elevated line visibility is determined by layer order
-   *  - Z-fighting issues can happen with intersecting elevated lines
-   *  - Elevated lines don't cast shadows
-   * Default value: 0.
+   * Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
    * @experimental
    */
   val lineZOffset: Double? = null,
   /**
    * Blur applied to the line, in pixels.
-   * Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
   val lineBlur: Double? = null,
   /**
@@ -181,12 +135,12 @@ data class PolylineAnnotation(
   val lineColor: Long? = null,
   /**
    * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-   * Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
   val lineGapWidth: Double? = null,
   /**
    * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-   * Default value: 0. The unit of lineOffset is in pixels.
+   * Default value: 0.
    */
   val lineOffset: Double? = null,
   /**
@@ -198,9 +152,11 @@ data class PolylineAnnotation(
   val linePattern: String? = null,
   /**
    * Stroke thickness.
-   * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
+   * Default value: 1. Minimum value: 0.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotation {
@@ -218,7 +174,8 @@ data class PolylineAnnotation(
       val lineOpacity = pigeonVar_list[11] as Double?
       val linePattern = pigeonVar_list[12] as String?
       val lineWidth = pigeonVar_list[13] as Double?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[14] as Boolean?
+      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -237,6 +194,7 @@ data class PolylineAnnotation(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -259,7 +217,8 @@ data class PolylineAnnotation(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -277,21 +236,13 @@ data class PolylineAnnotationOptions(
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val lineSortKey: Double? = null,
   /**
-   * Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-   *  - Not supported for globe projection at the moment
-   *  - Elevated line discontinuity is possible on tile borders with terrain enabled
-   *  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-   *  - Rendering artifacts relating to `line-opacity` and `line-blur`
-   *  - Elevated line visibility is determined by layer order
-   *  - Z-fighting issues can happen with intersecting elevated lines
-   *  - Elevated lines don't cast shadows
-   * Default value: 0.
+   * Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
    * @experimental
    */
   val lineZOffset: Double? = null,
   /**
    * Blur applied to the line, in pixels.
-   * Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
   val lineBlur: Double? = null,
   /**
@@ -311,12 +262,12 @@ data class PolylineAnnotationOptions(
   val lineColor: Long? = null,
   /**
    * Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-   * Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
+   * Default value: 0. Minimum value: 0.
    */
   val lineGapWidth: Double? = null,
   /**
    * The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-   * Default value: 0. The unit of lineOffset is in pixels.
+   * Default value: 0.
    */
   val lineOffset: Double? = null,
   /**
@@ -328,9 +279,11 @@ data class PolylineAnnotationOptions(
   val linePattern: String? = null,
   /**
    * Stroke thickness.
-   * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
+   * Default value: 1. Minimum value: 0.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationOptions {
@@ -347,7 +300,8 @@ data class PolylineAnnotationOptions(
       val lineOpacity = pigeonVar_list[10] as Double?
       val linePattern = pigeonVar_list[11] as String?
       val lineWidth = pigeonVar_list[12] as Double?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[13] as Boolean?
+      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -365,6 +319,7 @@ data class PolylineAnnotationOptions(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -386,7 +341,8 @@ data class PolylineAnnotationOptions(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -401,35 +357,25 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          LineElevationReference.ofRaw(it.toInt())
+          LineJoin.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          LineJoin.ofRaw(it.toInt())
-        }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
-          LineWidthUnit.ofRaw(it.toInt())
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
           LineTranslateAnchor.ofRaw(it.toInt())
         }
       }
-      134.toByte() -> {
+      132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LineStringDecoder.fromList(it)
         }
       }
-      135.toByte() -> {
+      133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolylineAnnotation.fromList(it)
         }
       }
-      136.toByte() -> {
+      134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           PolylineAnnotationOptions.fromList(it)
         }
@@ -443,32 +389,24 @@ private open class PolylineAnnotationMessengerPigeonCodec : StandardMessageCodec
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is LineElevationReference -> {
+      is LineJoin -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is LineJoin -> {
+      is LineTranslateAnchor -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is LineWidthUnit -> {
-        stream.write(132)
-        writeValue(stream, value.raw)
-      }
-      is LineTranslateAnchor -> {
-        stream.write(133)
-        writeValue(stream, value.raw)
-      }
       is LineString -> {
-        stream.write(134)
+        stream.write(132)
         writeValue(stream, value.toList())
       }
       is PolylineAnnotation -> {
-        stream.write(135)
+        stream.write(133)
         writeValue(stream, value.toList())
       }
       is PolylineAnnotationOptions -> {
-        stream.write(136)
+        stream.write(134)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -510,10 +448,6 @@ interface _PolylineAnnotationMessenger {
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
   fun setLineCap(managerId: String, lineCap: LineCap, callback: (Result<Unit>) -> Unit)
   fun getLineCap(managerId: String, callback: (Result<LineCap?>) -> Unit)
-  fun setLineCrossSlope(managerId: String, lineCrossSlope: Double, callback: (Result<Unit>) -> Unit)
-  fun getLineCrossSlope(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setLineElevationReference(managerId: String, lineElevationReference: LineElevationReference, callback: (Result<Unit>) -> Unit)
-  fun getLineElevationReference(managerId: String, callback: (Result<LineElevationReference?>) -> Unit)
   fun setLineJoin(managerId: String, lineJoin: LineJoin, callback: (Result<Unit>) -> Unit)
   fun getLineJoin(managerId: String, callback: (Result<LineJoin?>) -> Unit)
   fun setLineMiterLimit(managerId: String, lineMiterLimit: Double, callback: (Result<Unit>) -> Unit)
@@ -522,8 +456,6 @@ interface _PolylineAnnotationMessenger {
   fun getLineRoundLimit(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineSortKey(managerId: String, lineSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getLineSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
-  fun setLineWidthUnit(managerId: String, lineWidthUnit: LineWidthUnit, callback: (Result<Unit>) -> Unit)
-  fun getLineWidthUnit(managerId: String, callback: (Result<LineWidthUnit?>) -> Unit)
   fun setLineZOffset(managerId: String, lineZOffset: Double, callback: (Result<Unit>) -> Unit)
   fun getLineZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setLineBlur(managerId: String, lineBlur: Double, callback: (Result<Unit>) -> Unit)
@@ -714,86 +646,6 @@ interface _PolylineAnnotationMessenger {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCrossSlope$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            val lineCrossSlopeArg = args[1] as Double
-            api.setLineCrossSlope(managerIdArg, lineCrossSlopeArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getLineCrossSlope(managerIdArg) { result: Result<Double?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            val lineElevationReferenceArg = args[1] as LineElevationReference
-            api.setLineElevationReference(managerIdArg, lineElevationReferenceArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationReference$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getLineElevationReference(managerIdArg) { result: Result<LineElevationReference?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -940,46 +792,6 @@ interface _PolylineAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getLineSortKey(managerIdArg) { result: Result<Double?> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                val data = result.getOrNull()
-                reply.reply(wrapResult(data))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidthUnit$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            val lineWidthUnitArg = args[1] as LineWidthUnit
-            api.setLineWidthUnit(managerIdArg, lineWidthUnitArg) { result: Result<Unit> ->
-              val error = result.exceptionOrNull()
-              if (error != null) {
-                reply.reply(wrapError(error))
-              } else {
-                reply.reply(wrapResult(null))
-              }
-            }
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidthUnit$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { message, reply ->
-            val args = message as List<Any?>
-            val managerIdArg = args[0] as String
-            api.getLineWidthUnit(managerIdArg) { result: Result<LineWidthUnit?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

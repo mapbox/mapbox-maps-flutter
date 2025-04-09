@@ -85,9 +85,6 @@ enum SymbolElevationReference {
 
   /// Elevate symbols relative to the ground's height below them.
   GROUND,
-
-  /// Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed.
-  HD_ROAD_MARKUP,
 }
 
 /// Label placement relative to its geometry.
@@ -109,7 +106,7 @@ enum SymbolZOrder {
   /// Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   AUTO,
 
-  /// Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`.
+  /// Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   VIEWPORT_Y,
 
   /// Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.
@@ -261,7 +258,7 @@ enum TextTranslateAnchor {
   VIEWPORT,
 }
 
-class PointAnnotation {
+class PointAnnotation extends BaseAnnotation {
   PointAnnotation({
     required this.id,
     required this.geometry,
@@ -301,6 +298,7 @@ class PointAnnotation {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -325,11 +323,11 @@ class PointAnnotation {
   List<double?>? iconOffset;
 
   /// Rotates the icon clockwise.
-  /// Default value: 0. The unit of iconRotate is in degrees.
+  /// Default value: 0.
   double? iconRotate;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  /// Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
+  /// Default value: 1. Minimum value: 0.
   double? iconSize;
 
   /// Scales the icon to fit around the associated text.
@@ -337,7 +335,7 @@ class PointAnnotation {
   IconTextFit? iconTextFit;
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  /// Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
+  /// Default value: [0,0,0,0].
   List<double?>? iconTextFitPadding;
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
@@ -356,31 +354,31 @@ class PointAnnotation {
   TextJustify? textJustify;
 
   /// Text tracking amount.
-  /// Default value: 0. The unit of textLetterSpacing is in ems.
+  /// Default value: 0.
   double? textLetterSpacing;
 
   /// Text leading value for multi-line text.
-  /// Default value: 1.2. The unit of textLineHeight is in ems.
+  /// Default value: 1.2.
   double? textLineHeight;
 
   /// The maximum line width for text wrapping.
-  /// Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
+  /// Default value: 10. Minimum value: 0.
   double? textMaxWidth;
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  /// Default value: [0,0]. The unit of textOffset is in ems.
+  /// Default value: [0,0].
   List<double?>? textOffset;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  /// Default value: 0. The unit of textRadialOffset is in ems.
+  /// Default value: 0.
   double? textRadialOffset;
 
   /// Rotates the text clockwise.
-  /// Default value: 0. The unit of textRotate is in degrees.
+  /// Default value: 0.
   double? textRotate;
 
   /// Font size.
-  /// Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
+  /// Default value: 16. Minimum value: 0.
   double? textSize;
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
@@ -392,11 +390,11 @@ class PointAnnotation {
   int? iconColor;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
+  /// Default value: 1. Minimum value: 0.
   double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloBlur;
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
@@ -404,7 +402,7 @@ class PointAnnotation {
   int? iconHaloColor;
 
   /// Distance of halo to the icon outline.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloWidth;
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
@@ -429,11 +427,11 @@ class PointAnnotation {
   int? textColor;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
+  /// Default value: 1. Minimum value: 0.
   double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloBlur;
 
   /// The color of the text's halo, which helps it stand out from backgrounds.
@@ -441,7 +439,7 @@ class PointAnnotation {
   int? textHaloColor;
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloWidth;
 
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -451,6 +449,9 @@ class PointAnnotation {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -492,6 +493,7 @@ class PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -540,6 +542,7 @@ class PointAnnotation {
       textHaloWidth: result[35] as double?,
       textOcclusionOpacity: result[36] as double?,
       textOpacity: result[37] as double?,
+      isDraggable: result[38] as bool?,
     );
   }
 
@@ -589,7 +592,8 @@ class PointAnnotation {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -636,6 +640,7 @@ class PointAnnotationOptions {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -657,11 +662,11 @@ class PointAnnotationOptions {
   List<double?>? iconOffset;
 
   /// Rotates the icon clockwise.
-  /// Default value: 0. The unit of iconRotate is in degrees.
+  /// Default value: 0.
   double? iconRotate;
 
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  /// Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
+  /// Default value: 1. Minimum value: 0.
   double? iconSize;
 
   /// Scales the icon to fit around the associated text.
@@ -669,7 +674,7 @@ class PointAnnotationOptions {
   IconTextFit? iconTextFit;
 
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  /// Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
+  /// Default value: [0,0,0,0].
   List<double?>? iconTextFitPadding;
 
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
@@ -688,31 +693,31 @@ class PointAnnotationOptions {
   TextJustify? textJustify;
 
   /// Text tracking amount.
-  /// Default value: 0. The unit of textLetterSpacing is in ems.
+  /// Default value: 0.
   double? textLetterSpacing;
 
   /// Text leading value for multi-line text.
-  /// Default value: 1.2. The unit of textLineHeight is in ems.
+  /// Default value: 1.2.
   double? textLineHeight;
 
   /// The maximum line width for text wrapping.
-  /// Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
+  /// Default value: 10. Minimum value: 0.
   double? textMaxWidth;
 
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  /// Default value: [0,0]. The unit of textOffset is in ems.
+  /// Default value: [0,0].
   List<double?>? textOffset;
 
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  /// Default value: 0. The unit of textRadialOffset is in ems.
+  /// Default value: 0.
   double? textRadialOffset;
 
   /// Rotates the text clockwise.
-  /// Default value: 0. The unit of textRotate is in degrees.
+  /// Default value: 0.
   double? textRotate;
 
   /// Font size.
-  /// Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
+  /// Default value: 16. Minimum value: 0.
   double? textSize;
 
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
@@ -724,11 +729,11 @@ class PointAnnotationOptions {
   int? iconColor;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
+  /// Default value: 1. Minimum value: 0.
   double? iconEmissiveStrength;
 
   /// Fade out the halo towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloBlur;
 
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
@@ -736,7 +741,7 @@ class PointAnnotationOptions {
   int? iconHaloColor;
 
   /// Distance of halo to the icon outline.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? iconHaloWidth;
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
@@ -761,11 +766,11 @@ class PointAnnotationOptions {
   int? textColor;
 
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
+  /// Default value: 1. Minimum value: 0.
   double? textEmissiveStrength;
 
   /// The halo's fadeout distance towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloBlur;
 
   /// The color of the text's halo, which helps it stand out from backgrounds.
@@ -773,7 +778,7 @@ class PointAnnotationOptions {
   int? textHaloColor;
 
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? textHaloWidth;
 
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -783,6 +788,9 @@ class PointAnnotationOptions {
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -823,6 +831,7 @@ class PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -870,6 +879,7 @@ class PointAnnotationOptions {
       textHaloWidth: result[34] as double?,
       textOcclusionOpacity: result[35] as double?,
       textOpacity: result[36] as double?,
+      isDraggable: result[37] as bool?,
     );
   }
 
@@ -918,7 +928,8 @@ class PointAnnotationOptions {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -1889,59 +1900,6 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setIconSizeScaleRange(
-      String managerId, List<double?> iconSizeScaleRange) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, iconSizeScaleRange]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<List<double?>?> getIconSizeScaleRange(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 
@@ -3413,59 +3371,6 @@ class _PointAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setTextSizeScaleRange(
-      String managerId, List<double?> textSizeScaleRange) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, textSizeScaleRange]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<List<double?>?> getTextSizeScaleRange(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as List<Object?>?)?.cast<double?>();
     }
   }
 

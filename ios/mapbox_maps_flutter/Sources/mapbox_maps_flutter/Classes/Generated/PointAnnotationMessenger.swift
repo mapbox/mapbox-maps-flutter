@@ -134,8 +134,6 @@ enum SymbolElevationReference: Int {
   case sEA = 0
   /// Elevate symbols relative to the ground's height below them.
   case gROUND = 1
-  /// Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed.
-  case hDROADMARKUP = 2
 }
 
 /// Label placement relative to its geometry.
@@ -154,7 +152,7 @@ enum SymbolPlacement: Int {
 enum SymbolZOrder: Int {
   /// Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   case aUTO = 0
-  /// Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`.
+  /// Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`.
   case vIEWPORTY = 1
   /// Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data.
   case sOURCE = 2
@@ -285,111 +283,114 @@ struct PointAnnotation {
   var geometry: Point
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
-  var image: FlutterStandardTypedData?
+  var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
-  var iconAnchor: IconAnchor?
+  var iconAnchor: IconAnchor? = nil
   /// Name of image in sprite to use for drawing an image background.
-  var iconImage: String?
+  var iconImage: String? = nil
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  var iconOffset: [Double?]?
+  var iconOffset: [Double?]? = nil
   /// Rotates the icon clockwise.
-  /// Default value: 0. The unit of iconRotate is in degrees.
-  var iconRotate: Double?
+  /// Default value: 0.
+  var iconRotate: Double? = nil
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  /// Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
-  var iconSize: Double?
+  /// Default value: 1. Minimum value: 0.
+  var iconSize: Double? = nil
   /// Scales the icon to fit around the associated text.
   /// Default value: "none".
-  var iconTextFit: IconTextFit?
+  var iconTextFit: IconTextFit? = nil
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  /// Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
-  var iconTextFitPadding: [Double?]?
+  /// Default value: [0,0,0,0].
+  var iconTextFitPadding: [Double?]? = nil
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  var symbolSortKey: Double?
+  var symbolSortKey: Double? = nil
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
-  var textAnchor: TextAnchor?
+  var textAnchor: TextAnchor? = nil
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   /// Default value: "".
-  var textField: String?
+  var textField: String? = nil
   /// Text justification options.
   /// Default value: "center".
-  var textJustify: TextJustify?
+  var textJustify: TextJustify? = nil
   /// Text tracking amount.
-  /// Default value: 0. The unit of textLetterSpacing is in ems.
-  var textLetterSpacing: Double?
+  /// Default value: 0.
+  var textLetterSpacing: Double? = nil
   /// Text leading value for multi-line text.
-  /// Default value: 1.2. The unit of textLineHeight is in ems.
-  var textLineHeight: Double?
+  /// Default value: 1.2.
+  var textLineHeight: Double? = nil
   /// The maximum line width for text wrapping.
-  /// Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
-  var textMaxWidth: Double?
+  /// Default value: 10. Minimum value: 0.
+  var textMaxWidth: Double? = nil
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  /// Default value: [0,0]. The unit of textOffset is in ems.
-  var textOffset: [Double?]?
+  /// Default value: [0,0].
+  var textOffset: [Double?]? = nil
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  /// Default value: 0. The unit of textRadialOffset is in ems.
-  var textRadialOffset: Double?
+  /// Default value: 0.
+  var textRadialOffset: Double? = nil
   /// Rotates the text clockwise.
-  /// Default value: 0. The unit of textRotate is in degrees.
-  var textRotate: Double?
+  /// Default value: 0.
+  var textRotate: Double? = nil
   /// Font size.
-  /// Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
-  var textSize: Double?
+  /// Default value: 16. Minimum value: 0.
+  var textSize: Double? = nil
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   /// Default value: "none".
-  var textTransform: TextTransform?
+  var textTransform: TextTransform? = nil
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
-  var iconColor: Int64?
+  var iconColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
-  var iconEmissiveStrength: Double?
+  /// Default value: 1. Minimum value: 0.
+  var iconEmissiveStrength: Double? = nil
   /// Fade out the halo towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
-  var iconHaloBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var iconHaloBlur: Double? = nil
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "rgba(0, 0, 0, 0)".
-  var iconHaloColor: Int64?
+  var iconHaloColor: Int64? = nil
   /// Distance of halo to the icon outline.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
-  var iconHaloWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
-  var iconImageCrossFade: Double?
+  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
-  var iconOcclusionOpacity: Double?
+  var iconOcclusionOpacity: Double? = nil
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var iconOpacity: Double?
+  var iconOpacity: Double? = nil
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var symbolZOffset: Double?
+  var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
-  var textColor: Int64?
+  var textColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
-  var textEmissiveStrength: Double?
+  /// Default value: 1. Minimum value: 0.
+  var textEmissiveStrength: Double? = nil
   /// The halo's fadeout distance towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
-  var textHaloBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var textHaloBlur: Double? = nil
   /// The color of the text's halo, which helps it stand out from backgrounds.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var textHaloColor: Int64?
+  var textHaloColor: Int64? = nil
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
-  var textHaloWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var textHaloWidth: Double? = nil
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
-  var textOcclusionOpacity: Double?
+  var textOcclusionOpacity: Double? = nil
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var textOpacity: Double?
+  var textOpacity: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PointAnnotation? {
@@ -431,6 +432,7 @@ struct PointAnnotation {
     let textHaloWidth: Double? = nilOrValue(pigeonVar_list[35])
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[36])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[37])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[38])
 
     return PointAnnotation(
       id: id,
@@ -470,7 +472,8 @@ struct PointAnnotation {
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
-      textOpacity: textOpacity
+      textOpacity: textOpacity,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -513,6 +516,7 @@ struct PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ]
   }
 }
@@ -523,111 +527,114 @@ struct PointAnnotationOptions {
   var geometry: Point
   /// The bitmap image for this Annotation
   /// Will not take effect if [iconImage] has been set.
-  var image: FlutterStandardTypedData?
+  var image: FlutterStandardTypedData? = nil
   /// Part of the icon placed closest to the anchor.
   /// Default value: "center".
-  var iconAnchor: IconAnchor?
+  var iconAnchor: IconAnchor? = nil
   /// Name of image in sprite to use for drawing an image background.
-  var iconImage: String?
+  var iconImage: String? = nil
   /// Offset distance of icon from its anchor. Positive values indicate right and down, while negative values indicate left and up. Each component is multiplied by the value of `icon-size` to obtain the final offset in pixels. When combined with `icon-rotate` the offset will be as if the rotated direction was up.
   /// Default value: [0,0].
-  var iconOffset: [Double?]?
+  var iconOffset: [Double?]? = nil
   /// Rotates the icon clockwise.
-  /// Default value: 0. The unit of iconRotate is in degrees.
-  var iconRotate: Double?
+  /// Default value: 0.
+  var iconRotate: Double? = nil
   /// Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-  /// Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
-  var iconSize: Double?
+  /// Default value: 1. Minimum value: 0.
+  var iconSize: Double? = nil
   /// Scales the icon to fit around the associated text.
   /// Default value: "none".
-  var iconTextFit: IconTextFit?
+  var iconTextFit: IconTextFit? = nil
   /// Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-  /// Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
-  var iconTextFitPadding: [Double?]?
+  /// Default value: [0,0,0,0].
+  var iconTextFitPadding: [Double?]? = nil
   /// Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key.
-  var symbolSortKey: Double?
+  var symbolSortKey: Double? = nil
   /// Part of the text placed closest to the anchor.
   /// Default value: "center".
-  var textAnchor: TextAnchor?
+  var textAnchor: TextAnchor? = nil
   /// Value to use for a text label. If a plain `string` is provided, it will be treated as a `formatted` with default/inherited formatting options. SDF images are not supported in formatted text and will be ignored.
   /// Default value: "".
-  var textField: String?
+  var textField: String? = nil
   /// Text justification options.
   /// Default value: "center".
-  var textJustify: TextJustify?
+  var textJustify: TextJustify? = nil
   /// Text tracking amount.
-  /// Default value: 0. The unit of textLetterSpacing is in ems.
-  var textLetterSpacing: Double?
+  /// Default value: 0.
+  var textLetterSpacing: Double? = nil
   /// Text leading value for multi-line text.
-  /// Default value: 1.2. The unit of textLineHeight is in ems.
-  var textLineHeight: Double?
+  /// Default value: 1.2.
+  var textLineHeight: Double? = nil
   /// The maximum line width for text wrapping.
-  /// Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
-  var textMaxWidth: Double?
+  /// Default value: 10. Minimum value: 0.
+  var textMaxWidth: Double? = nil
   /// Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-  /// Default value: [0,0]. The unit of textOffset is in ems.
-  var textOffset: [Double?]?
+  /// Default value: [0,0].
+  var textOffset: [Double?]? = nil
   /// Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-  /// Default value: 0. The unit of textRadialOffset is in ems.
-  var textRadialOffset: Double?
+  /// Default value: 0.
+  var textRadialOffset: Double? = nil
   /// Rotates the text clockwise.
-  /// Default value: 0. The unit of textRotate is in degrees.
-  var textRotate: Double?
+  /// Default value: 0.
+  var textRotate: Double? = nil
   /// Font size.
-  /// Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
-  var textSize: Double?
+  /// Default value: 16. Minimum value: 0.
+  var textSize: Double? = nil
   /// Specifies how to capitalize text, similar to the CSS `text-transform` property.
   /// Default value: "none".
-  var textTransform: TextTransform?
+  var textTransform: TextTransform? = nil
   /// The color of the icon. This can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "#000000".
-  var iconColor: Int64?
+  var iconColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
-  var iconEmissiveStrength: Double?
+  /// Default value: 1. Minimum value: 0.
+  var iconEmissiveStrength: Double? = nil
   /// Fade out the halo towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
-  var iconHaloBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var iconHaloBlur: Double? = nil
   /// The color of the icon's halo. Icon halos can only be used with [SDF icons](/help/troubleshooting/using-recolorable-images-in-mapbox-maps/).
   /// Default value: "rgba(0, 0, 0, 0)".
-  var iconHaloColor: Int64?
+  var iconHaloColor: Int64? = nil
   /// Distance of halo to the icon outline.
-  /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
-  var iconHaloWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
-  var iconImageCrossFade: Double?
+  var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
-  var iconOcclusionOpacity: Double?
+  var iconOcclusionOpacity: Double? = nil
   /// The opacity at which the icon will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var iconOpacity: Double?
+  var iconOpacity: Double? = nil
   /// Specifies an uniform elevation from the ground, in meters.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var symbolZOffset: Double?
+  var symbolZOffset: Double? = nil
   /// The color with which the text will be drawn.
   /// Default value: "#000000".
-  var textColor: Int64?
+  var textColor: Int64? = nil
   /// Controls the intensity of light emitted on the source features.
-  /// Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
-  var textEmissiveStrength: Double?
+  /// Default value: 1. Minimum value: 0.
+  var textEmissiveStrength: Double? = nil
   /// The halo's fadeout distance towards the outside.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
-  var textHaloBlur: Double?
+  /// Default value: 0. Minimum value: 0.
+  var textHaloBlur: Double? = nil
   /// The color of the text's halo, which helps it stand out from backgrounds.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var textHaloColor: Int64?
+  var textHaloColor: Int64? = nil
   /// Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-  /// Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
-  var textHaloWidth: Double?
+  /// Default value: 0. Minimum value: 0.
+  var textHaloWidth: Double? = nil
   /// The opacity at which the text will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
-  var textOcclusionOpacity: Double?
+  var textOcclusionOpacity: Double? = nil
   /// The opacity at which the text will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var textOpacity: Double?
+  var textOpacity: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PointAnnotationOptions? {
@@ -668,6 +675,7 @@ struct PointAnnotationOptions {
     let textHaloWidth: Double? = nilOrValue(pigeonVar_list[34])
     let textOcclusionOpacity: Double? = nilOrValue(pigeonVar_list[35])
     let textOpacity: Double? = nilOrValue(pigeonVar_list[36])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[37])
 
     return PointAnnotationOptions(
       geometry: geometry,
@@ -706,7 +714,8 @@ struct PointAnnotationOptions {
       textHaloColor: textHaloColor,
       textHaloWidth: textHaloWidth,
       textOcclusionOpacity: textOcclusionOpacity,
-      textOpacity: textOpacity
+      textOpacity: textOpacity,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -748,6 +757,7 @@ struct PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ]
   }
 }
@@ -1006,8 +1016,6 @@ protocol _PointAnnotationMessenger {
   func getIconRotationAlignment(managerId: String, completion: @escaping (Result<IconRotationAlignment?, Error>) -> Void)
   func setIconSize(managerId: String, iconSize: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconSize(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setIconSizeScaleRange(managerId: String, iconSizeScaleRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getIconSizeScaleRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setIconTextFit(managerId: String, iconTextFit: IconTextFit, completion: @escaping (Result<Void, Error>) -> Void)
   func getIconTextFit(managerId: String, completion: @escaping (Result<IconTextFit?, Error>) -> Void)
   func setIconTextFitPadding(managerId: String, iconTextFitPadding: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
@@ -1064,8 +1072,6 @@ protocol _PointAnnotationMessenger {
   func getTextRotationAlignment(managerId: String, completion: @escaping (Result<TextRotationAlignment?, Error>) -> Void)
   func setTextSize(managerId: String, textSize: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextSize(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
-  func setTextSizeScaleRange(managerId: String, textSizeScaleRange: [Double?], completion: @escaping (Result<Void, Error>) -> Void)
-  func getTextSizeScaleRange(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void)
   func setTextTransform(managerId: String, textTransform: TextTransform, completion: @escaping (Result<Void, Error>) -> Void)
   func getTextTransform(managerId: String, completion: @escaping (Result<TextTransform?, Error>) -> Void)
   func setIconColor(managerId: String, iconColor: Int64, completion: @escaping (Result<Void, Error>) -> Void)
@@ -1626,41 +1632,6 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getIconSizeChannel.setMessageHandler(nil)
-    }
-    let setIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setIconSizeScaleRangeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let iconSizeScaleRangeArg = args[1] as! [Double?]
-        api.setIconSizeScaleRange(managerId: managerIdArg, iconSizeScaleRange: iconSizeScaleRangeArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setIconSizeScaleRangeChannel.setMessageHandler(nil)
-    }
-    let getIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getIconSizeScaleRangeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getIconSizeScaleRange(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getIconSizeScaleRangeChannel.setMessageHandler(nil)
     }
     let setIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -2641,41 +2612,6 @@ class _PointAnnotationMessengerSetup {
       }
     } else {
       getTextSizeChannel.setMessageHandler(nil)
-    }
-    let setTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      setTextSizeScaleRangeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        let textSizeScaleRangeArg = args[1] as! [Double?]
-        api.setTextSizeScaleRange(managerId: managerIdArg, textSizeScaleRange: textSizeScaleRangeArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      setTextSizeScaleRangeChannel.setMessageHandler(nil)
-    }
-    let getTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      getTextSizeScaleRangeChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let managerIdArg = args[0] as! String
-        api.getTextSizeScaleRange(managerId: managerIdArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      getTextSizeScaleRangeChannel.setMessageHandler(nil)
     }
     let setTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

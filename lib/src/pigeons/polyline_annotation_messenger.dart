@@ -17,22 +17,6 @@ enum LineCap {
   SQUARE,
 }
 
-/// Selects the base of line-elevation. Some modes might require precomputed elevation data in the tileset.
-/// Default value: "none".
-enum LineElevationReference {
-  /// Elevated rendering is disabled.
-  NONE,
-
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level.
-  SEA,
-
-  /// Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them.
-  GROUND,
-
-  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
-  HD_ROAD_MARKUP,
-}
-
 /// The display of lines when joining.
 /// Default value: "miter".
 enum LineJoin {
@@ -49,16 +33,6 @@ enum LineJoin {
   NONE,
 }
 
-/// Selects the unit of line-width. The same unit is automatically used for line-blur and line-offset. Note: This is an experimental property and might be removed in a future release.
-/// Default value: "pixels".
-enum LineWidthUnit {
-  /// Width is rendered in pixels.
-  PIXELS,
-
-  /// Width is rendered in meters.
-  METERS,
-}
-
 /// Controls the frame of reference for `line-translate`.
 /// Default value: "map".
 enum LineTranslateAnchor {
@@ -69,7 +43,7 @@ enum LineTranslateAnchor {
   VIEWPORT,
 }
 
-class PolylineAnnotation {
+class PolylineAnnotation extends BaseAnnotation {
   PolylineAnnotation({
     required this.id,
     required this.geometry,
@@ -85,6 +59,7 @@ class PolylineAnnotation {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -100,20 +75,12 @@ class PolylineAnnotation {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
-  /// Default value: 0.
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
   /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.
-  /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineBlur;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
@@ -129,11 +96,11 @@ class PolylineAnnotation {
   int? lineColor;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  /// Default value: 0. The unit of lineOffset is in pixels.
+  /// Default value: 0.
   double? lineOffset;
 
   /// The opacity at which the line will be drawn.
@@ -144,8 +111,11 @@ class PolylineAnnotation {
   String? linePattern;
 
   /// Stroke thickness.
-  /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
+  /// Default value: 1. Minimum value: 0.
   double? lineWidth;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -163,6 +133,7 @@ class PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ];
   }
 
@@ -187,6 +158,7 @@ class PolylineAnnotation {
       lineOpacity: result[11] as double?,
       linePattern: result[12] as String?,
       lineWidth: result[13] as double?,
+      isDraggable: result[14] as bool?,
     );
   }
 
@@ -212,7 +184,8 @@ class PolylineAnnotation {
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
-        lineWidth == other.lineWidth;
+        lineWidth == other.lineWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -235,6 +208,7 @@ class PolylineAnnotationOptions {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -247,20 +221,12 @@ class PolylineAnnotationOptions {
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   double? lineSortKey;
 
-  /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
-  ///  - Not supported for globe projection at the moment
-  ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
-  ///  - Rendering artifacts can happen near line joins and line caps depending on the line styling
-  ///  - Rendering artifacts relating to `line-opacity` and `line-blur`
-  ///  - Elevated line visibility is determined by layer order
-  ///  - Z-fighting issues can happen with intersecting elevated lines
-  ///  - Elevated lines don't cast shadows
-  /// Default value: 0.
+  /// Vertical offset from ground, in meters. Defaults to 0. Not supported for globe projection at the moment.
   /// @experimental
   double? lineZOffset;
 
   /// Blur applied to the line, in pixels.
-  /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineBlur;
 
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
@@ -276,11 +242,11 @@ class PolylineAnnotationOptions {
   int? lineColor;
 
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
-  /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
+  /// Default value: 0. Minimum value: 0.
   double? lineGapWidth;
 
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
-  /// Default value: 0. The unit of lineOffset is in pixels.
+  /// Default value: 0.
   double? lineOffset;
 
   /// The opacity at which the line will be drawn.
@@ -291,8 +257,11 @@ class PolylineAnnotationOptions {
   String? linePattern;
 
   /// Stroke thickness.
-  /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
+  /// Default value: 1. Minimum value: 0.
   double? lineWidth;
+
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
 
   List<Object?> _toList() {
     return <Object?>[
@@ -309,6 +278,7 @@ class PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ];
   }
 
@@ -332,6 +302,7 @@ class PolylineAnnotationOptions {
       lineOpacity: result[10] as double?,
       linePattern: result[11] as String?,
       lineWidth: result[12] as double?,
+      isDraggable: result[13] as bool?,
     );
   }
 
@@ -357,7 +328,8 @@ class PolylineAnnotationOptions {
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
-        lineWidth == other.lineWidth;
+        lineWidth == other.lineWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -375,26 +347,20 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     } else if (value is LineCap) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is LineElevationReference) {
+    } else if (value is LineJoin) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is LineJoin) {
+    } else if (value is LineTranslateAnchor) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    } else if (value is LineWidthUnit) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.index);
-    } else if (value is LineTranslateAnchor) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.index);
     } else if (value is LineString) {
-      buffer.putUint8(134);
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else if (value is PolylineAnnotation) {
-      buffer.putUint8(135);
+      buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else if (value is PolylineAnnotationOptions) {
-      buffer.putUint8(136);
+      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -409,21 +375,15 @@ class PolylineAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
         return value == null ? null : LineCap.values[value];
       case 130:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : LineElevationReference.values[value];
+        return value == null ? null : LineJoin.values[value];
       case 131:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : LineJoin.values[value];
-      case 132:
-        final int? value = readValue(buffer) as int?;
-        return value == null ? null : LineWidthUnit.values[value];
-      case 133:
-        final int? value = readValue(buffer) as int?;
         return value == null ? null : LineTranslateAnchor.values[value];
-      case 134:
+      case 132:
         return LineString.decode(readValue(buffer)!);
-      case 135:
+      case 133:
         return PolylineAnnotation.decode(readValue(buffer)!);
-      case 136:
+      case 134:
         return PolylineAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -688,113 +648,6 @@ class _PolylineAnnotationMessenger {
     }
   }
 
-  Future<void> setLineCrossSlope(
-      String managerId, double lineCrossSlope) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCrossSlope$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineCrossSlope]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<double?> getLineCrossSlope(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setLineElevationReference(
-      String managerId, LineElevationReference lineElevationReference) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineElevationReference]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<LineElevationReference?> getLineElevationReference(
-      String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationReference$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as LineElevationReference?);
-    }
-  }
-
   Future<void> setLineJoin(String managerId, LineJoin lineJoin) async {
     final String pigeonVar_channelName =
         'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin$pigeonVar_messageChannelSuffix';
@@ -1002,59 +855,6 @@ class _PolylineAnnotationMessenger {
       );
     } else {
       return (pigeonVar_replyList[0] as double?);
-    }
-  }
-
-  Future<void> setLineWidthUnit(
-      String managerId, LineWidthUnit lineWidthUnit) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidthUnit$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId, lineWidthUnit]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<LineWidthUnit?> getLineWidthUnit(String managerId) async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidthUnit$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture =
-        pigeonVar_channel.send(<Object?>[managerId]);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return (pigeonVar_replyList[0] as LineWidthUnit?);
     }
   }
 

@@ -89,6 +89,7 @@ enum _ViewportStateType: Int {
 struct _DefaultViewportTransitionOptions {
   var maxDurationMs: Int64
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _DefaultViewportTransitionOptions? {
     let maxDurationMs = pigeonVar_list[0] as! Int64
@@ -106,7 +107,8 @@ struct _DefaultViewportTransitionOptions {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct _FlyViewportTransitionOptions {
-  var durationMs: Int64?
+  var durationMs: Int64? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _FlyViewportTransitionOptions? {
@@ -130,6 +132,7 @@ struct _EasingViewportTransitionOptions {
   var b: Double
   var c: Double
   var d: Double
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _EasingViewportTransitionOptions? {
@@ -161,7 +164,8 @@ struct _EasingViewportTransitionOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _ViewportTransitionStorage {
   var type: _ViewportTransitionType
-  var options: Any?
+  var options: Any? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _ViewportTransitionStorage? {
@@ -185,12 +189,13 @@ struct _ViewportTransitionStorage {
 struct _OverviewViewportStateOptions {
   var geometry: String
   var geometryPadding: MbxEdgeInsets
-  var bearing: Double?
-  var pitch: Double?
-  var padding: MbxEdgeInsets?
-  var maxZoom: Double?
-  var offset: ScreenCoordinate?
+  var bearing: Double? = nil
+  var pitch: Double? = nil
+  var padding: MbxEdgeInsets? = nil
+  var maxZoom: Double? = nil
+  var offset: ScreenCoordinate? = nil
   var animationDurationMs: Int64
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _OverviewViewportStateOptions? {
@@ -230,10 +235,11 @@ struct _OverviewViewportStateOptions {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct _FollowPuckViewportStateOptions {
-  var zoom: Double?
-  var bearingValue: Double?
-  var bearing: _FollowPuckViewportStateBearing?
-  var pitch: Double?
+  var zoom: Double? = nil
+  var bearingValue: Double? = nil
+  var bearing: _FollowPuckViewportStateBearing? = nil
+  var pitch: Double? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _FollowPuckViewportStateOptions? {
@@ -262,7 +268,8 @@ struct _FollowPuckViewportStateOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _ViewportStateStorage {
   var type: _ViewportStateType
-  var options: Any?
+  var options: Any? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _ViewportStateStorage? {
