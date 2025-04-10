@@ -114,7 +114,7 @@ data class CircleAnnotation(
   val circleOpacity: Double? = null,
   /**
    * Circle radius.
-   * Default value: 5. Minimum value: 0.
+   * Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
    */
   val circleRadius: Double? = null,
   /**
@@ -129,7 +129,7 @@ data class CircleAnnotation(
   val circleStrokeOpacity: Double? = null,
   /**
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
   val circleStrokeWidth: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */
@@ -212,7 +212,7 @@ data class CircleAnnotationOptions(
   val circleOpacity: Double? = null,
   /**
    * Circle radius.
-   * Default value: 5. Minimum value: 0.
+   * Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
    */
   val circleRadius: Double? = null,
   /**
@@ -227,7 +227,7 @@ data class CircleAnnotationOptions(
   val circleStrokeOpacity: Double? = null,
   /**
    * The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
    */
   val circleStrokeWidth: Double? = null,
   /** Property to determine whether annotation can be manually moved around map. */

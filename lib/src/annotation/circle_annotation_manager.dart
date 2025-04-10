@@ -22,6 +22,28 @@ class CircleAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Adds a listener to be invoked on drag events.
+  void dragEvents({
+    Function(CircleAnnotationInteractionContext)? onBegin,
+    Function(CircleAnnotationInteractionContext)? onChanged,
+    Function(CircleAnnotationInteractionContext)? onEnd,
+  }) {
+    _annotationDragEvents(instanceName: _channelSuffix)
+        .cast<CircleAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data);
+        case GestureState.changed when onChanged != null:
+          onChanged(data);
+        case GestureState.ended when onEnd != null:
+          onEnd(data);
+        default:
+          break;
+      }
+    });
+  }
+
   /// Create a new annotation with the option.
   Future<CircleAnnotation> create(CircleAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

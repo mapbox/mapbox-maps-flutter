@@ -473,6 +473,9 @@ fun CircleAnnotationOptions.toCircleAnnotationOptions(): com.mapbox.maps.plugin.
   this.geometry?.let {
     options.withPoint(it)
   }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
   this.circleSortKey?.let {
     options.withCircleSortKey(it)
   }

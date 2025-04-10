@@ -34,7 +34,7 @@ enum CircleTranslateAnchor {
   VIEWPORT,
 }
 
-class CircleAnnotation extends BaseAnnotation {
+class CircleAnnotation {
   CircleAnnotation({
     required this.id,
     required this.geometry,
@@ -71,7 +71,7 @@ class CircleAnnotation extends BaseAnnotation {
   double? circleOpacity;
 
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0.
+  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   double? circleRadius;
 
   /// The stroke color of the circle.
@@ -83,7 +83,7 @@ class CircleAnnotation extends BaseAnnotation {
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
   /// Property to determine whether annotation can be manually moved around map.
@@ -186,7 +186,7 @@ class CircleAnnotationOptions {
   double? circleOpacity;
 
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0.
+  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   double? circleRadius;
 
   /// The stroke color of the circle.
@@ -198,7 +198,7 @@ class CircleAnnotationOptions {
   double? circleStrokeOpacity;
 
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
   /// Property to determine whether annotation can be manually moved around map.

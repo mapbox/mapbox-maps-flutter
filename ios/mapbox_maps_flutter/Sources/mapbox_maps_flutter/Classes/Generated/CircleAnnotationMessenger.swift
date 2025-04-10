@@ -114,7 +114,7 @@ struct CircleAnnotation {
   /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double? = nil
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0.
+  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   var circleRadius: Double? = nil
   /// The stroke color of the circle.
   /// Default value: "#000000".
@@ -123,7 +123,7 @@ struct CircleAnnotation {
   /// Default value: 1. Value range: [0, 1]
   var circleStrokeOpacity: Double? = nil
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   var circleStrokeWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil
@@ -190,7 +190,7 @@ struct CircleAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   var circleOpacity: Double? = nil
   /// Circle radius.
-  /// Default value: 5. Minimum value: 0.
+  /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
   var circleRadius: Double? = nil
   /// The stroke color of the circle.
   /// Default value: "#000000".
@@ -199,7 +199,7 @@ struct CircleAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   var circleStrokeOpacity: Double? = nil
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
-  /// Default value: 0. Minimum value: 0.
+  /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   var circleStrokeWidth: Double? = nil
   /// Property to determine whether annotation can be manually moved around map.
   var isDraggable: Bool? = nil

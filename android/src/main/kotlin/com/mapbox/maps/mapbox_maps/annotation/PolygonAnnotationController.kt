@@ -417,6 +417,9 @@ fun PolygonAnnotationOptions.toPolygonAnnotationOptions(): com.mapbox.maps.plugi
   this.geometry?.let {
     options.withGeometry(it)
   }
+  this.isDraggable?.let {
+    options.withDraggable(it)
+  }
   this.fillSortKey?.let {
     options.withFillSortKey(it)
   }

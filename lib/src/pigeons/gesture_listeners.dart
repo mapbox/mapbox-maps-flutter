@@ -74,6 +74,197 @@ class MapContentGestureContext {
   int get hashCode => Object.hashAll(_toList());
 }
 
+sealed class AnnotationInteractionContext {}
+
+class PointAnnotationInteractionContext extends AnnotationInteractionContext {
+  PointAnnotationInteractionContext({
+    required this.annotation,
+    required this.gestureState,
+  });
+
+  PointAnnotation annotation;
+
+  GestureState gestureState;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      annotation,
+      gestureState,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static PointAnnotationInteractionContext decode(Object result) {
+    result as List<Object?>;
+    return PointAnnotationInteractionContext(
+      annotation: result[0]! as PointAnnotation,
+      gestureState: result[1]! as GestureState,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! PointAnnotationInteractionContext ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return annotation == other.annotation && gestureState == other.gestureState;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class CircleAnnotationInteractionContext extends AnnotationInteractionContext {
+  CircleAnnotationInteractionContext({
+    required this.annotation,
+    required this.gestureState,
+  });
+
+  CircleAnnotation annotation;
+
+  GestureState gestureState;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      annotation,
+      gestureState,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static CircleAnnotationInteractionContext decode(Object result) {
+    result as List<Object?>;
+    return CircleAnnotationInteractionContext(
+      annotation: result[0]! as CircleAnnotation,
+      gestureState: result[1]! as GestureState,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CircleAnnotationInteractionContext ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return annotation == other.annotation && gestureState == other.gestureState;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class PolygonAnnotationInteractionContext extends AnnotationInteractionContext {
+  PolygonAnnotationInteractionContext({
+    required this.annotation,
+    required this.gestureState,
+  });
+
+  PolygonAnnotation annotation;
+
+  GestureState gestureState;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      annotation,
+      gestureState,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static PolygonAnnotationInteractionContext decode(Object result) {
+    result as List<Object?>;
+    return PolygonAnnotationInteractionContext(
+      annotation: result[0]! as PolygonAnnotation,
+      gestureState: result[1]! as GestureState,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! PolygonAnnotationInteractionContext ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return annotation == other.annotation && gestureState == other.gestureState;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
+class PolylineAnnotationInteractionContext
+    extends AnnotationInteractionContext {
+  PolylineAnnotationInteractionContext({
+    required this.annotation,
+    required this.gestureState,
+  });
+
+  PolylineAnnotation annotation;
+
+  GestureState gestureState;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      annotation,
+      gestureState,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static PolylineAnnotationInteractionContext decode(Object result) {
+    result as List<Object?>;
+    return PolylineAnnotationInteractionContext(
+      annotation: result[0]! as PolylineAnnotation,
+      gestureState: result[1]! as GestureState,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! PolylineAnnotationInteractionContext ||
+        other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return annotation == other.annotation && gestureState == other.gestureState;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 class GestureListeners_PigeonCodec extends StandardMessageCodec {
   const GestureListeners_PigeonCodec();
   @override
@@ -93,6 +284,30 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     } else if (value is MapContentGestureContext) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
+    } else if (value is PointAnnotation) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotation) {
+      buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotation) {
+      buffer.putUint8(135);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotation) {
+      buffer.putUint8(136);
+      writeValue(buffer, value.encode());
+    } else if (value is PointAnnotationInteractionContext) {
+      buffer.putUint8(137);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationInteractionContext) {
+      buffer.putUint8(138);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotationInteractionContext) {
+      buffer.putUint8(139);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotationInteractionContext) {
+      buffer.putUint8(140);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -110,11 +325,30 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
         return ScreenCoordinate.decode(readValue(buffer)!);
       case 132:
         return MapContentGestureContext.decode(readValue(buffer)!);
+      case 133:
+        return PointAnnotation.decode(readValue(buffer)!);
+      case 134:
+        return CircleAnnotation.decode(readValue(buffer)!);
+      case 135:
+        return PolygonAnnotation.decode(readValue(buffer)!);
+      case 136:
+        return PolylineAnnotation.decode(readValue(buffer)!);
+      case 137:
+        return PointAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 138:
+        return CircleAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 139:
+        return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 140:
+        return PolylineAnnotationInteractionContext.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
+
+const StandardMethodCodec pigeonMethodCodec =
+    StandardMethodCodec(GestureListeners_PigeonCodec());
 
 abstract class GestureListener {
   static const MessageCodec<Object?> pigeonChannelCodec =
@@ -256,4 +490,19 @@ abstract class GestureListener {
       }
     }
   }
+}
+
+Stream<AnnotationInteractionContext> _annotationDragEvents(
+    {String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel _annotationDragEventsChannel = EventChannel(
+      'dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents$instanceName',
+      pigeonMethodCodec);
+  return _annotationDragEventsChannel
+      .receiveBroadcastStream()
+      .map((dynamic event) {
+    return event as AnnotationInteractionContext;
+  });
 }

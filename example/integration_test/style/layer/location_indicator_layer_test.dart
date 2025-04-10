@@ -19,11 +19,13 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      bearingImage: "abc",
+      shadowImage: "abc",
+      topImage: "abc",
       accuracyRadius: 1.0,
       accuracyRadiusBorderColor: Colors.red.value,
       accuracyRadiusColor: Colors.red.value,
       bearing: 1.0,
-      bearingImage: "abc",
       bearingImageSize: 1.0,
       emphasisCircleColor: Colors.red.value,
       emphasisCircleGlowRange: [0.0, 1.0],
@@ -32,9 +34,7 @@ void main() {
       location: [0.0, 1.0, 2.0],
       locationIndicatorOpacity: 1.0,
       perspectiveCompensation: 1.0,
-      shadowImage: "abc",
       shadowImageSize: 1.0,
-      topImage: "abc",
       topImageSize: 1.0,
     ));
     var layer =
@@ -43,11 +43,13 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.bearingImage, "abc");
+    expect(layer.shadowImage, "abc");
+    expect(layer.topImage, "abc");
     expect(layer.accuracyRadius, 1.0);
     expect(layer.accuracyRadiusBorderColor, Colors.red.value);
     expect(layer.accuracyRadiusColor, Colors.red.value);
     expect(layer.bearing, 1.0);
-    expect(layer.bearingImage, "abc");
     expect(layer.bearingImageSize, 1.0);
     expect(layer.emphasisCircleColor, Colors.red.value);
     expect(layer.emphasisCircleGlowRange, [0.0, 1.0]);
@@ -56,9 +58,7 @@ void main() {
     expect(layer.location, [0.0, 1.0, 2.0]);
     expect(layer.locationIndicatorOpacity, 1.0);
     expect(layer.perspectiveCompensation, 1.0);
-    expect(layer.shadowImage, "abc");
     expect(layer.shadowImageSize, 1.0);
-    expect(layer.topImage, "abc");
     expect(layer.topImageSize, 1.0);
   });
 
@@ -79,11 +79,13 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      bearingImageExpression: ['image', "abc"],
+      shadowImageExpression: ['image', "abc"],
+      topImageExpression: ['image', "abc"],
       accuracyRadiusExpression: ['number', 1.0],
       accuracyRadiusBorderColorExpression: ['rgba', 255, 0, 0, 1],
       accuracyRadiusColorExpression: ['rgba', 255, 0, 0, 1],
       bearingExpression: ['number', 1.0],
-      bearingImageExpression: ['image', "abc"],
       bearingImageSizeExpression: ['number', 1.0],
       emphasisCircleColorExpression: ['rgba', 255, 0, 0, 1],
       emphasisCircleGlowRangeExpression: [
@@ -98,9 +100,7 @@ void main() {
       ],
       locationIndicatorOpacityExpression: ['number', 1.0],
       perspectiveCompensationExpression: ['number', 1.0],
-      shadowImageExpression: ['image', "abc"],
       shadowImageSizeExpression: ['number', 1.0],
-      topImageExpression: ['image', "abc"],
       topImageSizeExpression: ['number', 1.0],
     ));
     var layer =
@@ -114,11 +114,13 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.bearingImageExpression, ['image', "abc"]);
+    expect(layer.shadowImageExpression, ['image', "abc"]);
+    expect(layer.topImageExpression, ['image', "abc"]);
     expect(layer.accuracyRadius, 1.0);
     expect(layer.accuracyRadiusBorderColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.accuracyRadiusColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.bearing, 1.0);
-    expect(layer.bearingImageExpression, ['image', "abc"]);
     expect(layer.bearingImageSize, 1.0);
     expect(layer.emphasisCircleColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.emphasisCircleGlowRange, [0.0, 1.0]);
@@ -127,9 +129,7 @@ void main() {
     expect(layer.location, [0.0, 1.0, 2.0]);
     expect(layer.locationIndicatorOpacity, 1.0);
     expect(layer.perspectiveCompensation, 1.0);
-    expect(layer.shadowImageExpression, ['image', "abc"]);
     expect(layer.shadowImageSize, 1.0);
-    expect(layer.topImageExpression, ['image', "abc"]);
     expect(layer.topImageSize, 1.0);
   });
 }

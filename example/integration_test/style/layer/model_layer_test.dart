@@ -27,7 +27,6 @@ void main() {
       modelColor: Colors.red.value,
       modelColorMixIntensity: 1.0,
       modelCutoffFadeRange: 1.0,
-      modelElevationReference: ModelElevationReference.SEA,
       modelEmissiveStrength: 1.0,
       modelHeightBasedEmissiveStrengthMultiplier: [0.0, 1.0, 2.0, 3.0, 4.0],
       modelOpacity: 1.0,
@@ -51,7 +50,6 @@ void main() {
     expect(layer.modelColor, Colors.red.value);
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
-    expect(layer.modelElevationReference, ModelElevationReference.SEA);
     expect(layer.modelEmissiveStrength, 1.0);
     expect(layer.modelHeightBasedEmissiveStrengthMultiplier,
         [0.0, 1.0, 2.0, 3.0, 4.0]);
@@ -89,7 +87,6 @@ void main() {
       modelColorExpression: ['rgba', 255, 0, 0, 1],
       modelColorMixIntensityExpression: ['number', 1.0],
       modelCutoffFadeRangeExpression: ['number', 1.0],
-      modelElevationReferenceExpression: ['string', 'sea'],
       modelEmissiveStrengthExpression: ['number', 1.0],
       modelHeightBasedEmissiveStrengthMultiplierExpression: [
         'literal',
@@ -130,7 +127,6 @@ void main() {
     expect(layer.modelColorExpression, ['rgba', 255, 0, 0, 1]);
     expect(layer.modelColorMixIntensity, 1.0);
     expect(layer.modelCutoffFadeRange, 1.0);
-    expect(layer.modelElevationReference, ModelElevationReference.SEA);
     expect(layer.modelEmissiveStrength, 1.0);
     expect(layer.modelHeightBasedEmissiveStrengthMultiplier,
         [0.0, 1.0, 2.0, 3.0, 4.0]);

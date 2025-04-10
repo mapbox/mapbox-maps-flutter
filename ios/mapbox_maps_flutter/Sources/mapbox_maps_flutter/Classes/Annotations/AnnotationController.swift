@@ -2,14 +2,10 @@ import Foundation
 import MapboxMaps
 import Flutter
 
-public enum AnnotationControllerError: Error {
+enum AnnotationControllerError: Error {
     case noManagerFound
     case noAnnotationFound
     case wrongManagerType
-}
-
-public protocol ControllerDelegate: AnyObject {
-    func getManager(managerId: String) throws -> AnnotationManager
 }
 
 extension AnnotationController: AnnotationInteractionDelegate {
@@ -42,24 +38,56 @@ extension AnnotationController: AnnotationInteractionDelegate {
     }
 }
 
-class AnnotationController: ControllerDelegate {
+private class AnyAnnotationDragEventsStreamHandler: AnnotationDragEventsStreamHandler {
+    private var sink: PigeonEventSink<AnnotationInteractionContext>?
+
+    override func onListen(withArguments arguments: Any?, sink: PigeonEventSink<AnnotationInteractionContext>) {
+        self.sink = sink
+    }
+
+    override func onCancel(withArguments arguments: Any?) {
+        sink = nil
+    }
+
+    func send(event: AnnotationInteractionContext) {
+        sink?.success(event)
+    }
+
+    func send(error: FlutterError) {
+        sink?.error(code: error.code, message: error.message, details: error.details)
+    }
+
+    func endOfStream() {
+        sink?.endOfStream()
+    }
+}
+
+class AnnotationController {
     private var mapView: MapView
-    private var annotationManagers = [String: AnnotationManager]()
-    private var circleAnnotationController: CircleAnnotationController?
-    private var pointAnnotationController: PointAnnotationController?
-    private var polygonAnnotationController: PolygonAnnotationController?
-    private var polylineAnnotationController: PolylineAnnotationController?
+    private var disposal: [String: (String) -> Void] = [:]
+
+    private let circleAnnotationController: CircleAnnotationController
+    private let pointAnnotationController: PointAnnotationController
+    private let polygonAnnotationController: PolygonAnnotationController
+    private let polylineAnnotationController: PolylineAnnotationController
     private var onPointAnnotationClickListener: OnPointAnnotationClickListener?
     private var onCircleAnnotationClickListener: OnCircleAnnotationClickListener?
     private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener?
     private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener?
 
+    private let gestureEventStreamHandler: AnyAnnotationDragEventsStreamHandler
+
+    deinit {
+        gestureEventStreamHandler.endOfStream()
+    }
+
     init(withMapView mapView: MapView) {
         self.mapView = mapView
-        circleAnnotationController = CircleAnnotationController(withDelegate: self)
-        pointAnnotationController = PointAnnotationController(withDelegate: self)
-        polygonAnnotationController = PolygonAnnotationController(withDelegate: self)
-        polylineAnnotationController = PolylineAnnotationController(withDelegate: self)
+        gestureEventStreamHandler = AnyAnnotationDragEventsStreamHandler()
+        circleAnnotationController = CircleAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
+        pointAnnotationController = PointAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
+        polygonAnnotationController = PolygonAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
+        polylineAnnotationController = PolylineAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
     }
 
     func handleCreateManager(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -73,7 +101,7 @@ class AnnotationController: ControllerDelegate {
             belowLayerId = nil
         }
 
-        if let manager = { () -> AnnotationManager? in
+        if let manager: AnnotationManager = {
             switch type {
             case "circle":
                 let circleManager = mapView.annotations.makeCircleAnnotationManager(
@@ -81,6 +109,8 @@ class AnnotationController: ControllerDelegate {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 circleManager.delegate = self
+                circleAnnotationController.add(controller: circleManager)
+                disposal[id] = circleAnnotationController.removeController(id:)
                 return circleManager
             case "point":
                 let pointManager = mapView.annotations.makePointAnnotationManager(
@@ -88,6 +118,8 @@ class AnnotationController: ControllerDelegate {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 pointManager.delegate = self
+                pointAnnotationController.add(controller: pointManager)
+                disposal[id] = pointAnnotationController.removeController(id:)
                 return pointManager
             case "polygon":
                 let polygonManager: PolygonAnnotationManager = mapView.annotations.makePolygonAnnotationManager(
@@ -95,6 +127,8 @@ class AnnotationController: ControllerDelegate {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 polygonManager.delegate = self
+                polygonAnnotationController.add(controller: polygonManager)
+                disposal[id] = polygonAnnotationController.removeController(id:)
                 return polygonManager
             case "polyline":
                 let polylineManager: PolylineAnnotationManager = mapView.annotations.makePolylineAnnotationManager(
@@ -102,12 +136,13 @@ class AnnotationController: ControllerDelegate {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 polylineManager.delegate = self
+                polylineAnnotationController.add(controller: polylineManager)
+                disposal[id] = polylineAnnotationController.removeController(id:)
                 return polylineManager
             default:
                 return nil
             }
         }() {
-            annotationManagers[manager.id] = manager
             result(manager.id)
         } else {
             result(AnnotationControllerError.wrongManagerType)
@@ -117,7 +152,9 @@ class AnnotationController: ControllerDelegate {
     func handleRemoveManager(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let arguments = methodCall.arguments as? [String: Any] else { return }
         guard let id = arguments["id"] as? String else { return }
-        annotationManagers.removeValue(forKey: id)
+
+        disposal[id]?(id)
+
         mapView.annotations.removeAnnotationManager(withId: id)
         result(nil)
     }
@@ -131,6 +168,12 @@ class AnnotationController: ControllerDelegate {
         onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
         onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
         onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
+
+        AnnotationDragEventsStreamHandler.register(
+            with: binaryMessenger.messenger,
+            instanceName: binaryMessenger.suffix,
+            streamHandler: gestureEventStreamHandler
+        )
     }
 
     func tearDown(messenger: SuffixBinaryMessenger) {
@@ -142,12 +185,5 @@ class AnnotationController: ControllerDelegate {
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil
         onPolylineAnnotationClickListener = nil
-    }
-
-    func getManager(managerId: String) throws -> AnnotationManager {
-        if annotationManagers[managerId] == nil {
-            throw AnnotationControllerError.noManagerFound
-        }
-        return annotationManagers[managerId]!
     }
 }

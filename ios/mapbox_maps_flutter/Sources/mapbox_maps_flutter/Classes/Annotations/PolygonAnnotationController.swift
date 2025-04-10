@@ -3,47 +3,50 @@
 import Foundation
 import Flutter
 
-final class PolygonAnnotationController: _PolygonAnnotationMessenger {
+extension MapboxMaps.PolygonAnnotation: InteractableAnnotation {}
+
+final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotationManager>, _PolygonAnnotationMessenger {
     private static let errorCode = "0"
-    private weak var delegate: ControllerDelegate?
-
     private typealias AnnotationManager = PolygonAnnotationManager
-    private enum PolygonAnnotationControllerError: Swift.Error {
-        case managerNotFound(String)
-    }
-
-    init(withDelegate delegate: ControllerDelegate) {
-        self.delegate = delegate
-    }
 
     func create(managerId: String, annotationOption: PolygonAnnotationOptions, completion: @escaping (Result<PolygonAnnotation, Error>) -> Void) {
-        do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                let createdAnnotation = annotationOption.toPolygonAnnotation()
-                manager.annotations.append(createdAnnotation)
-                completion(.success(createdAnnotation.toFLTPolygonAnnotation()))
-            } else {
-                completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
-        } catch {
-            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        try createMulti(managerId: managerId, annotationOptions: [annotationOption]) { result in
+            completion(result.flatMap {
+                guard let createdAnnotation = $0.first else {
+                    return .failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "Fail to appen annotation", details: nil))
+                }
+                return .success(createdAnnotation)
+            })
         }
     }
 
     func createMulti(managerId: String, annotationOptions: [PolygonAnnotationOptions], completion: @escaping (Result<[PolygonAnnotation], Error>) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                let annotations = annotationOptions.map({ options in
-                    options.toPolygonAnnotation()
-                })
-                manager.annotations.append(contentsOf: annotations)
-                let createdAnnotations = annotations.map { annotation in
-                    annotation.toFLTPolygonAnnotation()
+            let annotations = annotationOptions.map({ options in
+                var annotation = options.toPolygonAnnotation()
+                annotation.dragBeginHandler = { [weak self] (annotation, context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .started)
+                    self?.sendGestureEvent(context)
+                    return true
                 }
-                completion(.success(createdAnnotations))
-            } else {
-                completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
+                annotation.dragChangeHandler = { [weak self] (annotation, context) in
+                    let context = PolygonAnnotationInteractionContext(
+                        annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .changed)
+                    self?.sendGestureEvent(context)
+                }
+				annotation.dragEndHandler = { [weak self] (annotation, context) in
+              	    let context = PolygonAnnotationInteractionContext(
+                	    annotation: annotation.toFLTPolygonAnnotation(),
+                        gestureState: .ended)
+                    self?.sendGestureEvent(context)
+                }
+                return annotation
+            })
+            try append(annotations, managerId: managerId)
+            completion(.success((annotations.map { $0.toFLTPolygonAnnotation() })))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -51,74 +54,29 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func update(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                let index = manager.annotations.firstIndex(where: { polygonAnnotation in
-                    polygonAnnotation.id == annotation.id
-                })
-
-                if index == nil {
-                    throw AnnotationControllerError.noAnnotationFound
-                }
-
-                let updatedAnnotation = annotation.toPolygonAnnotation()
-
-                manager.annotations[index!] = updatedAnnotation
-                completion(.success(()))
-            } else {
-                completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
+            let updatedAnnotation = annotation.toPolygonAnnotation()
+            try update(annotation: updatedAnnotation, managerId: managerId)
+            completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
         }
     }
 
     func delete(managerId: String, annotation: PolygonAnnotation, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                let index = manager.annotations.firstIndex(where: { polygonAnnotation in
-                    polygonAnnotation.id == annotation.id
-                })
-
-                if index == nil {
-                    throw AnnotationControllerError.noAnnotationFound
-                }
-                manager.annotations.remove(at: index!)
-                completion(.success(()))
-            } else {
-                completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
-        } catch {
-            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId) annotation id: \(annotation.id)", details: nil)))
-        }
-    }
-
-    func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        do {
-            if let manager = try delegate?.getManager(managerId: managerId) as? PolygonAnnotationManager {
-                manager.annotations = []
-            } else {
-                completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
-            }
-        } catch {
-            completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager or annotation found with manager id: \(managerId)", details: nil)))
-        }
+        delete(annotation: annotation.id, managerId: managerId)
         completion(.success(()))
     }
 
-    private func getManager(id: String) throws -> AnnotationManager {
-        if let manager = try delegate?.getManager(managerId: id) as? AnnotationManager {
-            return manager
-        } else {
-            throw PolygonAnnotationControllerError.managerNotFound(id)
-        }
+    func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        deleteAllAnnotations(from: managerId)
+        completion(.success(()))
     }
 
     // MARK: Properties
 
     func getFillElevationReference(managerId: String, completion: @escaping (Result<FillElevationReference?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillElevationReference?.toFLTFillElevationReference()))
+            completion(.success(try get(\.fillElevationReference, managerId: managerId)?.toFLTFillElevationReference()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -126,9 +84,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillElevationReference = MapboxMaps.FillElevationReference(fillElevationReference)
-
+            let newValue = MapboxMaps.FillElevationReference(fillElevationReference)
+            try set(\.fillElevationReference, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -137,8 +94,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillSortKey))
+            completion(.success(try get(\.fillSortKey, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -146,9 +102,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillSortKey(managerId: String, fillSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillSortKey = fillSortKey
-
+            let newValue = fillSortKey
+            try set(\.fillSortKey, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -157,8 +112,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillAntialias(managerId: String, completion: @escaping (Result<Bool?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillAntialias))
+            completion(.success(try get(\.fillAntialias, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -166,9 +120,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillAntialias(managerId: String, fillAntialias: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillAntialias = fillAntialias
-
+            let newValue = fillAntialias
+            try set(\.fillAntialias, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -177,8 +130,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillColor?.intValue))
+            completion(.success(try get(\.fillColor, managerId: managerId)?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -186,9 +138,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillColor(managerId: String, fillColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillColor = StyleColor(rgb: fillColor)
-
+            let newValue = StyleColor(rgb: fillColor)
+            try set(\.fillColor, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -197,8 +148,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillEmissiveStrength(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillEmissiveStrength))
+            completion(.success(try get(\.fillEmissiveStrength, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -206,9 +156,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillEmissiveStrength(managerId: String, fillEmissiveStrength: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillEmissiveStrength = fillEmissiveStrength
-
+            let newValue = fillEmissiveStrength
+            try set(\.fillEmissiveStrength, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -217,8 +166,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillOpacity(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillOpacity))
+            completion(.success(try get(\.fillOpacity, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -226,9 +174,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillOpacity(managerId: String, fillOpacity: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillOpacity = fillOpacity
-
+            let newValue = fillOpacity
+            try set(\.fillOpacity, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -237,8 +184,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillOutlineColor(managerId: String, completion: @escaping (Result<Int64?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillOutlineColor?.intValue))
+            completion(.success(try get(\.fillOutlineColor, managerId: managerId)?.intValue))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -246,9 +192,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillOutlineColor(managerId: String, fillOutlineColor: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillOutlineColor = StyleColor(rgb: fillOutlineColor)
-
+            let newValue = StyleColor(rgb: fillOutlineColor)
+            try set(\.fillOutlineColor, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -257,8 +202,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillPattern(managerId: String, completion: @escaping (Result<String?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillPattern))
+            completion(.success(try get(\.fillPattern, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -266,9 +210,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillPattern(managerId: String, fillPattern: String, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillPattern = fillPattern
-
+            let newValue = fillPattern
+            try set(\.fillPattern, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -277,8 +220,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillTranslate(managerId: String, completion: @escaping (Result<[Double?]?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillTranslate))
+            completion(.success(try get(\.fillTranslate, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -286,9 +228,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillTranslate(managerId: String, fillTranslate: [Double?], completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillTranslate = fillTranslate.compactMap { $0 }
-
+            let newValue = fillTranslate.compactMap { $0 }
+            try set(\.fillTranslate, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -297,8 +238,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillTranslateAnchor(managerId: String, completion: @escaping (Result<FillTranslateAnchor?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillTranslateAnchor?.toFLTFillTranslateAnchor()))
+            completion(.success(try get(\.fillTranslateAnchor, managerId: managerId)?.toFLTFillTranslateAnchor()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -306,9 +246,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillTranslateAnchor = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
-
+            let newValue = MapboxMaps.FillTranslateAnchor(fillTranslateAnchor)
+            try set(\.fillTranslateAnchor, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -317,8 +256,7 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func getFillZOffset(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            completion(.success(manager.fillZOffset))
+            completion(.success(try get(\.fillZOffset, managerId: managerId)))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
         }
@@ -326,9 +264,8 @@ final class PolygonAnnotationController: _PolygonAnnotationMessenger {
 
     func setFillZOffset(managerId: String, fillZOffset: Double, completion: @escaping (Result<Void, Error>) -> Void) {
         do {
-            let manager = try getManager(id: managerId)
-            manager.fillZOffset = fillZOffset
-
+            let newValue = fillZOffset
+            try set(\.fillZOffset, newValue: newValue, managerId: managerId)
             completion(.success(()))
         } catch {
             completion(.failure(FlutterError(code: PolygonAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
@@ -358,6 +295,9 @@ extension PolygonAnnotationOptions {
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
         }
+        if let isDraggable {
+            annotation.isDraggable = isDraggable
+        }
         return annotation
     }
 }
@@ -384,6 +324,9 @@ extension PolygonAnnotation {
         if let fillZOffset {
             annotation.fillZOffset = fillZOffset
         }
+        if let isDraggable {
+            annotation.isDraggable = isDraggable
+        }
         return annotation
     }
 }
@@ -398,7 +341,8 @@ extension MapboxMaps.PolygonAnnotation {
             fillOpacity: fillOpacity,
             fillOutlineColor: fillOutlineColor?.intValue,
             fillPattern: fillPattern,
-            fillZOffset: fillZOffset
+            fillZOffset: fillZOffset,
+            isDraggable: isDraggable
         )
     }
 }

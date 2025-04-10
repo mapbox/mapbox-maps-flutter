@@ -22,6 +22,28 @@ class PointAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Adds a listener to be invoked on drag events.
+  void dragEvents({
+    Function(PointAnnotationInteractionContext)? onBegin,
+    Function(PointAnnotationInteractionContext)? onChanged,
+    Function(PointAnnotationInteractionContext)? onEnd,
+  }) {
+    _annotationDragEvents(instanceName: _channelSuffix)
+        .cast<PointAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data);
+        case GestureState.changed when onChanged != null:
+          onChanged(data);
+        case GestureState.ended when onEnd != null:
+          onEnd(data);
+        default:
+          break;
+      }
+    });
+  }
+
   /// Create a new annotation with the option.
   Future<PointAnnotation> create(PointAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

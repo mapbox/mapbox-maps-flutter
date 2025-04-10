@@ -161,7 +161,9 @@ enum class SymbolElevationReference(val raw: Int) {
   /** Elevate symbols relative to the sea level. */
   SEA(0),
   /** Elevate symbols relative to the ground's height below them. */
-  GROUND(1);
+  GROUND(1),
+  /** Use this mode to enable elevated behavior for features that are rendered on top of 3D road polygons. The feature is currently being developed. */
+  HD_ROAD_MARKUP(2);
 
   companion object {
     fun ofRaw(raw: Int): SymbolElevationReference? {
@@ -196,7 +198,7 @@ enum class SymbolPlacement(val raw: Int) {
 enum class SymbolZOrder(val raw: Int) {
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
   AUTO(0),
-  /** Sorts symbols by their y-position relative to the viewport if `icon-allow-overlap` or `text-allow-overlap` is set to `true` or `icon-ignore-placement` or `text-ignore-placement` is `false`. */
+  /** Sorts symbols by their y-position relative to the viewport if any of the following is set to `true`: `icon-allow-overlap`, `text-allow-overlap`, `icon-ignore-placement`, `text-ignore-placement`. */
   VIEWPORT_Y(1),
   /** Sorts symbols by `symbol-sort-key` if set. Otherwise, no sorting is applied; symbols are rendered in the same order as the source data. */
   SOURCE(2);
@@ -418,12 +420,12 @@ data class PointAnnotation(
   val iconOffset: List<Double?>? = null,
   /**
    * Rotates the icon clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of iconRotate is in degrees.
    */
   val iconRotate: Double? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
    */
   val iconSize: Double? = null,
   /**
@@ -433,7 +435,7 @@ data class PointAnnotation(
   val iconTextFit: IconTextFit? = null,
   /**
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-   * Default value: [0,0,0,0].
+   * Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
    */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
@@ -455,37 +457,37 @@ data class PointAnnotation(
   val textJustify: TextJustify? = null,
   /**
    * Text tracking amount.
-   * Default value: 0.
+   * Default value: 0. The unit of textLetterSpacing is in ems.
    */
   val textLetterSpacing: Double? = null,
   /**
    * Text leading value for multi-line text.
-   * Default value: 1.2.
+   * Default value: 1.2. The unit of textLineHeight is in ems.
    */
   val textLineHeight: Double? = null,
   /**
    * The maximum line width for text wrapping.
-   * Default value: 10. Minimum value: 0.
+   * Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
    */
   val textMaxWidth: Double? = null,
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-   * Default value: [0,0].
+   * Default value: [0,0]. The unit of textOffset is in ems.
    */
   val textOffset: List<Double?>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-   * Default value: 0.
+   * Default value: 0. The unit of textRadialOffset is in ems.
    */
   val textRadialOffset: Double? = null,
   /**
    * Rotates the text clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of textRotate is in degrees.
    */
   val textRotate: Double? = null,
   /**
    * Font size.
-   * Default value: 16. Minimum value: 0.
+   * Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
    */
   val textSize: Double? = null,
   /**
@@ -500,12 +502,12 @@ data class PointAnnotation(
   val iconColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
    */
   val iconEmissiveStrength: Double? = null,
   /**
    * Fade out the halo towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
    */
   val iconHaloBlur: Double? = null,
   /**
@@ -515,7 +517,7 @@ data class PointAnnotation(
   val iconHaloColor: Long? = null,
   /**
    * Distance of halo to the icon outline.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
    */
   val iconHaloWidth: Double? = null,
   /**
@@ -546,12 +548,12 @@ data class PointAnnotation(
   val textColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
    */
   val textEmissiveStrength: Double? = null,
   /**
    * The halo's fadeout distance towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
    */
   val textHaloBlur: Double? = null,
   /**
@@ -561,7 +563,7 @@ data class PointAnnotation(
   val textHaloColor: Long? = null,
   /**
    * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
    */
   val textHaloWidth: Double? = null,
   /**
@@ -738,12 +740,12 @@ data class PointAnnotationOptions(
   val iconOffset: List<Double?>? = null,
   /**
    * Rotates the icon clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of iconRotate is in degrees.
    */
   val iconRotate: Double? = null,
   /**
    * Scales the original size of the icon by the provided factor. The new pixel size of the image will be the original pixel size multiplied by `icon-size`. 1 is the original size; 3 triples the size of the image.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconSize is in factor of the original icon size.
    */
   val iconSize: Double? = null,
   /**
@@ -753,7 +755,7 @@ data class PointAnnotationOptions(
   val iconTextFit: IconTextFit? = null,
   /**
    * Size of the additional area added to dimensions determined by `icon-text-fit`, in clockwise order: top, right, bottom, left.
-   * Default value: [0,0,0,0].
+   * Default value: [0,0,0,0]. The unit of iconTextFitPadding is in pixels.
    */
   val iconTextFitPadding: List<Double?>? = null,
   /** Sorts features in ascending order based on this value. Features with lower sort keys are drawn and placed first. When `icon-allow-overlap` or `text-allow-overlap` is `false`, features with a lower sort key will have priority during placement. When `icon-allow-overlap` or `text-allow-overlap` is set to `true`, features with a higher sort key will overlap over features with a lower sort key. */
@@ -775,37 +777,37 @@ data class PointAnnotationOptions(
   val textJustify: TextJustify? = null,
   /**
    * Text tracking amount.
-   * Default value: 0.
+   * Default value: 0. The unit of textLetterSpacing is in ems.
    */
   val textLetterSpacing: Double? = null,
   /**
    * Text leading value for multi-line text.
-   * Default value: 1.2.
+   * Default value: 1.2. The unit of textLineHeight is in ems.
    */
   val textLineHeight: Double? = null,
   /**
    * The maximum line width for text wrapping.
-   * Default value: 10. Minimum value: 0.
+   * Default value: 10. Minimum value: 0. The unit of textMaxWidth is in ems.
    */
   val textMaxWidth: Double? = null,
   /**
    * Offset distance of text from its anchor. Positive values indicate right and down, while negative values indicate left and up. If used with text-variable-anchor, input values will be taken as absolute values. Offsets along the x- and y-axis will be applied automatically based on the anchor position.
-   * Default value: [0,0].
+   * Default value: [0,0]. The unit of textOffset is in ems.
    */
   val textOffset: List<Double?>? = null,
   /**
    * Radial offset of text, in the direction of the symbol's anchor. Useful in combination with `text-variable-anchor`, which defaults to using the two-dimensional `text-offset` if present.
-   * Default value: 0.
+   * Default value: 0. The unit of textRadialOffset is in ems.
    */
   val textRadialOffset: Double? = null,
   /**
    * Rotates the text clockwise.
-   * Default value: 0.
+   * Default value: 0. The unit of textRotate is in degrees.
    */
   val textRotate: Double? = null,
   /**
    * Font size.
-   * Default value: 16. Minimum value: 0.
+   * Default value: 16. Minimum value: 0. The unit of textSize is in pixels.
    */
   val textSize: Double? = null,
   /**
@@ -820,12 +822,12 @@ data class PointAnnotationOptions(
   val iconColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of iconEmissiveStrength is in intensity.
    */
   val iconEmissiveStrength: Double? = null,
   /**
    * Fade out the halo towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloBlur is in pixels.
    */
   val iconHaloBlur: Double? = null,
   /**
@@ -835,7 +837,7 @@ data class PointAnnotationOptions(
   val iconHaloColor: Long? = null,
   /**
    * Distance of halo to the icon outline.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
    */
   val iconHaloWidth: Double? = null,
   /**
@@ -866,12 +868,12 @@ data class PointAnnotationOptions(
   val textColor: Long? = null,
   /**
    * Controls the intensity of light emitted on the source features.
-   * Default value: 1. Minimum value: 0.
+   * Default value: 1. Minimum value: 0. The unit of textEmissiveStrength is in intensity.
    */
   val textEmissiveStrength: Double? = null,
   /**
    * The halo's fadeout distance towards the outside.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloBlur is in pixels.
    */
   val textHaloBlur: Double? = null,
   /**
@@ -881,7 +883,7 @@ data class PointAnnotationOptions(
   val textHaloColor: Long? = null,
   /**
    * Distance of halo to the font outline. Max text halo width is 1/4 of the font-size.
-   * Default value: 0. Minimum value: 0.
+   * Default value: 0. Minimum value: 0. The unit of textHaloWidth is in pixels.
    */
   val textHaloWidth: Double? = null,
   /**
@@ -1271,6 +1273,8 @@ interface _PointAnnotationMessenger {
   fun getIconRotationAlignment(managerId: String, callback: (Result<IconRotationAlignment?>) -> Unit)
   fun setIconSize(managerId: String, iconSize: Double, callback: (Result<Unit>) -> Unit)
   fun getIconSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setIconSizeScaleRange(managerId: String, iconSizeScaleRange: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getIconSizeScaleRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setIconTextFit(managerId: String, iconTextFit: IconTextFit, callback: (Result<Unit>) -> Unit)
   fun getIconTextFit(managerId: String, callback: (Result<IconTextFit?>) -> Unit)
   fun setIconTextFitPadding(managerId: String, iconTextFitPadding: List<Double?>, callback: (Result<Unit>) -> Unit)
@@ -1327,6 +1331,8 @@ interface _PointAnnotationMessenger {
   fun getTextRotationAlignment(managerId: String, callback: (Result<TextRotationAlignment?>) -> Unit)
   fun setTextSize(managerId: String, textSize: Double, callback: (Result<Unit>) -> Unit)
   fun getTextSize(managerId: String, callback: (Result<Double?>) -> Unit)
+  fun setTextSizeScaleRange(managerId: String, textSizeScaleRange: List<Double?>, callback: (Result<Unit>) -> Unit)
+  fun getTextSizeScaleRange(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setTextTransform(managerId: String, textTransform: TextTransform, callback: (Result<Unit>) -> Unit)
   fun getTextTransform(managerId: String, callback: (Result<TextTransform?>) -> Unit)
   fun setIconColor(managerId: String, iconColor: Long, callback: (Result<Unit>) -> Unit)
@@ -1949,6 +1955,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getIconSize(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val iconSizeScaleRangeArg = args[1] as List<Double?>
+            api.setIconSizeScaleRange(managerIdArg, iconSizeScaleRangeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getIconSizeScaleRange(managerIdArg) { result: Result<List<Double?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -3069,6 +3115,46 @@ interface _PointAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getTextSize(managerIdArg) { result: Result<Double?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val textSizeScaleRangeArg = args[1] as List<Double?>
+            api.setTextSizeScaleRange(managerIdArg, textSizeScaleRangeArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getTextSizeScaleRange(managerIdArg) { result: Result<List<Double?>?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
