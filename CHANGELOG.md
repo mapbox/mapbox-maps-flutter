@@ -1,6 +1,7 @@
-### main
+### 2.8.0-beta.1
 
 * Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
+* Update Maps SDK to 11.12.0-beta.1
 
 ### 2.7.0
 
@@ -12,7 +13,7 @@
 * Expose `SymbolLayer.iconSizeScaleRange`, `SymbolLayer.iconSizeScaleRangeExpression`, `SymbolLayer.textSizeScaleRange`, `SymbolLayer.textSizeScaleRangeExpression`, `LineLayer.lineCrossSlope`, `LineLayer.lineElevationReference`, `LineLayer.lineWidthUnit`, `FillLayer.fillElevationReference`.
 * Expose `PointAnnotationManager.setIconSizeScaleRange()`, `PointAnnotationManager.getIconSizeScaleRange()`, `PointAnnotationManager.setTextSizeScaleRange()`, `PointAnnotationManager.getTextSizeScaleRange()` , `PolygonAnnotationManager.setFillElevationReference()`, `PolygonAnnotationManager.getFillElevationReference()`, `PolylineAnnotationManager.setLineCrossSlope()`, `PolylineAnnotationManager.getLineCrossSlope()`, `PolylineAnnotationManager.setLineElevationReference()`, `PolylineAnnotationManager.getLineElevationReference()`, `PolylineAnnotationManager.setLineWidthUnit()`, `PolylineAnnotationManager.getLineWidthUnit()` as experimental.
 * Mark `ClipLayer.clipLayerScope` and `ClipLayer.clipLayerTypes` as stable
-* Mark `BackgroundLayer.backgroundPitchAlignment` as experimental 
+* Mark `BackgroundLayer.backgroundPitchAlignment` as experimental
 * [Android] Fix rare NPE upon native view disposal.
 
 ### 2.6.0
@@ -22,7 +23,7 @@
 
 * Update Maps SDK to 11.10.0
 * Align tap propagation behavior on Android and iOS.
-* Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue. 
+* Introduce the experimental Interactions API, a toolset that allows you to handle interactions on both layers and basemap features for styles. This API introduces a new concept called `Featureset`, which allows Evolving Basemap styles, such as Standard, to export an abstract set of features, such as POI, buildings, and place labels, regardless of which layers they are rendered on. An `Interaction` can then be targeted to these features, modifying their state when interacted with. For example, you can add a `TapInteraction` to your map which targets the `buildings` `Featureset`. When a user taps on a building, the building will be highlighted and its color will change to blue.
 
 ```dart
 var tapInteraction = TapInteraction(StandardBuildings(),
@@ -32,10 +33,10 @@ var tapInteraction = TapInteraction(StandardBuildings(),
 });
 mapboxMap.addInteraction(tapInteraction);
 ```
-Specific changes: 
-  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map. 
+Specific changes:
+  * Introduce the experimental `MapboxMap.addInteraction` method, which allows you to add interactions to the map.
   * Introduce the experimental `MapboxMap.removeInteraction` method, which allows you to remove interactions from the map using an identifier `mapboxMap.removeInteraction("tap_interaction_poi")`
-  * Introduce the ability to add `TapInteraction` and `LongTapInteraction` targeting the map itself. 
+  * Introduce the ability to add `TapInteraction` and `LongTapInteraction` targeting the map itself.
   * Introduce `TapInteraction` and `LongTapInteraction`, which allow you to add tap and longTap interactions to the map.
   * Introduce `FeaturesetDescriptor` -- and convenience descriptors for `StandardBuildings`, `StandardPOIs`, and `StandardPlaceLabels` -- which allow you to describe the featureset you want `Interactions` to target.
   * Introduce low-level methods for creating and manipulating interactive features: `queryRenderedFeatures`, `querySourceFeatures`, `setFeatureState`, `getFeatureState`, `removeFeatureState`, `resetFeatureState`
@@ -54,15 +55,15 @@ Specific changes:
 
 * Mark `ClipLayer` as stable.
 * Updated our generated code to align with iOS and Android platforms. Specifically, the changes:
-  * Update experimental `symbolElevationReference` property on `SymbolLayer`. 
+  * Update experimental `symbolElevationReference` property on `SymbolLayer`.
   * Introduce `backgroundPitchAlignment` property on `BackgroundLayer`.
   * Introduce experimental `fillZOffset` property on `FillLayer`.
   * Introduce experimental `fillExtrusionBaseAlignment` and `fillExtrusionHeightAlignment` properties on `FillExtrusionLayer`.
   * Mark get and set `ZOffset` methods on `PolygonAnnotationManager`, `PolylineAnnotationManager`, and `PointAnnotationManager` as experimental.
   * Mark get and set `symbolElevationReference` methods on `PointAnnotationManager` as experimental.
   * Mark get and set line trim methods on `PolylineAnnotationManager` as experimental.
-  * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.  
-  * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`. 
+  * Add a property `emphasisCircleGlowRange` to `LocationIndicatorLayer` to control the glow effect of the emphasis circle – from the solid start to the fully transparent end.
+  * Add experimental `ZOffset` properties to `PolylineAnnotationMessenger`, `PolygonAnnotationMessenger`, and `PointAnnotationMessenger`.
   * Introduce `FillExtrusionBaseAlignment` and `FillExtrusionHeightAlignment`, and `BackgroundPitchAlignment` enums.
 * Added viewport support to `MapWidget`. Control the camera’s initial position and behavior by specifying a ViewportState subclass in the viewport parameter. This allows for centering on specific locations, following the user’s position, or showing an overview of a geometry. If no viewport is provided, the map uses its default camera settings.
   ```dart
@@ -134,7 +135,7 @@ And you can now set additional options to a `TileStore`, for example, a maximum 
 // This removes the tiles from the predictive cache.
 tileStore.setDiskQuota(0);
 ```
-* Add support for partial GeoJSON updates. 
+* Add support for partial GeoJSON updates.
 
 Instead of setting a whole new GeoJSON object anew every time a single feature has changed, now you can apply more granular, partial GeoJSON updates.
 If your features have associated identifiers - you can add, update, and remove them on individual basis in your ``GeoJSONSource``. This is especially beneficial for ``GeoJSONSource``s hosting a large amount of features - in this case adding a feature can be up to 4x faster with the partial GeoJSON update API.
