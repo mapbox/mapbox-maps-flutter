@@ -5,6 +5,7 @@ import 'package:mapbox_maps_example/camera_example.dart';
 import 'package:mapbox_maps_example/circle_annotations_example.dart';
 import 'package:mapbox_maps_example/cluster_example.dart';
 import 'package:mapbox_maps_example/custom_header_example.dart';
+import 'package:mapbox_maps_example/edit_polygon_example.dart';
 import 'package:mapbox_maps_example/model_layer_interactions_example.dart';
 import 'package:mapbox_maps_example/offline_map_example.dart';
 import 'package:mapbox_maps_example/model_layer_example.dart';
@@ -58,6 +59,7 @@ final List<Example> _allPages = <Example>[
   CircleAnnotationExample(),
   PolylineAnnotationExample(),
   PolygonAnnotationExample(),
+  EditPolygonExample(),
   VectorTileSourceExample(),
   DrawGeoJsonLineExample(),
   ImageSourceExample(),

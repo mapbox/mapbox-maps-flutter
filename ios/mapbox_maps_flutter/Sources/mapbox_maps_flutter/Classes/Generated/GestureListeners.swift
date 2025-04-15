@@ -438,4 +438,4 @@ class AnnotationDragEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInt
     channel.setStreamHandler(internalStreamHandler)
   }
 }
-      
+
