@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 // This file is generated.
 @_spi(Experimental) import MapboxMaps
 import Foundation
@@ -1511,3 +1512,4 @@ extension MapboxMaps.PointAnnotation {
     }
 }
 // End of generated file.
+// swiftlint:enable file_length

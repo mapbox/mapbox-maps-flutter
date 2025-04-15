@@ -18,6 +18,7 @@ disabled_rules:
   - function_parameter_count
   - type_body_length
   - cyclomatic_complexity
+  - superfluous_disable_command
 file_length:
     warning: 1500
     error: 1500
