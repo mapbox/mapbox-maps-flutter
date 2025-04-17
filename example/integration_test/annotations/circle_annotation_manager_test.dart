@@ -1,4 +1,5 @@
 // This file is generated.
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -84,6 +85,49 @@ void main() {
     await manager.setCircleTranslateAnchor(CircleTranslateAnchor.MAP);
     var circleTranslateAnchor = await manager.getCircleTranslateAnchor();
     expect(CircleTranslateAnchor.MAP, circleTranslateAnchor);
+  });
+
+  testWidgets('annotation drag events', (WidgetTester tester) async {
+    final mapFuture = app.main(width: 100, height: 100);
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager = await mapboxMap.annotations.createCircleAnnotationManager();
+    final touchPoint = ScreenCoordinate(x: 50, y: 50);
+    final point = await mapboxMap.coordinateForPixel(touchPoint);
+
+    final geometry = point;
+
+    final createdAnnotation = await manager.create(CircleAnnotationOptions(
+      geometry: geometry,
+      isDraggable: true,
+    ));
+
+    final onDragBegin = Completer();
+    final onDragChanged = Completer();
+    final onDragEnd = Completer();
+
+    manager.dragEvents(
+      onBegin: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragBegin.complete();
+      },
+      onChanged: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragChanged.complete();
+      },
+      onEnd: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragEnd.complete();
+      },
+    );
+
+    await tester.pumpAndSettle();
+    await mapboxMap.dispatch("dragBeing", touchPoint);
+    await mapboxMap.dispatch("drag", touchPoint);
+    await mapboxMap.dispatch("dragEnd", touchPoint);
+
+    await Future.wait([onDragBegin.future, onDragEnd.future]);
   });
 }
 // End of generated file.

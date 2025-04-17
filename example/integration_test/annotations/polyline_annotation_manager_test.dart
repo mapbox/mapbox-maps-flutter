@@ -1,4 +1,5 @@
 // This file is generated.
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -39,14 +40,6 @@ void main() {
     var lineCap = await manager.getLineCap();
     expect(LineCap.BUTT, lineCap);
 
-    await manager.setLineCrossSlope(1.0);
-    var lineCrossSlope = await manager.getLineCrossSlope();
-    expect(1.0, lineCrossSlope);
-
-    await manager.setLineElevationReference(LineElevationReference.NONE);
-    var lineElevationReference = await manager.getLineElevationReference();
-    expect(LineElevationReference.NONE, lineElevationReference);
-
     await manager.setLineJoin(LineJoin.BEVEL);
     var lineJoin = await manager.getLineJoin();
     expect(LineJoin.BEVEL, lineJoin);
@@ -62,10 +55,6 @@ void main() {
     await manager.setLineSortKey(1.0);
     var lineSortKey = await manager.getLineSortKey();
     expect(1.0, lineSortKey);
-
-    await manager.setLineWidthUnit(LineWidthUnit.PIXELS);
-    var lineWidthUnit = await manager.getLineWidthUnit();
-    expect(LineWidthUnit.PIXELS, lineWidthUnit);
 
     await manager.setLineZOffset(1.0);
     var lineZOffset = await manager.getLineZOffset();
@@ -142,6 +131,54 @@ void main() {
     await manager.setLineWidth(1.0);
     var lineWidth = await manager.getLineWidth();
     expect(1.0, lineWidth);
+  });
+
+  testWidgets('annotation drag events', (WidgetTester tester) async {
+    final mapFuture = app.main(width: 100, height: 100);
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolylineAnnotationManager();
+    final touchPoint = ScreenCoordinate(x: 50, y: 50);
+    final point = await mapboxMap.coordinateForPixel(touchPoint);
+
+    final coordinates = [
+      Position(point.coordinates.lng, point.coordinates.lat),
+      Position(10.0, 20.0)
+    ];
+    final geometry = LineString(coordinates: coordinates);
+
+    final createdAnnotation = await manager.create(PolylineAnnotationOptions(
+      geometry: geometry,
+      isDraggable: true,
+    ));
+
+    final onDragBegin = Completer();
+    final onDragChanged = Completer();
+    final onDragEnd = Completer();
+
+    manager.dragEvents(
+      onBegin: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragBegin.complete();
+      },
+      onChanged: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragChanged.complete();
+      },
+      onEnd: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragEnd.complete();
+      },
+    );
+
+    await tester.pumpAndSettle();
+    await mapboxMap.dispatch("dragBeing", touchPoint);
+    await mapboxMap.dispatch("drag", touchPoint);
+    await mapboxMap.dispatch("dragEnd", touchPoint);
+
+    await Future.wait([onDragBegin.future, onDragEnd.future]);
   });
 }
 // End of generated file.

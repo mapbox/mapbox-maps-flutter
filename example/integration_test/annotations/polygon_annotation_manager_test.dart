@@ -1,4 +1,5 @@
 // This file is generated.
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -33,10 +34,6 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager =
         await mapboxMap.annotations.createPolygonAnnotationManager();
-
-    await manager.setFillElevationReference(FillElevationReference.NONE);
-    var fillElevationReference = await manager.getFillElevationReference();
-    expect(FillElevationReference.NONE, fillElevationReference);
 
     await manager.setFillSortKey(1.0);
     var fillSortKey = await manager.getFillSortKey();
@@ -77,6 +74,56 @@ void main() {
     await manager.setFillZOffset(1.0);
     var fillZOffset = await manager.getFillZOffset();
     expect(1.0, fillZOffset);
+  });
+
+  testWidgets('annotation drag events', (WidgetTester tester) async {
+    final mapFuture = app.main(width: 100, height: 100);
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager =
+        await mapboxMap.annotations.createPolygonAnnotationManager();
+    final touchPoint = ScreenCoordinate(x: 50, y: 50);
+    final point = await mapboxMap.coordinateForPixel(touchPoint);
+
+    final coordinates = [
+      Position(point.coordinates.lng, point.coordinates.lat),
+      Position(1.754703, -19.716317),
+      Position(-15.747196, -21.085074),
+      Position(-3.363937, -10.733102)
+    ];
+    final geometry = Polygon(coordinates: [coordinates]);
+
+    final createdAnnotation = await manager.create(PolygonAnnotationOptions(
+      geometry: geometry,
+      isDraggable: true,
+    ));
+
+    final onDragBegin = Completer();
+    final onDragChanged = Completer();
+    final onDragEnd = Completer();
+
+    manager.dragEvents(
+      onBegin: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragBegin.complete();
+      },
+      onChanged: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragChanged.complete();
+      },
+      onEnd: (context) {
+        expect(context.annotation.id, equals(createdAnnotation.id));
+        onDragEnd.complete();
+      },
+    );
+
+    await tester.pumpAndSettle();
+    await mapboxMap.dispatch("dragBeing", touchPoint);
+    await mapboxMap.dispatch("drag", touchPoint);
+    await mapboxMap.dispatch("dragEnd", touchPoint);
+
+    await Future.wait([onDragBegin.future, onDragEnd.future]);
   });
 }
 // End of generated file.
