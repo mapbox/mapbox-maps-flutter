@@ -14,7 +14,7 @@ class EditPolygonExample extends StatefulWidget implements Example {
   Widget get leading => const Icon(Icons.map);
 
   @override
-  String? get subtitle => "Edit a polygon by dragging/dropping its legs";
+  String? get subtitle => "Edit a polygon by dragging/dropping its vertices";
 
   @override
   String get title => "Edit polygon";
@@ -94,7 +94,7 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
       await mapboxMap.style.addLayer(FillLayer(
         id: "city-fill-layer",
         sourceId: "city-fill-source",
-        fillColor: Colors.amberAccent.value,
+        fillColor: Colors.pink.value,
         fillOpacity: 0.3,
       ));
     } else {

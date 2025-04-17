@@ -426,8 +426,7 @@ struct GlyphsRasterizationOptions {
   ///
   /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
   ///
-  var fontFamily: String? = nil
-
+  var fontFamily: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> GlyphsRasterizationOptions? {
@@ -452,19 +451,18 @@ struct GlyphsRasterizationOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct TileCoverOptions {
   /// Tile size of the source. Defaults to 512.
-  var tileSize: Int64? = nil
+  var tileSize: Int64?
   /// Min zoom defined in the source between range [0, 22].
   /// if not provided or is out of range, defaults to 0.
-  var minZoom: Int64? = nil
+  var minZoom: Int64?
   /// Max zoom defined in the source between range [0, 22].
   /// Should be greater than or equal to minZoom.
   /// If not provided or is out of range, defaults to 22.
-  var maxZoom: Int64? = nil
+  var maxZoom: Int64?
   /// Whether to round zoom values when calculating tilecover.
   /// Set this to true for raster and raster-dem sources.
   /// If not specified, defaults to false.
-  var roundZoom: Bool? = nil
-
+  var roundZoom: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileCoverOptions? {
@@ -505,7 +503,6 @@ struct MbxEdgeInsets {
   /// Padding from the right.
   var right: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MbxEdgeInsets? {
     let top = pigeonVar_list[0] as! Double
@@ -539,21 +536,20 @@ struct MbxEdgeInsets {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraOptions {
   /// Coordinate at the center of the camera.
-  var center: Point? = nil
+  var center: Point?
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
-  var padding: MbxEdgeInsets? = nil
+  var padding: MbxEdgeInsets?
   /// Point of reference for `zoom` and `angle`, assuming an origin at the
   /// top-left corner of the view.
-  var anchor: ScreenCoordinate? = nil
+  var anchor: ScreenCoordinate?
   /// Zero-based zoom level. Constrained to the minimum and maximum zoom
   /// levels.
-  var zoom: Double? = nil
+  var zoom: Double?
   /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  var bearing: Double? = nil
+  var bearing: Double?
   /// Pitch toward the horizon measured in degrees.
-  var pitch: Double? = nil
-
+  var pitch: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraOptions? {
@@ -602,7 +598,6 @@ struct CameraState {
   /// Pitch toward the horizon measured in degrees.
   var pitch: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraState? {
     let center = pigeonVar_list[0] as! Point
@@ -635,16 +630,15 @@ struct CameraState {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraBoundsOptions {
   /// The latitude and longitude bounds to which the camera center are constrained.
-  var bounds: CoordinateBounds? = nil
+  var bounds: CoordinateBounds?
   /// The maximum zoom level, in Mapbox zoom levels 0-25.5. At low zoom levels, a small set of map tiles covers a large geographical area. At higher zoom levels, a larger number of tiles cover a smaller geographical area.
-  var maxZoom: Double? = nil
+  var maxZoom: Double?
   /// The minimum zoom level, in Mapbox zoom levels 0-25.5.
-  var minZoom: Double? = nil
+  var minZoom: Double?
   /// The maximum allowed pitch value in degrees.
-  var maxPitch: Double? = nil
+  var maxPitch: Double?
   /// The minimum allowed pitch value in degrees.
-  var minPitch: Double? = nil
-
+  var minPitch: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraBoundsOptions? {
@@ -688,7 +682,6 @@ struct CameraBounds {
   /// The minimum allowed pitch value in degrees.
   var minPitch: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraBounds? {
     let bounds = pigeonVar_list[0] as! CoordinateBounds
@@ -720,11 +713,10 @@ struct CameraBounds {
 struct MapAnimationOptions {
   /// The duration of the animation in milliseconds.
   /// If not set explicitly default duration will be taken 300ms
-  var duration: Int64? = nil
+  var duration: Int64?
   /// The amount of time, in milliseconds, to delay starting the animation after animation start.
   /// If not set explicitly default startDelay will be taken 0ms. This only works for Android.
-  var startDelay: Int64? = nil
-
+  var startDelay: Int64?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapAnimationOptions? {
@@ -758,7 +750,6 @@ struct CoordinateBounds {
   /// Coordinates provided in `southwest` and `northeast` fields would be omitted and have no effect.
   var infiniteBounds: Bool
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBounds? {
     let southwest = pigeonVar_list[0] as! Point
@@ -786,7 +777,6 @@ struct CoordinateBounds {
 struct MapDebugOptions {
   var data: MapDebugOptionsData
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapDebugOptions? {
     let data = pigeonVar_list[0] as! MapDebugOptionsData
@@ -807,7 +797,6 @@ struct MapDebugOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct TileCacheBudgetInMegabytes {
   var size: Int64
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInMegabytes? {
@@ -830,7 +819,6 @@ struct TileCacheBudgetInMegabytes {
 struct TileCacheBudgetInTiles {
   var size: Int64
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileCacheBudgetInTiles? {
     let size = pigeonVar_list[0] as! Int64
@@ -852,30 +840,29 @@ struct TileCacheBudgetInTiles {
 struct MapOptions {
   /// The map context mode. This can be used to optimizations
   /// if we know that the drawing context is not shared with other code.
-  var contextMode: ContextMode? = nil
+  var contextMode: ContextMode?
   /// The map constrain mode. This can be used to limit the map
   /// to wrap around the globe horizontally. By default, it is set to
   /// `HeightOnly`.
-  var constrainMode: ConstrainMode? = nil
+  var constrainMode: ConstrainMode?
   /// The viewport mode. This can be used to flip the vertical
   /// orientation of the map as some devices may use inverted orientation.
-  var viewportMode: ViewportMode? = nil
+  var viewportMode: ViewportMode?
   /// The orientation of the Map. By default, it is set to
   /// `Upwards`.
-  var orientation: NorthOrientation? = nil
+  var orientation: NorthOrientation?
   /// Specify whether to enable cross-source symbol collision detection
   /// or not. By default, it is set to `true`.
-  var crossSourceCollisions: Bool? = nil
+  var crossSourceCollisions: Bool?
   /// The size to resize the map object and renderer backend.
   /// The size is given in `logical pixel` units. macOS and iOS platforms use
   /// device-independent pixel units, while other platforms, such as Android,
   /// use screen pixel units.
-  var size: Size? = nil
+  var size: Size?
   /// The custom pixel ratio. By default, it is set to 1.0
   var pixelRatio: Double
   /// Glyphs rasterization options to use for client-side text rendering.
-  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
-
+  var glyphsRasterizationOptions: GlyphsRasterizationOptions?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapOptions? {
@@ -923,7 +910,6 @@ struct ScreenCoordinate {
   /// A value representing the y position of this coordinate.
   var y: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ScreenCoordinate? {
     let x = pigeonVar_list[0] as! Double
@@ -952,7 +938,6 @@ struct ScreenBox {
   /// The screen coordinate close to the bottom right corner of the screen.
   var max: ScreenCoordinate
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ScreenBox? {
     let min = pigeonVar_list[0] as! ScreenCoordinate
@@ -979,7 +964,6 @@ struct CoordinateBoundsZoom {
   var bounds: CoordinateBounds
   /// Zoom.
   var zoom: Double
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CoordinateBoundsZoom? {
@@ -1008,7 +992,6 @@ struct Size {
   /// Height of the size.
   var height: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> Size? {
     let width = pigeonVar_list[0] as! Double
@@ -1032,10 +1015,9 @@ struct Size {
 /// Generated class from Pigeon that represents data sent in messages.
 struct RenderedQueryOptions {
   /// Layer IDs to include in the query.
-  var layerIds: [String?]? = nil
+  var layerIds: [String?]?
   /// Filters the returned features with an expression
-  var filter: String? = nil
-
+  var filter: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> RenderedQueryOptions? {
@@ -1060,10 +1042,9 @@ struct RenderedQueryOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct SourceQueryOptions {
   /// Source layer IDs to include in the query.
-  var sourceLayerIds: [String?]? = nil
+  var sourceLayerIds: [String?]?
   /// Filters the returned features with an expression
   var filter: String
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> SourceQueryOptions? {
@@ -1088,10 +1069,9 @@ struct SourceQueryOptions {
 /// Generated class from Pigeon that represents data sent in messages.
 struct FeatureExtensionValue {
   /// An optional value of a feature extension
-  var value: String? = nil
+  var value: String?
   /// An optional array of features from a feature extension.
-  var featureCollection: [[String?: Any?]?]? = nil
-
+  var featureCollection: [[String?: Any?]?]?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeatureExtensionValue? {
@@ -1116,12 +1096,11 @@ struct FeatureExtensionValue {
 /// Generated class from Pigeon that represents data sent in messages.
 struct LayerPosition {
   /// Layer should be positioned above specified layer id.
-  var above: String? = nil
+  var above: String?
   /// Layer should be positioned below specified layer id.
-  var below: String? = nil
+  var below: String?
   /// Layer should be positioned at specified index in a layers stack.
-  var at: Int64? = nil
-
+  var at: Int64?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LayerPosition? {
@@ -1156,7 +1135,6 @@ struct QueriedRenderedFeature {
   /// If the feature is only rendered in one layer, a single Id will be provided.
   var layers: [String?]
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedRenderedFeature? {
     let queriedFeature = pigeonVar_list[0] as! QueriedFeature
@@ -1182,7 +1160,6 @@ struct QueriedRenderedFeature {
 struct QueriedSourceFeature {
   /// Feature returned by the query.
   var queriedFeature: QueriedFeature
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedSourceFeature? {
@@ -1210,11 +1187,10 @@ struct QueriedFeature {
   var source: String
   /// Source layer id for a queried feature. May be null if source does not support layers, e.g., 'geojson' source,
   /// or when data provided by the source is not layered.
-  var sourceLayer: String? = nil
+  var sourceLayer: String?
   /// Feature state for a queried feature. Type of the value is an Object.
   /// @see `setFeatureState` and `getFeatureState`
   var state: String
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> QueriedFeature? {
@@ -1255,8 +1231,7 @@ struct FeaturesetFeatureId {
   /// A feature id coming from the feature itself.exp
   var id: String
   /// A namespace of the feature
-  var namespace: String? = nil
-
+  var namespace: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeatureId? {
@@ -1282,7 +1257,6 @@ struct FeaturesetFeatureId {
 struct FeatureState {
   var map: [String: Any?]
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeatureState? {
     let map = pigeonVar_list[0] as! [String: Any?]
@@ -1307,16 +1281,15 @@ struct FeatureState {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _Interaction {
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  var featuresetDescriptor: FeaturesetDescriptor? = nil
+  var featuresetDescriptor: FeaturesetDescriptor?
   /// The type of interaction, either tap or longTap
   var interactionType: _InteractionType
   /// Whether to stop the propagation of the interaction to the map. Defaults to true.
   var stopPropagation: Bool
   /// An optional filter of features that should trigger the interaction.
-  var filter: String? = nil
+  var filter: String?
   /// Radius of a tappable area
-  var radius: Double? = nil
-
+  var radius: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _Interaction? {
@@ -1350,7 +1323,7 @@ struct _Interaction {
 /// Generated class from Pigeon that represents data sent in messages.
 struct _InteractionPigeon {
   /// The featureset descriptor that specifies the featureset to be included in the interaction.
-  var featuresetDescriptor: [Any?]? = nil
+  var featuresetDescriptor: [Any?]?
   /// Whether to stop the propagation of the interaction to the map
   var stopPropagation: Bool
   /// The type of interaction, either tap or longTap as a String
@@ -1358,10 +1331,9 @@ struct _InteractionPigeon {
   /// An identifier for the interaction
   var identifier: String
   /// An optional filter of features that should trigger the interaction.
-  var filter: String? = nil
+  var filter: String?
   /// Radius of a tappable area
-  var radius: Double? = nil
-
+  var radius: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _InteractionPigeon? {
@@ -1404,19 +1376,18 @@ struct FeaturesetDescriptor {
   /// 
   /// * Note: If `featuresetId` is provided and valid, it takes precedence over `layerId`,
   /// * meaning `layerId` will not be considered even if it has a valid value.
-  var featuresetId: String? = nil
+  var featuresetId: String?
   /// An optional import id that is required if the featureset is defined within an imported style.
   /// If the featureset belongs to the current style, this field should be set to a null string.
   ///
   /// Note: `importId` is only applicable when used in conjunction with `featuresetId`
   /// and has no effect when used with `layerId`.
-  var importId: String? = nil
+  var importId: String?
   /// An optional unique identifier for the layer within the current style.
   /// 
   /// Note: If `featuresetId` is valid, `layerId` will be ignored even if it has a valid value.
   /// Additionally, `importId` does not apply when using `layerId`.
-  var layerId: String? = nil
-
+  var layerId: String?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetDescriptor? {
@@ -1451,7 +1422,7 @@ struct FeaturesetFeature {
   ///
   /// The identifier can be `nil` if the underlying source doesn't have identifiers for features.
   /// In this case it's impossible to set a feature state for an individual feature.
-  var id: FeaturesetFeatureId? = nil
+  var id: FeaturesetFeatureId?
   /// A featureset descriptor denoting the featureset this feature belongs to.
   var featureset: FeaturesetDescriptor
   /// A feature geometry.
@@ -1463,7 +1434,6 @@ struct FeaturesetFeature {
   /// This is a **snapshot** of the state that the feature had when it was interacted with.
   /// To update and read the original state, use ``MapboxMap/setFeatureState()`` and ``MapboxMap/getFeatureState()``.
   var state: [String: Any?]
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FeaturesetFeature? {
@@ -1500,7 +1470,6 @@ struct _RenderedQueryGeometry {
   var value: String
   var type: Type
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> _RenderedQueryGeometry? {
     let value = pigeonVar_list[0] as! String
@@ -1533,7 +1502,6 @@ struct ProjectedMeters {
   /// Projected meters in east direction.
   var easting: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ProjectedMeters? {
     let northing = pigeonVar_list[0] as! Double
@@ -1560,7 +1528,6 @@ struct MercatorCoordinate {
   var x: Double
   /// A value representing the y position of this coordinate.
   var y: Double
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MercatorCoordinate? {
@@ -1589,7 +1556,6 @@ struct StyleObjectInfo {
   /// The object's type.
   var type: String
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StyleObjectInfo? {
     let id = pigeonVar_list[0] as! String
@@ -1611,7 +1577,6 @@ struct StyleObjectInfo {
 /// Generated class from Pigeon that represents data sent in messages.
 struct StyleProjection {
   var name: StyleProjectionName
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StyleProjection? {
@@ -1637,20 +1602,19 @@ struct FlatLight {
   /// Unique light name
   var id: String
   /// Whether extruded geometries are lit relative to the map or viewport.
-  var anchor: Anchor? = nil
+  var anchor: Anchor?
   /// Color tint for lighting extruded geometries.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// Intensity of lighting (on a scale from 0 to 1). Higher numbers will present as more extreme contrast.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
+  var intensityTransition: TransitionOptions?
   /// Position of the light source relative to lit (extruded) geometries, in [r radial coordinate, a azimuthal angle, p polar angle] where r indicates the distance from the center of the base of an object to its light, a indicates the position of the light relative to 0 degree (0 degree when `light.anchor` is set to `viewport` corresponds to the top of the viewport, or 0 degree when `light.anchor` is set to `map` corresponds to due north, and degrees proceed clockwise), and p indicates the height of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var position: [Double?]? = nil
+  var position: [Double?]?
   /// Transition property for `position`
-  var positionTransition: TransitionOptions? = nil
-
+  var positionTransition: TransitionOptions?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> FlatLight? {
@@ -1697,24 +1661,23 @@ struct DirectionalLight {
   /// Unique light name
   var id: String
   /// Enable/Disable shadow casting for this light
-  var castShadows: Bool? = nil
+  var castShadows: Bool?
   /// Color of the directional light.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// Direction of the light source specified as [a azimuthal angle, p polar angle] where a indicates the azimuthal angle of the light relative to north (in degrees and proceeding clockwise), and p indicates polar angle of the light (from 0 degree, directly above, to 180 degree, directly below).
-  var direction: [Double?]? = nil
+  var direction: [Double?]?
   /// Transition property for `direction`
-  var directionTransition: TransitionOptions? = nil
+  var directionTransition: TransitionOptions?
   /// A multiplier for the color of the directional light.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
+  var intensityTransition: TransitionOptions?
   /// Determines the shadow strength, affecting the shadow receiver surfaces final color. Values near 0.0 reduce the shadow contribution to the final color. Values near to 1.0 make occluded surfaces receive almost no directional light. Designed to be used mostly for transitioning between values 0 and 1.
-  var shadowIntensity: Double? = nil
+  var shadowIntensity: Double?
   /// Transition property for `shadowIntensity`
-  var shadowIntensityTransition: TransitionOptions? = nil
-
+  var shadowIntensityTransition: TransitionOptions?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> DirectionalLight? {
@@ -1767,14 +1730,13 @@ struct AmbientLight {
   /// Unique light name
   var id: String
   /// Color of the ambient light.
-  var color: Int64? = nil
+  var color: Int64?
   /// Transition property for `color`
-  var colorTransition: TransitionOptions? = nil
+  var colorTransition: TransitionOptions?
   /// A multiplier for the color of the ambient light.
-  var intensity: Double? = nil
+  var intensity: Double?
   /// Transition property for `intensity`
-  var intensityTransition: TransitionOptions? = nil
-
+  var intensityTransition: TransitionOptions?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> AmbientLight? {
@@ -1818,7 +1780,6 @@ struct MbxImage {
   /// should consist of a sequence of scanlines.
   var data: FlutterStandardTypedData
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MbxImage? {
     let width = pigeonVar_list[0] as! Int64
@@ -1848,7 +1809,6 @@ struct ImageStretches {
   var first: Double
   /// The second stretchable part in screen pixel units.
   var second: Double
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ImageStretches? {
@@ -1883,7 +1843,6 @@ struct ImageContent {
   /// Distance to the bottom, in screen pixels.
   var bottom: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ImageContent? {
     let left = pigeonVar_list[0] as! Double
@@ -1917,12 +1876,11 @@ struct ImageContent {
 /// Generated class from Pigeon that represents data sent in messages.
 struct TransitionOptions {
   /// Time allotted for transitions to complete. Units in milliseconds. Defaults to `300.0`.
-  var duration: Int64? = nil
+  var duration: Int64?
   /// Length of time before a transition begins. Units in milliseconds. Defaults to `0.0`.
-  var delay: Int64? = nil
+  var delay: Int64?
   /// Whether the fade in/out symbol placement transition is enabled. Defaults to `true`.
-  var enablePlacementTransitions: Bool? = nil
-
+  var enablePlacementTransitions: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TransitionOptions? {
@@ -1956,7 +1914,6 @@ struct CanonicalTileID {
   /// The y value of the coordinate.
   var y: Int64
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CanonicalTileID? {
     let z = pigeonVar_list[0] as! Int64
@@ -1983,10 +1940,9 @@ struct CanonicalTileID {
 /// Generated class from Pigeon that represents data sent in messages.
 struct StylePropertyValue {
   /// The property value.
-  var value: Any? = nil
+  var value: Any?
   /// The kind of the property value.
   var kind: StylePropertyValueKind
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StylePropertyValue? {

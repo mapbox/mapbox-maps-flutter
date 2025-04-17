@@ -60,9 +60,6 @@ class CircleAnnotationExampleState extends State<CircleAnnotationExample> {
           onAnnotationClick: (annotation) => circleAnnotation = annotation,
         ),
       );
-      circleAnnotationManager?.dragEvents(onBegin: (context) {
-        print("MMMM drag begin");
-      });
     });
   }
 
