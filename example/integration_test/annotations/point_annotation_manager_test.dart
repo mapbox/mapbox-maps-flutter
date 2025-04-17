@@ -1,5 +1,6 @@
 // This file is generated.
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -319,7 +320,11 @@ void main() {
     );
 
     await tester.pumpAndSettle();
-    await mapboxMap.dispatch("dragBeing", touchPoint);
+    // There is a typo in iOS dispatch type name,
+    // We need to use this typo for now in order for the test to pass.
+    // This should be removed in MapboxMaps v11.12..0-rc.1
+    await mapboxMap.dispatch(
+        Platform.isAndroid ? "dragBegin" : "dragBeing", touchPoint);
     await mapboxMap.dispatch("drag", touchPoint);
     await mapboxMap.dispatch("dragEnd", touchPoint);
 
