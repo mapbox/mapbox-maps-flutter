@@ -14,6 +14,7 @@ dependencies:
   turf: ^0.0.8
   typed_data: ^1.3.0
   meta: ^1.9.1
+  mapbox_maps_flutter_support: ^0.0.1
 
 dev_dependencies:
   integration_test:
