@@ -4,7 +4,7 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
-import com.mapbox.geojson.Point
+import com.mapbox.geojson.*
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
