@@ -1,7 +1,7 @@
 // This file is generated.
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -41,6 +41,14 @@ void main() {
     var lineCap = await manager.getLineCap();
     expect(LineCap.BUTT, lineCap);
 
+    await manager.setLineCrossSlope(1.0);
+    var lineCrossSlope = await manager.getLineCrossSlope();
+    expect(1.0, lineCrossSlope);
+
+    await manager.setLineElevationReference(LineElevationReference.NONE);
+    var lineElevationReference = await manager.getLineElevationReference();
+    expect(LineElevationReference.NONE, lineElevationReference);
+
     await manager.setLineJoin(LineJoin.BEVEL);
     var lineJoin = await manager.getLineJoin();
     expect(LineJoin.BEVEL, lineJoin);
@@ -56,6 +64,10 @@ void main() {
     await manager.setLineSortKey(1.0);
     var lineSortKey = await manager.getLineSortKey();
     expect(1.0, lineSortKey);
+
+    await manager.setLineWidthUnit(LineWidthUnit.PIXELS);
+    var lineWidthUnit = await manager.getLineWidthUnit();
+    expect(LineWidthUnit.PIXELS, lineWidthUnit);
 
     await manager.setLineZOffset(1.0);
     var lineZOffset = await manager.getLineZOffset();
@@ -135,25 +147,42 @@ void main() {
   });
 
   testWidgets('annotation drag events', (WidgetTester tester) async {
-    final mapFuture = app.main(width: 100, height: 100);
+    final mapFuture = app.main();
     await tester.pumpAndSettle();
 
     final mapboxMap = await mapFuture;
     final manager =
         await mapboxMap.annotations.createPolylineAnnotationManager();
-    final touchPoint = ScreenCoordinate(x: 50, y: 50);
-    final point = await mapboxMap.coordinateForPixel(touchPoint);
 
-    final coordinates = [
-      Position(point.coordinates.lng, point.coordinates.lat),
-      Position(10.0, 20.0)
-    ];
-    final geometry = LineString(coordinates: coordinates);
+    final geometry =
+        LineString(coordinates: [Position(0, 0), Position(10.0, 20.0)]);
 
     final createdAnnotation = await manager.create(PolylineAnnotationOptions(
       geometry: geometry,
       isDraggable: true,
     ));
+
+    // Mock drag events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(PolylineAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.started,
+      ));
+      events.success(PolylineAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.changed,
+      ));
+      events.success(PolylineAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
 
     final onDragBegin = Completer();
     final onDragChanged = Completer();
@@ -174,16 +203,8 @@ void main() {
       },
     );
 
-    await tester.pumpAndSettle();
-    // There is a typo in iOS dispatch type name,
-    // We need to use this typo for now in order for the test to pass.
-    // This should be removed in MapboxMaps v11.12..0-rc.1
-    await mapboxMap.dispatch(
-        Platform.isAndroid ? "dragBegin" : "dragBeing", touchPoint);
-    await mapboxMap.dispatch("drag", touchPoint);
-    await mapboxMap.dispatch("dragEnd", touchPoint);
-
-    await Future.wait([onDragBegin.future, onDragEnd.future]);
+    await Future.wait(
+        [onDragBegin.future, onDragChanged.future, onDragEnd.future]);
   });
 }
 // End of generated file.

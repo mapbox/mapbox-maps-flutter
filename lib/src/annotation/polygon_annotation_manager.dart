@@ -25,20 +25,20 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   /// Registers drag event callbacks for fill annotations.
   ///
   /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
-  ///   The provided [CircleAnnotationInteractionContext] contains details
+  ///   The provided [PolygonAnnotationInteractionContext] contains details
   ///   about the annotation being dragged and the drag start position.
   ///
   /// - [onChanged]: Called continuously as the annotation is dragged.
-  ///   The [CircleAnnotationInteractionContext] gives the updated drag
+  ///   The [PolygonAnnotationInteractionContext] gives the updated drag
   ///   position and annotation context on every move.
   ///
   /// - [onEnd]: Called once the drag gesture completes or is released.
-  ///   The [CircleAnnotationInteractionContext] gives the final position
+  ///   The [PolygonAnnotationInteractionContext] gives the final position
   ///   and annotation state at the end of the drag.
   ///
   /// Example usage:
   /// ```dart
-  /// dragEvents(
+  /// manager.dragEvents(
   ///   onBegin: (context) {
   ///     print("Drag started for: ${context.annotation.id}");
   ///   },

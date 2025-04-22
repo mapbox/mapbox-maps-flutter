@@ -278,35 +278,41 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
     } else if (value is Point) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is Polygon) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is LineString) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    } else if (value is PointAnnotation) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotation) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(134);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotation) {
+    } else if (value is PointAnnotation) {
       buffer.putUint8(135);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineAnnotation) {
+    } else if (value is CircleAnnotation) {
       buffer.putUint8(136);
       writeValue(buffer, value.encode());
-    } else if (value is PointAnnotationInteractionContext) {
+    } else if (value is PolygonAnnotation) {
       buffer.putUint8(137);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotationInteractionContext) {
+    } else if (value is PolylineAnnotation) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    } else if (value is PolygonAnnotationInteractionContext) {
+    } else if (value is PointAnnotationInteractionContext) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    } else if (value is PolylineAnnotationInteractionContext) {
+    } else if (value is CircleAnnotationInteractionContext) {
       buffer.putUint8(140);
+      writeValue(buffer, value.encode());
+    } else if (value is PolygonAnnotationInteractionContext) {
+      buffer.putUint8(141);
+      writeValue(buffer, value.encode());
+    } else if (value is PolylineAnnotationInteractionContext) {
+      buffer.putUint8(142);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -322,24 +328,28 @@ class GestureListeners_PigeonCodec extends StandardMessageCodec {
       case 130:
         return Point.decode(readValue(buffer)!);
       case 131:
-        return ScreenCoordinate.decode(readValue(buffer)!);
+        return Polygon.decode(readValue(buffer)!);
       case 132:
-        return MapContentGestureContext.decode(readValue(buffer)!);
+        return LineString.decode(readValue(buffer)!);
       case 133:
-        return PointAnnotation.decode(readValue(buffer)!);
+        return ScreenCoordinate.decode(readValue(buffer)!);
       case 134:
-        return CircleAnnotation.decode(readValue(buffer)!);
+        return MapContentGestureContext.decode(readValue(buffer)!);
       case 135:
-        return PolygonAnnotation.decode(readValue(buffer)!);
+        return PointAnnotation.decode(readValue(buffer)!);
       case 136:
-        return PolylineAnnotation.decode(readValue(buffer)!);
+        return CircleAnnotation.decode(readValue(buffer)!);
       case 137:
-        return PointAnnotationInteractionContext.decode(readValue(buffer)!);
+        return PolygonAnnotation.decode(readValue(buffer)!);
       case 138:
-        return CircleAnnotationInteractionContext.decode(readValue(buffer)!);
+        return PolylineAnnotation.decode(readValue(buffer)!);
       case 139:
-        return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
+        return PointAnnotationInteractionContext.decode(readValue(buffer)!);
       case 140:
+        return CircleAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 141:
+        return PolygonAnnotationInteractionContext.decode(readValue(buffer)!);
+      case 142:
         return PolylineAnnotationInteractionContext.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

@@ -38,7 +38,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   ///
   /// Example usage:
   /// ```dart
-  /// dragEvents(
+  /// manager.dragEvents(
   ///   onBegin: (context) {
   ///     print("Drag started for: ${context.annotation.id}");
   ///   },

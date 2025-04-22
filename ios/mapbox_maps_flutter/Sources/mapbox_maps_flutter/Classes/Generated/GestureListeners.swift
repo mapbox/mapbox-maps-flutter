@@ -10,7 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
-import struct Turf.Point
+import Turf
 
 /// Error class for passing custom error details to Dart side.
 final class GestureListenersError: Error {
@@ -200,24 +200,28 @@ private class GestureListenersPigeonCodecReader: FlutterStandardReader {
     case 130:
       return Point.fromList(self.readValue() as! [Any?])
     case 131:
-      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+      return Polygon.fromList(self.readValue() as! [Any?])
     case 132:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+      return LineString.fromList(self.readValue() as! [Any?])
     case 133:
-      return PointAnnotation.fromList(self.readValue() as! [Any?])
+      return ScreenCoordinate.fromList(self.readValue() as! [Any?])
     case 134:
-      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
     case 135:
-      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
+      return PointAnnotation.fromList(self.readValue() as! [Any?])
     case 136:
-      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
+      return CircleAnnotation.fromList(self.readValue() as! [Any?])
     case 137:
-      return PointAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return PolygonAnnotation.fromList(self.readValue() as! [Any?])
     case 138:
-      return CircleAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return PolylineAnnotation.fromList(self.readValue() as! [Any?])
     case 139:
-      return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+      return PointAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
     case 140:
+      return CircleAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 141:
+      return PolygonAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
+    case 142:
       return PolylineAnnotationInteractionContext.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -233,35 +237,41 @@ private class GestureListenersPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? Point {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? Polygon {
       super.writeByte(131)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? LineString {
       super.writeByte(132)
       super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotation {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotation {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(134)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotation {
+    } else if let value = value as? PointAnnotation {
       super.writeByte(135)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineAnnotation {
+    } else if let value = value as? CircleAnnotation {
       super.writeByte(136)
       super.writeValue(value.toList())
-    } else if let value = value as? PointAnnotationInteractionContext {
+    } else if let value = value as? PolygonAnnotation {
       super.writeByte(137)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotationInteractionContext {
+    } else if let value = value as? PolylineAnnotation {
       super.writeByte(138)
       super.writeValue(value.toList())
-    } else if let value = value as? PolygonAnnotationInteractionContext {
+    } else if let value = value as? PointAnnotationInteractionContext {
       super.writeByte(139)
       super.writeValue(value.toList())
-    } else if let value = value as? PolylineAnnotationInteractionContext {
+    } else if let value = value as? CircleAnnotationInteractionContext {
       super.writeByte(140)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolygonAnnotationInteractionContext {
+      super.writeByte(141)
+      super.writeValue(value.toList())
+    } else if let value = value as? PolylineAnnotationInteractionContext {
+      super.writeByte(142)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -438,4 +448,4 @@ class AnnotationDragEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInt
     channel.setStreamHandler(internalStreamHandler)
   }
 }
-
+      
