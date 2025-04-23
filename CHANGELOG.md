@@ -1,3 +1,7 @@
+### main
+
+* [Android] Fix color alpha value conversion.
+
 ### 2.8.0-beta.1
 
 * Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
