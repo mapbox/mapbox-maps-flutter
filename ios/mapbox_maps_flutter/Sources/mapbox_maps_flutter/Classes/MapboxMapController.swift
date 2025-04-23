@@ -1,6 +1,8 @@
 import Flutter
-@_spi(Experimental) import MapboxMaps
+@_spi(Experimental) @_spi(Internal) import MapboxMaps
+@_spi(Marshalling) import MapboxCoreMaps
 import UIKit
+import MapboxMapsFlutterSupport_Private
 
 struct SuffixBinaryMessenger {
     let messenger: FlutterBinaryMessenger
@@ -27,7 +29,8 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
         channelSuffix: Int,
         registrar: FlutterPluginRegistrar,
         pluginVersion: String,
-        eventTypes: [Int]
+        eventTypes: [Int],
+        mapRegistry: MapRegistry
     ) {
         binaryMessenger = SuffixBinaryMessenger(messenger: registrar.messenger(), suffix: String(channelSuffix))
         _ = SettingsServiceFactory.getInstanceFor(.nonPersistent)
@@ -35,6 +38,11 @@ final class MapboxMapController: NSObject, FlutterPlatformView {
 
         mapView = MapView(frame: frame, mapInitOptions: mapInitOptions)
         mapboxMap = mapView.mapboxMap
+
+        mapRegistry.insert(
+            for: MapboxCoreMaps.Map.Marshaller.toObjc(mapboxMap.map),
+            mapId: "123"
+        )
 
         channel = FlutterMethodChannel(
             name: "plugins.flutter.io.\(channelSuffix)",

@@ -1,4 +1,5 @@
 import Flutter
+import MapboxMapsFlutterSupport_Private
 import MapboxMaps
 import MapboxCommon
 import MapboxCommon_Private
@@ -6,15 +7,17 @@ import MapboxCommon_Private
 final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
     private static let mapCounter = FeatureTelemetryCounter.create(forName: "maps-mobile/flutter/map")
 
-    var registrar: FlutterPluginRegistrar
+    private let registrar: FlutterPluginRegistrar
+    private let mapRegistry: MapRegistry
 
     deinit {
         _MapboxOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
         _MapboxMapsOptionsSetup.setUp(binaryMessenger: registrar.messenger(), api: nil)
     }
 
-    init(withRegistrar registrar: FlutterPluginRegistrar) {
+    init(withRegistrar registrar: FlutterPluginRegistrar, mapRegistry: MapRegistry) {
         self.registrar = registrar
+        self.mapRegistry = mapRegistry
     }
 
     func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
@@ -34,7 +37,8 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
                 channelSuffix: 0,
                 registrar: registrar,
                 pluginVersion: "",
-                eventTypes: []
+                eventTypes: [],
+                mapRegistry: mapRegistry
             )
         }
 
@@ -55,7 +59,8 @@ final class MapboxMapFactory: NSObject, FlutterPlatformViewFactory {
             channelSuffix: args["channelSuffix"] as? Int ?? 0,
             registrar: registrar,
             pluginVersion: args["mapboxPluginVersion"] as? String ?? "",
-            eventTypes: args["eventTypes"] as? [Int] ?? []
+            eventTypes: args["eventTypes"] as? [Int] ?? [],
+            mapRegistry: mapRegistry
         )
     }
 }

@@ -3,3 +3,5 @@ dependency_overrides:
     path: /Users/romanlaitarenko/Developer/mapbox-sdk/projects/gl-native/internal/bindings/generated/dart/mapbox_maps_flutter_support
   mapbox_flutter_foundation:
     path: /Users/romanlaitarenko/Developer/mapbox-sdk/projects/bindgen/src/support/mapbox/bindgen/dart/mapbox_flutter_foundation
+  mapbox_maps_flutter:
+    path: /Users/romanlaitarenko/Developer/mapbox-maps-flutter-internal/mapbox-maps-flutter

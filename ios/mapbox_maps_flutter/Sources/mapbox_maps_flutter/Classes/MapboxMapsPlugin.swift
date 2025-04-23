@@ -1,10 +1,13 @@
 import Flutter
 import UIKit
 import MapboxMaps
+import MapboxMapsFlutterSupport_Private
 
 public class MapboxMapsPlugin: NSObject, FlutterPlugin {
+    static private let registry = MapRegistry()
+
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let instance = MapboxMapFactory(withRegistrar: registrar)
+        let instance = MapboxMapFactory(withRegistrar: registrar, mapRegistry: registry)
         registrar.register(instance, withId: "plugins.flutter.io/mapbox_maps")
 
         setupStaticChannels(with: registrar)
