@@ -745,7 +745,7 @@ class MapboxMap extends ChangeNotifier {
   ///     - Duration of sampling in milliseconds. A value of 0 forces the collection of performance statistics every frame.
   ///
   /// The statistics collection can be canceled by calling [stopPerformanceStatisticsCollection]. Canceling collection will prevent the listener
-  /// callback from being called. Collection can be restarted by calling [startPerformanceStatisticsCollection()] again.
+  /// callback from being called. Collection can be restarted by calling [startPerformanceStatisticsCollection] again.
   ///
   /// The callback function will be called every time the configured sampling duration [PerformanceStatisticsOptions.samplingDurationMillis] has elapsed.
   ///
