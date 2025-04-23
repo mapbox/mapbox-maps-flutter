@@ -4,7 +4,9 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
-import com.mapbox.geojson.*
+import com.mapbox.geojson.LineString
+import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
@@ -225,12 +227,12 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Polygon.fromList(it)
+          PolygonDecoder.fromList(it)
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LineString.fromList(it)
+          LineStringDecoder.fromList(it)
         }
       }
       133.toByte() -> {
