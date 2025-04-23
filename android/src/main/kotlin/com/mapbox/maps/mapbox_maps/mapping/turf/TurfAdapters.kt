@@ -21,6 +21,17 @@ fun LineString.toList(): List<Any?> {
   return listOf(mapOf("coordinates" to coordinates().map { it.coordinates() }))
 }
 
+@Suppress("UNCHECKED_CAST")
+fun LineString.fromList(list: List<Any?>): LineString {
+  val rawData = list.first() as Map<String, Any>
+
+  return LineString.fromLngLats(
+    (rawData["coordinates"] as List<List<Double>>).map {
+      Point.fromLngLat(it.first(), it.last())
+    }
+  )
+}
+
 object LineStringDecoder {
   @Suppress("UNCHECKED_CAST")
   fun fromList(list: List<Any?>): LineString {
@@ -36,6 +47,17 @@ object LineStringDecoder {
 
 fun Polygon.toList(): List<Any?> {
   return listOf(mapOf("coordinates" to coordinates().map { it.map { it.coordinates() } }))
+}
+
+@Suppress("UNCHECKED_CAST")
+fun Polygon.fromList(list: List<Any?>): Polygon {
+  val rawData = list.first() as Map<String, Any>
+
+  return Polygon.fromLngLats(
+    (rawData["coordinates"] as List<List<List<Double>>>).map {
+      it.map { Point.fromLngLat(it.first(), it.last()) }
+    }
+  )
 }
 
 object PolygonDecoder {
