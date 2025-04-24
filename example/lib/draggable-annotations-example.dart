@@ -7,7 +7,7 @@ import 'utils.dart';
 
 class DraggableAnnotationExample extends StatefulWidget implements Example {
   @override
-  Widget get leading => Icon(Icons.map);
+  Widget get leading => Icon(Icons.touch_app);
 
   @override
   String get subtitle => 'Demonstrates draggable annotations on the map.';
@@ -48,14 +48,17 @@ class DraggableAnnotationExampleState
         await _mapboxMap.annotations.createPointAnnotationManager();
     final ByteData bytes =
         await rootBundle.load('assets/symbols/custom-icon.png');
-    pointAnnotationManager.create(PointAnnotationOptions(
-      geometry: City.berlin,
-      image: bytes.buffer.asUint8List(),
-      isDraggable: true,
-    ));
+    for (int i = 0; i < 100; i++) {
+      pointAnnotationManager.create(PointAnnotationOptions(
+        geometry: createRandomPoint(),
+        image: bytes.buffer.asUint8List(),
+        textField: "point $i",
+        isDraggable: true,
+      ));
+    }
     pointAnnotationManager.dragEvents(
-      onBegin: (context) {
-        print("point: Drag started");
+      onBegin: (annotation) {
+        print("point: ${annotation.id} Drag started");
       },
     );
   }
@@ -63,15 +66,17 @@ class DraggableAnnotationExampleState
   void _addCircleAnnotation() async {
     final circleAnnotationManager =
         await _mapboxMap.annotations.createCircleAnnotationManager();
-    circleAnnotationManager.create(CircleAnnotationOptions(
-      geometry: City.helsinki,
-      circleRadius: 10.0,
-      circleColor: Colors.red.value,
-      isDraggable: true,
-    ));
+    for (int i = 0; i < 100; i++) {
+      circleAnnotationManager.create(CircleAnnotationOptions(
+        geometry: createRandomPoint(),
+        circleRadius: 10.0,
+        circleColor: createRandomColor(),
+        isDraggable: true,
+      ));
+    }
     circleAnnotationManager.dragEvents(
-      onBegin: (context) {
-        print("circle: Drag started");
+      onBegin: (annotation) {
+        print("circle: ${annotation.id} Drag started");
       },
     );
   }
@@ -79,32 +84,43 @@ class DraggableAnnotationExampleState
   void _addPolylineAnnotation() async {
     final polylineAnnotationManager =
         await _mapboxMap.annotations.createPolylineAnnotationManager();
-    polylineAnnotationManager.create(PolylineAnnotationOptions(
-      geometry: LineString.fromPoints(points: [
-        City.helsinki,
-        City.berlin,
-      ]),
-      lineWidth: 2.0,
-      isDraggable: true,
-    ));
+    for (int i = 0; i < 100; i++) {
+      polylineAnnotationManager.create(PolylineAnnotationOptions(
+        geometry: LineString.fromPoints(points: [
+          createRandomPoint(),
+          createRandomPoint(),
+        ]),
+        lineWidth: 5.0,
+        lineColor: createRandomColor(),
+        isDraggable: true,
+      ));
+    }
+    polylineAnnotationManager.dragEvents(
+      onBegin: (annotation) {
+        print("polyline: ${annotation.id} Drag started");
+      },
+    );
   }
 
   void _addPolygonAnnotation() async {
     final polygonAnnotationManager =
         await _mapboxMap.annotations.createPolygonAnnotationManager();
     polygonAnnotationManager.create(PolygonAnnotationOptions(
-      geometry: Polygon(coordinates: [
-        [
-          Position(-77.0369, 38.9072),
-          Position(-77.0434, 38.9072),
-          Position(-77.0434, 38.9096),
-          Position(-77.0369, 38.9096),
-          Position(-77.0369, 38.9072),
-        ]
-      ]),
-      fillOpacity: 0.5,
-      fillColor: Colors.blue.value,
-      isDraggable: true,
-    ));
+        geometry: Polygon(coordinates: [
+          [
+            Position(24.941024, 60.173324), // Helsinki
+            Position(13.404954, 52.520008), // Berlin
+            Position(30.523333, 50.450001), // Kyiv
+            Position(24.941024, 60.173324) // Back to Helsinki
+          ]
+        ]),
+        fillColor: Colors.blue.value,
+        fillOutlineColor: Colors.green.value,
+        isDraggable: true));
+    polygonAnnotationManager.dragEvents(
+      onBegin: (annotation) {
+        print("polygon: ${annotation.id} Drag started");
+      },
+    );
   }
 }

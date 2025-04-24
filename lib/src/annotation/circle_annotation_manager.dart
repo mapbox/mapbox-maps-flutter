@@ -50,13 +50,12 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  StreamSubscription dragEvents({
+  AnyCancelable dragEvents({
     Function(CircleAnnotation)? onBegin,
     Function(CircleAnnotation)? onChanged,
     Function(CircleAnnotation)? onEnd,
   }) {
     return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
-        .where((event) => event is CircleAnnotationInteractionContext)
         .cast<CircleAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -69,7 +68,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
         default:
           break;
       }
-    });
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.

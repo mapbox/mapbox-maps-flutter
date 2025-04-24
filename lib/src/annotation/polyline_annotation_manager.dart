@@ -50,13 +50,12 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  StreamSubscription dragEvents({
+  AnyCancelable dragEvents({
     Function(PolylineAnnotation)? onBegin,
     Function(PolylineAnnotation)? onChanged,
     Function(PolylineAnnotation)? onEnd,
   }) {
     return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
-        .where((event) => event is PolylineAnnotationInteractionContext)
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -69,7 +68,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         default:
           break;
       }
-    });
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.

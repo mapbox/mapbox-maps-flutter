@@ -50,13 +50,12 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  StreamSubscription dragEvents({
+  AnyCancelable dragEvents({
     Function(PolygonAnnotation)? onBegin,
     Function(PolygonAnnotation)? onChanged,
     Function(PolygonAnnotation)? onEnd,
   }) {
     return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
-        .where((event) => event is PolygonAnnotationInteractionContext)
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -69,7 +68,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
         default:
           break;
       }
-    });
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.

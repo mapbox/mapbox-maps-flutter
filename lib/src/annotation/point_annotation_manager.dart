@@ -50,13 +50,12 @@ class PointAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  StreamSubscription dragEvents({
+  AnyCancelable dragEvents({
     Function(PointAnnotation)? onBegin,
     Function(PointAnnotation)? onChanged,
     Function(PointAnnotation)? onEnd,
   }) {
     return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
-        .where((event) => event is PointAnnotationInteractionContext)
         .cast<PointAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
@@ -69,7 +68,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
         default:
           break;
       }
-    });
+    }).asCancelable();
   }
 
   /// Create a new annotation with the option.
