@@ -744,15 +744,14 @@ class MapboxMap extends ChangeNotifier {
   ///     - Which types of sampling to perform, whether cumulative, per-frame, or both.
   ///     - Duration of sampling in milliseconds. A value of 0 forces the collection of performance statistics every frame.
   ///
-  /// The statistics collection can be canceled using the ``AnyCancelable`` object returned by this function, note that if the token goes out of the scope it's deinitialized and thus canceled. Canceling collection will prevent the
-  /// callback from being called. Collection can be restarted by calling ``MapboxMap/collectPerformanceStatistics(_:callback:)`` again to obtain a new ``AnyCancelable`` object.
+  /// The statistics collection can be canceled by calling [stopPerformanceStatisticsCollection]. Canceling collection will prevent the listener
+  /// callback from being called. Collection can be restarted by calling [startPerformanceStatisticsCollection] again.
   ///
-  /// The callback function will be called every time the configured sampling duration ``PerformanceStatisticsOptions/samplingDurationMillis`` has elapsed.
+  /// The callback function will be called every time the configured sampling duration [PerformanceStatisticsOptions.samplingDurationMillis] has elapsed.
   ///
   /// - Parameters:
   ///   - options The statistics collection options to collect.
   ///   - callback The callback to be invoked when performance statistics are available.
-  /// - Returns:  The ``AnyCancelable`` object that can be used to cancel performance statistics collection.
   /// Enable real-time collection of map rendering performance statistics, for development purposes. Use after `render()` has
   /// been called for the first time.
   ///
