@@ -50,22 +50,22 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  void dragEvents({
-    Function(PolygonAnnotationInteractionContext)? onBegin,
-    Function(PolygonAnnotationInteractionContext)? onChanged,
-    Function(PolygonAnnotationInteractionContext)? onEnd,
+  StreamSubscription dragEvents({
+    Function(PolygonAnnotation)? onBegin,
+    Function(PolygonAnnotation)? onChanged,
+    Function(PolygonAnnotation)? onEnd,
   }) {
-    _annotationDragEvents(instanceName: _channelSuffix)
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
         .where((event) => event is PolygonAnnotationInteractionContext)
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
-          onBegin(data);
+          onBegin(data.annotation);
         case GestureState.changed when onChanged != null:
-          onChanged(data);
+          onChanged(data.annotation);
         case GestureState.ended when onEnd != null:
-          onEnd(data);
+          onEnd(data.annotation);
         default:
           break;
       }

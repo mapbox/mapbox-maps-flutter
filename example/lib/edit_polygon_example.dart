@@ -68,8 +68,8 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
       points[annotation.id] = point;
     }
 
-    circleManager.dragEvents(onChanged: (context) async {
-      points[context.annotation.id] = context.annotation.geometry;
+    circleManager.dragEvents(onChanged: (annotation) async {
+      points[annotation.id] = annotation.geometry;
       await _addOrUpdateFillLayer();
     });
 

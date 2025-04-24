@@ -63,7 +63,8 @@ private class AnyAnnotationDragEventsStreamHandler: AnnotationDragEventsStreamHa
 }
 
 class AnnotationController {
-    private var mapView: MapView
+    private let mapView: MapView
+    private let binaryMessenger: SuffixBinaryMessenger
     private var disposal: [String: (String) -> Void] = [:]
 
     private let circleAnnotationController: CircleAnnotationController
@@ -75,19 +76,13 @@ class AnnotationController {
     private var onPolygonAnnotationClickListener: OnPolygonAnnotationClickListener?
     private var onPolylineAnnotationClickListener: OnPolylineAnnotationClickListener?
 
-    private let gestureEventStreamHandler: AnyAnnotationDragEventsStreamHandler
-
-    deinit {
-        gestureEventStreamHandler.endOfStream()
-    }
-
-    init(withMapView mapView: MapView) {
+    init(withMapView mapView: MapView, messenger: SuffixBinaryMessenger) {
         self.mapView = mapView
-        gestureEventStreamHandler = AnyAnnotationDragEventsStreamHandler()
-        circleAnnotationController = CircleAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
-        pointAnnotationController = PointAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
-        polygonAnnotationController = PolygonAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
-        polylineAnnotationController = PolylineAnnotationController(sendGestureEvent: gestureEventStreamHandler.send(event:))
+        self.binaryMessenger = messenger
+        circleAnnotationController = CircleAnnotationController()
+        pointAnnotationController = PointAnnotationController()
+        polygonAnnotationController = PolygonAnnotationController()
+        polylineAnnotationController = PolylineAnnotationController()
     }
 
     func handleCreateManager(methodCall: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -101,6 +96,7 @@ class AnnotationController {
             belowLayerId = nil
         }
 
+        let streamHandler = AnyAnnotationDragEventsStreamHandler()
         if let manager: AnnotationManager = {
             switch type {
             case "circle":
@@ -109,7 +105,7 @@ class AnnotationController {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 circleManager.delegate = self
-                circleAnnotationController.add(controller: circleManager)
+                    circleAnnotationController.add(controller: circleManager, sendGestureEvents: streamHandler.send(event:))
                 disposal[id] = circleAnnotationController.removeController(id:)
                 return circleManager
             case "point":
@@ -118,7 +114,7 @@ class AnnotationController {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 pointManager.delegate = self
-                pointAnnotationController.add(controller: pointManager)
+                    pointAnnotationController.add(controller: pointManager, sendGestureEvents: streamHandler.send(event:))
                 disposal[id] = pointAnnotationController.removeController(id:)
                 return pointManager
             case "polygon":
@@ -127,7 +123,7 @@ class AnnotationController {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 polygonManager.delegate = self
-                polygonAnnotationController.add(controller: polygonManager)
+                    polygonAnnotationController.add(controller: polygonManager, sendGestureEvents: streamHandler.send(event:))
                 disposal[id] = polygonAnnotationController.removeController(id:)
                 return polygonManager
             case "polyline":
@@ -136,13 +132,17 @@ class AnnotationController {
                     layerPosition: belowLayerId.map(MapboxMaps.LayerPosition.below)
                 )
                 polylineManager.delegate = self
-                polylineAnnotationController.add(controller: polylineManager)
+                    polylineAnnotationController.add(controller: polylineManager, sendGestureEvents: streamHandler.send(event:))
                 disposal[id] = polylineAnnotationController.removeController(id:)
                 return polylineManager
             default:
                 return nil
             }
         }() {
+            AnnotationDragEventsStreamHandler.register(
+                with: binaryMessenger.messenger,
+                instanceName: binaryMessenger.suffix + "/" + id,
+                streamHandler: streamHandler)
             result(manager.id)
         } else {
             result(AnnotationControllerError.wrongManagerType)
@@ -159,7 +159,7 @@ class AnnotationController {
         result(nil)
     }
 
-    func setup(binaryMessenger: SuffixBinaryMessenger) {
+    func setup() {
         _CircleAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: circleAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
         _PointAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: pointAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
         _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: polygonAnnotationController, messageChannelSuffix: binaryMessenger.suffix)
@@ -168,19 +168,13 @@ class AnnotationController {
         onCircleAnnotationClickListener = OnCircleAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
         onPolygonAnnotationClickListener = OnPolygonAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
         onPolylineAnnotationClickListener = OnPolylineAnnotationClickListener(binaryMessenger: binaryMessenger.messenger, messageChannelSuffix: binaryMessenger.suffix)
-
-        AnnotationDragEventsStreamHandler.register(
-            with: binaryMessenger.messenger,
-            instanceName: binaryMessenger.suffix,
-            streamHandler: gestureEventStreamHandler
-        )
     }
 
-    func tearDown(messenger: SuffixBinaryMessenger) {
-        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PointAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
-        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: messenger.messenger, api: nil, messageChannelSuffix: messenger.suffix)
+    func tearDown() {
+        _CircleAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _PointAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _PolygonAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
+        _PolylineAnnotationMessengerSetup.setUp(binaryMessenger: binaryMessenger.messenger, api: nil, messageChannelSuffix: binaryMessenger.suffix)
         onPointAnnotationClickListener = nil
         onCircleAnnotationClickListener = nil
         onPolygonAnnotationClickListener = nil

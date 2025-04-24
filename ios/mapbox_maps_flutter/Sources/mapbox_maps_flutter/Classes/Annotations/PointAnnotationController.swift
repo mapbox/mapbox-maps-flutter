@@ -29,20 +29,20 @@ final class PointAnnotationController: BaseAnnotationMessenger<PointAnnotationMa
                     let context = PointAnnotationInteractionContext(
                         annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PointAnnotationInteractionContext(
                         annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PointAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPointAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
                 return annotation
             })

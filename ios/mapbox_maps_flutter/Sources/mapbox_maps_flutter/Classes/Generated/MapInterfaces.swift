@@ -426,7 +426,8 @@ struct GlyphsRasterizationOptions {
   ///
   /// Besides, the font family will be discarded if it is provided along with `NoGlyphsRasterizedLocally` mode.
   ///
-  var fontFamily: String?
+  var fontFamily: String? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> GlyphsRasterizationOptions? {

@@ -105,7 +105,7 @@ void main() {
 
     // Mock drag events
     final eventChannel = EventChannel(
-        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0",
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0/${manager.id}",
         pigeonMethodCodec);
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(eventChannel,
@@ -130,16 +130,16 @@ void main() {
     final onDragEnd = Completer();
 
     manager.dragEvents(
-      onBegin: (context) {
-        expect(context.annotation.id, equals(createdAnnotation.id));
+      onBegin: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
         onDragBegin.complete();
       },
-      onChanged: (context) {
-        expect(context.annotation.id, equals(createdAnnotation.id));
+      onChanged: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
         onDragChanged.complete();
       },
-      onEnd: (context) {
-        expect(context.annotation.id, equals(createdAnnotation.id));
+      onEnd: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
         onDragEnd.complete();
       },
     );

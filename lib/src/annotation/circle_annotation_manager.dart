@@ -50,22 +50,22 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  void dragEvents({
-    Function(CircleAnnotationInteractionContext)? onBegin,
-    Function(CircleAnnotationInteractionContext)? onChanged,
-    Function(CircleAnnotationInteractionContext)? onEnd,
+  StreamSubscription dragEvents({
+    Function(CircleAnnotation)? onBegin,
+    Function(CircleAnnotation)? onChanged,
+    Function(CircleAnnotation)? onEnd,
   }) {
-    _annotationDragEvents(instanceName: _channelSuffix)
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
         .where((event) => event is CircleAnnotationInteractionContext)
         .cast<CircleAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
-          onBegin(data);
+          onBegin(data.annotation);
         case GestureState.changed when onChanged != null:
-          onChanged(data);
+          onChanged(data.annotation);
         case GestureState.ended when onEnd != null:
-          onEnd(data);
+          onEnd(data.annotation);
         default:
           break;
       }

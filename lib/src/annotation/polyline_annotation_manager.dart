@@ -50,22 +50,22 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  void dragEvents({
-    Function(PolylineAnnotationInteractionContext)? onBegin,
-    Function(PolylineAnnotationInteractionContext)? onChanged,
-    Function(PolylineAnnotationInteractionContext)? onEnd,
+  StreamSubscription dragEvents({
+    Function(PolylineAnnotation)? onBegin,
+    Function(PolylineAnnotation)? onChanged,
+    Function(PolylineAnnotation)? onEnd,
   }) {
-    _annotationDragEvents(instanceName: _channelSuffix)
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
         .where((event) => event is PolylineAnnotationInteractionContext)
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
-          onBegin(data);
+          onBegin(data.annotation);
         case GestureState.changed when onChanged != null:
-          onChanged(data);
+          onChanged(data.annotation);
         case GestureState.ended when onEnd != null:
-          onEnd(data);
+          onEnd(data.annotation);
         default:
           break;
       }

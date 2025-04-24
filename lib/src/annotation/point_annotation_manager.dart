@@ -50,22 +50,22 @@ class PointAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  void dragEvents({
-    Function(PointAnnotationInteractionContext)? onBegin,
-    Function(PointAnnotationInteractionContext)? onChanged,
-    Function(PointAnnotationInteractionContext)? onEnd,
+  StreamSubscription dragEvents({
+    Function(PointAnnotation)? onBegin,
+    Function(PointAnnotation)? onChanged,
+    Function(PointAnnotation)? onEnd,
   }) {
-    _annotationDragEvents(instanceName: _channelSuffix)
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
         .where((event) => event is PointAnnotationInteractionContext)
         .cast<PointAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
         case GestureState.started when onBegin != null:
-          onBegin(data);
+          onBegin(data.annotation);
         case GestureState.changed when onChanged != null:
-          onChanged(data);
+          onChanged(data.annotation);
         case GestureState.ended when onEnd != null:
-          onEnd(data);
+          onEnd(data.annotation);
         default:
           break;
       }

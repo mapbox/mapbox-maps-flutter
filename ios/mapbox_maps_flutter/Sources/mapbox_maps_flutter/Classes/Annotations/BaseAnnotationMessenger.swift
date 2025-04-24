@@ -1,4 +1,5 @@
 import MapboxMaps
+import Flutter
 
 protocol InteractableAnnotation: Annotation {
     var dragBeginHandler: ((inout Self, InteractionContext) -> Bool)? { get set }
@@ -16,43 +17,50 @@ extension CircleAnnotationManager: AnnotationControllable {}
 extension PolylineAnnotationManager: AnnotationControllable {}
 extension PolygonAnnotationManager: AnnotationControllable {}
 
-class BaseAnnotationMessenger<Controller: AnnotationControllable> {
-    private var controllers: [String: Controller] = [:]
-    let sendGestureEvent: (AnnotationInteractionContext) -> Void
+class BaseAnnotationMessenger<C: AnnotationControllable> {
+    private struct Storage {
+        let controller: C
+        let sendGestureEvents: (AnnotationInteractionContext) -> Void
+    }
+    private var storage: [String: Storage] = [:]
 
-    init(sendGestureEvent: @escaping (AnnotationInteractionContext) -> Void) {
-        self.sendGestureEvent = sendGestureEvent
+    func sendGestureEvent(_ context: AnnotationInteractionContext, managerId: String) {
+        storage[managerId]?.sendGestureEvents(context)
     }
 
-    func add(controller: Controller) {
-        controllers[controller.id] = controller
+    private subscript(id: String) -> C? {
+        return storage[id]?.controller
+    }
+
+    func add(controller: C, sendGestureEvents: @escaping (AnnotationInteractionContext) -> Void) {
+        storage[controller.id] = Storage(controller: controller, sendGestureEvents: sendGestureEvents)
     }
 
     func removeController(id: String) {
-        controllers[id] = nil
+        storage[id] = nil
     }
 
-    func append<T: InteractableAnnotation>(_ annotation: T, managerId: String) throws where T == Controller.Child {
+    func append<T: InteractableAnnotation>(_ annotation: T, managerId: String) throws where T == C.Child {
         try append([annotation], managerId: managerId)
     }
 
-    func append<T: InteractableAnnotation>(_ annotations: [T], managerId: String) throws where T == Controller.Child {
-        guard let annotationManager = controllers[managerId] else {
+    func append<T: InteractableAnnotation>(_ annotations: [T], managerId: String) throws where T == C.Child {
+        guard let annotationManager = self[managerId] else {
             throw AnnotationControllerError.noManagerFound
         }
         annotationManager.annotations.append(contentsOf: annotations)
     }
 
     func delete(annotation id: String, managerId: String) {
-        controllers[managerId]?.annotations.removeAll(where: { $0.id == id })
+        self[managerId]?.annotations.removeAll(where: { $0.id == id })
     }
 
     func deleteAllAnnotations(from managerId: String) {
-        controllers[managerId]?.annotations = []
+        self[managerId]?.annotations = []
     }
 
-    func update(annotation: Controller.Child, managerId: String) throws {
-        guard let annotationManager = controllers[managerId] else {
+    func update(annotation: C.Child, managerId: String) throws {
+        guard let annotationManager = self[managerId] else {
             throw AnnotationControllerError.noManagerFound
         }
         guard let indexToReplace = annotationManager.annotations.firstIndex(where: { $0.id == annotation.id }) else {
@@ -61,15 +69,15 @@ class BaseAnnotationMessenger<Controller: AnnotationControllable> {
         annotationManager.annotations[indexToReplace] = annotation
     }
 
-    func get<T>(_ keyPath: KeyPath<Controller, T>, managerId: String) throws -> T {
-        guard let annotationManager = controllers[managerId] else {
+    func get<T>(_ keyPath: KeyPath<C, T>, managerId: String) throws -> T {
+        guard let annotationManager = self[managerId] else {
             throw AnnotationControllerError.noManagerFound
         }
         return annotationManager[keyPath: keyPath]
     }
 
-    func set<T>(_ keyPath: ReferenceWritableKeyPath<Controller, T>, newValue: T, managerId: String) throws {
-        guard let annotationManager = controllers[managerId] else {
+    func set<T>(_ keyPath: ReferenceWritableKeyPath<C, T>, newValue: T, managerId: String) throws {
+        guard let annotationManager = self[managerId] else {
             throw AnnotationControllerError.noManagerFound
         }
         annotationManager[keyPath: keyPath] = newValue

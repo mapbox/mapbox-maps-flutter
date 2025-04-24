@@ -29,20 +29,20 @@ final class PolylineAnnotationController: BaseAnnotationMessenger<PolylineAnnota
                     let context = PolylineAnnotationInteractionContext(
                         annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PolylineAnnotationInteractionContext(
                         annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PolylineAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPolylineAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
                 return annotation
             })

@@ -29,20 +29,20 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
                     let context = CircleAnnotationInteractionContext(
                         annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = CircleAnnotationInteractionContext(
                         annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = CircleAnnotationInteractionContext(
                 	    annotation: annotation.toFLTCircleAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
                 return annotation
             })

@@ -29,20 +29,20 @@ final class PolygonAnnotationController: BaseAnnotationMessenger<PolygonAnnotati
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .started)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                     return true
                 }
                 annotation.dragChangeHandler = { [weak self] (annotation, context) in
                     let context = PolygonAnnotationInteractionContext(
                         annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .changed)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
 				annotation.dragEndHandler = { [weak self] (annotation, context) in
               	    let context = PolygonAnnotationInteractionContext(
                 	    annotation: annotation.toFLTPolygonAnnotation(),
                         gestureState: .ended)
-                    self?.sendGestureEvent(context)
+                    self?.sendGestureEvent(context, managerId: managerId)
                 }
                 return annotation
             })
