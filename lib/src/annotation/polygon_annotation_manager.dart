@@ -56,6 +56,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
     Function(PolygonAnnotationInteractionContext)? onEnd,
   }) {
     _annotationDragEvents(instanceName: _channelSuffix)
+        .where((event) => event is PolygonAnnotationInteractionContext)
         .cast<PolygonAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

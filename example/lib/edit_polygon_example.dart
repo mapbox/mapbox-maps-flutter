@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_example/utils.dart';
@@ -24,7 +23,18 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
   late final MapboxMap mapboxMap;
   late final CircleAnnotationManager circleManager;
 
+  static const _sourceId = "editable-polygon-source";
+  static const _featureId = "editable-polygon-feature";
+
   Map<String, Point> points = {};
+  List<Position> get coordinates =>
+      points.values
+          .map((e) => Position(e.coordinates.lng, e.coordinates.lat))
+          .toList() +
+      [
+        Position(points.values.first.coordinates.lng,
+            points.values.first.coordinates.lat)
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -63,46 +73,36 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
       await _addOrUpdateFillLayer();
     });
 
-    await _addOrUpdateFillLayer();
+    final geoJsonData = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": _featureId,
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [coordinates],
+          }
+        }
+      ]
+    };
+    await mapboxMap.style
+        .addSource(GeoJsonSource(id: _sourceId, data: jsonEncode(geoJsonData)));
+
+    await mapboxMap.style.addLayer(FillLayer(
+      id: "city-fill-layer",
+      sourceId: _sourceId,
+      fillColor: Colors.pink.value,
+      fillOpacity: 0.3,
+    ));
   }
 
   Future<void> _addOrUpdateFillLayer() async {
-    final sourceId = "city-fill-source";
-
-    var coordinates = points.values
-        .map((e) => Position(e.coordinates.lng, e.coordinates.lat))
-        .toList();
-    coordinates.add(coordinates.first); // Close the polygon
-
-    if (await mapboxMap.style.styleSourceExists(sourceId) == false) {
-      final geoJsonData = {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "id": "editable-polygon-feature",
-            "geometry": {
-              "type": "Polygon",
-              "coordinates": [coordinates],
-            }
-          }
-        ]
-      };
-      await mapboxMap.style.addSource(
-          GeoJsonSource(id: sourceId, data: jsonEncode(geoJsonData)));
-
-      await mapboxMap.style.addLayer(FillLayer(
-        id: "city-fill-layer",
-        sourceId: "city-fill-source",
-        fillColor: Colors.pink.value,
-        fillOpacity: 0.3,
-      ));
+    if (await mapboxMap.style.styleSourceExists(_sourceId) == false) {
     } else {
       await mapboxMap.style
-          .updateGeoJSONSourceFeatures("city-fill-source", "editable-polygon", [
-        Feature(
-            id: "editable-polygon-feature",
-            geometry: Polygon(coordinates: [coordinates]))
+          .updateGeoJSONSourceFeatures(_sourceId, "editable-polygon", [
+        Feature(id: _featureId, geometry: Polygon(coordinates: [coordinates]))
       ]);
     }
   }

@@ -56,6 +56,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
     Function(CircleAnnotationInteractionContext)? onEnd,
   }) {
     _annotationDragEvents(instanceName: _channelSuffix)
+        .where((event) => event is CircleAnnotationInteractionContext)
         .cast<CircleAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

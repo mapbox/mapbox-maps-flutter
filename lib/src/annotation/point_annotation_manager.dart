@@ -56,6 +56,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
     Function(PointAnnotationInteractionContext)? onEnd,
   }) {
     _annotationDragEvents(instanceName: _channelSuffix)
+        .where((event) => event is PointAnnotationInteractionContext)
         .cast<PointAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {

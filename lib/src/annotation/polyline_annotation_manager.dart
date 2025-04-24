@@ -56,6 +56,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
     Function(PolylineAnnotationInteractionContext)? onEnd,
   }) {
     _annotationDragEvents(instanceName: _channelSuffix)
+        .where((event) => event is PolylineAnnotationInteractionContext)
         .cast<PolylineAnnotationInteractionContext>()
         .listen((data) {
       switch (data.gestureState) {
