@@ -88,10 +88,10 @@ class StyleController(private val context: Context, private val styleManager: Ma
     importPosition: ImportPosition?
   ) {
     val mapsImportPosition = if (importPosition != null) com.mapbox.maps.ImportPosition(
-        importPosition.above,
-        importPosition.below,
-        importPosition.at?.toInt()
-      ) else null
+      importPosition.above,
+      importPosition.below,
+      importPosition.at?.toInt()
+    ) else null
     val configs = if (config != null) config.mapValues {
       it.value.toValue()
     } as HashMap<String, Value> else null
@@ -121,7 +121,8 @@ class StyleController(private val context: Context, private val styleManager: Ma
       importId,
       uri,
       configs,
-      mapsImportPosition)
+      mapsImportPosition
+    )
   }
 
   override fun updateStyleImportWithJSON(
