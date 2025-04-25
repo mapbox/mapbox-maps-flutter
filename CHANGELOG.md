@@ -1,6 +1,8 @@
 ### main
 
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
+* Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+* Fixed minor bug in `getStyleImportConfigProperties` where `StylePropertyValue`s were being returned as Strings rather than their actual type. 
 
 ### 2.8.0-rc.1
 

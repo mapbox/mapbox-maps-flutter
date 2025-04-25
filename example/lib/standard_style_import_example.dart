@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
@@ -25,9 +26,14 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
   String lightPreset = 'day';
   bool labelsSetting = true;
 
-  _onMapCreated(MapboxMap mapboxMap) {
+  _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
+
+    // Load a style fragment from a JSON file and add it to the map
+    var styleJson =
+        await rootBundle.loadString("assets/fragment_realestate_NY.json");
+    mapboxMap.style.addStyleImportFromJSON("real-estate-fragment", styleJson);
 
     // When the map is ready, add a tap interaction to show a snackbar with the name of the place that was tapped
     mapboxMap

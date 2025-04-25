@@ -579,6 +579,192 @@ void main() {
     var projection = await mapboxMap.style.getProjection();
     expect(projection?.name, StyleProjectionName.mercator);
   });
+
+  testWidgets('StyleImportJSON', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    var configs = {
+      "config1": true,
+      "config2": "string",
+      "config3": 1,
+    };
+
+    var importPosition = ImportPosition(below: "basemap");
+
+    var styleImportJSON =
+        await rootBundle.loadString('assets/fragment_realestate_NY.json');
+    await style.addStyleImportFromJSON('style-import', styleImportJSON,
+        config: configs, importPosition: importPosition);
+    var styleImports = await style.getStyleImports();
+
+    // As it is below the basemap, it should be the first one
+    expect(styleImports.first?.id, "style-import");
+    expect(styleImports.first?.type, "import");
+    expect(styleImports[1]?.id, "basemap");
+    expect(styleImports[1]?.type, "import");
+    expect(styleImports.length, 2);
+
+    await mapboxMap.style
+        .getStyleImportConfigProperties("style-import")
+        .then((value) {
+      expect(value["config1"]?.value, configs["config1"]);
+      expect(value["config2"]?.value, configs["config2"]);
+      expect(value["config3"]?.value, configs["config3"]);
+    });
+  });
+
+  testWidgets('StyleImportsURI', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    var configs = {
+      "config1": true,
+      "config2": "string",
+      "config3": 1,
+    };
+
+    var importPosition = ImportPosition(below: "basemap");
+    var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
+
+    await style.addStyleImportFromURI('style-import-satellite', styleImportURI,
+        config: configs, importPosition: importPosition);
+    var styleImports = await style.getStyleImports();
+
+    // As it is below the basemap, it should be the first one
+    expect(styleImports.first?.id, "style-import-satellite");
+    expect(styleImports.first?.type, "import");
+    expect(styleImports[1]?.id, "basemap");
+    expect(styleImports[1]?.type, "import");
+    expect(styleImports.length, 2);
+
+    await mapboxMap.style
+        .getStyleImportConfigProperties("style-import-satellite")
+        .then((value) {
+      expect(value["config1"]?.value, configs["config1"]);
+      expect(value["config2"]?.value, configs["config2"]);
+      expect(value["config3"]?.value, configs["config3"]);
+    });
+  });
+
+  testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    var configs = {
+      "config1": true,
+      "config2": "string",
+      "config3": 1,
+    };
+
+    var configs2 = {
+      "config4": false,
+      "config5": "newString",
+      "config6": 1.5,
+    };
+
+    var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
+    var styleImportJSON =
+        await rootBundle.loadString('assets/fragment_realestate_NY.json');
+    await style.addStyleImportFromURI('style-import', styleImportURI,
+        config: configs);
+    await style.updateStyleImportWithJSON('style-import', styleImportJSON,
+        config: configs2);
+
+    var styleImports = await style.getStyleImports();
+
+    expect(styleImports.length, 2);
+
+    await mapboxMap.style
+        .getStyleImportConfigProperties("style-import")
+        .then((value) {
+      expect(value["config1"]?.value, configs["config1"]);
+      expect(value["config2"]?.value, configs["config2"]);
+      expect(value["config3"]?.value, configs["config3"]);
+      expect(value["config4"]?.value, configs2["config4"]);
+      expect(value["config5"]?.value, configs2["config5"]);
+      expect(value["config6"]?.value, configs2["config6"]);
+    });
+  });
+
+  testWidgets('StyleUpdateJSON', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    var configs = {
+      "config1": true,
+      "config2": "string",
+      "config3": 1,
+    };
+
+    var configs2 = {
+      "config4": false,
+      "config5": "newString",
+      "config6": 1.5,
+    };
+
+    var styleImportURI = 'mapbox://styles/mapbox/standard-satellite';
+    var styleImportJSON =
+        await rootBundle.loadString('assets/fragment_realestate_NY.json');
+    await style.addStyleImportFromJSON('style-import', styleImportJSON,
+        config: configs);
+    await style.updateStyleImportWithURI('style-import', styleImportURI,
+        config: configs2);
+
+    var styleImports = await style.getStyleImports();
+
+    expect(styleImports.length, 2);
+
+    await mapboxMap.style
+        .getStyleImportConfigProperties("style-import")
+        .then((value) {
+      expect(value["config1"]?.value, configs["config1"]);
+      expect(value["config2"]?.value, configs["config2"]);
+      expect(value["config3"]?.value, configs["config3"]);
+      expect(value["config4"]?.value, configs2["config4"]);
+      expect(value["config5"]?.value, configs2["config5"]);
+      expect(value["config6"]?.value, configs2["config6"]);
+    });
+  });
+
+  testWidgets('MoveStyleImport', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+    final mapboxMap = await mapFuture;
+    var style = mapboxMap.style;
+
+    var importPosition = ImportPosition(below: "basemap");
+    var styleImportJSON =
+        await rootBundle.loadString('assets/fragment_realestate_NY.json');
+    await style.addStyleImportFromJSON('style-import', styleImportJSON);
+
+    var styleImports = await style.getStyleImports();
+
+    expect(styleImports.first?.id, "basemap");
+    expect(styleImports.first?.type, "import");
+    expect(styleImports[1]?.id, "style-import");
+    expect(styleImports[1]?.type, "import");
+    expect(styleImports.length, 2);
+
+    // Move the style import to be below the basemap
+    await style.moveStyleImport('style-import', importPosition);
+
+    styleImports = await style.getStyleImports();
+
+    expect(styleImports.first?.id, "style-import");
+    expect(styleImports.first?.type, "import");
+    expect(styleImports[1]?.id, "basemap");
+    expect(styleImports[1]?.type, "import");
+    expect(styleImports.length, 2);
+  });
 }
 
 extension ToJSON on TransitionOptions {
