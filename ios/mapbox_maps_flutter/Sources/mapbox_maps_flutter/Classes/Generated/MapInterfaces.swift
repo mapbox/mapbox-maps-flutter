@@ -3824,7 +3824,7 @@ class _MapInterfaceSetup {
     /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
     /// @param options The `render query options` for querying rendered features.
     /// @param completion The `query features completion` called when the query completes.
-    /// @return A `cancelable` object that could be used to cancel the pending query.
+    /// @return A list of `QueriedRenderedFeature` objects representing the query results.
     let queryRenderedFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       queryRenderedFeaturesChannel.setMessageHandler { message, reply in
@@ -6680,43 +6680,6 @@ class StyleManagerSetup {
       }
     } else {
       getFeaturesetsChannel.setMessageHandler(nil)
-    }
-  }
-}
-/// Allows to cancel the associated asynchronous operation
-///
-/// The the associated asynchronous operation is not automatically canceled if this
-/// object goes out of scope.
-///
-/// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol Cancelable {
-  /// Cancels the associated asynchronous operation
-  ///
-  /// If the associated asynchronous operation has already finished, this call is ignored.
-  func cancel() throws
-}
-
-/// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class CancelableSetup {
-  static var codec: FlutterStandardMessageCodec { MapInterfacesPigeonCodec.shared }
-  /// Sets up an instance of `Cancelable` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: Cancelable?, messageChannelSuffix: String = "") {
-    let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    /// Cancels the associated asynchronous operation
-    ///
-    /// If the associated asynchronous operation has already finished, this call is ignored.
-    let cancelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      cancelChannel.setMessageHandler { _, reply in
-        do {
-          try api.cancel()
-          reply(wrapResult(nil))
-        } catch {
-          reply(wrapError(error))
-        }
-      }
-    } else {
-      cancelChannel.setMessageHandler(nil)
     }
   }
 }

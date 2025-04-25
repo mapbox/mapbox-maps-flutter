@@ -50,7 +50,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  AnyCancelable dragEvents({
+  Cancelable dragEvents({
     Function(PointAnnotation)? onBegin,
     Function(PointAnnotation)? onChanged,
     Function(PointAnnotation)? onEnd,

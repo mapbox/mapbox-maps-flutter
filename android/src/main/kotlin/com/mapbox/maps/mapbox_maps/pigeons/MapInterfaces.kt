@@ -4169,7 +4169,7 @@ interface _MapInterface {
    * @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
    * @param options The `render query options` for querying rendered features.
    * @param completion The `query features completion` called when the query completes.
-   * @return A `cancelable` object that could be used to cancel the pending query.
+   * @return A list of `QueriedRenderedFeature` objects representing the query results.
    */
   fun queryRenderedFeatures(geometry: _RenderedQueryGeometry, options: RenderedQueryOptions, callback: (Result<List<QueriedRenderedFeature?>>) -> Unit)
   /**
@@ -7408,50 +7408,6 @@ interface StyleManager {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
               listOf(api.getFeaturesets())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-    }
-  }
-}
-/**
- * Allows to cancel the associated asynchronous operation
- *
- * The the associated asynchronous operation is not automatically canceled if this
- * object goes out of scope.
- *
- * Generated interface from Pigeon that represents a handler of messages from Flutter.
- */
-interface Cancelable {
-  /**
-   * Cancels the associated asynchronous operation
-   *
-   * If the associated asynchronous operation has already finished, this call is ignored.
-   */
-  fun cancel()
-
-  companion object {
-    /** The codec used by Cancelable. */
-    val codec: MessageCodec<Any?> by lazy {
-      MapInterfacesPigeonCodec()
-    }
-    /** Sets up an instance of `Cancelable` to handle messages through the `binaryMessenger`. */
-    @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: Cancelable?, messageChannelSuffix: String = "") {
-      val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              api.cancel()
-              listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
             }

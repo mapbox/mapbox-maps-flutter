@@ -50,7 +50,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  AnyCancelable dragEvents({
+  Cancelable dragEvents({
     Function(PolygonAnnotation)? onBegin,
     Function(PolygonAnnotation)? onChanged,
     Function(PolygonAnnotation)? onEnd,

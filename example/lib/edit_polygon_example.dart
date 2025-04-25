@@ -70,7 +70,11 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
 
     circleManager.dragEvents(onChanged: (annotation) async {
       points[annotation.id] = annotation.geometry;
-      await _addOrUpdateFillLayer();
+      // Update source with new feature.
+      await mapboxMap.style
+          .updateGeoJSONSourceFeatures(_sourceId, "editable-polygon", [
+        Feature(id: _featureId, geometry: Polygon(coordinates: [coordinates]))
+      ]);
     });
 
     final geoJsonData = {
@@ -95,15 +99,5 @@ class EditPolygonExampleState extends State<EditPolygonExample> {
       fillColor: Colors.pink.value,
       fillOpacity: 0.3,
     ));
-  }
-
-  Future<void> _addOrUpdateFillLayer() async {
-    if (await mapboxMap.style.styleSourceExists(_sourceId) == false) {
-    } else {
-      await mapboxMap.style
-          .updateGeoJSONSourceFeatures(_sourceId, "editable-polygon", [
-        Feature(id: _featureId, geometry: Polygon(coordinates: [coordinates]))
-      ]);
-    }
   }
 }

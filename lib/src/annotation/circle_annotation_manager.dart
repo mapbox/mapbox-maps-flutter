@@ -50,7 +50,7 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  AnyCancelable dragEvents({
+  Cancelable dragEvents({
     Function(CircleAnnotation)? onBegin,
     Function(CircleAnnotation)? onChanged,
     Function(CircleAnnotation)? onEnd,

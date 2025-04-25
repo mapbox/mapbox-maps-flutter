@@ -50,7 +50,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
   ///   },
   /// );
   /// ```
-  AnyCancelable dragEvents({
+  Cancelable dragEvents({
     Function(PolylineAnnotation)? onBegin,
     Function(PolylineAnnotation)? onChanged,
     Function(PolylineAnnotation)? onEnd,
