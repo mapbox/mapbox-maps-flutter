@@ -61,7 +61,7 @@ class _SimpleMapState extends State<SimpleMapExample> {
                 zoom: 15.0,
               ));
             },
-            child: const Text('Insert map'),
+            child: const Text('Call FFI setCamera'),
           ),
         ),
       ],
