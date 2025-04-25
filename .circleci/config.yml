@@ -226,6 +226,9 @@ jobs:
       - flutter/install_sdk_and_pub:
           version: 3.24.3
       - run:
+          name: Check license
+          command: bash scripts/license.sh --mode validate
+      - run:
           name: Run dart analyze
           command: dart analyze
       - run:
