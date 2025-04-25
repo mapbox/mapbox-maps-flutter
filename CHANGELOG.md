@@ -1,4 +1,4 @@
-### main
+### 2.8.0-rc.1
 
 * [Android] Fix color alpha value conversion.
 
