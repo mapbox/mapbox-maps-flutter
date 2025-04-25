@@ -6,14 +6,18 @@ part of '../mapbox_maps_flutter.dart';
 /// canceled before completion, such as asynchronous tasks or
 /// long-running processes.
 class Cancelable {
-  final void Function() cancel;
+  final void Function() _cancel;
 
-  Cancelable._({required this.cancel});
+  Cancelable._(this._cancel);
+
+  void cancel() {
+    _cancel();
+  }
 }
 
 extension on StreamSubscription {
   /// Cancels the subscription and returns a [Cancelable] object.
   Cancelable asCancelable() {
-    return Cancelable._(cancel: cancel);
+    return Cancelable._(cancel);
   }
 }
