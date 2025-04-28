@@ -444,33 +444,33 @@ fun Geometry.toMap(): Map<String?, Any?> {
   return when (this) {
     is Point -> mapOf(
       "type" to "Point",
-      "coordinates" to listOf(this.latitude(), this.longitude())
+      "coordinates" to listOf(this.longitude(), this.latitude())
     )
     is LineString -> mapOf(
       "type" to "LineString",
-      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+      "coordinates" to this.coordinates().map { listOf(it.longitude(), it.latitude()) }
     )
     is Polygon -> mapOf(
       "type" to "Polygon",
       "coordinates" to this.coordinates().map { ring ->
-        ring.map { listOf(it.latitude(), it.longitude()) }
+        ring.map { listOf(it.longitude(), it.latitude()) }
       }
     )
     is MultiPoint -> mapOf(
       "type" to "MultiPoint",
-      "coordinates" to this.coordinates().map { listOf(it.latitude(), it.longitude()) }
+      "coordinates" to this.coordinates().map { listOf(it.longitude(), it.latitude()) }
     )
     is MultiLineString -> mapOf(
       "type" to "MultiLineString",
       "coordinates" to this.coordinates().map { line ->
-        line.map { listOf(it.latitude(), it.longitude()) }
+        line.map { listOf(it.longitude(), it.latitude()) }
       }
     )
     is MultiPolygon -> mapOf(
       "type" to "MultiPolygon",
       "coordinates" to this.coordinates().map { polygon ->
         polygon.map { ring ->
-          ring.map { listOf(it.latitude(), it.longitude()) }
+          ring.map { listOf(it.longitude(), it.latitude()) }
         }
       }
     )
