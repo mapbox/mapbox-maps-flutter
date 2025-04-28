@@ -132,9 +132,9 @@ struct PolylineAnnotation {
   var geometry: LineString
   /// The display of lines when joining.
   /// Default value: "miter".
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
+  var lineSortKey: Double? = nil
   /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
   ///  - Not supported for globe projection at the moment
   ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
@@ -145,33 +145,36 @@ struct PolylineAnnotation {
   ///  - Elevated lines don't cast shadows
   /// Default value: 0.
   /// @experimental
-  var lineZOffset: Double?
+  var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
-  var lineBlur: Double?
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
   /// Default value: 0. Minimum value: 0.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
-  var lineGapWidth: Double?
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0. The unit of lineOffset is in pixels.
-  var lineOffset: Double?
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
-  var lineWidth: Double?
+  var lineWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotation? {
@@ -189,6 +192,7 @@ struct PolylineAnnotation {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[11])
     let linePattern: String? = nilOrValue(pigeonVar_list[12])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[13])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[14])
 
     return PolylineAnnotation(
       id: id,
@@ -204,7 +208,8 @@ struct PolylineAnnotation {
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
-      lineWidth: lineWidth
+      lineWidth: lineWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -223,6 +228,7 @@ struct PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ]
   }
 }
@@ -233,9 +239,9 @@ struct PolylineAnnotationOptions {
   var geometry: LineString
   /// The display of lines when joining.
   /// Default value: "miter".
-  var lineJoin: LineJoin?
+  var lineJoin: LineJoin? = nil
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var lineSortKey: Double?
+  var lineSortKey: Double? = nil
   /// Vertical offset from ground, in meters. Defaults to 0. This is an experimental property with some known issues:
   ///  - Not supported for globe projection at the moment
   ///  - Elevated line discontinuity is possible on tile borders with terrain enabled
@@ -246,33 +252,36 @@ struct PolylineAnnotationOptions {
   ///  - Elevated lines don't cast shadows
   /// Default value: 0.
   /// @experimental
-  var lineZOffset: Double?
+  var lineZOffset: Double? = nil
   /// Blur applied to the line, in pixels.
   /// Default value: 0. Minimum value: 0. The unit of lineBlur is in pixels.
-  var lineBlur: Double?
+  var lineBlur: Double? = nil
   /// The color of the line border. If line-border-width is greater than zero and the alpha value of this color is 0 (default), the color for the border will be selected automatically based on the line color.
   /// Default value: "rgba(0, 0, 0, 0)".
-  var lineBorderColor: Int64?
+  var lineBorderColor: Int64? = nil
   /// The width of the line border. A value of zero means no border.
   /// Default value: 0. Minimum value: 0.
-  var lineBorderWidth: Double?
+  var lineBorderWidth: Double? = nil
   /// The color with which the line will be drawn.
   /// Default value: "#000000".
-  var lineColor: Int64?
+  var lineColor: Int64? = nil
   /// Draws a line casing outside of a line's actual path. Value indicates the width of the inner gap.
   /// Default value: 0. Minimum value: 0. The unit of lineGapWidth is in pixels.
-  var lineGapWidth: Double?
+  var lineGapWidth: Double? = nil
   /// The line's offset. For linear features, a positive value offsets the line to the right, relative to the direction of the line, and a negative value to the left. For polygon features, a positive value results in an inset, and a negative value results in an outset.
   /// Default value: 0. The unit of lineOffset is in pixels.
-  var lineOffset: Double?
+  var lineOffset: Double? = nil
   /// The opacity at which the line will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var lineOpacity: Double?
+  var lineOpacity: Double? = nil
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var linePattern: String?
+  var linePattern: String? = nil
   /// Stroke thickness.
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
-  var lineWidth: Double?
+  var lineWidth: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotationOptions? {
@@ -289,6 +298,7 @@ struct PolylineAnnotationOptions {
     let lineOpacity: Double? = nilOrValue(pigeonVar_list[10])
     let linePattern: String? = nilOrValue(pigeonVar_list[11])
     let lineWidth: Double? = nilOrValue(pigeonVar_list[12])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[13])
 
     return PolylineAnnotationOptions(
       geometry: geometry,
@@ -303,7 +313,8 @@ struct PolylineAnnotationOptions {
       lineOffset: lineOffset,
       lineOpacity: lineOpacity,
       linePattern: linePattern,
-      lineWidth: lineWidth
+      lineWidth: lineWidth,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -321,6 +332,7 @@ struct PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ]
   }
 }

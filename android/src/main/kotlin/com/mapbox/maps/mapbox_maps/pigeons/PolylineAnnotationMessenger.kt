@@ -200,7 +200,9 @@ data class PolylineAnnotation(
    * Stroke thickness.
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotation {
@@ -218,7 +220,8 @@ data class PolylineAnnotation(
       val lineOpacity = pigeonVar_list[11] as Double?
       val linePattern = pigeonVar_list[12] as String?
       val lineWidth = pigeonVar_list[13] as Double?
-      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[14] as Boolean?
+      return PolylineAnnotation(id, geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -237,6 +240,7 @@ data class PolylineAnnotation(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -259,7 +263,8 @@ data class PolylineAnnotation(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -330,7 +335,9 @@ data class PolylineAnnotationOptions(
    * Stroke thickness.
    * Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
    */
-  val lineWidth: Double? = null
+  val lineWidth: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationOptions {
@@ -347,7 +354,8 @@ data class PolylineAnnotationOptions(
       val lineOpacity = pigeonVar_list[10] as Double?
       val linePattern = pigeonVar_list[11] as String?
       val lineWidth = pigeonVar_list[12] as Double?
-      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth)
+      val isDraggable = pigeonVar_list[13] as Boolean?
+      return PolylineAnnotationOptions(geometry, lineJoin, lineSortKey, lineZOffset, lineBlur, lineBorderColor, lineBorderWidth, lineColor, lineGapWidth, lineOffset, lineOpacity, linePattern, lineWidth, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -365,6 +373,7 @@ data class PolylineAnnotationOptions(
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -386,7 +395,8 @@ data class PolylineAnnotationOptions(
       lineOffset == other.lineOffset &&
       lineOpacity == other.lineOpacity &&
       linePattern == other.linePattern &&
-      lineWidth == other.lineWidth
+      lineWidth == other.lineWidth &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()

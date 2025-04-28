@@ -629,11 +629,11 @@ extension CGPoint {
 }
 
 extension MapboxMaps.InteractionContext {
-    func toFLTMapContentGestureContext() -> MapContentGestureContext {
+    func toFLTMapContentGestureContext(gestureState: GestureState = .ended) -> MapContentGestureContext {
         MapContentGestureContext(
             touchPosition: point.toFLTScreenCoordinate(),
             point: Point(coordinate),
-            gestureState: .ended
+            gestureState: gestureState
         )
     }
 }

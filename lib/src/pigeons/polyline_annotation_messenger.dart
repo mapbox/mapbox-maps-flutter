@@ -85,6 +85,7 @@ class PolylineAnnotation {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -147,6 +148,9 @@ class PolylineAnnotation {
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   double? lineWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -163,6 +167,7 @@ class PolylineAnnotation {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ];
   }
 
@@ -187,6 +192,7 @@ class PolylineAnnotation {
       lineOpacity: result[11] as double?,
       linePattern: result[12] as String?,
       lineWidth: result[13] as double?,
+      isDraggable: result[14] as bool?,
     );
   }
 
@@ -212,7 +218,8 @@ class PolylineAnnotation {
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
-        lineWidth == other.lineWidth;
+        lineWidth == other.lineWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -235,6 +242,7 @@ class PolylineAnnotationOptions {
     this.lineOpacity,
     this.linePattern,
     this.lineWidth,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -294,6 +302,9 @@ class PolylineAnnotationOptions {
   /// Default value: 1. Minimum value: 0. The unit of lineWidth is in pixels.
   double? lineWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -309,6 +320,7 @@ class PolylineAnnotationOptions {
       lineOpacity,
       linePattern,
       lineWidth,
+      isDraggable,
     ];
   }
 
@@ -332,6 +344,7 @@ class PolylineAnnotationOptions {
       lineOpacity: result[10] as double?,
       linePattern: result[11] as String?,
       lineWidth: result[12] as double?,
+      isDraggable: result[13] as bool?,
     );
   }
 
@@ -357,7 +370,8 @@ class PolylineAnnotationOptions {
         lineOffset == other.lineOffset &&
         lineOpacity == other.lineOpacity &&
         linePattern == other.linePattern &&
-        lineWidth == other.lineWidth;
+        lineWidth == other.lineWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override

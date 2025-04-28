@@ -301,6 +301,7 @@ class PointAnnotation {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -452,6 +453,9 @@ class PointAnnotation {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -492,6 +496,7 @@ class PointAnnotation {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -540,6 +545,7 @@ class PointAnnotation {
       textHaloWidth: result[35] as double?,
       textOcclusionOpacity: result[36] as double?,
       textOpacity: result[37] as double?,
+      isDraggable: result[38] as bool?,
     );
   }
 
@@ -589,7 +595,8 @@ class PointAnnotation {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -636,6 +643,7 @@ class PointAnnotationOptions {
     this.textHaloWidth,
     this.textOcclusionOpacity,
     this.textOpacity,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -784,6 +792,9 @@ class PointAnnotationOptions {
   /// Default value: 1. Value range: [0, 1]
   double? textOpacity;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -823,6 +834,7 @@ class PointAnnotationOptions {
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     ];
   }
 
@@ -870,6 +882,7 @@ class PointAnnotationOptions {
       textHaloWidth: result[34] as double?,
       textOcclusionOpacity: result[35] as double?,
       textOpacity: result[36] as double?,
+      isDraggable: result[37] as bool?,
     );
   }
 
@@ -918,7 +931,8 @@ class PointAnnotationOptions {
         textHaloColor == other.textHaloColor &&
         textHaloWidth == other.textHaloWidth &&
         textOcclusionOpacity == other.textOcclusionOpacity &&
-        textOpacity == other.textOpacity;
+        textOpacity == other.textOpacity &&
+        isDraggable == other.isDraggable;
   }
 
   @override

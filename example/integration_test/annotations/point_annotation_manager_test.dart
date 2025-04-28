@@ -1,5 +1,7 @@
 // This file is generated.
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -288,6 +290,65 @@ void main() {
     await manager.setTextTranslateAnchor(TextTranslateAnchor.MAP);
     var textTranslateAnchor = await manager.getTextTranslateAnchor();
     expect(TextTranslateAnchor.MAP, textTranslateAnchor);
+  });
+
+  testWidgets('annotation drag events', (WidgetTester tester) async {
+    final mapFuture = app.main();
+    await tester.pumpAndSettle();
+
+    final mapboxMap = await mapFuture;
+    final manager = await mapboxMap.annotations.createPointAnnotationManager();
+
+    final geometry = Point(coordinates: Position(0, 0));
+
+    final createdAnnotation = await manager.create(PointAnnotationOptions(
+      geometry: geometry,
+      isDraggable: true,
+    ));
+
+    // Mock drag events
+    final eventChannel = EventChannel(
+        "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents.0/${manager.id}",
+        pigeonMethodCodec);
+    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+        .setMockStreamHandler(eventChannel,
+            MockStreamHandler.inline(onListen: (arguments, events) {
+      events.success(PointAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.started,
+      ));
+      events.success(PointAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.changed,
+      ));
+      events.success(PointAnnotationInteractionContext(
+        annotation: createdAnnotation,
+        gestureState: GestureState.ended,
+      ));
+      events.endOfStream();
+    }));
+
+    final onDragBegin = Completer();
+    final onDragChanged = Completer();
+    final onDragEnd = Completer();
+
+    manager.dragEvents(
+      onBegin: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onDragBegin.complete();
+      },
+      onChanged: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onDragChanged.complete();
+      },
+      onEnd: (annotation) {
+        expect(annotation.id, equals(createdAnnotation.id));
+        onDragEnd.complete();
+      },
+    );
+
+    await Future.wait(
+        [onDragBegin.future, onDragChanged.future, onDragEnd.future]);
   });
 }
 // End of generated file.

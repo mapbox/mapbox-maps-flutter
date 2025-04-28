@@ -37,6 +37,7 @@ class PolygonAnnotation {
     this.fillOutlineColor,
     this.fillPattern,
     this.fillZOffset,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -67,6 +68,9 @@ class PolygonAnnotation {
   /// @experimental
   double? fillZOffset;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -77,6 +81,7 @@ class PolygonAnnotation {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ];
   }
 
@@ -95,6 +100,7 @@ class PolygonAnnotation {
       fillOutlineColor: result[5] as int?,
       fillPattern: result[6] as String?,
       fillZOffset: result[7] as double?,
+      isDraggable: result[8] as bool?,
     );
   }
 
@@ -114,7 +120,8 @@ class PolygonAnnotation {
         fillOpacity == other.fillOpacity &&
         fillOutlineColor == other.fillOutlineColor &&
         fillPattern == other.fillPattern &&
-        fillZOffset == other.fillZOffset;
+        fillZOffset == other.fillZOffset &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -131,6 +138,7 @@ class PolygonAnnotationOptions {
     this.fillOutlineColor,
     this.fillPattern,
     this.fillZOffset,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -158,6 +166,9 @@ class PolygonAnnotationOptions {
   /// @experimental
   double? fillZOffset;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -167,6 +178,7 @@ class PolygonAnnotationOptions {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ];
   }
 
@@ -184,6 +196,7 @@ class PolygonAnnotationOptions {
       fillOutlineColor: result[4] as int?,
       fillPattern: result[5] as String?,
       fillZOffset: result[6] as double?,
+      isDraggable: result[7] as bool?,
     );
   }
 
@@ -203,7 +216,8 @@ class PolygonAnnotationOptions {
         fillOpacity == other.fillOpacity &&
         fillOutlineColor == other.fillOutlineColor &&
         fillPattern == other.fillPattern &&
-        fillZOffset == other.fillZOffset;
+        fillZOffset == other.fillZOffset &&
+        isDraggable == other.isDraggable;
   }
 
   @override

@@ -46,6 +46,7 @@ class CircleAnnotation {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The id for annotation
@@ -85,6 +86,9 @@ class CircleAnnotation {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       id,
@@ -97,6 +101,7 @@ class CircleAnnotation {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -117,6 +122,7 @@ class CircleAnnotation {
       circleStrokeColor: result[7] as int?,
       circleStrokeOpacity: result[8] as double?,
       circleStrokeWidth: result[9] as double?,
+      isDraggable: result[10] as bool?,
     );
   }
 
@@ -138,7 +144,8 @@ class CircleAnnotation {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override
@@ -157,6 +164,7 @@ class CircleAnnotationOptions {
     this.circleStrokeColor,
     this.circleStrokeOpacity,
     this.circleStrokeWidth,
+    this.isDraggable,
   });
 
   /// The geometry that determines the location/shape of this annotation
@@ -193,6 +201,9 @@ class CircleAnnotationOptions {
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
   double? circleStrokeWidth;
 
+  /// Property to determine whether annotation can be manually moved around map.
+  bool? isDraggable;
+
   List<Object?> _toList() {
     return <Object?>[
       geometry,
@@ -204,6 +215,7 @@ class CircleAnnotationOptions {
       circleStrokeColor,
       circleStrokeOpacity,
       circleStrokeWidth,
+      isDraggable,
     ];
   }
 
@@ -223,6 +235,7 @@ class CircleAnnotationOptions {
       circleStrokeColor: result[6] as int?,
       circleStrokeOpacity: result[7] as double?,
       circleStrokeWidth: result[8] as double?,
+      isDraggable: result[9] as bool?,
     );
   }
 
@@ -243,7 +256,8 @@ class CircleAnnotationOptions {
         circleRadius == other.circleRadius &&
         circleStrokeColor == other.circleStrokeColor &&
         circleStrokeOpacity == other.circleStrokeOpacity &&
-        circleStrokeWidth == other.circleStrokeWidth;
+        circleStrokeWidth == other.circleStrokeWidth &&
+        isDraggable == other.isDraggable;
   }
 
   @override

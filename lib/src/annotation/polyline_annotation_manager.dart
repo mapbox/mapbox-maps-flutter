@@ -22,6 +22,55 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Registers drag event callbacks for line annotations.
+  ///
+  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
+  ///   The provided [PolylineAnnotationInteractionContext] contains details
+  ///   about the annotation being dragged and the drag start position.
+  ///
+  /// - [onChanged]: Called continuously as the annotation is dragged.
+  ///   The [PolylineAnnotationInteractionContext] gives the updated drag
+  ///   position and annotation context on every move.
+  ///
+  /// - [onEnd]: Called once the drag gesture completes or is released.
+  ///   The [PolylineAnnotationInteractionContext] gives the final position
+  ///   and annotation state at the end of the drag.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// manager.dragEvents(
+  ///   onBegin: (context) {
+  ///     print("Drag started for: ${context.annotation.id}");
+  ///   },
+  ///   onChanged: (context) {
+  ///     print("Dragging at: ${context.annotation.geometry}");
+  ///   },
+  ///   onEnd: (context) {
+  ///     print("Drag ended at: ${context.annotation.geometry}");
+  ///   },
+  /// );
+  /// ```
+  Cancelable dragEvents({
+    Function(PolylineAnnotation)? onBegin,
+    Function(PolylineAnnotation)? onChanged,
+    Function(PolylineAnnotation)? onEnd,
+  }) {
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+        .cast<PolylineAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data.annotation);
+        case GestureState.changed when onChanged != null:
+          onChanged(data.annotation);
+        case GestureState.ended when onEnd != null:
+          onEnd(data.annotation);
+        default:
+          break;
+      }
+    }).asCancelable();
+  }
+
   /// Create a new annotation with the option.
   Future<PolylineAnnotation> create(PolylineAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

@@ -96,21 +96,24 @@ struct PolygonAnnotation {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotation? {
@@ -122,6 +125,7 @@ struct PolygonAnnotation {
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[5])
     let fillPattern: String? = nilOrValue(pigeonVar_list[6])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[7])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[8])
 
     return PolygonAnnotation(
       id: id,
@@ -131,7 +135,8 @@ struct PolygonAnnotation {
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -144,6 +149,7 @@ struct PolygonAnnotation {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ]
   }
 }
@@ -153,21 +159,24 @@ struct PolygonAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Polygon
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var fillSortKey: Double?
+  var fillSortKey: Double? = nil
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
-  var fillColor: Int64?
+  var fillColor: Int64? = nil
   /// The opacity of the entire fill layer. In contrast to the `fill-color`, this value will also affect the 1px stroke around the fill, if the stroke is used.
   /// Default value: 1. Value range: [0, 1]
-  var fillOpacity: Double?
+  var fillOpacity: Double? = nil
   /// The outline color of the fill. Matches the value of `fill-color` if unspecified.
-  var fillOutlineColor: Int64?
+  var fillOutlineColor: Int64? = nil
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
-  var fillPattern: String?
+  var fillPattern: String? = nil
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   /// @experimental
-  var fillZOffset: Double?
+  var fillZOffset: Double? = nil
+  /// Property to determine whether annotation can be manually moved around map.
+  var isDraggable: Bool? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationOptions? {
@@ -178,6 +187,7 @@ struct PolygonAnnotationOptions {
     let fillOutlineColor: Int64? = nilOrValue(pigeonVar_list[4])
     let fillPattern: String? = nilOrValue(pigeonVar_list[5])
     let fillZOffset: Double? = nilOrValue(pigeonVar_list[6])
+    let isDraggable: Bool? = nilOrValue(pigeonVar_list[7])
 
     return PolygonAnnotationOptions(
       geometry: geometry,
@@ -186,7 +196,8 @@ struct PolygonAnnotationOptions {
       fillOpacity: fillOpacity,
       fillOutlineColor: fillOutlineColor,
       fillPattern: fillPattern,
-      fillZOffset: fillZOffset
+      fillZOffset: fillZOffset,
+      isDraggable: isDraggable
     )
   }
   func toList() -> [Any?] {
@@ -198,6 +209,7 @@ struct PolygonAnnotationOptions {
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     ]
   }
 }

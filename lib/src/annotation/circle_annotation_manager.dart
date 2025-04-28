@@ -22,6 +22,55 @@ class CircleAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
+  /// Registers drag event callbacks for circle annotations.
+  ///
+  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
+  ///   The provided [CircleAnnotationInteractionContext] contains details
+  ///   about the annotation being dragged and the drag start position.
+  ///
+  /// - [onChanged]: Called continuously as the annotation is dragged.
+  ///   The [CircleAnnotationInteractionContext] gives the updated drag
+  ///   position and annotation context on every move.
+  ///
+  /// - [onEnd]: Called once the drag gesture completes or is released.
+  ///   The [CircleAnnotationInteractionContext] gives the final position
+  ///   and annotation state at the end of the drag.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// manager.dragEvents(
+  ///   onBegin: (context) {
+  ///     print("Drag started for: ${context.annotation.id}");
+  ///   },
+  ///   onChanged: (context) {
+  ///     print("Dragging at: ${context.annotation.geometry}");
+  ///   },
+  ///   onEnd: (context) {
+  ///     print("Drag ended at: ${context.annotation.geometry}");
+  ///   },
+  /// );
+  /// ```
+  Cancelable dragEvents({
+    Function(CircleAnnotation)? onBegin,
+    Function(CircleAnnotation)? onChanged,
+    Function(CircleAnnotation)? onEnd,
+  }) {
+    return _annotationDragEvents(instanceName: "$_channelSuffix/$id")
+        .cast<CircleAnnotationInteractionContext>()
+        .listen((data) {
+      switch (data.gestureState) {
+        case GestureState.started when onBegin != null:
+          onBegin(data.annotation);
+        case GestureState.changed when onChanged != null:
+          onChanged(data.annotation);
+        case GestureState.ended when onEnd != null:
+          onEnd(data.annotation);
+        default:
+          break;
+      }
+    }).asCancelable();
+  }
+
   /// Create a new annotation with the option.
   Future<CircleAnnotation> create(CircleAnnotationOptions annotation) =>
       _annotationMessenger.create(id, annotation);

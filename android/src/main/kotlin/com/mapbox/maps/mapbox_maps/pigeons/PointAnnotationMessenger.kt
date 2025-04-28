@@ -575,7 +575,9 @@ data class PointAnnotation(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null
+  val textOpacity: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotation {
@@ -617,7 +619,8 @@ data class PointAnnotation(
       val textHaloWidth = pigeonVar_list[35] as Double?
       val textOcclusionOpacity = pigeonVar_list[36] as Double?
       val textOpacity = pigeonVar_list[37] as Double?
-      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
+      val isDraggable = pigeonVar_list[38] as Boolean?
+      return PointAnnotation(id, geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -660,6 +663,7 @@ data class PointAnnotation(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -706,7 +710,8 @@ data class PointAnnotation(
       textHaloColor == other.textHaloColor &&
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
-      textOpacity == other.textOpacity
+      textOpacity == other.textOpacity &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -890,7 +895,9 @@ data class PointAnnotationOptions(
    * The opacity at which the text will be drawn.
    * Default value: 1. Value range: [0, 1]
    */
-  val textOpacity: Double? = null
+  val textOpacity: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PointAnnotationOptions {
@@ -931,7 +938,8 @@ data class PointAnnotationOptions(
       val textHaloWidth = pigeonVar_list[34] as Double?
       val textOcclusionOpacity = pigeonVar_list[35] as Double?
       val textOpacity = pigeonVar_list[36] as Double?
-      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity)
+      val isDraggable = pigeonVar_list[37] as Boolean?
+      return PointAnnotationOptions(geometry, image, iconAnchor, iconImage, iconOffset, iconRotate, iconSize, iconTextFit, iconTextFitPadding, symbolSortKey, textAnchor, textField, textJustify, textLetterSpacing, textLineHeight, textMaxWidth, textOffset, textRadialOffset, textRotate, textSize, textTransform, iconColor, iconEmissiveStrength, iconHaloBlur, iconHaloColor, iconHaloWidth, iconImageCrossFade, iconOcclusionOpacity, iconOpacity, symbolZOffset, textColor, textEmissiveStrength, textHaloBlur, textHaloColor, textHaloWidth, textOcclusionOpacity, textOpacity, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -973,6 +981,7 @@ data class PointAnnotationOptions(
       textHaloWidth,
       textOcclusionOpacity,
       textOpacity,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -1018,7 +1027,8 @@ data class PointAnnotationOptions(
       textHaloColor == other.textHaloColor &&
       textHaloWidth == other.textHaloWidth &&
       textOcclusionOpacity == other.textOcclusionOpacity &&
-      textOpacity == other.textOpacity
+      textOpacity == other.textOpacity &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()

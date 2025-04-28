@@ -101,7 +101,9 @@ data class PolygonAnnotation(
    * Default value: 0. Minimum value: 0.
    * @experimental
    */
-  val fillZOffset: Double? = null
+  val fillZOffset: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotation {
@@ -113,7 +115,8 @@ data class PolygonAnnotation(
       val fillOutlineColor = pigeonVar_list[5] as Long?
       val fillPattern = pigeonVar_list[6] as String?
       val fillZOffset = pigeonVar_list[7] as Double?
-      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset)
+      val isDraggable = pigeonVar_list[8] as Boolean?
+      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -126,6 +129,7 @@ data class PolygonAnnotation(
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -142,7 +146,8 @@ data class PolygonAnnotation(
       fillOpacity == other.fillOpacity &&
       fillOutlineColor == other.fillOutlineColor &&
       fillPattern == other.fillPattern &&
-      fillZOffset == other.fillZOffset
+      fillZOffset == other.fillZOffset &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -173,7 +178,9 @@ data class PolygonAnnotationOptions(
    * Default value: 0. Minimum value: 0.
    * @experimental
    */
-  val fillZOffset: Double? = null
+  val fillZOffset: Double? = null,
+  /** Property to determine whether annotation can be manually moved around map. */
+  val isDraggable: Boolean? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotationOptions {
@@ -184,7 +191,8 @@ data class PolygonAnnotationOptions(
       val fillOutlineColor = pigeonVar_list[4] as Long?
       val fillPattern = pigeonVar_list[5] as String?
       val fillZOffset = pigeonVar_list[6] as Double?
-      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset)
+      val isDraggable = pigeonVar_list[7] as Boolean?
+      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset, isDraggable)
     }
   }
   fun toList(): List<Any?> {
@@ -196,6 +204,7 @@ data class PolygonAnnotationOptions(
       fillOutlineColor,
       fillPattern,
       fillZOffset,
+      isDraggable,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -211,7 +220,8 @@ data class PolygonAnnotationOptions(
       fillOpacity == other.fillOpacity &&
       fillOutlineColor == other.fillOutlineColor &&
       fillPattern == other.fillPattern &&
-      fillZOffset == other.fillZOffset
+      fillZOffset == other.fillZOffset &&
+      isDraggable == other.isDraggable
   }
 
   override fun hashCode(): Int = toList().hashCode()

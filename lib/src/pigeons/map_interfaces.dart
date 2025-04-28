@@ -5126,7 +5126,7 @@ class _MapInterface {
   /// @param geometry The `screen pixel coordinates` (point, line string or box) to query for rendered features.
   /// @param options The `render query options` for querying rendered features.
   /// @param completion The `query features completion` called when the query completes.
-  /// @return A `cancelable` object that could be used to cancel the pending query.
+  /// @return A list of `QueriedRenderedFeature` objects representing the query results.
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
       _RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
     final String pigeonVar_channelName =
@@ -8738,55 +8738,6 @@ class StyleManager {
     } else {
       return (pigeonVar_replyList[0] as List<Object?>?)!
           .cast<FeaturesetDescriptor>();
-    }
-  }
-}
-
-/// Allows to cancel the associated asynchronous operation
-///
-/// The the associated asynchronous operation is not automatically canceled if this
-/// object goes out of scope.
-class Cancelable {
-  /// Constructor for [Cancelable].  The [binaryMessenger] named argument is
-  /// available for dependency injection.  If it is left null, the default
-  /// BinaryMessenger will be used which routes to the host platform.
-  Cancelable(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
-  final BinaryMessenger? pigeonVar_binaryMessenger;
-
-  static const MessageCodec<Object?> pigeonChannelCodec =
-      MapInterfaces_PigeonCodec();
-
-  final String pigeonVar_messageChannelSuffix;
-
-  /// Cancels the associated asynchronous operation
-  ///
-  /// If the associated asynchronous operation has already finished, this call is ignored.
-  Future<void> cancel() async {
-    final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Cancelable.cancel$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel =
-        BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
     }
   }
 }

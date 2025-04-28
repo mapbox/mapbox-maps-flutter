@@ -87,3 +87,4 @@ part 'src/viewport/transitions/fly_viewport_transition.dart';
 part 'src/viewport/transitions/easing_viewport_transition.dart';
 part 'src/package_info.dart';
 part 'src/http/http_service.dart';
+part 'src/cancelable.dart';

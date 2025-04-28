@@ -1,8 +1,6 @@
 ---
 allow_zero_lintable_files: true
 excluded:
-  - Carthage
-  - Pods
   - Sources/mapbox_maps_flutter/Classes/Generated
   - Sources/mapbox_maps_flutter/Classes/*AnnotationController.swift
   - .build/
@@ -20,6 +18,7 @@ disabled_rules:
   - function_parameter_count
   - type_body_length
   - cyclomatic_complexity
+  - superfluous_disable_command
 file_length:
     warning: 1500
     error: 1500

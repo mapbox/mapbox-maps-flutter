@@ -4,12 +4,16 @@
 
 package com.mapbox.maps.mapbox_maps.pigeons
 
+import com.mapbox.geojson.LineString
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import com.mapbox.maps.mapbox_maps.mapping.turf.*
 import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MessageCodec
 import io.flutter.plugin.common.StandardMessageCodec
+import io.flutter.plugin.common.StandardMethodCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
@@ -75,6 +79,139 @@ data class MapContentGestureContext(
 
   override fun hashCode(): Int = toList().hashCode()
 }
+
+/**
+ * Generated class from Pigeon that represents data sent in messages.
+ * This class should not be extended by any user class outside of the generated file.
+ */
+sealed class AnnotationInteractionContext
+/** Generated class from Pigeon that represents data sent in messages. */
+data class PointAnnotationInteractionContext(
+  val annotation: PointAnnotation,
+  val gestureState: GestureState
+) : AnnotationInteractionContext() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PointAnnotationInteractionContext {
+      val annotation = pigeonVar_list[0] as PointAnnotation
+      val gestureState = pigeonVar_list[1] as GestureState
+      return PointAnnotationInteractionContext(annotation, gestureState)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      annotation,
+      gestureState,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PointAnnotationInteractionContext) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return annotation == other.annotation &&
+      gestureState == other.gestureState
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class CircleAnnotationInteractionContext(
+  val annotation: CircleAnnotation,
+  val gestureState: GestureState
+) : AnnotationInteractionContext() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CircleAnnotationInteractionContext {
+      val annotation = pigeonVar_list[0] as CircleAnnotation
+      val gestureState = pigeonVar_list[1] as GestureState
+      return CircleAnnotationInteractionContext(annotation, gestureState)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      annotation,
+      gestureState,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is CircleAnnotationInteractionContext) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return annotation == other.annotation &&
+      gestureState == other.gestureState
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class PolygonAnnotationInteractionContext(
+  val annotation: PolygonAnnotation,
+  val gestureState: GestureState
+) : AnnotationInteractionContext() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotationInteractionContext {
+      val annotation = pigeonVar_list[0] as PolygonAnnotation
+      val gestureState = pigeonVar_list[1] as GestureState
+      return PolygonAnnotationInteractionContext(annotation, gestureState)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      annotation,
+      gestureState,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PolygonAnnotationInteractionContext) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return annotation == other.annotation &&
+      gestureState == other.gestureState
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class PolylineAnnotationInteractionContext(
+  val annotation: PolylineAnnotation,
+  val gestureState: GestureState
+) : AnnotationInteractionContext() {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): PolylineAnnotationInteractionContext {
+      val annotation = pigeonVar_list[0] as PolylineAnnotation
+      val gestureState = pigeonVar_list[1] as GestureState
+      return PolylineAnnotationInteractionContext(annotation, gestureState)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      annotation,
+      gestureState,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is PolylineAnnotationInteractionContext) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return annotation == other.annotation &&
+      gestureState == other.gestureState
+  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class GestureListenersPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -90,12 +227,62 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          PolygonDecoder.fromList(it)
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          LineStringDecoder.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ScreenCoordinate.fromList(it)
+        }
+      }
+      134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           MapContentGestureContext.fromList(it)
+        }
+      }
+      135.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointAnnotation.fromList(it)
+        }
+      }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotation.fromList(it)
+        }
+      }
+      137.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotation.fromList(it)
+        }
+      }
+      138.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineAnnotation.fromList(it)
+        }
+      }
+      139.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PointAnnotationInteractionContext.fromList(it)
+        }
+      }
+      140.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotationInteractionContext.fromList(it)
+        }
+      }
+      141.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolygonAnnotationInteractionContext.fromList(it)
+        }
+      }
+      142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          PolylineAnnotationInteractionContext.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -111,18 +298,60 @@ private open class GestureListenersPigeonCodec : StandardMessageCodec() {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is ScreenCoordinate -> {
+      is Polygon -> {
         stream.write(131)
         writeValue(stream, value.toList())
       }
-      is MapContentGestureContext -> {
+      is LineString -> {
         stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is ScreenCoordinate -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
+      is MapContentGestureContext -> {
+        stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotation -> {
+        stream.write(135)
+        writeValue(stream, value.toList())
+      }
+      is CircleAnnotation -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotation -> {
+        stream.write(137)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotation -> {
+        stream.write(138)
+        writeValue(stream, value.toList())
+      }
+      is PointAnnotationInteractionContext -> {
+        stream.write(139)
+        writeValue(stream, value.toList())
+      }
+      is CircleAnnotationInteractionContext -> {
+        stream.write(140)
+        writeValue(stream, value.toList())
+      }
+      is PolygonAnnotationInteractionContext -> {
+        stream.write(141)
+        writeValue(stream, value.toList())
+      }
+      is PolylineAnnotationInteractionContext -> {
+        stream.write(142)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
     }
   }
 }
+
+val GestureListenersPigeonMethodCodec = StandardMethodCodec(GestureListenersPigeonCodec())
 
 /** Generated class from Pigeon that represents Flutter messages that can be called from Kotlin. */
 class GestureListener(private val binaryMessenger: BinaryMessenger, private val messageChannelSuffix: String = "") {
@@ -194,6 +423,55 @@ class GestureListener(private val binaryMessenger: BinaryMessenger, private val 
       } else {
         callback(Result.failure(createConnectionError(channelName)))
       }
+    }
+  }
+}
+
+private class GestureListenersPigeonStreamHandler<T>(
+  val wrapper: GestureListenersPigeonEventChannelWrapper<T>
+) : EventChannel.StreamHandler {
+  var pigeonSink: PigeonEventSink<T>? = null
+
+  override fun onListen(p0: Any?, sink: EventChannel.EventSink) {
+    pigeonSink = PigeonEventSink<T>(sink)
+    wrapper.onListen(p0, pigeonSink!!)
+  }
+
+  override fun onCancel(p0: Any?) {
+    pigeonSink = null
+    wrapper.onCancel(p0)
+  }
+}
+
+interface GestureListenersPigeonEventChannelWrapper<T> {
+  open fun onListen(p0: Any?, sink: PigeonEventSink<T>) {}
+
+  open fun onCancel(p0: Any?) {}
+}
+
+class PigeonEventSink<T>(private val sink: EventChannel.EventSink) {
+  fun success(value: T) {
+    sink.success(value)
+  }
+
+  fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+    sink.error(errorCode, errorMessage, errorDetails)
+  }
+
+  fun endOfStream() {
+    sink.endOfStream()
+  }
+}
+
+abstract class AnnotationDragEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<AnnotationInteractionContext> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: AnnotationDragEventsStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = GestureListenersPigeonStreamHandler<AnnotationInteractionContext>(streamHandler)
+      EventChannel(messenger, channelName, GestureListenersPigeonMethodCodec).setStreamHandler(internalStreamHandler)
     }
   }
 }

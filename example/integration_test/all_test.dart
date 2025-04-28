@@ -51,6 +51,16 @@ import 'viewport_test.dart' as viewport_test;
 import 'interactive_features_test.dart' as interactive_features_test;
 
 void main() {
+  // annotation tests
+  circle_annotation_manager_test.main();
+  circle_annotation_test.main();
+  point_annotation_manager_test.main();
+  point_annotation_test.main();
+  polygon_annotation_manager_test.main();
+  polygon_annotation_test.main();
+  polyline_annotation_manager_test.main();
+  polyline_annotation_test.main();
+
   animation_test.main();
   camera_test.main();
   map_interface_test.main();
@@ -63,15 +73,6 @@ void main() {
 
   // offline_test
   offline_test.main();
-  // annotation tests
-  circle_annotation_manager_test.main();
-  circle_annotation_test.main();
-  point_annotation_manager_test.main();
-  point_annotation_test.main();
-  polygon_annotation_manager_test.main();
-  polygon_annotation_test.main();
-  polyline_annotation_manager_test.main();
-  polyline_annotation_test.main();
 
   // style tests
   style_test.main();
