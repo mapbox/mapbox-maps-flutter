@@ -598,7 +598,7 @@ fun com.mapbox.maps.plugin.ModelScaleMode.toFLTModelScaleMode(): ModelScaleMode 
   }
 }
 fun com.mapbox.maps.StylePropertyValue.toFLTStylePropertyValue(): StylePropertyValue {
-  return StylePropertyValue(value.toJson(), StylePropertyValueKind.values()[kind.ordinal])
+  return StylePropertyValue(value.contents, StylePropertyValueKind.values()[kind.ordinal])
 }
 
 fun ProjectionName.toFLTProjectionName(): StyleProjectionName {

@@ -1680,6 +1680,61 @@ class LayerPosition {
   int get hashCode => Object.hashAll(_toList());
 }
 
+/// Specifies the position at which an import will be added when using `Style.addImport`
+class ImportPosition {
+  ImportPosition({
+    this.above,
+    this.below,
+    this.at,
+  });
+
+  /// Import should be positioned above the specified import id.
+  String? above;
+
+  /// Import should be positioned below the specified import id.
+  String? below;
+
+  /// Import should be positioned at the specified index in the imports stack.
+  int? at;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      above,
+      below,
+      at,
+    ];
+  }
+
+  Object encode() {
+    return _toList();
+  }
+
+  static ImportPosition decode(Object result) {
+    result as List<Object?>;
+    return ImportPosition(
+      above: result[0] as String?,
+      below: result[1] as String?,
+      at: result[2] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! ImportPosition || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return above == other.above && below == other.below && at == other.at;
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList());
+}
+
 /// Represents query result that is returned in QueryRenderedFeaturesCallback.
 /// @see `queryRenderedFeatures`
 class QueriedRenderedFeature {
@@ -3265,77 +3320,80 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is LayerPosition) {
       buffer.putUint8(179);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedRenderedFeature) {
+    } else if (value is ImportPosition) {
       buffer.putUint8(180);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedSourceFeature) {
+    } else if (value is QueriedRenderedFeature) {
       buffer.putUint8(181);
       writeValue(buffer, value.encode());
-    } else if (value is QueriedFeature) {
+    } else if (value is QueriedSourceFeature) {
       buffer.putUint8(182);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeatureId) {
+    } else if (value is QueriedFeature) {
       buffer.putUint8(183);
       writeValue(buffer, value.encode());
-    } else if (value is FeatureState) {
+    } else if (value is FeaturesetFeatureId) {
       buffer.putUint8(184);
       writeValue(buffer, value.encode());
-    } else if (value is _Interaction) {
+    } else if (value is FeatureState) {
       buffer.putUint8(185);
       writeValue(buffer, value.encode());
-    } else if (value is _InteractionPigeon) {
+    } else if (value is _Interaction) {
       buffer.putUint8(186);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetDescriptor) {
+    } else if (value is _InteractionPigeon) {
       buffer.putUint8(187);
       writeValue(buffer, value.encode());
-    } else if (value is FeaturesetFeature) {
+    } else if (value is FeaturesetDescriptor) {
       buffer.putUint8(188);
       writeValue(buffer, value.encode());
-    } else if (value is MapContentGestureContext) {
+    } else if (value is FeaturesetFeature) {
       buffer.putUint8(189);
       writeValue(buffer, value.encode());
-    } else if (value is _RenderedQueryGeometry) {
+    } else if (value is MapContentGestureContext) {
       buffer.putUint8(190);
       writeValue(buffer, value.encode());
-    } else if (value is ProjectedMeters) {
+    } else if (value is _RenderedQueryGeometry) {
       buffer.putUint8(191);
       writeValue(buffer, value.encode());
-    } else if (value is MercatorCoordinate) {
+    } else if (value is ProjectedMeters) {
       buffer.putUint8(192);
       writeValue(buffer, value.encode());
-    } else if (value is StyleObjectInfo) {
+    } else if (value is MercatorCoordinate) {
       buffer.putUint8(193);
       writeValue(buffer, value.encode());
-    } else if (value is StyleProjection) {
+    } else if (value is StyleObjectInfo) {
       buffer.putUint8(194);
       writeValue(buffer, value.encode());
-    } else if (value is FlatLight) {
+    } else if (value is StyleProjection) {
       buffer.putUint8(195);
       writeValue(buffer, value.encode());
-    } else if (value is DirectionalLight) {
+    } else if (value is FlatLight) {
       buffer.putUint8(196);
       writeValue(buffer, value.encode());
-    } else if (value is AmbientLight) {
+    } else if (value is DirectionalLight) {
       buffer.putUint8(197);
       writeValue(buffer, value.encode());
-    } else if (value is MbxImage) {
+    } else if (value is AmbientLight) {
       buffer.putUint8(198);
       writeValue(buffer, value.encode());
-    } else if (value is ImageStretches) {
+    } else if (value is MbxImage) {
       buffer.putUint8(199);
       writeValue(buffer, value.encode());
-    } else if (value is ImageContent) {
+    } else if (value is ImageStretches) {
       buffer.putUint8(200);
       writeValue(buffer, value.encode());
-    } else if (value is TransitionOptions) {
+    } else if (value is ImageContent) {
       buffer.putUint8(201);
       writeValue(buffer, value.encode());
-    } else if (value is CanonicalTileID) {
+    } else if (value is TransitionOptions) {
       buffer.putUint8(202);
       writeValue(buffer, value.encode());
-    } else if (value is StylePropertyValue) {
+    } else if (value is CanonicalTileID) {
       buffer.putUint8(203);
+      writeValue(buffer, value.encode());
+    } else if (value is StylePropertyValue) {
+      buffer.putUint8(204);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -3478,52 +3536,54 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 179:
         return LayerPosition.decode(readValue(buffer)!);
       case 180:
-        return QueriedRenderedFeature.decode(readValue(buffer)!);
+        return ImportPosition.decode(readValue(buffer)!);
       case 181:
-        return QueriedSourceFeature.decode(readValue(buffer)!);
+        return QueriedRenderedFeature.decode(readValue(buffer)!);
       case 182:
-        return QueriedFeature.decode(readValue(buffer)!);
+        return QueriedSourceFeature.decode(readValue(buffer)!);
       case 183:
-        return FeaturesetFeatureId.decode(readValue(buffer)!);
+        return QueriedFeature.decode(readValue(buffer)!);
       case 184:
-        return FeatureState.decode(readValue(buffer)!);
+        return FeaturesetFeatureId.decode(readValue(buffer)!);
       case 185:
-        return _Interaction.decode(readValue(buffer)!);
+        return FeatureState.decode(readValue(buffer)!);
       case 186:
-        return _InteractionPigeon.decode(readValue(buffer)!);
+        return _Interaction.decode(readValue(buffer)!);
       case 187:
-        return FeaturesetDescriptor.decode(readValue(buffer)!);
+        return _InteractionPigeon.decode(readValue(buffer)!);
       case 188:
-        return FeaturesetFeature.decode(readValue(buffer)!);
+        return FeaturesetDescriptor.decode(readValue(buffer)!);
       case 189:
-        return MapContentGestureContext.decode(readValue(buffer)!);
+        return FeaturesetFeature.decode(readValue(buffer)!);
       case 190:
-        return _RenderedQueryGeometry.decode(readValue(buffer)!);
+        return MapContentGestureContext.decode(readValue(buffer)!);
       case 191:
-        return ProjectedMeters.decode(readValue(buffer)!);
+        return _RenderedQueryGeometry.decode(readValue(buffer)!);
       case 192:
-        return MercatorCoordinate.decode(readValue(buffer)!);
+        return ProjectedMeters.decode(readValue(buffer)!);
       case 193:
-        return StyleObjectInfo.decode(readValue(buffer)!);
+        return MercatorCoordinate.decode(readValue(buffer)!);
       case 194:
-        return StyleProjection.decode(readValue(buffer)!);
+        return StyleObjectInfo.decode(readValue(buffer)!);
       case 195:
-        return FlatLight.decode(readValue(buffer)!);
+        return StyleProjection.decode(readValue(buffer)!);
       case 196:
-        return DirectionalLight.decode(readValue(buffer)!);
+        return FlatLight.decode(readValue(buffer)!);
       case 197:
-        return AmbientLight.decode(readValue(buffer)!);
+        return DirectionalLight.decode(readValue(buffer)!);
       case 198:
-        return MbxImage.decode(readValue(buffer)!);
+        return AmbientLight.decode(readValue(buffer)!);
       case 199:
-        return ImageStretches.decode(readValue(buffer)!);
+        return MbxImage.decode(readValue(buffer)!);
       case 200:
-        return ImageContent.decode(readValue(buffer)!);
+        return ImageStretches.decode(readValue(buffer)!);
       case 201:
-        return TransitionOptions.decode(readValue(buffer)!);
+        return ImageContent.decode(readValue(buffer)!);
       case 202:
-        return CanonicalTileID.decode(readValue(buffer)!);
+        return TransitionOptions.decode(readValue(buffer)!);
       case 203:
+        return CanonicalTileID.decode(readValue(buffer)!);
+      case 204:
         return StylePropertyValue.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -6907,6 +6967,185 @@ class StyleManager {
       );
     } else {
       return (pigeonVar_replyList[0] as TransitionOptions?)!;
+    }
+  }
+
+  /// Adds new import to current style, loaded from a JSON string.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> addStyleImportFromJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[importId, json, config, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Adds new import to current style, loaded from an URI.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> addStyleImportFromURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+    ImportPosition? importPosition,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel
+        .send(<Object?>[importId, uri, config, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided data value.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  Future<void> updateStyleImportWithJSON(
+    String importId,
+    String json, {
+    Map<String, Object>? config,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, json, config]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided URI.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  ///
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  Future<void> updateStyleImportWithURI(
+    String importId,
+    String uri, {
+    Map<String, Object>? config,
+  }) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, uri, config]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
+  ///
+  ///  @param importId Identifier of import to move.
+  ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  Future<void> moveStyleImport(
+      String importId, ImportPosition? importPosition) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[importId, importPosition]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
     }
   }
 

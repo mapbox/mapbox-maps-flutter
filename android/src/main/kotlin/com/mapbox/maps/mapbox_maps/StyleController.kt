@@ -23,6 +23,7 @@ import com.mapbox.maps.mapbox_maps.pigeons.FeaturesetDescriptor
 import com.mapbox.maps.mapbox_maps.pigeons.FlatLight
 import com.mapbox.maps.mapbox_maps.pigeons.ImageContent
 import com.mapbox.maps.mapbox_maps.pigeons.ImageStretches
+import com.mapbox.maps.mapbox_maps.pigeons.ImportPosition
 import com.mapbox.maps.mapbox_maps.pigeons.LayerPosition
 import com.mapbox.maps.mapbox_maps.pigeons.MbxImage
 import com.mapbox.maps.mapbox_maps.pigeons.StyleManager
@@ -77,6 +78,88 @@ class StyleController(private val context: Context, private val styleManager: Ma
           enablePlacementTransitions = transitionOptions.enablePlacementTransitions
         )
       )
+    )
+  }
+
+  override fun addStyleImportFromJSON(
+    importId: String,
+    json: String,
+    config: Map<String, Any>?,
+    importPosition: ImportPosition?
+  ) {
+    val mapsImportPosition = if (importPosition != null) com.mapbox.maps.ImportPosition(
+      importPosition.above,
+      importPosition.below,
+      importPosition.at?.toInt()
+    ) else null
+    val configs = if (config != null) config.mapValues {
+      it.value.toValue()
+    } as HashMap<String, Value> else null
+    styleManager.addStyleImportFromJSON(
+      importId,
+      json,
+      configs,
+      mapsImportPosition
+    )
+  }
+
+  override fun addStyleImportFromURI(
+    importId: String,
+    uri: String,
+    config: Map<String, Any>?,
+    importPosition: ImportPosition?
+  ) {
+    val mapsImportPosition = if (importPosition != null) com.mapbox.maps.ImportPosition(
+      importPosition.above,
+      importPosition.below,
+      importPosition.at?.toInt()
+    ) else null
+    val configs = if (config != null) config.mapValues {
+      it.value.toValue()
+    } as HashMap<String, Value> else null
+    styleManager.addStyleImportFromURI(
+      importId,
+      uri,
+      configs,
+      mapsImportPosition
+    )
+  }
+
+  override fun updateStyleImportWithJSON(
+    importId: String,
+    json: String,
+    config: Map<String, Any>?
+  ) {
+    val configs = if (config != null) config.mapValues {
+      it.value.toValue()
+    } as HashMap<String, Value> else null
+    styleManager.updateStyleImportWithJSON(
+      importId,
+      json,
+      configs
+    )
+  }
+
+  override fun updateStyleImportWithURI(importId: String, uri: String, config: Map<String, Any>?) {
+    val configs = if (config != null) config.mapValues {
+      it.value.toValue()
+    } as HashMap<String, Value> else null
+    styleManager.updateStyleImportWithURI(
+      importId,
+      uri,
+      configs
+    )
+  }
+
+  override fun moveStyleImport(importId: String, importPosition: ImportPosition?) {
+    val mapsImportPosition = if (importPosition != null) com.mapbox.maps.ImportPosition(
+      importPosition.above,
+      importPosition.below,
+      importPosition.at?.toInt()
+    ) else null
+    styleManager.moveStyleImport(
+      importId,
+      mapsImportPosition
     )
   }
 

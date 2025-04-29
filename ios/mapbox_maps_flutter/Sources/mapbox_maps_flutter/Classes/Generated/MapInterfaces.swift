@@ -1124,6 +1124,38 @@ struct LayerPosition {
   }
 }
 
+/// Specifies the position at which an import will be added when using `Style.addImport`
+///
+/// Generated class from Pigeon that represents data sent in messages.
+struct ImportPosition {
+  /// Import should be positioned above the specified import id.
+  var above: String?
+  /// Import should be positioned below the specified import id.
+  var below: String?
+  /// Import should be positioned at the specified index in the imports stack.
+  var at: Int64?
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> ImportPosition? {
+    let above: String? = nilOrValue(pigeonVar_list[0])
+    let below: String? = nilOrValue(pigeonVar_list[1])
+    let at: Int64? = nilOrValue(pigeonVar_list[2])
+
+    return ImportPosition(
+      above: above,
+      below: below,
+      at: at
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      above,
+      below,
+      at,
+    ]
+  }
+}
+
 /// Represents query result that is returned in QueryRenderedFeaturesCallback.
 /// @see `queryRenderedFeatures`
 ///
@@ -2181,52 +2213,54 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 179:
       return LayerPosition.fromList(self.readValue() as! [Any?])
     case 180:
-      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
+      return ImportPosition.fromList(self.readValue() as! [Any?])
     case 181:
-      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
+      return QueriedRenderedFeature.fromList(self.readValue() as! [Any?])
     case 182:
-      return QueriedFeature.fromList(self.readValue() as! [Any?])
+      return QueriedSourceFeature.fromList(self.readValue() as! [Any?])
     case 183:
-      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
+      return QueriedFeature.fromList(self.readValue() as! [Any?])
     case 184:
-      return FeatureState.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeatureId.fromList(self.readValue() as! [Any?])
     case 185:
-      return _Interaction.fromList(self.readValue() as! [Any?])
+      return FeatureState.fromList(self.readValue() as! [Any?])
     case 186:
-      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
+      return _Interaction.fromList(self.readValue() as! [Any?])
     case 187:
-      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
+      return _InteractionPigeon.fromList(self.readValue() as! [Any?])
     case 188:
-      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
+      return FeaturesetDescriptor.fromList(self.readValue() as! [Any?])
     case 189:
-      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
+      return FeaturesetFeature.fromList(self.readValue() as! [Any?])
     case 190:
-      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
+      return MapContentGestureContext.fromList(self.readValue() as! [Any?])
     case 191:
-      return ProjectedMeters.fromList(self.readValue() as! [Any?])
+      return _RenderedQueryGeometry.fromList(self.readValue() as! [Any?])
     case 192:
-      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
+      return ProjectedMeters.fromList(self.readValue() as! [Any?])
     case 193:
-      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
+      return MercatorCoordinate.fromList(self.readValue() as! [Any?])
     case 194:
-      return StyleProjection.fromList(self.readValue() as! [Any?])
+      return StyleObjectInfo.fromList(self.readValue() as! [Any?])
     case 195:
-      return FlatLight.fromList(self.readValue() as! [Any?])
+      return StyleProjection.fromList(self.readValue() as! [Any?])
     case 196:
-      return DirectionalLight.fromList(self.readValue() as! [Any?])
+      return FlatLight.fromList(self.readValue() as! [Any?])
     case 197:
-      return AmbientLight.fromList(self.readValue() as! [Any?])
+      return DirectionalLight.fromList(self.readValue() as! [Any?])
     case 198:
-      return MbxImage.fromList(self.readValue() as! [Any?])
+      return AmbientLight.fromList(self.readValue() as! [Any?])
     case 199:
-      return ImageStretches.fromList(self.readValue() as! [Any?])
+      return MbxImage.fromList(self.readValue() as! [Any?])
     case 200:
-      return ImageContent.fromList(self.readValue() as! [Any?])
+      return ImageStretches.fromList(self.readValue() as! [Any?])
     case 201:
-      return TransitionOptions.fromList(self.readValue() as! [Any?])
+      return ImageContent.fromList(self.readValue() as! [Any?])
     case 202:
-      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+      return TransitionOptions.fromList(self.readValue() as! [Any?])
     case 203:
+      return CanonicalTileID.fromList(self.readValue() as! [Any?])
+    case 204:
       return StylePropertyValue.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -2389,77 +2423,80 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? LayerPosition {
       super.writeByte(179)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedRenderedFeature {
+    } else if let value = value as? ImportPosition {
       super.writeByte(180)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedSourceFeature {
+    } else if let value = value as? QueriedRenderedFeature {
       super.writeByte(181)
       super.writeValue(value.toList())
-    } else if let value = value as? QueriedFeature {
+    } else if let value = value as? QueriedSourceFeature {
       super.writeByte(182)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeatureId {
+    } else if let value = value as? QueriedFeature {
       super.writeByte(183)
       super.writeValue(value.toList())
-    } else if let value = value as? FeatureState {
+    } else if let value = value as? FeaturesetFeatureId {
       super.writeByte(184)
       super.writeValue(value.toList())
-    } else if let value = value as? _Interaction {
+    } else if let value = value as? FeatureState {
       super.writeByte(185)
       super.writeValue(value.toList())
-    } else if let value = value as? _InteractionPigeon {
+    } else if let value = value as? _Interaction {
       super.writeByte(186)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetDescriptor {
+    } else if let value = value as? _InteractionPigeon {
       super.writeByte(187)
       super.writeValue(value.toList())
-    } else if let value = value as? FeaturesetFeature {
+    } else if let value = value as? FeaturesetDescriptor {
       super.writeByte(188)
       super.writeValue(value.toList())
-    } else if let value = value as? MapContentGestureContext {
+    } else if let value = value as? FeaturesetFeature {
       super.writeByte(189)
       super.writeValue(value.toList())
-    } else if let value = value as? _RenderedQueryGeometry {
+    } else if let value = value as? MapContentGestureContext {
       super.writeByte(190)
       super.writeValue(value.toList())
-    } else if let value = value as? ProjectedMeters {
+    } else if let value = value as? _RenderedQueryGeometry {
       super.writeByte(191)
       super.writeValue(value.toList())
-    } else if let value = value as? MercatorCoordinate {
+    } else if let value = value as? ProjectedMeters {
       super.writeByte(192)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleObjectInfo {
+    } else if let value = value as? MercatorCoordinate {
       super.writeByte(193)
       super.writeValue(value.toList())
-    } else if let value = value as? StyleProjection {
+    } else if let value = value as? StyleObjectInfo {
       super.writeByte(194)
       super.writeValue(value.toList())
-    } else if let value = value as? FlatLight {
+    } else if let value = value as? StyleProjection {
       super.writeByte(195)
       super.writeValue(value.toList())
-    } else if let value = value as? DirectionalLight {
+    } else if let value = value as? FlatLight {
       super.writeByte(196)
       super.writeValue(value.toList())
-    } else if let value = value as? AmbientLight {
+    } else if let value = value as? DirectionalLight {
       super.writeByte(197)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxImage {
+    } else if let value = value as? AmbientLight {
       super.writeByte(198)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageStretches {
+    } else if let value = value as? MbxImage {
       super.writeByte(199)
       super.writeValue(value.toList())
-    } else if let value = value as? ImageContent {
+    } else if let value = value as? ImageStretches {
       super.writeByte(200)
       super.writeValue(value.toList())
-    } else if let value = value as? TransitionOptions {
+    } else if let value = value as? ImageContent {
       super.writeByte(201)
       super.writeValue(value.toList())
-    } else if let value = value as? CanonicalTileID {
+    } else if let value = value as? TransitionOptions {
       super.writeByte(202)
       super.writeValue(value.toList())
-    } else if let value = value as? StylePropertyValue {
+    } else if let value = value as? CanonicalTileID {
       super.writeByte(203)
+      super.writeValue(value.toList())
+    } else if let value = value as? StylePropertyValue {
+      super.writeByte(204)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -4900,6 +4937,41 @@ protocol StyleManager {
   ///
   /// @return The `transition options` of the current style in use.
   func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void)
+  /// Adds new import to current style, loaded from a JSON string.
+  /// 
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  func addStyleImportFromJSON(importId: String, json: String, config: [String: Any]?, importPosition: ImportPosition?) throws
+  /// Adds new import to current style, loaded from an URI.
+  /// 
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  func addStyleImportFromURI(importId: String, uri: String, config: [String: Any]?, importPosition: ImportPosition?) throws
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided data value.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  /// 
+  /// @param importId Identifier of import to update.
+  /// @param json The JSON string to be loaded directly as the import.
+  /// @param config A map containing the configuration options of the import.
+  func updateStyleImportWithJSON(importId: String, json: String, config: [String: Any]?) throws
+  /// Updates an existing import in the style.
+  /// The function replaces the content of the import, with the content loaded from the provided URI.
+  /// The configuration values of the import are merged with the configuration provided in the update.
+  /// 
+  /// @param importId Identifier of import to update.
+  /// @param uri URI of the import.
+  /// @param config A map containing the configuration options of the import.
+  func updateStyleImportWithURI(importId: String, uri: String, config: [String: Any]?) throws
+  /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
+  /// 
+  ///  @param importId Identifier of import to move.
+  ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+  func moveStyleImport(importId: String, importPosition: ImportPosition?) throws
   /// Returns the list containing information about existing style import objects.
   func getStyleImports() throws -> [StyleObjectInfo?]
   /// Removes an existing style import.
@@ -5442,6 +5514,122 @@ class StyleManagerSetup {
       }
     } else {
       getStyleTransitionChannel.setMessageHandler(nil)
+    }
+    /// Adds new import to current style, loaded from a JSON string.
+    /// 
+    /// @param importId Identifier of import to update.
+    /// @param json The JSON string to be loaded directly as the import.
+    /// @param config A map containing the configuration options of the import.
+    /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+    let addStyleImportFromJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addStyleImportFromJSONChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let jsonArg = args[1] as! String
+        let configArg: [String: Any]? = nilOrValue(args[2])
+        let importPositionArg: ImportPosition? = nilOrValue(args[3])
+        do {
+          try api.addStyleImportFromJSON(importId: importIdArg, json: jsonArg, config: configArg, importPosition: importPositionArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      addStyleImportFromJSONChannel.setMessageHandler(nil)
+    }
+    /// Adds new import to current style, loaded from an URI.
+    /// 
+    /// @param importId Identifier of import to update.
+    /// @param uri URI of the import.
+    /// @param config A map containing the configuration options of the import.
+    /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+    let addStyleImportFromURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      addStyleImportFromURIChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let uriArg = args[1] as! String
+        let configArg: [String: Any]? = nilOrValue(args[2])
+        let importPositionArg: ImportPosition? = nilOrValue(args[3])
+        do {
+          try api.addStyleImportFromURI(importId: importIdArg, uri: uriArg, config: configArg, importPosition: importPositionArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      addStyleImportFromURIChannel.setMessageHandler(nil)
+    }
+    /// Updates an existing import in the style.
+    /// The function replaces the content of the import, with the content loaded from the provided data value.
+    /// The configuration values of the import are merged with the configuration provided in the update.
+    /// 
+    /// @param importId Identifier of import to update.
+    /// @param json The JSON string to be loaded directly as the import.
+    /// @param config A map containing the configuration options of the import.
+    let updateStyleImportWithJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      updateStyleImportWithJSONChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let jsonArg = args[1] as! String
+        let configArg: [String: Any]? = nilOrValue(args[2])
+        do {
+          try api.updateStyleImportWithJSON(importId: importIdArg, json: jsonArg, config: configArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      updateStyleImportWithJSONChannel.setMessageHandler(nil)
+    }
+    /// Updates an existing import in the style.
+    /// The function replaces the content of the import, with the content loaded from the provided URI.
+    /// The configuration values of the import are merged with the configuration provided in the update.
+    /// 
+    /// @param importId Identifier of import to update.
+    /// @param uri URI of the import.
+    /// @param config A map containing the configuration options of the import.
+    let updateStyleImportWithURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      updateStyleImportWithURIChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let uriArg = args[1] as! String
+        let configArg: [String: Any]? = nilOrValue(args[2])
+        do {
+          try api.updateStyleImportWithURI(importId: importIdArg, uri: uriArg, config: configArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      updateStyleImportWithURIChannel.setMessageHandler(nil)
+    }
+    /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
+    /// 
+    ///  @param importId Identifier of import to move.
+    ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
+    let moveStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      moveStyleImportChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let importIdArg = args[0] as! String
+        let importPositionArg: ImportPosition? = nilOrValue(args[1])
+        do {
+          try api.moveStyleImport(importId: importIdArg, importPosition: importPositionArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      moveStyleImportChannel.setMessageHandler(nil)
     }
     /// Returns the list containing information about existing style import objects.
     let getStyleImportsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

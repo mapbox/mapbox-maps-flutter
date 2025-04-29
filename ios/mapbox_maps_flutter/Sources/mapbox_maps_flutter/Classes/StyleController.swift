@@ -370,6 +370,55 @@ final class StyleController: StyleManager {
 
     // MARK: Style Imports
 
+    func addStyleImportFromJSON(importId: String, json: String, config: [String: Any]?, importPosition: ImportPosition?) throws {
+        do {
+            try styleManager.addStyleImport(withId: importId, json: json, config: config, importPosition: importPosition?.toImportPosition())
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func addStyleImportFromURI(importId: String, uri: String, config: [String: Any]?, importPosition: ImportPosition?) throws {
+        guard let styleURI = StyleURI(rawValue: uri) else {
+            throw FlutterError(code: StyleController.errorCode, message: "Incorrect Style URI", details: nil)
+            return
+        }
+        do {
+            try styleManager.addStyleImport(withId: importId, uri: styleURI, config: config, importPosition: importPosition?.toImportPosition())
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func updateStyleImportWithJSON(importId: String, json: String, config: [String: Any]?) throws {
+        do {
+            try styleManager.updateStyleImport(withId: importId, json: json, config: config)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func updateStyleImportWithURI(importId: String, uri: String, config: [String: Any]?) throws {
+        guard let styleURI = StyleURI(rawValue: uri) else {
+            throw FlutterError(code: StyleController.errorCode, message: "Incorrect Style URI", details: nil)
+            return
+        }
+        do {
+            try styleManager.updateStyleImport(withId: importId, uri: styleURI, config: config)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
+    func moveStyleImport(importId: String, importPosition: ImportPosition?) throws {
+        let mapsImportPosition: MapboxMaps.ImportPosition = importPosition?.toImportPosition() ?? .default
+        do {
+            try styleManager.moveStyleImport(withId: importId, to: mapsImportPosition)
+        } catch let styleError {
+            throw FlutterError(code: StyleController.errorCode, message: styleError.localizedDescription, details: nil)
+        }
+    }
+
     func getStyleImports() throws -> [StyleObjectInfo?] {
         styleManager.styleImports.map { StyleObjectInfo(id: $0.id, type: $0.type) }
     }

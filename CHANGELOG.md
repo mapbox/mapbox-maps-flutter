@@ -1,5 +1,11 @@
 ### main
 
+> [!IMPORTANT]
+> [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+
+* In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
+  * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
+* Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
 
 ### 2.8.0-rc.1
