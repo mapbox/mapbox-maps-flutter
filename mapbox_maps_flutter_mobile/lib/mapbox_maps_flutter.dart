@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
 import 'package:meta/meta.dart';
 import 'package:turf/turf.dart' as turf;
 
@@ -88,3 +89,4 @@ part 'src/viewport/transitions/easing_viewport_transition.dart';
 part 'src/package_info.dart';
 part 'src/http/http_service.dart';
 part 'src/cancelable.dart';
+part 'src/mapbox_maps_flutter_mobile.dart';

@@ -21,7 +21,8 @@ abstract base class MapboxMapsFlutterPlatform {
     _instance = instance;
   }
 
-  MapboxMapsFlutterPlatform._();
+  /// Constructs a MapboxMapsFlutterPlatform.
+  MapboxMapsFlutterPlatform();
 
   /// The public access token that is used to access resources provided by Mapbox services.
   /// For more information about public access tokens, see

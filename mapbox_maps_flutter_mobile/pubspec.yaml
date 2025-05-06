@@ -14,6 +14,7 @@ dependencies:
   turf: ^0.0.8
   typed_data: ^1.3.0
   meta: ^1.9.1
+  mapbox_maps_flutter_interface: any
 
 dev_dependencies:
   integration_test:
@@ -29,9 +30,12 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   plugin:
+    implements: mapbox_maps_flutter_interface
     platforms:
       android:
         package: com.mapbox.maps.mapbox_maps
         pluginClass: MapboxMapsPlugin
+        dartPluginClass: MapboxMapsFlutterMobile
       ios:
         pluginClass: MapboxMapsPlugin
+        dartPluginClass: MapboxMapsFlutterMobile

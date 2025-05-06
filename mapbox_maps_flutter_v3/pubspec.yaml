@@ -1,5 +1,5 @@
-name: mapbox_maps_flutter_interface
-description: "A common package that defines an interface for the MapboxMaps Flutter plugin, enabling seamless integration of MapboxMaps into Flutter applications."
+name: mapbox_maps_flutter_v3 # Update this name
+description: "A new Flutter package project."
 version: 0.0.1
 homepage:
 
@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  mapbox_maps_flutter: any # Update this
+  mapbox_maps_flutter_interface: any
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +23,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  plugin:
+    platforms:
+      android:
+        default_package: mapbox_maps_flutter
+      ios:
+        default_package: mapbox_maps_flutter
 
   # To add assets to your package, add an assets section, like this:
   # assets:
