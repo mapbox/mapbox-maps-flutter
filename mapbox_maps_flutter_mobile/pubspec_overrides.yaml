@@ -1,3 +1,0 @@
-dependency_overrides:
-  mapbox_maps_flutter_interface:
-    path: ../mapbox_maps_flutter_interface
