@@ -10,7 +10,7 @@ platform :ios do
     sync_code_signing(type: "development")
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "example/ios/Runner.xcodeproj",
+      path: "mapbox_maps_flutter_mobile/example/ios/Runner.xcodeproj",
       team_id: "GJZR2MEM28", # Developer Portal Team ID,
       profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterMapsExample"],
       targets: ["Runner"],
@@ -18,7 +18,7 @@ platform :ios do
     )
     update_code_signing_settings(
       use_automatic_signing: false,
-      path: "example/ios/Runner.xcodeproj",
+      path: "mapbox_maps_flutter_mobile/example/ios/Runner.xcodeproj",
       team_id: "GJZR2MEM28", # Developer Portal Team ID,
       profile_name: lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]["com.mapbox.maps.FlutterRunnerTests"],
       targets: ["RunnerTests"],
@@ -26,10 +26,10 @@ platform :ios do
     )
     # build tests archive in the `output_directory` to launch on firebase
     run_tests(
-      workspace: 'example/ios/Runner.xcworkspace',
+      workspace: 'mapbox_maps_flutter_mobile/example/ios/Runner.xcworkspace',
       scheme: 'Runner',                   # XCTest scheme
-      xcconfig: "example/ios/Flutter/Release.xcconfig",
-      derived_data_path: "example/build/output",
+      xcconfig: "mapbox_maps_flutter_mobile/example/ios/Flutter/Release.xcconfig",
+      derived_data_path: "mapbox_maps_flutter_mobile/example/build/output",
       configuration: "Release",
       xcargs: "SWIFT_TREAT_WARNINGS_AS_ERRORS=NO COMPILER_INDEX_STORE_ENABLE=NO",
       skip_detect_devices: true,          # Required
@@ -37,7 +37,7 @@ platform :ios do
       sdk: 'iphoneos',                    # Required
       should_zip_build_products: true,    # Must be true to set the correct format for Firebase Test Lab,
       result_bundle: true,
-      output_directory: "example/build/output/",
+      output_directory: "mapbox_maps_flutter_mobile/example/build/output/",
       code_coverage: true
     )
   end
