@@ -27,6 +27,10 @@ dependencies:
   http: ^1.3.0
   path_provider: ^2.1.3
 
+dependency_overrides:
+  mapbox_maps_flutter_interface:
+    path: ../../mapbox_maps_flutter_interface
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter

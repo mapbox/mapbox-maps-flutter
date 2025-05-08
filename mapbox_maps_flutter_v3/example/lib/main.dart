@@ -14,9 +14,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const String ACCESS_TOKEN = String.fromEnvironment(
+    "MAPBOX_ACCESS_TOKEN",
+  );
+
   @override
   void initState() {
     super.initState();
+    MapboxOptions.setAccessToken(ACCESS_TOKEN);
   }
 
   @override

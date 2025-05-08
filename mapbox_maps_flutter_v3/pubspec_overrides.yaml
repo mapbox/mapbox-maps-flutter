@@ -3,3 +3,5 @@ dependency_overrides:
     path: ../mapbox_maps_flutter_interface
   mapbox_maps_flutter:
     path: ../mapbox_maps_flutter_mobile
+  mapbox_maps_flutter_web:
+    path: ../mapbox_maps_flutter_web
