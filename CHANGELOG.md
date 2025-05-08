@@ -18,7 +18,7 @@
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
 * Additionally, the STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
-* Move `modelElevationReference` to `LocationPuck3D`. 
+* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
 
 ### 2.8.0 
 
