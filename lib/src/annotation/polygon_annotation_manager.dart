@@ -24,7 +24,7 @@ class PolygonAnnotationManager extends BaseAnnotationManager {
 
   /// Registers drag event callbacks for fill annotations.
   ///
-  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
+  /// - [onBegin]: Called when a drag gesture starts on a fill annotation.
   ///   The provided [PolygonAnnotationInteractionContext] contains details
   ///   about the annotation being dragged and the drag start position.
   ///

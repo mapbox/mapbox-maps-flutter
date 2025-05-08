@@ -92,6 +92,7 @@ struct PerformanceStatisticsOptions {
   /// A negative sampling duration is an error and results in no operation.
   var samplingDurationMillis: Double
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PerformanceStatisticsOptions? {
     let samplerOptions = pigeonVar_list[0] as! [PerformanceSamplerOptions]
@@ -117,6 +118,7 @@ struct DurationStatistics {
   /// The median duration over the sampling window.
   var medianMillis: Double
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> DurationStatistics? {
     let maxMillis = pigeonVar_list[0] as! Double
@@ -138,17 +140,18 @@ struct DurationStatistics {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CumulativeRenderingStatistics {
   /// The number of draw calls at the end of the collection window.
-  var drawCalls: Int64?
+  var drawCalls: Int64? = nil
   /// The amount of texture memory in use at the end of the collection window.
-  var textureBytes: Int64?
+  var textureBytes: Int64? = nil
   /// The amount of vertex memory (array and index buffer memory) in use at the end of the collection window.
-  var vertexBytes: Int64?
+  var vertexBytes: Int64? = nil
   /// The number of graphics pipeline programs created.
-  var graphicsPrograms: Int64?
+  var graphicsPrograms: Int64? = nil
   /// The total amount of time spent on all graphics pipeline program creation, in milliseconds.
-  var graphicsProgramsCreationTimeMillis: Double?
+  var graphicsProgramsCreationTimeMillis: Double? = nil
   /// The number of FBO switches.
-  var fboSwitchCount: Int64?
+  var fboSwitchCount: Int64? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CumulativeRenderingStatistics? {
@@ -187,6 +190,7 @@ struct GroupPerformanceStatistics {
   /// The name of the group or layer.
   var name: String
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> GroupPerformanceStatistics? {
     let durationMillis = pigeonVar_list[0] as! Double
@@ -215,6 +219,7 @@ struct PerFrameRenderingStatistics {
   var shadowMapDurationStatistics: DurationStatistics
   /// The CPU timeline duration of the renderer's resource (buffers, textures, images) upload pass.
   var uploadDurationStatistics: DurationStatistics
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PerFrameRenderingStatistics? {
@@ -250,9 +255,10 @@ struct PerformanceStatistics {
   /// The CPU timeline duration statistics of the map render call.
   var mapRenderDurationStatistics: DurationStatistics
   /// Cumulative, continuously tracked, resource stats. Enable using the `CumulativeRenderingStats` performance sampler option.
-  var cumulativeStatistics: CumulativeRenderingStatistics?
+  var cumulativeStatistics: CumulativeRenderingStatistics? = nil
   /// Aggregated, per-frame, timings. Enable using the  `PerFrameRenderingStats` performance sampler option.
-  var perFrameStatistics: PerFrameRenderingStatistics?
+  var perFrameStatistics: PerFrameRenderingStatistics? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PerformanceStatistics? {

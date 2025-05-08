@@ -6,6 +6,19 @@
 * In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
 * Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+* Promote interaction APIs to stable. The following APIs are now stable:
+  * `MapboxMap.addInteraction`
+  * `MapboxMap.removeInteraction`
+  * `MapboxMap.setFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.setFeatureStateForFeaturesetFeature`
+  * `MapboxMap.getFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.getFeatureStateForFeaturesetFeature`
+  * `MapboxMap.removeFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.removeFeatureStateForFeaturesetFeature`
+  * `MapboxMap.resetFeatureStatesForFeatureset`
+  * `MapboxMap.queryRenderedFeaturesForFeatureset`
+* Additionally, the STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
+* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
 
 ### 2.8.0 
 
