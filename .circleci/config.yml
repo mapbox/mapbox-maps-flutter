@@ -83,7 +83,7 @@ jobs:
     parameters:
       workspace-path:
         type: string
-        default: example/build/app/outputs/apk
+        default: mapbox_maps_flutter_mobile/example/build/app/outputs/apk
     docker:
       - image: cimg/android:2024.01.1
     resource_class: 2xlarge
@@ -94,14 +94,14 @@ jobs:
           app-dir: example
       - run:
           name: ktlint
-          working_directory: example/android
+          working_directory: mapbox_maps_flutter_mobile/example/android
           command: ./gradlew ktlint
       - run:
           name: unit test
-          command: flutter test test
+          command: flutter test mapbox_maps_flutter_mobile/test
       - run:
           name: "Build Android integration tests"
-          working_directory: example/android
+          working_directory: mapbox_maps_flutter_mobile/example/android
           command: |
             ./gradlew app:assembleAndroidTest --stacktrace
             ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n "ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" | base64 -w 0)" --stacktrace
@@ -117,7 +117,7 @@ jobs:
     parameters:
       workspace-path:
         type: string
-        default: example/build/app/outputs/apk
+        default: mapbox_maps_flutter_mobile/example/build/app/outputs/apk
     executor: firebase-test-runner
     steps:
       - attach_workspace:
@@ -144,7 +144,7 @@ jobs:
     parameters:
       workspace-path:
         type: string
-        default: example/build/output
+        default: mapbox_maps_flutter_mobile/example/build/output
     executor: macos-xcode-latest
     steps:
       - checkout
@@ -156,18 +156,18 @@ jobs:
           app-dir: example
       - run:
           name: swiftlint
-          working_directory: ios/mapbox_maps_flutter
+          working_directory: mapbox_maps_flutter_mobile/ios/mapbox_maps_flutter
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint; swiftlint lint --strict
       - run:
           name: unit test
-          command: flutter test test
+          command: flutter test mapbox_maps_flutter_mobile/test
       - run:
           name: "Build iOS integration tests"
           command: |
             pushd example
 
             # required to init configs that pass environment variables to fastlane later
-            flutter build ios --config-only integration_test/all_test.dart \
+            flutter build ios --config-only mapbox_maps_flutter_mobile/integration_test/all_test.dart \
               --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
             popd # to repo root
@@ -184,7 +184,7 @@ jobs:
     parameters:
       workspace-path:
         type: string
-        default: example/build/output
+        default: mapbox_maps_flutter_mobile/example/build/output
     executor: firebase-test-runner
     steps:
       - attach_workspace:
