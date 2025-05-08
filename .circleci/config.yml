@@ -90,8 +90,8 @@ jobs:
     steps:
       - checkout
       - flutter/install_sdk_and_pub:
-          version: 3.24.3
-          app-dir: example
+          version: 3.27.0
+          app-dir: mapbox_maps_flutter_mobile/example
       - run:
           name: ktlint
           working_directory: mapbox_maps_flutter_mobile/example/android
@@ -152,8 +152,8 @@ jobs:
       - add-mapbox-submodules-key
       - macos/install-rosetta
       - flutter/install_sdk_and_pub:
-          version: 3.24.3
-          app-dir: example
+          version: 3.27.0
+          app-dir: mapbox_maps_flutter_mobile/example
       - run:
           name: swiftlint
           working_directory: mapbox_maps_flutter_mobile/ios/mapbox_maps_flutter
