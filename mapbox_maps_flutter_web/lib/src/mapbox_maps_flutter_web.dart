@@ -18,7 +18,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
   late HTMLDivElement _mapElement;
 
   @override
-  Widget buildView({OnPlatformViewCreated? onPlatformViewCreated}) {
+  Widget buildView() {
     final viewType = 'mapbox-maps-flutter-web/$hashCode';
 
     // Attach the mapDiv to the DOM
@@ -34,14 +34,7 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
       _initMap();
       return _mapElement;
     });
-    return HtmlElementView(
-      viewType: viewType,
-      onPlatformViewCreated: (int viewId) {
-        if (onPlatformViewCreated != null) {
-          onPlatformViewCreated(viewId);
-        }
-      },
-    );
+    return HtmlElementView(viewType: viewType);
   }
 
   _initMap() async {

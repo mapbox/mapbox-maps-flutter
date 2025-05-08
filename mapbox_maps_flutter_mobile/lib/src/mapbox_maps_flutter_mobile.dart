@@ -4,7 +4,7 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
   late final MapboxMap _mapboxMap;
 
   @override
-  Widget buildView({OnPlatformViewCreated? onPlatformViewCreated}) {
+  Widget buildView() {
     return MapWidget(
       onMapCreated: (MapboxMap mapboxMap) {
         _mapboxMap = mapboxMap;

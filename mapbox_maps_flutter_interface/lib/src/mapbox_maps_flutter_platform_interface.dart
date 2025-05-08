@@ -38,13 +38,5 @@ abstract base class MapboxMapsFlutterPlatform {
   ///
   /// This method is responsible for creating the widget that integrates
   /// with the underlying platform's view system to render the map.
-  ///
-  /// The [onPlatformViewCreated] callback is invoked when the platform-specific
-  /// view is created. It provides a way to interact with the platform view
-  /// after it has been initialized.
-  ///
-  /// - [onPlatformViewCreated]: A callback function that is triggered when the
-  ///   platform view is created. It can be used to perform additional setup
-  ///   or configuration.
-  Widget buildView({OnPlatformViewCreated? onPlatformViewCreated});
+  Widget buildView();
 }

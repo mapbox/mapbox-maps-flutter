@@ -1,7 +1,7 @@
 part of mapbox_maps_flutter;
 
 /// Definition for listener invoked when the map is created.
-typedef void MapCreatedCallback(MapboxMap controller);
+typedef MapCreatedCallback = void Function(MapboxMap controller);
 
 /// Definition for listener invoked when the style is fully loaded.
 typedef void OnStyleLoadedListener(StyleLoadedEventData styleLoadedEventData);
