@@ -1,7 +1,7 @@
 name: _
 publish_to: none
 environment:
-  sdk: ^3.6.0
+  sdk: ">=3.6.0 <4.0.0"
 workspace:
   - mapbox_maps_flutter_mobile
   - mapbox_maps_flutter_interface
