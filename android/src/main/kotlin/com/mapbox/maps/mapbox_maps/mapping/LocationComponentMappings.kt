@@ -47,6 +47,7 @@ fun LocationComponentSettingsInterface.applyFromFLT(settings: LocationComponentS
           puck3D.modelScaleMode?.let { this.modelScaleMode = it.toModelScaleMode() }
           puck3D.modelEmissiveStrength?.let { this.modelEmissiveStrength = it.toFloat() }
           puck3D.modelEmissiveStrengthExpression?.let { this.modelEmissiveStrengthExpression = it }
+          puck3D.modelElevationReference?.let { this.modelElevationReference = it }
         }
       } else {
         (if (useDefaultPuck2DIfNeeded) createDefault2DPuck(withBearing = settings.puckBearingEnabled == true) else com.mapbox.maps.plugin.LocationPuck2D())
@@ -111,6 +112,7 @@ fun LocationComponentSettingsInterface.toFLT(context: Context) = LocationCompone
         modelScaleMode = puck3D.modelScaleMode.toFLTModelScaleMode(),
         modelEmissiveStrength = puck3D.modelEmissiveStrength.toDouble(),
         modelEmissiveStrengthExpression = puck3D.modelEmissiveStrengthExpression,
+        modelElevationReference = puck3D.modelElevationReference,
       )
     }
   )
