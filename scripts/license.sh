@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Extract the archive URLs for direct dependencies, excluding the package named 'flutter'
-package_info=$(echo "$deps" | jq -r '.packages[] | select(.kind == "direct" and .name != "flutter") | "\(.name) \(.version)"')
+package_info=$(echo "$deps" | jq -r '.packages[] | select(.kind != "root" and .name != "flutter") | "\(.name) \(.version)"')
 sdk_version=$(echo "$deps" | jq -r '.packages[] | select(.kind == "root") | .version')
 
 deps_licenses=""
@@ -63,8 +63,14 @@ while read -r name version; do
   # Add your logic here to handle each package
 done <<< "$package_info"
 
-ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' ios/mapbox_maps_flutter/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
-android_sdk_version=$(grep 'com.mapbox.maps:android' android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+mobile_dir='mapbox_maps_flutter_mobile'
+
+ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' $mobile_dir/ios/mapbox_maps_flutter/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+android_sdk_version=$(grep 'com.mapbox.maps:android' $mobile_dir/android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+
+echo "iOS SDK version: $ios_sdk_version"
+echo "Android SDK version: $android_sdk_version"
+# Fetch the license files for iOS and Android SDKs
 ios_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md")
 android_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-android/v$android_sdk_version/LICENSE.md")
 
