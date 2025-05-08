@@ -6,16 +6,13 @@
 * In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
 * Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+
+### 2.8.0 
+
 * Update geometry conversions on Android to use Longitude, Latitude instead of Latitude, Longitude order. This follows the order used by the GeoJSON Specification and the Turf library.
-
-### 2.8.0-rc.1
-
 * [Android] Fix color alpha value conversion.
-
-### 2.8.0-beta.1
-
 * Introduce experimental `MapboxMap.startPerformanceStatisticsCollection` / `MapboxMap.stopPerformanceStatisticsCollection` APIs allowing to start / stop collecting map rendering performance statistics.
-* Update Maps SDK to 11.12.0-beta.1
+* Update Maps SDK to 11.12.0
 
 ### 2.7.0
 
