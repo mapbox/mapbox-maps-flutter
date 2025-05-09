@@ -124,6 +124,23 @@ enum class ModelScaleMode(val raw: Int) {
 }
 
 /**
+ * Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+ * Default value: "ground".
+ */
+enum class ModelElevationReference(val raw: Int) {
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
+  SEA(0),
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
+  GROUND(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ModelElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Gesture configuration allows to control the user touch interaction.
  *
  * Generated class from Pigeon that represents data sent in messages.
@@ -391,7 +408,12 @@ data class LocationPuck3D(
    */
   val modelEmissiveStrength: Double? = null,
   /** The emissive strength expression of the model, which will overwrite the default model emissive strength. */
-  val modelEmissiveStrengthExpression: String? = null
+  val modelEmissiveStrengthExpression: String? = null,
+  /**
+   * Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
+   * Default value: "ground".
+   */
+  val modelElevationReference: ModelElevationReference? = null
 ) {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LocationPuck3D {
@@ -407,7 +429,8 @@ data class LocationPuck3D(
       val modelScaleMode = pigeonVar_list[9] as ModelScaleMode?
       val modelEmissiveStrength = pigeonVar_list[10] as Double?
       val modelEmissiveStrengthExpression = pigeonVar_list[11] as String?
-      return LocationPuck3D(modelUri, position, modelOpacity, modelScale, modelScaleExpression, modelTranslation, modelRotation, modelCastShadows, modelReceiveShadows, modelScaleMode, modelEmissiveStrength, modelEmissiveStrengthExpression)
+      val modelElevationReference = pigeonVar_list[12] as ModelElevationReference?
+      return LocationPuck3D(modelUri, position, modelOpacity, modelScale, modelScaleExpression, modelTranslation, modelRotation, modelCastShadows, modelReceiveShadows, modelScaleMode, modelEmissiveStrength, modelEmissiveStrengthExpression, modelElevationReference)
     }
   }
   fun toList(): List<Any?> {
@@ -424,6 +447,7 @@ data class LocationPuck3D(
       modelScaleMode,
       modelEmissiveStrength,
       modelEmissiveStrengthExpression,
+      modelElevationReference,
     )
   }
   override fun equals(other: Any?): Boolean {
@@ -444,7 +468,8 @@ data class LocationPuck3D(
       modelReceiveShadows == other.modelReceiveShadows &&
       modelScaleMode == other.modelScaleMode &&
       modelEmissiveStrength == other.modelEmissiveStrength &&
-      modelEmissiveStrengthExpression == other.modelEmissiveStrengthExpression
+      modelEmissiveStrengthExpression == other.modelEmissiveStrengthExpression &&
+      modelElevationReference == other.modelElevationReference
   }
 
   override fun hashCode(): Int = toList().hashCode()
@@ -1100,51 +1125,56 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
         }
       }
       133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          ModelElevationReference.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          GesturesSettings.fromList(it)
+          ScreenCoordinate.fromList(it)
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck2D.fromList(it)
+          GesturesSettings.fromList(it)
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck3D.fromList(it)
+          LocationPuck2D.fromList(it)
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationPuck.fromList(it)
+          LocationPuck3D.fromList(it)
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LocationComponentSettings.fromList(it)
+          LocationPuck.fromList(it)
         }
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScaleBarSettings.fromList(it)
+          LocationComponentSettings.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CompassSettings.fromList(it)
+          ScaleBarSettings.fromList(it)
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          AttributionSettings.fromList(it)
+          CompassSettings.fromList(it)
         }
       }
       142.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          AttributionSettings.fromList(it)
+        }
+      }
+      143.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LogoSettings.fromList(it)
         }
@@ -1170,44 +1200,48 @@ private open class SettingsPigeonCodec : StandardMessageCodec() {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is ScreenCoordinate -> {
+      is ModelElevationReference -> {
         stream.write(133)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is GesturesSettings -> {
+      is ScreenCoordinate -> {
         stream.write(134)
         writeValue(stream, value.toList())
       }
-      is LocationPuck2D -> {
+      is GesturesSettings -> {
         stream.write(135)
         writeValue(stream, value.toList())
       }
-      is LocationPuck3D -> {
+      is LocationPuck2D -> {
         stream.write(136)
         writeValue(stream, value.toList())
       }
-      is LocationPuck -> {
+      is LocationPuck3D -> {
         stream.write(137)
         writeValue(stream, value.toList())
       }
-      is LocationComponentSettings -> {
+      is LocationPuck -> {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is ScaleBarSettings -> {
+      is LocationComponentSettings -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is CompassSettings -> {
+      is ScaleBarSettings -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is AttributionSettings -> {
+      is CompassSettings -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is LogoSettings -> {
+      is AttributionSettings -> {
         stream.write(142)
+        writeValue(stream, value.toList())
+      }
+      is LogoSettings -> {
+        stream.write(143)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

@@ -113,7 +113,8 @@ void main() {
                 modelRotation: [1.0, 2.0, 3.0],
                 modelScale: [1.0, 5.0, 3.0],
                 modelTranslation: [0.0, 1.0, 2.0],
-                modelScaleExpression: expression)));
+                modelScaleExpression: expression,
+                modelElevationReference: ModelElevationReference.SEA)));
 
     await location.updateSettings(settings);
 
@@ -138,5 +139,8 @@ void main() {
     }
     expect(updatedSettings.locationPuck?.locationPuck3D?.modelScaleExpression,
         settings.locationPuck?.locationPuck3D?.modelScaleExpression);
+    expect(
+        updatedSettings.locationPuck?.locationPuck3D?.modelElevationReference,
+        settings.locationPuck?.locationPuck3D?.modelElevationReference);
   });
 }

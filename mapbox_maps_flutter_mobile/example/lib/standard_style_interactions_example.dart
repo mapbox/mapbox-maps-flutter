@@ -31,6 +31,7 @@ class StandardStyleInteractionsState
   _onMapCreated(MapboxMap mapboxMap) {
     this.mapboxMap = mapboxMap;
     mapboxMap.style;
+    _updateMapStyle();
 
     /// When a POI feature in the Standard POI featureset is tapped hide the POI
     var tapInteractionPOI = TapInteraction(StandardPOIs(), (feature, _) {
@@ -154,9 +155,7 @@ class StandardStyleInteractionsState
             bearing: 49.92,
             zoom: 16.35,
             pitch: 40),
-
-        /// NOT FOR PRODUCTION USE. An experimental version of the Mapbox Standard style.
-        styleUri: MapboxStyles.STANDARD_EXPERIMENTAL,
+        styleUri: MapboxStyles.STANDARD,
         textureView: true,
         onMapCreated: _onMapCreated,
       ),
@@ -174,7 +173,7 @@ class StandardStyleInteractionsState
     var configs = {
       "lightPreset": lightPreset,
       "theme": theme,
-      "buildingHighlightColor": buildingHighlightColor,
+      "colorBuildingHighlight": buildingHighlightColor,
     };
     mapboxMap?.style.setStyleImportConfigProperties("basemap", configs);
   }

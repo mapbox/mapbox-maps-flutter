@@ -24,7 +24,7 @@ class PointAnnotationManager extends BaseAnnotationManager {
 
   /// Registers drag event callbacks for symbol annotations.
   ///
-  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
+  /// - [onBegin]: Called when a drag gesture starts on a symbol annotation.
   ///   The provided [PointAnnotationInteractionContext] contains details
   ///   about the annotation being dragged and the drag start position.
   ///

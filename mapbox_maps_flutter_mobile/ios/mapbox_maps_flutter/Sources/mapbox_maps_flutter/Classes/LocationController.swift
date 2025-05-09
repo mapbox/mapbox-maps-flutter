@@ -59,6 +59,9 @@ extension LocationOptions {
                 let decodedExpression = try! JSONDecoder().decode(Expression.self, from: scaleExpressionData)
                 configuration.modelScale = .expression(decodedExpression)
             }
+            if let elevationReference = puck3D.modelElevationReference.flatMap(MapboxMaps.ModelElevationReference.init) {
+                configuration.modelElevationReference = .constant(elevationReference)
+            }
             if let rotation = puck3D.modelRotation {
                 configuration.modelRotation = .constant(rotation.compactMap { $0 })
             }
@@ -168,6 +171,9 @@ extension LocationOptions {
             if case .constant(let scaleData) = oldConfiguration.modelScale {
                 locationPuck3D.modelScale = scaleData.compactMap { $0 }
             }
+            if case .constant(let modelElevationReference) = oldConfiguration.modelElevationReference {
+                locationPuck3D.modelElevationReference = modelElevationReference.toFLTModelElevationReference()
+            }
             if case .expression(let scaleExpression) = oldConfiguration.modelScale {
                 let encoded = try! JSONEncoder().encode(scaleExpression)
                 locationPuck3D.modelScaleExpression = String(data: encoded, encoding: .utf8)
@@ -208,6 +214,24 @@ private extension MapboxMaps.PuckBearing {
         switch self {
         case .heading: return .hEADING
         case .course: return .cOURSE
+        }
+    }
+}
+
+private extension MapboxMaps.ModelElevationReference {
+    init?(_ fltValue: ModelElevationReference) {
+        switch fltValue {
+        case .gROUND: self = .ground
+        case .sEA: self = .sea
+        }
+    }
+
+    func toFLTModelElevationReference() -> ModelElevationReference {
+        switch self {
+        case .ground: return .gROUND
+        case .sea: return .sEA
+        default:
+            return .gROUND
         }
     }
 }

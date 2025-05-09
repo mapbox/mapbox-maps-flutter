@@ -24,7 +24,7 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
 
   /// Registers drag event callbacks for line annotations.
   ///
-  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
+  /// - [onBegin]: Called when a drag gesture starts on a line annotation.
   ///   The provided [PolylineAnnotationInteractionContext] contains details
   ///   about the annotation being dragged and the drag start position.
   ///
