@@ -7,9 +7,9 @@
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
 * Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
 * Introduce `dragEvents` API to the Annotation Managers to handle drag event callbacks for annotations:
-  * `onBegin`: Called when a drag gesture starts on an annotation. The `AnnotationInteractionContext` provides details about the annotation and the drag start position.
-  * `onChanged`: Called continuously as the annotation is dragged. The `AnnotationInteractionContext` provides updated drag position and context.
-  * `onEnd`: Called once the drag gesture completes. The `AnnotationInteractionContext` provides the final position and state of the annotation.
+  * `onBegin`: Called when a drag gesture starts on an annotation.
+  * `onChanged`: Called continuously as the annotation is dragged.
+  * `onEnd`: Called once the drag gesture completes.
 
   Example usage:
   ```dart

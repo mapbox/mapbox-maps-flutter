@@ -22,31 +22,25 @@ class PolylineAnnotationManager extends BaseAnnotationManager {
         binaryMessenger: _messenger, messageChannelSuffix: _channelSuffix);
   }
 
-  /// Registers drag event callbacks for line annotations.
+  /// Registers drag event callbacks for the annotations managed by this instance.
   ///
-  /// - [onBegin]: Called when a drag gesture starts on a circle annotation.
-  ///   The provided [PolylineAnnotationInteractionContext] contains details
-  ///   about the annotation being dragged and the drag start position.
+  /// - [onBegin]: Triggered when a drag gesture begins on an annotation.
+  /// - [onChanged]: Triggered continuously as the annotation is being dragged.
+  /// - [onEnd]: Triggered when the drag gesture ends.
   ///
-  /// - [onChanged]: Called continuously as the annotation is dragged.
-  ///   The [PolylineAnnotationInteractionContext] gives the updated drag
-  ///   position and annotation context on every move.
-  ///
-  /// - [onEnd]: Called once the drag gesture completes or is released.
-  ///   The [PolylineAnnotationInteractionContext] gives the final position
-  ///   and annotation state at the end of the drag.
-  ///
+  /// This method returns a [Cancelable] object that can be used to cancel
+  /// the drag event listener when it's no longer needed.
   /// Example usage:
   /// ```dart
   /// manager.dragEvents(
-  ///   onBegin: (context) {
-  ///     print("Drag started for: ${context.annotation.id}");
+  ///   onBegin: (annotation) {
+  ///     print("Drag started for: ${annotation.id}");
   ///   },
-  ///   onChanged: (context) {
-  ///     print("Dragging at: ${context.annotation.geometry}");
+  ///   onChanged: (annotation) {
+  ///     print("Dragging at: ${annotation.geometry}");
   ///   },
-  ///   onEnd: (context) {
-  ///     print("Drag ended at: ${context.annotation.geometry}");
+  ///   onEnd: (annotation) {
+  ///     print("Drag ended at: ${annotation.geometry}");
   ///   },
   /// );
   /// ```
