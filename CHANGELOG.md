@@ -24,6 +24,19 @@
       print("Drag ended at: ${annotation.geometry}");
     },
   );
+* Promote interaction APIs to stable. The following APIs are now stable:
+  * `MapboxMap.addInteraction`
+  * `MapboxMap.removeInteraction`
+  * `MapboxMap.setFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.setFeatureStateForFeaturesetFeature`
+  * `MapboxMap.getFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.getFeatureStateForFeaturesetFeature`
+  * `MapboxMap.removeFeatureStateForFeaturesetDescriptor`
+  * `MapboxMap.removeFeatureStateForFeaturesetFeature`
+  * `MapboxMap.resetFeatureStatesForFeatureset`
+  * `MapboxMap.queryRenderedFeaturesForFeatureset`
+* Additionally, the STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
+* Move experimental `modelElevationReference` property to `LocationPuck3D`. 
 
 ### 2.8.0 
 

@@ -104,20 +104,21 @@ struct StylePackLoadOptions {
   ///
   /// By default, ideographs are rasterized locally and other glyphs are loaded
   /// from network (i.e. `IdeographsRasterizedLocally` value is used).
-  var glyphsRasterizationMode: GlyphsRasterizationMode?
+  var glyphsRasterizationMode: GlyphsRasterizationMode? = nil
   /// A custom Mapbox value associated with this style package for storing metadata.
   ///
   /// If provided, the custom value value will be stored alongside the style package. Previous values will
   /// be replaced with the new value.
   ///
   /// Developers can use this field to store custom metadata associated with a style package.
-  var metadata: [String?: Any?]?
+  var metadata: [String?: Any?]? = nil
   /// Accepts expired data when loading style resources.
   ///
   /// This flag should be set to true to accept expired responses. When a style resource is already loaded but expired,
   /// no attempt will be made to refresh the data. This may lead to outdated data. Set to false to ensure that data
   /// for a style is up-to-date.
   var acceptExpired: Bool
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StylePackLoadOptions? {
@@ -161,7 +162,8 @@ struct StylePack {
   /// The earliest point in time when any of the style package resources gets expired.
   ///
   /// Uninitialized for incomplete style packages or for complete style packages with all immutable resources.
-  var expires: Int64?
+  var expires: Int64? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StylePack? {
@@ -212,6 +214,7 @@ struct StylePackLoadProgress {
   /// The cumulative size, in bytes, of all resources that have been fully downloaded
   /// from the network.
   var loadedResourceSize: Int64
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> StylePackLoadProgress? {
@@ -268,14 +271,14 @@ struct TilesetDescriptorOptions {
   var maxZoom: Int64
   /// Pixel ratio to be accounted for when downloading raster tiles.
   /// The `pixelRatio` must be ≥ 0 and should typically be 1.0 or 2.0.
-  var pixelRatio: Double?
+  var pixelRatio: Double? = nil
   /// The tilesets associated with the tileset descriptor.
   /// Contains an array, each element of which must be either a URI to a TileJSON
   /// resource or a JSON string representing the inline tileset.
   /// This property can be used to resolve extra tilesets that are not part of the original style
   /// represented by `styleURL`, it can be used also with the empty `styleURL`.
   /// The provided URIs must have "mapbox://" scheme, e.g. "mapbox://mapbox.mapbox-streets-v8".
-  var tilesets: [String?]?
+  var tilesets: [String?]? = nil
   /// Style package load options, associated with the tileset descriptor.
   /// If provided, `offline manager` will create a style package while resolving the corresponding
   /// tileset descriptor and load all the resources as defined in the provided style package options,
@@ -285,9 +288,10 @@ struct TilesetDescriptorOptions {
   /// package but the loaded resources will be stored in the disk cache.
   ///
   /// Style package creation requires nonempty `styleURL`, which will be the created style package identifier.
-  var stylePackOptions: StylePackLoadOptions?
+  var stylePackOptions: StylePackLoadOptions? = nil
   /// Extra tileset descriptor options.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String?: Any?]? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TilesetDescriptorOptions? {
@@ -333,14 +337,14 @@ struct TileRegionLoadOptions {
   /// for the tile region.
   ///
   /// Providing an empty geometry list is equivalent to removeTileRegion() call.
-  var geometry: [String?: Any?]?
+  var geometry: [String?: Any?]? = nil
   /// The tile region's tileset descriptors.
   ///
   /// If provided, updates the tile region's tileset descriptors that define
   /// the tilesets and zoom ranges of the tiles for the tile region.
   ///
   /// Providing an empty tileset descriptors list is equivalent to removeTileRegion() call.
-  var descriptorsOptions: [TilesetDescriptorOptions?]?
+  var descriptorsOptions: [TilesetDescriptorOptions?]? = nil
   /// A custom Mapbox Value associated with this tile region for storing metadata.
   ///
   /// If provided, the custom value value will be stored alongside the tile region. Previous values will
@@ -348,7 +352,7 @@ struct TileRegionLoadOptions {
   ///
   /// Developers can use this field to store custom metadata associated with a tile region. This value
   /// can be retrieved with getTileRegionMetadata().
-  var metadata: [String?: Any?]?
+  var metadata: [String?: Any?]? = nil
   /// Accepts expired data when loading tiles.
   ///
   /// This flag should be set to true to accept expired responses. When a tile is already loaded but expired, no
@@ -366,7 +370,7 @@ struct TileRegionLoadOptions {
   /// from it.
   ///
   /// Note that this functionality is not currently implemented.
-  var startLocation: Point?
+  var startLocation: Point? = nil
   /// Limits the download speed of the tile region.
   ///
   /// Note that this is not a strict bandwidth limit, but only limits the average download speed. tile regions may
@@ -376,13 +380,14 @@ struct TileRegionLoadOptions {
   /// If unspecified, the download speed will not be restricted.
   ///
   /// Note that this functionality is not currently implemented.
-  var averageBytesPerSecond: Int64?
+  var averageBytesPerSecond: Int64? = nil
   /// Extra tile region load options.
   ///
   /// If provided, contains an object value with extra tile region load options.
   ///
   /// There are currently no extra options.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String?: Any?]? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionLoadOptions? {
@@ -439,7 +444,8 @@ struct TileRegion {
   /// The earliest point in time when any of the region resources gets expired.
   ///
   /// Uninitialized for incomplete tile regions or for complete tile regions with all immutable resources.
-  var expires: Int64?
+  var expires: Int64? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegion? {
@@ -486,7 +492,8 @@ struct TileRegionEstimateResult {
   /// is complete.
   var storageSize: Int64
   /// Reserved for future use.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String?: Any?]? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateResult? {
@@ -527,7 +534,8 @@ struct TileRegionEstimateOptions {
   /// A value of 0 means no timeout. If unspecified, defaults to 0.
   var timeout: Double
   /// Reserved for future use.
-  var extraOptions: [String?: Any?]?
+  var extraOptions: [String?: Any?]? = nil
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateOptions? {
@@ -575,6 +583,7 @@ struct TileRegionLoadProgress {
   /// been downloaded from the network.
   var loadedResourceSize: Int64
 
+
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionLoadProgress? {
     let completedResourceCount = pigeonVar_list[0] as! Int64
@@ -617,6 +626,7 @@ struct TileRegionEstimateProgress {
   var completedResourceCount: Int64
   /// The number of resources that have failed to download due to an error.
   var erroredResourceCount: Int64
+
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> TileRegionEstimateProgress? {
