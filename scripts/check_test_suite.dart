@@ -32,15 +32,18 @@ void main() {
       .where((testFile) => !includedTestFiles.contains(testFile))
       .toList();
 
-  missingTests.remove('all_test.dart'); // Exclude the aggregated test suite file itself
+  missingTests
+      .remove('all_test.dart'); // Exclude the aggregated test suite file itself
 
   if (missingTests.isNotEmpty) {
-    print('The following test files are missing from the aggregated test suite:');
+    print(
+        'The following test files are missing from the aggregated test suite:');
     for (var missingTest in missingTests) {
       print(missingTest);
     }
     print('');
-    print('Import the missing test files in the integration_test/all_test.dart.');
+    print(
+        'Import the missing test files in the integration_test/all_test.dart.');
     print("Don't forget to invoke the main function of the test file as well.");
     exit(1); // Exit with error code 1 if there are missing tests
   } else {

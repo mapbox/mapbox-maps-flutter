@@ -6,7 +6,9 @@ void main() {
     final json = {
       'timestamp': 1,
       'cameraState': {
-        'center': {'coordinates': [0, 0]},
+        'center': {
+          'coordinates': [0, 0]
+        },
         'padding': {'top': 0, 'left': 1, 'bottom': 2, 'right': 3},
         'zoom': 11,
         'bearing': 0,
@@ -15,7 +17,8 @@ void main() {
     };
     var cameraChangedEventData = CameraChangedEventData.fromJson(json);
     expect(cameraChangedEventData.timestamp, 1);
-    expect(cameraChangedEventData.cameraState.center.coordinates, Position.of([0, 0]));
+    expect(cameraChangedEventData.cameraState.center.coordinates,
+        Position.of([0, 0]));
     expect(cameraChangedEventData.cameraState.padding.top, 0);
     expect(cameraChangedEventData.cameraState.padding.left, 1);
     expect(cameraChangedEventData.cameraState.padding.bottom, 2);

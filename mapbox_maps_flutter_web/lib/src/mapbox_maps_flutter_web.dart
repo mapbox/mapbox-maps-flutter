@@ -23,13 +23,12 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
 
     // Attach the mapDiv to the DOM
     platformViewRegistry.registerViewFactory(viewType, (int id) {
-      _mapElement =
-          document.createElement("div") as HTMLDivElement
-            ..style.position = 'absolute'
-            ..style.top = '0'
-            ..style.bottom = '0'
-            ..style.height = '100%'
-            ..style.width = '100%';
+      _mapElement = document.createElement("div") as HTMLDivElement
+        ..style.position = 'absolute'
+        ..style.top = '0'
+        ..style.bottom = '0'
+        ..style.height = '100%'
+        ..style.width = '100%';
 
       _initMap();
       return _mapElement;
@@ -38,11 +37,10 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
   }
 
   _initMap() async {
-    final link =
-        document.createElement('link') as HTMLLinkElement
-          ..rel = 'stylesheet'
-          ..href = mapboxGlCss
-          ..type = 'text/css';
+    final link = document.createElement('link') as HTMLLinkElement
+      ..rel = 'stylesheet'
+      ..href = mapboxGlCss
+      ..type = 'text/css';
     _mapElement.append(link);
 
     await link.onLoad.first;
