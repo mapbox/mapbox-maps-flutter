@@ -6,6 +6,24 @@
 * In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
 * Expose new methods for working with style imports: `addStyleImportFromJSON`, `addStyleImportFromURI`, `updateStyleImportWithJSON`, `updateStyleImportWithURI`, and `moveStyleImport`.
+* Introduce `dragEvents` API to the Annotation Managers to handle drag event callbacks for annotations:
+  * `onBegin`: Called when a drag gesture starts on an annotation.
+  * `onChanged`: Called continuously as the annotation is dragged.
+  * `onEnd`: Called once the drag gesture completes.
+
+  Example usage:
+  ```dart
+  manager.dragEvents(
+    onBegin: (annotation) {
+      print("Drag started for: ${annotation.id}");
+    },
+    onChanged: (annotation) {
+      print("Dragging at: ${annotation.geometry}");
+    },
+    onEnd: (annotation) {
+      print("Drag ended at: ${annotation.geometry}");
+    },
+  );
 * Promote interaction APIs to stable. The following APIs are now stable:
   * `MapboxMap.addInteraction`
   * `MapboxMap.removeInteraction`
