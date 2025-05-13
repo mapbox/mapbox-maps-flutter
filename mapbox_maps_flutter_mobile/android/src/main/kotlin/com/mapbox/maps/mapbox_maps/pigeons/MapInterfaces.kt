@@ -258,6 +258,20 @@ enum class ViewAnnotationAnchor(val raw: Int) {
   }
 }
 
+/** Selects the base of the model. Some modes might require precomputed elevation data in the tileset. */
+enum class ModelElevationReference(val raw: Int) {
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the sea level. */
+  SEA(0),
+  /** Elevated rendering is enabled. Use this mode to elevate lines relative to the ground's height below them. */
+  GROUND(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ModelElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** The type of interaction, either tap/click or longTap/longClick */
 enum class _InteractionType(val raw: Int) {
   /** A short tap or click */
@@ -2876,17 +2890,17 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       160.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MbxEdgeInsets.fromList(it)
+          MbxEdgeInsetsDecoder.fromList(it)
         }
       }
       161.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraOptions.fromList(it)
+          CameraOptionsDecoder.fromList(it)
         }
       }
       162.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CameraState.fromList(it)
+          CameraStateDecoder.fromList(it)
         }
       }
       163.toByte() -> {
@@ -2931,7 +2945,7 @@ private open class MapInterfacesPigeonCodec : StandardMessageCodec() {
       }
       171.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          ScreenCoordinate.fromList(it)
+          ScreenCoordinateDecoder.fromList(it)
         }
       }
       172.toByte() -> {

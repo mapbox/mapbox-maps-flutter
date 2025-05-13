@@ -1,4 +1,6 @@
-part of 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
+import 'package:flutter/widgets.dart';
+
+import 'types/camera_options.dart';
 
 abstract base class MapboxMapsFlutterPlatform {
   static MapboxMapsFlutterPlatform? _instance;
@@ -38,5 +40,5 @@ abstract base class MapboxMapsFlutterPlatform {
   ///
   /// This method is responsible for creating the widget that integrates
   /// with the underlying platform's view system to render the map.
-  Widget buildView();
+  Widget buildView({CameraOptions? cameraOptions});
 }
