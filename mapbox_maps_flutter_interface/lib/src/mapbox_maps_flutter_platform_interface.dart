@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'types/camera_options.dart';
+import '../mapbox_maps_flutter_interface.dart';
 
 abstract base class MapboxMapsFlutterPlatform {
   static MapboxMapsFlutterPlatform? _instance;

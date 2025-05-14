@@ -8,6 +8,10 @@ final class Point extends turf.Point {
     return Point(bbox: turfPoint.bbox, coordinates: turfPoint.coordinates);
   }
 
+  factory Point._from(turf.Point point) {
+    return Point(bbox: point.bbox, coordinates: point.coordinates);
+  }
+
   static Point decode(Object result) {
     var map = (result is List<Object?>) ? result.first : result;
     return Point.fromJson((map as Map).cast<String, dynamic>());

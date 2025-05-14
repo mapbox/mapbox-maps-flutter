@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'example.dart';
 
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
+    show CameraOptions;
+
 class StandardStyleImportExample extends StatefulWidget implements Example {
   @override
   final Widget leading = const Icon(Icons.touch_app);

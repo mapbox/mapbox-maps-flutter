@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_example/example.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
+    show CameraOptions;
 
 class EditPolygonExample extends StatefulWidget implements Example {
   @override

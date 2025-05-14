@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mapbox_maps_example/example.dart';
+import 'example.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
+    show CameraOptions;
 
 class TrafficRouteLineExample extends StatefulWidget implements Example {
   @override

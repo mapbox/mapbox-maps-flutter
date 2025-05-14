@@ -482,146 +482,6 @@ struct TileCoverOptions {
   }
 }
 
-/// The distance on each side between rectangles, when one is contained into other.
-///
-/// All fields' values are in `logical pixel` units.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct MbxEdgeInsets {
-  /// Padding from the top.
-  var top: Double
-  /// Padding from the left.
-  var left: Double
-  /// Padding from the bottom.
-  var bottom: Double
-  /// Padding from the right.
-  var right: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MbxEdgeInsets? {
-    let top = pigeonVar_list[0] as! Double
-    let left = pigeonVar_list[1] as! Double
-    let bottom = pigeonVar_list[2] as! Double
-    let right = pigeonVar_list[3] as! Double
-
-    return MbxEdgeInsets(
-      top: top,
-      left: left,
-      bottom: bottom,
-      right: right
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      top,
-      left,
-      bottom,
-      right,
-    ]
-  }
-}
-
-/// Various options for describing the viewpoint of a camera. All fields are
-/// optional.
-///
-/// Anchor and center points are mutually exclusive, with preference for the
-/// center point when both are set.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CameraOptions {
-  /// Coordinate at the center of the camera.
-  var center: Point? = nil
-  /// Padding around the interior of the view that affects the frame of
-  /// reference for `center`.
-  var padding: MbxEdgeInsets? = nil
-  /// Point of reference for `zoom` and `angle`, assuming an origin at the
-  /// top-left corner of the view.
-  var anchor: ScreenCoordinate? = nil
-  /// Zero-based zoom level. Constrained to the minimum and maximum zoom
-  /// levels.
-  var zoom: Double? = nil
-  /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  var bearing: Double? = nil
-  /// Pitch toward the horizon measured in degrees.
-  var pitch: Double? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CameraOptions? {
-    let center: Point? = nilOrValue(pigeonVar_list[0])
-    let padding: MbxEdgeInsets? = nilOrValue(pigeonVar_list[1])
-    let anchor: ScreenCoordinate? = nilOrValue(pigeonVar_list[2])
-    let zoom: Double? = nilOrValue(pigeonVar_list[3])
-    let bearing: Double? = nilOrValue(pigeonVar_list[4])
-    let pitch: Double? = nilOrValue(pigeonVar_list[5])
-
-    return CameraOptions(
-      center: center,
-      padding: padding,
-      anchor: anchor,
-      zoom: zoom,
-      bearing: bearing,
-      pitch: pitch
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      center,
-      padding,
-      anchor,
-      zoom,
-      bearing,
-      pitch,
-    ]
-  }
-}
-
-/// Describes the viewpoint of a camera.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct CameraState {
-  /// Coordinate at the center of the camera.
-  var center: Point
-  /// Padding around the interior of the view that affects the frame of
-  /// reference for `center`.
-  var padding: MbxEdgeInsets
-  /// Zero-based zoom level. Constrained to the minimum and maximum zoom
-  /// levels.
-  var zoom: Double
-  /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  var bearing: Double
-  /// Pitch toward the horizon measured in degrees.
-  var pitch: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> CameraState? {
-    let center = pigeonVar_list[0] as! Point
-    let padding = pigeonVar_list[1] as! MbxEdgeInsets
-    let zoom = pigeonVar_list[2] as! Double
-    let bearing = pigeonVar_list[3] as! Double
-    let pitch = pigeonVar_list[4] as! Double
-
-    return CameraState(
-      center: center,
-      padding: padding,
-      zoom: zoom,
-      bearing: bearing,
-      pitch: pitch
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      center,
-      padding,
-      zoom,
-      bearing,
-      pitch,
-    ]
-  }
-}
-
 /// Holds options to be used for setting `camera bounds`.
 ///
 /// Generated class from Pigeon that represents data sent in messages.
@@ -901,35 +761,6 @@ struct MapOptions {
       size,
       pixelRatio,
       glyphsRasterizationOptions,
-    ]
-  }
-}
-
-/// Describes the coordinate on the screen, measured from top to bottom and from left to right.
-/// Note: the `map` uses screen coordinate units measured in `logical pixels`.
-///
-/// Generated class from Pigeon that represents data sent in messages.
-struct ScreenCoordinate {
-  /// A value representing the x position of this coordinate.
-  var x: Double
-  /// A value representing the y position of this coordinate.
-  var y: Double
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> ScreenCoordinate? {
-    let x = pigeonVar_list[0] as! Double
-    let y = pigeonVar_list[1] as! Double
-
-    return ScreenCoordinate(
-      x: x,
-      y: y
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      x,
-      y,
     ]
   }
 }
@@ -4965,14 +4796,14 @@ protocol StyleManager {
   /// @return The `transition options` of the current style in use.
   func getStyleTransition(completion: @escaping (Result<TransitionOptions, Error>) -> Void)
   /// Adds new import to current style, loaded from a JSON string.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
   /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
   func addStyleImportFromJSON(importId: String, json: String, config: [String: Any]?, importPosition: ImportPosition?) throws
   /// Adds new import to current style, loaded from an URI.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
@@ -4981,7 +4812,7 @@ protocol StyleManager {
   /// Updates an existing import in the style.
   /// The function replaces the content of the import, with the content loaded from the provided data value.
   /// The configuration values of the import are merged with the configuration provided in the update.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param json The JSON string to be loaded directly as the import.
   /// @param config A map containing the configuration options of the import.
@@ -4989,13 +4820,13 @@ protocol StyleManager {
   /// Updates an existing import in the style.
   /// The function replaces the content of the import, with the content loaded from the provided URI.
   /// The configuration values of the import are merged with the configuration provided in the update.
-  /// 
+  ///
   /// @param importId Identifier of import to update.
   /// @param uri URI of the import.
   /// @param config A map containing the configuration options of the import.
   func updateStyleImportWithURI(importId: String, uri: String, config: [String: Any]?) throws
   /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
-  /// 
+  ///
   ///  @param importId Identifier of import to move.
   ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
   func moveStyleImport(importId: String, importPosition: ImportPosition?) throws
@@ -5543,7 +5374,7 @@ class StyleManagerSetup {
       getStyleTransitionChannel.setMessageHandler(nil)
     }
     /// Adds new import to current style, loaded from a JSON string.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
@@ -5567,7 +5398,7 @@ class StyleManagerSetup {
       addStyleImportFromJSONChannel.setMessageHandler(nil)
     }
     /// Adds new import to current style, loaded from an URI.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
@@ -5593,7 +5424,7 @@ class StyleManagerSetup {
     /// Updates an existing import in the style.
     /// The function replaces the content of the import, with the content loaded from the provided data value.
     /// The configuration values of the import are merged with the configuration provided in the update.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
@@ -5617,7 +5448,7 @@ class StyleManagerSetup {
     /// Updates an existing import in the style.
     /// The function replaces the content of the import, with the content loaded from the provided URI.
     /// The configuration values of the import are merged with the configuration provided in the update.
-    /// 
+    ///
     /// @param importId Identifier of import to update.
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
@@ -5639,7 +5470,7 @@ class StyleManagerSetup {
       updateStyleImportWithURIChannel.setMessageHandler(nil)
     }
     /// Moves import to position before another import, specified with `beforeId`. Order of imported styles corresponds to order of their layers.
-    /// 
+    ///
     ///  @param importId Identifier of import to move.
     ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
     let moveStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)

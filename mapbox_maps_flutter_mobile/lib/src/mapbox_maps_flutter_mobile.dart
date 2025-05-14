@@ -4,8 +4,12 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
   late final MapboxMap _mapboxMap;
 
   @override
-  Widget buildView() {
+  Widget buildView({CameraOptions? cameraOptions}) {
+    if (cameraOptions?.center != null) {
+      cameraOptions?.center = Point._from(cameraOptions.center!);
+    }
     return MapWidget(
+      cameraOptions: cameraOptions,
       onMapCreated: (MapboxMap mapboxMap) {
         _mapboxMap = mapboxMap;
       },

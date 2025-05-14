@@ -10,7 +10,7 @@ import Foundation
 #else
   #error("Unsupported platform.")
 #endif
-import struct Turf.Point;
+import struct Turf.Point
 
 /// Error class for passing custom error details to Dart side.
 final class CircleAnnotationMessengerError: Error {

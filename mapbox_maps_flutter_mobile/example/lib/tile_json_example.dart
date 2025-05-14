@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
+    show CameraOptions;
 import 'example.dart';
 
 class TileJsonExample extends StatefulWidget implements Example {
