@@ -20,10 +20,16 @@ class _MyAppState extends State<MyApp> {
     "MAPBOX_ACCESS_TOKEN",
   );
 
+  late final MapboxMap _mapboxMap;
+
   @override
   void initState() {
     super.initState();
     MapboxOptions.setAccessToken(ACCESS_TOKEN);
+  }
+
+  _onMapCreated(MapboxMap mapboxMap) {
+    _mapboxMap = mapboxMap;
   }
 
   @override
@@ -34,6 +40,7 @@ class _MyAppState extends State<MyApp> {
         body: Center(
             child: MapWidget(
           cameraOptions: CameraOptions(center: City.helsinki, zoom: 6),
+          onMapCreated: _onMapCreated,
         )),
       ),
     );

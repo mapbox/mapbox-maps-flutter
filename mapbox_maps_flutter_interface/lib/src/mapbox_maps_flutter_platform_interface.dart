@@ -40,5 +40,8 @@ abstract base class MapboxMapsFlutterPlatform {
   ///
   /// This method is responsible for creating the widget that integrates
   /// with the underlying platform's view system to render the map.
-  Widget buildView({CameraOptions? cameraOptions});
+  Widget buildView({
+    CameraOptions? cameraOptions,
+    OnMapCreated? onMapCreated,
+  });
 }

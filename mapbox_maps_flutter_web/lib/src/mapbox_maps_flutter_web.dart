@@ -18,7 +18,10 @@ base class MapboxMapsFlutterWeb extends MapboxMapsFlutterPlatform {
   late HTMLDivElement _mapElement;
 
   @override
-  Widget buildView({CameraOptions? cameraOptions}) {
+  Widget buildView({
+    CameraOptions? cameraOptions,
+    OnMapCreated? onMapCreated,
+  }) {
     final viewType = 'mapbox-maps-flutter-web/$hashCode';
 
     // Attach the mapDiv to the DOM

@@ -136,7 +136,7 @@ extension on _MapWidgetDebugOptions {
 }
 
 /// Controller for a single MapboxMap instance running on the host platform.
-class MapboxMap extends ChangeNotifier {
+final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
   MapboxMap._({
     required _MapboxMapsPlatform mapboxMapsPlatform,
     this.onMapTapListener,
@@ -344,10 +344,16 @@ class MapboxMap extends ChangeNotifier {
   /// The map will retain its current values for any details not passed via the camera options argument.
   /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
   /// different `camera state`.
-  Future<void> setCamera(CameraOptions cameraOptions) =>
-      _cameraManager.setCamera(cameraOptions);
+  @override
+  Future<void> setCamera(CameraOptions cameraOptions) {
+    if (cameraOptions.center != null) {
+      cameraOptions.center = Point._from(cameraOptions.center!);
+    }
+    return _cameraManager.setCamera(cameraOptions);
+  }
 
   /// Returns the current `camera state`.
+  @override
   Future<CameraState> getCameraState() => _cameraManager.getCameraState();
 
   /// Sets the `camera bounds options` of the map. The map will retain its current values for any
