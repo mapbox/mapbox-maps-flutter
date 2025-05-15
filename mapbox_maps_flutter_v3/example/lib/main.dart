@@ -30,6 +30,14 @@ class _MyAppState extends State<MyApp> {
 
   _onMapCreated(MapboxMap mapboxMap) {
     _mapboxMap = mapboxMap;
+
+    Future.delayed(const Duration(seconds: 2), () {
+      _mapboxMap.setCamera(
+        CameraOptions(
+          center: City.saigon,
+        ),
+      );
+    });
   }
 
   @override
