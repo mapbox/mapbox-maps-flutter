@@ -462,7 +462,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
           options);
 
   /// Queries the map for rendered features with one typed featureset.
-  @experimental
   Future<List<FeaturesetFeature>> queryRenderedFeaturesForFeatureset(
       {required FeaturesetDescriptor featureset,
       RenderedQueryGeometry? geometry,
@@ -520,7 +519,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
   /// Update the state map of a feature within a featureset.
   /// Update entries in the state map of a given feature within a style source. Only entries listed in the state map
   /// will be updated. An entry in the feature state map that is not listed in `state` will retain its previous value.
-  @experimental
   Future<void> setFeatureStateForFeaturesetDescriptor(
           FeaturesetDescriptor featureset,
           FeaturesetFeatureId featureId,
@@ -532,7 +530,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
   ///
   /// The feature should have a non-nil ``FeaturesetFeatureType/id``. Otherwise,
   /// the operation will be no-op and callback will receive an error.
-  @experimental
   Future<void> setFeatureStateForFeaturesetFeature(
           FeaturesetFeature feature, FeatureState state) =>
       _mapInterface.setFeatureStateForFeaturesetFeature(feature, state.map);
@@ -546,14 +543,12 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
       _mapInterface.getFeatureState(sourceId, sourceLayerId, featureId);
 
   /// Get the state map of a feature within a style source.
-  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
           FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) =>
       _mapInterface.getFeatureStateForFeaturesetDescriptor(
           featureset, featureId);
 
   /// Get the state map of a feature within a style source.
-  @experimental
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
           FeaturesetFeature feature) =>
       _mapInterface.getFeatureStateForFeaturesetFeature(feature);
@@ -572,7 +567,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
 
   /// Removes entries from a feature state object of a feature in the specified featureset.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
-  @experimental
   Future<void> removeFeatureStateForFeaturesetDescriptor(
           {required FeaturesetDescriptor featureset,
           required FeaturesetFeatureId featureId,
@@ -582,7 +576,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
 
   /// Removes entries from a specified Feature.
   /// Remove a specified property or all property from a feature's state object, depending on the value of `stateKey`.
-  @experimental
   Future<void> removeFeatureStateForFeaturesetFeature(
           {required FeaturesetFeature feature, String? stateKey}) =>
       _mapInterface.removeFeatureStateForFeaturesetFeature(feature, stateKey);
@@ -591,19 +584,16 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
   ///
   /// Note that updates to feature state are asynchronous, so changes made by this method might not be
   /// immediately visible using ``MapboxMap/getFeatureState(_:callback:)``.
-  @experimental
   Future<void> resetFeatureStatesForFeatureset(
           FeaturesetDescriptor featureset) =>
       _mapInterface.resetFeatureStatesForFeatureset(featureset);
 
   /// References for all interactions added to the map.
-  @experimental
   final _InteractionsMap _interactionsMap = _InteractionsMap(interactions: {});
 
   /// Add an interaction to the map
   /// An identifier can be provided, which you can use to remove
   /// the interaction with `.removeInteraction(interactionID)`
-  @experimental
   void addInteraction<T extends TypedFeaturesetFeature<FeaturesetDescriptor>>(
       TypedInteraction<T> interaction,
       {String? interactionID}) {
@@ -620,7 +610,6 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
 
   /// Remove an interaction from the map with the given interactionID
   /// that was passed with `.addInteraction(interaction, interactionID)`
-  @experimental
   void removeInteraction(String interactionID) {
     _interactionsMap.interactions.remove(interactionID);
     _mapboxMapsPlatform.removeInteractionsListeners(interactionID);
