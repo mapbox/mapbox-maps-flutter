@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
-    show CameraOptions, CameraState;
+
 import 'example.dart';
 
 class FullMapExample extends StatefulWidget implements Example {

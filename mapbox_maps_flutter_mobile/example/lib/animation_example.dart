@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
-import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
-    show CameraOptions, ScreenCoordinate;
+
 import 'example.dart';
 
 class AnimationExample extends StatefulWidget implements Example {

@@ -19,10 +19,10 @@ typedef MapboxMap = MapboxMapInterface;
 /// ```dart
 /// MapWidget(
 ///   cameraOptions: CameraOptions(
-///     center: LatLng(37.7749, -122.4194),
+///     center: Point(37.7749, -122.4194),
 ///     zoom: 12.0,
 ///   ),
-///   onMapCreated: (controller) {
+///   onMapCreated: (mapboxMap) {
 ///     // Handle map creation logic here.
 ///   },
 /// )

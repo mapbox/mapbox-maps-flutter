@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
 
 final class Point extends turf.Point {
   Point({super.bbox, required super.coordinates});
@@ -6,10 +6,6 @@ final class Point extends turf.Point {
   factory Point.fromJson(Map<String, dynamic> json) {
     final turfPoint = turf.Point.fromJson(json);
     return Point(bbox: turfPoint.bbox, coordinates: turfPoint.coordinates);
-  }
-
-  factory Point._from(turf.Point point) {
-    return Point(bbox: point.bbox, coordinates: point.coordinates);
   }
 
   static Point decode(Object result) {

@@ -9,8 +9,6 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:mapbox_maps_example/main.dart';
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
-import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart'
-    show MbxEdgeInsets, CameraOptions, Point;
 
 import 'example.dart';
 

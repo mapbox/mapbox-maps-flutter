@@ -345,12 +345,10 @@ final class MapboxMap extends MapboxMapInterface with ChangeNotifier {
   /// It is not guaranteed that the provided `camera options` will be set, the map may apply constraints resulting in a
   /// different `camera state`.
   @override
-  Future<void> setCamera(CameraOptions cameraOptions) {
-    if (cameraOptions.center != null) {
-      cameraOptions.center = Point._from(cameraOptions.center!);
-    }
-    return _cameraManager.setCamera(cameraOptions);
-  }
+  Future<void> setCamera(CameraOptions cameraOptions) =>
+      _cameraManager.setCamera(
+        cameraOptions,
+      );
 
   /// Returns the current `camera state`.
   @override

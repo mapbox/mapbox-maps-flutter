@@ -5,6 +5,9 @@ export 'src/map_interface.dart';
 export 'src/callbacks.dart';
 export 'package:turf/helpers.dart';
 
-import 'package:turf/turf.dart';
+import 'dart:convert';
+
+import 'package:turf/turf.dart' as turf;
 
 part 'src/pigeons/platform_interface_data_types.dart';
+part 'src/turf_adapter.dart';

@@ -6,9 +6,6 @@ base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
     CameraOptions? cameraOptions,
     OnMapCreated? onMapCreated,
   }) {
-    if (cameraOptions?.center != null) {
-      cameraOptions?.center = Point._from(cameraOptions.center!);
-    }
     return MapWidget(
       cameraOptions: cameraOptions,
       onMapCreated: (MapboxMap mapboxMap) {
