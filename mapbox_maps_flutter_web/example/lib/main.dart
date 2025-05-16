@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:mapbox_maps_flutter_web/mapbox_maps_flutter_web.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _mapboxMapsFlutterWebPlugin = MapboxMapsFlutterWeb();
 
   @override
   void initState() {

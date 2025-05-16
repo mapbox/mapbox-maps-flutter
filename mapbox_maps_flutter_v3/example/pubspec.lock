@@ -189,7 +189,7 @@ packages:
       path: "../../mapbox_maps_flutter_mobile"
       relative: true
     source: path
-    version: "2.8.0-rc.1"
+    version: "2.8.0"
   mapbox_maps_flutter_interface:
     dependency: "direct overridden"
     description:

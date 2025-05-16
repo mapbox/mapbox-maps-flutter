@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
 import 'package:mapbox_maps_flutter_web/src/bindings.dart' as gl_js;
 import 'package:mapbox_maps_flutter_web/src/conversion.dart';
