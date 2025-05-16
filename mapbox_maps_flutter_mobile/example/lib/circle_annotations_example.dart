@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Visibility;
 import 'package:mapbox_maps_example/utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import 'example.dart';
 
 class CircleAnnotationExample extends StatefulWidget implements Example {

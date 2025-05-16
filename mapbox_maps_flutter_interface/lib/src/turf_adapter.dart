@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
 
 final class Point extends turf.Point {
   Point({super.bbox, required super.coordinates});

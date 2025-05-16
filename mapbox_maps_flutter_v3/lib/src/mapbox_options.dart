@@ -1,4 +1,4 @@
-part of 'package:mapbox_maps_flutter_v3/mapbox_maps_flutter_v3.dart';
+import 'package:mapbox_maps_flutter_interface/mapbox_maps_flutter_interface.dart';
 
 /// A class that provides options and configurations for Mapbox services.
 ///

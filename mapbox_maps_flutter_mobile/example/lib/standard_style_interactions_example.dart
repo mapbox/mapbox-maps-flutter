@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
 import 'example.dart';
 
 class StandardStyleInteractionsExample extends StatefulWidget

@@ -21,7 +21,7 @@ part of mapbox_maps_flutter;
 /// ```
 final class OverviewViewportState extends ViewportState {
   /// The geometry to display in the overview.
-  final turf.GeometryObject geometry;
+  final GeometryObject geometry;
 
   /// Extra padding to add around the [geometry].
   ///

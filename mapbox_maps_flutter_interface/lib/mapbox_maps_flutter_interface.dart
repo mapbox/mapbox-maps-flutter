@@ -1,6 +1,13 @@
-library;
+library mapbox_maps_flutter_interface;
 
-import 'package:flutter/cupertino.dart';
+export 'src/mapbox_maps_flutter_platform_interface.dart';
+export 'src/map_interface.dart';
+export 'src/callbacks.dart';
+export 'package:turf/helpers.dart';
 
-part 'src/mapbox_maps_flutter_platform_interface.dart';
-part 'src/callbacks.dart';
+import 'dart:convert';
+
+import 'package:turf/turf.dart' as turf;
+
+part 'src/pigeons/platform_interface_data_types.dart';
+part 'src/turf_adapter.dart';
