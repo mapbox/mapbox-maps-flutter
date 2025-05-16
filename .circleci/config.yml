@@ -167,7 +167,7 @@ jobs:
             pushd mapbox_maps_flutter_mobile/example
 
             # required to init configs that pass environment variables to fastlane later
-            flutter build ios --config-only mapbox_maps_flutter_mobile/example/integration_test/all_test.dart \
+            flutter build ios --config-only integration_test/all_test.dart \
               --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
             popd # to repo root
@@ -226,8 +226,8 @@ jobs:
       - flutter/install_sdk_and_pub:
           version: 3.27.0
       - run:
-          name: Check license
-          command: bash scripts/license.sh --mode validate
+          name: Check license for mapbox_maps_flutter_mobile
+          command: bash scripts/license.sh mapbox_maps_flutter --mode=validate
       - run:
           name: Run dart analyze
           command: dart analyze
