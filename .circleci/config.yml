@@ -164,7 +164,7 @@ jobs:
       - run:
           name: "Build iOS integration tests"
           command: |
-            pushd example
+            pushd mapbox_maps_flutter_mobile/example
 
             # required to init configs that pass environment variables to fastlane later
             flutter build ios --config-only mapbox_maps_flutter_mobile/example/integration_test/all_test.dart \
