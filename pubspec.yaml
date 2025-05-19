@@ -7,6 +7,9 @@ workspace:
   - mapbox_maps_flutter_interface
   - mapbox_maps_flutter_web
   - mapbox_maps_flutter_v3
+  - mapbox_maps_flutter_web/example
+  - mapbox_maps_flutter_mobile/example
+  - mapbox_maps_flutter_v3/example
 
 dependencies:
   mapbox_maps_flutter: 

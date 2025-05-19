@@ -11,6 +11,8 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.10.0"
 
+resolution: workspace
+
 dependencies:
   flutter:
     sdk: flutter
@@ -26,10 +28,6 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   http: ^1.3.0
   path_provider: ^2.1.3
-
-dependency_overrides:
-  mapbox_maps_flutter_interface:
-    path: ../../mapbox_maps_flutter_interface
     
 dev_dependencies:
   flutter_test:
