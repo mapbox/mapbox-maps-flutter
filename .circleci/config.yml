@@ -233,8 +233,8 @@ jobs:
           command: dart analyze
       - run:
           name: Check all tests are in the test suite
-          command: dart ../scripts/check_test_suite.dart
-          working_directory: example
+          command: dart ../../scripts/check_test_suite.dart
+          working_directory: mapbox_maps_flutter_mobile/example
 
 workflows:
   build:
