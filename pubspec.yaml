@@ -6,14 +6,14 @@ workspace:
   - mapbox_maps_flutter_mobile
   - mapbox_maps_flutter_interface
   - mapbox_maps_flutter_web
-  - mapbox_maps_flutter_v3
+  - mapbox_maps_flutter
 
 dependencies:
-  mapbox_maps_flutter: 
+  mapbox_maps_flutter_mobile: 
     path: mapbox_maps_flutter_mobile
   mapbox_maps_flutter_interface:
     path: mapbox_maps_flutter_interface
   mapbox_maps_flutter_web:
     path: mapbox_maps_flutter_web
-  mapbox_maps_flutter_v3:
-    path: mapbox_maps_flutter_v3
+  mapbox_maps_flutter:
+    path: mapbox_maps_flutter

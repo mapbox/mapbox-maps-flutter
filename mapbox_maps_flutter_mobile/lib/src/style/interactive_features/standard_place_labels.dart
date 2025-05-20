@@ -1,5 +1,5 @@
 // This file is generated.
-part of '../../../mapbox_maps_flutter.dart';
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// Points for labeling places including countries, states, cities, towns, and neighborhoods.
 ///

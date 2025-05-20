@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// A stroked line.
 class LineLayer extends Layer {

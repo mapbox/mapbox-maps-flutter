@@ -1,5 +1,5 @@
 // This file is generated.
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// A vector tile source.
 /// @see [The online documentation](https://docs.mapbox.com/mapbox-gl-js/style-spec/sources/#vector)

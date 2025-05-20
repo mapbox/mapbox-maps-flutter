@@ -26,7 +26,7 @@ import 'package:mapbox_maps_example/traffic_route_line_example.dart';
 import 'package:mapbox_maps_example/tile_json_example.dart';
 import 'package:mapbox_maps_example/vector_tile_source_example.dart';
 import 'package:mapbox_maps_example/viewport_example.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:mapbox_maps_flutter_mobile/mapbox_maps_flutter_mobile.dart';
 
 import 'full_map_example.dart';
 import 'location_example.dart';

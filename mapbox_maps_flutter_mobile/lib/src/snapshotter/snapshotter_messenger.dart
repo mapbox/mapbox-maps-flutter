@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Set of options for taking map snapshot with `map snapshotter`.
 class MapSnapshotOptions {
@@ -186,7 +186,7 @@ abstract class OnSnapshotStyleListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFinishLoadingStyle$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFinishLoadingStyle$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -209,7 +209,7 @@ abstract class OnSnapshotStyleListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFullyLoadStyle$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFullyLoadStyle$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -232,7 +232,7 @@ abstract class OnSnapshotStyleListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFailLoadingStyle$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -240,11 +240,11 @@ abstract class OnSnapshotStyleListener {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFailLoadingStyle was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_message = (args[0] as String?);
           assert(arg_message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFailLoadingStyle was null, expected non-null String.');
           try {
             api.onDidFailLoadingStyle(arg_message!);
             return wrapResponse(empty: true);
@@ -261,7 +261,7 @@ abstract class OnSnapshotStyleListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onStyleImageMissing$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -269,11 +269,11 @@ abstract class OnSnapshotStyleListener {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onStyleImageMissing was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final String? arg_imageId = (args[0] as String?);
           assert(arg_imageId != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onStyleImageMissing was null, expected non-null String.');
           try {
             api.onStyleImageMissing(arg_imageId!);
             return wrapResponse(empty: true);
@@ -308,7 +308,7 @@ class _SnapshotterInstanceManager {
   Future<void> setupSnapshotterForSuffix(
       String suffix, List<int> eventTypes, MapSnapshotOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.setupSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterInstanceManager.setupSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -334,7 +334,7 @@ class _SnapshotterInstanceManager {
 
   Future<void> tearDownSnapshotterForSuffix(String suffix) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.tearDownSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterInstanceManager.tearDownSnapshotterForSuffix$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -377,7 +377,7 @@ class _SnapshotterMessenger {
 
   Future<Size> getSize() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.getSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -407,7 +407,7 @@ class _SnapshotterMessenger {
 
   Future<void> setSize(Size size) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.setSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -433,7 +433,7 @@ class _SnapshotterMessenger {
 
   Future<CameraState> getCameraState() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getCameraState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.getCameraState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -463,7 +463,7 @@ class _SnapshotterMessenger {
 
   Future<void> setCamera(CameraOptions cameraOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setCamera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.setCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -489,7 +489,7 @@ class _SnapshotterMessenger {
 
   Future<Uint8List?> start() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.start$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.start$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -514,7 +514,7 @@ class _SnapshotterMessenger {
 
   Future<void> cancel() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.cancel$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.cancel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -539,7 +539,7 @@ class _SnapshotterMessenger {
 
   Future<CoordinateBounds> coordinateBounds(CameraOptions camera) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.coordinateBounds$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.coordinateBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -575,7 +575,7 @@ class _SnapshotterMessenger {
     double? pitch,
   }) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.camera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.camera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -606,7 +606,7 @@ class _SnapshotterMessenger {
 
   Future<List<CanonicalTileID>> tileCover(TileCoverOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.tileCover$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -638,7 +638,7 @@ class _SnapshotterMessenger {
 
   Future<void> clearData() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.clearData$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
