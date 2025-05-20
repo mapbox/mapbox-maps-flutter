@@ -210,7 +210,7 @@ jobs:
       - checkout
       - setup-flutter:
           app-dir: .
-      run:
+      - run:
           name: Install dependencies for examples
           command: |
             dart pub get -C mapbox_maps_flutter_mobile/example
