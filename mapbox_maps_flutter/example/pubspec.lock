@@ -184,12 +184,12 @@ packages:
     source: hosted
     version: "5.1.1"
   mapbox_maps_flutter:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: "../../mapbox_maps_flutter_mobile"
+      path: ".."
       relative: true
     source: path
-    version: "2.8.0"
+    version: "3.0.0-beta.1"
   mapbox_maps_flutter_interface:
     dependency: "direct overridden"
     description:
@@ -197,13 +197,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  mapbox_maps_flutter_v3:
-    dependency: "direct main"
+  mapbox_maps_flutter_mobile:
+    dependency: "direct overridden"
     description:
-      path: ".."
+      path: "../../mapbox_maps_flutter_mobile"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "1.0.0"
   mapbox_maps_flutter_web:
     dependency: "direct overridden"
     description:

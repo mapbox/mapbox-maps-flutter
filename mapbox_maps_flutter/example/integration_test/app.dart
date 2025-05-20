@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mapbox_maps_flutter_v3/mapbox_maps_flutter_v3.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 const ACCESS_TOKEN = String.fromEnvironment('ACCESS_TOKEN');
 

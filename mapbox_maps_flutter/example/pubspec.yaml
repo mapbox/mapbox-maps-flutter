@@ -1,4 +1,4 @@
-name: mapbox_maps_flutter_v3_example
+name: mapbox_maps_flutter_example
 description: "Demonstrates how to use the mapbox_maps_flutter_v3 plugin."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -17,7 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mapbox_maps_flutter_v3:
+  mapbox_maps_flutter:
     # When depending on this package from a real application you should use:
     #   mapbox_maps_flutter_v3: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
@@ -32,7 +32,7 @@ dependencies:
 dependency_overrides:
   mapbox_maps_flutter_interface:
     path: ../../mapbox_maps_flutter_interface
-  mapbox_maps_flutter:
+  mapbox_maps_flutter_mobile:
     path: ../../mapbox_maps_flutter_mobile
   mapbox_maps_flutter_web:
     path: ../../mapbox_maps_flutter_web

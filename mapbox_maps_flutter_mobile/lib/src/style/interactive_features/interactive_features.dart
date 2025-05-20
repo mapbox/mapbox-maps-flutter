@@ -1,4 +1,4 @@
-part of '../../../mapbox_maps_flutter.dart';
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A single tap interaction on a Featureset with a typed `FeaturesetDescriptor` or on the map.
 final class TapInteraction<T extends FeaturesetDescriptor>

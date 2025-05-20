@@ -1,4 +1,4 @@
-import 'package:mapbox_maps_flutter_v3/mapbox_maps_flutter_v3.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 extension City on Point {
   static Point get helsinki =>
