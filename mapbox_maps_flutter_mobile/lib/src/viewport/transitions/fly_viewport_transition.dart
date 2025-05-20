@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A [ViewportTransition] that performs a fly animation over a specified duration.
 ///

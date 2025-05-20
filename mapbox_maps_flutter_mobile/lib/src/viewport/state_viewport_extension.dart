@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../mapbox_maps_flutter.dart';
 
 ViewportTransition? _viewportTransition;
 Function(bool)? _viewportTransitionCompletion;

@@ -369,7 +369,7 @@ class PerformanceStatisticsListener: PerformanceStatisticsListenerProtocol {
     return PerformaceStatisticsPigeonCodec.shared
   }
   func onPerformanceStatisticsCollected(statistics statisticsArg: PerformanceStatistics, completion: @escaping (Result<Void, PerformaceStatisticsError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.PerformanceStatisticsListener.onPerformanceStatisticsCollected\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([statisticsArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -399,7 +399,7 @@ class _PerformanceStatisticsApiSetup {
   /// Sets up an instance of `_PerformanceStatisticsApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PerformanceStatisticsApi?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let startPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let startPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.startPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       startPerformanceStatisticsCollectionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -414,7 +414,7 @@ class _PerformanceStatisticsApiSetup {
     } else {
       startPerformanceStatisticsCollectionChannel.setMessageHandler(nil)
     }
-    let stopPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let stopPerformanceStatisticsCollectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.stopPerformanceStatisticsCollection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       stopPerformanceStatisticsCollectionChannel.setMessageHandler { _, reply in
         do {

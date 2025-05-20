@@ -15,7 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  mapbox_maps_flutter:
+  mapbox_maps_flutter_mobile:
     # When depending on this package from a real application you should use:
     # mapbox_maps_flutter: ^x.y.z
     path: ../

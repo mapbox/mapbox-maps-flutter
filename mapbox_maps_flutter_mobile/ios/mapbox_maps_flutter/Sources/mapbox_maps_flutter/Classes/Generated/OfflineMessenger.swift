@@ -787,7 +787,7 @@ class _OfflineManagerSetup {
   /// Sets up an instance of `_OfflineManager` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _OfflineManager?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let loadStylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.loadStylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let loadStylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.loadStylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       loadStylePackChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -805,7 +805,7 @@ class _OfflineManagerSetup {
     } else {
       loadStylePackChannel.setMessageHandler(nil)
     }
-    let removeStylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.removeStylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.removeStylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStylePackChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -822,7 +822,7 @@ class _OfflineManagerSetup {
     } else {
       removeStylePackChannel.setMessageHandler(nil)
     }
-    let addStylePackLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStylePackLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.addStylePackLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStylePackLoadProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -837,7 +837,7 @@ class _OfflineManagerSetup {
     } else {
       addStylePackLoadProgressListenerChannel.setMessageHandler(nil)
     }
-    let stylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let stylePackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.stylePack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       stylePackChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -854,7 +854,7 @@ class _OfflineManagerSetup {
     } else {
       stylePackChannel.setMessageHandler(nil)
     }
-    let stylePackMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePackMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let stylePackMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.stylePackMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       stylePackMetadataChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -871,7 +871,7 @@ class _OfflineManagerSetup {
     } else {
       stylePackMetadataChannel.setMessageHandler(nil)
     }
-    let allStylePacksChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let allStylePacksChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.allStylePacks\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       allStylePacksChannel.setMessageHandler { _, reply in
         api.allStylePacks { result in
@@ -908,7 +908,7 @@ class _TileStoreSetup {
   /// Sets up an instance of `_TileStore` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _TileStore?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let loadTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let loadTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.loadTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       loadTileRegionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -926,7 +926,7 @@ class _TileStoreSetup {
     } else {
       loadTileRegionChannel.setMessageHandler(nil)
     }
-    let addTileRegionLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addTileRegionLoadProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.addTileRegionLoadProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addTileRegionLoadProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -941,7 +941,7 @@ class _TileStoreSetup {
     } else {
       addTileRegionLoadProgressListenerChannel.setMessageHandler(nil)
     }
-    let estimateTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let estimateTileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.estimateTileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       estimateTileRegionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -960,7 +960,7 @@ class _TileStoreSetup {
     } else {
       estimateTileRegionChannel.setMessageHandler(nil)
     }
-    let addTileRegionEstimateProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addTileRegionEstimateProgressListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.addTileRegionEstimateProgressListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addTileRegionEstimateProgressListenerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -975,7 +975,7 @@ class _TileStoreSetup {
     } else {
       addTileRegionEstimateProgressListenerChannel.setMessageHandler(nil)
     }
-    let tileRegionMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tileRegionMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegionMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tileRegionMetadataChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -992,7 +992,7 @@ class _TileStoreSetup {
     } else {
       tileRegionMetadataChannel.setMessageHandler(nil)
     }
-    let tileRegionContainsDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tileRegionContainsDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegionContainsDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tileRegionContainsDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1010,7 +1010,7 @@ class _TileStoreSetup {
     } else {
       tileRegionContainsDescriptorChannel.setMessageHandler(nil)
     }
-    let allTileRegionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let allTileRegionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.allTileRegions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       allTileRegionsChannel.setMessageHandler { _, reply in
         api.allTileRegions { result in
@@ -1025,7 +1025,7 @@ class _TileStoreSetup {
     } else {
       allTileRegionsChannel.setMessageHandler(nil)
     }
-    let tileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tileRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tileRegionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1042,7 +1042,7 @@ class _TileStoreSetup {
     } else {
       tileRegionChannel.setMessageHandler(nil)
     }
-    let removeRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.removeRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.removeRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeRegionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1059,7 +1059,7 @@ class _TileStoreSetup {
     } else {
       removeRegionChannel.setMessageHandler(nil)
     }
-    let setOptionForKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setOptionForKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.setOptionForKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setOptionForKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1090,7 +1090,7 @@ class _OfflineMapInstanceManagerSetup {
   /// Sets up an instance of `_OfflineMapInstanceManager` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _OfflineMapInstanceManager?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let setupOfflineManagerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.setupOfflineManager\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setupOfflineManagerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineMapInstanceManager.setupOfflineManager\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setupOfflineManagerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1105,7 +1105,7 @@ class _OfflineMapInstanceManagerSetup {
     } else {
       setupOfflineManagerChannel.setMessageHandler(nil)
     }
-    let tearDownOfflineManagerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.tearDownOfflineManager\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tearDownOfflineManagerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineMapInstanceManager.tearDownOfflineManager\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tearDownOfflineManagerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1134,7 +1134,7 @@ class _TileStoreInstanceManagerSetup {
   /// Sets up an instance of `_TileStoreInstanceManager` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _TileStoreInstanceManager?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let setupTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.setupTileStore\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setupTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStoreInstanceManager.setupTileStore\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setupTileStoreChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1150,7 +1150,7 @@ class _TileStoreInstanceManagerSetup {
     } else {
       setupTileStoreChannel.setMessageHandler(nil)
     }
-    let tearDownTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.tearDownTileStore\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tearDownTileStoreChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStoreInstanceManager.tearDownTileStore\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tearDownTileStoreChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1192,7 +1192,7 @@ class _OfflineSwitchSetup {
     /// with HttpRequestErrorType#ConnectionError.
     ///
     /// @param connected Set false to disconnect the Mapbox stack
-    let setMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.setMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineSwitch.setMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setMapboxStackConnectedChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1210,7 +1210,7 @@ class _OfflineSwitchSetup {
     /// Provides information if the Mapbox stack is connected or disconnected via OfflineSwitch.
     ///
     /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
-    let isMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.isMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let isMapboxStackConnectedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineSwitch.isMapboxStackConnected\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isMapboxStackConnectedChannel.setMessageHandler { _, reply in
         do {

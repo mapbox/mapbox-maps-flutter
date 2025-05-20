@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../mapbox_maps_flutter.dart';
 
 /// Specifies the different ways that [FollowPuckViewportState] can obtain values to use when
 /// setting the camera's bearing.

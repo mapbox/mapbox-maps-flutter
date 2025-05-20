@@ -963,7 +963,7 @@ class GesturesSettingsInterfaceSetup {
   /// Sets up an instance of `GesturesSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: GesturesSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GesturesSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -976,7 +976,7 @@ class GesturesSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GesturesSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1007,7 +1007,7 @@ class _LocationComponentSettingsInterfaceSetup {
   /// Sets up an instance of `_LocationComponentSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _LocationComponentSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._LocationComponentSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -1020,7 +1020,7 @@ class _LocationComponentSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._LocationComponentSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1052,7 +1052,7 @@ class ScaleBarSettingsInterfaceSetup {
   /// Sets up an instance of `ScaleBarSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: ScaleBarSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.ScaleBarSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -1065,7 +1065,7 @@ class ScaleBarSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.ScaleBarSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1096,7 +1096,7 @@ class CompassSettingsInterfaceSetup {
   /// Sets up an instance of `CompassSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: CompassSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.CompassSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -1109,7 +1109,7 @@ class CompassSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.CompassSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1140,7 +1140,7 @@ class AttributionSettingsInterfaceSetup {
   /// Sets up an instance of `AttributionSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: AttributionSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AttributionSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -1153,7 +1153,7 @@ class AttributionSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AttributionSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1184,7 +1184,7 @@ class LogoSettingsInterfaceSetup {
   /// Sets up an instance of `LogoSettingsInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: LogoSettingsInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogoSettingsInterface.getSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSettingsChannel.setMessageHandler { _, reply in
         do {
@@ -1197,7 +1197,7 @@ class LogoSettingsInterfaceSetup {
     } else {
       getSettingsChannel.setMessageHandler(nil)
     }
-    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateSettingsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogoSettingsInterface.updateSettings\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateSettingsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

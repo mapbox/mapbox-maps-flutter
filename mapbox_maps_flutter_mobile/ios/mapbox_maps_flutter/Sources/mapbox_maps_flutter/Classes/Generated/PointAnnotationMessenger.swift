@@ -969,7 +969,7 @@ class OnPointAnnotationClickListener: OnPointAnnotationClickListenerProtocol {
     return PointAnnotationMessengerPigeonCodec.shared
   }
   func onPointAnnotationClick(annotation annotationArg: PointAnnotation, completion: @escaping (Result<Void, PointAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPointAnnotationClickListener.onPointAnnotationClick\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPointAnnotationClickListener.onPointAnnotationClick\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([annotationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -1130,7 +1130,7 @@ class _PointAnnotationMessengerSetup {
   /// Sets up an instance of `_PointAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PointAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1148,7 +1148,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1166,7 +1166,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1184,7 +1184,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1202,7 +1202,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1219,7 +1219,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1237,7 +1237,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconAllowOverlapChannel.setMessageHandler(nil)
     }
-    let getIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1254,7 +1254,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconAllowOverlapChannel.setMessageHandler(nil)
     }
-    let setIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1272,7 +1272,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconAnchorChannel.setMessageHandler(nil)
     }
-    let getIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1289,7 +1289,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconAnchorChannel.setMessageHandler(nil)
     }
-    let setIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1307,7 +1307,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let getIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1324,7 +1324,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let setIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1342,7 +1342,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconImageChannel.setMessageHandler(nil)
     }
-    let getIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1359,7 +1359,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconImageChannel.setMessageHandler(nil)
     }
-    let setIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1377,7 +1377,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconKeepUprightChannel.setMessageHandler(nil)
     }
-    let getIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1394,7 +1394,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconKeepUprightChannel.setMessageHandler(nil)
     }
-    let setIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1412,7 +1412,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconOffsetChannel.setMessageHandler(nil)
     }
-    let getIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1429,7 +1429,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconOffsetChannel.setMessageHandler(nil)
     }
-    let setIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1447,7 +1447,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconOptionalChannel.setMessageHandler(nil)
     }
-    let getIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1464,7 +1464,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconOptionalChannel.setMessageHandler(nil)
     }
-    let setIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1482,7 +1482,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconPaddingChannel.setMessageHandler(nil)
     }
-    let getIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1499,7 +1499,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconPaddingChannel.setMessageHandler(nil)
     }
-    let setIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1517,7 +1517,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let getIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1534,7 +1534,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let setIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconRotateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1552,7 +1552,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconRotateChannel.setMessageHandler(nil)
     }
-    let getIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconRotateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1569,7 +1569,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconRotateChannel.setMessageHandler(nil)
     }
-    let setIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1587,7 +1587,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let getIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1604,7 +1604,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let setIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconSizeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1622,7 +1622,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconSizeChannel.setMessageHandler(nil)
     }
-    let getIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconSizeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1639,7 +1639,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconSizeChannel.setMessageHandler(nil)
     }
-    let setIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconSizeScaleRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1657,7 +1657,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconSizeScaleRangeChannel.setMessageHandler(nil)
     }
-    let getIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconSizeScaleRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1674,7 +1674,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconSizeScaleRangeChannel.setMessageHandler(nil)
     }
-    let setIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTextFitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1692,7 +1692,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconTextFitChannel.setMessageHandler(nil)
     }
-    let getIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTextFitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTextFit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTextFitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1709,7 +1709,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconTextFitChannel.setMessageHandler(nil)
     }
-    let setIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTextFitPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1727,7 +1727,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconTextFitPaddingChannel.setMessageHandler(nil)
     }
-    let getIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTextFitPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTextFitPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTextFitPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1744,7 +1744,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconTextFitPaddingChannel.setMessageHandler(nil)
     }
-    let setSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolAvoidEdges\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolAvoidEdges\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolAvoidEdgesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1762,7 +1762,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolAvoidEdgesChannel.setMessageHandler(nil)
     }
-    let getSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolAvoidEdges\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolAvoidEdgesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolAvoidEdges\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolAvoidEdgesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1779,7 +1779,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolAvoidEdgesChannel.setMessageHandler(nil)
     }
-    let setSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1797,7 +1797,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolElevationReferenceChannel.setMessageHandler(nil)
     }
-    let getSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1814,7 +1814,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolElevationReferenceChannel.setMessageHandler(nil)
     }
-    let setSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolPlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolPlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolPlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1832,7 +1832,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolPlacementChannel.setMessageHandler(nil)
     }
-    let getSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolPlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolPlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolPlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolPlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1849,7 +1849,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolPlacementChannel.setMessageHandler(nil)
     }
-    let setSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1867,7 +1867,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolSortKeyChannel.setMessageHandler(nil)
     }
-    let getSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1884,7 +1884,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolSortKeyChannel.setMessageHandler(nil)
     }
-    let setSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1902,7 +1902,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolSpacingChannel.setMessageHandler(nil)
     }
-    let getSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1919,7 +1919,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolSpacingChannel.setMessageHandler(nil)
     }
-    let setSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZElevate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZElevate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolZElevateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1937,7 +1937,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolZElevateChannel.setMessageHandler(nil)
     }
-    let getSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZElevate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolZElevateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZElevate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolZElevateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1954,7 +1954,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolZElevateChannel.setMessageHandler(nil)
     }
-    let setSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOrder\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZOrder\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolZOrderChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1972,7 +1972,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolZOrderChannel.setMessageHandler(nil)
     }
-    let getSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOrder\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolZOrderChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZOrder\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolZOrderChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1989,7 +1989,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolZOrderChannel.setMessageHandler(nil)
     }
-    let setTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2007,7 +2007,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextAllowOverlapChannel.setMessageHandler(nil)
     }
-    let getTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextAllowOverlapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextAllowOverlap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextAllowOverlapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2024,7 +2024,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextAllowOverlapChannel.setMessageHandler(nil)
     }
-    let setTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2042,7 +2042,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextAnchorChannel.setMessageHandler(nil)
     }
-    let getTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2059,7 +2059,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextAnchorChannel.setMessageHandler(nil)
     }
-    let setTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextFieldChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2077,7 +2077,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextFieldChannel.setMessageHandler(nil)
     }
-    let getTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextFieldChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextField\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextFieldChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2094,7 +2094,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextFieldChannel.setMessageHandler(nil)
     }
-    let setTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextFont\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextFont\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextFontChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2112,7 +2112,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextFontChannel.setMessageHandler(nil)
     }
-    let getTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextFont\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextFontChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextFont\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextFontChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2129,7 +2129,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextFontChannel.setMessageHandler(nil)
     }
-    let setTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2147,7 +2147,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let getTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextIgnorePlacementChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextIgnorePlacement\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextIgnorePlacementChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2164,7 +2164,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextIgnorePlacementChannel.setMessageHandler(nil)
     }
-    let setTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextJustifyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2182,7 +2182,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextJustifyChannel.setMessageHandler(nil)
     }
-    let getTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextJustifyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextJustify\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextJustifyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2199,7 +2199,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextJustifyChannel.setMessageHandler(nil)
     }
-    let setTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2217,7 +2217,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextKeepUprightChannel.setMessageHandler(nil)
     }
-    let getTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextKeepUprightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextKeepUpright\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextKeepUprightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2234,7 +2234,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextKeepUprightChannel.setMessageHandler(nil)
     }
-    let setTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextLetterSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2252,7 +2252,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextLetterSpacingChannel.setMessageHandler(nil)
     }
-    let getTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextLetterSpacingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextLetterSpacing\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextLetterSpacingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2269,7 +2269,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextLetterSpacingChannel.setMessageHandler(nil)
     }
-    let setTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextLineHeightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2287,7 +2287,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextLineHeightChannel.setMessageHandler(nil)
     }
-    let getTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextLineHeightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextLineHeight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextLineHeightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2304,7 +2304,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextLineHeightChannel.setMessageHandler(nil)
     }
-    let setTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxAngle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextMaxAngle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextMaxAngleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2322,7 +2322,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextMaxAngleChannel.setMessageHandler(nil)
     }
-    let getTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxAngle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextMaxAngleChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextMaxAngle\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextMaxAngleChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2339,7 +2339,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextMaxAngleChannel.setMessageHandler(nil)
     }
-    let setTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextMaxWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2357,7 +2357,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextMaxWidthChannel.setMessageHandler(nil)
     }
-    let getTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextMaxWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextMaxWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextMaxWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2374,7 +2374,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextMaxWidthChannel.setMessageHandler(nil)
     }
-    let setTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2392,7 +2392,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextOffsetChannel.setMessageHandler(nil)
     }
-    let getTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2409,7 +2409,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextOffsetChannel.setMessageHandler(nil)
     }
-    let setTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2427,7 +2427,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextOptionalChannel.setMessageHandler(nil)
     }
-    let getTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextOptionalChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOptional\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextOptionalChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2444,7 +2444,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextOptionalChannel.setMessageHandler(nil)
     }
-    let setTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2462,7 +2462,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextPaddingChannel.setMessageHandler(nil)
     }
-    let getTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2479,7 +2479,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextPaddingChannel.setMessageHandler(nil)
     }
-    let setTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2497,7 +2497,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let getTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextPitchAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextPitchAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextPitchAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2514,7 +2514,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextPitchAlignmentChannel.setMessageHandler(nil)
     }
-    let setTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextRadialOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2532,7 +2532,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextRadialOffsetChannel.setMessageHandler(nil)
     }
-    let getTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextRadialOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRadialOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextRadialOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2549,7 +2549,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextRadialOffsetChannel.setMessageHandler(nil)
     }
-    let setTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextRotateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2567,7 +2567,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextRotateChannel.setMessageHandler(nil)
     }
-    let getTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextRotateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRotate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextRotateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2584,7 +2584,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextRotateChannel.setMessageHandler(nil)
     }
-    let setTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2602,7 +2602,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let getTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextRotationAlignmentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextRotationAlignment\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextRotationAlignmentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2619,7 +2619,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextRotationAlignmentChannel.setMessageHandler(nil)
     }
-    let setTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextSizeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2637,7 +2637,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextSizeChannel.setMessageHandler(nil)
     }
-    let getTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextSizeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2654,7 +2654,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextSizeChannel.setMessageHandler(nil)
     }
-    let setTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextSizeScaleRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2672,7 +2672,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextSizeScaleRangeChannel.setMessageHandler(nil)
     }
-    let getTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextSizeScaleRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextSizeScaleRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextSizeScaleRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2689,7 +2689,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextSizeScaleRangeChannel.setMessageHandler(nil)
     }
-    let setTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextTransformChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2707,7 +2707,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextTransformChannel.setMessageHandler(nil)
     }
-    let getTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextTransformChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTransform\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextTransformChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2724,7 +2724,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextTransformChannel.setMessageHandler(nil)
     }
-    let setIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2742,7 +2742,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconColorChannel.setMessageHandler(nil)
     }
-    let getIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2759,7 +2759,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconColorChannel.setMessageHandler(nil)
     }
-    let setIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconColorSaturationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2777,7 +2777,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconColorSaturationChannel.setMessageHandler(nil)
     }
-    let getIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconColorSaturationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconColorSaturation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconColorSaturationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2794,7 +2794,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconColorSaturationChannel.setMessageHandler(nil)
     }
-    let setIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2812,7 +2812,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2829,7 +2829,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconHaloBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2847,7 +2847,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconHaloBlurChannel.setMessageHandler(nil)
     }
-    let getIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconHaloBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2864,7 +2864,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconHaloBlurChannel.setMessageHandler(nil)
     }
-    let setIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconHaloColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2882,7 +2882,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconHaloColorChannel.setMessageHandler(nil)
     }
-    let getIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconHaloColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2899,7 +2899,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconHaloColorChannel.setMessageHandler(nil)
     }
-    let setIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconHaloWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2917,7 +2917,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconHaloWidthChannel.setMessageHandler(nil)
     }
-    let getIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconHaloWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2934,7 +2934,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconHaloWidthChannel.setMessageHandler(nil)
     }
-    let setIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconImageCrossFadeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2952,7 +2952,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconImageCrossFadeChannel.setMessageHandler(nil)
     }
-    let getIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconImageCrossFadeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconImageCrossFade\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconImageCrossFadeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2969,7 +2969,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconImageCrossFadeChannel.setMessageHandler(nil)
     }
-    let setIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2987,7 +2987,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let getIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3004,7 +3004,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let setIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3022,7 +3022,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconOpacityChannel.setMessageHandler(nil)
     }
-    let getIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3039,7 +3039,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconOpacityChannel.setMessageHandler(nil)
     }
-    let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3057,7 +3057,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconTranslateChannel.setMessageHandler(nil)
     }
-    let getIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3074,7 +3074,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconTranslateChannel.setMessageHandler(nil)
     }
-    let setIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setIconTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setIconTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setIconTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3092,7 +3092,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setIconTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getIconTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getIconTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getIconTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getIconTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3109,7 +3109,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getIconTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let setSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSymbolZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3127,7 +3127,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setSymbolZOffsetChannel.setMessageHandler(nil)
     }
-    let getSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSymbolZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getSymbolZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSymbolZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3144,7 +3144,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getSymbolZOffsetChannel.setMessageHandler(nil)
     }
-    let setTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3162,7 +3162,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextColorChannel.setMessageHandler(nil)
     }
-    let getTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3179,7 +3179,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextColorChannel.setMessageHandler(nil)
     }
-    let setTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3197,7 +3197,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3214,7 +3214,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextHaloBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3232,7 +3232,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextHaloBlurChannel.setMessageHandler(nil)
     }
-    let getTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextHaloBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextHaloBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3249,7 +3249,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextHaloBlurChannel.setMessageHandler(nil)
     }
-    let setTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextHaloColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3267,7 +3267,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextHaloColorChannel.setMessageHandler(nil)
     }
-    let getTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextHaloColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextHaloColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3284,7 +3284,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextHaloColorChannel.setMessageHandler(nil)
     }
-    let setTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextHaloWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3302,7 +3302,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextHaloWidthChannel.setMessageHandler(nil)
     }
-    let getTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextHaloWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextHaloWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextHaloWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3319,7 +3319,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextHaloWidthChannel.setMessageHandler(nil)
     }
-    let setTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3337,7 +3337,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let getTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3354,7 +3354,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let setTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3372,7 +3372,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextOpacityChannel.setMessageHandler(nil)
     }
-    let getTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3389,7 +3389,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextOpacityChannel.setMessageHandler(nil)
     }
-    let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3407,7 +3407,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextTranslateChannel.setMessageHandler(nil)
     }
-    let getTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3424,7 +3424,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       getTextTranslateChannel.setMessageHandler(nil)
     }
-    let setTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.setTextTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.setTextTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTextTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3442,7 +3442,7 @@ class _PointAnnotationMessengerSetup {
     } else {
       setTextTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PointAnnotationMessenger.getTextTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTextTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PointAnnotationMessenger.getTextTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTextTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

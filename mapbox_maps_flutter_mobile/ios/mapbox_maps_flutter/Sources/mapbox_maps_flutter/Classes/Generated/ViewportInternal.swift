@@ -413,7 +413,7 @@ class _ViewportMessengerSetup {
   /// Sets up an instance of `_ViewportMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _ViewportMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let transitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._ViewportMessenger.transition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let transitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._ViewportMessenger.transition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       transitionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

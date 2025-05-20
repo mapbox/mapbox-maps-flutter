@@ -293,7 +293,7 @@ class OnPolygonAnnotationClickListener: OnPolygonAnnotationClickListenerProtocol
     return PolygonAnnotationMessengerPigeonCodec.shared
   }
   func onPolygonAnnotationClick(annotation annotationArg: PolygonAnnotation, completion: @escaping (Result<Void, PolygonAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolygonAnnotationClickListener.onPolygonAnnotationClick\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolygonAnnotationClickListener.onPolygonAnnotationClick\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([annotationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -348,7 +348,7 @@ class _PolygonAnnotationMessengerSetup {
   /// Sets up an instance of `_PolygonAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolygonAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -366,7 +366,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -384,7 +384,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -402,7 +402,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -420,7 +420,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -437,7 +437,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -455,7 +455,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillElevationReferenceChannel.setMessageHandler(nil)
     }
-    let getFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -472,7 +472,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillElevationReferenceChannel.setMessageHandler(nil)
     }
-    let setFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -490,7 +490,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillSortKeyChannel.setMessageHandler(nil)
     }
-    let getFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -507,7 +507,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillSortKeyChannel.setMessageHandler(nil)
     }
-    let setFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillAntialias\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillAntialias\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillAntialiasChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -525,7 +525,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillAntialiasChannel.setMessageHandler(nil)
     }
-    let getFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillAntialias\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillAntialiasChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillAntialias\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillAntialiasChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -542,7 +542,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillAntialiasChannel.setMessageHandler(nil)
     }
-    let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -560,7 +560,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillColorChannel.setMessageHandler(nil)
     }
-    let getFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -577,7 +577,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillColorChannel.setMessageHandler(nil)
     }
-    let setFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -595,7 +595,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -612,7 +612,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -630,7 +630,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillOpacityChannel.setMessageHandler(nil)
     }
-    let getFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -647,7 +647,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillOpacityChannel.setMessageHandler(nil)
     }
-    let setFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillOutlineColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -665,7 +665,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillOutlineColorChannel.setMessageHandler(nil)
     }
-    let getFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillOutlineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillOutlineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillOutlineColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -682,7 +682,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillOutlineColorChannel.setMessageHandler(nil)
     }
-    let setFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillPatternChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -700,7 +700,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillPatternChannel.setMessageHandler(nil)
     }
-    let getFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillPatternChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -717,7 +717,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillPatternChannel.setMessageHandler(nil)
     }
-    let setFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -735,7 +735,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillTranslateChannel.setMessageHandler(nil)
     }
-    let getFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -752,7 +752,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillTranslateChannel.setMessageHandler(nil)
     }
-    let setFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -770,7 +770,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -787,7 +787,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       getFillTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.setFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFillZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -805,7 +805,7 @@ class _PolygonAnnotationMessengerSetup {
     } else {
       setFillZOffsetChannel.setMessageHandler(nil)
     }
-    let getFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFillZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolygonAnnotationMessenger.getFillZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFillZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

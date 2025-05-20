@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A [ViewportTransition] that animates viewport changes using an easing curve.
 ///

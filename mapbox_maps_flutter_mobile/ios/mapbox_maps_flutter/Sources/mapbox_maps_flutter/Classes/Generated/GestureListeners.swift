@@ -313,7 +313,7 @@ class GestureListener: GestureListenerProtocol {
     return GestureListenersPigeonCodec.shared
   }
   func onTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onTap\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -331,7 +331,7 @@ class GestureListener: GestureListenerProtocol {
     }
   }
   func onLongTap(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onLongTap\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -349,7 +349,7 @@ class GestureListener: GestureListenerProtocol {
     }
   }
   func onScroll(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onScroll\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -367,7 +367,7 @@ class GestureListener: GestureListenerProtocol {
     }
   }
   func onZoom(context contextArg: MapContentGestureContext, completion: @escaping (Result<Void, GestureListenersError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onZoom\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([contextArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -439,7 +439,7 @@ class AnnotationDragEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInt
   static func register(with messenger: FlutterBinaryMessenger,
                       instanceName: String = "",
                       streamHandler: AnnotationDragEventsStreamHandler) {
-    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents"
+    var channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationDragEvents"
     if !instanceName.isEmpty {
       channelName += ".\(instanceName)"
     }

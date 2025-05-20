@@ -2032,33 +2032,33 @@ private class MapInterfacesPigeonCodecReader: FlutterStandardReader {
     case 157:
       return Feature.fromList(self.readValue() as! [Any?])
     case 158:
-      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
-    case 159:
-      return TileCoverOptions.fromList(self.readValue() as! [Any?])
-    case 160:
       return MbxEdgeInsets.fromList(self.readValue() as! [Any?])
-    case 161:
+    case 159:
       return CameraOptions.fromList(self.readValue() as! [Any?])
-    case 162:
+    case 160:
       return CameraState.fromList(self.readValue() as! [Any?])
-    case 163:
-      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
-    case 164:
-      return CameraBounds.fromList(self.readValue() as! [Any?])
-    case 165:
-      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
-    case 166:
-      return CoordinateBounds.fromList(self.readValue() as! [Any?])
-    case 167:
-      return MapDebugOptions.fromList(self.readValue() as! [Any?])
-    case 168:
-      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
-    case 169:
-      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
-    case 170:
-      return MapOptions.fromList(self.readValue() as! [Any?])
-    case 171:
+    case 161:
       return ScreenCoordinate.fromList(self.readValue() as! [Any?])
+    case 162:
+      return GlyphsRasterizationOptions.fromList(self.readValue() as! [Any?])
+    case 163:
+      return TileCoverOptions.fromList(self.readValue() as! [Any?])
+    case 164:
+      return CameraBoundsOptions.fromList(self.readValue() as! [Any?])
+    case 165:
+      return CameraBounds.fromList(self.readValue() as! [Any?])
+    case 166:
+      return MapAnimationOptions.fromList(self.readValue() as! [Any?])
+    case 167:
+      return CoordinateBounds.fromList(self.readValue() as! [Any?])
+    case 168:
+      return MapDebugOptions.fromList(self.readValue() as! [Any?])
+    case 169:
+      return TileCacheBudgetInMegabytes.fromList(self.readValue() as! [Any?])
+    case 170:
+      return TileCacheBudgetInTiles.fromList(self.readValue() as! [Any?])
+    case 171:
+      return MapOptions.fromList(self.readValue() as! [Any?])
     case 172:
       return ScreenBox.fromList(self.readValue() as! [Any?])
     case 173:
@@ -2218,46 +2218,46 @@ private class MapInterfacesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? Feature {
       super.writeByte(157)
       super.writeValue(value.toList())
-    } else if let value = value as? GlyphsRasterizationOptions {
+    } else if let value = value as? MbxEdgeInsets {
       super.writeByte(158)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCoverOptions {
+    } else if let value = value as? CameraOptions {
       super.writeByte(159)
       super.writeValue(value.toList())
-    } else if let value = value as? MbxEdgeInsets {
+    } else if let value = value as? CameraState {
       super.writeByte(160)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraOptions {
+    } else if let value = value as? ScreenCoordinate {
       super.writeByte(161)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraState {
+    } else if let value = value as? GlyphsRasterizationOptions {
       super.writeByte(162)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBoundsOptions {
+    } else if let value = value as? TileCoverOptions {
       super.writeByte(163)
       super.writeValue(value.toList())
-    } else if let value = value as? CameraBounds {
+    } else if let value = value as? CameraBoundsOptions {
       super.writeByte(164)
       super.writeValue(value.toList())
-    } else if let value = value as? MapAnimationOptions {
+    } else if let value = value as? CameraBounds {
       super.writeByte(165)
       super.writeValue(value.toList())
-    } else if let value = value as? CoordinateBounds {
+    } else if let value = value as? MapAnimationOptions {
       super.writeByte(166)
       super.writeValue(value.toList())
-    } else if let value = value as? MapDebugOptions {
+    } else if let value = value as? CoordinateBounds {
       super.writeByte(167)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInMegabytes {
+    } else if let value = value as? MapDebugOptions {
       super.writeByte(168)
       super.writeValue(value.toList())
-    } else if let value = value as? TileCacheBudgetInTiles {
+    } else if let value = value as? TileCacheBudgetInMegabytes {
       super.writeByte(169)
       super.writeValue(value.toList())
-    } else if let value = value as? MapOptions {
+    } else if let value = value as? TileCacheBudgetInTiles {
       super.writeByte(170)
       super.writeValue(value.toList())
-    } else if let value = value as? ScreenCoordinate {
+    } else if let value = value as? MapOptions {
       super.writeByte(171)
       super.writeValue(value.toList())
     } else if let value = value as? ScreenBox {
@@ -2395,7 +2395,7 @@ class _AnimationManagerSetup {
   /// Sets up an instance of `_AnimationManager` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _AnimationManager?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let easeToChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.easeTo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let easeToChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.easeTo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       easeToChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2411,7 +2411,7 @@ class _AnimationManagerSetup {
     } else {
       easeToChannel.setMessageHandler(nil)
     }
-    let flyToChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.flyTo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let flyToChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.flyTo\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       flyToChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2427,7 +2427,7 @@ class _AnimationManagerSetup {
     } else {
       flyToChannel.setMessageHandler(nil)
     }
-    let pitchByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.pitchBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let pitchByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.pitchBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       pitchByChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2443,7 +2443,7 @@ class _AnimationManagerSetup {
     } else {
       pitchByChannel.setMessageHandler(nil)
     }
-    let scaleByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.scaleBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let scaleByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.scaleBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       scaleByChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2460,7 +2460,7 @@ class _AnimationManagerSetup {
     } else {
       scaleByChannel.setMessageHandler(nil)
     }
-    let moveByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.moveBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let moveByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.moveBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       moveByChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2476,7 +2476,7 @@ class _AnimationManagerSetup {
     } else {
       moveByChannel.setMessageHandler(nil)
     }
-    let rotateByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.rotateBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let rotateByChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.rotateBy\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       rotateByChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2493,7 +2493,7 @@ class _AnimationManagerSetup {
     } else {
       rotateByChannel.setMessageHandler(nil)
     }
-    let cancelCameraAnimationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.cancelCameraAnimation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cancelCameraAnimationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.cancelCameraAnimation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cancelCameraAnimationChannel.setMessageHandler { _, reply in
         do {
@@ -2684,7 +2684,7 @@ class _CameraManagerSetup {
     /// @param maxZoom The maximum zoom level allowed in the returned camera options.
     /// @param offset The center of the given bounds relative to map center in screen points.
     /// @return The `camera options` object representing the provided parameters.
-    let cameraForCoordinatesPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraForCoordinatesPaddingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinatesPadding\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraForCoordinatesPaddingChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2712,7 +2712,7 @@ class _CameraManagerSetup {
     /// @param maxZoom The maximum zoom level allowed in the returned camera options.
     /// @param offset The center of the given bounds relative to map center in screen points.
     /// @return The `camera options` object representing the provided parameters.
-    let cameraForCoordinateBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinateBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraForCoordinateBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinateBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraForCoordinateBoundsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2740,7 +2740,7 @@ class _CameraManagerSetup {
     /// @param pitch The pitch of the camera.
     ///
     /// @return The `camera options` object representing the provided parameters.
-    let cameraForCoordinatesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinates\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraForCoordinatesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinates\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraForCoordinatesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2771,7 +2771,7 @@ class _CameraManagerSetup {
     /// @param box The `screen box` into which `coordinates` should fit.
     ///
     /// @return The `camera options` object with the zoom level adjusted to fit `coordinates` into the `box`.
-    let cameraForCoordinatesCameraOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesCameraOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraForCoordinatesCameraOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinatesCameraOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraForCoordinatesCameraOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2796,7 +2796,7 @@ class _CameraManagerSetup {
     /// @param pitch The pitch of the camera.
     ///
     /// @return The `camera options` object representing the provided parameters.
-    let cameraForGeometryChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForGeometry\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraForGeometryChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForGeometry\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraForGeometryChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2823,7 +2823,7 @@ class _CameraManagerSetup {
     ///
     /// @return The `coordinate bounds` object representing a given `camera`.
     ///
-    let coordinateBoundsForCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateBoundsForCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsForCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateBoundsForCameraChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2846,7 +2846,7 @@ class _CameraManagerSetup {
     ///
     /// @return The `coordinate bounds` object representing a given `camera`.
     ///
-    let coordinateBoundsForCameraUnwrappedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCameraUnwrapped\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateBoundsForCameraUnwrappedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsForCameraUnwrapped\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateBoundsForCameraUnwrappedChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2870,7 +2870,7 @@ class _CameraManagerSetup {
     ///
     /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
     ///
-    let coordinateBoundsZoomForCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateBoundsZoomForCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsZoomForCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateBoundsZoomForCameraChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2893,7 +2893,7 @@ class _CameraManagerSetup {
     ///
     /// @return The object representing `coordinate bounds` and `zoom` for a given `camera`.
     ///
-    let coordinateBoundsZoomForCameraUnwrappedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCameraUnwrapped\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateBoundsZoomForCameraUnwrappedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsZoomForCameraUnwrapped\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateBoundsZoomForCameraUnwrappedChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2917,7 +2917,7 @@ class _CameraManagerSetup {
     /// @param coordinate A geographical `coordinate` on the map to convert to a `screen coordinate`.
     ///
     /// @return A `screen coordinate` on the screen in `logical pixels`.
-    let pixelForCoordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelForCoordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let pixelForCoordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.pixelForCoordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       pixelForCoordinateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2941,7 +2941,7 @@ class _CameraManagerSetup {
     /// @param pixel A `screen coordinate` on the screen in `logical pixels`.
     ///
     /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
-    let coordinateForPixelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateForPixel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateForPixelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateForPixel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateForPixelChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2965,7 +2965,7 @@ class _CameraManagerSetup {
     /// @param coordinates A geographical `coordinates` on the map to convert to `screen coordinates`.
     ///
     /// @return A `screen coordinates` in `logical pixels` for a given geographical `coordinates`.
-    let pixelsForCoordinatesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let pixelsForCoordinatesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.pixelsForCoordinates\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       pixelsForCoordinatesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -2989,7 +2989,7 @@ class _CameraManagerSetup {
     /// @param pixels A `screen coordinates` in `logical pixels`.
     ///
     /// @return A `geographical coordinates` that correspond to a given `screen coordinates`.
-    let coordinatesForPixelsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinatesForPixelsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinatesForPixels\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinatesForPixelsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3010,7 +3010,7 @@ class _CameraManagerSetup {
     /// different `camera state`.
     ///
     /// @param cameraOptions The new `camera options` to be set.
-    let setCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.setCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCameraChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3028,7 +3028,7 @@ class _CameraManagerSetup {
     /// Returns the current `camera state`.
     ///
     /// @return The current `camera state`.
-    let getCameraStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getCameraState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getCameraStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.getCameraState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCameraStateChannel.setMessageHandler { _, reply in
         do {
@@ -3049,7 +3049,7 @@ class _CameraManagerSetup {
     ///
     /// @param options The `camera bounds options` to set.
     /// @return A string describing an error if the operation was not successful, expected with `void` value otherwise.
-    let setBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.setBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setBoundsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3066,7 +3066,7 @@ class _CameraManagerSetup {
     }
     /// Returns the `camera bounds` of the map.
     /// @return A `camera bounds` of the map.
-    let getBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.getBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getBoundsChannel.setMessageHandler { _, reply in
         do {
@@ -3096,7 +3096,7 @@ class _InteractionsListener: _InteractionsListenerProtocol {
     return MapInterfacesPigeonCodec.shared
   }
   func onInteraction(feature featureArg: FeaturesetFeature?, context contextArg: MapContentGestureContext, interactionID interactionIDArg: String, completion: @escaping (Result<Void, MapInterfacesError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile._InteractionsListener.onInteraction\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([featureArg, contextArg, interactionIDArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -3364,7 +3364,7 @@ class _MapInterfaceSetup {
   /// Sets up an instance of `_MapInterface` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _MapInterface?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let loadStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let loadStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.loadStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       loadStyleURIChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3381,7 +3381,7 @@ class _MapInterfaceSetup {
     } else {
       loadStyleURIChannel.setMessageHandler(nil)
     }
-    let loadStyleJsonChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleJson\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let loadStyleJsonChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.loadStyleJson\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       loadStyleJsonChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3398,7 +3398,7 @@ class _MapInterfaceSetup {
     } else {
       loadStyleJsonChannel.setMessageHandler(nil)
     }
-    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       clearDataChannel.setMessageHandler { _, reply in
         api.clearData { result in
@@ -3413,7 +3413,7 @@ class _MapInterfaceSetup {
     } else {
       clearDataChannel.setMessageHandler(nil)
     }
-    let setTileCacheBudgetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setTileCacheBudget\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTileCacheBudgetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setTileCacheBudget\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTileCacheBudgetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3432,7 +3432,7 @@ class _MapInterfaceSetup {
     /// Gets the size of the map.
     ///
     /// @return The `size` of the map in `logical pixels`.
-    let getSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSizeChannel.setMessageHandler { _, reply in
         do {
@@ -3446,7 +3446,7 @@ class _MapInterfaceSetup {
       getSizeChannel.setMessageHandler(nil)
     }
     /// Triggers a repaint of the map.
-    let triggerRepaintChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.triggerRepaint\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let triggerRepaintChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.triggerRepaint\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       triggerRepaintChannel.setMessageHandler { _, reply in
         do {
@@ -3464,7 +3464,7 @@ class _MapInterfaceSetup {
     /// is ongoing.
     ///
     /// @param inProgress The `boolean` value representing if a gesture is in progress.
-    let setGestureInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setGestureInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setGestureInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setGestureInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setGestureInProgressChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3482,7 +3482,7 @@ class _MapInterfaceSetup {
     /// Returns `true` if a gesture is currently in progress.
     ///
     /// @return `true` if a gesture is currently in progress, `false` otherwise.
-    let isGestureInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isGestureInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let isGestureInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.isGestureInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isGestureInProgressChannel.setMessageHandler { _, reply in
         do {
@@ -3497,7 +3497,7 @@ class _MapInterfaceSetup {
     }
     /// For internal use only.
     /// Dispatch a map gesture event for testing purposes.
-    let dispatchChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let dispatchChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.dispatch\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       dispatchChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3518,7 +3518,7 @@ class _MapInterfaceSetup {
     /// In particular, it brings more stability to symbol placement and rendering.
     ///
     /// @param inProgress The `boolean` value representing if user animation is in progress
-    let setUserAnimationInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setUserAnimationInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setUserAnimationInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setUserAnimationInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setUserAnimationInProgressChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3536,7 +3536,7 @@ class _MapInterfaceSetup {
     /// Returns `true` if user animation is currently in progress.
     ///
     /// @return `true` if a user animation is currently in progress, `false` otherwise.
-    let isUserAnimationInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isUserAnimationInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let isUserAnimationInProgressChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.isUserAnimationInProgress\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isUserAnimationInProgressChannel.setMessageHandler { _, reply in
         do {
@@ -3554,7 +3554,7 @@ class _MapInterfaceSetup {
     /// zoom level a multiple of `delta`, in an attempt to display a full map at lower resolution as quick as possible.
     ///
     /// @param delta The new prefetch zoom delta.
-    let setPrefetchZoomDeltaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setPrefetchZoomDelta\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setPrefetchZoomDeltaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setPrefetchZoomDelta\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setPrefetchZoomDeltaChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3572,7 +3572,7 @@ class _MapInterfaceSetup {
     /// Returns the map's prefetch zoom delta.
     ///
     /// @return The map's prefetch zoom `delta`.
-    let getPrefetchZoomDeltaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getPrefetchZoomDelta\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getPrefetchZoomDeltaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getPrefetchZoomDelta\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getPrefetchZoomDeltaChannel.setMessageHandler { _, reply in
         do {
@@ -3586,7 +3586,7 @@ class _MapInterfaceSetup {
       getPrefetchZoomDeltaChannel.setMessageHandler(nil)
     }
     /// Sets the north `orientation mode`.
-    let setNorthOrientationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setNorthOrientation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setNorthOrientationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setNorthOrientation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setNorthOrientationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3602,7 +3602,7 @@ class _MapInterfaceSetup {
       setNorthOrientationChannel.setMessageHandler(nil)
     }
     /// Sets the map `constrain mode`.
-    let setConstrainModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setConstrainMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setConstrainModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setConstrainMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setConstrainModeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3618,7 +3618,7 @@ class _MapInterfaceSetup {
       setConstrainModeChannel.setMessageHandler(nil)
     }
     /// Sets the `viewport mode`.
-    let setViewportModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setViewportMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setViewportModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setViewportMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setViewportModeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3636,7 +3636,7 @@ class _MapInterfaceSetup {
     /// Returns the `map options`.
     ///
     /// @return The map's `map options`.
-    let getMapOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getMapOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getMapOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getMapOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getMapOptionsChannel.setMessageHandler { _, reply in
         do {
@@ -3649,7 +3649,7 @@ class _MapInterfaceSetup {
     } else {
       getMapOptionsChannel.setMessageHandler(nil)
     }
-    let getDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getDebugOptionsChannel.setMessageHandler { _, reply in
         do {
@@ -3662,7 +3662,7 @@ class _MapInterfaceSetup {
     } else {
       getDebugOptionsChannel.setMessageHandler(nil)
     }
-    let setDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setDebugOptionsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setDebugOptions\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setDebugOptionsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3680,7 +3680,7 @@ class _MapInterfaceSetup {
     /// Returns the `map debug options`.
     ///
     /// @return An array of `map debug options` flags currently set to the map.
-    let getDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getDebugChannel.setMessageHandler { _, reply in
         do {
@@ -3698,7 +3698,7 @@ class _MapInterfaceSetup {
     /// @param debugOptions An array of `map debug options` to be set.
     /// @param value A `boolean` value representing the state for a given `map debug options`.
     ///
-    let setDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setDebugChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setDebug\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setDebugChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3720,7 +3720,7 @@ class _MapInterfaceSetup {
     /// @param options The `render query options` for querying rendered features.
     /// @param completion The `query features completion` called when the query completes.
     /// @return A list of `QueriedRenderedFeature` objects representing the query results.
-    let queryRenderedFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let queryRenderedFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.queryRenderedFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       queryRenderedFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3749,7 +3749,7 @@ class _MapInterfaceSetup {
     /// @param geometry An optional screen geometry to query. Can be a `CGPoint`, `CGRect`, or an array of `CGPoint`.
     /// If omitted, the full viewport is queried.
     /// @param filter An additional filter for features.
-    let queryRenderedFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let queryRenderedFeaturesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.queryRenderedFeaturesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       queryRenderedFeaturesForFeaturesetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3773,7 +3773,7 @@ class _MapInterfaceSetup {
     /// @param sourceId The style source identifier used to query for source features.
     /// @param options The `source query options` for querying source features.
     /// @param completion The `query features completion` called when the query completes.
-    let querySourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let querySourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.querySourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       querySourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3802,7 +3802,7 @@ class _MapInterfaceSetup {
     /// @param offset The amount of points to skip (for pagination, must use type [Long]). Defaults to 0.
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature collection or a string describing an error if the operation was not successful.
-    let getGeoJsonClusterLeavesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getGeoJsonClusterLeavesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterLeaves\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getGeoJsonClusterLeavesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3831,7 +3831,7 @@ class _MapInterfaceSetup {
     /// @param cluster cluster from which to retrieve children from
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature collection or a string describing an error if the operation was not successful.
-    let getGeoJsonClusterChildrenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getGeoJsonClusterChildrenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterChildren\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getGeoJsonClusterChildrenChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3858,7 +3858,7 @@ class _MapInterfaceSetup {
     /// @param cluster cluster from which to retrieve the expansion zoom from
     /// @param completion The result will be returned through the completion block.
     ///         The result is a feature extension value containing a value or a string describing an error if the operation was not successful.
-    let getGeoJsonClusterExpansionZoomChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getGeoJsonClusterExpansionZoomChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterExpansionZoom\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getGeoJsonClusterExpansionZoomChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3889,7 +3889,7 @@ class _MapInterfaceSetup {
     /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
     /// @param featureId The feature identifier of the feature whose state should be updated.
     /// @param state The `state` object with properties to update with their respective new values.
-    let setFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFeatureStateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3916,7 +3916,7 @@ class _MapInterfaceSetup {
     /// @param featureset The featureset to look the feature in.
     /// @param featureId Identifier of the feature whose state should be updated.
     /// @param state Map of entries to update with their respective new values
-    let setFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3942,7 +3942,7 @@ class _MapInterfaceSetup {
     ///
     /// @param feature The feature to update.
     /// @param state Map of entries to update with their respective new values
-    let setFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3970,7 +3970,7 @@ class _MapInterfaceSetup {
     /// @param featureId The feature identifier of the feature whose state should be queried.
     ///
     /// @return A String representing the Feature's state map.
-    let getFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFeatureStateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -3995,7 +3995,7 @@ class _MapInterfaceSetup {
     /// @param featureId Identifier of the feature whose state should be queried.
     ///
     /// @return  The Feature's state map or an empty map if the feature could not be found.
-    let getFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4018,7 +4018,7 @@ class _MapInterfaceSetup {
     /// @param feature An interactive feature to query the state of.
     ///
     /// @return  The Feature's state map or an empty map if the feature could not be found.
-    let getFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4047,7 +4047,7 @@ class _MapInterfaceSetup {
     /// @param sourceLayerId The style source layer identifier (for multi-layer sources such as vector sources).
     /// @param featureId The feature identifier of the feature whose state should be removed.
     /// @param stateKey The key of the property to remove. If `null`, all feature's state object properties are removed.
-    let removeFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeFeatureStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeFeatureStateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4073,7 +4073,7 @@ class _MapInterfaceSetup {
     /// @param featureset A featureset the feature belongs to.
     /// @param featureId Identifier of the feature whose state should be removed.
     /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
-    let removeFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeFeatureStateForFeaturesetDescriptorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureStateForFeaturesetDescriptor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeFeatureStateForFeaturesetDescriptorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4097,7 +4097,7 @@ class _MapInterfaceSetup {
     ///
     /// @param feature An interactive feature to update.
     /// @param stateKey The key of the property to remove. If `nil`, all feature's state object properties are removed. Defaults to `nil`.
-    let removeFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeFeatureStateForFeaturesetFeatureChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureStateForFeaturesetFeature\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeFeatureStateForFeaturesetFeatureChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4121,7 +4121,7 @@ class _MapInterfaceSetup {
     /// immediately visible using ``MapboxMap/getFeatureState()``.
     ///
     /// @param featureset A featureset descriptor
-    let resetFeatureStatesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let resetFeatureStatesForFeaturesetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.resetFeatureStatesForFeatureset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       resetFeatureStatesForFeaturesetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4139,7 +4139,7 @@ class _MapInterfaceSetup {
       resetFeatureStatesForFeaturesetChannel.setMessageHandler(nil)
     }
     /// Reduces memory use. Useful to call when the application gets paused or sent to background.
-    let reduceMemoryUseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let reduceMemoryUseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.reduceMemoryUse\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       reduceMemoryUseChannel.setMessageHandler { _, reply in
         do {
@@ -4157,7 +4157,7 @@ class _MapInterfaceSetup {
     ///
     /// @param coordinate The `coordinate` defined as longitude-latitude pair.
     /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
-    let getElevationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getElevation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getElevationChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getElevation\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getElevationChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4173,7 +4173,7 @@ class _MapInterfaceSetup {
       getElevationChannel.setMessageHandler(nil)
     }
     /// Returns array of tile identifiers that cover current map camera.
-    let tileCoverChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tileCoverChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.tileCover\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tileCoverChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4195,7 +4195,7 @@ class _MapInterfaceSetup {
     /// https://github.com/mapbox/mapbox-maps-android/issues/2280.
     ///
     /// Note: This method has no effect on iOS platform.
-    let setSnapshotLegacyModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSnapshotLegacyModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setSnapshotLegacyMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSnapshotLegacyModeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4216,7 +4216,7 @@ class _MapInterfaceSetup {
     ///
     /// This property allows setting a custom glyph URL at runtime, making it easier to
     /// apply custom fonts to the map without modifying the base style.
-    let styleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.styleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let styleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.styleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       styleGlyphURLChannel.setMessageHandler { _, reply in
         do {
@@ -4233,7 +4233,7 @@ class _MapInterfaceSetup {
     ///
     /// This property allows setting a custom glyph URL at runtime, making it easier to
     /// apply custom fonts to the map without modifying the base style.
-    let setStyleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setStyleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleGlyphURLChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setStyleGlyphURL\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleGlyphURLChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4311,7 +4311,7 @@ class ProjectionSetup {
     /// @param zoom The zoom level.
     ///
     /// @return Returns the distance measured in meters.
-    let getMetersPerPixelAtLatitudeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.getMetersPerPixelAtLatitude\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getMetersPerPixelAtLatitudeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.getMetersPerPixelAtLatitude\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getMetersPerPixelAtLatitudeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4333,7 +4333,7 @@ class ProjectionSetup {
     /// `projected meters` coordinates.
     ///
     /// @return Returns Spherical Mercator ProjectedMeters coordinates.
-    let projectedMetersForCoordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let projectedMetersForCoordinateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.projectedMetersForCoordinate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       projectedMetersForCoordinateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4355,7 +4355,7 @@ class ProjectionSetup {
     /// which to calculate a longitude-latitude pair.
     ///
     /// @return Returns a longitude-latitude pair.
-    let coordinateForProjectedMetersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateForProjectedMetersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.coordinateForProjectedMeters\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateForProjectedMetersChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4379,7 +4379,7 @@ class ProjectionSetup {
     /// where tileSize is the width of a tile in pixels.
     ///
     /// @return Returns a point on the map in Mercator projection.
-    let projectChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.project\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let projectChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.project\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       projectChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4403,7 +4403,7 @@ class ProjectionSetup {
     /// where tileSize is the width of a tile in pixels.
     ///
     /// @return Returns a coordinate.
-    let unprojectChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Projection.unproject\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let unprojectChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.unproject\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       unprojectChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4433,7 +4433,7 @@ class _MapboxOptionsSetup {
   /// Sets up an instance of `_MapboxOptions` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _MapboxOptions?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getAccessTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.getAccessToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getAccessTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxOptions.getAccessToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getAccessTokenChannel.setMessageHandler { _, reply in
         do {
@@ -4446,7 +4446,7 @@ class _MapboxOptionsSetup {
     } else {
       getAccessTokenChannel.setMessageHandler(nil)
     }
-    let setAccessTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.setAccessToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setAccessTokenChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxOptions.setAccessToken\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setAccessTokenChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4487,7 +4487,7 @@ class _MapboxMapsOptionsSetup {
   /// Sets up an instance of `_MapboxMapsOptions` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _MapboxMapsOptions?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getBaseUrlChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getBaseUrl\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getBaseUrlChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getBaseUrl\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getBaseUrlChannel.setMessageHandler { _, reply in
         do {
@@ -4500,7 +4500,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getBaseUrlChannel.setMessageHandler(nil)
     }
-    let setBaseUrlChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setBaseUrl\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setBaseUrlChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setBaseUrl\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setBaseUrlChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4515,7 +4515,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setBaseUrlChannel.setMessageHandler(nil)
     }
-    let getDataPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getDataPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getDataPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getDataPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getDataPathChannel.setMessageHandler { _, reply in
         do {
@@ -4528,7 +4528,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getDataPathChannel.setMessageHandler(nil)
     }
-    let setDataPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setDataPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setDataPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setDataPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setDataPathChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4543,7 +4543,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setDataPathChannel.setMessageHandler(nil)
     }
-    let getAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getAssetPathChannel.setMessageHandler { _, reply in
         do {
@@ -4556,7 +4556,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getAssetPathChannel.setMessageHandler(nil)
     }
-    let setAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setAssetPathChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4571,7 +4571,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setAssetPathChannel.setMessageHandler(nil)
     }
-    let getFlutterAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFlutterAssetPathChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getFlutterAssetPath\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFlutterAssetPathChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4586,7 +4586,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getFlutterAssetPathChannel.setMessageHandler(nil)
     }
-    let getTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getTileStoreUsageModeChannel.setMessageHandler { _, reply in
         do {
@@ -4599,7 +4599,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getTileStoreUsageModeChannel.setMessageHandler(nil)
     }
-    let setTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setTileStoreUsageModeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setTileStoreUsageMode\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setTileStoreUsageModeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4614,7 +4614,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setTileStoreUsageModeChannel.setMessageHandler(nil)
     }
-    let getWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getWorldview\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getWorldviewChannel.setMessageHandler { _, reply in
         do {
@@ -4627,7 +4627,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getWorldviewChannel.setMessageHandler(nil)
     }
-    let setWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setWorldviewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setWorldview\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setWorldviewChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4642,7 +4642,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setWorldviewChannel.setMessageHandler(nil)
     }
-    let getLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getLanguage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLanguageChannel.setMessageHandler { _, reply in
         do {
@@ -4655,7 +4655,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       getLanguageChannel.setMessageHandler(nil)
     }
-    let setLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLanguageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setLanguage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLanguageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4670,7 +4670,7 @@ class _MapboxMapsOptionsSetup {
     } else {
       setLanguageChannel.setMessageHandler(nil)
     }
-    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       clearDataChannel.setMessageHandler { _, reply in
         api.clearData { result in
@@ -4714,7 +4714,7 @@ class SettingsSetup {
     ///
     /// @param key A name of the key.
     /// @param value The `value` for the key.
-    let setChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Settings.set\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Settings.set\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -4735,7 +4735,7 @@ class SettingsSetup {
     /// @param key A name of the key.
     ///
     /// @return `value` if a key exists in settings otherwise a `null value` will be returned.
-    let getChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.Settings.get\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.Settings.get\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5249,7 +5249,7 @@ class StyleManagerSetup {
     /// Get the URI of the current style in use.
     ///
     /// @return A string containing a style URI.
-    let getStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleURIChannel.setMessageHandler { _, reply in
         api.getStyleURI { result in
@@ -5270,7 +5270,7 @@ class StyleManagerSetup {
     /// `MapLoaded` or `MapLoadingError` events. In case of successful style load, `StyleLoaded` event will be also emitted.
     ///
     /// @param uri URI where the style should be loaded from.
-    let setStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleURIChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5290,7 +5290,7 @@ class StyleManagerSetup {
     /// Get the JSON serialization string of the current style in use.
     ///
     /// @return A JSON string containing a serialized style.
-    let getStyleJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleJSONChannel.setMessageHandler { _, reply in
         api.getStyleJSON { result in
@@ -5308,7 +5308,7 @@ class StyleManagerSetup {
     /// Load the style from a provided JSON string.
     ///
     /// @param json A JSON string containing a serialized style.
-    let setStyleJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleJSONChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5335,7 +5335,7 @@ class StyleManagerSetup {
     /// The style default camera is re-evaluated when a new style is loaded.
     ///
     /// @return The default `camera options` of the current style in use.
-    let getStyleDefaultCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleDefaultCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleDefaultCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleDefaultCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleDefaultCameraChannel.setMessageHandler { _, reply in
         api.getStyleDefaultCamera { result in
@@ -5358,7 +5358,7 @@ class StyleManagerSetup {
     /// The style transition is re-evaluated when a new style is loaded.
     ///
     /// @return The `transition options` of the current style in use.
-    let getStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleTransitionChannel.setMessageHandler { _, reply in
         api.getStyleTransition { result in
@@ -5379,7 +5379,7 @@ class StyleManagerSetup {
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
     /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
-    let addStyleImportFromJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleImportFromJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImportFromJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleImportFromJSONChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5403,7 +5403,7 @@ class StyleManagerSetup {
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
     /// @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
-    let addStyleImportFromURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleImportFromURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImportFromURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleImportFromURIChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5428,7 +5428,7 @@ class StyleManagerSetup {
     /// @param importId Identifier of import to update.
     /// @param json The JSON string to be loaded directly as the import.
     /// @param config A map containing the configuration options of the import.
-    let updateStyleImportWithJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateStyleImportWithJSONChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImportWithJSON\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateStyleImportWithJSONChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5452,7 +5452,7 @@ class StyleManagerSetup {
     /// @param importId Identifier of import to update.
     /// @param uri URI of the import.
     /// @param config A map containing the configuration options of the import.
-    let updateStyleImportWithURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateStyleImportWithURIChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImportWithURI\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateStyleImportWithURIChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5473,7 +5473,7 @@ class StyleManagerSetup {
     ///
     ///  @param importId Identifier of import to move.
     ///  @param importPosition The import will be positioned according to the ImportPosition parameters. If not specified, then the import is moved to the top of the import stack.
-    let moveStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let moveStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.moveStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       moveStyleImportChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5490,7 +5490,7 @@ class StyleManagerSetup {
       moveStyleImportChannel.setMessageHandler(nil)
     }
     /// Returns the list containing information about existing style import objects.
-    let getStyleImportsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleImportsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImports\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleImportsChannel.setMessageHandler { _, reply in
         do {
@@ -5506,7 +5506,7 @@ class StyleManagerSetup {
     /// Removes an existing style import.
     ///
     /// @param importId Identifier of the style import to remove.
-    let removeStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStyleImportChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleImport\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStyleImportChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5526,7 +5526,7 @@ class StyleManagerSetup {
     /// @param importId Identifier of the style import.
     ///
     /// Returns the style import schema, containing the default configurations for the style import.
-    let getStyleImportSchemaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleImportSchemaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportSchema\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleImportSchemaChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5546,7 +5546,7 @@ class StyleManagerSetup {
     /// @param importId Identifier of the style import.
     ///
     /// Returns the style import configuration or a string describing an error if the operation was not successful.
-    let getStyleImportConfigPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleImportConfigPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportConfigProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleImportConfigPropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5567,7 +5567,7 @@ class StyleManagerSetup {
     /// @param config The style import config name.
     ///
     /// Returns the style import configuration or a string describing an error if the operation was not successful.
-    let getStyleImportConfigPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleImportConfigPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportConfigProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleImportConfigPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5588,7 +5588,7 @@ class StyleManagerSetup {
     ///
     /// @param importId Identifier of the style import.
     /// @param configs A map of style import configurations.
-    let setStyleImportConfigPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleImportConfigPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleImportConfigProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleImportConfigPropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5609,7 +5609,7 @@ class StyleManagerSetup {
     /// @param importId Identifier of the style import.
     /// @param config The style import config name.
     /// @param value The style import config value.
-    let setStyleImportConfigPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleImportConfigPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleImportConfigProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleImportConfigPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5631,7 +5631,7 @@ class StyleManagerSetup {
     /// The style transition is re-evaluated when a new style is loaded.
     ///
     /// @param transitionOptions The `transition options`.
-    let setStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleTransitionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTransition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleTransitionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5656,7 +5656,7 @@ class StyleManagerSetup {
     /// @param layerPosition If not empty, the new layer will be positioned according to `layer position` parameters.
     ///
     /// @return A string describing an error if the operation was not successful, or empty otherwise.
-    let addStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleLayerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5689,7 +5689,7 @@ class StyleManagerSetup {
     /// @param layerPosition If not empty, the new layer will be positioned according to `layer position` parameters.
     ///
     /// @return A string describing an error if the operation was not successful, or empty otherwise.
-    let addPersistentStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addPersistentStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addPersistentStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addPersistentStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addPersistentStyleLayerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5711,7 +5711,7 @@ class StyleManagerSetup {
     ///
     /// @param layerId A style layer identifier.
     /// @return A string describing an error if the operation was not successful, boolean representing state otherwise.
-    let isStyleLayerPersistentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLayerPersistent\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let isStyleLayerPersistentChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.isStyleLayerPersistent\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isStyleLayerPersistentChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5733,7 +5733,7 @@ class StyleManagerSetup {
     /// @param layerId An identifier of the style layer to remove.
     ///
     /// @return A string describing an error if the operation was not successful, or empty otherwise.
-    let removeStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStyleLayerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5757,7 +5757,7 @@ class StyleManagerSetup {
     ///                      is provided then the layer is moved to the top of the layerstack.
     ///
     /// @return A string describing an error if the operation was not successful, or empty otherwise.
-    let moveStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let moveStyleLayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.moveStyleLayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       moveStyleLayerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5780,7 +5780,7 @@ class StyleManagerSetup {
     /// @param layerId Style layer identifier.
     ///
     /// @return A `true` value if the given style layer exists, `false` otherwise.
-    let styleLayerExistsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleLayerExists\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let styleLayerExistsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.styleLayerExists\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       styleLayerExistsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5800,7 +5800,7 @@ class StyleManagerSetup {
     /// Returns the existing style layers.
     ///
     /// @return The list containing the information about existing style layer objects.
-    let getStyleLayersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleLayersChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayers\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLayersChannel.setMessageHandler { _, reply in
         api.getStyleLayers { result in
@@ -5820,7 +5820,7 @@ class StyleManagerSetup {
     /// @param layerId A style layer identifier.
     /// @param property The style layer property name.
     /// @return The `style property value`.
-    let getStyleLayerPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleLayerPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayerProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLayerPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5845,7 +5845,7 @@ class StyleManagerSetup {
     /// @param value The style layer property value.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleLayerPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleLayerPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLayerProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleLayerPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5867,7 +5867,7 @@ class StyleManagerSetup {
     /// Gets style layer properties.
     ///
     /// @return The style layer properties or a string describing an error if the operation was not successful.
-    let getStyleLayerPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleLayerPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayerProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLayerPropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5893,7 +5893,7 @@ class StyleManagerSetup {
     /// @param properties A map of style layer properties.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleLayerPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleLayerPropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLayerProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleLayerPropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5917,7 +5917,7 @@ class StyleManagerSetup {
     /// @param properties A map of style source properties.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let addStyleSourceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleSource\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleSourceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleSource\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleSourceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5940,7 +5940,7 @@ class StyleManagerSetup {
     /// @param sourceId A style source identifier.
     /// @param property The style source property name.
     /// @return The value of a `property` in the source with a `sourceId`.
-    let getStyleSourcePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleSourcePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSourceProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleSourcePropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5968,7 +5968,7 @@ class StyleManagerSetup {
     /// @param value The style source property value.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleSourcePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleSourcePropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleSourceProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleSourcePropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -5992,7 +5992,7 @@ class StyleManagerSetup {
     /// @param sourceId A style source identifier.
     ///
     /// @return The style source properties or a string describing an error if the operation was not successful.
-    let getStyleSourcePropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleSourcePropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSourceProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleSourcePropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6019,7 +6019,7 @@ class StyleManagerSetup {
     /// @param properties A map of Style source properties.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleSourcePropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleSourcePropertiesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleSourceProperties\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleSourcePropertiesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6062,7 +6062,7 @@ class StyleManagerSetup {
     /// @param features An array of GeoJSON features to be added to the source.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let addGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6106,7 +6106,7 @@ class StyleManagerSetup {
     /// @param features The GeoJSON features to be updated in the source.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let updateGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6150,7 +6150,7 @@ class StyleManagerSetup {
     /// @param featureIds The Ids of the features that need to be removed from the source.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let removeGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeGeoJSONSourceFeaturesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeGeoJSONSourceFeatures\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeGeoJSONSourceFeaturesChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6175,7 +6175,7 @@ class StyleManagerSetup {
     /// @param image An `image`.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let updateStyleImageSourceImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImageSourceImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateStyleImageSourceImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImageSourceImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateStyleImageSourceImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6196,7 +6196,7 @@ class StyleManagerSetup {
     /// Removes an existing style source.
     ///
     /// @param sourceId An identifier of the style source to remove.
-    let removeStyleSourceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleSource\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStyleSourceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleSource\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStyleSourceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6218,7 +6218,7 @@ class StyleManagerSetup {
     /// @param sourceId A style source identifier.
     ///
     /// @return `true` if the given source exists, `false` otherwise.
-    let styleSourceExistsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleSourceExists\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let styleSourceExistsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.styleSourceExists\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       styleSourceExistsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6238,7 +6238,7 @@ class StyleManagerSetup {
     /// Returns the existing style sources.
     ///
     /// @return The list containing the information about existing style source objects.
-    let getStyleSourcesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleSourcesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSources\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleSourcesChannel.setMessageHandler { _, reply in
         api.getStyleSources { result in
@@ -6254,7 +6254,7 @@ class StyleManagerSetup {
       getStyleSourcesChannel.setMessageHandler(nil)
     }
     /// Returns an ordered list of the current style lights.
-    let getStyleLightsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleLightsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLights\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLightsChannel.setMessageHandler { _, reply in
         do {
@@ -6270,7 +6270,7 @@ class StyleManagerSetup {
     /// Set global directional lightning.
     ///
     /// @param flatLight The flat light source.
-    let setLightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLightChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setLight\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLightChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6289,7 +6289,7 @@ class StyleManagerSetup {
     ///
     /// @param ambientLight The ambient light source.
     /// @param directionalLight The directional light source.
-    let setLightsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLights\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLightsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setLights\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLightsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6310,7 +6310,7 @@ class StyleManagerSetup {
     /// @param property The style light property name.
     /// @param id The unique identifier of the style light in lights list.
     /// @return The style light property value.
-    let getStyleLightPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLightProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleLightPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLightProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleLightPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6335,7 +6335,7 @@ class StyleManagerSetup {
     /// @param value The style light property value.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleLightPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLightProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleLightPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLightProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleLightPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6359,7 +6359,7 @@ class StyleManagerSetup {
     /// @param properties A map of style terrain properties values, with their names as a key.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleTerrainChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrain\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleTerrainChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTerrain\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleTerrainChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6380,7 +6380,7 @@ class StyleManagerSetup {
     ///
     /// @param property The style terrain property name.
     /// @return The style terrain property value.
-    let getStyleTerrainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTerrainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleTerrainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleTerrainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleTerrainPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6403,7 +6403,7 @@ class StyleManagerSetup {
     /// @param value The style terrain property value.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let setStyleTerrainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setStyleTerrainPropertyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTerrainProperty\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setStyleTerrainPropertyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6426,7 +6426,7 @@ class StyleManagerSetup {
     /// @param imageId The identifier of the `image`.
     ///
     /// @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
-    let getStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getStyleImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6464,7 +6464,7 @@ class StyleManagerSetup {
     /// icon uses icon-text-fit, the symbol's text will be fit inside the content box.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let addStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6492,7 +6492,7 @@ class StyleManagerSetup {
     /// @param imageId The identifier of the image to remove.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let removeStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStyleImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6514,7 +6514,7 @@ class StyleManagerSetup {
     /// @param imageId The identifier of the image.
     ///
     /// @return True if image exists, false otherwise.
-    let hasStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.hasStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let hasStyleImageChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.hasStyleImage\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       hasStyleImageChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6540,7 +6540,7 @@ class StyleManagerSetup {
     /// @param modelUri A URI for the model.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let addStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let addStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       addStyleModelChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6563,7 +6563,7 @@ class StyleManagerSetup {
     /// @param modelId The identifier of the model to remove.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let removeStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let removeStyleModelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleModel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       removeStyleModelChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6591,7 +6591,7 @@ class StyleManagerSetup {
     /// @param tileId A `canonical tile id` of the tile.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let invalidateStyleCustomGeometrySourceTileChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceTile\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let invalidateStyleCustomGeometrySourceTileChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.invalidateStyleCustomGeometrySourceTile\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       invalidateStyleCustomGeometrySourceTileChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6615,7 +6615,7 @@ class StyleManagerSetup {
     /// @param bounds A `coordinate bounds` object.
     ///
     /// @return A string describing an error if the operation was not successful, empty otherwise.
-    let invalidateStyleCustomGeometrySourceRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let invalidateStyleCustomGeometrySourceRegionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.invalidateStyleCustomGeometrySourceRegion\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       invalidateStyleCustomGeometrySourceRegionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6640,7 +6640,7 @@ class StyleManagerSetup {
     ///
     /// @return `true` iff the style JSON contents, the style specified sprite and sources are all loaded, otherwise returns `false`.
     ///
-    let isStyleLoadedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLoaded\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let isStyleLoadedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.isStyleLoaded\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       isStyleLoadedChannel.setMessageHandler { _, reply in
         api.isStyleLoaded { result in
@@ -6658,7 +6658,7 @@ class StyleManagerSetup {
     /// Function to get the projection provided by the Style Extension.
     ///
     /// @return Projection that is currently applied to the map
-    let getProjectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getProjectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getProjection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getProjectionChannel.setMessageHandler { _, reply in
         do {
@@ -6674,7 +6674,7 @@ class StyleManagerSetup {
     /// Function to set the projection provided by the Style Extension.
     ///
     /// @param projection The projection to be set.
-    let setProjectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setProjectionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setProjection\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setProjectionChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6693,7 +6693,7 @@ class StyleManagerSetup {
     ///
     /// @param locale The locale to apply for localization
     /// @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
-    let localizeLabelsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.localizeLabels\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let localizeLabelsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.localizeLabels\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       localizeLabelsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -6714,7 +6714,7 @@ class StyleManagerSetup {
     /// Returns the available featuresets in the currently loaded style.
     ///
     /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
-    let getFeaturesetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getFeaturesetsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getFeaturesets\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getFeaturesetsChannel.setMessageHandler { _, reply in
         do {

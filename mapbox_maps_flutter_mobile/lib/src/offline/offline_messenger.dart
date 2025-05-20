@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 /// Classify network types based on cost.
 enum NetworkRestriction {
@@ -1005,7 +1005,7 @@ class _OfflineManager {
   Future<StylePack> loadStylePack(
       String styleURI, StylePackLoadOptions loadOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.loadStylePack$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.loadStylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1036,7 +1036,7 @@ class _OfflineManager {
 
   Future<StylePack> removeStylePack(String styleURI) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.removeStylePack$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.removeStylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1067,7 +1067,7 @@ class _OfflineManager {
 
   Future<void> addStylePackLoadProgressListener(String styleURI) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.addStylePackLoadProgressListener$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.addStylePackLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1093,7 +1093,7 @@ class _OfflineManager {
 
   Future<StylePack> stylePack(String styleURI) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePack$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.stylePack$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1124,7 +1124,7 @@ class _OfflineManager {
 
   Future<Map<String, Object>> stylePackMetadata(String styleURI) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.stylePackMetadata$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.stylePackMetadata$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1156,7 +1156,7 @@ class _OfflineManager {
 
   Future<List<StylePack>> allStylePacks() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineManager.allStylePacks$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineManager.allStylePacks$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1204,7 +1204,7 @@ class _TileStore {
   Future<TileRegion> loadTileRegion(
       String id, TileRegionLoadOptions loadOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.loadTileRegion$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.loadTileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1235,7 +1235,7 @@ class _TileStore {
 
   Future<void> addTileRegionLoadProgressListener(String id) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionLoadProgressListener$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.addTileRegionLoadProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1264,7 +1264,7 @@ class _TileStore {
       TileRegionLoadOptions loadOptions,
       TileRegionEstimateOptions? estimateOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.estimateTileRegion$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.estimateTileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1295,7 +1295,7 @@ class _TileStore {
 
   Future<void> addTileRegionEstimateProgressListener(String id) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.addTileRegionEstimateProgressListener$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.addTileRegionEstimateProgressListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1321,7 +1321,7 @@ class _TileStore {
 
   Future<Map<String, Object>> tileRegionMetadata(String id) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionMetadata$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegionMetadata$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1354,7 +1354,7 @@ class _TileStore {
   Future<bool> tileRegionContainsDescriptor(
       String id, List<TilesetDescriptorOptions> options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegionContainsDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegionContainsDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1385,7 +1385,7 @@ class _TileStore {
 
   Future<List<TileRegion>> allTileRegions() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.allTileRegions$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.allTileRegions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1415,7 +1415,7 @@ class _TileStore {
 
   Future<TileRegion> tileRegion(String id) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.tileRegion$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.tileRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1446,7 +1446,7 @@ class _TileStore {
 
   Future<TileRegion> removeRegion(String id) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.removeRegion$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.removeRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1478,7 +1478,7 @@ class _TileStore {
   Future<void> setOptionForKey(
       _TileStoreOptionsKey key, TileDataDomain? domain, Object? value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStore.setOptionForKey$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStore.setOptionForKey$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1521,7 +1521,7 @@ class _OfflineMapInstanceManager {
 
   Future<void> setupOfflineManager(String channelSuffix) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.setupOfflineManager$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineMapInstanceManager.setupOfflineManager$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1547,7 +1547,7 @@ class _OfflineMapInstanceManager {
 
   Future<void> tearDownOfflineManager(String channelSuffix) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineMapInstanceManager.tearDownOfflineManager$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineMapInstanceManager.tearDownOfflineManager$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1590,7 +1590,7 @@ class _TileStoreInstanceManager {
 
   Future<void> setupTileStore(String channelSuffix, String? filePath) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.setupTileStore$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStoreInstanceManager.setupTileStore$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1616,7 +1616,7 @@ class _TileStoreInstanceManager {
 
   Future<void> tearDownTileStore(String channelSuffix) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._TileStoreInstanceManager.tearDownTileStore$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._TileStoreInstanceManager.tearDownTileStore$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1664,7 +1664,7 @@ class _OfflineSwitch {
   /// @param connected Set false to disconnect the Mapbox stack
   Future<void> setMapboxStackConnected(bool connected) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.setMapboxStackConnected$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineSwitch.setMapboxStackConnected$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1693,7 +1693,7 @@ class _OfflineSwitch {
   /// @return True if the Mapbox stack is disconnected via setMapboxStackConnected(), false otherwise.
   Future<bool> isMapboxStackConnected() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._OfflineSwitch.isMapboxStackConnected$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._OfflineSwitch.isMapboxStackConnected$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

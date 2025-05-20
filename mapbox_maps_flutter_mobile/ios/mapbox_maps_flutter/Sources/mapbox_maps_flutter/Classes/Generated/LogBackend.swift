@@ -112,7 +112,7 @@ class LogWriterBackend: LogWriterBackendProtocol {
   }
   /// Writes a log message with a given level.
   func writeLog(level levelArg: LoggingLevel, message messageArg: String, completion: @escaping (Result<Void, LogBackendError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([levelArg, messageArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {

@@ -231,7 +231,7 @@ class OnSnapshotStyleListener: OnSnapshotStyleListenerProtocol {
     return SnapshotterMessengerPigeonCodec.shared
   }
   func onDidFinishLoadingStyle(completion: @escaping (Result<Void, SnapshotterMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFinishLoadingStyle\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFinishLoadingStyle\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
@@ -249,7 +249,7 @@ class OnSnapshotStyleListener: OnSnapshotStyleListenerProtocol {
     }
   }
   func onDidFullyLoadStyle(completion: @escaping (Result<Void, SnapshotterMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFullyLoadStyle\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFullyLoadStyle\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage(nil) { response in
       guard let listResponse = response as? [Any?] else {
@@ -267,7 +267,7 @@ class OnSnapshotStyleListener: OnSnapshotStyleListenerProtocol {
     }
   }
   func onDidFailLoadingStyle(message messageArg: String, completion: @escaping (Result<Void, SnapshotterMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onDidFailLoadingStyle\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onDidFailLoadingStyle\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([messageArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -285,7 +285,7 @@ class OnSnapshotStyleListener: OnSnapshotStyleListenerProtocol {
     }
   }
   func onStyleImageMissing(imageId imageIdArg: String, completion: @escaping (Result<Void, SnapshotterMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnSnapshotStyleListener.onStyleImageMissing\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnSnapshotStyleListener.onStyleImageMissing\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([imageIdArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -315,7 +315,7 @@ class _SnapshotterInstanceManagerSetup {
   /// Sets up an instance of `_SnapshotterInstanceManager` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _SnapshotterInstanceManager?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let setupSnapshotterForSuffixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.setupSnapshotterForSuffix\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setupSnapshotterForSuffixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterInstanceManager.setupSnapshotterForSuffix\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setupSnapshotterForSuffixChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -332,7 +332,7 @@ class _SnapshotterInstanceManagerSetup {
     } else {
       setupSnapshotterForSuffixChannel.setMessageHandler(nil)
     }
-    let tearDownSnapshotterForSuffixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterInstanceManager.tearDownSnapshotterForSuffix\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tearDownSnapshotterForSuffixChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterInstanceManager.tearDownSnapshotterForSuffix\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tearDownSnapshotterForSuffixChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -369,7 +369,7 @@ class _SnapshotterMessengerSetup {
   /// Sets up an instance of `_SnapshotterMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _SnapshotterMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let getSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.getSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getSizeChannel.setMessageHandler { _, reply in
         do {
@@ -382,7 +382,7 @@ class _SnapshotterMessengerSetup {
     } else {
       getSizeChannel.setMessageHandler(nil)
     }
-    let setSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.setSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setSizeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -397,7 +397,7 @@ class _SnapshotterMessengerSetup {
     } else {
       setSizeChannel.setMessageHandler(nil)
     }
-    let getCameraStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.getCameraState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getCameraStateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.getCameraState\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getCameraStateChannel.setMessageHandler { _, reply in
         do {
@@ -410,7 +410,7 @@ class _SnapshotterMessengerSetup {
     } else {
       getCameraStateChannel.setMessageHandler(nil)
     }
-    let setCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.setCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setCameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.setCamera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setCameraChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -425,7 +425,7 @@ class _SnapshotterMessengerSetup {
     } else {
       setCameraChannel.setMessageHandler(nil)
     }
-    let startChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.start\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let startChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.start\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       startChannel.setMessageHandler { _, reply in
         api.start { result in
@@ -440,7 +440,7 @@ class _SnapshotterMessengerSetup {
     } else {
       startChannel.setMessageHandler(nil)
     }
-    let cancelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.cancel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cancelChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.cancel\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cancelChannel.setMessageHandler { _, reply in
         do {
@@ -453,7 +453,7 @@ class _SnapshotterMessengerSetup {
     } else {
       cancelChannel.setMessageHandler(nil)
     }
-    let coordinateBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.coordinateBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let coordinateBoundsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.coordinateBounds\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       coordinateBoundsChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -468,7 +468,7 @@ class _SnapshotterMessengerSetup {
     } else {
       coordinateBoundsChannel.setMessageHandler(nil)
     }
-    let cameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.camera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let cameraChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.camera\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       cameraChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -486,7 +486,7 @@ class _SnapshotterMessengerSetup {
     } else {
       cameraChannel.setMessageHandler(nil)
     }
-    let tileCoverChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.tileCover\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let tileCoverChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.tileCover\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       tileCoverChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -501,7 +501,7 @@ class _SnapshotterMessengerSetup {
     } else {
       tileCoverChannel.setMessageHandler(nil)
     }
-    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._SnapshotterMessenger.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let clearDataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._SnapshotterMessenger.clearData\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       clearDataChannel.setMessageHandler { _, reply in
         api.clearData { result in

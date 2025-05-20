@@ -263,13 +263,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  mapbox_maps_flutter:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "2.8.0"
   mapbox_maps_flutter_interface:
     dependency: "direct overridden"
     description:
@@ -277,6 +270,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  mapbox_maps_flutter_mobile:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "1.0.0"
   matcher:
     dependency: transitive
     description:

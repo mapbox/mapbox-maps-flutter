@@ -363,7 +363,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger, private val 
   }
   fun onTap(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onTap$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onTap$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(contextArg)) {
       if (it is List<*>) {
@@ -379,7 +379,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger, private val 
   }
   fun onLongTap(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onLongTap$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onLongTap$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(contextArg)) {
       if (it is List<*>) {
@@ -395,7 +395,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger, private val 
   }
   fun onScroll(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onScroll$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onScroll$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(contextArg)) {
       if (it is List<*>) {
@@ -411,7 +411,7 @@ class GestureListener(private val binaryMessenger: BinaryMessenger, private val 
   }
   fun onZoom(contextArg: MapContentGestureContext, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.GestureListener.onZoom$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.GestureListener.onZoom$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(contextArg)) {
       if (it is List<*>) {
@@ -466,7 +466,7 @@ class PigeonEventSink<T>(private val sink: EventChannel.EventSink) {
 abstract class AnnotationDragEventsStreamHandler : GestureListenersPigeonEventChannelWrapper<AnnotationInteractionContext> {
   companion object {
     fun register(messenger: BinaryMessenger, streamHandler: AnnotationDragEventsStreamHandler, instanceName: String = "") {
-      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.AnnotationInteractions._annotationDragEvents"
+      var channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.AnnotationInteractions._annotationDragEvents"
       if (instanceName.isNotEmpty()) {
         channelName += ".$instanceName"
       }

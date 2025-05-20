@@ -1,4 +1,4 @@
-part of 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+part of '../mapbox_maps_flutter_mobile.dart';
 
 base class MapboxMapsFlutterMobile extends MapboxMapsFlutterPlatform {
   @override

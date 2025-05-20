@@ -443,7 +443,7 @@ class OnPolylineAnnotationClickListener: OnPolylineAnnotationClickListenerProtoc
     return PolylineAnnotationMessengerPigeonCodec.shared
   }
   func onPolylineAnnotationClick(annotation annotationArg: PolylineAnnotation, completion: @escaping (Result<Void, PolylineAnnotationMessengerError>) -> Void) {
-    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter.OnPolylineAnnotationClickListener.onPolylineAnnotationClick\(messageChannelSuffix)"
+    let channelName: String = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.OnPolylineAnnotationClickListener.onPolylineAnnotationClick\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
     channel.sendMessage([annotationArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
@@ -530,7 +530,7 @@ class _PolylineAnnotationMessengerSetup {
   /// Sets up an instance of `_PolylineAnnotationMessenger` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: _PolylineAnnotationMessenger?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.create\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -548,7 +548,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       createChannel.setMessageHandler(nil)
     }
-    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let createMultiChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.createMulti\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       createMultiChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -566,7 +566,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       createMultiChannel.setMessageHandler(nil)
     }
-    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let updateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.update\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       updateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -584,7 +584,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       updateChannel.setMessageHandler(nil)
     }
-    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.delete\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -602,7 +602,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       deleteChannel.setMessageHandler(nil)
     }
-    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let deleteAllChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.deleteAll\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       deleteAllChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -619,7 +619,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       deleteAllChannel.setMessageHandler(nil)
     }
-    let setLineCapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineCapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineCap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineCapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -637,7 +637,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineCapChannel.setMessageHandler(nil)
     }
-    let getLineCapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineCapChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineCap\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineCapChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -654,7 +654,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineCapChannel.setMessageHandler(nil)
     }
-    let setLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineCrossSlopeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -672,7 +672,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineCrossSlopeChannel.setMessageHandler(nil)
     }
-    let getLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineCrossSlopeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineCrossSlope\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineCrossSlopeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -689,7 +689,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineCrossSlopeChannel.setMessageHandler(nil)
     }
-    let setLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -707,7 +707,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineElevationReferenceChannel.setMessageHandler(nil)
     }
-    let getLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineElevationReferenceChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -724,7 +724,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineElevationReferenceChannel.setMessageHandler(nil)
     }
-    let setLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineJoinChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -742,7 +742,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineJoinChannel.setMessageHandler(nil)
     }
-    let getLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineJoinChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineJoin\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineJoinChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -759,7 +759,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineJoinChannel.setMessageHandler(nil)
     }
-    let setLineMiterLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineMiterLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineMiterLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineMiterLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineMiterLimitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -777,7 +777,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineMiterLimitChannel.setMessageHandler(nil)
     }
-    let getLineMiterLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineMiterLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineMiterLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineMiterLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineMiterLimitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -794,7 +794,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineMiterLimitChannel.setMessageHandler(nil)
     }
-    let setLineRoundLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineRoundLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineRoundLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineRoundLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineRoundLimitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -812,7 +812,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineRoundLimitChannel.setMessageHandler(nil)
     }
-    let getLineRoundLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineRoundLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineRoundLimitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineRoundLimit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineRoundLimitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -829,7 +829,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineRoundLimitChannel.setMessageHandler(nil)
     }
-    let setLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -847,7 +847,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineSortKeyChannel.setMessageHandler(nil)
     }
-    let getLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineSortKeyChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -864,7 +864,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineSortKeyChannel.setMessageHandler(nil)
     }
-    let setLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineWidthUnitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -882,7 +882,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineWidthUnitChannel.setMessageHandler(nil)
     }
-    let getLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineWidthUnitChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineWidthUnit\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineWidthUnitChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -899,7 +899,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineWidthUnitChannel.setMessageHandler(nil)
     }
-    let setLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -917,7 +917,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineZOffsetChannel.setMessageHandler(nil)
     }
-    let getLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineZOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineZOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineZOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -934,7 +934,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineZOffsetChannel.setMessageHandler(nil)
     }
-    let setLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -952,7 +952,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineBlurChannel.setMessageHandler(nil)
     }
-    let getLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineBlurChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBlur\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineBlurChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -969,7 +969,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineBlurChannel.setMessageHandler(nil)
     }
-    let setLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineBorderColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -987,7 +987,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineBorderColorChannel.setMessageHandler(nil)
     }
-    let getLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineBorderColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBorderColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineBorderColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1004,7 +1004,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineBorderColorChannel.setMessageHandler(nil)
     }
-    let setLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineBorderWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1022,7 +1022,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineBorderWidthChannel.setMessageHandler(nil)
     }
-    let getLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineBorderWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineBorderWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineBorderWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1039,7 +1039,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineBorderWidthChannel.setMessageHandler(nil)
     }
-    let setLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1057,7 +1057,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineColorChannel.setMessageHandler(nil)
     }
-    let getLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1074,7 +1074,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineColorChannel.setMessageHandler(nil)
     }
-    let setLineDasharrayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDasharray\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineDasharrayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineDasharray\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineDasharrayChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1092,7 +1092,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineDasharrayChannel.setMessageHandler(nil)
     }
-    let getLineDasharrayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDasharray\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineDasharrayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineDasharray\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineDasharrayChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1109,7 +1109,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineDasharrayChannel.setMessageHandler(nil)
     }
-    let setLineDepthOcclusionFactorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineDepthOcclusionFactor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineDepthOcclusionFactorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineDepthOcclusionFactor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineDepthOcclusionFactorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1127,7 +1127,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineDepthOcclusionFactorChannel.setMessageHandler(nil)
     }
-    let getLineDepthOcclusionFactorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineDepthOcclusionFactor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineDepthOcclusionFactorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineDepthOcclusionFactor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineDepthOcclusionFactorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1144,7 +1144,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineDepthOcclusionFactorChannel.setMessageHandler(nil)
     }
-    let setLineEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1162,7 +1162,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let getLineEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineEmissiveStrengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineEmissiveStrength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineEmissiveStrengthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1179,7 +1179,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineEmissiveStrengthChannel.setMessageHandler(nil)
     }
-    let setLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineGapWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1197,7 +1197,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineGapWidthChannel.setMessageHandler(nil)
     }
-    let getLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineGapWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineGapWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineGapWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1214,7 +1214,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineGapWidthChannel.setMessageHandler(nil)
     }
-    let setLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1232,7 +1232,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let getLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineOcclusionOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOcclusionOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineOcclusionOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1249,7 +1249,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineOcclusionOpacityChannel.setMessageHandler(nil)
     }
-    let setLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1267,7 +1267,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineOffsetChannel.setMessageHandler(nil)
     }
-    let getLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1284,7 +1284,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineOffsetChannel.setMessageHandler(nil)
     }
-    let setLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1302,7 +1302,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineOpacityChannel.setMessageHandler(nil)
     }
-    let getLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineOpacityChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineOpacity\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineOpacityChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1319,7 +1319,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineOpacityChannel.setMessageHandler(nil)
     }
-    let setLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLinePatternChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1337,7 +1337,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLinePatternChannel.setMessageHandler(nil)
     }
-    let getLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLinePatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLinePattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLinePatternChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1354,7 +1354,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLinePatternChannel.setMessageHandler(nil)
     }
-    let setLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1372,7 +1372,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineTranslateChannel.setMessageHandler(nil)
     }
-    let getLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineTranslateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTranslate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineTranslateChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1389,7 +1389,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTranslateChannel.setMessageHandler(nil)
     }
-    let setLineTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1407,7 +1407,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let getLineTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineTranslateAnchorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTranslateAnchor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineTranslateAnchorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1424,7 +1424,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTranslateAnchorChannel.setMessageHandler(nil)
     }
-    let setLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTrimColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1442,7 +1442,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineTrimColorChannel.setMessageHandler(nil)
     }
-    let getLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineTrimColorChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimColor\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineTrimColorChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1459,7 +1459,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTrimColorChannel.setMessageHandler(nil)
     }
-    let setLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTrimFadeRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1477,7 +1477,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineTrimFadeRangeChannel.setMessageHandler(nil)
     }
-    let getLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineTrimFadeRangeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimFadeRange\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineTrimFadeRangeChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1494,7 +1494,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTrimFadeRangeChannel.setMessageHandler(nil)
     }
-    let setLineTrimOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineTrimOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineTrimOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineTrimOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineTrimOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1512,7 +1512,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineTrimOffsetChannel.setMessageHandler(nil)
     }
-    let getLineTrimOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineTrimOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineTrimOffsetChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineTrimOffset\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineTrimOffsetChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1529,7 +1529,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       getLineTrimOffsetChannel.setMessageHandler(nil)
     }
-    let setLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.setLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let setLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.setLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       setLineWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
@@ -1547,7 +1547,7 @@ class _PolylineAnnotationMessengerSetup {
     } else {
       setLineWidthChannel.setMessageHandler(nil)
     }
-    let getLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._PolylineAnnotationMessenger.getLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let getLineWidthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PolylineAnnotationMessenger.getLineWidth\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       getLineWidthChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]

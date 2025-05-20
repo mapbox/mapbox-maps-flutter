@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 enum LoggingLevel {
   /// Verbose log data to understand how the code executes.
@@ -64,7 +64,7 @@ abstract class LogWriterBackend {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -72,14 +72,14 @@ abstract class LogWriterBackend {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final LoggingLevel? arg_level = (args[0] as LoggingLevel?);
           assert(arg_level != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null LoggingLevel.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog was null, expected non-null LoggingLevel.');
           final String? arg_message = (args[1] as String?);
           assert(arg_message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog was null, expected non-null String.');
           try {
             api.writeLog(arg_level!, arg_message!);
             return wrapResponse(empty: true);
