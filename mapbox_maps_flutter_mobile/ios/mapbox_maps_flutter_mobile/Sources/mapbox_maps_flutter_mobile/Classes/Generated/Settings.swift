@@ -115,55 +115,54 @@ enum ModelElevationReference: Int {
 struct GesturesSettings {
   /// Whether the rotate gesture is enabled.
   /// Default value: true.
-  var rotateEnabled: Bool? = nil
+  var rotateEnabled: Bool?
   /// Whether the pinch to zoom gesture is enabled.
   /// Default value: true.
-  var pinchToZoomEnabled: Bool? = nil
+  var pinchToZoomEnabled: Bool?
   /// Whether the single-touch scroll gesture is enabled.
   /// Default value: true.
-  var scrollEnabled: Bool? = nil
+  var scrollEnabled: Bool?
   /// Whether rotation is enabled for the pinch to zoom gesture.
   /// Default value: true.
-  var simultaneousRotateAndPinchToZoomEnabled: Bool? = nil
+  var simultaneousRotateAndPinchToZoomEnabled: Bool?
   /// Whether the pitch gesture is enabled.
   /// Default value: true.
-  var pitchEnabled: Bool? = nil
+  var pitchEnabled: Bool?
   /// Configures the directions in which the map is allowed to move during a scroll gesture.
   /// Default value: "horizontal-and-vertical".
-  var scrollMode: ScrollMode? = nil
+  var scrollMode: ScrollMode?
   /// Whether double tapping the map with one touch results in a zoom-in animation.
   /// Default value: true.
-  var doubleTapToZoomInEnabled: Bool? = nil
+  var doubleTapToZoomInEnabled: Bool?
   /// Whether single tapping the map with two touches results in a zoom-out animation.
   /// Default value: true.
-  var doubleTouchToZoomOutEnabled: Bool? = nil
+  var doubleTouchToZoomOutEnabled: Bool?
   /// Whether the quick zoom gesture is enabled.
   /// Default value: true.
-  var quickZoomEnabled: Bool? = nil
+  var quickZoomEnabled: Bool?
   /// By default, gestures rotate and zoom around the center of the gesture. Set this property to rotate and zoom around a fixed point instead.
-  var focalPoint: ScreenCoordinate? = nil
+  var focalPoint: ScreenCoordinate?
   /// Whether a deceleration animation following a pinch-to-zoom gesture is enabled. True by default.
   /// Default value: true.
-  var pinchToZoomDecelerationEnabled: Bool? = nil
+  var pinchToZoomDecelerationEnabled: Bool?
   /// Whether a deceleration animation following a rotate gesture is enabled. True by default.
   /// Default value: true.
-  var rotateDecelerationEnabled: Bool? = nil
+  var rotateDecelerationEnabled: Bool?
   /// Whether a deceleration animation following a scroll gesture is enabled. True by default.
   /// Default value: true.
-  var scrollDecelerationEnabled: Bool? = nil
+  var scrollDecelerationEnabled: Bool?
   /// Whether rotate threshold increases when pinching to zoom. true by default.
   /// Default value: true.
-  var increaseRotateThresholdWhenPinchingToZoom: Bool? = nil
+  var increaseRotateThresholdWhenPinchingToZoom: Bool?
   /// Whether pinch to zoom threshold increases when rotating. true by default.
   /// Default value: true.
-  var increasePinchToZoomThresholdWhenRotating: Bool? = nil
+  var increasePinchToZoomThresholdWhenRotating: Bool?
   /// The amount by which the zoom level increases or decreases during a double-tap-to-zoom-in or double-touch-to-zoom-out gesture. 1.0 by default. Must be positive.
   /// Default value: 1.
-  var zoomAnimationAmount: Double? = nil
+  var zoomAnimationAmount: Double?
   /// Whether pan is enabled for the pinch gesture.
   /// Default value: true.
-  var pinchPanEnabled: Bool? = nil
-
+  var pinchPanEnabled: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> GesturesSettings? {
@@ -231,17 +230,16 @@ struct GesturesSettings {
 /// Generated class from Pigeon that represents data sent in messages.
 struct LocationPuck2D {
   /// Name of image in sprite to use as the top of the location indicator.
-  var topImage: FlutterStandardTypedData? = nil
+  var topImage: FlutterStandardTypedData?
   /// Name of image in sprite to use as the middle of the location indicator.
-  var bearingImage: FlutterStandardTypedData? = nil
+  var bearingImage: FlutterStandardTypedData?
   /// Name of image in sprite to use as the background of the location indicator.
-  var shadowImage: FlutterStandardTypedData? = nil
+  var shadowImage: FlutterStandardTypedData?
   /// The scale expression of the images. If defined, it will be applied to all the three images.
-  var scaleExpression: String? = nil
+  var scaleExpression: String?
   /// The opacity of the entire location puck
   /// Default value: 1. Value range: [0, 1]
-  var opacity: Double? = nil
-
+  var opacity: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck2D? {
@@ -274,42 +272,41 @@ struct LocationPuck2D {
 struct LocationPuck3D {
   /// An URL for the model file in gltf format.
   /// Default value: null.
-  var modelUri: String? = nil
+  var modelUri: String?
   /// The position of the model.
   /// Default value: [0,0].
-  var position: [Double?]? = nil
+  var position: [Double?]?
   /// The opacity of the model.
   /// Default value: 1. Value range: [0, 1]
-  var modelOpacity: Double? = nil
+  var modelOpacity: Double?
   /// The scale of the model.
   /// Default value: [1,1,1].
-  var modelScale: [Double?]? = nil
+  var modelScale: [Double?]?
   /// The scale expression of the model, which will overwrite the default scale expression that keeps the model size constant during zoom.
-  var modelScaleExpression: String? = nil
+  var modelScaleExpression: String?
   /// The translation of the model [lon, lat, z]
   /// Default value: [0,0,0].
-  var modelTranslation: [Double?]? = nil
+  var modelTranslation: [Double?]?
   /// The rotation of the model.
   /// Default value: [0,0,90].
-  var modelRotation: [Double?]? = nil
+  var modelRotation: [Double?]?
   /// Enable/Disable shadow casting for the 3D location puck.
   /// Default value: true.
-  var modelCastShadows: Bool? = nil
+  var modelCastShadows: Bool?
   /// Enable/Disable shadow receiving for the 3D location puck.
   /// Default value: true.
-  var modelReceiveShadows: Bool? = nil
+  var modelReceiveShadows: Bool?
   /// Defines scaling mode. Only applies to location-indicator type layers.
   /// Default value: "map".
-  var modelScaleMode: ModelScaleMode? = nil
+  var modelScaleMode: ModelScaleMode?
   /// Strength of the emission. There is no emission for value 0. For value 1.0, only emissive component (no shading) is displayed and values above 1.0 produce light contribution to surrounding area, for some of the parts (e.g. doors). Expressions that depend on measure-light are only supported as a global layer value (and not for each feature) when using GeoJSON or vector tile as the model layer source.
   /// Default value: 1. Value range: [0, 5]
-  var modelEmissiveStrength: Double? = nil
+  var modelEmissiveStrength: Double?
   /// The emissive strength expression of the model, which will overwrite the default model emissive strength.
-  var modelEmissiveStrengthExpression: String? = nil
+  var modelEmissiveStrengthExpression: String?
   /// Selects the base of the model. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "ground".
-  var modelElevationReference: ModelElevationReference? = nil
-
+  var modelElevationReference: ModelElevationReference?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck3D? {
@@ -366,9 +363,8 @@ struct LocationPuck3D {
 ///
 /// Generated class from Pigeon that represents data sent in messages.
 struct LocationPuck {
-  var locationPuck2D: LocationPuck2D? = nil
-  var locationPuck3D: LocationPuck3D? = nil
-
+  var locationPuck2D: LocationPuck2D?
+  var locationPuck3D: LocationPuck3D?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LocationPuck? {
@@ -394,40 +390,39 @@ struct LocationPuck {
 struct LocationComponentSettings {
   /// Whether the user location is visible on the map.
   /// Default value: false.
-  var enabled: Bool? = nil
+  var enabled: Bool?
   /// Whether the location puck is pulsing on the map. Works for 2D location puck only.
   /// Default value: false.
-  var pulsingEnabled: Bool? = nil
+  var pulsingEnabled: Bool?
   /// The color of the pulsing circle. Works for 2D location puck only.
   /// Default value: "#4A90E2".
-  var pulsingColor: Int64? = nil
+  var pulsingColor: Int64?
   /// The maximum radius of the pulsing circle. Works for 2D location puck only. Note: Setting [pulsingMaxRadius] to LocationComponentConstants.PULSING_MAX_RADIUS_FOLLOW_ACCURACY will set the pulsing circle's maximum radius to follow location accuracy circle.
   /// Default value: 10.
-  var pulsingMaxRadius: Double? = nil
+  var pulsingMaxRadius: Double?
   /// Whether show accuracy ring with location puck. Works for 2D location puck only.
   /// Default value: false.
-  var showAccuracyRing: Bool? = nil
+  var showAccuracyRing: Bool?
   /// The color of the accuracy ring. Works for 2D location puck only.
   /// Default value: "#4d89cff0".
-  var accuracyRingColor: Int64? = nil
+  var accuracyRingColor: Int64?
   /// The color of the accuracy ring border. Works for 2D location puck only.
   /// Default value: "#4d89cff0".
-  var accuracyRingBorderColor: Int64? = nil
+  var accuracyRingBorderColor: Int64?
   /// Sets the id of the layer that's added above to when placing the component on the map.
-  var layerAbove: String? = nil
+  var layerAbove: String?
   /// Sets the id of the layer that's added below to when placing the component on the map.
-  var layerBelow: String? = nil
+  var layerBelow: String?
   /// Whether the puck rotates to track the bearing source.
   /// Default value: false.
-  var puckBearingEnabled: Bool? = nil
+  var puckBearingEnabled: Bool?
   /// The enum controls how the puck is oriented
   /// Default value: "heading".
-  var puckBearing: PuckBearing? = nil
+  var puckBearing: PuckBearing?
   /// The slot this layer is assigned to. If specified, and a slot with that name exists, it will be placed at that position in the layer order.
-  var slot: String? = nil
+  var slot: String?
   /// Defines what the customised look of the location puck. Note that direct changes to the puck variables won't have any effect, a new puck needs to be set every time.
-  var locationPuck: LocationPuck? = nil
-
+  var locationPuck: LocationPuck?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LocationComponentSettings? {
@@ -486,62 +481,61 @@ struct LocationComponentSettings {
 struct ScaleBarSettings {
   /// Whether the scale is visible on the map.
   /// Default value: true.
-  var enabled: Bool? = nil
+  var enabled: Bool?
   /// Defines where the scale bar is positioned on the map
   /// Default value: "top-left".
-  var position: OrnamentPosition? = nil
+  var position: OrnamentPosition?
   /// Defines the margin to the left that the scale bar honors.
   /// Default value: 4.
-  var marginLeft: Double? = nil
+  var marginLeft: Double?
   /// Defines the margin to the top that the scale bar honors.
   /// Default value: 4.
-  var marginTop: Double? = nil
+  var marginTop: Double?
   /// Defines the margin to the right that the scale bar honors.
   /// Default value: 4.
-  var marginRight: Double? = nil
+  var marginRight: Double?
   /// Defines the margin to the bottom that the scale bar honors.
   /// Default value: 4.
-  var marginBottom: Double? = nil
+  var marginBottom: Double?
   /// Defines text color of the scale bar.
   /// Default value: "black".
-  var textColor: Int64? = nil
+  var textColor: Int64?
   /// Defines primary color of the scale bar.
   /// Default value: "black".
-  var primaryColor: Int64? = nil
+  var primaryColor: Int64?
   /// Defines secondary color of the scale bar.
   /// Default value: "white".
-  var secondaryColor: Int64? = nil
+  var secondaryColor: Int64?
   /// Defines width of the border for the scale bar.
   /// Default value: 2.
-  var borderWidth: Double? = nil
+  var borderWidth: Double?
   /// Defines height of the scale bar.
   /// Default value: 2.
-  var height: Double? = nil
+  var height: Double?
   /// Defines margin of the text bar of the scale bar.
   /// Default value: 8.
-  var textBarMargin: Double? = nil
+  var textBarMargin: Double?
   /// Defines text border width of the scale bar.
   /// Default value: 2.
-  var textBorderWidth: Double? = nil
+  var textBorderWidth: Double?
   /// Defines text size of the scale bar.
   /// Default value: 8.
-  var textSize: Double? = nil
+  var textSize: Double?
   /// Whether the scale bar is using metric unit. True if the scale bar is using metric system, false if the scale bar is using imperial units.
   /// Default value: true.
-  var isMetricUnits: Bool? = nil
+  var isMetricUnits: Bool?
   /// Configures minimum refresh interval, in millisecond, default is 15.
   /// Default value: 15.
-  var refreshInterval: Int64? = nil
+  var refreshInterval: Int64?
   /// Configures whether to show the text border or not, default is true.
   /// Default value: true.
-  var showTextBorder: Bool? = nil
+  var showTextBorder: Bool?
   /// configures ratio of scale bar max width compared with MapView width, default is 0.5.
   /// Default value: 0.5.
-  var ratio: Double? = nil
+  var ratio: Double?
   /// If set to True scale bar will be triggering onDraw depending on [ScaleBarSettings.refreshInterval] even if actual data did not change. If set to False scale bar will redraw only on demand. Defaults to False and should not be changed explicitly in most cases. Could be set to True to produce correct GPU frame metrics when running gfxinfo command.
   /// Default value: false.
-  var useContinuousRendering: Bool? = nil
-
+  var useContinuousRendering: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ScaleBarSettings? {
@@ -618,40 +612,39 @@ struct ScaleBarSettings {
 struct CompassSettings {
   /// Whether the compass is visible on the map.
   /// Default value: true.
-  var enabled: Bool? = nil
+  var enabled: Bool?
   /// Defines where the compass is positioned on the map
   /// Default value: "top-right".
-  var position: OrnamentPosition? = nil
+  var position: OrnamentPosition?
   /// Defines the margin to the left that the compass icon honors.
   /// Default value: 4.
-  var marginLeft: Double? = nil
+  var marginLeft: Double?
   /// Defines the margin to the top that the compass icon honors.
   /// Default value: 4.
-  var marginTop: Double? = nil
+  var marginTop: Double?
   /// Defines the margin to the right that the compass icon honors.
   /// Default value: 4.
-  var marginRight: Double? = nil
+  var marginRight: Double?
   /// Defines the margin to the bottom that the compass icon honors.
   /// Default value: 4.
-  var marginBottom: Double? = nil
+  var marginBottom: Double?
   /// The alpha channel value of the compass image
   /// Default value: 1.
-  var opacity: Double? = nil
+  var opacity: Double?
   /// The clockwise rotation value in degrees of the compass.
   /// Default value: 0.
-  var rotation: Double? = nil
+  var rotation: Double?
   /// Whether the compass is displayed.
   /// Default value: true.
-  var visibility: Bool? = nil
+  var visibility: Bool?
   /// Whether the compass fades out to invisible when facing north direction.
   /// Default value: true.
-  var fadeWhenFacingNorth: Bool? = nil
+  var fadeWhenFacingNorth: Bool?
   /// Whether the compass can be clicked and click events can be registered.
   /// Default value: true.
-  var clickable: Bool? = nil
+  var clickable: Bool?
   /// The compass image, the visual representation of the compass.
-  var image: FlutterStandardTypedData? = nil
-
+  var image: FlutterStandardTypedData?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CompassSettings? {
@@ -708,29 +701,28 @@ struct AttributionSettings {
   /// Whether the attribution icon is visible on the map.
   /// Default value: true.
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
-  var enabled: Bool? = nil
+  var enabled: Bool?
   /// Defines text color of the attribution icon.
   /// Default value: "#FF1E8CAB".
-  var iconColor: Int64? = nil
+  var iconColor: Int64?
   /// Defines where the attribution icon is positioned on the map
   /// Default value: "bottom-left".
-  var position: OrnamentPosition? = nil
+  var position: OrnamentPosition?
   /// Defines the margin to the left that the attribution icon honors.
   /// Default value: 92.
-  var marginLeft: Double? = nil
+  var marginLeft: Double?
   /// Defines the margin to the top that the attribution icon honors.
   /// Default value: 4.
-  var marginTop: Double? = nil
+  var marginTop: Double?
   /// Defines the margin to the right that the attribution icon honors.
   /// Default value: 4.
-  var marginRight: Double? = nil
+  var marginRight: Double?
   /// Defines the margin to the bottom that the attribution icon honors.
   /// Default value: 4.
-  var marginBottom: Double? = nil
+  var marginBottom: Double?
   /// Whether the attribution can be clicked and click events can be registered.
   /// Default value: true.
-  var clickable: Bool? = nil
-
+  var clickable: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> AttributionSettings? {
@@ -775,23 +767,22 @@ struct LogoSettings {
   /// Whether the logo is visible on the map.
   /// Default value: true.
   /// Restricted API. Please contact Mapbox to discuss your use case if you intend to use this property.
-  var enabled: Bool? = nil
+  var enabled: Bool?
   /// Defines where the logo is positioned on the map
   /// Default value: "bottom-left".
-  var position: OrnamentPosition? = nil
+  var position: OrnamentPosition?
   /// Defines the margin to the left that the attribution icon honors.
   /// Default value: 4.
-  var marginLeft: Double? = nil
+  var marginLeft: Double?
   /// Defines the margin to the top that the attribution icon honors.
   /// Default value: 4.
-  var marginTop: Double? = nil
+  var marginTop: Double?
   /// Defines the margin to the right that the attribution icon honors.
   /// Default value: 4.
-  var marginRight: Double? = nil
+  var marginRight: Double?
   /// Defines the margin to the bottom that the attribution icon honors.
   /// Default value: 4.
-  var marginBottom: Double? = nil
-
+  var marginBottom: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> LogoSettings? {

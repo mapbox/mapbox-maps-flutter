@@ -103,31 +103,30 @@ struct CircleAnnotation {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double? = nil
+  var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
-  var circleBlur: Double? = nil
+  var circleBlur: Double?
   /// The fill color of the circle.
   /// Default value: "#000000".
-  var circleColor: Int64? = nil
+  var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var circleOpacity: Double? = nil
+  var circleOpacity: Double?
   /// Circle radius.
   /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
-  var circleRadius: Double? = nil
+  var circleRadius: Double?
   /// The stroke color of the circle.
   /// Default value: "#000000".
-  var circleStrokeColor: Int64? = nil
+  var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
   /// Default value: 1. Value range: [0, 1]
-  var circleStrokeOpacity: Double? = nil
+  var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
-  var circleStrokeWidth: Double? = nil
+  var circleStrokeWidth: Double?
   /// Property to determine whether annotation can be manually moved around map.
-  var isDraggable: Bool? = nil
-
+  var isDraggable: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotation? {
@@ -179,31 +178,30 @@ struct CircleAnnotationOptions {
   /// The geometry that determines the location/shape of this annotation
   var geometry: Point
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
-  var circleSortKey: Double? = nil
+  var circleSortKey: Double?
   /// Amount to blur the circle. 1 blurs the circle such that only the centerpoint is full opacity. Setting a negative value renders the blur as an inner glow effect.
   /// Default value: 0.
-  var circleBlur: Double? = nil
+  var circleBlur: Double?
   /// The fill color of the circle.
   /// Default value: "#000000".
-  var circleColor: Int64? = nil
+  var circleColor: Int64?
   /// The opacity at which the circle will be drawn.
   /// Default value: 1. Value range: [0, 1]
-  var circleOpacity: Double? = nil
+  var circleOpacity: Double?
   /// Circle radius.
   /// Default value: 5. Minimum value: 0. The unit of circleRadius is in pixels.
-  var circleRadius: Double? = nil
+  var circleRadius: Double?
   /// The stroke color of the circle.
   /// Default value: "#000000".
-  var circleStrokeColor: Int64? = nil
+  var circleStrokeColor: Int64?
   /// The opacity of the circle's stroke.
   /// Default value: 1. Value range: [0, 1]
-  var circleStrokeOpacity: Double? = nil
+  var circleStrokeOpacity: Double?
   /// The width of the circle's stroke. Strokes are placed outside of the `circle-radius`.
   /// Default value: 0. Minimum value: 0. The unit of circleStrokeWidth is in pixels.
-  var circleStrokeWidth: Double? = nil
+  var circleStrokeWidth: Double?
   /// Property to determine whether annotation can be manually moved around map.
-  var isDraggable: Bool? = nil
-
+  var isDraggable: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotationOptions? {

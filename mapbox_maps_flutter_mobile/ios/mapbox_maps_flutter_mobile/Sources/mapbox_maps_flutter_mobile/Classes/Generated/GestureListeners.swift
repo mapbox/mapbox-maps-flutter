@@ -64,7 +64,6 @@ struct MapContentGestureContext {
   /// The state of the gesture.
   var gestureState: GestureState
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapContentGestureContext? {
     let touchPosition = pigeonVar_list[0] as! ScreenCoordinate
@@ -97,7 +96,6 @@ struct PointAnnotationInteractionContext: AnnotationInteractionContext {
   var annotation: PointAnnotation
   var gestureState: GestureState
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PointAnnotationInteractionContext? {
     let annotation = pigeonVar_list[0] as! PointAnnotation
@@ -120,7 +118,6 @@ struct PointAnnotationInteractionContext: AnnotationInteractionContext {
 struct CircleAnnotationInteractionContext: AnnotationInteractionContext {
   var annotation: CircleAnnotation
   var gestureState: GestureState
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CircleAnnotationInteractionContext? {
@@ -145,7 +142,6 @@ struct PolygonAnnotationInteractionContext: AnnotationInteractionContext {
   var annotation: PolygonAnnotation
   var gestureState: GestureState
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolygonAnnotationInteractionContext? {
     let annotation = pigeonVar_list[0] as! PolygonAnnotation
@@ -168,7 +164,6 @@ struct PolygonAnnotationInteractionContext: AnnotationInteractionContext {
 struct PolylineAnnotationInteractionContext: AnnotationInteractionContext {
   var annotation: PolylineAnnotation
   var gestureState: GestureState
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> PolylineAnnotationInteractionContext? {
@@ -293,7 +288,7 @@ class GestureListenersPigeonCodec: FlutterStandardMessageCodec, @unchecked Senda
   static let shared = GestureListenersPigeonCodec(readerWriter: GestureListenersPigeonCodecReaderWriter())
 }
 
-var gestureListenersPigeonMethodCodec = FlutterStandardMethodCodec(readerWriter: GestureListenersPigeonCodecReaderWriter());
+var gestureListenersPigeonMethodCodec = FlutterStandardMethodCodec(readerWriter: GestureListenersPigeonCodecReaderWriter())
 
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol GestureListenerProtocol {
@@ -388,15 +383,14 @@ class GestureListener: GestureListenerProtocol {
 
 private class PigeonStreamHandler<ReturnType>: NSObject, FlutterStreamHandler {
   private let wrapper: PigeonEventChannelWrapper<ReturnType>
-  private var pigeonSink: PigeonEventSink<ReturnType>? = nil
+  private var pigeonSink: PigeonEventSink<ReturnType>?
 
   init(wrapper: PigeonEventChannelWrapper<ReturnType>) {
     self.wrapper = wrapper
   }
 
   func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink)
-    -> FlutterError?
-  {
+    -> FlutterError? {
     pigeonSink = PigeonEventSink<ReturnType>(events)
     wrapper.onListen(withArguments: arguments, sink: pigeonSink!)
     return nil
@@ -448,4 +442,4 @@ class AnnotationDragEventsStreamHandler: PigeonEventChannelWrapper<AnnotationInt
     channel.setStreamHandler(internalStreamHandler)
   }
 }
-      
+

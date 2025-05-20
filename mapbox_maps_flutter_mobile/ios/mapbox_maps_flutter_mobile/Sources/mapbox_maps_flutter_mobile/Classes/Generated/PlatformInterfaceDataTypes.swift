@@ -49,7 +49,6 @@ struct ScreenCoordinate {
   /// A value representing the y position of this coordinate.
   var y: Double
 
-
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> ScreenCoordinate? {
     let x = pigeonVar_list[0] as! Double
@@ -82,7 +81,6 @@ struct MbxEdgeInsets {
   var bottom: Double
   /// Padding from the right.
   var right: Double
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MbxEdgeInsets? {
@@ -117,21 +115,20 @@ struct MbxEdgeInsets {
 /// Generated class from Pigeon that represents data sent in messages.
 struct CameraOptions {
   /// Coordinate at the center of the camera.
-  var center: Point? = nil
+  var center: Point?
   /// Padding around the interior of the view that affects the frame of
   /// reference for `center`.
-  var padding: MbxEdgeInsets? = nil
+  var padding: MbxEdgeInsets?
   /// Point of reference for `zoom` and `angle`, assuming an origin at the
   /// top-left corner of the view.
-  var anchor: ScreenCoordinate? = nil
+  var anchor: ScreenCoordinate?
   /// Zero-based zoom level. Constrained to the minimum and maximum zoom
   /// levels.
-  var zoom: Double? = nil
+  var zoom: Double?
   /// Bearing, measured in degrees from true north. Wrapped to [0, 360).
-  var bearing: Double? = nil
+  var bearing: Double?
   /// Pitch toward the horizon measured in degrees.
-  var pitch: Double? = nil
-
+  var pitch: Double?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraOptions? {
@@ -179,7 +176,6 @@ struct CameraState {
   var bearing: Double
   /// Pitch toward the horizon measured in degrees.
   var pitch: Double
-
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> CameraState? {

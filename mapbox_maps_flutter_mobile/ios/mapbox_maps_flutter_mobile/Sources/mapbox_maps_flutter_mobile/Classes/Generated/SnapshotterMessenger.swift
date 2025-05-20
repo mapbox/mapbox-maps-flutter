@@ -79,12 +79,11 @@ struct MapSnapshotOptions {
   var pixelRatio: Double
   /// Glyphs rasterization options to use for client-side text rendering.
   /// By default, `GlyphsRasterizationOptions` will use `NoGlyphsRasterizedLocally` mode.
-  var glyphsRasterizationOptions: GlyphsRasterizationOptions? = nil
+  var glyphsRasterizationOptions: GlyphsRasterizationOptions?
   /// Flag that determines if the logo should be shown on the snapshot.
-  var showsLogo: Bool? = nil
+  var showsLogo: Bool?
   /// Flag that determines if attribution should be shown on the snapshot.
-  var showsAttribution: Bool? = nil
-
+  var showsAttribution: Bool?
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MapSnapshotOptions? {

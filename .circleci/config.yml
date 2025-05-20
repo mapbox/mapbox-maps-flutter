@@ -218,7 +218,7 @@ jobs:
             dart pub get -C mapbox_maps_flutter/example
       - run:
           name: Check license for mapbox_maps_flutter_mobile
-          command: bash scripts/license.sh mapbox_maps_flutter --mode=validate
+          command: bash scripts/license.sh mapbox_maps_flutter_mobile --mode=validate
       - run:
           name: Run dart analyze
           command: dart analyze
