@@ -1,6 +1,6 @@
-name: mapbox_maps_flutter_v3 # Update this name
+name: mapbox_maps_flutter
 description: "A new Flutter package project."
-version: 0.0.1
+version: 3.0.0-beta.1
 homepage:
 
 environment:
@@ -12,7 +12,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  mapbox_maps_flutter: any # Update this
+  mapbox_maps_flutter_mobile: any
   mapbox_maps_flutter_interface: any
   mapbox_maps_flutter_web: any
 
@@ -29,9 +29,9 @@ flutter:
   plugin:
     platforms:
       android:
-        default_package: mapbox_maps_flutter
+        default_package: mapbox_maps_flutter_mobile
       ios:
-        default_package: mapbox_maps_flutter
+        default_package: mapbox_maps_flutter_mobile
       web:
         default_package: mapbox_maps_flutter_web
 
