@@ -146,7 +146,7 @@ jobs:
           app-dir: mapbox_maps_flutter_mobile/example
       - run:
           name: swiftlint
-          working_directory: mapbox_maps_flutter_mobile/ios/mapbox_maps_flutter
+          working_directory: mapbox_maps_flutter_mobile/ios/mapbox_maps_flutter_mobile
           command: HOMEBREW_NO_AUTO_UPDATE=1 brew install swiftlint; swiftlint lint --strict
       - run:
           name: unit test
@@ -215,7 +215,7 @@ jobs:
           command: |
             dart pub get -C mapbox_maps_flutter_mobile/example
             dart pub get -C mapbox_maps_flutter_web/example
-            dart pub get -C mapbox_maps_flutter_v3/example
+            dart pub get -C mapbox_maps_flutter/example
       - run:
           name: Check license for mapbox_maps_flutter_mobile
           command: bash scripts/license.sh mapbox_maps_flutter --mode=validate
@@ -223,7 +223,7 @@ jobs:
           name: Run dart analyze
           command: dart analyze
       - run:
-          name: Check all tests are in the test suite
+          name: Check all tests are in the mobile test suite
           working_directory: mapbox_maps_flutter_mobile/example
           command: dart ../../scripts/check_test_suite.dart
 

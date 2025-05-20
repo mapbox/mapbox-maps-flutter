@@ -3,7 +3,7 @@ set -eou pipefail
 
 # Function to display usage information
 usage() {
-    echo "Usage: $0 <package_name> --mode <validate|generate>"
+    echo "Usage: $0 <package_name> --mode=<validate|generate>"
     exit 1
 }
 mode="generate"
@@ -11,8 +11,7 @@ mode="generate"
 
 # Check if exactly two arguments are provided
 if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 <package-name> --mode=[generate|validate]"
-  exit 1
+  usage
 fi
 
 PACKAGE_NAME="$1"
@@ -22,7 +21,7 @@ MODE="$2"
 if [[ "$MODE" =~ --mode[=\ ]?(generate|validate) ]]; then
   MODE="${BASH_REMATCH[1]}"
 else
-  echo "Invalid mode. Use --mode generate or --mode validate"
+  echo "Invalid mode. Use --mode=generate or --mode=validate"
   exit 1
 fi
 
@@ -73,14 +72,8 @@ while read -r name version; do
   # Add your logic here to handle each package
 done < <(echo "$MATCHING_PACKAGES" | jq -r '.[] | "\(.name) \(.version)"')
 
-if [[ "$PACKAGE_NAME" == "mapbox_maps_flutter" ]]; then
-  mobile_dir="mapbox_maps_flutter_mobile"
-else
-  mobile_dir="$PACKAGE_NAME"
-fi
-
-ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' $mobile_dir/ios/mapbox_maps_flutter/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
-android_sdk_version=$(grep 'com.mapbox.maps:android' $mobile_dir/android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+ios_sdk_version=$(grep -A 1 'mapbox-maps-ios' mapbox_maps_flutter_mobile/ios/mapbox_maps_flutter_mobile/Package.swift | grep 'exact' | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
+android_sdk_version=$(grep 'com.mapbox.maps:android' mapbox_maps_flutter_mobile/android/build.gradle | sed -E 's/.*"com\.mapbox\.maps:android:([0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?)".*/\1/')
 
 # Fetch the license files for iOS and Android SDKs
 ios_license_content=$(curl -s "https://raw.githubusercontent.com/mapbox/mapbox-maps-ios/v$ios_sdk_version/LICENSE.md")
@@ -113,7 +106,7 @@ license=$(echo "$license_template" | m4 -D __SDK_VERSION__="$PACKAGE_VERSION" \
                                         -D __YEAR__="$(date +%Y)")
 
 if [ "$MODE" == "validate" ]; then
-    if [[ "$(cat $mobile_dir/LICENSE)" == "$license" ]]; then
+    if [[ "$(cat $PACKAGE_NAME/LICENSE)" == "$license" ]]; then
         echo "License file is up-to-date."
         exit 0
     else
@@ -121,7 +114,7 @@ if [ "$MODE" == "validate" ]; then
         exit 1
     fi
 elif [ "$MODE" == "generate" ]; then
-    echo "$license" > $mobile_dir/LICENSE
+    echo "$license" > $PACKAGE_NAME/LICENSE
     echo "License file has been updated." >&2
 else
     usage

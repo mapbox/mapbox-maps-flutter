@@ -3,7 +3,7 @@
 # Run `pod lib lint mapbox_maps_flutter.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'mapbox_maps_flutter'
+  s.name             = 'mapbox_maps_flutter_mobile'
   s.version          = '2.8.0'
 
   s.summary          = 'Mapbox Maps SDK Flutter Plugin.'
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.author           = { 'Mapbox' => 'mobile@mapbox.com' }
   s.source           = { :path => '.' }
 
-  s.source_files = 'mapbox_maps_flutter/Sources/mapbox_maps_flutter/Classes/**/*'
+  s.source_files = 'mapbox_maps_flutter_mobile/Sources/mapbox_maps_flutter_mobile/Classes/**/*'
   s.dependency 'Flutter'
   s.platform = :ios, '14.0'
 
