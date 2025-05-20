@@ -210,6 +210,12 @@ jobs:
       - checkout
       - setup-flutter:
           app-dir: .
+      run:
+          name: Install dependencies for examples
+          command: |
+            dart pub get -C mapbox_maps_flutter_mobile/example
+            dart pub get -C mapbox_maps_flutter_web/example
+            dart pub get -C mapbox_maps_flutter_v3/example
       - run:
           name: Check license for mapbox_maps_flutter_mobile
           command: bash scripts/license.sh mapbox_maps_flutter --mode=validate
