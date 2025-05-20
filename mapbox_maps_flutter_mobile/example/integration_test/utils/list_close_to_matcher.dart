@@ -14,11 +14,11 @@ class _IsListCloseTo extends Matcher {
     if (_value == null || list == null) {
       return false;
     }
-    if (_value!.length != list.length) {
+    if (_value.length != list.length) {
       return false;
     }
-    for (var i = 0; i < _value!.length; i++) {
-      final expected = _value![i];
+    for (var i = 0; i < _value.length; i++) {
+      final expected = _value[i];
       final actual = list[i];
       if (expected is num && actual is num) {
         final pairIsCloseTo = closeTo(expected, _delta).matches(actual, {});

@@ -7,7 +7,6 @@ orbs:
   slack: circleci/slack@5
 
 commands:
-
   inject-netrc-credentials:
     steps:
       - run:
@@ -27,6 +26,15 @@ commands:
       - add_ssh_keys:
           fingerprints:
             - "9d:db:07:0b:62:81:11:c3:46:21:8e:fa:51:99:80:2d"
+
+  setup-flutter:
+    parameters:
+      app-dir:
+        type: string
+    steps:
+      - flutter/install_sdk_and_pub:
+          version: 3.27.0
+          app-dir: << parameters.app-dir >>
 
   slack-notify-failure-if-any:
     steps:
@@ -48,22 +56,8 @@ commands:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "`$CIRCLE_JOB` <$CIRCLE_BUILD_URL|failed> for <https://github.com/mapbox/mapbox-maps-flutter/commit/$CIRCLE_SHA1|${CIRCLE_SHA1:0:6}> by `$(git log --format='%an' -n 1 $CIRCLE_SHA1)` on $(if [ \"$CIRCLE_BRANCH\" == \"main\" ]; then echo 'the'; fi) `${CIRCLE_TAG:-$CIRCLE_BRANCH}` ${CIRCLE_TAG:+tag}${CIRCLE_BRANCH:+branch}."
+                    "text": "`$CIRCLE_JOB` <$CIRCLE_BUILD_URL|failed> for commit ${CIRCLE_SHA1:0:6} on `${CIRCLE_TAG:-$CIRCLE_BRANCH}` ${CIRCLE_TAG:+tag}${CIRCLE_BRANCH:+branch}."
                   }
-                },
-                {
-                  "type": "rich_text",
-                  "elements": [
-                    {
-                      "type": "rich_text_quote",
-                      "elements": [
-                        {
-                          "type": "text",
-                          "text": "$(git log --format=%s -n 1 $CIRCLE_SHA1)"
-                        }
-                      ]
-                    }
-                  ]
                 },
                 {
                   "type": "section",
@@ -78,7 +72,6 @@ commands:
             }
 
 jobs:
-
   build-android:
     parameters:
       workspace-path:
@@ -89,8 +82,7 @@ jobs:
     resource_class: 2xlarge
     steps:
       - checkout
-      - flutter/install_sdk_and_pub:
-          version: 3.27.0
+      - setup-flutter:
           app-dir: mapbox_maps_flutter_mobile/example
       - run:
           name: ktlint
@@ -100,18 +92,17 @@ jobs:
           name: unit test
           command: flutter test mapbox_maps_flutter_mobile/test
       - run:
-          name: "Build Android integration tests"
+          name: Build Android integration tests
           working_directory: mapbox_maps_flutter_mobile/example/android
           command: |
             ./gradlew app:assembleAndroidTest --stacktrace
-            ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n "ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN" | base64 -w 0)" --stacktrace
+            ./gradlew app:assembleDebug -Ptarget=integration_test/all_test.dart -Pdart-defines="$(echo -n \"ACCESS_TOKEN=$MAPBOX_ACCESS_TOKEN\" | base64 -w 0)" --stacktrace
       - persist_to_workspace:
           root: << parameters.workspace-path >>
           paths:
             - debug/app-debug.apk
             - androidTest/debug/app-debug-androidTest.apk
       - slack-notify-failure-if-any
-
 
   run-android-tests-firebase:
     parameters:
@@ -124,7 +115,7 @@ jobs:
           at: << parameters.workspace-path >>
       - setup-gcloud
       - run:
-          name: "Run Android integration tests on Firebase"
+          name: Run Android integration tests on Firebase
           no_output_timeout: 20m
           command: |
             gcloud firebase test android run --type instrumentation \
@@ -151,8 +142,7 @@ jobs:
       - inject-netrc-credentials
       - add-mapbox-submodules-key
       - macos/install-rosetta
-      - flutter/install_sdk_and_pub:
-          version: 3.27.0
+      - setup-flutter:
           app-dir: mapbox_maps_flutter_mobile/example
       - run:
           name: swiftlint
@@ -162,16 +152,11 @@ jobs:
           name: unit test
           command: flutter test mapbox_maps_flutter_mobile/test
       - run:
-          name: "Build iOS integration tests"
+          name: Build iOS integration tests
           command: |
-            pushd example
-
-            # required to init configs that pass environment variables to fastlane later
-            flutter build ios --config-only mapbox_maps_flutter_mobile/example/integration_test/all_test.dart \
-              --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
-
-            popd # to repo root
-
+            pushd mapbox_maps_flutter_mobile/example
+            flutter build ios --config-only integration_test/all_test.dart --release --dart-define=ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+            popd
             bundle install
             bundle exec fastlane build_examples_tests
       - persist_to_workspace:
@@ -191,7 +176,7 @@ jobs:
           at: << parameters.workspace-path >>
       - setup-gcloud
       - run:
-          name: "Run iOS integration tests on Firebase"
+          name: Run iOS integration tests on Firebase
           no_output_timeout: 20m
           command: |
             gcloud firebase test ios run \
@@ -202,17 +187,17 @@ jobs:
               --client-details matrixLabel="${CIRCLE_JOB}-${CIRCLE_SHA1:0:6}" 2>&1 | tee firebase_test_lab_run.log
       - run:
           name: Download XCResults
+          when: always
           command: |
-            TEST_LAB_PATH=$(cat firebase_test_lab_run.log | grep -o "test-lab.*/")
-
+            TEST_LAB_PATH=$(grep -o "test-lab.*/" firebase_test_lab_run.log)
             mkdir testlab_results
             gsutil -m cp -r "gs://${TEST_LAB_PATH}i*" testlab_results
             zip -r testlab_results.zip testlab_results
-          when: always
       - store_artifacts:
           path: firebase_test_lab_run.log
       - store_artifacts:
           path: testlab_results.zip
+          destination: ios/testlab_results.zip
       - store_test_results:
           path: testlab_results
       - slack-notify-failure-if-any
@@ -223,18 +208,24 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - flutter/install_sdk_and_pub:
-          version: 3.27.0
+      - setup-flutter:
+          app-dir: .
       - run:
-          name: Check license
-          command: bash scripts/license.sh --mode validate
+          name: Install dependencies for examples
+          command: |
+            dart pub get -C mapbox_maps_flutter_mobile/example
+            dart pub get -C mapbox_maps_flutter_web/example
+            dart pub get -C mapbox_maps_flutter_v3/example
+      - run:
+          name: Check license for mapbox_maps_flutter_mobile
+          command: bash scripts/license.sh mapbox_maps_flutter --mode=validate
       - run:
           name: Run dart analyze
           command: dart analyze
       - run:
           name: Check all tests are in the test suite
-          command: dart ../scripts/check_test_suite.dart
-          working_directory: example
+          working_directory: mapbox_maps_flutter_mobile/example
+          command: dart ../../scripts/check_test_suite.dart
 
 workflows:
   build:
@@ -254,6 +245,7 @@ executors:
     resource_class: macos.m1.medium.gen1
     macos:
       xcode: 16.0.0
+
   firebase-test-runner:
     resource_class: small
     docker:
