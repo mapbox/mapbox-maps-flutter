@@ -358,6 +358,7 @@ struct PointAnnotation {
   var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
@@ -602,6 +603,7 @@ struct PointAnnotationOptions {
   var iconHaloWidth: Double? = nil
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
+  /// Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
   var iconImageCrossFade: Double? = nil
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
   /// Default value: 0. Value range: [0, 1]
