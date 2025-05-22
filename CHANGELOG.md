@@ -2,9 +2,11 @@
 
 ### 2.9.0-beta.1 
 
-> [!IMPORTANT] ⚠️ Breaking changes
-> [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
-> `PointAnnotation.iconImageCrossFade` has been deprecated and setting a value to it will not have any impact. Use `PointAnnotationManager.iconImageCrossFade` instead.
+> [!IMPORTANT]
+> ⚠️ Breaking changes
+> * [Android] When a method returns `StylePropertyValue` the property values will now be typed rather than a string.
+> * `PointAnnotation.iconImageCrossFade` has been deprecated and setting a value to it will not have any impact. Use `PointAnnotationManager.iconImageCrossFade` instead.
+> * The STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
 
 * In this release we fixed a bug in our Android conversion code where the property values in `StylePropertyValue` were being returned as strings rather than their actual type. This fix will cause a behavioral change in the return value of the following methods on Android:
   * `getStyleImportConfigProperties`, `getStyleImportConfigProperty`, `getStyleLayerProperty`, `getStyleSourceProperty`, `getStyleTerrainProperty`, `getStyleLightProperty`.
@@ -38,7 +40,6 @@
   * `MapboxMap.removeFeatureStateForFeaturesetFeature`
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
-* Additionally, the STANDARD_EXPERIMENTAL style has been removed. Use the STANDARD style instead.
 * Move experimental `modelElevationReference` property to `LocationPuck3D`. 
 
 ### 2.8.0 
