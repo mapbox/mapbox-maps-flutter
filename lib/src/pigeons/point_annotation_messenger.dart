@@ -290,6 +290,7 @@ class PointAnnotation {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
+    @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
@@ -410,6 +411,7 @@ class PointAnnotation {
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
+  @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.
@@ -632,6 +634,7 @@ class PointAnnotationOptions {
     this.iconHaloBlur,
     this.iconHaloColor,
     this.iconHaloWidth,
+    @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
     this.iconImageCrossFade,
     this.iconOcclusionOpacity,
     this.iconOpacity,
@@ -749,6 +752,7 @@ class PointAnnotationOptions {
 
   /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
   /// Default value: 0. Value range: [0, 1]
+  @Deprecated('Use [PointAnnotationManager.iconImageCrossFade] instead.')
   double? iconImageCrossFade;
 
   /// The opacity at which the icon will be drawn in case of being depth occluded. Absent value means full occlusion against terrain only.

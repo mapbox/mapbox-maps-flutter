@@ -523,6 +523,7 @@ data class PointAnnotation(
   /**
    * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
@@ -843,6 +844,7 @@ data class PointAnnotationOptions(
   /**
    * Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
    * Default value: 0. Value range: [0, 1]
+   * Deprecated: Use `PointAnnotationManager.iconImageCrossFade` instead.
    */
   val iconImageCrossFade: Double? = null,
   /**
