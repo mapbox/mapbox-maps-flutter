@@ -35,6 +35,10 @@ void main() {
     final mapboxMap = await mapFuture;
     final manager = await mapboxMap.annotations.createCircleAnnotationManager();
 
+    await manager.setCircleElevationReference(CircleElevationReference.NONE);
+    var circleElevationReference = await manager.getCircleElevationReference();
+    expect(CircleElevationReference.NONE, circleElevationReference);
+
     await manager.setCircleSortKey(1.0);
     var circleSortKey = await manager.getCircleSortKey();
     expect(1.0, circleSortKey);
