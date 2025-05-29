@@ -567,11 +567,11 @@ class SymbolLayer extends Layer {
   /// Default value: 0. Minimum value: 0. The unit of iconHaloWidth is in pixels.
   List<Object>? iconHaloWidthExpression;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   double? iconImageCrossFade;
 
-  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together.
+  /// Controls the transition progress between the image variants of icon-image. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
   /// Default value: 0. Value range: [0, 1]
   List<Object>? iconImageCrossFadeExpression;
 

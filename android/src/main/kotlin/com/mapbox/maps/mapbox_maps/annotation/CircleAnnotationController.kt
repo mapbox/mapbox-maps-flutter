@@ -3,9 +3,11 @@ package com.mapbox.maps.mapbox_maps.annotation
 
 import com.mapbox.maps.mapbox_maps.pigeons.*
 import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationManager
+import toCircleElevationReference
 import toCirclePitchAlignment
 import toCirclePitchScale
 import toCircleTranslateAnchor
+import toFLTCircleElevationReference
 import toFLTCirclePitchAlignment
 import toFLTCirclePitchScale
 import toFLTCircleTranslateAnchor
@@ -149,6 +151,29 @@ class CircleAnnotationController(private val delegate: ControllerDelegate) : _Ci
       originalAnnotation.circleStrokeWidth = it
     }
     return originalAnnotation
+  }
+
+  override fun setCircleElevationReference(
+    managerId: String,
+    circleElevationReference: CircleElevationReference,
+    callback: (Result<Unit>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    manager.circleElevationReference = circleElevationReference.toCircleElevationReference()
+    callback(Result.success(Unit))
+  }
+
+  override fun getCircleElevationReference(
+    managerId: String,
+    callback: (Result<CircleElevationReference?>) -> Unit
+  ) {
+    val manager = delegate.getManager(managerId) as CircleAnnotationManager
+    val value = manager.circleElevationReference
+    if (value != null) {
+      callback(Result.success(value.toFLTCircleElevationReference()))
+    } else {
+      callback(Result.success(null))
+    }
   }
 
   override fun setCircleSortKey(

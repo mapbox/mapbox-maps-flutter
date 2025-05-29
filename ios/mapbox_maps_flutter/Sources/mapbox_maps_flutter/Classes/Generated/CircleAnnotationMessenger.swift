@@ -69,6 +69,15 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum CircleElevationReference: Int {
+  /// Elevated rendering is disabled.
+  case nONE = 0
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
+  case hDROADMARKUP = 1
+}
+
 /// Orientation of circle when map is pitched.
 /// Default value: "viewport".
 enum CirclePitchAlignment: Int {
@@ -253,26 +262,32 @@ private class CircleAnnotationMessengerPigeonCodecReader: FlutterStandardReader 
     case 129:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CirclePitchAlignment(rawValue: enumResultAsInt)
+        return CircleElevationReference(rawValue: enumResultAsInt)
       }
       return nil
     case 130:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CirclePitchScale(rawValue: enumResultAsInt)
+        return CirclePitchAlignment(rawValue: enumResultAsInt)
       }
       return nil
     case 131:
       let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
       if let enumResultAsInt = enumResultAsInt {
-        return CircleTranslateAnchor(rawValue: enumResultAsInt)
+        return CirclePitchScale(rawValue: enumResultAsInt)
       }
       return nil
     case 132:
-      return Point.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return CircleTranslateAnchor(rawValue: enumResultAsInt)
+      }
+      return nil
     case 133:
-      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+      return Point.fromList(self.readValue() as! [Any?])
     case 134:
+      return CircleAnnotation.fromList(self.readValue() as! [Any?])
+    case 135:
       return CircleAnnotationOptions.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -282,23 +297,26 @@ private class CircleAnnotationMessengerPigeonCodecReader: FlutterStandardReader 
 
 private class CircleAnnotationMessengerPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? CirclePitchAlignment {
+    if let value = value as? CircleElevationReference {
       super.writeByte(129)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CirclePitchScale {
+    } else if let value = value as? CirclePitchAlignment {
       super.writeByte(130)
       super.writeValue(value.rawValue)
-    } else if let value = value as? CircleTranslateAnchor {
+    } else if let value = value as? CirclePitchScale {
       super.writeByte(131)
       super.writeValue(value.rawValue)
-    } else if let value = value as? Point {
+    } else if let value = value as? CircleTranslateAnchor {
       super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotation {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Point {
       super.writeByte(133)
       super.writeValue(value.toList())
-    } else if let value = value as? CircleAnnotationOptions {
+    } else if let value = value as? CircleAnnotation {
       super.writeByte(134)
+      super.writeValue(value.toList())
+    } else if let value = value as? CircleAnnotationOptions {
+      super.writeByte(135)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -360,6 +378,8 @@ protocol _CircleAnnotationMessenger {
   func update(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func delete(managerId: String, annotation: CircleAnnotation, completion: @escaping (Result<Void, Error>) -> Void)
   func deleteAll(managerId: String, completion: @escaping (Result<Void, Error>) -> Void)
+  func setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, completion: @escaping (Result<Void, Error>) -> Void)
+  func getCircleElevationReference(managerId: String, completion: @escaping (Result<CircleElevationReference?, Error>) -> Void)
   func setCircleSortKey(managerId: String, circleSortKey: Double, completion: @escaping (Result<Void, Error>) -> Void)
   func getCircleSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void)
   func setCircleBlur(managerId: String, circleBlur: Double, completion: @escaping (Result<Void, Error>) -> Void)
@@ -482,6 +502,41 @@ class _CircleAnnotationMessengerSetup {
       }
     } else {
       deleteAllChannel.setMessageHandler(nil)
+    }
+    let setCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setCircleElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        let circleElevationReferenceArg = args[1] as! CircleElevationReference
+        api.setCircleElevationReference(managerId: managerIdArg, circleElevationReference: circleElevationReferenceArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setCircleElevationReferenceChannel.setMessageHandler(nil)
+    }
+    let getCircleElevationReferenceChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      getCircleElevationReferenceChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let managerIdArg = args[0] as! String
+        api.getCircleElevationReference(managerId: managerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      getCircleElevationReferenceChannel.setMessageHandler(nil)
     }
     let setCircleSortKeyChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleSortKey\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

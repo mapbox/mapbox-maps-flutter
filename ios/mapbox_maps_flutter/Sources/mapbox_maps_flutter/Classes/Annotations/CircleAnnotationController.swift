@@ -75,6 +75,24 @@ final class CircleAnnotationController: BaseAnnotationMessenger<CircleAnnotation
 
     // MARK: Properties
 
+    func getCircleElevationReference(managerId: String, completion: @escaping (Result<CircleElevationReference?, Error>) -> Void) {
+        do {
+            completion(.success(try get(\.circleElevationReference, managerId: managerId)?.toFLTCircleElevationReference()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
+    func setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, completion: @escaping (Result<Void, Error>) -> Void) {
+        do {
+            let newValue = MapboxMaps.CircleElevationReference(circleElevationReference)
+            try set(\.circleElevationReference, newValue: newValue, managerId: managerId)
+            completion(.success(()))
+        } catch {
+            completion(.failure(FlutterError(code: CircleAnnotationController.errorCode, message: "No manager found with id: \(managerId)", details: nil)))
+        }
+    }
+
     func getCircleSortKey(managerId: String, completion: @escaping (Result<Double?, Error>) -> Void) {
         do {
             completion(.success(try get(\.circleSortKey, managerId: managerId)))

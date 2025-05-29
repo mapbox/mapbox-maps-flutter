@@ -4,6 +4,16 @@
 
 part of mapbox_maps_flutter;
 
+/// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+/// Default value: "none".
+enum CircleElevationReference {
+  /// Elevated rendering is disabled.
+  NONE,
+
+  /// Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons.
+  HD_ROAD_MARKUP,
+}
+
 /// Orientation of circle when map is pitched.
 /// Default value: "viewport".
 enum CirclePitchAlignment {
@@ -272,23 +282,26 @@ class CircleAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    } else if (value is CirclePitchAlignment) {
+    } else if (value is CircleElevationReference) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
-    } else if (value is CirclePitchScale) {
+    } else if (value is CirclePitchAlignment) {
       buffer.putUint8(130);
       writeValue(buffer, value.index);
-    } else if (value is CircleTranslateAnchor) {
+    } else if (value is CirclePitchScale) {
       buffer.putUint8(131);
       writeValue(buffer, value.index);
-    } else if (value is Point) {
+    } else if (value is CircleTranslateAnchor) {
       buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotation) {
+      writeValue(buffer, value.index);
+    } else if (value is Point) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
-    } else if (value is CircleAnnotationOptions) {
+    } else if (value is CircleAnnotation) {
       buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else if (value is CircleAnnotationOptions) {
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -300,18 +313,21 @@ class CircleAnnotationMessenger_PigeonCodec extends StandardMessageCodec {
     switch (type) {
       case 129:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CirclePitchAlignment.values[value];
+        return value == null ? null : CircleElevationReference.values[value];
       case 130:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CirclePitchScale.values[value];
+        return value == null ? null : CirclePitchAlignment.values[value];
       case 131:
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : CircleTranslateAnchor.values[value];
+        return value == null ? null : CirclePitchScale.values[value];
       case 132:
-        return Point.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : CircleTranslateAnchor.values[value];
       case 133:
-        return CircleAnnotation.decode(readValue(buffer)!);
+        return Point.decode(readValue(buffer)!);
       case 134:
+        return CircleAnnotation.decode(readValue(buffer)!);
+      case 135:
         return CircleAnnotationOptions.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -521,6 +537,60 @@ class _CircleAnnotationMessenger {
       );
     } else {
       return;
+    }
+  }
+
+  Future<void> setCircleElevationReference(String managerId,
+      CircleElevationReference circleElevationReference) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId, circleElevationReference]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<CircleElevationReference?> getCircleElevationReference(
+      String managerId) async {
+    final String pigeonVar_channelName =
+        'dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel =
+        BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[managerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return (pigeonVar_replyList[0] as CircleElevationReference?);
     }
   }
 

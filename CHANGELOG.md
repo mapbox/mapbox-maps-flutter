@@ -1,5 +1,7 @@
 ### main
 
+* Introduce new experimental properties: `FillLayer.fillConstructBridgeGuardRail`, `FillLayer.fillBridgeGuardRailColor`, `FillLayer.fillTunnelStructureColor`, `CircleLayer.circleElevationReference`. 
+
 ### 2.9.0-beta.1 
 
 > [!IMPORTANT]

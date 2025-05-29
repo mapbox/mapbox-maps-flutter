@@ -13,12 +13,16 @@ class FillLayer extends Layer {
     String? slot,
     required String this.sourceId,
     String? this.sourceLayer,
+    bool? this.fillConstructBridgeGuardRail,
+    List<Object>? this.fillConstructBridgeGuardRailExpression,
     FillElevationReference? this.fillElevationReference,
     List<Object>? this.fillElevationReferenceExpression,
     double? this.fillSortKey,
     List<Object>? this.fillSortKeyExpression,
     bool? this.fillAntialias,
     List<Object>? this.fillAntialiasExpression,
+    int? this.fillBridgeGuardRailColor,
+    List<Object>? this.fillBridgeGuardRailColorExpression,
     int? this.fillColor,
     List<Object>? this.fillColorExpression,
     double? this.fillEmissiveStrength,
@@ -33,6 +37,8 @@ class FillLayer extends Layer {
     List<Object>? this.fillTranslateExpression,
     FillTranslateAnchor? this.fillTranslateAnchor,
     List<Object>? this.fillTranslateAnchorExpression,
+    int? this.fillTunnelStructureColor,
+    List<Object>? this.fillTunnelStructureColorExpression,
     double? this.fillZOffset,
     List<Object>? this.fillZOffsetExpression,
   }) : super(
@@ -52,6 +58,16 @@ class FillLayer extends Layer {
 
   /// A source layer is an individual layer of data within a vector source. A vector source can have multiple source layers.
   String? sourceLayer;
+
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  @experimental
+  bool? fillConstructBridgeGuardRail;
+
+  /// Determines whether bridge guard rails are added for elevated roads.
+  /// Default value: "true".
+  @experimental
+  List<Object>? fillConstructBridgeGuardRailExpression;
 
   /// Selects the base of fill-elevation. Some modes might require precomputed elevation data in the tileset.
   /// Default value: "none".
@@ -76,6 +92,16 @@ class FillLayer extends Layer {
   /// Whether or not the fill should be antialiased.
   /// Default value: true.
   List<Object>? fillAntialiasExpression;
+
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  int? fillBridgeGuardRailColor;
+
+  /// The color of bridge guard rail.
+  /// Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  List<Object>? fillBridgeGuardRailColorExpression;
 
   /// The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
   /// Default value: "#000000".
@@ -129,6 +155,16 @@ class FillLayer extends Layer {
   /// Default value: "map".
   List<Object>? fillTranslateAnchorExpression;
 
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  int? fillTunnelStructureColor;
+
+  /// The color of tunnel structures (tunnel entrance and tunnel walls).
+  /// Default value: "rgba(241, 236, 225, 255)".
+  @experimental
+  List<Object>? fillTunnelStructureColorExpression;
+
   /// Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
   /// Default value: 0. Minimum value: 0.
   @experimental
@@ -150,6 +186,14 @@ class FillLayer extends Layer {
           visibility!.name.toLowerCase().replaceAll("_", "-");
     }
 
+    if (fillConstructBridgeGuardRailExpression != null) {
+      layout["fill-construct-bridge-guard-rail"] =
+          fillConstructBridgeGuardRailExpression;
+    }
+
+    if (fillConstructBridgeGuardRail != null) {
+      layout["fill-construct-bridge-guard-rail"] = fillConstructBridgeGuardRail;
+    }
     if (fillElevationReferenceExpression != null) {
       layout["fill-elevation-reference"] = fillElevationReferenceExpression;
     }
@@ -171,6 +215,15 @@ class FillLayer extends Layer {
     }
     if (fillAntialias != null) {
       paint["fill-antialias"] = fillAntialias;
+    }
+
+    if (fillBridgeGuardRailColorExpression != null) {
+      paint["fill-bridge-guard-rail-color"] =
+          fillBridgeGuardRailColorExpression;
+    }
+    if (fillBridgeGuardRailColor != null) {
+      paint["fill-bridge-guard-rail-color"] =
+          fillBridgeGuardRailColor?.toRGBA();
     }
 
     if (fillColorExpression != null) {
@@ -221,6 +274,13 @@ class FillLayer extends Layer {
     if (fillTranslateAnchor != null) {
       paint["fill-translate-anchor"] =
           fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
+    }
+
+    if (fillTunnelStructureColorExpression != null) {
+      paint["fill-tunnel-structure-color"] = fillTunnelStructureColorExpression;
+    }
+    if (fillTunnelStructureColor != null) {
+      paint["fill-tunnel-structure-color"] = fillTunnelStructureColor?.toRGBA();
     }
 
     if (fillZOffsetExpression != null) {
@@ -279,6 +339,10 @@ class FillLayer extends Layer {
               .contains(map["layout"]["visibility"])),
       visibilityExpression: _optionalCastList(map["layout"]["visibility"]),
       filter: _optionalCastList(map["filter"]),
+      fillConstructBridgeGuardRail:
+          _optionalCast(map["layout"]["fill-construct-bridge-guard-rail"]),
+      fillConstructBridgeGuardRailExpression:
+          _optionalCastList(map["layout"]["fill-construct-bridge-guard-rail"]),
       fillElevationReference: map["layout"]["fill-elevation-reference"] == null
           ? null
           : FillElevationReference.values.firstWhere((e) => e.name
@@ -292,6 +356,10 @@ class FillLayer extends Layer {
       fillAntialias: _optionalCast(map["paint"]["fill-antialias"]),
       fillAntialiasExpression:
           _optionalCastList(map["paint"]["fill-antialias"]),
+      fillBridgeGuardRailColor:
+          (map["paint"]["fill-bridge-guard-rail-color"] as List?)?.toRGBAInt(),
+      fillBridgeGuardRailColorExpression:
+          _optionalCastList(map["paint"]["fill-bridge-guard-rail-color"]),
       fillColor: (map["paint"]["fill-color"] as List?)?.toRGBAInt(),
       fillColorExpression: _optionalCastList(map["paint"]["fill-color"]),
       fillEmissiveStrength:
@@ -319,6 +387,10 @@ class FillLayer extends Layer {
               .contains(map["paint"]["fill-translate-anchor"])),
       fillTranslateAnchorExpression:
           _optionalCastList(map["paint"]["fill-translate-anchor"]),
+      fillTunnelStructureColor:
+          (map["paint"]["fill-tunnel-structure-color"] as List?)?.toRGBAInt(),
+      fillTunnelStructureColorExpression:
+          _optionalCastList(map["paint"]["fill-tunnel-structure-color"]),
       fillZOffset: _optionalCast(map["paint"]["fill-z-offset"]),
       fillZOffsetExpression: _optionalCastList(map["paint"]["fill-z-offset"]),
     );

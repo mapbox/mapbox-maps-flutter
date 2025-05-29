@@ -25,6 +25,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      circleElevationReference: CircleElevationReference.NONE,
       circleSortKey: 1.0,
       circleBlur: 1.0,
       circleColor: Colors.red.value,
@@ -45,6 +46,7 @@ void main() {
     expect(layer.maxZoom, 20);
     expect(layer.slot, LayerSlot.BOTTOM);
     expect(layer.visibility, Visibility.NONE);
+    expect(layer.circleElevationReference, CircleElevationReference.NONE);
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColor, Colors.red.value);
@@ -81,6 +83,7 @@ void main() {
       minZoom: 1.0,
       maxZoom: 20.0,
       slot: LayerSlot.BOTTOM,
+      circleElevationReferenceExpression: ['string', 'none'],
       circleSortKeyExpression: ['number', 1.0],
       circleBlurExpression: ['number', 1.0],
       circleColorExpression: ['rgba', 255, 0, 0, 1],
@@ -109,6 +112,7 @@ void main() {
       ["get", "type"],
       "Feature"
     ]);
+    expect(layer.circleElevationReference, CircleElevationReference.NONE);
     expect(layer.circleSortKey, 1.0);
     expect(layer.circleBlur, 1.0);
     expect(layer.circleColorExpression, ['rgba', 255, 0, 0, 1]);

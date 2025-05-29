@@ -36,6 +36,11 @@ void main() {
     final manager =
         await mapboxMap.annotations.createPolygonAnnotationManager();
 
+    await manager.setFillConstructBridgeGuardRail(true);
+    var fillConstructBridgeGuardRail =
+        await manager.getFillConstructBridgeGuardRail();
+    expect(true, fillConstructBridgeGuardRail);
+
     await manager.setFillElevationReference(FillElevationReference.NONE);
     var fillElevationReference = await manager.getFillElevationReference();
     expect(FillElevationReference.NONE, fillElevationReference);
@@ -47,6 +52,10 @@ void main() {
     await manager.setFillAntialias(true);
     var fillAntialias = await manager.getFillAntialias();
     expect(true, fillAntialias);
+
+    await manager.setFillBridgeGuardRailColor(Colors.red.value);
+    var fillBridgeGuardRailColor = await manager.getFillBridgeGuardRailColor();
+    expect(Colors.red.value, fillBridgeGuardRailColor);
 
     await manager.setFillColor(Colors.red.value);
     var fillColor = await manager.getFillColor();
@@ -75,6 +84,10 @@ void main() {
     await manager.setFillTranslateAnchor(FillTranslateAnchor.MAP);
     var fillTranslateAnchor = await manager.getFillTranslateAnchor();
     expect(FillTranslateAnchor.MAP, fillTranslateAnchor);
+
+    await manager.setFillTunnelStructureColor(Colors.red.value);
+    var fillTunnelStructureColor = await manager.getFillTunnelStructureColor();
+    expect(Colors.red.value, fillTunnelStructureColor);
 
     await manager.setFillZOffset(1.0);
     var fillZOffset = await manager.getFillZOffset();
