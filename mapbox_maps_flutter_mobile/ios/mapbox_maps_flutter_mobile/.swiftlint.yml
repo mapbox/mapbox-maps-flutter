@@ -1,8 +1,8 @@
 ---
 allow_zero_lintable_files: true
 excluded:
-  - Sources/mapbox_maps_flutter/Classes/Generated
-  - Sources/mapbox_maps_flutter/Classes/*AnnotationController.swift
+  - Sources/mapbox_maps_flutter_mobile/Classes/Generated
+  - Sources/mapbox_maps_flutter_mobile/Classes/*AnnotationController.swift
   - .build/
 disabled_rules:
   - comment_spacing
