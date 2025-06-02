@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// Manually sets camera to specified properties.
 final class CameraViewportState extends ViewportState {

@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../mapbox_maps_flutter_mobile.dart';
 
 /// A service that handles HTTP-related functionality for Mapbox
 class MapboxHttpService {

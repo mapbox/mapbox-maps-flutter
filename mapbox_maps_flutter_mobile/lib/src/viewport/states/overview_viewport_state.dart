@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A viewport state that configures the camera to display an overview of a specified geometry.
 ///

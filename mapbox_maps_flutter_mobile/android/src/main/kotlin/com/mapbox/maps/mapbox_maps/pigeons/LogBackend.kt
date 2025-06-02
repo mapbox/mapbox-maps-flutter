@@ -68,7 +68,7 @@ class LogWriterBackend(private val binaryMessenger: BinaryMessenger, private val
   /** Writes a log message with a given level. */
   fun writeLog(levelArg: LoggingLevel, messageArg: String, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.LogWriterBackend.writeLog$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogWriterBackend.writeLog$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(levelArg, messageArg)) {
       if (it is List<*>) {

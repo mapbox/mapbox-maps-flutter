@@ -424,7 +424,7 @@ class PerformanceStatisticsListener(private val binaryMessenger: BinaryMessenger
   }
   fun onPerformanceStatisticsCollected(statisticsArg: PerformanceStatistics, callback: (Result<Unit>) -> Unit) {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter.PerformanceStatisticsListener.onPerformanceStatisticsCollected$separatedMessageChannelSuffix"
+    val channelName = "dev.flutter.pigeon.mapbox_maps_flutter_mobile.PerformanceStatisticsListener.onPerformanceStatisticsCollected$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
     channel.send(listOf(statisticsArg)) {
       if (it is List<*>) {
@@ -454,7 +454,7 @@ interface _PerformanceStatisticsApi {
     fun setUp(binaryMessenger: BinaryMessenger, api: _PerformanceStatisticsApi?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.startPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.startPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -472,7 +472,7 @@ interface _PerformanceStatisticsApi {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter_mobile._PerformanceStatisticsApi.stopPerformanceStatisticsCollection$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {

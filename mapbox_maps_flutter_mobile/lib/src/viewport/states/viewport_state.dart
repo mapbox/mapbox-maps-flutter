@@ -1,4 +1,4 @@
-part of mapbox_maps_flutter;
+part of '../../../mapbox_maps_flutter_mobile.dart';
 
 /// A base class representing different ways to position the camera on a map.
 ///

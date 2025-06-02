@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 enum OrnamentPosition {
   TOP_LEFT,
@@ -1248,7 +1248,7 @@ class GesturesSettingsInterface {
 
   Future<GesturesSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.GesturesSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1278,7 +1278,7 @@ class GesturesSettingsInterface {
 
   Future<void> updateSettings(GesturesSettings settings) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.GesturesSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1322,7 +1322,7 @@ class _LocationComponentSettingsInterface {
 
   Future<LocationComponentSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._LocationComponentSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1353,7 +1353,7 @@ class _LocationComponentSettingsInterface {
   Future<void> updateSettings(
       LocationComponentSettings settings, bool useDefaultPuck2DIfNeeded) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._LocationComponentSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._LocationComponentSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1397,7 +1397,7 @@ class ScaleBarSettingsInterface {
 
   Future<ScaleBarSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.ScaleBarSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1427,7 +1427,7 @@ class ScaleBarSettingsInterface {
 
   Future<void> updateSettings(ScaleBarSettings settings) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.ScaleBarSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.ScaleBarSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1471,7 +1471,7 @@ class CompassSettingsInterface {
 
   Future<CompassSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.CompassSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1501,7 +1501,7 @@ class CompassSettingsInterface {
 
   Future<void> updateSettings(CompassSettings settings) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.CompassSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.CompassSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1545,7 +1545,7 @@ class AttributionSettingsInterface {
 
   Future<AttributionSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.AttributionSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1575,7 +1575,7 @@ class AttributionSettingsInterface {
 
   Future<void> updateSettings(AttributionSettings settings) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.AttributionSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.AttributionSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1619,7 +1619,7 @@ class LogoSettingsInterface {
 
   Future<LogoSettings> getSettings() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogoSettingsInterface.getSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1649,7 +1649,7 @@ class LogoSettingsInterface {
 
   Future<void> updateSettings(LogoSettings settings) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.LogoSettingsInterface.updateSettings$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,

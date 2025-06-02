@@ -2,7 +2,7 @@
 // See also: https://pub.dev/packages/pigeon
 // ignore_for_file: public_member_api_docs, non_constant_identifier_names, avoid_as, unused_import, unnecessary_parenthesis, prefer_null_aware_operators, omit_local_variable_types, unused_shown_name, unnecessary_import, no_leading_underscores_for_local_identifiers
 
-part of mapbox_maps_flutter;
+part of mapbox_maps_flutter_mobile;
 
 PlatformException _createConnectionError(String channelName) {
   return PlatformException(
@@ -2971,46 +2971,46 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
     } else if (value is Feature) {
       buffer.putUint8(157);
       writeValue(buffer, value.encode());
-    } else if (value is GlyphsRasterizationOptions) {
+    } else if (value is MbxEdgeInsets) {
       buffer.putUint8(158);
       writeValue(buffer, value.encode());
-    } else if (value is TileCoverOptions) {
+    } else if (value is CameraOptions) {
       buffer.putUint8(159);
       writeValue(buffer, value.encode());
-    } else if (value is MbxEdgeInsets) {
+    } else if (value is CameraState) {
       buffer.putUint8(160);
       writeValue(buffer, value.encode());
-    } else if (value is CameraOptions) {
+    } else if (value is ScreenCoordinate) {
       buffer.putUint8(161);
       writeValue(buffer, value.encode());
-    } else if (value is CameraState) {
+    } else if (value is GlyphsRasterizationOptions) {
       buffer.putUint8(162);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBoundsOptions) {
+    } else if (value is TileCoverOptions) {
       buffer.putUint8(163);
       writeValue(buffer, value.encode());
-    } else if (value is CameraBounds) {
+    } else if (value is CameraBoundsOptions) {
       buffer.putUint8(164);
       writeValue(buffer, value.encode());
-    } else if (value is MapAnimationOptions) {
+    } else if (value is CameraBounds) {
       buffer.putUint8(165);
       writeValue(buffer, value.encode());
-    } else if (value is CoordinateBounds) {
+    } else if (value is MapAnimationOptions) {
       buffer.putUint8(166);
       writeValue(buffer, value.encode());
-    } else if (value is MapDebugOptions) {
+    } else if (value is CoordinateBounds) {
       buffer.putUint8(167);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInMegabytes) {
+    } else if (value is MapDebugOptions) {
       buffer.putUint8(168);
       writeValue(buffer, value.encode());
-    } else if (value is TileCacheBudgetInTiles) {
+    } else if (value is TileCacheBudgetInMegabytes) {
       buffer.putUint8(169);
       writeValue(buffer, value.encode());
-    } else if (value is MapOptions) {
+    } else if (value is TileCacheBudgetInTiles) {
       buffer.putUint8(170);
       writeValue(buffer, value.encode());
-    } else if (value is ScreenCoordinate) {
+    } else if (value is MapOptions) {
       buffer.putUint8(171);
       writeValue(buffer, value.encode());
     } else if (value is ScreenBox) {
@@ -3205,33 +3205,33 @@ class MapInterfaces_PigeonCodec extends StandardMessageCodec {
       case 157:
         return Feature.decode(readValue(buffer)!);
       case 158:
-        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
-      case 159:
-        return TileCoverOptions.decode(readValue(buffer)!);
-      case 160:
         return MbxEdgeInsets.decode(readValue(buffer)!);
-      case 161:
+      case 159:
         return CameraOptions.decode(readValue(buffer)!);
-      case 162:
+      case 160:
         return CameraState.decode(readValue(buffer)!);
-      case 163:
-        return CameraBoundsOptions.decode(readValue(buffer)!);
-      case 164:
-        return CameraBounds.decode(readValue(buffer)!);
-      case 165:
-        return MapAnimationOptions.decode(readValue(buffer)!);
-      case 166:
-        return CoordinateBounds.decode(readValue(buffer)!);
-      case 167:
-        return MapDebugOptions.decode(readValue(buffer)!);
-      case 168:
-        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
-      case 169:
-        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
-      case 170:
-        return MapOptions.decode(readValue(buffer)!);
-      case 171:
+      case 161:
         return ScreenCoordinate.decode(readValue(buffer)!);
+      case 162:
+        return GlyphsRasterizationOptions.decode(readValue(buffer)!);
+      case 163:
+        return TileCoverOptions.decode(readValue(buffer)!);
+      case 164:
+        return CameraBoundsOptions.decode(readValue(buffer)!);
+      case 165:
+        return CameraBounds.decode(readValue(buffer)!);
+      case 166:
+        return MapAnimationOptions.decode(readValue(buffer)!);
+      case 167:
+        return CoordinateBounds.decode(readValue(buffer)!);
+      case 168:
+        return MapDebugOptions.decode(readValue(buffer)!);
+      case 169:
+        return TileCacheBudgetInMegabytes.decode(readValue(buffer)!);
+      case 170:
+        return TileCacheBudgetInTiles.decode(readValue(buffer)!);
+      case 171:
+        return MapOptions.decode(readValue(buffer)!);
       case 172:
         return ScreenBox.decode(readValue(buffer)!);
       case 173:
@@ -3322,7 +3322,7 @@ class _AnimationManager {
   Future<void> easeTo(CameraOptions cameraOptions,
       MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.easeTo$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.easeTo$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3349,7 +3349,7 @@ class _AnimationManager {
   Future<void> flyTo(CameraOptions cameraOptions,
       MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.flyTo$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.flyTo$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3376,7 +3376,7 @@ class _AnimationManager {
   Future<void> pitchBy(
       double pitch, MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.pitchBy$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.pitchBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3403,7 +3403,7 @@ class _AnimationManager {
   Future<void> scaleBy(double amount, ScreenCoordinate? screenCoordinate,
       MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.scaleBy$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.scaleBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3430,7 +3430,7 @@ class _AnimationManager {
   Future<void> moveBy(ScreenCoordinate screenCoordinate,
       MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.moveBy$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.moveBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3457,7 +3457,7 @@ class _AnimationManager {
   Future<void> rotateBy(ScreenCoordinate first, ScreenCoordinate second,
       MapAnimationOptions? mapAnimationOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.rotateBy$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.rotateBy$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3483,7 +3483,7 @@ class _AnimationManager {
 
   Future<void> cancelCameraAnimation() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._AnimationManager.cancelCameraAnimation$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._AnimationManager.cancelCameraAnimation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3541,7 +3541,7 @@ class _CameraManager {
       double? maxZoom,
       ScreenCoordinate? offset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesPadding$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinatesPadding$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3587,7 +3587,7 @@ class _CameraManager {
       double? maxZoom,
       ScreenCoordinate? offset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinateBounds$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinateBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3627,7 +3627,7 @@ class _CameraManager {
   Future<CameraOptions> cameraForCoordinates(List<Point> coordinates,
       MbxEdgeInsets? padding, double? bearing, double? pitch) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinates$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinates$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3672,7 +3672,7 @@ class _CameraManager {
   Future<CameraOptions> cameraForCoordinatesCameraOptions(
       List<Point> coordinates, CameraOptions camera, ScreenBox box) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForCoordinatesCameraOptions$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForCoordinatesCameraOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3712,7 +3712,7 @@ class _CameraManager {
   Future<CameraOptions> cameraForGeometry(Map<String?, Object?> geometry,
       MbxEdgeInsets padding, double? bearing, double? pitch) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.cameraForGeometry$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.cameraForGeometry$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3753,7 +3753,7 @@ class _CameraManager {
   Future<CoordinateBounds> coordinateBoundsForCamera(
       CameraOptions camera) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCamera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsForCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3793,7 +3793,7 @@ class _CameraManager {
   Future<CoordinateBounds> coordinateBoundsForCameraUnwrapped(
       CameraOptions camera) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsForCameraUnwrapped$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsForCameraUnwrapped$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3834,7 +3834,7 @@ class _CameraManager {
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCamera(
       CameraOptions camera) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCamera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsZoomForCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3874,7 +3874,7 @@ class _CameraManager {
   Future<CoordinateBoundsZoom> coordinateBoundsZoomForCameraUnwrapped(
       CameraOptions camera) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateBoundsZoomForCameraUnwrapped$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateBoundsZoomForCameraUnwrapped$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3914,7 +3914,7 @@ class _CameraManager {
   /// @return A `screen coordinate` on the screen in `logical pixels`.
   Future<ScreenCoordinate> pixelForCoordinate(Point coordinate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelForCoordinate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.pixelForCoordinate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3954,7 +3954,7 @@ class _CameraManager {
   /// @return A geographical `coordinate` corresponding to a given `screen coordinate`.
   Future<Point> coordinateForPixel(ScreenCoordinate pixel) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinateForPixel$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinateForPixel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -3995,7 +3995,7 @@ class _CameraManager {
   Future<List<ScreenCoordinate?>> pixelsForCoordinates(
       List<Point> coordinates) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.pixelsForCoordinates$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.pixelsForCoordinates$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4037,7 +4037,7 @@ class _CameraManager {
   Future<List<Point>> coordinatesForPixels(
       List<ScreenCoordinate?> pixels) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.coordinatesForPixels$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.coordinatesForPixels$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4074,7 +4074,7 @@ class _CameraManager {
   /// @param cameraOptions The new `camera options` to be set.
   Future<void> setCamera(CameraOptions cameraOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setCamera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.setCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4103,7 +4103,7 @@ class _CameraManager {
   /// @return The current `camera state`.
   Future<CameraState> getCameraState() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getCameraState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.getCameraState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4141,7 +4141,7 @@ class _CameraManager {
   /// @return A string describing an error if the operation was not successful, expected with `void` value otherwise.
   Future<void> setBounds(CameraBoundsOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.setBounds$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.setBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4169,7 +4169,7 @@ class _CameraManager {
   /// @return A `camera bounds` of the map.
   Future<CameraBounds> getBounds() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._CameraManager.getBounds$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._CameraManager.getBounds$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4216,7 +4216,7 @@ abstract class _InteractionsListener {
       final BasicMessageChannel<
           Object?> pigeonVar_channel = BasicMessageChannel<
               Object?>(
-          'dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction$messageChannelSuffix',
+          'dev.flutter.pigeon.mapbox_maps_flutter_mobile._InteractionsListener.onInteraction$messageChannelSuffix',
           pigeonChannelCodec,
           binaryMessenger: binaryMessenger);
       if (api == null) {
@@ -4224,17 +4224,17 @@ abstract class _InteractionsListener {
       } else {
         pigeonVar_channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile._InteractionsListener.onInteraction was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final FeaturesetFeature? arg_feature =
               (args[0] as FeaturesetFeature?);
           final MapContentGestureContext? arg_context =
               (args[1] as MapContentGestureContext?);
           assert(arg_context != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile._InteractionsListener.onInteraction was null, expected non-null MapContentGestureContext.');
           final String? arg_interactionID = (args[2] as String?);
           assert(arg_interactionID != null,
-              'Argument for dev.flutter.pigeon.mapbox_maps_flutter._InteractionsListener.onInteraction was null, expected non-null String.');
+              'Argument for dev.flutter.pigeon.mapbox_maps_flutter_mobile._InteractionsListener.onInteraction was null, expected non-null String.');
           try {
             api.onInteraction(arg_feature, arg_context!, arg_interactionID!);
             return wrapResponse(empty: true);
@@ -4270,7 +4270,7 @@ class _MapInterface {
 
   Future<void> loadStyleURI(String styleURI) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleURI$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.loadStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4296,7 +4296,7 @@ class _MapInterface {
 
   Future<void> loadStyleJson(String styleJson) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.loadStyleJson$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.loadStyleJson$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4322,7 +4322,7 @@ class _MapInterface {
 
   Future<void> clearData() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.clearData$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4349,7 +4349,7 @@ class _MapInterface {
       TileCacheBudgetInMegabytes? tileCacheBudgetInMegabytes,
       TileCacheBudgetInTiles? tileCacheBudgetInTiles) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setTileCacheBudget$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setTileCacheBudget$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4378,7 +4378,7 @@ class _MapInterface {
   /// @return The `size` of the map in `logical pixels`.
   Future<Size> getSize() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getSize$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getSize$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4409,7 +4409,7 @@ class _MapInterface {
   /// Triggers a repaint of the map.
   Future<void> triggerRepaint() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.triggerRepaint$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.triggerRepaint$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4439,7 +4439,7 @@ class _MapInterface {
   /// @param inProgress The `boolean` value representing if a gesture is in progress.
   Future<void> setGestureInProgress(bool inProgress) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setGestureInProgress$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setGestureInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4468,7 +4468,7 @@ class _MapInterface {
   /// @return `true` if a gesture is currently in progress, `false` otherwise.
   Future<bool> isGestureInProgress() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isGestureInProgress$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.isGestureInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4501,7 +4501,7 @@ class _MapInterface {
   Future<void> dispatch(
       String gesture, ScreenCoordinate screenCoordinate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.dispatch$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.dispatch$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4532,7 +4532,7 @@ class _MapInterface {
   /// @param inProgress The `boolean` value representing if user animation is in progress
   Future<void> setUserAnimationInProgress(bool inProgress) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setUserAnimationInProgress$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setUserAnimationInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4561,7 +4561,7 @@ class _MapInterface {
   /// @return `true` if a user animation is currently in progress, `false` otherwise.
   Future<bool> isUserAnimationInProgress() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.isUserAnimationInProgress$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.isUserAnimationInProgress$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4596,7 +4596,7 @@ class _MapInterface {
   /// @param delta The new prefetch zoom delta.
   Future<void> setPrefetchZoomDelta(int delta) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4625,7 +4625,7 @@ class _MapInterface {
   /// @return The map's prefetch zoom `delta`.
   Future<int> getPrefetchZoomDelta() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getPrefetchZoomDelta$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4656,7 +4656,7 @@ class _MapInterface {
   /// Sets the north `orientation mode`.
   Future<void> setNorthOrientation(NorthOrientation orientation) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setNorthOrientation$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setNorthOrientation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4683,7 +4683,7 @@ class _MapInterface {
   /// Sets the map `constrain mode`.
   Future<void> setConstrainMode(ConstrainMode mode) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setConstrainMode$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setConstrainMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4710,7 +4710,7 @@ class _MapInterface {
   /// Sets the `viewport mode`.
   Future<void> setViewportMode(ViewportMode mode) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setViewportMode$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setViewportMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4739,7 +4739,7 @@ class _MapInterface {
   /// @return The map's `map options`.
   Future<MapOptions> getMapOptions() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getMapOptions$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getMapOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4769,7 +4769,7 @@ class _MapInterface {
 
   Future<List<_MapWidgetDebugOptions>> getDebugOptions() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebugOptions$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4801,7 +4801,7 @@ class _MapInterface {
   Future<void> setDebugOptions(
       List<_MapWidgetDebugOptions> debugOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebugOptions$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setDebugOptions$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4831,7 +4831,7 @@ class _MapInterface {
   @Deprecated("Use [MapboxMap.debugOptions] instead")
   Future<List<MapDebugOptions?>> getDebug() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getDebug$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4868,7 +4868,7 @@ class _MapInterface {
   @Deprecated("Use [MapboxMap.debugOptions] instead")
   Future<void> setDebug(List<MapDebugOptions?> debugOptions, bool value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setDebug$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setDebug$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4901,7 +4901,7 @@ class _MapInterface {
   Future<List<QueriedRenderedFeature?>> queryRenderedFeatures(
       _RenderedQueryGeometry geometry, RenderedQueryOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeatures$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.queryRenderedFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4947,7 +4947,7 @@ class _MapInterface {
       _RenderedQueryGeometry? geometry,
       String? filter) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.queryRenderedFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.queryRenderedFeaturesForFeatureset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -4985,7 +4985,7 @@ class _MapInterface {
   Future<List<QueriedSourceFeature?>> querySourceFeatures(
       String sourceId, SourceQueryOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.querySourceFeatures$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.querySourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5029,7 +5029,7 @@ class _MapInterface {
   Future<FeatureExtensionValue> getGeoJsonClusterLeaves(String sourceIdentifier,
       Map<String?, Object?> cluster, int? limit, int? offset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterLeaves$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterLeaves$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5070,7 +5070,7 @@ class _MapInterface {
   Future<FeatureExtensionValue> getGeoJsonClusterChildren(
       String sourceIdentifier, Map<String?, Object?> cluster) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterChildren$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterChildren$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5111,7 +5111,7 @@ class _MapInterface {
   Future<FeatureExtensionValue> getGeoJsonClusterExpansionZoom(
       String sourceIdentifier, Map<String?, Object?> cluster) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getGeoJsonClusterExpansionZoom$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getGeoJsonClusterExpansionZoom$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5156,7 +5156,7 @@ class _MapInterface {
   Future<void> setFeatureState(String sourceId, String? sourceLayerId,
       String featureId, String state) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5192,7 +5192,7 @@ class _MapInterface {
       FeaturesetFeatureId featureId,
       Map<String, Object?> state) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5226,7 +5226,7 @@ class _MapInterface {
   Future<void> setFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, Map<String, Object?> state) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5263,7 +5263,7 @@ class _MapInterface {
   Future<String> getFeatureState(
       String sourceId, String? sourceLayerId, String featureId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5301,7 +5301,7 @@ class _MapInterface {
   Future<Map<String, Object?>> getFeatureStateForFeaturesetDescriptor(
       FeaturesetDescriptor featureset, FeaturesetFeatureId featureId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5339,7 +5339,7 @@ class _MapInterface {
   Future<Map<String, Object?>> getFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5384,7 +5384,7 @@ class _MapInterface {
   Future<void> removeFeatureState(String sourceId, String? sourceLayerId,
       String featureId, String? stateKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureState$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5419,7 +5419,7 @@ class _MapInterface {
       FeaturesetFeatureId featureId,
       String? stateKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureStateForFeaturesetDescriptor$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5451,7 +5451,7 @@ class _MapInterface {
   Future<void> removeFeatureStateForFeaturesetFeature(
       FeaturesetFeature feature, String? stateKey) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.removeFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.removeFeatureStateForFeaturesetFeature$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5484,7 +5484,7 @@ class _MapInterface {
   Future<void> resetFeatureStatesForFeatureset(
       FeaturesetDescriptor featureset) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.resetFeatureStatesForFeatureset$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.resetFeatureStatesForFeatureset$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5511,7 +5511,7 @@ class _MapInterface {
   /// Reduces memory use. Useful to call when the application gets paused or sent to background.
   Future<void> reduceMemoryUse() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.reduceMemoryUse$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.reduceMemoryUse$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5541,7 +5541,7 @@ class _MapInterface {
   /// @return The elevation (in meters) multiplied by current terrain exaggeration, or empty if elevation for the coordinate is not available.
   Future<double?> getElevation(Point coordinate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.getElevation$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.getElevation$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5568,7 +5568,7 @@ class _MapInterface {
   /// Returns array of tile identifiers that cover current map camera.
   Future<List<CanonicalTileID>> tileCover(TileCoverOptions options) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.tileCover$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.tileCover$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5607,7 +5607,7 @@ class _MapInterface {
   /// Note: This method has no effect on iOS platform.
   Future<void> setSnapshotLegacyMode(bool enabled) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setSnapshotLegacyMode$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setSnapshotLegacyMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5637,7 +5637,7 @@ class _MapInterface {
   /// apply custom fonts to the map without modifying the base style.
   Future<String> styleGlyphURL() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.styleGlyphURL$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.styleGlyphURL$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5671,7 +5671,7 @@ class _MapInterface {
   /// apply custom fonts to the map without modifying the base style.
   Future<void> setStyleGlyphURL(String glyphURL) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapInterface.setStyleGlyphURL$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapInterface.setStyleGlyphURL$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5723,7 +5723,7 @@ class Projection {
   Future<double> getMetersPerPixelAtLatitude(
       double latitude, double zoom) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.getMetersPerPixelAtLatitude$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.getMetersPerPixelAtLatitude$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5760,7 +5760,7 @@ class Projection {
   /// @return Returns Spherical Mercator ProjectedMeters coordinates.
   Future<ProjectedMeters> projectedMetersForCoordinate(Point coordinate) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.projectedMetersForCoordinate$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.projectedMetersForCoordinate$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5799,7 +5799,7 @@ class Projection {
   Future<Point> coordinateForProjectedMeters(
       ProjectedMeters projectedMeters) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.coordinateForProjectedMeters$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.coordinateForProjectedMeters$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5839,7 +5839,7 @@ class Projection {
   /// @return Returns a point on the map in Mercator projection.
   Future<MercatorCoordinate> project(Point coordinate, double zoomScale) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.project$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.project$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5879,7 +5879,7 @@ class Projection {
   Future<Point> unproject(
       MercatorCoordinate coordinate, double zoomScale) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Projection.unproject$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Projection.unproject$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5927,7 +5927,7 @@ class _MapboxOptions {
 
   Future<String> getAccessToken() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.getAccessToken$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxOptions.getAccessToken$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -5957,7 +5957,7 @@ class _MapboxOptions {
 
   Future<void> setAccessToken(String token) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxOptions.setAccessToken$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxOptions.setAccessToken$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6000,7 +6000,7 @@ class _MapboxMapsOptions {
 
   Future<String> getBaseUrl() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getBaseUrl$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getBaseUrl$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6030,7 +6030,7 @@ class _MapboxMapsOptions {
 
   Future<void> setBaseUrl(String url) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setBaseUrl$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setBaseUrl$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6056,7 +6056,7 @@ class _MapboxMapsOptions {
 
   Future<String> getDataPath() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getDataPath$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getDataPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6086,7 +6086,7 @@ class _MapboxMapsOptions {
 
   Future<void> setDataPath(String path) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setDataPath$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setDataPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6112,7 +6112,7 @@ class _MapboxMapsOptions {
 
   Future<String> getAssetPath() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getAssetPath$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6142,7 +6142,7 @@ class _MapboxMapsOptions {
 
   Future<void> setAssetPath(String path) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setAssetPath$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6168,7 +6168,7 @@ class _MapboxMapsOptions {
 
   Future<String?> getFlutterAssetPath(String? flutterAssetUri) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getFlutterAssetPath$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getFlutterAssetPath$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6194,7 +6194,7 @@ class _MapboxMapsOptions {
 
   Future<TileStoreUsageMode> getTileStoreUsageMode() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getTileStoreUsageMode$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getTileStoreUsageMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6224,7 +6224,7 @@ class _MapboxMapsOptions {
 
   Future<void> setTileStoreUsageMode(TileStoreUsageMode mode) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setTileStoreUsageMode$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setTileStoreUsageMode$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6250,7 +6250,7 @@ class _MapboxMapsOptions {
 
   Future<String?> getWorldview() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getWorldview$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getWorldview$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6275,7 +6275,7 @@ class _MapboxMapsOptions {
 
   Future<void> setWorldview(String? worldview) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setWorldview$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setWorldview$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6301,7 +6301,7 @@ class _MapboxMapsOptions {
 
   Future<String?> getLanguage() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.getLanguage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.getLanguage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6326,7 +6326,7 @@ class _MapboxMapsOptions {
 
   Future<void> setLanguage(String? language) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.setLanguage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.setLanguage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6352,7 +6352,7 @@ class _MapboxMapsOptions {
 
   Future<void> clearData() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter._MapboxMapsOptions.clearData$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile._MapboxMapsOptions.clearData$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6398,7 +6398,7 @@ class Settings {
   /// @param value The `value` for the key.
   Future<void> set(String key, String value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Settings.set$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Settings.set$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6429,7 +6429,7 @@ class Settings {
   /// @return `value` if a key exists in settings otherwise a `null value` will be returned.
   Future<String> get(String key) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.Settings.get$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.Settings.get$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6481,7 +6481,7 @@ class StyleManager {
   /// @return A string containing a style URI.
   Future<String> getStyleURI() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleURI$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6517,7 +6517,7 @@ class StyleManager {
   /// @param uri URI where the style should be loaded from.
   Future<void> setStyleURI(String uri) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleURI$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6546,7 +6546,7 @@ class StyleManager {
   /// @return A JSON string containing a serialized style.
   Future<String> getStyleJSON() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleJSON$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6579,7 +6579,7 @@ class StyleManager {
   /// @param json A JSON string containing a serialized style.
   Future<void> setStyleJSON(String json) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleJSON$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6615,7 +6615,7 @@ class StyleManager {
   /// @return The default `camera options` of the current style in use.
   Future<CameraOptions> getStyleDefaultCamera() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleDefaultCamera$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleDefaultCamera$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6653,7 +6653,7 @@ class StyleManager {
   /// @return The `transition options` of the current style in use.
   Future<TransitionOptions> getStyleTransition() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTransition$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleTransition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6694,7 +6694,7 @@ class StyleManager {
     ImportPosition? importPosition,
   }) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromJSON$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImportFromJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6731,7 +6731,7 @@ class StyleManager {
     ImportPosition? importPosition,
   }) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImportFromURI$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImportFromURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6768,7 +6768,7 @@ class StyleManager {
     Map<String, Object>? config,
   }) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithJSON$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImportWithJSON$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6805,7 +6805,7 @@ class StyleManager {
     Map<String, Object>? config,
   }) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImportWithURI$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImportWithURI$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6836,7 +6836,7 @@ class StyleManager {
   Future<void> moveStyleImport(
       String importId, ImportPosition? importPosition) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleImport$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.moveStyleImport$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6863,7 +6863,7 @@ class StyleManager {
   /// Returns the list containing information about existing style import objects.
   Future<List<StyleObjectInfo?>> getStyleImports() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImports$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImports$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6897,7 +6897,7 @@ class StyleManager {
   /// @param importId Identifier of the style import to remove.
   Future<void> removeStyleImport(String importId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImport$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleImport$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6928,7 +6928,7 @@ class StyleManager {
   /// Returns the style import schema, containing the default configurations for the style import.
   Future<Object> getStyleImportSchema(String importId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportSchema$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportSchema$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -6965,7 +6965,7 @@ class StyleManager {
   Future<Map<String, StylePropertyValue>> getStyleImportConfigProperties(
       String importId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7004,7 +7004,7 @@ class StyleManager {
   Future<StylePropertyValue> getStyleImportConfigProperty(
       String importId, String config) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7041,7 +7041,7 @@ class StyleManager {
   Future<void> setStyleImportConfigProperties(
       String importId, Map<String, Object> configs) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleImportConfigProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7073,7 +7073,7 @@ class StyleManager {
   Future<void> setStyleImportConfigProperty(
       String importId, String config, Object value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleImportConfigProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7104,7 +7104,7 @@ class StyleManager {
   /// @param transitionOptions The `transition options`.
   Future<void> setStyleTransition(TransitionOptions transitionOptions) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTransition$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTransition$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7139,7 +7139,7 @@ class StyleManager {
   Future<void> addStyleLayer(
       String properties, LayerPosition? layerPosition) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleLayer$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7181,7 +7181,7 @@ class StyleManager {
   Future<void> addPersistentStyleLayer(
       String properties, LayerPosition? layerPosition) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addPersistentStyleLayer$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addPersistentStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7211,7 +7211,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, boolean representing state otherwise.
   Future<bool> isStyleLayerPersistent(String layerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLayerPersistent$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.isStyleLayerPersistent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7247,7 +7247,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, or empty otherwise.
   Future<void> removeStyleLayer(String layerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleLayer$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7281,7 +7281,7 @@ class StyleManager {
   Future<void> moveStyleLayer(
       String layerId, LayerPosition? layerPosition) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.moveStyleLayer$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.moveStyleLayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7312,7 +7312,7 @@ class StyleManager {
   /// @return A `true` value if the given style layer exists, `false` otherwise.
   Future<bool> styleLayerExists(String layerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleLayerExists$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.styleLayerExists$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7346,7 +7346,7 @@ class StyleManager {
   /// @return The list containing the information about existing style layer objects.
   Future<List<StyleObjectInfo?>> getStyleLayers() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayers$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayers$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7383,7 +7383,7 @@ class StyleManager {
   Future<StylePropertyValue> getStyleLayerProperty(
       String layerId, String property) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayerProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7422,7 +7422,7 @@ class StyleManager {
   Future<void> setStyleLayerProperty(
       String layerId, String property, Object value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLayerProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7451,7 +7451,7 @@ class StyleManager {
   /// @return The style layer properties or a string describing an error if the operation was not successful.
   Future<String> getStyleLayerProperties(String layerId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLayerProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLayerProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7492,7 +7492,7 @@ class StyleManager {
   Future<void> setStyleLayerProperties(
       String layerId, String properties) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLayerProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLayerProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7524,7 +7524,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addStyleSource(String sourceId, String properties) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleSource$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleSource$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7556,7 +7556,7 @@ class StyleManager {
   Future<StylePropertyValue> getStyleSourceProperty(
       String sourceId, String property) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSourceProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7598,7 +7598,7 @@ class StyleManager {
   Future<void> setStyleSourceProperty(
       String sourceId, String property, Object value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleSourceProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7629,7 +7629,7 @@ class StyleManager {
   /// @return The style source properties or a string describing an error if the operation was not successful.
   Future<String> getStyleSourceProperties(String sourceId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSourceProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSourceProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7671,7 +7671,7 @@ class StyleManager {
   Future<void> setStyleSourceProperties(
       String sourceId, String properties) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleSourceProperties$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleSourceProperties$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7723,7 +7723,7 @@ class StyleManager {
   Future<void> addGeoJSONSourceFeatures(
       String sourceId, String dataId, List<Feature> features) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7775,7 +7775,7 @@ class StyleManager {
   Future<void> updateGeoJSONSourceFeatures(
       String sourceId, String dataId, List<Feature> features) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7827,7 +7827,7 @@ class StyleManager {
   Future<void> removeGeoJSONSourceFeatures(
       String sourceId, String dataId, List<String> featureIds) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeGeoJSONSourceFeatures$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7860,7 +7860,7 @@ class StyleManager {
   Future<void> updateStyleImageSourceImage(
       String sourceId, MbxImage image) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.updateStyleImageSourceImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.updateStyleImageSourceImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7889,7 +7889,7 @@ class StyleManager {
   /// @param sourceId An identifier of the style source to remove.
   Future<void> removeStyleSource(String sourceId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleSource$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleSource$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7920,7 +7920,7 @@ class StyleManager {
   /// @return `true` if the given source exists, `false` otherwise.
   Future<bool> styleSourceExists(String sourceId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.styleSourceExists$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.styleSourceExists$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7954,7 +7954,7 @@ class StyleManager {
   /// @return The list containing the information about existing style source objects.
   Future<List<StyleObjectInfo?>> getStyleSources() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleSources$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleSources$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -7986,7 +7986,7 @@ class StyleManager {
   /// Returns an ordered list of the current style lights.
   Future<List<StyleObjectInfo?>> getStyleLights() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLights$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLights$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8020,7 +8020,7 @@ class StyleManager {
   /// @param flatLight The flat light source.
   Future<void> setLight(FlatLight flatLight) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLight$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setLight$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8051,7 +8051,7 @@ class StyleManager {
   Future<void> setLights(
       AmbientLight ambientLight, DirectionalLight directionalLight) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setLights$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setLights$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8083,7 +8083,7 @@ class StyleManager {
   Future<StylePropertyValue> getStyleLightProperty(
       String id, String property) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleLightProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleLightProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8122,7 +8122,7 @@ class StyleManager {
   Future<void> setStyleLightProperty(
       String id, String property, Object value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleLightProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleLightProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8153,7 +8153,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleTerrain(String properties) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrain$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTerrain$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8183,7 +8183,7 @@ class StyleManager {
   /// @return The style terrain property value.
   Future<StylePropertyValue> getStyleTerrainProperty(String property) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleTerrainProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleTerrainProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8220,7 +8220,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> setStyleTerrainProperty(String property, Object value) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setStyleTerrainProperty$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setStyleTerrainProperty$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8251,7 +8251,7 @@ class StyleManager {
   /// @return The `image` for the given `imageId`, or empty if no image is associated with the `imageId`.
   Future<MbxImage?> getStyleImage(String imageId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getStyleImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8305,7 +8305,7 @@ class StyleManager {
       List<ImageStretches?> stretchY,
       ImageContent? content) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8336,7 +8336,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> removeStyleImage(String imageId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8367,7 +8367,7 @@ class StyleManager {
   /// @return True if image exists, false otherwise.
   Future<bool> hasStyleImage(String imageId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.hasStyleImage$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.hasStyleImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8407,7 +8407,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> addStyleModel(String modelId, String modelUri) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.addStyleModel$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.addStyleModel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8438,7 +8438,7 @@ class StyleManager {
   /// @return A string describing an error if the operation was not successful, empty otherwise.
   Future<void> removeStyleModel(String modelId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.removeStyleModel$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.removeStyleModel$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8476,7 +8476,7 @@ class StyleManager {
   Future<void> invalidateStyleCustomGeometrySourceTile(
       String sourceId, CanonicalTileID tileId) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceTile$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.invalidateStyleCustomGeometrySourceTile$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8509,7 +8509,7 @@ class StyleManager {
   Future<void> invalidateStyleCustomGeometrySourceRegion(
       String sourceId, CoordinateBounds bounds) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.invalidateStyleCustomGeometrySourceRegion$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.invalidateStyleCustomGeometrySourceRegion$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8542,7 +8542,7 @@ class StyleManager {
   ///
   Future<bool> isStyleLoaded() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.isStyleLoaded$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.isStyleLoaded$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8575,7 +8575,7 @@ class StyleManager {
   /// @return Projection that is currently applied to the map
   Future<StyleProjection?> getProjection() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getProjection$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8603,7 +8603,7 @@ class StyleManager {
   /// @param projection The projection to be set.
   Future<void> setProjection(StyleProjection projection) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.setProjection$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.setProjection$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8633,7 +8633,7 @@ class StyleManager {
   /// @param layerIds The ids of layers that will localize on, default is null which means will localize all the feasible layers.
   Future<void> localizeLabels(String locale, List<String>? layerIds) async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.localizeLabels$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.localizeLabels$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -8662,7 +8662,7 @@ class StyleManager {
   /// - Note: This function should only be called after the style is fully loaded; otherwise, the result may be unreliable.
   Future<List<FeaturesetDescriptor>> getFeaturesets() async {
     final String pigeonVar_channelName =
-        'dev.flutter.pigeon.mapbox_maps_flutter.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
+        'dev.flutter.pigeon.mapbox_maps_flutter_mobile.StyleManager.getFeaturesets$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
       pigeonVar_channelName,
