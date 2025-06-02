@@ -80,8 +80,20 @@ data class PolygonAnnotation(
   val id: String,
   /** The geometry that determines the location/shape of this annotation */
   val geometry: Polygon,
+  /**
+   * Determines whether bridge guard rails are added for elevated roads.
+   * Default value: "true".
+   * @experimental
+   */
+  val fillConstructBridgeGuardRail: Boolean? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
+  /**
+   * The color of bridge guard rail.
+   * Default value: "rgba(241, 236, 225, 255)".
+   * @experimental
+   */
+  val fillBridgeGuardRailColor: Long? = null,
   /**
    * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
    * Default value: "#000000".
@@ -96,6 +108,12 @@ data class PolygonAnnotation(
   val fillOutlineColor: Long? = null,
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val fillPattern: String? = null,
+  /**
+   * The color of tunnel structures (tunnel entrance and tunnel walls).
+   * Default value: "rgba(241, 236, 225, 255)".
+   * @experimental
+   */
+  val fillTunnelStructureColor: Long? = null,
   /**
    * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
    * Default value: 0. Minimum value: 0.
@@ -109,25 +127,31 @@ data class PolygonAnnotation(
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotation {
       val id = pigeonVar_list[0] as String
       val geometry = pigeonVar_list[1] as Polygon
-      val fillSortKey = pigeonVar_list[2] as Double?
-      val fillColor = pigeonVar_list[3] as Long?
-      val fillOpacity = pigeonVar_list[4] as Double?
-      val fillOutlineColor = pigeonVar_list[5] as Long?
-      val fillPattern = pigeonVar_list[6] as String?
-      val fillZOffset = pigeonVar_list[7] as Double?
-      val isDraggable = pigeonVar_list[8] as Boolean?
-      return PolygonAnnotation(id, geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset, isDraggable)
+      val fillConstructBridgeGuardRail = pigeonVar_list[2] as Boolean?
+      val fillSortKey = pigeonVar_list[3] as Double?
+      val fillBridgeGuardRailColor = pigeonVar_list[4] as Long?
+      val fillColor = pigeonVar_list[5] as Long?
+      val fillOpacity = pigeonVar_list[6] as Double?
+      val fillOutlineColor = pigeonVar_list[7] as Long?
+      val fillPattern = pigeonVar_list[8] as String?
+      val fillTunnelStructureColor = pigeonVar_list[9] as Long?
+      val fillZOffset = pigeonVar_list[10] as Double?
+      val isDraggable = pigeonVar_list[11] as Boolean?
+      return PolygonAnnotation(id, geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       id,
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
     )
@@ -141,11 +165,14 @@ data class PolygonAnnotation(
     }
     return id == other.id &&
       geometry == other.geometry &&
+      fillConstructBridgeGuardRail == other.fillConstructBridgeGuardRail &&
       fillSortKey == other.fillSortKey &&
+      fillBridgeGuardRailColor == other.fillBridgeGuardRailColor &&
       fillColor == other.fillColor &&
       fillOpacity == other.fillOpacity &&
       fillOutlineColor == other.fillOutlineColor &&
       fillPattern == other.fillPattern &&
+      fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
       isDraggable == other.isDraggable
   }
@@ -157,8 +184,20 @@ data class PolygonAnnotation(
 data class PolygonAnnotationOptions(
   /** The geometry that determines the location/shape of this annotation */
   val geometry: Polygon,
+  /**
+   * Determines whether bridge guard rails are added for elevated roads.
+   * Default value: "true".
+   * @experimental
+   */
+  val fillConstructBridgeGuardRail: Boolean? = null,
   /** Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key. */
   val fillSortKey: Double? = null,
+  /**
+   * The color of bridge guard rail.
+   * Default value: "rgba(241, 236, 225, 255)".
+   * @experimental
+   */
+  val fillBridgeGuardRailColor: Long? = null,
   /**
    * The color of the filled part of this layer. This color can be specified as `rgba` with an alpha component and the color's opacity will not affect the opacity of the 1px stroke, if it is used.
    * Default value: "#000000".
@@ -174,6 +213,12 @@ data class PolygonAnnotationOptions(
   /** Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels. */
   val fillPattern: String? = null,
   /**
+   * The color of tunnel structures (tunnel entrance and tunnel walls).
+   * Default value: "rgba(241, 236, 225, 255)".
+   * @experimental
+   */
+  val fillTunnelStructureColor: Long? = null,
+  /**
    * Specifies an uniform elevation in meters. Note: If the value is zero, the layer will be rendered on the ground. Non-zero values will elevate the layer from the sea level, which can cause it to be rendered below the terrain.
    * Default value: 0. Minimum value: 0.
    * @experimental
@@ -185,24 +230,30 @@ data class PolygonAnnotationOptions(
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): PolygonAnnotationOptions {
       val geometry = pigeonVar_list[0] as Polygon
-      val fillSortKey = pigeonVar_list[1] as Double?
-      val fillColor = pigeonVar_list[2] as Long?
-      val fillOpacity = pigeonVar_list[3] as Double?
-      val fillOutlineColor = pigeonVar_list[4] as Long?
-      val fillPattern = pigeonVar_list[5] as String?
-      val fillZOffset = pigeonVar_list[6] as Double?
-      val isDraggable = pigeonVar_list[7] as Boolean?
-      return PolygonAnnotationOptions(geometry, fillSortKey, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillZOffset, isDraggable)
+      val fillConstructBridgeGuardRail = pigeonVar_list[1] as Boolean?
+      val fillSortKey = pigeonVar_list[2] as Double?
+      val fillBridgeGuardRailColor = pigeonVar_list[3] as Long?
+      val fillColor = pigeonVar_list[4] as Long?
+      val fillOpacity = pigeonVar_list[5] as Double?
+      val fillOutlineColor = pigeonVar_list[6] as Long?
+      val fillPattern = pigeonVar_list[7] as String?
+      val fillTunnelStructureColor = pigeonVar_list[8] as Long?
+      val fillZOffset = pigeonVar_list[9] as Double?
+      val isDraggable = pigeonVar_list[10] as Boolean?
+      return PolygonAnnotationOptions(geometry, fillConstructBridgeGuardRail, fillSortKey, fillBridgeGuardRailColor, fillColor, fillOpacity, fillOutlineColor, fillPattern, fillTunnelStructureColor, fillZOffset, isDraggable)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       geometry,
+      fillConstructBridgeGuardRail,
       fillSortKey,
+      fillBridgeGuardRailColor,
       fillColor,
       fillOpacity,
       fillOutlineColor,
       fillPattern,
+      fillTunnelStructureColor,
       fillZOffset,
       isDraggable,
     )
@@ -215,11 +266,14 @@ data class PolygonAnnotationOptions(
       return true
     }
     return geometry == other.geometry &&
+      fillConstructBridgeGuardRail == other.fillConstructBridgeGuardRail &&
       fillSortKey == other.fillSortKey &&
+      fillBridgeGuardRailColor == other.fillBridgeGuardRailColor &&
       fillColor == other.fillColor &&
       fillOpacity == other.fillOpacity &&
       fillOutlineColor == other.fillOutlineColor &&
       fillPattern == other.fillPattern &&
+      fillTunnelStructureColor == other.fillTunnelStructureColor &&
       fillZOffset == other.fillZOffset &&
       isDraggable == other.isDraggable
   }
@@ -316,12 +370,16 @@ interface _PolygonAnnotationMessenger {
   fun update(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: PolygonAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setFillConstructBridgeGuardRail(managerId: String, fillConstructBridgeGuardRail: Boolean, callback: (Result<Unit>) -> Unit)
+  fun getFillConstructBridgeGuardRail(managerId: String, callback: (Result<Boolean?>) -> Unit)
   fun setFillElevationReference(managerId: String, fillElevationReference: FillElevationReference, callback: (Result<Unit>) -> Unit)
   fun getFillElevationReference(managerId: String, callback: (Result<FillElevationReference?>) -> Unit)
   fun setFillSortKey(managerId: String, fillSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getFillSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setFillAntialias(managerId: String, fillAntialias: Boolean, callback: (Result<Unit>) -> Unit)
   fun getFillAntialias(managerId: String, callback: (Result<Boolean?>) -> Unit)
+  fun setFillBridgeGuardRailColor(managerId: String, fillBridgeGuardRailColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getFillBridgeGuardRailColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setFillColor(managerId: String, fillColor: Long, callback: (Result<Unit>) -> Unit)
   fun getFillColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setFillEmissiveStrength(managerId: String, fillEmissiveStrength: Double, callback: (Result<Unit>) -> Unit)
@@ -336,6 +394,8 @@ interface _PolygonAnnotationMessenger {
   fun getFillTranslate(managerId: String, callback: (Result<List<Double?>?>) -> Unit)
   fun setFillTranslateAnchor(managerId: String, fillTranslateAnchor: FillTranslateAnchor, callback: (Result<Unit>) -> Unit)
   fun getFillTranslateAnchor(managerId: String, callback: (Result<FillTranslateAnchor?>) -> Unit)
+  fun setFillTunnelStructureColor(managerId: String, fillTunnelStructureColor: Long, callback: (Result<Unit>) -> Unit)
+  fun getFillTunnelStructureColor(managerId: String, callback: (Result<Long?>) -> Unit)
   fun setFillZOffset(managerId: String, fillZOffset: Double, callback: (Result<Unit>) -> Unit)
   fun getFillZOffset(managerId: String, callback: (Result<Double?>) -> Unit)
 
@@ -450,6 +510,46 @@ interface _PolygonAnnotationMessenger {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillConstructBridgeGuardRail$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillConstructBridgeGuardRailArg = args[1] as Boolean
+            api.setFillConstructBridgeGuardRail(managerIdArg, fillConstructBridgeGuardRailArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillConstructBridgeGuardRail$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillConstructBridgeGuardRail(managerIdArg) { result: Result<Boolean?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillElevationReference$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -556,6 +656,46 @@ interface _PolygonAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getFillAntialias(managerIdArg) { result: Result<Boolean?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillBridgeGuardRailColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillBridgeGuardRailColorArg = args[1] as Long
+            api.setFillBridgeGuardRailColor(managerIdArg, fillBridgeGuardRailColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillBridgeGuardRailColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillBridgeGuardRailColor(managerIdArg) { result: Result<Long?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))
@@ -836,6 +976,46 @@ interface _PolygonAnnotationMessenger {
             val args = message as List<Any?>
             val managerIdArg = args[0] as String
             api.getFillTranslateAnchor(managerIdArg) { result: Result<FillTranslateAnchor?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.setFillTunnelStructureColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val fillTunnelStructureColorArg = args[1] as Long
+            api.setFillTunnelStructureColor(managerIdArg, fillTunnelStructureColorArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._PolygonAnnotationMessenger.getFillTunnelStructureColor$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getFillTunnelStructureColor(managerIdArg) { result: Result<Long?> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

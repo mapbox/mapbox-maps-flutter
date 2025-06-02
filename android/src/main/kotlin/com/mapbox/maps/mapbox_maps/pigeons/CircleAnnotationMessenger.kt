@@ -39,6 +39,23 @@ private fun createConnectionError(channelName: String): FlutterError {
 }
 
 /**
+ * Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset.
+ * Default value: "none".
+ */
+enum class CircleElevationReference(val raw: Int) {
+  /** Elevated rendering is disabled. */
+  NONE(0),
+  /** Elevated rendering is enabled. Use this mode to describe additive and stackable features that should exist only on top of road polygons. */
+  HD_ROAD_MARKUP(1);
+
+  companion object {
+    fun ofRaw(raw: Int): CircleElevationReference? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
+/**
  * Orientation of circle when map is pitched.
  * Default value: "viewport".
  */
@@ -288,30 +305,35 @@ private open class CircleAnnotationMessengerPigeonCodec : StandardMessageCodec()
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CirclePitchAlignment.ofRaw(it.toInt())
+          CircleElevationReference.ofRaw(it.toInt())
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CirclePitchScale.ofRaw(it.toInt())
+          CirclePitchAlignment.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CircleTranslateAnchor.ofRaw(it.toInt())
+          CirclePitchScale.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          PointDecoder.fromList(it)
+        return (readValue(buffer) as Long?)?.let {
+          CircleTranslateAnchor.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          CircleAnnotation.fromList(it)
+          PointDecoder.fromList(it)
         }
       }
       134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CircleAnnotation.fromList(it)
+        }
+      }
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           CircleAnnotationOptions.fromList(it)
         }
@@ -321,28 +343,32 @@ private open class CircleAnnotationMessengerPigeonCodec : StandardMessageCodec()
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
     when (value) {
-      is CirclePitchAlignment -> {
+      is CircleElevationReference -> {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is CirclePitchScale -> {
+      is CirclePitchAlignment -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is CircleTranslateAnchor -> {
+      is CirclePitchScale -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is Point -> {
+      is CircleTranslateAnchor -> {
         stream.write(132)
-        writeValue(stream, value.toList())
+        writeValue(stream, value.raw)
       }
-      is CircleAnnotation -> {
+      is Point -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is CircleAnnotationOptions -> {
+      is CircleAnnotation -> {
         stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is CircleAnnotationOptions -> {
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -382,6 +408,8 @@ interface _CircleAnnotationMessenger {
   fun update(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun delete(managerId: String, annotation: CircleAnnotation, callback: (Result<Unit>) -> Unit)
   fun deleteAll(managerId: String, callback: (Result<Unit>) -> Unit)
+  fun setCircleElevationReference(managerId: String, circleElevationReference: CircleElevationReference, callback: (Result<Unit>) -> Unit)
+  fun getCircleElevationReference(managerId: String, callback: (Result<CircleElevationReference?>) -> Unit)
   fun setCircleSortKey(managerId: String, circleSortKey: Double, callback: (Result<Unit>) -> Unit)
   fun getCircleSortKey(managerId: String, callback: (Result<Double?>) -> Unit)
   fun setCircleBlur(managerId: String, circleBlur: Double, callback: (Result<Unit>) -> Unit)
@@ -512,6 +540,46 @@ interface _CircleAnnotationMessenger {
                 reply.reply(wrapError(error))
               } else {
                 reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.setCircleElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            val circleElevationReferenceArg = args[1] as CircleElevationReference
+            api.setCircleElevationReference(managerIdArg, circleElevationReferenceArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.mapbox_maps_flutter._CircleAnnotationMessenger.getCircleElevationReference$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val managerIdArg = args[0] as String
+            api.getCircleElevationReference(managerIdArg) { result: Result<CircleElevationReference?> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
               }
             }
           }

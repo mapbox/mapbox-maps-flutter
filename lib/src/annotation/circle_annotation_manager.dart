@@ -85,6 +85,18 @@ class CircleAnnotationManager extends BaseAnnotationManager {
   /// Delete all the annotation added by this manager.
   Future<void> deleteAll() => _annotationMessenger.deleteAll(id);
 
+  /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<void> setCircleElevationReference(
+          CircleElevationReference circleElevationReference) =>
+      _annotationMessenger.setCircleElevationReference(
+          id, circleElevationReference);
+
+  /// Selects the base of circle-elevation. Some modes might require precomputed elevation data in the tileset. Default value: "none".
+  @experimental
+  Future<CircleElevationReference?> getCircleElevationReference() =>
+      _annotationMessenger.getCircleElevationReference(id);
+
   /// Sorts features in ascending order based on this value. Features with a higher sort key will appear above features with a lower sort key.
   Future<void> setCircleSortKey(double circleSortKey) =>
       _annotationMessenger.setCircleSortKey(id, circleSortKey);
