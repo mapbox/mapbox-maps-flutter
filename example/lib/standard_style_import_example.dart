@@ -25,6 +25,7 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
   /// Style import config properties
   String lightPreset = 'day';
   bool labelsSetting = true;
+  bool landmarkIconsSetting = false;
 
   _onMapCreated(MapboxMap mapboxMap) async {
     this.mapboxMap = mapboxMap;
@@ -50,6 +51,12 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            FloatingActionButton(
+              heroTag: 'landmarkIcons',
+              onPressed: _changeLandmarkIconsSetting,
+              child: Icon(Icons.camera_alt_outlined),
+            ),
+            SizedBox(height: 16),
             FloatingActionButton(
               heroTag: 'light',
               onPressed: _changeLightSetting,
@@ -126,6 +133,14 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
     });
   }
 
+  // Toggle the visibility of the landmark icons
+  void _changeLandmarkIconsSetting() {
+    setState(() {
+      landmarkIconsSetting = !landmarkIconsSetting;
+      _updateMapStyle();
+    });
+  }
+
   void _updateMapStyle() {
     // Update the map style's config properties based on the selected options
     var configs = {
@@ -133,6 +148,7 @@ class StandardStyleImportState extends State<StandardStyleImportExample> {
       "showPointOfInterestLabels": labelsSetting,
       "showTransitLabels": labelsSetting,
       "showPlaceLabels": labelsSetting,
+      "showLandmarkIcons": landmarkIconsSetting,
     };
     mapboxMap?.style.setStyleImportConfigProperties("basemap", configs);
   }
