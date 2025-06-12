@@ -257,4 +257,4 @@ executors:
   firebase-test-runner:
     resource_class: small
     docker:
-      - image: cimg/python:3.7
+      - image: cimg/python:3.13
