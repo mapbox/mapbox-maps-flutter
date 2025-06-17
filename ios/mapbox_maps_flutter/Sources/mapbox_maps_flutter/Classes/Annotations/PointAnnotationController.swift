@@ -1351,8 +1351,8 @@ extension PointAnnotation {
 
     func toPointAnnotation() -> MapboxMaps.PointAnnotation {
         var annotation = MapboxMaps.PointAnnotation(id: self.id, point: geometry)
-        if let image = self.image {
-            annotation.image = .init(image: UIImage(data: image.data, scale: UIScreen.main.scale)!, name: iconImage ?? UUID().uuidString)
+        if let image = image, let uiImage = UIImage(data: image.data, scale: UIScreen.main.scale) {
+            annotation.image = .init(image: uiImage, name: iconImage ?? UUID().uuidString)
         }
         if let iconAnchor {
             annotation.iconAnchor = MapboxMaps.IconAnchor(iconAnchor)
