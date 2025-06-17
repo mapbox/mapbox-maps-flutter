@@ -1,3 +1,7 @@
+### main
+
+* [ios] Fix crash when force unwrapping UIImage for point annotations.
+
 ### 2.9.0-rc.1
 
 * Update MapboxMaps to v11.13.0-rc.1
