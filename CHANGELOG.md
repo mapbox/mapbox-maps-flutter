@@ -1,3 +1,7 @@
+### main
+
+* Fixed an issue where style expressions did not override constant values when both were present.
+
 ### 2.9.0-rc.1
 
 * Update MapboxMaps to v11.13.0-rc.1
