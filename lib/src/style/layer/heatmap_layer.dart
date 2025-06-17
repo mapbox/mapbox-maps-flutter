@@ -95,36 +95,31 @@ class HeatmapLayer extends Layer {
     var paint = {};
     if (heatmapColorExpression != null) {
       paint["heatmap-color"] = heatmapColorExpression;
-    }
-    if (heatmapColor != null) {
+    } else if (heatmapColor != null) {
       paint["heatmap-color"] = heatmapColor?.toRGBA();
     }
 
     if (heatmapIntensityExpression != null) {
       paint["heatmap-intensity"] = heatmapIntensityExpression;
-    }
-    if (heatmapIntensity != null) {
+    } else if (heatmapIntensity != null) {
       paint["heatmap-intensity"] = heatmapIntensity;
     }
 
     if (heatmapOpacityExpression != null) {
       paint["heatmap-opacity"] = heatmapOpacityExpression;
-    }
-    if (heatmapOpacity != null) {
+    } else if (heatmapOpacity != null) {
       paint["heatmap-opacity"] = heatmapOpacity;
     }
 
     if (heatmapRadiusExpression != null) {
       paint["heatmap-radius"] = heatmapRadiusExpression;
-    }
-    if (heatmapRadius != null) {
+    } else if (heatmapRadius != null) {
       paint["heatmap-radius"] = heatmapRadius;
     }
 
     if (heatmapWeightExpression != null) {
       paint["heatmap-weight"] = heatmapWeightExpression;
-    }
-    if (heatmapWeight != null) {
+    } else if (heatmapWeight != null) {
       paint["heatmap-weight"] = heatmapWeight;
     }
 
