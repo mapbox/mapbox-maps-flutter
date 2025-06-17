@@ -180,87 +180,75 @@ class CircleLayer extends Layer {
     var paint = {};
     if (circleBlurExpression != null) {
       paint["circle-blur"] = circleBlurExpression;
-    }
-    if (circleBlur != null) {
+    } else if (circleBlur != null) {
       paint["circle-blur"] = circleBlur;
     }
 
     if (circleColorExpression != null) {
       paint["circle-color"] = circleColorExpression;
-    }
-    if (circleColor != null) {
+    } else if (circleColor != null) {
       paint["circle-color"] = circleColor?.toRGBA();
     }
 
     if (circleEmissiveStrengthExpression != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrengthExpression;
-    }
-    if (circleEmissiveStrength != null) {
+    } else if (circleEmissiveStrength != null) {
       paint["circle-emissive-strength"] = circleEmissiveStrength;
     }
 
     if (circleOpacityExpression != null) {
       paint["circle-opacity"] = circleOpacityExpression;
-    }
-    if (circleOpacity != null) {
+    } else if (circleOpacity != null) {
       paint["circle-opacity"] = circleOpacity;
     }
 
     if (circlePitchAlignmentExpression != null) {
       paint["circle-pitch-alignment"] = circlePitchAlignmentExpression;
-    }
-    if (circlePitchAlignment != null) {
+    } else if (circlePitchAlignment != null) {
       paint["circle-pitch-alignment"] =
           circlePitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (circlePitchScaleExpression != null) {
       paint["circle-pitch-scale"] = circlePitchScaleExpression;
-    }
-    if (circlePitchScale != null) {
+    } else if (circlePitchScale != null) {
       paint["circle-pitch-scale"] =
           circlePitchScale?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (circleRadiusExpression != null) {
       paint["circle-radius"] = circleRadiusExpression;
-    }
-    if (circleRadius != null) {
+    } else if (circleRadius != null) {
       paint["circle-radius"] = circleRadius;
     }
 
     if (circleStrokeColorExpression != null) {
       paint["circle-stroke-color"] = circleStrokeColorExpression;
-    }
-    if (circleStrokeColor != null) {
+    } else if (circleStrokeColor != null) {
       paint["circle-stroke-color"] = circleStrokeColor?.toRGBA();
     }
 
     if (circleStrokeOpacityExpression != null) {
       paint["circle-stroke-opacity"] = circleStrokeOpacityExpression;
-    }
-    if (circleStrokeOpacity != null) {
+    } else if (circleStrokeOpacity != null) {
       paint["circle-stroke-opacity"] = circleStrokeOpacity;
     }
 
     if (circleStrokeWidthExpression != null) {
       paint["circle-stroke-width"] = circleStrokeWidthExpression;
-    }
-    if (circleStrokeWidth != null) {
+    } else if (circleStrokeWidth != null) {
       paint["circle-stroke-width"] = circleStrokeWidth;
     }
 
     if (circleTranslateExpression != null) {
       paint["circle-translate"] = circleTranslateExpression;
-    }
-    if (circleTranslate != null) {
+    } else if (circleTranslate != null) {
       paint["circle-translate"] = circleTranslate;
     }
 
     if (circleTranslateAnchorExpression != null) {
       paint["circle-translate-anchor"] = circleTranslateAnchorExpression;
-    }
-    if (circleTranslateAnchor != null) {
+    } else if (circleTranslateAnchor != null) {
       paint["circle-translate-anchor"] =
           circleTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }

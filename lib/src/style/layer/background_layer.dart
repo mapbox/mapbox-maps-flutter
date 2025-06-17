@@ -87,37 +87,32 @@ class BackgroundLayer extends Layer {
     var paint = {};
     if (backgroundColorExpression != null) {
       paint["background-color"] = backgroundColorExpression;
-    }
-    if (backgroundColor != null) {
+    } else if (backgroundColor != null) {
       paint["background-color"] = backgroundColor?.toRGBA();
     }
 
     if (backgroundEmissiveStrengthExpression != null) {
       paint["background-emissive-strength"] =
           backgroundEmissiveStrengthExpression;
-    }
-    if (backgroundEmissiveStrength != null) {
+    } else if (backgroundEmissiveStrength != null) {
       paint["background-emissive-strength"] = backgroundEmissiveStrength;
     }
 
     if (backgroundOpacityExpression != null) {
       paint["background-opacity"] = backgroundOpacityExpression;
-    }
-    if (backgroundOpacity != null) {
+    } else if (backgroundOpacity != null) {
       paint["background-opacity"] = backgroundOpacity;
     }
 
     if (backgroundPatternExpression != null) {
       paint["background-pattern"] = backgroundPatternExpression;
-    }
-    if (backgroundPattern != null) {
+    } else if (backgroundPattern != null) {
       paint["background-pattern"] = backgroundPattern;
     }
 
     if (backgroundPitchAlignmentExpression != null) {
       paint["background-pitch-alignment"] = backgroundPitchAlignmentExpression;
-    }
-    if (backgroundPitchAlignment != null) {
+    } else if (backgroundPitchAlignment != null) {
       paint["background-pitch-alignment"] =
           backgroundPitchAlignment?.name.toLowerCase().replaceAll("_", "-");
     }

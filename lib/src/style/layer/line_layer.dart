@@ -57,6 +57,8 @@ class LineLayer extends Layer {
     List<Object>? this.lineOpacityExpression,
     String? this.linePattern,
     List<Object>? this.linePatternExpression,
+    double? this.linePatternCrossFade,
+    List<Object>? this.linePatternCrossFadeExpression,
     List<double?>? this.lineTranslate,
     List<Object>? this.lineTranslateExpression,
     LineTranslateAnchor? this.lineTranslateAnchor,
@@ -281,6 +283,14 @@ class LineLayer extends Layer {
   /// Name of image in sprite to use for drawing image lines. For seamless patterns, image width must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   List<Object>? linePatternExpression;
 
+  /// Controls the transition progress between the image variants of line-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  double? linePatternCrossFade;
+
+  /// Controls the transition progress between the image variants of line-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? linePatternCrossFadeExpression;
+
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0]. The unit of lineTranslate is in pixels.
   List<double?>? lineTranslate;
@@ -412,135 +422,122 @@ class LineLayer extends Layer {
     var paint = {};
     if (lineBlurExpression != null) {
       paint["line-blur"] = lineBlurExpression;
-    }
-    if (lineBlur != null) {
+    } else if (lineBlur != null) {
       paint["line-blur"] = lineBlur;
     }
 
     if (lineBorderColorExpression != null) {
       paint["line-border-color"] = lineBorderColorExpression;
-    }
-    if (lineBorderColor != null) {
+    } else if (lineBorderColor != null) {
       paint["line-border-color"] = lineBorderColor?.toRGBA();
     }
 
     if (lineBorderWidthExpression != null) {
       paint["line-border-width"] = lineBorderWidthExpression;
-    }
-    if (lineBorderWidth != null) {
+    } else if (lineBorderWidth != null) {
       paint["line-border-width"] = lineBorderWidth;
     }
 
     if (lineColorExpression != null) {
       paint["line-color"] = lineColorExpression;
-    }
-    if (lineColor != null) {
+    } else if (lineColor != null) {
       paint["line-color"] = lineColor?.toRGBA();
     }
 
     if (lineDasharrayExpression != null) {
       paint["line-dasharray"] = lineDasharrayExpression;
-    }
-    if (lineDasharray != null) {
+    } else if (lineDasharray != null) {
       paint["line-dasharray"] = lineDasharray;
     }
 
     if (lineDepthOcclusionFactorExpression != null) {
       paint["line-depth-occlusion-factor"] = lineDepthOcclusionFactorExpression;
-    }
-    if (lineDepthOcclusionFactor != null) {
+    } else if (lineDepthOcclusionFactor != null) {
       paint["line-depth-occlusion-factor"] = lineDepthOcclusionFactor;
     }
 
     if (lineEmissiveStrengthExpression != null) {
       paint["line-emissive-strength"] = lineEmissiveStrengthExpression;
-    }
-    if (lineEmissiveStrength != null) {
+    } else if (lineEmissiveStrength != null) {
       paint["line-emissive-strength"] = lineEmissiveStrength;
     }
 
     if (lineGapWidthExpression != null) {
       paint["line-gap-width"] = lineGapWidthExpression;
-    }
-    if (lineGapWidth != null) {
+    } else if (lineGapWidth != null) {
       paint["line-gap-width"] = lineGapWidth;
     }
 
     if (lineGradientExpression != null) {
       paint["line-gradient"] = lineGradientExpression;
-    }
-    if (lineGradient != null) {
+    } else if (lineGradient != null) {
       paint["line-gradient"] = lineGradient?.toRGBA();
     }
 
     if (lineOcclusionOpacityExpression != null) {
       paint["line-occlusion-opacity"] = lineOcclusionOpacityExpression;
-    }
-    if (lineOcclusionOpacity != null) {
+    } else if (lineOcclusionOpacity != null) {
       paint["line-occlusion-opacity"] = lineOcclusionOpacity;
     }
 
     if (lineOffsetExpression != null) {
       paint["line-offset"] = lineOffsetExpression;
-    }
-    if (lineOffset != null) {
+    } else if (lineOffset != null) {
       paint["line-offset"] = lineOffset;
     }
 
     if (lineOpacityExpression != null) {
       paint["line-opacity"] = lineOpacityExpression;
-    }
-    if (lineOpacity != null) {
+    } else if (lineOpacity != null) {
       paint["line-opacity"] = lineOpacity;
     }
 
     if (linePatternExpression != null) {
       paint["line-pattern"] = linePatternExpression;
-    }
-    if (linePattern != null) {
+    } else if (linePattern != null) {
       paint["line-pattern"] = linePattern;
+    }
+
+    if (linePatternCrossFadeExpression != null) {
+      paint["line-pattern-cross-fade"] = linePatternCrossFadeExpression;
+    } else if (linePatternCrossFade != null) {
+      paint["line-pattern-cross-fade"] = linePatternCrossFade;
     }
 
     if (lineTranslateExpression != null) {
       paint["line-translate"] = lineTranslateExpression;
-    }
-    if (lineTranslate != null) {
+    } else if (lineTranslate != null) {
       paint["line-translate"] = lineTranslate;
     }
 
     if (lineTranslateAnchorExpression != null) {
       paint["line-translate-anchor"] = lineTranslateAnchorExpression;
-    }
-    if (lineTranslateAnchor != null) {
+    } else if (lineTranslateAnchor != null) {
       paint["line-translate-anchor"] =
           lineTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (lineTrimColorExpression != null) {
       paint["line-trim-color"] = lineTrimColorExpression;
-    }
-    if (lineTrimColor != null) {
+    } else if (lineTrimColor != null) {
       paint["line-trim-color"] = lineTrimColor?.toRGBA();
     }
 
     if (lineTrimFadeRangeExpression != null) {
       paint["line-trim-fade-range"] = lineTrimFadeRangeExpression;
-    }
-    if (lineTrimFadeRange != null) {
+    } else if (lineTrimFadeRange != null) {
       paint["line-trim-fade-range"] = lineTrimFadeRange;
     }
 
     if (lineTrimOffsetExpression != null) {
       paint["line-trim-offset"] = lineTrimOffsetExpression;
-    }
-    if (lineTrimOffset != null) {
+    } else if (lineTrimOffset != null) {
       paint["line-trim-offset"] = lineTrimOffset;
     }
 
     if (lineWidthExpression != null) {
       paint["line-width"] = lineWidthExpression;
-    }
-    if (lineWidth != null) {
+    } else if (lineWidth != null) {
       paint["line-width"] = lineWidth;
     }
 
@@ -674,6 +671,10 @@ class LineLayer extends Layer {
       lineOpacityExpression: _optionalCastList(map["paint"]["line-opacity"]),
       linePattern: _optionalCast(map["paint"]["line-pattern"]),
       linePatternExpression: _optionalCastList(map["paint"]["line-pattern"]),
+      linePatternCrossFade:
+          _optionalCast(map["paint"]["line-pattern-cross-fade"]),
+      linePatternCrossFadeExpression:
+          _optionalCastList(map["paint"]["line-pattern-cross-fade"]),
       lineTranslate: (map["paint"]["line-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),
