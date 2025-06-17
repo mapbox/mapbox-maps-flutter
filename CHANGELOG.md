@@ -1,5 +1,6 @@
 ### main
 
+* Fixed an issue where style expressions did not override constant values when both were present.
 * [ios] Fix crash when force unwrapping UIImage for point annotations.
 
 ### 2.9.0-rc.1

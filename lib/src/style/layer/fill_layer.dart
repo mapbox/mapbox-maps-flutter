@@ -33,6 +33,8 @@ class FillLayer extends Layer {
     List<Object>? this.fillOutlineColorExpression,
     String? this.fillPattern,
     List<Object>? this.fillPatternExpression,
+    double? this.fillPatternCrossFade,
+    List<Object>? this.fillPatternCrossFadeExpression,
     List<double?>? this.fillTranslate,
     List<Object>? this.fillTranslateExpression,
     FillTranslateAnchor? this.fillTranslateAnchor,
@@ -139,6 +141,14 @@ class FillLayer extends Layer {
   /// Name of image in sprite to use for drawing image fills. For seamless patterns, image width and height must be a factor of two (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be evaluated only at integer zoom levels.
   List<Object>? fillPatternExpression;
 
+  /// Controls the transition progress between the image variants of fill-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  double? fillPatternCrossFade;
+
+  /// Controls the transition progress between the image variants of fill-pattern. Zero means the first variant is used, one is the second, and in between they are blended together. Both images should be the same size and have the same type (either raster or vector).
+  /// Default value: 0. Value range: [0, 1]
+  List<Object>? fillPatternCrossFadeExpression;
+
   /// The geometry's offset. Values are [x, y] where negatives indicate left and up, respectively.
   /// Default value: [0,0]. The unit of fillTranslate is in pixels.
   List<double?>? fillTranslate;
@@ -212,81 +222,76 @@ class FillLayer extends Layer {
     var paint = {};
     if (fillAntialiasExpression != null) {
       paint["fill-antialias"] = fillAntialiasExpression;
-    }
-    if (fillAntialias != null) {
+    } else if (fillAntialias != null) {
       paint["fill-antialias"] = fillAntialias;
     }
 
     if (fillBridgeGuardRailColorExpression != null) {
       paint["fill-bridge-guard-rail-color"] =
           fillBridgeGuardRailColorExpression;
-    }
-    if (fillBridgeGuardRailColor != null) {
+    } else if (fillBridgeGuardRailColor != null) {
       paint["fill-bridge-guard-rail-color"] =
           fillBridgeGuardRailColor?.toRGBA();
     }
 
     if (fillColorExpression != null) {
       paint["fill-color"] = fillColorExpression;
-    }
-    if (fillColor != null) {
+    } else if (fillColor != null) {
       paint["fill-color"] = fillColor?.toRGBA();
     }
 
     if (fillEmissiveStrengthExpression != null) {
       paint["fill-emissive-strength"] = fillEmissiveStrengthExpression;
-    }
-    if (fillEmissiveStrength != null) {
+    } else if (fillEmissiveStrength != null) {
       paint["fill-emissive-strength"] = fillEmissiveStrength;
     }
 
     if (fillOpacityExpression != null) {
       paint["fill-opacity"] = fillOpacityExpression;
-    }
-    if (fillOpacity != null) {
+    } else if (fillOpacity != null) {
       paint["fill-opacity"] = fillOpacity;
     }
 
     if (fillOutlineColorExpression != null) {
       paint["fill-outline-color"] = fillOutlineColorExpression;
-    }
-    if (fillOutlineColor != null) {
+    } else if (fillOutlineColor != null) {
       paint["fill-outline-color"] = fillOutlineColor?.toRGBA();
     }
 
     if (fillPatternExpression != null) {
       paint["fill-pattern"] = fillPatternExpression;
-    }
-    if (fillPattern != null) {
+    } else if (fillPattern != null) {
       paint["fill-pattern"] = fillPattern;
+    }
+
+    if (fillPatternCrossFadeExpression != null) {
+      paint["fill-pattern-cross-fade"] = fillPatternCrossFadeExpression;
+    } else if (fillPatternCrossFade != null) {
+      paint["fill-pattern-cross-fade"] = fillPatternCrossFade;
     }
 
     if (fillTranslateExpression != null) {
       paint["fill-translate"] = fillTranslateExpression;
-    }
-    if (fillTranslate != null) {
+    } else if (fillTranslate != null) {
       paint["fill-translate"] = fillTranslate;
     }
 
     if (fillTranslateAnchorExpression != null) {
       paint["fill-translate-anchor"] = fillTranslateAnchorExpression;
-    }
-    if (fillTranslateAnchor != null) {
+    } else if (fillTranslateAnchor != null) {
       paint["fill-translate-anchor"] =
           fillTranslateAnchor?.name.toLowerCase().replaceAll("_", "-");
     }
 
     if (fillTunnelStructureColorExpression != null) {
       paint["fill-tunnel-structure-color"] = fillTunnelStructureColorExpression;
-    }
-    if (fillTunnelStructureColor != null) {
+    } else if (fillTunnelStructureColor != null) {
       paint["fill-tunnel-structure-color"] = fillTunnelStructureColor?.toRGBA();
     }
 
     if (fillZOffsetExpression != null) {
       paint["fill-z-offset"] = fillZOffsetExpression;
-    }
-    if (fillZOffset != null) {
+    } else if (fillZOffset != null) {
       paint["fill-z-offset"] = fillZOffset;
     }
 
@@ -374,6 +379,10 @@ class FillLayer extends Layer {
           _optionalCastList(map["paint"]["fill-outline-color"]),
       fillPattern: _optionalCast(map["paint"]["fill-pattern"]),
       fillPatternExpression: _optionalCastList(map["paint"]["fill-pattern"]),
+      fillPatternCrossFade:
+          _optionalCast(map["paint"]["fill-pattern-cross-fade"]),
+      fillPatternCrossFadeExpression:
+          _optionalCastList(map["paint"]["fill-pattern-cross-fade"]),
       fillTranslate: (map["paint"]["fill-translate"] as List?)
           ?.map<double?>((e) => e.toDouble())
           .toList(),

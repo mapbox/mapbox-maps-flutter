@@ -201,122 +201,105 @@ class LocationIndicatorLayer extends Layer {
     var paint = {};
     if (accuracyRadiusExpression != null) {
       paint["accuracy-radius"] = accuracyRadiusExpression;
-    }
-    if (accuracyRadius != null) {
+    } else if (accuracyRadius != null) {
       paint["accuracy-radius"] = accuracyRadius;
     }
 
     if (accuracyRadiusBorderColorExpression != null) {
       paint["accuracy-radius-border-color"] =
           accuracyRadiusBorderColorExpression;
-    }
-    if (accuracyRadiusBorderColor != null) {
+    } else if (accuracyRadiusBorderColor != null) {
       paint["accuracy-radius-border-color"] =
           accuracyRadiusBorderColor?.toRGBA();
     }
 
     if (accuracyRadiusColorExpression != null) {
       paint["accuracy-radius-color"] = accuracyRadiusColorExpression;
-    }
-    if (accuracyRadiusColor != null) {
+    } else if (accuracyRadiusColor != null) {
       paint["accuracy-radius-color"] = accuracyRadiusColor?.toRGBA();
     }
 
     if (bearingExpression != null) {
       paint["bearing"] = bearingExpression;
-    }
-    if (bearing != null) {
+    } else if (bearing != null) {
       paint["bearing"] = bearing;
     }
 
     if (bearingImageExpression != null) {
       paint["bearing-image"] = bearingImageExpression;
-    }
-    if (bearingImage != null) {
+    } else if (bearingImage != null) {
       paint["bearing-image"] = bearingImage;
     }
 
     if (bearingImageSizeExpression != null) {
       paint["bearing-image-size"] = bearingImageSizeExpression;
-    }
-    if (bearingImageSize != null) {
+    } else if (bearingImageSize != null) {
       paint["bearing-image-size"] = bearingImageSize;
     }
 
     if (emphasisCircleColorExpression != null) {
       paint["emphasis-circle-color"] = emphasisCircleColorExpression;
-    }
-    if (emphasisCircleColor != null) {
+    } else if (emphasisCircleColor != null) {
       paint["emphasis-circle-color"] = emphasisCircleColor?.toRGBA();
     }
 
     if (emphasisCircleGlowRangeExpression != null) {
       paint["emphasis-circle-glow-range"] = emphasisCircleGlowRangeExpression;
-    }
-    if (emphasisCircleGlowRange != null) {
+    } else if (emphasisCircleGlowRange != null) {
       paint["emphasis-circle-glow-range"] = emphasisCircleGlowRange;
     }
 
     if (emphasisCircleRadiusExpression != null) {
       paint["emphasis-circle-radius"] = emphasisCircleRadiusExpression;
-    }
-    if (emphasisCircleRadius != null) {
+    } else if (emphasisCircleRadius != null) {
       paint["emphasis-circle-radius"] = emphasisCircleRadius;
     }
 
     if (imagePitchDisplacementExpression != null) {
       paint["image-pitch-displacement"] = imagePitchDisplacementExpression;
-    }
-    if (imagePitchDisplacement != null) {
+    } else if (imagePitchDisplacement != null) {
       paint["image-pitch-displacement"] = imagePitchDisplacement;
     }
 
     if (locationExpression != null) {
       paint["location"] = locationExpression;
-    }
-    if (location != null) {
+    } else if (location != null) {
       paint["location"] = location;
     }
 
     if (locationIndicatorOpacityExpression != null) {
       paint["location-indicator-opacity"] = locationIndicatorOpacityExpression;
-    }
-    if (locationIndicatorOpacity != null) {
+    } else if (locationIndicatorOpacity != null) {
       paint["location-indicator-opacity"] = locationIndicatorOpacity;
     }
 
     if (perspectiveCompensationExpression != null) {
       paint["perspective-compensation"] = perspectiveCompensationExpression;
-    }
-    if (perspectiveCompensation != null) {
+    } else if (perspectiveCompensation != null) {
       paint["perspective-compensation"] = perspectiveCompensation;
     }
 
     if (shadowImageExpression != null) {
       paint["shadow-image"] = shadowImageExpression;
-    }
-    if (shadowImage != null) {
+    } else if (shadowImage != null) {
       paint["shadow-image"] = shadowImage;
     }
 
     if (shadowImageSizeExpression != null) {
       paint["shadow-image-size"] = shadowImageSizeExpression;
-    }
-    if (shadowImageSize != null) {
+    } else if (shadowImageSize != null) {
       paint["shadow-image-size"] = shadowImageSize;
     }
 
     if (topImageExpression != null) {
       paint["top-image"] = topImageExpression;
-    }
-    if (topImage != null) {
+    } else if (topImage != null) {
       paint["top-image"] = topImage;
     }
 
     if (topImageSizeExpression != null) {
       paint["top-image-size"] = topImageSizeExpression;
-    }
-    if (topImageSize != null) {
+    } else if (topImageSize != null) {
       paint["top-image-size"] = topImageSize;
     }
 
