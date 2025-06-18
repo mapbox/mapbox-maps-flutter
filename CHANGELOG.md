@@ -1,8 +1,4 @@
-### 2.9.0-rc.1
-
-* Update MapboxMaps to v11.13.0-rc.1
-
-### 2.9.0-beta.1 
+### 2.9.0
 
 > [!IMPORTANT]
 > ⚠️ Breaking changes
@@ -43,6 +39,7 @@
   * `MapboxMap.resetFeatureStatesForFeatureset`
   * `MapboxMap.queryRenderedFeaturesForFeatureset`
 * Move experimental `modelElevationReference` property to `LocationPuck3D`. 
+* Update MapboxMaps to v11.13.0
 
 ### 2.8.0 
 
